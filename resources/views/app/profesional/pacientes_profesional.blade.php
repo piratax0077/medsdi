@@ -31,8 +31,9 @@
                 <div class="card">
                     <div class="card-header text-center bg-info">
                         <div class="row">
-                            <div class="col-md-12 align-botton">
+                            <div class="col-md-12 align-botton d-flex justify-content-between">
                                 <h4 class="text-white f-20 d-inline ml-4 mt-1 float-left">Mis pacientes</h4>
+                                <button class="btn btn-primary btn-sm" onclick="enviar_difusion_pacientes()">Mensaje Difusion a mis pacientes</button>
                             </div>
                         </div>
                     </div>
@@ -48,6 +49,7 @@
                                             <th>Convenio</th>
                                             <th>Contacto</th>
                                             <th>Acción</th>
+                                            <th>Mensaje</th>
                                             <th>Usuario</th>
                                         </tr>
                                     </thead>
@@ -69,11 +71,11 @@
                                                     </td>
                                                     <td>
                                                         @if($p->id_usuario)
-                                                        <a href="{{ ROUTE('check_sdi', ['id_recept' => $p->id_usuario,'urla'=> 'Profesional/Mis_pacientes','urln' => 'Mi_Ficha_Medica']) }}" 
+                                                        <a href="{{ ROUTE('check_sdi', ['id_recept' => $p->id_usuario,'urla'=> 'Profesional/Mis_pacientes','urln' => 'Mi_Ficha_Medica']) }}"
                                                             class="btn btn-primary btn-icon" data-toggle="tooltip"
                                                             data-placement="top" title="Ficha Médica Única"><i
                                                                 class="feather icon-file-plus"></i></a>
-                                                        @endif        
+                                                        @endif
                                                         <a href="{{ ROUTE('profesional.atenciones_previas_paciente', $p->id) }}"
                                                             class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top"
                                                             title="Atenciones previas"><i class="feather icon-activity"></i></a>
@@ -83,21 +85,14 @@
                                                             data-placement="top" title="Ficha Médica Única"><i
                                                                 class="feather icon-file-plus"></i></a>-->
 														@if($p->id_usuario)
-                                                        <a href="{{ ROUTE('check_sdi', ['id_recept' => $p->id_usuario,'urla'=> 'Profesional/Mis_pacientes','urln' => 'Profesional/Editar_paciente/'.$p->id, 'id_tipo' => 9]) }}" 
+                                                        <a href="{{ ROUTE('check_sdi', ['id_recept' => $p->id_usuario,'urla'=> 'Profesional/Mis_pacientes','urln' => 'Profesional/Editar_paciente/'.$p->id, 'id_tipo' => 9]) }}"
                                                             class="btn btn-secondary btn-sm btn-icon" data-toggle="tooltip"
                                                             data-placement="top" title="Editar datos medicos del paciente"><i
                                                                 class="feather icon-edit"></i></a>
-                                                        @endif 
-                                                        {{-- 
-															<a href="{{ ROUTE('profesional.editar_paciente', $p->id) }}"
-                                                            class="btn btn-secondary btn-sm btn-icon" data-toggle="tooltip"
-                                                            data-placement="top" title="Editar datos medicos del paciente"><i
-                                                                class="feather icon-edit"></i></a>
-														--}}
-		
-                                                        <!--<a target="_blank" class="btn btn-icon btn-success text-white"
-                                                            data-toggle="modal" data-target="#modal_correo" data-placement="top"
-                                                            title="Enviar Email"><i class="fas feather icon-mail"></i></a>-->
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-outline-warning btn-icon btn-sm" onclick="enviar_mensaje_paciente({{ $p->id }})"><i class="fas fa-mail"></i></button>
                                                     </td>
                                                     @if ($p->id_premium == null)
                                                         <td><span
@@ -179,5 +174,20 @@
         </div>
     </div>
 
-    @include( 'app.profesional.modales.autorizacion_ficha_medica_unica')
+    @include('app.profesional.modales.autorizacion_ficha_medica_unica')
+    @include('app.profesional.modales.mensaje_paciente')
+    @include('app.profesional.modales.mensaje_difusion_pacientes')
+@endsection
+
+@section('page-script')
+<script>
+    function enviar_mensaje_paciente(id_paciente){
+        $('#modalMensajePaciente').modal('show');
+        $('#id_paciente_mensaje').val(id_paciente);
+    }
+
+    function enviar_difusion_pacientes(){
+        $('#modalMensajeDifusionPacientes').modal('show');
+    }
+</script>
 @endsection

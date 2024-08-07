@@ -29,7 +29,7 @@
                                             <div class="media">
                                                 <img class="img-radius img-40" src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="Foto de perfil" style="width: 50px;">
                                                 <div class="media-body ml-3">
-                                                    <h6 class="pro-title">{{ $mensaje->titulo }}</h6>
+                                                    <h6 class="pro-title">{{ $mensaje->datos_mensaje['titulo'] }}</h6>
                                                     <p class="pro-date">{{ $mensaje->created_at->diffForHumans() }}</p>
                                                 </div>
                                             </div>

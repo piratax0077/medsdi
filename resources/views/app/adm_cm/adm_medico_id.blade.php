@@ -8,11 +8,11 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Administración Médica del Centro</h5>
+                            <h5 class="m-b-10 font-weight-bold">Administración Médica del {{ $institucion->nombre }}</h5>
                         </div>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('profesional.home')  }}">Volver a mi escritorio profesional</a></li>
+                            {{-- <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li> --}}
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('profesional.home')  }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i> Volver a mi escritorio profesional</a></li>
                         </ul>
                     </div>
                 </div>
@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="card subir">
-                        <a href="{{ ROUTE('adm_cm.profesionales') }}">
+                        <a href="{{ ROUTE('adm_cm.profesionales_id',['id' => $institucion->id]) }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-70 text-center" src="{{ asset('images/iconos/laboratorio_1.svg') }}">
                                 <h5 class="mt-2">Mis profesionales</h5>

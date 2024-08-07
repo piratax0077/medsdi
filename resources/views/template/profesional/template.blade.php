@@ -5105,7 +5105,9 @@
                 responsive: true,
             });
 
-
+            $('#historial_mensajes').DataTable({
+                responsive: true,
+            });
 
             $('#tabla_recetas_profesional_ro').DataTable({
                 responsive: true,

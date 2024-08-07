@@ -63,7 +63,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="card subir py-auto">
-                        <a href="{{ ROUTE('adm_cm.profesionales') }}">
+                        <a href="{{ ROUTE('adm_cm.profesionales_institucion') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-50 text-center" src="{{ asset('images/iconos/profesionales.svg') }}">
                                 <h6 class="mt-2 mb-0">Profesionales de La Institución</h6>

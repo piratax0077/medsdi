@@ -6,49 +6,142 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			</div>
 			<div class="modal-body">
-                <div class="form-group">
-                    <label for="de">De:</label>
-                    <input type="text" class="form-control" id="de_difusion" name="de_difusion" value="{{ Auth::user()->name }}" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="para">Para:</label>
+                <form id="mensajeDifusionForm" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label for="de">De:</label>
+                        <input type="text" class="form-control" id="de_difusion" name="de_difusion" value="{{ Auth::user()->name }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="para">Para:</label>
 
-                    <select class="form-control form-control-sm" name="msj_para_difusion" id="msj_para_difusion" multiple="multiple">
-                        <option value="0">A todos los roles</option>
-                        @foreach($roles as $rol)
-                            <option value="{{ $rol->id }}">{{ $rol->name }}</option>
-                        @endforeach
-                    </select>
+                        <select class="form-control form-control-sm" name="msj_para_difusion" id="msj_para_difusion" multiple="multiple">
+                            <option value="0">A todos los roles</option>
+                            @foreach($roles as $rol)
+                                <option value="{{ $rol->id }}">{{ $rol->alias }}</option>
+                            @endforeach
+                        </select>
 
-                </div>
-				<div class="form-group">
-					<label for="titulo_msj">Título:</label>
-					<input type="text" class="form-control" id="titulo_msj_difusion" name="titulo_msj_difusion" required>
-				</div>
-				<div class="form-group">
-					<label for="detalle_msj">Asunto:</label>
-					<textarea class="form-control" rows="3" id="detalle_msj_difusion" name="detalle_msj_difusion" required></textarea>
-				</div>
-				<div class="form-group">
-					<label for="mensaje_msj">Mensaje:</label>
-					<textarea class="form-control" rows="5" id="mensaje_msj_difusion" name="mensaje_msj_difusion" required></textarea>
-				</div>
-                <div class="form-group">
-                    <div class="card-a">
-                        <div class="card-header-a" id="img">
-                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_elim_cicat_pre" aria-expanded="false" aria-controls="imagenes_elim_cicat_pre">
-                                Adjuntar archivo
-                            </button>
-                        </div>
-                        <div id="img_cons_dermato_pre-c" class="collapse show" aria-labelledby="img_cons_dermato_pre" data-parent="#img_cons_dermato_pre">
-                            <div class="card-body-aten-a">
-                                <!-- [ Main Content ] start -->
-                                <div class="dropzone" id="mis-imagenes-cons-dermato-pre" action="{{ route('profesional.imagen.carga') }}"></div>
-                                <!-- [ file-upload ] end -->
+                    </div>
+                    <div class="form-group">
+                        <label for="titulo_msj">Título:</label>
+                        <input type="text" class="form-control" id="titulo_msj_difusion" name="titulo_msj_difusion" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="detalle_msj">Asunto:</label>
+                        <textarea class="form-control" rows="3" id="detalle_msj_difusion" name="detalle_msj_difusion" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="mensaje_msj">Mensaje:</label>
+                        <textarea class="form-control" rows="5" id="mensaje_msj_difusion" name="mensaje_msj_difusion" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <div class="card-a">
+                            <div class="card-header-a" id="img">
+                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#imagenes_elim_cicat_pre" aria-expanded="false" aria-controls="imagenes_elim_cicat_pre">
+                                    Adjuntar archivo
+                                </button>
+                            </div>
+                            <div id="img_cons_dermato_pre-c" class="collapse show" aria-labelledby="img_cons_dermato_pre" data-parent="#img_cons_dermato_pre">
+                                <div class="card-body-aten-a">
+                                    <!-- [ Main Content ] start -->
+                                    <div class="dropzone" id="misArchivosGes" action="{{ route('profesional.archivo.carga') }}"></div>
+                                    <!-- [ file-upload ] end -->
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+
+                    <script>
+                        var myDropzone_ges; // Define la variable globalmente
+                        document.addEventListener("DOMContentLoaded", function() {
+                            // Verifica si Dropzone ya está inicializado en el elemento
+                            if (Dropzone.instances.length > 0) {
+                                Dropzone.instances.forEach(instance => {
+                                    if (instance.element.id === "misArchivosGes") {
+                                        instance.destroy();
+                                    }
+                                });
+                            }
+                            // Inicializa Dropzone en el elemento con el ID "misArchivosGes"
+                            myDropzone_ges = new Dropzone("#misArchivosGes", {
+                                url: "{{ route('profesional.archivo.carga') }}",
+                                method: 'post',
+                                createImageThumbnails: true,
+                                addRemoveLinks: true,
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                },
+                                acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
+                                maxFilesize: 4, // Tamaño máximo en MiB
+                                maxFiles: 4,
+                                dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
+                                dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+                                dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+                                dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+                                dictInvalidFileType: "No puedes subir archivos de este tipo.",
+                                dictCancelUpload: "Cancelar carga",
+                                dictUploadCanceled: "Subida cancelada.",
+                                dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+                                dictRemoveFile: "Eliminar archivo",
+                                dictMaxFilesExceeded: "No puede cargar más archivos.",
+                                autoProcessQueue: false, // Desactiva el procesamiento automático
+                                init: function() {
+                                    this.on("sending", function(file, xhr, formData) {
+                                        formData.append("id", "{{ Auth::user()->id }}");
+                                    });
+                                    this.on("success", function(file, response) {
+                                        // Manejar la respuesta de éxito
+                                        console.log(response);
+                                    });
+                                    this.on("error", function(file, message) {
+                                        // Manejar el error
+                                        console.error(message);
+                                    });
+                                    this.on("removedfile", function(file) {
+                                        // Manejar la eliminación del archivo
+                                        console.log("Archivo eliminado");
+                                    });
+                                    this.on("canceled", function(file) {
+                                        // Manejar la cancelación de la carga
+                                        console.log("Carga cancelada");
+                                    });
+                                }
+                            });
+
+                            window.enviarMensajeDifusion = function() {
+                                var formData = new FormData(document.getElementById("mensajeDifusionForm"));
+                                myDropzone_ges.getAcceptedFiles().forEach(function(file) {
+                                    formData.append('misArchivosGes[]', file);
+                                });
+
+                                formData.append('_token', '{{ csrf_token() }}');
+                                formData.append('de', document.getElementById('de').value);
+                                formData.append('para', document.getElementById('para').value);
+                                formData.append('titulo', document.getElementById('titulo').value);
+                                formData.append('detalle', document.getElementById('detalle').value);
+                                formData.append('mensaje', document.getElementById('mensaje').value);
+
+                                fetch("{{ route('mensaje_difusion') }}", {
+                                    method: 'POST',
+                                    body: formData,
+                                    headers: {
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                    }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data);
+                                    // Manejar la respuesta del servidor
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                });
+                            };
+                        });
+                    </script>
+                </form>
+
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -59,74 +152,36 @@
 </div>
 
 <script>
-    var myDropzoneConsDermatoPre;
-    function enviar_mensaje_difusion_confirmar(){
-        var de = $('#de').val();
-        var para = $('#msj_para_difusion').val();
-        var titulo = $('#titulo_msj_difusion').val();
-        var detalle = $('#detalle_msj_difusion').val();
-        var mensaje = $('#mensaje_msj_difusion').val();
-        if(para == ''){
-            swal({
-                title: "Error",
-                text: "Debe seleccionar un Profesional",
-                icon: "error",
-            })
-            return false;
-        }
-        if(titulo == ''){
-            swal({
-                title: "Error",
-                text: "Debe ingresar un Título",
-                icon: "error",
-            })
-            return false;
-        }
-        if(detalle == ''){
-            swal({
-                title: "Error",
-                text: "Debe ingresar un Detalle del Mensaje",
-                icon: "error",
-            })
-            return false;
-        }
-        if(mensaje == ''){
-            swal({
-                title: "Error",
-                text: "Debe ingresar un Mensaje",
-                icon: "error",
-            })
-            return false;
-        }
-        $.ajax({
-            url: "{{ route('mensaje_difusion') }}",
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                de: de,
-                para: para,
-                titulo: titulo,
-                detalle: detalle,
-                mensaje: mensaje
-            },
-            success: function(response){
-                console.log(response);
-                if(response.estado == 1){
-                    swal({
-                        title: "Mensaje Enviado",
-                        text: "El mensaje ha sido enviado correctamente",
-                        icon: "success",
-                    })
-                    $('#mensaje_difusion').modal('hide');
-                }else{
-                    swal({
-                        title: "Error",
-                        text: "Ha ocurrido un error al enviar el mensaje",
-                        icon: "error",
-                    })
-                }
-            }
+
+
+    function enviar_mensaje_difusion_confirmar() {
+        var formData = new FormData(document.getElementById("mensajeDifusionForm"));
+        myDropzone_ges.getAcceptedFiles().forEach(function(file) {
+            formData.append('misArchivosGes[]', file);
         });
-    }
+
+        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('de_difusion', document.getElementById('de_difusion').value);
+        formData.append('msj_para_difusion', document.getElementById('msj_para_difusion').value);
+        formData.append('titulo_msj_difusion', document.getElementById('titulo_msj_difusion').value);
+        formData.append('detalle_msj_difusion', document.getElementById('detalle_msj_difusion').value);
+        formData.append('mensaje_msj_difusion', document.getElementById('mensaje_msj_difusion').value);
+
+        fetch("{{ route('mensaje_difusion') }}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // Manejar la respuesta del servidor
+        })
+        .catch(error => {
+            console.error('Error:', error.responseText);
+        });
+    };
 
 </script>

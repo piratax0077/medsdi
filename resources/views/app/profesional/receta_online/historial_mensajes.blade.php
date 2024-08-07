@@ -33,7 +33,7 @@
                             <button class="btn btn-primary btn-sm float-right">Enviar mensaje</button>
                         </div>
                         <div class="card-body">
-                            <table id="tabla_examenes_profesional_ro"
+                            <table id="historial_mensajes"
                                 class="display table table-striped dt-responsive nowrap table-xs"
                                 style="width:100%">
                                 <thead>
@@ -43,13 +43,17 @@
                                         <th class=" align-middle">Remitente</th>
                                         <th class=" align-middle">Titulo</th>
                                         <th class=" align-middle">Asunto</th>
+
+
+                                        <th class="align-middle">Estado</th>
                                         <th class=" align-middle">Ver</th>
+                                        <th class="align-middle">Eliminar</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tbody_mensajes_a_profesional">
 
-                                    @if (isset($mensajes) && count($mensajes) > 0)
-                                        @foreach ($mensajes as $mensaje)
+                                    @if (isset($mis_mensajes) && count($mis_mensajes) > 0)
+                                        @foreach ($mis_mensajes as $mensaje)
                                             <tr>
                                                 {{--  <td class="text-wrap align-middle">{{ $mensaje->id }}</td>  --}}
                                                 <td class="text-wrap text-center align-middle" style="font-size:12px">
@@ -57,15 +61,19 @@
                                                 </td>
 
                                                 <td class="align-middle" style="font-size:12px">
-                                                    {{ $mensaje->usuario }}
+                                                    {{ $mensaje->remitente }}
                                                 </td>
-                                                <td class="align-middle text-wrap" style="font-size:10px"><label>{{ $mensaje->mensaje }}</label></td>
-                                                <td class="align-middle text-wrap" style="font-size:10px"><label>DIRECTO</label></td>
+                                                <td class="align-middle text-wrap" style="font-size:10px"><label>{{ $mensaje->datos_mensaje->mensaje }}</label></td>
+                                                <td class="align-middle text-wrap" style="font-size:10px"><label>{{ $mensaje->tipo_mensaje }}</label></td>
                                                 <!--<td class="align-middle text-center">
                                                     <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar mensaje a Paciente"><i class="feather icon-navigation"></i></button>
                                                 </td>-->
                                                  <!--<td class="align-middle text-center">Enviado</td>-->
-                                               <td class="align-middle"> <div onclick="ver_mensaje({{ $mensaje->id  }})"><img src="{{ asset('images/talk.png') }}" alt="Documento" height="35px"></div></td>
+
+
+                                                <td class="align-middle"><span id="estado-{{ $mensaje->id }}">{{ $mensaje->estado }}</span></td>
+                                                <td class="align-middle"> <div style="cursor: pointer;" onclick="ver_mensaje({{ $mensaje->id  }})"><img src="{{ asset('images/talk.png') }}" alt="Documento" height="35px"></div></td>
+                                                <td class="align-middle"><button class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_mensaje({{ $mensaje->id }})"><i class="fas fa-trash"></i></button></td>
                                             </tr>
                                         @endforeach
                                     @endif
@@ -147,9 +155,10 @@
                 $('#modal_mensaje_a_profesional').modal('show');
                 $('#fecha_msj').val(mensaje.fecha_emision);
                 $('#remitente_msj').val(mensaje.remitente);
-                $('#titulo_msj').val(mensaje.titulo);
-                $('#asunto_msj').val(mensaje.asunto);
-                $('#mensaje_msj').val(mensaje.mensaje);
+                $('#titulo_msj').val(mensaje.datos_mensaje.titulo);
+                $('#asunto_msj').val(mensaje.datos_mensaje.asunto);
+                $('#mensaje_msj').val(mensaje.datos_mensaje.mensaje);
+                $('#estado-'+id).text('LEIDO');
             },
             error: function(error){
                 console.log(error);
@@ -159,6 +168,58 @@
 
     function cerrar_modal_mensaje(){
         $('#modal_mensaje_a_profesional').modal('hide');
+    }
+
+    function eliminar_mensaje(id){
+        swal({
+            title: "¿Estás seguro?",
+            text: "Una vez eliminado, no podrás recuperar este mensaje",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: "{{ URL('Profesional/eliminar_mensaje') }}"+"/"+id,
+                    type: "get",
+                    success: function(response){
+                        console.log(response);
+                        if(response.estado == 1){
+                            let mensajes = response.mensajes;
+                            console.log(mensajes);
+                            $('#tbody_mensajes_a_profesional').empty();
+                            mensajes.forEach(mensaje => {
+                                $('#tbody_mensajes_a_profesional').append(`
+                                    <tr>
+                                        <td class="text-wrap text-center align-middle" style="font-size:12px">${mensaje.created_at}</td>
+                                        <td class="align-middle" style="font-size:12px">${mensaje.remitente}</td>
+                                        <td class="align-middle text-wrap" style="font-size:10px"><label>${mensaje.datos_mensaje.mensaje}</label></td>
+                                        <td class="align-middle text-wrap" style="font-size:10px"><label>${mensaje.tipo_mensaje}</label></td>
+                                        <td class="align-middle"><span id="estado-${mensaje.id}">${mensaje.estado}</span></td>
+                                        <td class="align-middle"> <div style="cursor: pointer;" onclick="ver_mensaje(${mensaje.id})"><img src="{{ asset('images/talk.png') }}" alt="Documento" height="35px"></div></td>
+                                        <td class="align-middle"><button class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_mensaje(${mensaje.id})"><i class="fas fa-trash"></i></button></td>
+                                    </tr>
+                                `);
+                            });
+                            swal("El mensaje ha sido eliminado", {
+                                icon: "success",
+                            });
+                            //location.reload();
+                        }else{
+                            swal("Error al eliminar el mensaje", {
+                                icon: "error",
+                            });
+                        }
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+            } else {
+                swal("El mensaje no ha sido eliminado");
+            }
+        });
     }
 </script>
 @endsection

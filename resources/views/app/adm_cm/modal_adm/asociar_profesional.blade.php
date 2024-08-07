@@ -39,6 +39,29 @@
                                     @endif
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">En el cargo de</label>
+                                        <select class="form-control form-control-sm" name="agregar_profesional_cargo_int" id="agregar_profesional_cargo_int" onchange="registrar_nuevo_servicio(event)">
+                                                <option value="0">Seleccione una opción</option>
+                                                <option value="1">Profesional</option>
+                                                <option value="2">Jefe de servicio</option>
+                                                <option value="3">Subjefe de servicio</option>
+                                                <option value="4">Director medico</option>
+                                                <option value="5">Tens</option>
+                                                <option value="6">Tons</option>
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 d-none" id="div_nuevo_servicio">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Nombre del servicio</label>
+                                    <input type="text" class="form-control form-control-sm" name="agregar_profesional_servicio_int" id="agregar_profesional_servicio_int">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <button class="btn btn-outline-success btn-sm"><i class="fas fa-save"></i> Guardar</button>
+                            </div>
                         </div>
                     </div>
 
@@ -862,6 +885,18 @@
         .fail(function(jqXHR, ajaxOptions, thrownError) {
             console.log(jqXHR, ajaxOptions, thrownError)
         });
+    }
+
+    function registrar_nuevo_servicio(event){
+        let id_nuevo_servicio = event.target.value;
+        if(id_nuevo_servicio == 2 || id_nuevo_servicio == 3)
+        {
+            $('#div_nuevo_servicio').removeClass('d-none');
+        }
+        else
+        {
+            $('#div_nuevo_servicio').addClass('d-none');
+        }
     }
 
 </script>

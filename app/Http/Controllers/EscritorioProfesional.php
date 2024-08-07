@@ -41,6 +41,7 @@ use App\Models\LiquidacionRecibo;
 use App\Models\LogUsersDevices;
 use App\Models\MensajesProfesional;
 use App\Models\MensajesDifusion;
+use App\Models\Mensajes;
 use App\Models\NotificacionConfirmacion;
 use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
@@ -498,6 +499,7 @@ class EscritorioProfesional extends Controller
 
             $lugar_atencion_prof = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->count();
             $mensajes = $this->dame_mensajes($profesional->id);
+
             //if($profesional->bienvenida == 0)
             if( $lugar_atencion_prof == 0 )
             {
@@ -542,51 +544,17 @@ class EscritorioProfesional extends Controller
     }
 
     public function dame_mensajes($id){
-        $profesional = Profesional::where('id', $id)->first();
-        // revisar si tiene mensaje para profesional
-        $mensajes = MensajesProfesional::where('id_profesional', $profesional->id)->where('estado', 1)->get();
+        $mensajes_directos = Mensajes::where('id_receptor', $id)->where('estado', 1)->get();
 
-        $mensajes_difusion = MensajesDifusion::where('estado', 1)->get();
-        foreach ($mensajes_difusion as $mensaje) {
-            $mensaje->destinatarios = json_decode($mensaje->destinatarios);
-        }
-
-        // revisar si su rol tiene mensaje de difusion
-        $User = User::where('id', $profesional->id_usuario)->first();
-        $roles = $User->roles()->orderBy('id', 'DESC')->get();
-        $m = [];
-        foreach($mensajes_difusion as $mensaje)
+        foreach($mensajes_directos as $m)
         {
-            foreach($mensaje->destinatarios as $destinatario){
+            $datos_mensaje = json_decode($m->datos_mensaje,true);
+            $m->datos_mensaje = $datos_mensaje;
+            $emisor = User::where('id', $m->id_usuario)->first();
 
-                foreach($roles as $rol){
-                    if(intval($destinatario) == $rol->id){
-                        array_push($m, $mensaje);
-                    }
-                }
-            }
-        }
-        // Asegúrate de que $mensajes sea una colección
-        if (!($mensajes instanceof Collection)) {
-            $mensajes = collect($mensajes);
         }
 
-        // Asegúrate de que $m sea una colección
-        if (!($m instanceof Collection)) {
-            $m = collect($m);
-        }
-
-        // Unir los mensajes
-        $mensajes = $mensajes->merge($m);
-        // Ordenar la colección por el campo created_at
-        $mensajes = $mensajes->sortBy('created_at');
-
-        foreach($mensajes as $mensaje){
-            $mensaje->usuario = User::where('id', $mensaje->id_usuario)->first();
-            $mensaje->usuario = $mensaje->usuario->name;
-        }
-
-        return $mensajes;
+        return $mensajes_directos;
     }
 
     public function validar_rut(Request $request)
@@ -864,6 +832,74 @@ class EscritorioProfesional extends Controller
                 'region' => $region
             ]
         );
+    }
+
+    function enviar_mensaje_paciente(Request $req){
+        try {
+            //code...
+            $asunto = $req->asunto;
+            $mensaje = $req->mensaje;
+            $id_paciente = $req->id_paciente;
+
+            $datos_mensaje = [
+                'asunto' => $asunto,
+                'mensaje' => $mensaje
+            ];
+
+            // buscamos al paciente
+            $paciente = Paciente::where('id', $id_paciente)->first();
+            $nuevo_mensaje = new Mensajes;
+            $nuevo_mensaje->id_usuario = Auth::user()->id;
+            $nuevo_mensaje->id_receptor = $paciente->id;
+            $nuevo_mensaje->estado = 1;
+            $nuevo_mensaje->datos_mensaje = json_encode($datos_mensaje);
+            $nuevo_mensaje->tipo_mensaje = 3;
+            $nuevo_mensaje->fecha_envio = Carbon::now()->format('Y-m-d H:i:s');
+            $nuevo_mensaje->save();
+
+            return ['estado' => 1, 'mensaje' => 'Mensaje enviado correctamente'];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
+    function enviar_mensaje_difusion_pacientes(Request $req){
+        try {
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            $ficha_atencion = FichaAtencion::where('id_profesional', $profesional->id)->distinct()->get(['id_paciente']);
+            $prevision = Prevision::all();
+            $region = Region::all();
+            $paciente = [];
+            foreach ($ficha_atencion as $f) {
+                array_push($paciente, $f->Paciente()->first());
+            }
+            //code...
+            $asunto = $req->asunto;
+            $mensaje = $req->mensaje;
+            $id_paciente = $req->id_paciente;
+
+            $datos_mensaje = [
+                'asunto' => $asunto,
+                'mensaje' => $mensaje
+            ];
+            foreach($pacientes as $paciente){
+                $nuevo_mensaje = new Mensajes;
+                $nuevo_mensaje->id_usuario = Auth::user()->id;
+                $nuevo_mensaje->id_receptor = $paciente->id;
+                $nuevo_mensaje->estado = 1;
+                $nuevo_mensaje->datos_mensaje = json_encode($datos_mensaje);
+                $nuevo_mensaje->tipo_mensaje = 4; // 1: directo a profesional, 2: difusion a profesionales, 3: directo a paciente, 4: difusion a pacientes
+                $nuevo_mensaje->fecha_envio = Carbon::now()->format('Y-m-d H:i:s');
+                $nuevo_mensaje->save();
+            }
+            return ['estado' => 1, 'mensaje' => 'Mensaje enviado correctamente'];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
     }
 
     public function buscar_ciudad_region(Request $request)
@@ -1596,6 +1632,7 @@ class EscritorioProfesional extends Controller
 
     public function index_receta()
     {
+
         return view('app.profesional.receta_online.inicio_receta_online_profesional');
     }
 
@@ -4982,9 +5019,49 @@ class EscritorioProfesional extends Controller
 
 
      public function historial_mensajes(){
-        $mensajes = $this->dame_mensajes(Auth::user()->id);
+        $mis_mensajes = Mensajes::where('id_receptor', Auth::user()->id)->get();
 
-        return view('app.profesional.receta_online.historial_mensajes',['mensajes' => $mensajes]);
+        foreach($mis_mensajes as $m){
+            $remitente = User::find($m->id_usuario);
+            $m->remitente = $remitente->name;
+            $m->datos_mensaje = json_decode($m->datos_mensaje);
+            if($m->tipo_mensaje == 1){
+                $m->tipo_mensaje = 'DIRECTO';
+            }else{
+                $m->tipo_mensaje = 'DIFUSION';
+            }
+
+            if($m->estado == 1){
+                $m->estado = 'NO LEIDO';
+            }else{
+                $m->estado = 'LEIDO';
+            }
+        }
+
+        return view('app.profesional.receta_online.historial_mensajes',['mis_mensajes' => $mis_mensajes]);
+     }
+
+     public function dame_historial_mensajes_json(){
+        $mis_mensajes = Mensajes::where('id_receptor', Auth::user()->id)->get();
+
+        foreach($mis_mensajes as $m){
+            $remitente = User::find($m->id_usuario);
+            $m->remitente = $remitente->name;
+            $m->datos_mensaje = json_decode($m->datos_mensaje);
+            if($m->tipo_mensaje == 1){
+                $m->tipo_mensaje = 'DIRECTO';
+            }else{
+                $m->tipo_mensaje = 'DIFUSION';
+            }
+
+            if($m->estado == 1){
+                $m->estado = 'NO LEIDO';
+            }else{
+                $m->estado = 'LEIDO';
+            }
+        }
+
+        return $mis_mensajes;
      }
 
      public function mis_documentos(){
@@ -4993,9 +5070,12 @@ class EscritorioProfesional extends Controller
 
      public function ver_mensaje($id){
         try {
-            $mensaje = MensajesProfesional::find($id);
+            $mensaje = Mensajes::find($id);
+            $mensaje->estado = 0;
+            $mensaje->save();
             $remitente = User::find($mensaje->id_usuario);
             $mensaje->remitente = $remitente->name;
+            $mensaje->datos_mensaje = json_decode($mensaje->datos_mensaje);
 
             $mensaje->fecha_emision = Carbon::parse($mensaje->created_at)->format('d-m-Y H:i:s');
             return $mensaje;
@@ -5004,5 +5084,17 @@ class EscritorioProfesional extends Controller
             return $e->getMessage();
         }
 
+     }
+
+     public function eliminar_mensaje($id){
+        try {
+            $mensaje = Mensajes::find($id);
+            $mensaje->delete();
+            $mensajes = $this->dame_historial_mensajes_json();
+            return ['estado' => 1, 'msj' => 'Mensaje eliminado','mensajes' => $mensajes];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
      }
 }

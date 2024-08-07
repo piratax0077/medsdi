@@ -26,7 +26,7 @@
                <div class="row row-cols-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 row-cols-xxl-6">
                     <div class="col mb-3">
                         <div class="card-a subir mb-2 h-100 pt-0 pb-0">
-                            <a href="{{ route('ministerio.enfer_noti_obliga') }}">
+                            <a href="{{ route('ministerio.comunicados') }}">
                                 <div class="card-body text-center px-2 pt-2 pb-1" style="cursor:pointer">
                                     <img class="wid-50 text-center" src="{{ asset('images/ministerio/comunicados.png') }}">
                                     <h6 class="mt-1">Envío, comunicados y decretos de difusión</h6>
@@ -96,8 +96,8 @@
                                     <div class="media-body">
                                         <h5 class="my-auto text-left text-white ml-3"> Portal Crónicos</h5>
                                     </div>
-                                </div> 
-                            </a>               
+                                </div>
+                            </a>
                         </div>
                     </div>
                  <div class="col mb-1">
@@ -108,7 +108,7 @@
                                     <div class="media-body">
                                         <h5 class="my-auto text-left text-white ml-3">Flujo de caja</h5>
                                     </div>
-                                </div> 
+                                </div>
                             </a>
                         </div>
                     </div>

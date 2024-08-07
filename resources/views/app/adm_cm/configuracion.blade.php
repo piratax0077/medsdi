@@ -67,9 +67,9 @@
                                                     <li class="nav-item">
                                                         <a class="nav-link text-reset " id="p-adm-tab" data-toggle="tab" href="#p-adm" role="tab" aria-controls="p-adm" aria-selected="true"><i class="feather icon-user mr-2"></i>Perfil administrador</a>
                                                     </li>
-                                                    {{-- <li class="nav-item">
-                                                        <a class="nav-link text-reset" id="rol-permiso-tab" data-toggle="tab" href="#rol-permiso" role="tab" aria-controls="rol-permiso" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Asignar Usuario y Clave</a>
-                                                    </li> --}}
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-reset" id="rol-permiso-adm-med-tab" data-toggle="tab" href="#rol-permiso-adm-med" role="tab" aria-controls="rol-permiso-adm-med" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Perfil administrador medico</a>
+                                                    </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link text-reset" id="ar-dep-tab" data-toggle="tab" href="#ar-dep" role="tab" aria-controls="ar-dep" aria-selected="false"><i class="fa-solid fa-stethoscope mr-2"></i>Especialidades y áreas</a>
                                                     </li>
@@ -385,6 +385,7 @@
                                 <div class="card mb-1">
                                     <div class="card-body">
                                         <h4 class="f-18 mb-0 text-info">Perfil administrador de la Institución</h4>
+
                                         <input type="hidden" name="id_responsable" id="id_responsable" value="{{ $responsable->id }}">
                                     </div>
                                 </div>
@@ -710,6 +711,983 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="tab-pane fade" id="rol-permiso-adm-med" role="tabpanel" aria-labelledby="rol-permiso-adm-med-tab">
+                        <div class="row mb-3 mt-0">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="card mb-1">
+                                    <div class="card-body">
+                                        <h4 class="f-18 mb-0 text-info">Perfil administradores medicos de la Institución</h4>
+                                        <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                            <button type="button" class="btn btn-sm btn-info" onclick="ag_area();"><i class="feather icon-plus" aria-hidden="true"></i> Administrar</button>
+                                        </div>
+                                        @if(isset($director_cm) && $director_cm != null)<input type="hidden" name="id_responsable" id="id_director_cm" value="{{$director_cm->id }}"> @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="contenedor_administradores_cm">
+                            <div class="row">
+                                @if(isset($director_cm) && $director_cm != null)
+                                <div class="col-md-4">
+                                    <!--Card Información Básica-->
+                                    <div class="card">
+                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Datos Personales Director Medico</h5>
+                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_admin_cm(1,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
+                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica_director_cm" aria-expanded="false" aria-controls="info_basica-1_ info_basica-2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Datos Personales-->
+                                        <div class="card-body border-top info_basica_director_cm collapse show" id="info_basica-1_">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Rut</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_cm->rut }} </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Nombre</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_cm->nombre }} </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Primer
+                                                        Apellido</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_cm->apellido_uno }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Segundo
+                                                        Apellido</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_cm->apellido_dos }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Sexo</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        @if ($director_cm->sexo == 'F')
+                                                            Mujer
+                                                        @elseif ($director_cm->sexo == 'M')
+                                                            Hombre
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Nacimiento</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        {{ \Carbon\Carbon::parse($director_cm->fecha_nac)->format('d-m-Y') }}
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Datos Personales-->
+                                        <!--(Editar)Datos Personales-->
+                                        <div class="card-body border-top info_basica_director_cm collapse" id="pinfo_basica_2">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" placeholder="Rut" id="perfil_rut_medico" name="perfil_rut_medico" value="{{$director_cm->rut }}" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nombre</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" placeholder="Nombre" id="perfil_nombre_medico" name="perfil_nombre_medico" value="{{$director_cm->nombre }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Primer Apellido</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" id="perfil_apellido_uno_medico" name="perfil_apellido_uno_medico" placeholder="Primer Apellido" value="{{$director_cm->apellido_uno }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Segundo Apellido</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" id="perfil_apellido_dos_medico" name="perfil_apellido_dos_medico" placeholder="Segundo Apellido" value="{{$director_cm->apellido_dos }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Sexo</label>
+                                                    <div class="col-sm-7 my-auto">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" id="perfil_sexo_medico" name="perfil_sexo_medico" id="inlineRadio2" value="F" @if ($director_cm->sexo == 'F') checked @endif>
+                                                            <label class="form-check-label" for="inlineRadio2">Mujer</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" id="perfil_sexo_medico" name="perfil_sexo_medico" id="inlineRadio1" value="M" @if ($director_cm->sexo == 'M') checked @endif>
+                                                            <label class="form-check-label" for="inlineRadio1">Hombre</label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nacimiento</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="date" class="form-control" id="perfil_nac_medico" name="perfil_nac_medico" value="{{$director_cm->fecha_nac }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_medico_datos_personales();" class="btn btn-info">Guardar Cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: (Editar)Datos Personales-->
+                                    </div>
+                                    <!--Cierre: Card Datos Personales-->
+
+                                    <!--Contraseña-->
+                                    <div class="card">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Cambiar contraseña</h5>
+                                            <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal_director_cm" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Contraseña-->
+                                        <div class="card-body pass_personal_director_cm collapse show" id="pass_personal_1">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Contraseña actual</label>
+                                                    <div class="col-sm-7 pt-2 ml-2 font-weight-bolder"> •••••••• </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Contraseña-->
+                                        <!--(Editar)Contraseña-->
+                                        <div class="card-body pass_personal_director_cm collapse" id="pass_personal_2">
+                                            <form method="get" action="{{ route('adm_cm.cambio_contrasena_responsable')}}" id="form_cambio_contrasena_perfil_responsable" name="form_cambio_contrasena_perfil_responsable">
+                                                <input type="hidden" name="responsable_id" id="responsable_id" value="{{ $responsable->Usuario()->first()->id }}">
+                                                @csrf
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Contraseña actual</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña Actual">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nueva contraseña</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva Contraseña">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Repitir contraseña</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la Contraseña">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-sm btn-danger mr-2">Cancelar</button>
+                                                        <button type="submit" class="btn btn-sm btn-info">Guardar cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: (Editar)Contraseña-->
+                                    </div>
+                                    <!--Cierre:Contraseña-->
+                                    <!--Card Contacto-->
+                                    <div class="card">
+                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Contacto</h5>
+                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto_" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Contacto-->
+                                        <div class="card-body border-top info_contacto_ collapse show" id="info_contacto_1">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Correo
+                                                        Electrónico</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_cm->email }} </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-6 my-auto ml-2">{{$director_cm->telefono_uno }}</div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-6 my-auto ml-2">{{$director_cm->telefono_dos }}</div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Contacto-->
+                                        <!--(Editar) Contacto-->
+                                        <div class="card-body border-top info_contacto_ collapse " id="info_contacto_2">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Correo Electrónico</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" id="Perfil_email" name="Perfil_email" placeholder="Correo Electrónico" value="{{$director_cm->email }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono" name="Perfil_fono" value="{{$director_cm->telefono_uno }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono_dos" name="Perfil_fono_dos" value="{{$director_cm->telefono_dos }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info">Guardar Cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--(Editar) Contacto-->
+                                    </div>
+                                    <!--Cierre: Card Contacto-->
+                                    <!--Card Residencia-->
+                                    <div class="card">
+                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Residencia</h5>
+                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial_director_cm" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Residencia-->
+                                        <div class="card-body border-top info_residencial_director_cm collapse show" id="info_residencial_1">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        {{$director_cm->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Comuna</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        {{$director_cm->Direccion()->first()->Ciudad()->first()->nombre }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        {{$director_cm->Direccion()->first()->direccion . ' ' . $responsable->Direccion()->first()->numero_dir }}
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Residencia-->
+                                        <!--(Editar) Residencia-->
+                                        <div class="card-body border-top info_residencial_director_cm collapse " id="info_residencial_2">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-6">
+                                                        <select class="form-control" onchange="buscar_ciudad_responsable();" id="perfil_region" name="perfil_region">
+                                                            <option value="">Seleccione una Región</option>
+                                                            @if (isset($regiones))
+                                                                @foreach ($regiones as $region)
+                                                                <option value="{{ $region->id }}" @if ($region->id ==
+                                                                   $director_cm->Direccion()->first()->Ciudad()->first()->Region()->first()->id) selected @endif>
+                                                                    {{ $region->nombre }}
+                                                                </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Ciudad</label>
+                                                    <div class="col-sm-6">
+                                                        <select class="form-control" id="perfil_ciudad" name="perfil_ciudad">
+                                                            <option value="">Seleccione su comuna</option>
+                                                            @if (isset($ciudades))
+                                                                @foreach ($ciudades as $ciudad)
+                                                                <option value="{{ $ciudad->id }}" @if ($director_cm->Direccion()->first()->id_ciudad == $ciudad->id) selected @endif>
+                                                                    {{ $ciudad->nombre }}
+                                                                </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="{{$director_cm->Direccion()->first()->direccion }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Piso/Depto</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="{{$director_cm->Direccion()->first()->numero_dir }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info">Guardar Cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--(Editar) Residencia-->
+                                    </div>
+                                    <!--Cierre: Card Residencia-->
+                                </div>
+                                @endif
+                                @if(isset($subdirector_cm) && $subdirector_cm != null)
+                                <div class="col-md-4">
+                                    <!--Card Información Básica-->
+                                    <div class="card">
+                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Datos Personales SubDirector Medico</h5>
+                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_admin_cm(2,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
+                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica_subdirector_cm" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Datos Personales-->
+                                        <div class="card-body border-top info_basica_subdirector_cm collapse show" id="info_basica-1">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Rut</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$subdirector_cm->rut }} </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Nombre</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$subdirector_cm->nombre }} </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Primer
+                                                        Apellido</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$subdirector_cm->apellido_uno }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Segundo
+                                                        Apellido</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$subdirector_cm->apellido_dos }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Sexo</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        @if ($subdirector_cm->sexo == 'F')
+                                                            Mujer
+                                                        @elseif ($subdirector_cm->sexo == 'M')
+                                                            Hombre
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Nacimiento</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        {{ \Carbon\Carbon::parse($subdirector_cm->fecha_nac)->format('d-m-Y') }}
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Datos Personales-->
+                                        <!--(Editar)Datos Personales-->
+                                        <div class="card-body border-top info_basica_subdirector_cm collapse" id="pinfo_basica_2">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" placeholder="Rut" id="perfil_rut_medico" name="perfil_rut_medico" value="{{$subdirector_cm->rut }}" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nombre</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" placeholder="Nombre" id="perfil_nombre_medico" name="perfil_nombre_medico" value="{{$subdirector_cm->nombre }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Primer Apellido</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" id="perfil_apellido_uno_medico" name="perfil_apellido_uno_medico" placeholder="Primer Apellido" value="{{$subdirector_cm->apellido_uno }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Segundo Apellido</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" id="perfil_apellido_dos_medico" name="perfil_apellido_dos_medico" placeholder="Segundo Apellido" value="{{$subdirector_cm->apellido_dos }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Sexo</label>
+                                                    <div class="col-sm-7 my-auto">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" id="perfil_sexo_medico" name="perfil_sexo_medico" id="inlineRadio2" value="F" @if ($subdirector_cm->sexo == 'F') checked @endif>
+                                                            <label class="form-check-label" for="inlineRadio2">Mujer</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" id="perfil_sexo_medico" name="perfil_sexo_medico" id="inlineRadio1" value="M" @if ($subdirector_cm->sexo == 'M') checked @endif>
+                                                            <label class="form-check-label" for="inlineRadio1">Hombre</label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nacimiento</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="date" class="form-control" id="perfil_nac_medico" name="perfil_nac_medico" value="{{$subdirector_cm->fecha_nac }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_medico_datos_personales();" class="btn btn-info">Guardar Cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: (Editar)Datos Personales-->
+                                    </div>
+                                    <!--Cierre: Card Datos Personales-->
+
+                                    <!--Contraseña-->
+                                    <div class="card">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Cambiar contraseña</h5>
+                                            <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal_subdirector_cm" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Contraseña-->
+                                        <div class="card-body pass_personal_subdirector_cm collapse show" id="pass_personal_1">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Contraseña actual</label>
+                                                    <div class="col-sm-7 pt-2 ml-2 font-weight-bolder"> •••••••• </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Contraseña-->
+                                        <!--(Editar)Contraseña-->
+                                        <div class="card-body pass_personal_subdirector_cm collapse" id="pass_personal_2">
+                                            <form method="get" action="{{ route('adm_cm.cambio_contrasena_responsable')}}" id="form_cambio_contrasena_perfil_responsable" name="form_cambio_contrasena_perfil_responsable">
+                                                <input type="hidden" name="responsable_id" id="responsable_id" value="{{ $responsable->Usuario()->first()->id }}">
+                                                @csrf
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Contraseña actual</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña Actual">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nueva contraseña</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva Contraseña">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Repitir contraseña</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la Contraseña">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-sm btn-danger mr-2">Cancelar</button>
+                                                        <button type="submit" class="btn btn-sm btn-info">Guardar cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: (Editar)Contraseña-->
+                                    </div>
+                                    <!--Cierre:Contraseña-->
+                                    <!--Card Contacto-->
+                                    <div class="card">
+                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Contacto</h5>
+                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto_subdirector_cm" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Contacto-->
+                                        <div class="card-body border-top info_contacto_subdirector_cm collapse show" id="info_contacto_1">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Correo
+                                                        Electrónico</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$subdirector_cm->email }} </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-6 my-auto ml-2">{{$subdirector_cm->telefono_uno }}</div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-6 my-auto ml-2">{{$subdirector_cm->telefono_dos }}</div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Contacto-->
+                                        <!--(Editar) Contacto-->
+                                        <div class="card-body border-top info_contacto_subdirector_cm collapse " id="info_contacto_2">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Correo Electrónico</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" id="Perfil_email" name="Perfil_email" placeholder="Correo Electrónico" value="{{$subdirector_cm->email }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono" name="Perfil_fono" value="{{$subdirector_cm->telefono_uno }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono_dos" name="Perfil_fono_dos" value="{{$subdirector_cm->telefono_dos }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info">Guardar Cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--(Editar) Contacto-->
+                                    </div>
+                                    <!--Cierre: Card Contacto-->
+                                    <!--Card Residencia-->
+                                    @if(isset($subdirector_cm))
+                                    <div class="card">
+                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Residencia</h5>
+                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial_subdirector_cm" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Residencia-->
+                                        <div class="card-body border-top info_residencial_subdirector_cm collapse show" id="info_residencial_1">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        {{$subdirector_cm->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Comuna</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        {{$subdirector_cm->Direccion()->first()->Ciudad()->first()->nombre }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        {{$subdirector_cm->Direccion()->first()->direccion . ' ' . $responsable->Direccion()->first()->numero_dir }}
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Residencia-->
+                                        <!--(Editar) Residencia-->
+                                        <div class="card-body border-top info_residencial_subdirector_cm collapse " id="info_residencial_2">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-6">
+                                                        <select class="form-control" onchange="buscar_ciudad_responsable();" id="perfil_region" name="perfil_region">
+                                                            <option value="">Seleccione una Región</option>
+                                                            @if (isset($regiones))
+                                                                @foreach ($regiones as $region)
+                                                                <option value="{{ $region->id }}" @if ($region->id ==
+                                                                   $subdirector_cm->Direccion()->first()->Ciudad()->first()->Region()->first()->id) selected @endif>
+                                                                    {{ $region->nombre }}
+                                                                </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Ciudad</label>
+                                                    <div class="col-sm-6">
+                                                        <select class="form-control" id="perfil_ciudad" name="perfil_ciudad">
+                                                            <option value="">Seleccione su comuna</option>
+                                                            @if (isset($ciudades))
+                                                                @foreach ($ciudades as $ciudad)
+                                                                <option value="{{ $ciudad->id }}" @if ($subdirector_cm->Direccion()->first()->id_ciudad == $ciudad->id) selected @endif>
+                                                                    {{ $ciudad->nombre }}
+                                                                </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="{{$subdirector_cm->Direccion()->first()->direccion }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Piso/Depto</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="{{$subdirector_cm->Direccion()->first()->numero_dir }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info">Guardar Cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--(Editar) Residencia-->
+                                    </div>
+                                    @endif
+                                    <!--Cierre: Card Residencia-->
+                                </div>
+                                @endif
+                                @if(isset($director_gestion_cuidado) && $director_gestion_cuidado != null)
+                                <div class="col-md-4">
+                                    <!--Card Información Básica-->
+                                    <div class="card">
+                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Datos Personales SubDirector Gestion Cuidado</h5>
+                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_admin_cm(3,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
+                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Datos Personales-->
+                                        <div class="card-body border-top info_basica collapse show" id="info_basica-1">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Rut</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_gestion_cuidado->rut }} </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Nombre</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_gestion_cuidado->nombre }} </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Primer
+                                                        Apellido</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_gestion_cuidado->apellido_uno }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Segundo
+                                                        Apellido</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_gestion_cuidado->apellido_dos }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Sexo</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        @if ($director_gestion_cuidado->sexo == 'F')
+                                                            Mujer
+                                                        @elseif ($director_gestion_cuidado->sexo == 'M')
+                                                            Hombre
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Nacimiento</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        {{ \Carbon\Carbon::parse($director_gestion_cuidado->fecha_nac)->format('d-m-Y') }}
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Datos Personales-->
+                                        <!--(Editar)Datos Personales-->
+                                        <div class="card-body border-top info_basica collapse" id="pinfo_basica_2">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" placeholder="Rut" id="perfil_rut_medico" name="perfil_rut_medico" value="{{$director_gestion_cuidado->rut }}" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nombre</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" placeholder="Nombre" id="perfil_nombre_medico" name="perfil_nombre_medico" value="{{$director_gestion_cuidado->nombre }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Primer Apellido</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" id="perfil_apellido_uno_medico" name="perfil_apellido_uno_medico" placeholder="Primer Apellido" value="{{$director_gestion_cuidado->apellido_uno }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Segundo Apellido</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" id="perfil_apellido_dos_medico" name="perfil_apellido_dos_medico" placeholder="Segundo Apellido" value="{{$director_gestion_cuidado->apellido_dos }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Sexo</label>
+                                                    <div class="col-sm-7 my-auto">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" id="perfil_sexo_medico" name="perfil_sexo_medico" id="inlineRadio2" value="F" @if ($director_gestion_cuidado->sexo == 'F') checked @endif>
+                                                            <label class="form-check-label" for="inlineRadio2">Mujer</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" id="perfil_sexo_medico" name="perfil_sexo_medico" id="inlineRadio1" value="M" @if ($director_gestion_cuidado->sexo == 'M') checked @endif>
+                                                            <label class="form-check-label" for="inlineRadio1">Hombre</label>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nacimiento</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="date" class="form-control" id="perfil_nac_medico" name="perfil_nac_medico" value="{{$director_gestion_cuidado->fecha_nac }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_medico_datos_personales();" class="btn btn-info">Guardar Cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: (Editar)Datos Personales-->
+                                    </div>
+                                    <!--Cierre: Card Datos Personales-->
+
+                                    <!--Contraseña-->
+                                    <div class="card">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Cambiar contraseña</h5>
+                                            <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Contraseña-->
+                                        <div class="card-body pass_personal collapse show" id="pass_personal_1">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Contraseña actual</label>
+                                                    <div class="col-sm-7 pt-2 ml-2 font-weight-bolder"> •••••••• </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Contraseña-->
+                                        <!--(Editar)Contraseña-->
+                                        <div class="card-body pass_personal collapse" id="pass_personal_2">
+                                            <form method="get" action="{{ route('adm_cm.cambio_contrasena_responsable')}}" id="form_cambio_contrasena_perfil_responsable" name="form_cambio_contrasena_perfil_responsable">
+                                                <input type="hidden" name="responsable_id" id="responsable_id" value="{{ $responsable->Usuario()->first()->id }}">
+                                                @csrf
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Contraseña actual</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña Actual">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nueva contraseña</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva Contraseña">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Repitir contraseña</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la Contraseña">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-sm btn-danger mr-2">Cancelar</button>
+                                                        <button type="submit" class="btn btn-sm btn-info">Guardar cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: (Editar)Contraseña-->
+                                    </div>
+                                    <!--Cierre:Contraseña-->
+                                    <!--Card Contacto-->
+                                    <div class="card">
+                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Contacto</h5>
+                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Contacto-->
+                                        <div class="card-body border-top info_contacto collapse show" id="info_contacto_1">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Correo
+                                                        Electrónico</label>
+                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_gestion_cuidado->email }} </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-6 my-auto ml-2">{{$director_gestion_cuidado->telefono_uno }}</div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-6 my-auto ml-2">{{$director_gestion_cuidado->telefono_dos }}</div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Contacto-->
+                                        <!--(Editar) Contacto-->
+                                        <div class="card-body border-top info_contacto collapse " id="info_contacto_2">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Correo Electrónico</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" id="Perfil_email" name="Perfil_email" placeholder="Correo Electrónico" value="{{$director_gestion_cuidado->email }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono" name="Perfil_fono" value="{{$director_gestion_cuidado->telefono_uno }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono_dos" name="Perfil_fono_dos" value="{{$director_gestion_cuidado->telefono_dos }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info">Guardar Cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--(Editar) Contacto-->
+                                    </div>
+                                    <!--Cierre: Card Contacto-->
+                                    <!--Card Residencia-->
+                                    <div class="card">
+                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Residencia</h5>
+                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Residencia-->
+                                        <div class="card-body border-top info_residencial collapse show" id="info_residencial_1">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        {{$director_gestion_cuidado->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Comuna</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        {{$director_gestion_cuidado->Direccion()->first()->Ciudad()->first()->nombre }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+                                                        {{$director_gestion_cuidado->Direccion()->first()->direccion . ' ' . $responsable->Direccion()->first()->numero_dir }}
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Residencia-->
+                                        <!--(Editar) Residencia-->
+                                        <div class="card-body border-top info_residencial collapse " id="info_residencial_2">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-6">
+                                                        <select class="form-control" onchange="buscar_ciudad_responsable();" id="perfil_region" name="perfil_region">
+                                                            <option value="">Seleccione una Región</option>
+                                                            @if (isset($regiones))
+                                                                @foreach ($regiones as $region)
+                                                                <option value="{{ $region->id }}" @if ($region->id ==
+                                                                   $director_gestion_cuidado->Direccion()->first()->Ciudad()->first()->Region()->first()->id) selected @endif>
+                                                                    {{ $region->nombre }}
+                                                                </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Ciudad</label>
+                                                    <div class="col-sm-6">
+                                                        <select class="form-control" id="perfil_ciudad" name="perfil_ciudad">
+                                                            <option value="">Seleccione su comuna</option>
+                                                            @if (isset($ciudades))
+                                                                @foreach ($ciudades as $ciudad)
+                                                                <option value="{{ $ciudad->id }}" @if ($director_gestion_cuidado->Direccion()->first()->id_ciudad == $ciudad->id) selected @endif>
+                                                                    {{ $ciudad->nombre }}
+                                                                </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="{{$director_gestion_cuidado->Direccion()->first()->direccion }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Piso/Depto</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="{{$director_gestion_cuidado->Direccion()->first()->numero_dir }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info">Guardar Cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--(Editar) Residencia-->
+                                    </div>
+                                    <!--Cierre: Card Residencia-->
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+
+                    </div>
                     <!--CIERRE: PERFIL ADMINISTRADOR-->
 
                     <!--ADMINISTRADOR DE ROLES Y PERMISOS-->
@@ -777,7 +1755,7 @@
                     <!--ESPECIALIDADES Y ÁREAS-->
                     <div class="tab-pane fade" id="ar-dep" role="tabpanel" aria-labelledby="ar-dep-tab">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <!--Especialidades-->
                                 <div class="card">
                                     <div class="card-header pt-3 pb-2 bg-light">
@@ -830,57 +1808,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="col-md-4">
-                                <!--Especialidades-->
-                                <div class="card">
-                                    <div class="card-header pt-3 pb-2 bg-light">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <h6 class="f-18 d-inline mt-3 text-info">Otros Profesionales</h6>
-                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
-                                                    <button type="button" class="btn btn-sm btn-info" onclick="ag_otra_especialidad();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-6 col-md-12">
-                                                <table id="otros_profesionales_cm" class="display table table-striped table-xs dt-responsive nowrap" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="text-wrap text-center align-middle">Especialidad</th>
-                                                            <th class="text-wrap text-center align-middle">N° Profesionales</th>
-                                                            <th class="text-wrap text-center align-middle">Acción</th>
-                                                            <th class="text-wrap"></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @if(isset($otras_especialidades_cm))
-                                                            @foreach($otras_especialidades_cm as $especialidad)
-                                                            <tr>
-                                                                <td class="align-middle text-center">{{ $especialidad->nombre }}</td>
-                                                                <td class="align-middle text-center">5</td>
-                                                                <td class="align-middle text-center">
-                                                                    <div class="custom-control custom-switch">
-                                                                        <input type="checkbox" class="custom-control-input" id="esp-{{ $especialidad->id }}">
-                                                                        <label class="custom-control-label" for="esp-{{ $especialidad->id }}"></label>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="align-middle text-center">
-                                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_otra_especialidad_cm({{ $especialidad->id }});"><i class="feather icon-trash"></i></button>
-                                                                </td>
-                                                            </tr>
-                                                            @endforeach
-                                                        @endif
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <!--Área-->
                                 <div class="card">
                                     <div class="card-header pt-3 pb-2 bg-light">
@@ -908,11 +1836,53 @@
                                                         @foreach($areas_cm as $area)
                                                         <tr>
                                                             <td class="align-middle text-left">{{ $area->tipo_area }}</td>
-                                                            <td class="align-middle text-left">{{ $area->nombre_responsable . ' ' . $area->apellido_uno_responsable . ' ' . $area->apellido_dos_responsable }}</td>
+                                                            <td class="align-middle text-left">{{ $area->nombre . ' ' . $area->apellido_uno . ' ' . $area->apellido_dos }}</td>
                                                             <td class="align-middle text-left">
-                                                                <button type="button" class="btn btn-outline-warning btn-sn btn-icon" onclick="dame_area_cm({{ $area->id }})"><i class="fas fa-edit"></i></button>
-                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_area_cm({{ $area->id }});"><i class="feather icon-trash"></i></button>
+                                                                <button type="button" class="btn btn-outline-warning btn-sn btn-icon" data-toggle="tooltip" data-placement="top" title="Editar responsable {{ $area->tipo_area }}" onclick="dame_area_cm({{ $area->id_responsable }},{{ $institucion->id_lugar_atencion }})"><i class="fas fa-edit"></i></button>
+                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar area {{ $area->tipo_area }}" onclick="eliminar_area_cm({{ $area->id }});"><i class="feather icon-trash"></i></button>
                                                             </td>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <!--Área-->
+                                <div class="card">
+                                    <div class="card-header pt-3 pb-2 bg-light">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h6 class="f-18 d-inline mt-3 text-info">Servicios</h6>
+                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="ag_servicio();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-md-12">
+                                                <table id="servicios_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-wrap text-left align-middle">Servicio</th>
+                                                            <th class="text-wrap text-left align-middle">Responsable</th>
+                                                            <th class="text-wrap text-left align-middle">Acción</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($servicios_internos as $servicio)
+                                                        <tr>
+                                                            <td class="align-middle text-left">{{ $servicio->nombre }}</td>
+                                                            <td class="align-middle text-left">{{ $servicio->nombre_responsable . ' ' . $servicio->apellido_uno_responsable . ' ' . $servicio->apellido_dos_responsable }}</td>
+                                                            <td class="align-middle text-left">
+                                                                <button type="button" class="btn btn-outline-warning btn-sn btn-icon" onclick="dame_servicio_cm({{ $servicio->id }})"><i class="fas fa-edit"></i></button>
+                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_servicio_cm({{ $servicio->id }});"><i class="feather icon-trash"></i></button>
+                                                            </td>
+                                                        </tr>
                                                         @endforeach
                                                     </tbody>
                                                 </table>
@@ -991,355 +1961,6 @@
     </div>
 </div>
 
-    {{--  MODALES CONFIGURACION  --}}
-
-    {{--  MODAL  SUCURSAL  --}}
-    {{--  <div id="a_sucursal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_sucursal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Añadir nueva sucursal</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <form>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Rut</label>
-                                    <input class="form-control form-control-sm" name="nombre_lugar_atencion" id="nombre_lugar_atencion" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Nombre</label>
-                                    <input class="form-control form-control-sm" name="nombre_lugar_atencion" id="nombre_lugar_atencion" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label class="floating-label">Dirección</label>
-                                    <input class="form-control form-control-sm" name="direccion" id="direccion_lugar_atencion" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Región</label>
-                                    <select class="form-control form-control-sm">
-                                        <option>Seleccione una opción</option>
-                                        <optgroup label="Valparaíso">
-                                            <option value="AL">Viña del Mar</option>
-                                            <option value="LA">La Calera</option>
-                                            <option value="VA">Valparaíso</option>
-                                        </optgroup>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Comuna</label>
-                                    <select class="form-control form-control-sm">
-                                        <option>Seleccione</option>
-                                        <option value="AL">Viña del Mar</option>
-                                        <option value="LA">La Calera</option>
-                                        <option value="VA">Valparaíso</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Correo electrónico</label>
-                                    <input class="form-control form-control-sm" name="email" id="email" type="email">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Teléfono</label>
-                                    <input class="form-control form-control-sm" name="telefono_1" id="telefono_1" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Teléfono (opcional)</label>
-                                    <input class="form-control form-control-sm" name="telefono_2" id="telefono_2" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <div class="switch switch-success d-inline m-r-10">
-                                        <input type="checkbox" id="not_pacientes_1">
-                                        <label for="not_pacientes_1" class="cr"></label>
-                                        <label>Notificar a pacientes</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-info btn-sm mx-auto">Añadir nueva sucursal</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>  --}}
-
-     {{--  <div id="e_sucursal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="e_sucursal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Editar sucursal ( Nombre de sucursal)
-                        <!--Sin los parentesis, solo cargar el nombre de la sucursal-->
-                    </h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Rut</label>
-                                    <input class="form-control form-control-sm" name="nombre_lugar_atencion" id="nombre_lugar_atencion" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Nombre</label>
-                                    <input class="form-control form-control-sm" name="nombre_lugar_atencion" id="nombre_lugar_atencion" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <label class="floating-label">Dirección</label>
-                                    <input class="form-control form-control-sm" name="direccion" id="direccion_lugar_atencion" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Región</label>
-                                    <select class="form-control form-control-sm">
-                                        <option>Seleccione</option>
-                                        <optgroup label="Valparaíso">
-                                            <option value="AL">Viña del Mar</option>
-                                            <option value="LA">La Calera</option>
-                                            <option value="VA">Valparaíso</option>
-                                        </optgroup>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Comuna</label>
-                                    <select class="form-control form-control-sm">
-                                        <option>Seleccione</option>
-                                        <option value="AL">Viña del Mar</option>
-                                        <option value="LA">La Calera</option>
-                                        <option value="VA">Valparaíso</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Correo electrónico</label>
-                                    <input class="form-control form-control-sm" name="email" id="email" type="email">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Teléfono</label>
-                                    <input class="form-control form-control-sm" name="telefono_1" id="telefono_1" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Teléfono (opcional)</label>
-                                    <input class="form-control form-control-sm" name="telefono_2" id="telefono_2" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <div class="switch switch-success d-inline m-r-10">
-                                        <input type="checkbox" id="not_pacientes_1">
-                                        <label for="not_pacientes_1" class="cr"></label>
-                                        <label>Notificar a pacientes</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-info btn-sm mx-auto">Guardar cambios</button>
-                </div>
-            </div>
-        </div>
-    </div>  --}}
-
-    {{--  <div id="asistentes_sucursal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="asistentes_sucursal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Asistentes de ( Nombre de sucursal)
-                        <!--Sin los parentesis, solo cargar el nombre de la sucursal-->
-                    </h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <form>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h6>Ingrese Rut de el o la asistente que desea asociar a su lugar de atención</h6>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control form-control-sm" placeholder="Rut" aria-label="Rut" aria-describedby="button-addon2">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-info btn-sm" type="button" id="button-addon2">Asociar</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <!--TABLA RESPONSIVA HACIA ABAJO-->
-                                <table id="res-config" class="display table table-striped dt-responsive nowrap text-center table-xs" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Acción</th>
-                                            <th>Rut</th>
-                                            <th>Nombre</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="habdes_1">
-                                                    <label class="custom-control-label" for="habdes_1"></label>
-                                                </div>
-                                            </td>
-                                            <td>00.000.000-0</td>
-                                            <td>Pepita Sanchez Díaz</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-info btn-sm mx-auto">Guardar cambios</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>  --}}
-
-    {{--  <div id="horario_sucursal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="horario_sucursal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Horario de ( Nombre de sucursal)
-                        <!--Sin los parentesis, solo cargar el nombre de la sucursal-->
-                    </h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <form>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h6 class="text-c-blue">Horario de atención</h6>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="col-sm-6 col-md-3">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Día</label>
-                                    <select class="form-control form-control-sm">
-                                        <option>Seleccione</option>
-                                        <option>Lunes a viernes</option>
-                                        <option>Sabado y domingos</option>
-                                        <option>Lunes</option>
-                                        <option>Martes</option>
-                                        <option>Miércoles</option>
-                                        <option>Jueves</option>
-                                        <option>Viernes</option>
-                                        <option>Sábado</option>
-                                        <option>Domingo</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-md-3">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Desde</label>
-                                    <select class="form-control form-control-sm">
-                                        <option>Seleccione</option>
-                                        <option>Cargar horas</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-md-3">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Hasta</label>
-                                    <select class="form-control form-control-sm">
-                                        <option>Seleccione</option>
-                                        <option>Cargar horas</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 col-md-3">
-                                <button type="button" class="btn btn-info btn-sm btn-block">Añadir horario</button></td>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12">
-                                <!--TABLA RESPONSIVA HACIA ABAJO-->
-                                <table id="res-config" class="display table table-striped dt-responsive nowrap table-xs text-center" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Desde</th>
-                                            <th>Hasta</th>
-                                            <th>Día</th>
-                                            <th>Acción</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>8:00 am</td>
-                                            <td>19:00 pm</td>
-                                            <td>Martes</td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="feather icon-x"></i></button></td>
-                                        </tr>
-                                        </tr>
-                                        <tr>
-                                            <td>8:00 am</td>
-                                            <td>19:00 pm</td>
-                                            <td>Lunes a viernes</td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="feather icon-x"></i></button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>10:00 am</td>
-                                            <td>14:00 pm</td>
-                                            <td>Sábado</td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="feather icon-x"></i></button></td>
-                                        </tr>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-info btn-sm mx-auto">Guardar cambios</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>  --}}
-
-    {{--  MODAL DESASOCIAR  --}}
     <div id="permisos_rol" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="permisos_rol" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -1636,7 +2257,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Añadir área</h5>
+                    <h5 class="modal-title text-white text-center">Añadir o editar direccion medica</h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
@@ -1645,11 +2266,11 @@
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <!--Cargar áreas-->
-                                    <label class="floating-label">Área</label>
-                                    <select class="form-control form-control-sm" id="area">
-                                        <option>Seleccione</option>
-                                        @foreach($tipos_areas_cm as $area)
-                                            <option value="{{ $area->id }}">{{ $area->nombre }}</option>
+                                    <label class="floating-label">Cargo</label>
+                                    <select class="form-control form-control-sm" id="cargo">
+                                        <option value="0">Seleccione</option>
+                                        @foreach($cargos as $cargo)
+                                            <option value="{{ $cargo->id }}">{{ $cargo->descripcion }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -1658,8 +2279,8 @@
                                 <div class="form-group fill">
                                     <!--Cargar áreas-->
                                     <label class="floating-label">Responsable</label>
-                                    <select class="form-control form-control-sm" id="responsable_area">
-                                        <option>Seleccione</option>
+                                    <select class="form-control form-control-sm" id="responsable_cargo">
+                                        <option value="0">Seleccione</option>
                                         @if(isset($profesionales))
                                         @foreach($profesionales as $profesional)
                                             <option value="{{ $profesional->id }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
@@ -1673,7 +2294,99 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="registrar_area_profesional()">Añadir</button>
+                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_direccion_medica({{ $institucion->id }})">Editar direccion medica</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{--  MODAL AREA  --}}
+    <div id="a_servicio" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_servicio" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white text-center">Añadir servicio</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <!--Cargar áreas-->
+                                    <label class="floating-label">Servicio</label>
+                                    <div class="d-flex justify-content-between">
+                                        <select class="form-control form-control-sm" id="servicio" >
+                                            <option value="0">Seleccione</option>
+                                            @if(isset($servicios))
+                                            @foreach($servicios as $servicio)
+                                                <option value="{{ $servicio->id }}">{{ $servicio->nombre }}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
+                                        <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_div_servicio()"><i class="fas fa-plus"></i> </button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <!--Cargar áreas-->
+                                    <label class="floating-label">Responsable</label>
+                                    <select class="form-control form-control-sm" id="responsable_servicio">
+                                        <option value="0">Seleccione</option>
+                                        @if(isset($profesionales))
+                                        @foreach($profesionales as $profesional)
+                                            <option value="{{ $profesional->id }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="div_form_servicio" class="d-none w-100">
+                                <div class="col-sm-12">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm" for="nombre_servicio_">Nombre</label>
+                                        <input type="text" class="form-control form-control-sm" name="nombre_servicio_" id="nombre_servicio_">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm" for="rut_servicio">RUT</label>
+                                        <input type="text" class="form-control form-control-sm" name="rut_servicio" id="rut_servicio">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Dirección</label>
+                                        <input type="address" class="form-control form-control-sm" name="direccion_servicio" id="direccion_servicio">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm" for="telefono_servicio">Telefono</label>
+                                        <input type="text" class="form-control form-control-sm" name="telefono_servicio" id="telefono_servicio">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm" for="email_servicio">Email</label>
+                                        <input type="text" class="form-control form-control-sm" name="email_servicio" id="email_servicio">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <button type="button" class="btn btn-outline-success btn-sm my-3 float-right" onclick="guardar_nuevo_servicio()"><i class="fas fa-save"></i> Guardar</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_servicio()">Añadir</button>
                 </div>
             </div>
         </div>
@@ -1775,6 +2488,39 @@
             </div>
         </div>
     </div>
+
+    <div id="editar_area" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editar_area" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white text-center">Editar area</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <!--Cargar áreas-->
+                                    <label class="floating-label-activo-sm">Responsable</label>
+                                    <select class="form-control form-control-sm" id="editar_responsable" name="editar_responsable">
+                                        <option>Seleccione</option>
+                                        @foreach($profesionales as $p)
+                                            <option value="{{ $p->id }}">{{ $p->nombre }} {{ $p->apellido_uno }} {{ $p->apellido_dos }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_area_cm({{ $institucion->id_lugar_atencion }})">Editar</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {{--  MODAL ESPECIALIDADES  --}}
 <div id="a_otra_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_otra_especialidad" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -1868,6 +2614,10 @@
         /*-Añadir área-*/
         function ag_area() {
             $('#a_area').modal('show');
+        }
+
+        function ag_servicio(){
+            $('#a_servicio').modal('show');
         }
 
         /*-Rol-*/
@@ -2221,7 +2971,56 @@
                     })
                     .fail(function() {
                         console.log("error");
+                    });
+        }
+
+        function editar_responsable_medico_datos_personales(){
+            let id_responsable = $('#id_responsable_medico').val();
+            let rut = $('#perfil_rut_medico').val();
+            let nombre = $('#perfil_nombre_medico').val();
+            let apellido_uno = $('#perfil_apellido_uno_medico').val();
+            let apellido_dos = $('#perfil_apellido_dos_medico').val();
+            let sexo = $('input:radio[name=perfil_sexo_medico]:checked').val();
+            let nac = $('#perfil_nac_medico').val();
+            let url = "{{ route('adm_cm.editar_datos_perfil_responsable_medico') }}";
+
+            let data = {
+                _token: CSRF_TOKEN,
+                id_responsable:id_responsable,
+                rut:rut,
+                nombres:nombre,
+                apellido_uno:apellido_uno,
+                apellido_dos:apellido_dos,
+                sexo:sexo,
+                fecha_nac:nac,
+            }
+
+            $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: data,
                     })
+                    .done(function(response) {
+                        console.log(response);
+                        if (response.estado == 1) {
+                            swal({
+                                title: "Datos de Datos del Representante editados correctamente",
+                                icon: "success",
+                                buttons: "Aceptar",
+                                DangerMode: true,
+                            });
+                        } else {
+                            swal({
+                                title: "Error al Editar los Datos del Representante",
+                                icon: "error",
+                                buttons: "Aceptar",
+                                DangerMode: true,
+                            });
+                        }
+                    })
+                    .fail(function() {
+                        console.log("error");
+                    });
         }
 
         function editar_responsable_datos_contacto()
@@ -3301,17 +4100,42 @@
         });
     }
 
-    function registrar_area_profesional(){
-        let area = $('#area').val();
-        let responsable = $('#responsable_area').val();
+    function editar_direccion_medica(id_institucion){
+        let cargo = $('#cargo').val();
+        let responsable = $('#responsable_cargo').val();
+
+        // validar campos
+        if(cargo == '' || cargo == 0)
+        {
+            swal({
+                title: "Error",
+                text: "Campo Cargo es requerido",
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+            return;
+        }
+        if(responsable == '' || responsable == 0)
+        {
+            swal({
+                title: "Error",
+                text: "Campo Responsable es requerido",
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+            return;
+        }
 
         let data = {
-            area : area,
+            cargo : cargo,
             responsable : responsable,
+            id_institucion : id_institucion,
             _token: CSRF_TOKEN,
         }
 
-        let url = "{{ route('adm_cm.registrar_area_profesional') }}";
+        let url = "{{ route('adm_cm.editar_direccion_medica') }}";
 
         $.ajax({
             url: url,
@@ -3325,20 +4149,15 @@
                 {
                     // cerrar modal
                     $('#a_area').modal('hide');
-                    let areas = data.areas;
-                    $('#area_cm tbody').empty();
-                    $(areas).each(function(i, v) { // indice, valor
-                        $('#area_cm tbody').append(`
-                        <tr>
-                            <td class="align-items-left text-left">${v.tipo_area}</td>
-                            <td class="align-items-left text-left">${v.nombre_responsable} ${v.apellido_uno_responsable} ${v.apellido_dos_responsable}</td>
-                            <td class="align-items-left text-left">
-                                <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="dame_area_profesionale(${v.id})"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_area_cm(${v.id})"><i class="feather icon-trash"></i></button>
-                            </td>
-                        </tr>
-                        `);
+                    swal({
+                        title: "Dirección Médica",
+                        text: "Dirección Médica Actualizada Correctamente",
+                        icon: "success",
+                        buttons: "Aceptar",
+                        DangerMode: true,
                     });
+                    $('#contenedor_administradores_cm').empty();
+                    $('#contenedor_administradores_cm').html(data.v);
                 }
                 else
                 {
@@ -3401,7 +4220,7 @@
                         $('#area_cm tbody').append(`
                         <tr>
                             <td class="align-items-left text-left">${v.tipo_area}</td>
-                            <td class="align-items-left text-left">${v.nombre_responsable} ${v.apellido_uno_responsable} ${v.apellido_dos_responsable}</td>
+                            <td class="align-items-left text-left">${v.nombre} ${v.apellido_uno} ${v.apellido_dos}</td>
                             <td class="align-items-left text-left">
                                 <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="dame_area_profesionale(${v.id})"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_area_cm(${v.id})"><i class="feather icon-trash"></i></button>
@@ -3513,6 +4332,403 @@
         });
     }
 
+    function mostrar_div_servicio(){
+        $('#div_form_servicio').toggleClass('d-none');
+    }
 
+    function guardar_nuevo_servicio(){
+        let nombre_servicio = $('#nombre_servicio_').val();
+        let rut_servicio = $('#rut_servicio').val();
+        let telefono_servicio = $('#telefono_servicio').val();
+        let email_servicio = $('#email_servicio').val();
+        let direccion_servicio = $('#direccion_servicio').val();
+        let id_responsable_servicio = $('#responsable_servicio').val();
+
+        let valido = 1;
+        let mensaje = '';
+
+        // validar campos
+        if(nombre_servicio == '')
+        {
+            valido = 0;
+            mensaje += 'Campo requerido Nombre\n';
+        }
+        if(rut_servicio == '')
+        {
+            valido = 0;
+            mensaje += 'Campo requerido Rut\n';
+        }
+        if(telefono_servicio == '')
+        {
+            valido = 0;
+            mensaje += 'Campo requerido Teléfono\n';
+        }
+        if(email_servicio == '')
+        {
+            valido = 0;
+            mensaje += 'Campo requerido Email\n';
+        }
+        if(direccion_servicio == '')
+        {
+            valido = 0;
+            mensaje += 'Campo requerido Dirección\n';
+        }
+        if(id_responsable_servicio == '' || id_responsable_servicio == 0)
+        {
+            valido = 0;
+            mensaje += 'Campo requerido Responsable\n';
+        }
+
+        if(valido == 1)
+        {
+            let data = {
+                nombre_servicio : nombre_servicio,
+                rut_servicio : rut_servicio,
+                telefono_servicio : telefono_servicio,
+                email_servicio : email_servicio,
+                direccion_servicio : direccion_servicio,
+                id_responsable_servicio : id_responsable_servicio,
+                _token: CSRF_TOKEN,
+            }
+
+            let url = "{{ route('adm_cm.registrar_servicio') }}";
+
+            $.ajax({
+                url: url,
+                type: "post",
+                data: data,
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    if(data.estado == 1)
+                    {
+                        // cerrar modal
+                        $('#a_servicio').modal('hide');
+                        let servicios = data.servicios;
+                        $('#servicios_cm tbody').empty();
+                        $(servicios).each(function(i, v) { // indice, valor
+                            $('#servicios_cm tbody').append(`
+                            <tr>
+                                <td class="align-items-left text-left">${v.nombre}</td>
+                                <td class="align-items-left text-left">${v.rut}</td>
+                                <td class="align-items-left text-left">${v.telefono}</td>
+                                <td class="align-items-left text-left">${v.email}</td>
+                                <td class="align-items-left text-left">
+                                    <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="dame_servicio(${v.id})"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_servicio_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                </td>
+                            </tr>
+                            `);
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar servicio",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar servicio",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+
+        }
+        else
+        {
+            swal({
+                title: "Campos requeridos",
+                text: mensaje,
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+        }
+    }
+
+    function guardar_servicio(){
+        let id_servicio = $('#servicio').val();
+        let id_responsable = $('#responsable_servicio').val();
+        id_servicio = parseInt(id_servicio);
+        id_responsable = parseInt(id_responsable);
+        let valido = 1;
+        let mensaje = '';
+        // validar campos
+        if(id_servicio == 0)
+        {
+            valido = 0;
+            mensaje += 'Campo requerido Servicio\n';
+        }
+        if(id_responsable == 0)
+        {
+            valido = 0;
+            mensaje += 'Campo requerido Responsable\n';
+        }
+
+
+        if(valido == 1)
+        {
+            let data = {
+                id_servicio : id_servicio,
+                id_responsable : id_responsable,
+                _token: CSRF_TOKEN,
+            }
+
+            let url = "{{ route('adm_cm.registrar_servicio_cm') }}";
+
+            $.ajax({
+                url: url,
+                type: "post",
+                data: data,
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    if(data.estado == 1)
+                    {
+                        // cerrar modal
+                        $('#a_servicio').modal('hide');
+                        let servicios = data.servicios_internos;
+                        $('#servicios_cm tbody').empty();
+                        $(servicios).each(function(i, v) { // indice, valor
+                            $('#servicios_cm tbody').append(`
+                            <tr>
+                                <td class="align-items-left text-left">${v.nombre}</td>
+                                <td class="align-items-left text-left">${v.nombre_responsable} ${v.apellido_uno_responsable} ${v.apellido_dos_responsable}</td>
+                                <td class="align-items-left text-left">
+                                    <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="dame_servicio(${v.id})"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_servicio_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                </td>
+                            </tr>
+                            `);
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar servicio",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar servicio",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+
+        }
+        else
+        {
+            swal({
+                title: "Campos requeridos",
+                text: mensaje,
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+        }
+    }
+
+    function eliminar_servicio_cm(id){
+        swal({
+            title: "Eliminar Servicio",
+            text: "¿Está seguro que desea eliminar el servicio?",
+            icon: "warning",
+            buttons: ["Cancelar", "Aceptar"],
+            DangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                confirmar_eliminar_servicio(id);
+            }
+        });
+    }
+
+    function confirmar_eliminar_servicio(id){
+        let data = {
+            id : id,
+            _token: CSRF_TOKEN,
+        };
+        let url = "{{ route('adm_cm.eliminar_servicio_cm') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: data,
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data != null) {
+                if(data.estado == 1)
+                {
+                    let servicios = data.servicios_internos;
+                    $('#servicios_cm tbody').empty();
+                    $(servicios).each(function(i, v) { // indice, valor
+                        $('#servicios_cm tbody').append(`
+                        <tr>
+                            <td class="align-items-left text-left">${v.nombre}</td>
+                            <td class="align-items-left text-left">${v.nombre_responsable} ${v.apellido_uno_responsable} ${v.apellido_dos_responsable}</td>
+                            <td class="align-items-left text-left">
+                                <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="dame_servicio(${v.id})"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_servicio_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                            </td>
+                        </tr>
+                        `);
+                    });
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar servicio",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar ingresar servicio",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function dame_area_cm(id,id_lugar_atencion){
+        // Construye la URL con la id adjunta
+        var url = "{{ url('Administrador/dame_area') }}/" + id+"/"+id_lugar_atencion;
+        $.ajax({
+            url: url,
+            type: "get",
+        })
+        .done(function(data) {
+            // abrir modal
+            $('#editar_area').modal('show');
+            console.log(data);
+            if (data != null) {
+
+                $('#editar_responsable option:selected').removeAttr('selected');
+                $('#editar_responsable option[value="'+data+'"]').attr('selected', 'selected');
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar ingresar área profesional",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+
+    }
+
+    function editar_area_cm(id_lugar_atencion){
+        let id_responsable = $('#editar_responsable').val();
+        let id_area = $('#id_area').val();
+    }
+
+    function eliminar_admin_cm(tipo_admin, id_institucion){
+        swal({
+            title: "Eliminar Administrador",
+            text: "¿Está seguro que desea eliminar el administrador?",
+            icon: "warning",
+            buttons: ["Cancelar", "Aceptar"],
+            DangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                confirmar_eliminar_admin_cm(tipo_admin, id_institucion);
+            }
+        });
+    }
+
+    function confirmar_eliminar_admin_cm(tipo_admin, id_institucion){
+        let data = {
+            tipo_admin : tipo_admin,
+            id_institucion : id_institucion,
+            _token: CSRF_TOKEN,
+        };
+        let url = "{{ route('adm_cm.eliminar_admin_cm') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: data,
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data != null) {
+                if(data.estado == 1)
+                {
+                    swal({
+                        title: "Administrador",
+                        text: "Administrador Eliminado Correctamente",
+                        icon: "success",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                    $('#contenedor_administradores_cm').empty();
+                    $('#contenedor_administradores_cm').html(data.v);
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar administrador",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar ingresar administrador",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
     </script>
 @endsection

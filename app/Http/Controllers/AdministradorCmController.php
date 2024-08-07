@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdminInstServ;
+use App\Models\AdminMed;
 use App\Models\AreasCm;
 use App\Models\Asistente;
 use App\Models\AsistenteLugarAtencion;
@@ -28,11 +29,15 @@ use App\Models\ProfesionalInstitucionConvenio;
 use App\Models\Remuneraciones;
 use App\Models\Roles;
 use App\Models\Servicios;
+use App\Models\ServiciosInternos;
 use App\Models\TipoAdministrador;
 use App\Models\TipoConvenioInstitucion;
 use App\Models\TipoEspecialidad;
 use App\Models\TipoInstitucion;
 use App\Models\User;
+
+use Spatie\Permission\Models\Role;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -149,8 +154,17 @@ class AdministradorCmController extends Controller
 
             }
         }
+        $usuario = Auth::user();
+        $roles = $usuario->roles()->orderBy('id', 'DESC')->pluck('name')->toArray();
+        $adm_medico = false;
+        foreach($roles as $rol){
+            if($rol == 'AdministradorMedico'){
+                $adm_medico = true;
+                break;
+            }
+        }
         /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
-        return view('app.adm_cm.home')->with(['institucion' => $institucion]);
+        return view('app.adm_cm.home')->with(['institucion' => $institucion, 'adm_medico' => $adm_medico]);
     }
 
     public function centroMedico(){
@@ -158,8 +172,29 @@ class AdministradorCmController extends Controller
     }
 
     public function adm_medico(){
-        return view('app.adm_cm.adm_medico');
+        $usuario = Auth::user();
+        $instituciones = Instituciones::where('id_director_medico', $usuario->id)->get();
+        if($instituciones->count() == 1){
+            return view('app.adm_cm.adm_medico_id',[
+                'institucion' => $instituciones[0]
+            ]);
+        }
+
+        return view('app.adm_cm.adm_medico',[
+            'instituciones' => $instituciones
+        ]);
+
     }
+
+    public function adm_medico_id($id){
+        $usuario = Auth::user();
+        $institucion = Instituciones::find($id);
+
+        return view('app.adm_cm.adm_medico_id',[
+            'institucion' => $institucion
+        ]);
+    }
+
 	public function escritorio_asist_adm(){
         return view('app.asistente_adm_cm.escritorio_asist_adm');
     }
@@ -345,12 +380,40 @@ class AdministradorCmController extends Controller
         $tipos_areas_cm = TipoAreasCm::all();
         $areas_cm = $this->dame_areas_cm($institucion->id_lugar_atencion);
 
+        $servicios = Servicios::all();
+
+        $servicios_internos = $this->dame_servicios_internos($institucion->id);
+
+        // buscar si el responsable tiene una area asignada
+        $areas_institucion = AreasCm::where('id_institucion',$institucion->id)->get();
+        $responsable_medico = Profesional::find(3);
+
+        foreach($areas_institucion as $area){
+            if($area->id_tipo_area_cm == 1){
+                $responsable_medico = Profesional::find($area->id_responsable);
+                break;
+            }
+        }
+
+        $cargos = AdminMed::all();
+
+        $director_cm = Profesional::find($institucion->id_director_medico);
+
+        $subdirector_cm = Profesional::find($institucion->id_subdirector_medico);
+
+        $director_gestion_cuidado = Profesional::find($institucion->id_director_gestion_cuidado);
+
+
         return view('app.adm_cm.configuracion')->with([
             'tipo_institucion' => $tipo_institucion,
             'institucion' => $institucion,
             'responsable' => $responsable,
+            'director_cm' => $director_cm ? $director_cm : null,
+            'subdirector_cm' => $subdirector_cm ? $subdirector_cm : null,
+            'director_gestion_cuidado' => $director_gestion_cuidado ? $director_gestion_cuidado : null,
             'regiones' => $regiones,
             'ciudades' => $ciudades,
+            'cargos' => $cargos,
             'personal' => $personal,
             'lista_tipo_contrato' => (object)$lista_tipo_contrato,
             'especialidades' => $especialidades,
@@ -358,14 +421,668 @@ class AdministradorCmController extends Controller
             'otras_especialidades_cm' => $otras_especialidades_cm,
             'profesionales' => $profesionales,
             'tipos_areas_cm' => $tipos_areas_cm,
-            'areas_cm' => $areas_cm
+            'areas_cm' => $areas_cm,
+            'servicios' => $servicios,
+            'servicios_internos' => $servicios_internos,
         ]);
     }
 
+    public function dame_area($id, $id_lugar_atencion){
+
+        $profesional = ProfesionalesLugaresAtencion::where('id_profesional',$id)->where('id_lugar_atencion',$id_lugar_atencion)->first();
+        return $profesional->id;
+
+    }
+
+    public function eliminar_admin_cm(Request $req){
+            $institucion = '';
+            $tipo_institucion = '1';
+            $id_busqueda = Auth::user()->id;
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::find($req->id_institucion);
+            }
+
+            if($registro)
+            {
+                // var_dump($registro);
+                // var_dump($registro->UsuarioAdministrador()->first());
+                //var_dump($registro->UsuarioAdministrador()->first()->id);
+                /** INSTITUCION */
+                $institucion = $registro;
+                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                $tipo_institucion = 'institucion';
+
+            }
+            else
+            {
+                $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+                if($registro)
+                {
+                    /** SERVICIOS */
+                    $institucion = $registro;
+                    $tipo_institucion = 'servicio';
+                }
+                else
+                {
+                    /** busqueda por responsable */
+                    $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                    if($responsable)
+                    {
+                        $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            // var_dump($registro);
+                            // var_dump($registro->UsuarioAdministrador()->first());
+                            /** INSTITUCION */
+                            $institucion = $registro;
+                            $tipo_institucion = 'institucion';
+
+                        }
+                        else
+                        {
+                            $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                            if($registro)
+                            {
+                                /** SERVICIOS */
+                                $institucion = $registro;
+                                $tipo_institucion = 'servicio';
+                            }
+                            else
+                            {
+                                return back()->with('error','Institución no encontrada');
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
+                }
+            }
+
+            $regiones = Region::all();
+            $ciudades = Ciudad::where('id_region', $institucion->direccion()->first()->ciudad()->first()->Region()->first()->id)->orderBy('nombre')->get();
+
+            /** CARGA DE PERSONAL */
+            /** EMPLEADOS */
+            $contratos = ContratoDependiente::select('id', 'id_institucion', 'id_lugar_atencion', 'tipo_empleado', 'id_empleado')
+                                            ->where('id_institucion',$institucion->id)
+                                            ->where('id_lugar_atencion', $institucion->id_lugar_atencion)
+                                            ->get();
+            // var_dump($contratos);
+
+            $personal = array();
+            if($contratos)
+            {
+                // var_dump($contratos->count());
+                if($contratos->count()>0)
+                {
+                    foreach ($contratos as $key_contratos => $value_contratos)
+                    {
+                        // Asistente Publico
+                        // Asistente Jefa Caja
+                        // Asistente Adm
+                        // Asistente Online
+                        if(strstr(strtoupper($value_contratos->tipo_empleado), 'ASISTENTE') !== FALSE)
+                        {
+                            $asistente = Asistente::select('id', 'id_asistente_tipo', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_direccion', 'id_usuario', 'id_modalidad')
+                                                    ->with(['AsistenteTipo' => function($query){
+                                                        $query->select('id', 'nombre', 'descripcion');
+                                                    }])
+                                                    ->where('id', $value_contratos->id_empleado)
+                                                    ->first();
+                            if($asistente)
+                                array_push($personal, $asistente);
+                        }
+                        // adm_insitucion
+                        else if(strpos(strtoupper($value_contratos->tipo_empleado), 'ADMINISTRADOR') >= 0)
+                        {
+                            $administrador = AdminInstServ::select('id', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_tipo_administrador', 'id_direccion', 'id_admin')
+                                                    ->with(['TipoAdministrador' => function($query){
+                                                        $query->select('id', 'nombres as nombre','descripcion');
+                                                    }])
+                                                    ->where('id', $value_contratos->id_empleado)
+                                                    ->first();
+                            // var_dump($administrador);
+                            if($administrador)
+                                array_push($personal, $administrador);
+                        }
+                        // contador
+                        else if(strpos(strtoupper($value_contratos->tipo_empleado), 'CONTADOR') >= 0)
+                        {
+
+                        }
+                        // profesional (dependiente-> ej: admin medico)
+                        else if(strpos(strtoupper($value_contratos->tipo_empleado), 'PROFESIONAL') >= 0)
+                        {
+
+                        }
+
+                    }
+                }
+            }
+
+            if($req->tipo_admin == 1){
+                $institucion->id_director_medico = null;
+            }else if($req->tipo_admin == 2){
+                $institucion->id_subdirector_medico = null;
+            }else if($req->tipo_admin == 3){
+                $institucion->id_director_gestion_cuidado = null;
+            }
+            $institucion->update();
+
+            $director_cm = Profesional::where('id', $institucion->id_director_medico)->first();
+            $subdirector_cm = Profesional::where('id', $institucion->id_subdirector_medico)->first();
+            $director_gestion_cuidado = Profesional::where('id', $institucion->id_director_gestion_cuidado)->first();
+
+            $v = view('fragm.administradores_cm',[
+                'director_cm' => $director_cm ? $director_cm : null,
+                'subdirector_cm' => $subdirector_cm ? $subdirector_cm : null,
+                'director_gestion_cuidado' => $director_gestion_cuidado ? $director_gestion_cuidado : null,
+                'responsable' => $responsable ? $responsable : null,
+                'institucion' => $institucion,
+                'regiones' => $regiones,
+                'ciudades' => $ciudades,
+            ])->render();
+
+            return ['estado' => 1, 'mensaje' => 'Administrador eliminado', 'v' => $v];
+    }
+
+    public function registrar_servicio_cm(Request $req){
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+
+        $regiones = Region::all();
+        $ciudades = Ciudad::where('id_region', $institucion->direccion()->first()->ciudad()->first()->Region()->first()->id)->orderBy('nombre')->get();
+
+        /** CARGA DE PERSONAL */
+        /** EMPLEADOS */
+        $contratos = ContratoDependiente::select('id', 'id_institucion', 'id_lugar_atencion', 'tipo_empleado', 'id_empleado')
+                                        ->where('id_institucion',$institucion->id)
+                                        ->where('id_lugar_atencion', $institucion->id_lugar_atencion)
+                                        ->get();
+        // var_dump($contratos);
+
+        $personal = array();
+        if($contratos)
+        {
+            // var_dump($contratos->count());
+            if($contratos->count()>0)
+            {
+                foreach ($contratos as $key_contratos => $value_contratos)
+                {
+                    // Asistente Publico
+                    // Asistente Jefa Caja
+                    // Asistente Adm
+                    // Asistente Online
+                    if(strstr(strtoupper($value_contratos->tipo_empleado), 'ASISTENTE') !== FALSE)
+                    {
+                        $asistente = Asistente::select('id', 'id_asistente_tipo', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_direccion', 'id_usuario', 'id_modalidad')
+                                                ->with(['AsistenteTipo' => function($query){
+                                                    $query->select('id', 'nombre', 'descripcion');
+                                                }])
+                                                ->where('id', $value_contratos->id_empleado)
+                                                ->first();
+                        if($asistente)
+                            array_push($personal, $asistente);
+                    }
+                    // adm_insitucion
+                    else if(strpos(strtoupper($value_contratos->tipo_empleado), 'ADMINISTRADOR') >= 0)
+                    {
+                        $administrador = AdminInstServ::select('id', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_tipo_administrador', 'id_direccion', 'id_admin')
+                                                ->with(['TipoAdministrador' => function($query){
+                                                    $query->select('id', 'nombres as nombre','descripcion');
+                                                }])
+                                                ->where('id', $value_contratos->id_empleado)
+                                                ->first();
+                        // var_dump($administrador);
+                        if($administrador)
+                            array_push($personal, $administrador);
+                    }
+                    // contador
+                    else if(strpos(strtoupper($value_contratos->tipo_empleado), 'CONTADOR') >= 0)
+                    {
+
+                    }
+                    // profesional (dependiente-> ej: admin medico)
+                    else if(strpos(strtoupper($value_contratos->tipo_empleado), 'PROFESIONAL') >= 0)
+                    {
+
+                    }
+
+                }
+            }
+        }
+        $servicio = Servicios::find($req->id_servicio);
+        $nuevo_servicio = new ServiciosInternos();
+        $responsable = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
+        ->leftjoin('profesionales','profesionales.id','=','profesionales_lugares_atencion.id_profesional')
+        ->where('profesionales_lugares_atencion.id',$req->id_responsable)
+        ->first();
+        $profesional = Profesional::find($responsable->id_profesional);
+
+        $nuevo_servicio->id_institucion = $institucion->id;
+        $nuevo_servicio->id_lugar_atencion = $institucion->id_lugar_atencion;
+        $nuevo_servicio->id_servicio = $req->id_servicio;
+        $nuevo_servicio->nombre = $servicio->nombre;
+        $nuevo_servicio->id_responsable = $responsable->id_profesional;
+
+        $nuevo_servicio->save();
+
+        $servicios_internos = $this->dame_servicios_internos($institucion->id);
+
+        return ['estado' => 1, 'mensaje' => 'Servicio registrado', 'servicios_internos' => $servicios_internos];
+    }
+
+    public function dame_servicios_internos($id_institucion){
+        $servicios_internos = ServiciosInternos::select('servicio_interno.*','servicios.nombre as nombre_servicio','profesionales.nombre as nombre_responsable','profesionales.apellido_uno as apellido_uno_responsable','profesionales.apellido_dos as apellido_dos_responsable')
+                            ->join('servicios','servicios.id','=','servicio_interno.id_servicio')
+                            ->leftjoin('profesionales','profesionales.id','=','servicio_interno.id_responsable')
+                            ->where('servicio_interno.id_institucion',$id_institucion)
+                            ->get();
+
+        return $servicios_internos;
+    }
+
+    public function registrar_servicio(Request $req){
+        try {
+            $institucion = '';
+            $tipo_institucion = '1';
+            $id_busqueda = Auth::user()->id;
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+            if($registro)
+            {
+                // var_dump($registro);
+                // var_dump($registro->UsuarioAdministrador()->first());
+                //var_dump($registro->UsuarioAdministrador()->first()->id);
+                /** INSTITUCION */
+                $institucion = $registro;
+                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                $tipo_institucion = 'institucion';
+
+            }
+            else
+            {
+                $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+                if($registro)
+                {
+                    /** SERVICIOS */
+                    $institucion = $registro;
+                    $tipo_institucion = 'servicio';
+                }
+                else
+                {
+                    /** busqueda por responsable */
+                    $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                    if($responsable)
+                    {
+                        $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            // var_dump($registro);
+                            // var_dump($registro->UsuarioAdministrador()->first());
+                            /** INSTITUCION */
+                            $institucion = $registro;
+                            $tipo_institucion = 'institucion';
+
+                        }
+                        else
+                        {
+                            $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                            if($registro)
+                            {
+                                /** SERVICIOS */
+                                $institucion = $registro;
+                                $tipo_institucion = 'servicio';
+                            }
+                            else
+                            {
+                                return back()->with('error','Institución no encontrada');
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
+                }
+            }
+
+            $regiones = Region::all();
+            $ciudades = Ciudad::where('id_region', $institucion->direccion()->first()->ciudad()->first()->Region()->first()->id)->orderBy('nombre')->get();
+
+            /** CARGA DE PERSONAL */
+            /** EMPLEADOS */
+            $contratos = ContratoDependiente::select('id', 'id_institucion', 'id_lugar_atencion', 'tipo_empleado', 'id_empleado')
+                                            ->where('id_institucion',$institucion->id)
+                                            ->where('id_lugar_atencion', $institucion->id_lugar_atencion)
+                                            ->get();
+            // var_dump($contratos);
+
+            $personal = array();
+            if($contratos)
+            {
+                // var_dump($contratos->count());
+                if($contratos->count()>0)
+                {
+                    foreach ($contratos as $key_contratos => $value_contratos)
+                    {
+                        // Asistente Publico
+                        // Asistente Jefa Caja
+                        // Asistente Adm
+                        // Asistente Online
+                        if(strstr(strtoupper($value_contratos->tipo_empleado), 'ASISTENTE') !== FALSE)
+                        {
+                            $asistente = Asistente::select('id', 'id_asistente_tipo', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_direccion', 'id_usuario', 'id_modalidad')
+                                                    ->with(['AsistenteTipo' => function($query){
+                                                        $query->select('id', 'nombre', 'descripcion');
+                                                    }])
+                                                    ->where('id', $value_contratos->id_empleado)
+                                                    ->first();
+                            if($asistente)
+                                array_push($personal, $asistente);
+                        }
+                        // adm_insitucion
+                        else if(strpos(strtoupper($value_contratos->tipo_empleado), 'ADMINISTRADOR') >= 0)
+                        {
+                            $administrador = AdminInstServ::select('id', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_tipo_administrador', 'id_direccion', 'id_admin')
+                                                    ->with(['TipoAdministrador' => function($query){
+                                                        $query->select('id', 'nombres as nombre','descripcion');
+                                                    }])
+                                                    ->where('id', $value_contratos->id_empleado)
+                                                    ->first();
+                            // var_dump($administrador);
+                            if($administrador)
+                                array_push($personal, $administrador);
+                        }
+                        // contador
+                        else if(strpos(strtoupper($value_contratos->tipo_empleado), 'CONTADOR') >= 0)
+                        {
+
+                        }
+                        // profesional (dependiente-> ej: admin medico)
+                        else if(strpos(strtoupper($value_contratos->tipo_empleado), 'PROFESIONAL') >= 0)
+                        {
+
+                        }
+
+                    }
+                }
+            }
+
+            // buscar al responsable
+            $responsable = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos','profesionales.rut')
+            ->leftjoin('profesionales','profesionales.id','=','profesionales_lugares_atencion.id_profesional')
+            ->where('profesionales_lugares_atencion.id',$req->id_responsable_servicio)
+            ->first();
+
+            $direccion = new Direccion();
+            $direccion->direccion = $req->direccion_servicio;
+            $direccion->numero_dir = 1;
+            $direccion->id_ciudad = 1;
+            $direccion->save();
+
+            $servicio = new Servicios();
+            $servicio->nombre = $req->nombre_servicio;
+            $servicio->id_direccion = $direccion->id;
+            $servicio->rut = $req->rut_servicio;
+            $servicio->telefono = $req->telefono_servicio;
+            $servicio->email = $req->email_servicio;
+            $servicio->id_usuario = Auth::user()->id;
+            $servicio->rut_responsable = $responsable->rut;
+            $servicio->id_responsable = $responsable->id_profesional;
+            $servicio->nombre_responsable = $responsable->nombre.' '.$responsable->apellido_uno.' '.$responsable->apellido_dos;
+            $servicio->estado = 1;
+            $servicio->id_servicio = 1;
+            $servicio->save();
+
+            // guardar el servicio interno en la institucion
+            $servicio_interno = new ServiciosInternos();
+            $servicio_interno->id_institucion = $institucion->id;
+            $servicio_interno->id_lugar_atencion = $institucion->id_lugar_atencion;
+            $servicio_interno->id_servicio = $servicio->id;
+            $servicio_interno->nombre = $req->nombre_servicio;
+            $servicio_interno->id_responsable = $responsable->id_profesional;
+            $servicio_interno->save();
+
+            return ['estado' => 1, 'mensaje' => 'Servicio registrado'];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
+    public function eliminar_servicio_cm(Request $req){
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+
+        $regiones = Region::all();
+        $ciudades = Ciudad::where('id_region', $institucion->direccion()->first()->ciudad()->first()->Region()->first()->id)->orderBy('nombre')->get();
+
+        /** CARGA DE PERSONAL */
+        /** EMPLEADOS */
+        $contratos = ContratoDependiente::select('id', 'id_institucion', 'id_lugar_atencion', 'tipo_empleado', 'id_empleado')
+                                        ->where('id_institucion',$institucion->id)
+                                        ->where('id_lugar_atencion', $institucion->id_lugar_atencion)
+                                        ->get();
+        // var_dump($contratos);
+
+        $personal = array();
+        if($contratos)
+        {
+            // var_dump($contratos->count());
+            if($contratos->count()>0)
+            {
+                foreach ($contratos as $key_contratos => $value_contratos)
+                {
+                    // Asistente Publico
+                    // Asistente Jefa Caja
+                    // Asistente Adm
+                    // Asistente Online
+                    if(strstr(strtoupper($value_contratos->tipo_empleado), 'ASISTENTE') !== FALSE)
+                    {
+                        $asistente = Asistente::select('id', 'id_asistente_tipo', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_direccion', 'id_usuario', 'id_modalidad')
+                                                ->with(['AsistenteTipo' => function($query){
+                                                    $query->select('id', 'nombre', 'descripcion');
+                                                }])
+                                                ->where('id', $value_contratos->id_empleado)
+                                                ->first();
+                        if($asistente)
+                            array_push($personal, $asistente);
+                    }
+                    // adm_insitucion
+                    else if(strpos(strtoupper($value_contratos->tipo_empleado), 'ADMINISTRADOR') >= 0)
+                    {
+                        $administrador = AdminInstServ::select('id', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_tipo_administrador', 'id_direccion', 'id_admin')
+                                                ->with(['TipoAdministrador' => function($query){
+                                                    $query->select('id', 'nombres as nombre','descripcion');
+                                                }])
+                                                ->where('id', $value_contratos->id_empleado)
+                                                ->first();
+                        // var_dump($administrador);
+                        if($administrador)
+                            array_push($personal, $administrador);
+                    }
+                    // contador
+                    else if(strpos(strtoupper($value_contratos->tipo_empleado), 'CONTADOR') >= 0)
+                    {
+
+                    }
+                    // profesional (dependiente-> ej: admin medico)
+                    else if(strpos(strtoupper($value_contratos->tipo_empleado), 'PROFESIONAL') >= 0)
+                    {
+
+                    }
+
+                }
+            }
+        }
+        $servicio = ServiciosInternos::find($req->id);
+        $servicio->delete();
+
+        $servicios_internos = $this->dame_servicios_internos($institucion->id);
+        return ['estado' => 1, 'mensaje' => 'Servicio eliminado','servicios_internos' => $servicios_internos];
+    }
+
     public function dame_areas_cm($id_lugar_atencion){
-        $areas_cm = AreasCm::select('areas_cm.*','tipos_areas_cm.nombre as tipo_area','profesionales.nombre as nombre_responsable','profesionales.apellido_uno as apellido_uno_responsable','profesionales.apellido_dos as apellido_dos_responsable')
+        $areas_cm = AreasCm::select('areas_cm.*','tipos_areas_cm.nombre as tipo_area')
                             ->join('tipos_areas_cm','tipos_areas_cm.id','=','areas_cm.id_tipo_area_cm')
-                            ->join('profesionales','profesionales.id','=','areas_cm.id_responsable')
                             ->where('areas_cm.id_lugar_atencion',$id_lugar_atencion)
                             ->get();
 
@@ -710,6 +1427,159 @@ class AdministradorCmController extends Controller
         }
 
         return $datos;
+    }
+
+    public function editarDatosPerfilResponsableMedico(Request $req){
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+
+        $regiones = Region::all();
+        $ciudades = Ciudad::where('id_region', $institucion->direccion()->first()->ciudad()->first()->Region()->first()->id)->orderBy('nombre')->get();
+
+        /** CARGA DE PERSONAL */
+        /** EMPLEADOS */
+        $contratos = ContratoDependiente::select('id', 'id_institucion', 'id_lugar_atencion', 'tipo_empleado', 'id_empleado')
+                                        ->where('id_institucion',$institucion->id)
+                                        ->where('id_lugar_atencion', $institucion->id_lugar_atencion)
+                                        ->get();
+        // var_dump($contratos);
+
+        $personal = array();
+        if($contratos)
+        {
+            // var_dump($contratos->count());
+            if($contratos->count()>0)
+            {
+                foreach ($contratos as $key_contratos => $value_contratos)
+                {
+                    // Asistente Publico
+                    // Asistente Jefa Caja
+                    // Asistente Adm
+                    // Asistente Online
+                    if(strstr(strtoupper($value_contratos->tipo_empleado), 'ASISTENTE') !== FALSE)
+                    {
+                        $asistente = Asistente::select('id', 'id_asistente_tipo', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_direccion', 'id_usuario', 'id_modalidad')
+                                                ->with(['AsistenteTipo' => function($query){
+                                                    $query->select('id', 'nombre', 'descripcion');
+                                                }])
+                                                ->where('id', $value_contratos->id_empleado)
+                                                ->first();
+                        if($asistente)
+                            array_push($personal, $asistente);
+                    }
+                    // adm_insitucion
+                    else if(strpos(strtoupper($value_contratos->tipo_empleado), 'ADMINISTRADOR') >= 0)
+                    {
+                        $administrador = AdminInstServ::select('id', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_tipo_administrador', 'id_direccion', 'id_admin')
+                                                ->with(['TipoAdministrador' => function($query){
+                                                    $query->select('id', 'nombres as nombre','descripcion');
+                                                }])
+                                                ->where('id', $value_contratos->id_empleado)
+                                                ->first();
+                        // var_dump($administrador);
+                        if($administrador)
+                            array_push($personal, $administrador);
+                    }
+                    // contador
+                    else if(strpos(strtoupper($value_contratos->tipo_empleado), 'CONTADOR') >= 0)
+                    {
+
+                    }
+                    // profesional (dependiente-> ej: admin medico)
+                    else if(strpos(strtoupper($value_contratos->tipo_empleado), 'PROFESIONAL') >= 0)
+                    {
+
+                    }
+
+                }
+            }
+        }
+        // buscar AREA CM ADMINISTRADOR MEDICO de la institucion
+        $area_cm_responsable = AreasCm::select('areas_cm.*','tipos_areas_cm.nombre as tipo_area')
+                            ->join('tipos_areas_cm','tipos_areas_cm.id','=','areas_cm.id_tipo_area_cm')
+                            ->where('areas_cm.id_lugar_atencion',$institucion->id_lugar_atencion)
+                            ->where('areas_cm.id_responsable',$req->id_responsable)
+                            ->where('areas_cm.id_tipo_area_cm',1)
+                            ->first();
+
+        $area_cm_responsable->nombre = $req->nombres;
+        $area_cm_responsable->apellido_uno = $req->apellido_uno;
+        $area_cm_responsable->apellido_dos = $req->apellido_dos;
+        $area_cm_responsable->email = $req->email;
+        $area_cm_responsable->telefono = $req->telefono;
+
+        $area_cm_responsable->save();
+
+        return ['estado' => 1, 'mensaje' => 'Datos actualizados','area_cm' => $area_cm_responsable];
     }
 
     // ACTUALIZAR CONTRASEÑA DEL RESPONSABLE DE LA INSTITUCION
@@ -1133,7 +2003,19 @@ class AdministradorCmController extends Controller
 
         $region = Region::all();
         $especialidad = Especialidad::all();
-        $roles = Roles::orderBy('name','ASC')->get();
+        $roles = Roles::orderBy('alias','ASC')->where('difusion',1)->get();
+
+        $usuario = Auth::user();
+        $roles_ = $usuario->roles()->orderBy('id', 'DESC')->pluck('name')->toArray();
+        $adm_medico = false;
+        foreach($roles_ as $rol){
+            if($rol == 'AdministradorMedico'){
+                $adm_medico = true;
+                break;
+            }
+        }
+
+        $servicios = Servicios::all();
 
         return view('app.adm_cm.profesionales')->with([
             'responsable' => $responsable,
@@ -1144,76 +2026,421 @@ class AdministradorCmController extends Controller
             'region' => $region,
             'especialidad' => $especialidad,
             'roles' => $roles,
+            'adm_medico' => $adm_medico,
+            'servicios' => $servicios
+        ]);
+    }
+
+    public function profesionales_id($id){
+
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+
+        /** INFORMACION DE INSTITUCION Y RESPONSABLE */
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+
+            }
+        }
+        /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
+
+        $institucion = Instituciones::find($id);
+
+        /** CARGA DE PROFESIONALES */
+        $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+        $lista_profesionales = array();
+        $lista_profesionales['MEDICO'] = array();
+        $lista_profesionales['ODONTOLOG'] = array();
+        $lista_profesionales['OTROS'] = array();
+
+        if($LugarAtencion)
+        {
+            $profesionales = $LugarAtencion->Profesionales()->get();
+            if($profesionales)
+            {
+
+                // echo json_encode($profesionales);
+                // exit();
+
+                foreach ($profesionales as $key_prof => $value_prof)
+                {
+
+                    if($value_prof->id_especialidad == 1)//MEDICO
+                    {
+                        array_push($lista_profesionales['MEDICO'], $value_prof) ;
+                    }
+                    else if($value_prof->id_especialidad == 2)//ODONTOLOG
+                    {
+                        array_push($lista_profesionales['ODONTOLOG'], $value_prof) ;
+                    }
+                    else //OTROS
+                    {
+                        array_push($lista_profesionales['OTROS'], $value_prof) ;
+                    }
+                }
+            }
+        }
+        /** FIN CARGA DE PROFESIONALES */
+
+        $tipo_convenio = TipoConvenioInstitucion::where('estado', 1)->get();
+
+        $region = Region::all();
+        $especialidad = Especialidad::all();
+        $roles = Roles::orderBy('alias','ASC')->where('difusion',1)->get();
+
+        $usuario = Auth::user();
+        $roles_ = $usuario->roles()->orderBy('id', 'DESC')->pluck('name')->toArray();
+        $adm_medico = false;
+        foreach($roles_ as $rol){
+            if($rol == 'AdministradorMedico'){
+                $adm_medico = true;
+                break;
+            }
+        }
+
+        $servicios = Servicios::all();
+
+        return view('app.adm_cm.profesionales_id')->with([
+            'responsable' => $responsable,
+            'institucion' => $institucion,
+            'tipo_institucion' => $tipo_institucion,
+            'lista_profesionales' => $lista_profesionales,
+            'tipo_convenio' => $tipo_convenio,
+            'region' => $region,
+            'especialidad' => $especialidad,
+            'roles' => $roles,
+            'adm_medico' => $adm_medico,
+            'servicios' => $servicios
+        ]);
+    }
+
+    public function profesionales_institucion(){
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+
+        /** INFORMACION DE INSTITUCION Y RESPONSABLE */
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+
+                            $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                    ->where('id_empleado', $responsable->id)
+                                    ->whereIn('estado', [2,3])
+                                    ->first();
+
+                            if($result_contrato)
+                            {
+                                $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                if($registro)
+                                {
+                                    /** INSTITUCION */
+                                    $institucion = $registro;
+                                    $tipo_institucion = 'institucion';
+                                }
+                                else
+                                {
+                                    $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** SERVICIOS */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'servicio';
+                                    }
+                                    else
+                                    {
+                                        return back()->with('error','Institución no encontrada');
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+
+            }
+        }
+        /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
+
+        /** CARGA DE PROFESIONALES */
+        $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+        $lista_profesionales = array();
+        $lista_profesionales['MEDICO'] = array();
+        $lista_profesionales['ODONTOLOG'] = array();
+        $lista_profesionales['OTROS'] = array();
+
+        if($LugarAtencion)
+        {
+            $profesionales = $LugarAtencion->Profesionales()->get();
+            if($profesionales)
+            {
+
+                // echo json_encode($profesionales);
+                // exit();
+
+                foreach ($profesionales as $key_prof => $value_prof)
+                {
+
+                    if($value_prof->id_especialidad == 1)//MEDICO
+                    {
+                        array_push($lista_profesionales['MEDICO'], $value_prof) ;
+                    }
+                    else if($value_prof->id_especialidad == 2)//ODONTOLOG
+                    {
+                        array_push($lista_profesionales['ODONTOLOG'], $value_prof) ;
+                    }
+                    else //OTROS
+                    {
+                        array_push($lista_profesionales['OTROS'], $value_prof) ;
+                    }
+                }
+            }
+        }
+        /** FIN CARGA DE PROFESIONALES */
+
+        $tipo_convenio = TipoConvenioInstitucion::where('estado', 1)->get();
+
+        $region = Region::all();
+        $especialidad = Especialidad::all();
+        $roles = Roles::orderBy('alias','ASC')->where('difusion',1)->get();
+
+        $usuario = Auth::user();
+        $roles_ = $usuario->roles()->orderBy('id', 'DESC')->pluck('name')->toArray();
+        $adm_medico = true;
+
+        $servicios = Servicios::all();
+
+        return view('app.adm_cm.profesionales')->with([
+            'responsable' => $responsable,
+            'institucion' => $institucion,
+            'tipo_institucion' => $tipo_institucion,
+            'lista_profesionales' => $lista_profesionales,
+            'tipo_convenio' => $tipo_convenio,
+            'region' => $region,
+            'especialidad' => $especialidad,
+            'roles' => $roles,
+            'adm_medico' => $adm_medico,
+            'servicios' => $servicios
         ]);
     }
 
     public function mensaje_difusion(Request $req){
         try {
             $destinatarios = $req->para;
+            // Obtener los roles correspondientes
+            $roles = Role::whereIn('id', $destinatarios)->get();
+            // Obtener los nombres de los roles
+            $roleNames = $roles->pluck('name');
+
+            // Obtener todos los usuarios que tienen esos roles
+            $usuariosConRoles = User::whereHas('roles', function($query) use ($roleNames) {
+                $query->whereIn('name', $roleNames);
+            })->get();
+
             $datos_mensaje = [
                 'titulo' => $req->titulo,
                 'asunto' => $req->detalle,
                 'mensaje' => $req->mensaje,
             ];
-            $mensaje = new Mensajes;
-            $mensaje->id_usuario = Auth::user()->id;
-            $mensaje->destinatarios = $destinatarios ? json_encode($destinatarios) : null;
-            $mensaje->id_receptor = null;
-            $mensaje->datos_mensaje = json_encode($datos_mensaje);
-            $mensaje->tipo_mensaje = 1; // Difusion
-            $mensaje->fecha_envio = Carbon::now()->format('Y-m-d H:i:s');
-            $mensaje->estado = 1; // 1: No leido, 2: Leido
 
-            $mensaje->save();
+            foreach($usuariosConRoles as $usuario){
+                // enviar un mensaje a cada usuario
+                $nuevo_mensaje = new Mensajes();
+                $nuevo_mensaje->id_usuario = Auth::user()->id;
+                $nuevo_mensaje->destinatarios = json_encode($destinatarios);
+                $nuevo_mensaje->id_receptor = $usuario->id;
+                $nuevo_mensaje->datos_mensaje = json_encode($datos_mensaje);
+                $nuevo_mensaje->tipo_mensaje = 2; // Difusion
+                $nuevo_mensaje->fecha_envio = Carbon::now()->format('Y-m-d H:i:s');
+                $nuevo_mensaje->estado = 1; // 1: No leido, 2: Leido
+
+                $nuevo_mensaje->save();
+            }
 
             $datos = array();
             $datos['estado'] = 1;
             $datos['msj'] = 'mensaje enviado';
-            // get dropzone image
-            if ($req->file('file')) {
-                $file = $req->file('file');
-                $filename = time().'_'.$file->getClientOriginalName();
-                $req->file->storeAs('uploads/', $filename, 'public');
-                $form->update([
-                    'image' => '/storage/uploads/'.$filename
-                ]);
+
+            // Manejar archivos adjuntos
+            if ($req->hasFile('misArchivosGes')) {
+                foreach ($req->file('misArchivosGes') as $file) {
+                    $filename = time().'_'.$file->getClientOriginalName();
+                    $file->storeAs('uploads/', $filename, 'public');
+
+                    // Aquí puedes guardar la información del archivo en la base de datos si es necesario
+                    // Ejemplo:
+                    // $archivo = new Archivo();
+                    // $archivo->mensaje_id = $nuevo_mensaje->id;
+                    // $archivo->ruta = '/storage/uploads/'.$filename;
+                    // $archivo->save();
+                }
             }
+
             return $datos;
         } catch (\Exception $e) {
-            //throw $th;
             return $e->getMessage();
         }
-
     }
-
-    // public function mensaje_profesional(Request $req){
-    //     try {
-    //         //code...
-    //         $mensaje_profesional = new MensajesProfesional();
-    //         $mensaje_profesional->id_usuario = Auth::user()->id;
-    //         $mensaje_profesional->id_profesional = intval($req->id_profesional_mensaje);
-    //         $mensaje_profesional->titulo = $req->titulo;
-    //         $mensaje_profesional->asunto = $req->detalle;
-    //         $mensaje_profesional->mensaje = $req->mensaje;
-    //         $mensaje_profesional->save();
-    //         $datos = array();
-    //         $datos['estado'] = 1;
-    //         $datos['msj'] = 'mensaje enviado';
-    //         // get dropzone image
-    //         if ($req->file('file')) {
-    //             $file = $req->file('file');
-    //             $filename = time().'_'.$file->getClientOriginalName();
-    //             $req->file->storeAs('uploads/', $filename, 'public');
-    //             $form->update([
-    //                 'image' => '/storage/uploads/'.$filename
-    //             ]);
-    //         }
-    //         return $datos;
-    //     } catch (\Exception $e) {
-    //         //throw $th;
-    //         return $e->getMessage();
-    //     }
-    // }
 
 
     public function mensaje_profesional(Request $req){
@@ -1229,7 +2456,7 @@ class AdministradorCmController extends Controller
             $mensaje->destinatarios = null;
             $mensaje->id_receptor = $id_receptor ? $id_receptor : null;
             $mensaje->datos_mensaje = json_encode($datos_mensaje);
-            $mensaje->tipo_mensaje = 2; // Directo a profesional
+            $mensaje->tipo_mensaje = 1; // Directo a profesional
             $mensaje->fecha_envio = Carbon::now()->format('Y-m-d H:i:s');
             $mensaje->estado = 1; // 1: No leido, 2: Leido
 
@@ -3648,8 +4875,9 @@ class AdministradorCmController extends Controller
         return ['estado' => 1, 'msj' => 'Especialidad actualizada', 'especialidades' => $especialidades, 'otras_especialidades' => $otras_especialidades];
     }
 
-    public function registrar_area_profesional(Request $req){
-        $institucion = '';
+    public function editar_direccion_medica(Request $req){
+
+            $institucion = '';
             $tipo_institucion = '1';
             $id_busqueda = Auth::user()->id;
             if(Auth::user()->id == 3)
@@ -3783,18 +5011,43 @@ class AdministradorCmController extends Controller
             }
         }
         try {
-            // buscamos al profesional responsable
-            $prof = ProfesionalesLugaresAtencion::where('id', $req->responsable)->first();
-            $profesional = Profesional::where('id', $prof->id_profesional)->first();
-            $area_cm = new AreasCm;
-            $area_cm->id_tipo_area_cm = $req->area;
-            $area_cm->id_responsable = $profesional->id;
-            $area_cm->id_lugar_atencion = $institucion->id_lugar_atencion;
-            $area_cm->id_institucion = $institucion->id;
-            $area_cm->save();
-            $areas = $this->dame_areas_cm($institucion->id_lugar_atencion);
+            $responsable_ = ProfesionalesLugaresAtencion::where('id', $req->responsable)->first();
+            if($responsable_) $profesional = Profesional::find($responsable_->id_profesional);
 
-            return ['estado' => 1, 'msj' => 'Area registrada', 'areas' => $areas];
+            $cargo = AdminMed::where('id', $req->cargo)->first();
+
+            $institucion = Instituciones::where('id', $req->id_institucion)->first();
+
+            if($cargo->id == 1){
+                $institucion->id_director_medico = intval($profesional->id);
+                $institucion->update();
+            }
+
+            if($cargo->id == 2){
+                $institucion->id_subdirector_medico = intval($profesional->id);
+                $institucion->update();
+            }
+
+            if($cargo->id == 3){
+                $institucion->id_director_gestion_cuidado = intval($profesional->id);
+                $institucion->update();
+            }
+
+            $director_cm = Profesional::where('id', $institucion->id_director_medico)->first();
+            $subdirector_cm = Profesional::where('id', $institucion->id_subdirector_medico)->first();
+            $director_gestion_cuidado = Profesional::where('id', $institucion->id_director_gestion_cuidado)->first();
+
+            $v = view('fragm.administradores_cm',[
+                'director_cm' => $director_cm ? $director_cm : null,
+                'subdirector_cm' => $subdirector_cm ? $subdirector_cm : null,
+                'director_gestion_cuidado' => $director_gestion_cuidado ? $director_gestion_cuidado : null,
+                'responsable' => $responsable ? $responsable : null,
+                'institucion' => $institucion,
+                'regiones' => $regiones,
+                'ciudades' => $ciudades,
+
+            ])->render();
+            return ['estado' => 1, 'msj' => 'Cargo registrado', 'v' => $v];
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();

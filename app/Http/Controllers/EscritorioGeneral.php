@@ -8,7 +8,7 @@ use App\Models\Especialidad;
 use App\Models\HoraMedica;
 use App\Models\Instituciones;
 use App\Models\Invitacion;
-use App\Models\MensajesProfesional;
+use App\Models\Mensajes;
 use App\Models\Paciente;
 use App\Models\Prevision;
 use App\Models\Profesional;
@@ -1539,11 +1539,14 @@ class EscritorioGeneral extends Controller
     }
 
     public function mensaje($id){
-        $mensaje = MensajesProfesional::find($id);
+        $mensaje = Mensajes::find($id);
+        $mensaje->estado = 0;
+        $mensaje->update();
+        $mensaje->datos_mensaje = json_decode($mensaje->datos_mensaje);
         $pc = new EscritorioProfesional;
-        $mensajes = $pc->dame_mensajes($mensaje->id_profesional);
+        $mensajes = $pc->dame_mensajes($mensaje->id_receptor);
         return view('app.general.mensajes.profesional')->with([
-            'mensaje' => $mensaje->mensaje,
+            'mensaje' => $mensaje->datos_mensaje->mensaje,
             'mensajes' => $mensajes,
         ]);
     }

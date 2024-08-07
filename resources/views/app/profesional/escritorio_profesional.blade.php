@@ -173,10 +173,10 @@
                             </a>
                         </div>
                         <div class="card social-widget-card bg-c-info opacidad px-0">
-                            <a href="#" class="btn" type="button">
+                            <a href="{{ ROUTE('adm_cm.adm_medico') }}" class="btn" type="button">
                                 <div class="card-body">
                                     <img class="wid-30 mb-3" src="{{ asset('images/iconos/otros_servicios.svg') }}">
-                                    <h5 class="my-auto text-white">Otros Servicios</h5>
+                                    <h5 class="my-auto text-white">Direccion medica</h5>
                                 </div>
                             </a>
                         </div>
@@ -185,6 +185,14 @@
                                 <div class="card-body">
                                     <img class="wid-30 mb-3" src="{{ asset('images/iconos/flujo_caja_3.svg') }}">
                                     <h5 class="my-auto text-white">Flujo de Caja</h5>
+                                </div>
+                            </a>
+                        </div>
+						<div class="card social-widget-card bg-c-info opacidad px-0">
+                            <a href="#" class="btn" type="button" target="_blank">
+                                <div class="card-body">
+                                    <img class="wid-30 mb-3" src="{{ asset('images/iconos/lock.svg') }}">
+                                    <h5 class="my-auto text-white">SDIPASS</h5>
                                 </div>
                             </a>
                         </div>

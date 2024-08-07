@@ -97,6 +97,9 @@ class HomeController extends Controller
             case 'Ministerio':
                 return redirect()->route('ministerio.home');
                 break;
+            case 'AdministradorMedico':
+                return redirect()->route('administrador_medico.home');
+                break;
             default:
                 return redirect('/Acceso');
                 break;

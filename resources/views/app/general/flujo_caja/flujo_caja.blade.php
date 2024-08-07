@@ -1,4 +1,4 @@
-@extends('template.templateFlujoCaja')
+@extends('template.mensajes')
 @section('content')
 
     <!--Container Completo-->
@@ -30,14 +30,7 @@
                                         <a href="{{ route('servicio.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
                                             <i class="feather icon-home"></i>
                                         </a>
-                                    {{--  @elseif(Auth::user()->hasRole('AsistenCaja'))
-                                        <a href="{{ route('asistente_adm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                            <i class="feather icon-home"></i>
-                                        </a>  --}}
                                     @endif
-                                    {{--  <a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                        <i class="feather icon-home"></i>
-                                    </a>  --}}
                                 </li>
                                 <li class="breadcrumb-item"><a href="#">Flujo de Caja</a></li>
                             </ul>

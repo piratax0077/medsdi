@@ -339,4 +339,11 @@ class DireccionSaludController extends Controller
     {
         return view('direccion_salud.escritorio_control_licencia')->with([]);
     }
+
+    public function comunicados()
+    {
+        return view('direccion_salud.escritorio_comunicados')->with([
+            'adm_medico' => false
+        ]);
+    }
 }
