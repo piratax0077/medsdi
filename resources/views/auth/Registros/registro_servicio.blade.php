@@ -36,9 +36,9 @@
 			<div class="row">
 				<div class="col-sm-12 col-md-6 mx-auto py-2">
 					<div class="card">
-						<div class="card-header pt-2 pb-1">
+						<div class="card-to pt-2">
 							<h5>Registro de servico</h5>
-							<p class="p-18 mb-1">Complete los datos para finalizar el registro</p>
+							<p class="p-18">Complete los datos para finalizar el registro</p>
 						</div>
 						<div class="card-body">
 
@@ -72,11 +72,11 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Rut Servicio</label>
+                                                    <label class="floating-label-activo-sm">Rut del servicio</label>
                                                     <input type="text" class="form-control form-control-sm" name="rut" id="rut" >
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Nombre Servicio</label>
+                                                    <label class="floating-label-activo-sm">Nombre del servicio</label>
                                                     <input type="text" class="form-control form-control-sm" name="nombre" id="nombre">
 
                                                 </div>
@@ -93,7 +93,7 @@
                                             </div> -->
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label-activo-sm">Tipo Servicio</label>
+                                                    <label class="floating-label-activo-sm">Tipo de servicio</label>
                                                     <select class="form-control form-control-sm" id="id_tiposervicio" name="id_tiposervicio">
                                                         <option selected value="0">Seleccione</option>
                                                         @if (isset($tipo_servicio))
@@ -112,18 +112,18 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-8">
-                                                    <label class="floating-label">Dirección</label>
+                                                    <label class="floating-label-activo-sm">Dirección</label>
                                                     <input type="text" class="form-control form-control-sm" name="direccion" id="direccion">
                                                     <i class="zmdi zmdi-card input-icon"></i>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-4">
-                                                    <label class="floating-label">Depto. | Ofic.</label>
+                                                    <label class="floating-label-activo-sm">Nº</label>
                                                     <input type="number" class="form-control form-control-sm" name="numero" id="numero">
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Región</label>
+                                                    <label class="floating-label-activo-sm">Región</label>
                                                     <select class="form-control form-control-sm" id="region" name="region" onchange="buscar_ciudad();">
                                                         <option selected value="0" selected>Seleccione</option>
                                                         @if (isset($region))
@@ -134,7 +134,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Comuna</label>
+                                                    <label class="floating-label-activo-sm">Comuna</label>
                                                     <select class="form-control form-control-sm" id="ciudad" name="ciudad">
                                                         <option selected value="0">Seleccione</option>
                                                         <option>-</option>
@@ -143,7 +143,7 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Teléfono</label>
+                                                    <label class="floating-label-activo-sm">Teléfono</label>
                                                     <input type="tel" class="form-control form-control-sm" name="telefono" id="telefono">
                                                 </div>
                                             </div>
@@ -163,7 +163,7 @@
                                         <form class="wizard-container" id="js-wizard-form2">
                                             <div class="form-row">
                                                 <div class="col-sm-12 col-md-12 text-center mb-3">
-                                                    <h5>Información Responsable</h5>
+                                                    <h5>Información del responsable del servicio</h5>
                                                 </div>
                                             </div>
                                             <div class="form-group row ">
@@ -171,29 +171,29 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label-activo-sm">Rut Responsable</label>
+                                                    <label class="floating-label-activo-sm">Rut responsable</label>
                                                     <input type="text" class="form-control form-control-sm" name="responsable_rut" id="responsable_rut">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label-activo-sm">Nombre Responsable</label>
+                                                    <label class="floating-label-activo-sm">Nombre responsable</label>
                                                     <input type="text" class="form-control form-control-sm" name="responsable_nombre" id="responsable_nombre">
                                                 </div>
                                             </div>
 
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label-activo-sm">Apellido Paterno Responsable</label>
+                                                    <label class="floating-label-activo-sm">Primer apellido responsable</label>
                                                     <input type="text" class="form-control form-control-sm" name="responsable_apellido_uno" id="responsable_apellido_uno">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label-activo-sm">Apellido Materno Responsable</label>
+                                                    <label class="floating-label-activo-sm">Segundo apellido responsable</label>
                                                     <input type="text" class="form-control form-control-sm" name="responsable_apellido_dos" id="responsable_apellido_dos">
                                                 </div>
                                             </div>
 
                                             <div class="form-row">
                                                 <div class="col-sm-12 col-md-12 text-center mb-3">
-                                                    <h5>Información de Contacto del Responsable</h5>
+                                                    <h5>Información de contacto del responsable</h5>
                                                 </div>
                                             </div>
                                             <div class="form-row">
@@ -203,7 +203,7 @@
                                                     <i class="zmdi zmdi-card input-icon"></i>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-4">
-                                                    <label class="floating-label-activo-sm">Depto. | Ofic.</label>
+                                                    <label class="floating-label-activo-sm">Nº</label>
                                                     <input type="number" class="form-control form-control-sm" name="responsable_numero" id="responsable_numero">
                                                 </div>
                                             </div>
@@ -231,7 +231,7 @@
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
                                                     <label class="floating-label-activo-sm">Celular</label>
-                                                    <input type="tel" class="form-control form-control-sm" name="responsable_celular" id="responsable_celular">
+                                                    <input type="tel" class="form-control form-control-sm" name="responsable_celular" id="responsable_celular" placeholder="+569">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
                                                     <label class="floating-label-activo-sm">Teléfono</label>
@@ -249,7 +249,7 @@
                                             <hr>
                                             <div class="form-row">
                                                 <div class="col-sm-12 col-md-12 text-center mb-3">
-                                                    <h5>Constraseña para el usuario del Responsable</h5>
+                                                    <h5>Constraseña para el usuario del responsable</h5>
                                                 </div>
                                             </div>
                                             <div class="form-row">

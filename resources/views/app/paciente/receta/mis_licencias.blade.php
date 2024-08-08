@@ -62,7 +62,7 @@
                                         {{ $f->Profesional()->first()->especialidad()->first()->txt_esp }}</td>
                                         <td>Enviado a Isapre</td>
                                         <td>
-                                            <button type="button" class="btn btn-warning btn-sm" onclick="abri_pdf_licencia('{{ $l->id }}');"><i class="feather icon-file-plus"></i>Ver licencia</button>
+                                            <button type="button" class="btn btn-primary-light-c btn-xxs" onclick="abri_pdf_licencia('{{ $l->id }}');"><i class="feather icon-file"></i> Ver licencia</button>
                                         </td>
                                     </tr>
                                     @endforeach

@@ -36,9 +36,9 @@
 			<div class="row">
 				<div class="col-sm-12 col-md-6 mx-auto py-2">
 					<div class="card">
-						<div class="card-header pt-2 pb-1">
-							<h5>Registro de Paciente</h5>
-							<p class="p-18 mb-1">Complete los datos para finalizar el registro</p>
+						<div class="card-top pt-2">
+							<h5>Registro de paciente</h5>
+							<p class="p-18">Complete los datos para finalizar el registro</p>
 						</div>
 						<div class="card-body">
 
@@ -72,22 +72,22 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Rut</label>
+                                                    <label class="floating-label-activo-sm">Rut</label>
                                                     <input type="text" class="form-control form-control-sm" name="rut" id="rut" >{{-- onblur="verificador_rut();" onkeyup="formatoRut(this)" --}}
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Nombre</label>
+                                                    <label class="floating-label-activo-sm">Nombre</label>
                                                     <input type="text" class="form-control form-control-sm" name="nombre" id="nombre">
 
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Primer apellido</label>
+                                                    <label class="floating-label-activo-sm">Primer apellido</label>
                                                     <input type="text" class="form-control form-control-sm" name="primer_apellido" id="primer_apellido">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Segundo apellido</label>
+                                                    <label class="floating-label-activo-sm">Segundo apellido</label>
                                                     <input type="text" class="form-control form-control-sm" name="segundo_apellido" id="segundo_apellido">
                                                 </div>
                                             </div>
@@ -137,18 +137,18 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-8">
-                                                    <label class="floating-label">Dirección</label>
+                                                    <label class="floating-label-activo-sm">Dirección</label>
                                                     <input type="text" class="form-control form-control-sm" name="direccion" id="direccion">
                                                     <i class="zmdi zmdi-card input-icon"></i>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-4">
-                                                    <label class="floating-label">Depto. | Ofic.</label>
+                                                    <label class="floating-label-activo-sm">Nº</label>
                                                     <input type="number" class="form-control form-control-sm" name="numero" id="numero">
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Región</label>
+                                                    <label class="floating-label-activo-sm">Región</label>
                                                     <select class="form-control form-control-sm" id="region" name="region" onchange="buscar_ciudad();">
                                                         <option selected value="0" selected>Seleccione</option>
                                                         @if (isset($region))
@@ -159,7 +159,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Comuna</label>
+                                                    <label class="floating-label-activo-sm">Comuna</label>
                                                     <select class="form-control form-control-sm" id="ciudad" name="ciudad">
                                                         <option selected value="0">Seleccione</option>
                                                         <option>-</option>
@@ -168,11 +168,11 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Celular</label>
-                                                    <input type="tel" class="form-control form-control-sm" name="celular" id="celular">
+                                                    <label class="floating-label-activo-sm">Celular</label>
+                                                    <input type="tel" class="form-control form-control-sm" name="celular" id="celular" placeholder="+569">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Teléfono</label>
+                                                    <label class="floating-label-activo-sm">Teléfono</label>
                                                     <input type="tel" class="form-control form-control-sm" name="telefono" id="telefono">
                                                 </div>
                                             </div>

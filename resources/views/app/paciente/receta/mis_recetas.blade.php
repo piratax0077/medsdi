@@ -9,12 +9,12 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis Recetas</h5>
+                                <h5 class="m-b-10 font-weight-bold">Mis recetas</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
                                 <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta') }}" data-toggle="tooltip" data-placement="top" title="Volver a inicio de receta online">Receta Online</a></li>
-                                <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta.receta') }}">Mis Recetas</a></li>
+                                <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta.receta') }}">Mis recetas</a></li>
                             </ul>
                         </div>
                     </div>
@@ -25,7 +25,7 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="text-c-blue f-20 d-inline ml-4 my-1 py-1">Mis Recetas</h4>
+                            <h4 class="text-c-blue f-20 d-inline ml-4 my-1 py-1">Mis recetas</h4>
                         </div>
                         <div class="card-body">
                             <table id="tabla_recetas_paciente_ro" class="display table table-striped  dt-responsive nowrap table-xs" style="width:100%">
@@ -54,7 +54,7 @@
                                                     </span>
                                                 </td>
                                                 <td class="text-center align-middle">
-                                                    <div onclick="ver_pdf_receta_retenido({{ $receta['id_ficha_atencion'] }}, {{ $receta['id'] }})" class="btn btn-danger btn-sm"><i class="feather icon-file-plus"></i> Ver Receta</div>
+                                                    <div onclick="ver_pdf_receta_retenido({{ $receta['id_ficha_atencion'] }}, {{ $receta['id'] }})" class="btn btn-warning-light-c btn-xxs"><i class="feather icon-activity"></i> Ver Receta</div>
                                                 </td>
                                             </tr>
                                         @endforeach

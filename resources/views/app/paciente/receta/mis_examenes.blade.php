@@ -8,12 +8,12 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Mis Exámenes</h5>
+                            <h5 class="m-b-10 font-weight-bold">Mis exámenes</h5>
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
                             <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta') }}" data-toggle="tooltip" data-placement="top" title="Volver a inicio de receta online">Receta Online</a></li>
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta.examen') }}">Mis Exámenes</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta.examen') }}">Mis exámenes</a></li>
                         </ul>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn btn-primary-light btn-xs" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                    <button type="button" class="btn btn-success-light-c btn-xxs" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-file-plus"></i> Ver examen</button>
                                                 </td>
                                             </tr>
                                         @endif
@@ -101,9 +101,9 @@
                                             </td>
                                             <td>
                                                 @if ($result_ex->ResultadoExamenArchivo->count()>0)
-                                                    <button type="button" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',1);"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                    <button type="button" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',1);"><i class="feather icon-file-plus"></i> Ver examen</button>
                                                 @else
-                                                    <button type="button" disabled="disabled" class="btn btn btn-primary-light btn-xs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-file-text"></i> Ver examen</button>
+                                                    <button type="button" disabled="disabled" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-file-plus"></i> Ver examen</button>
                                                 @endif
                                             </td>
                                         </tr>

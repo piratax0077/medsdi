@@ -33,38 +33,39 @@
     <div class="auth-wrapper">
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-sm-12 col-md-6 mx-auto py-2">
+				<div class="col-sm-12 col-md-8 mx-auto py-2">
 					<div class="card">
-						<div class="card-header pt-2 pb-1">
-							<h5>Nuestras APP</h5>
-						</div>
-						<div class="card-body">
-
-                            <div class="" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-around; align-items: center;">
-                                <div class="ml-1 mr-1">
-                                    <div class="text-center">
-                                        <a href="{{ asset('app/download/sdipass.apk') }}">
-                                            <img src="{{ asset('images/app_descarga/apk.png') }}" alt="logo_apk" class="img-fluid" style="max-width: 118px;">
-                                            <div style="font-weight: bold;color: #0751ff;font-size: 15px;">Descarga<br>SDI-PASS APK</div>
-                                        </a>
+						
+						<div class="card-body text-center p-5">
+                            <h4 class="mb-4 f-20">Descarga nuestra aplicación</h4>
+                            <div class="text-center">
+                                <a href="{{ asset('app/download/sdipass.apk') }}">
+                                    <img src="{{ asset('images/app_descarga/apk.png') }}" alt="logo_apk" class="img-fluid rounded" style="max-width: 160px;">
+                                </a>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-8 d-inline text-center mx-auto mt-5">
+                                    <div class="text-center d-inline">
+                                        <img src="{{ asset('images/app_descarga/google_play_logo.png') }}" alt="google_play_logo" class="img-fluid d-inline" width="150">
                                     </div>
-                                </div>
-                                <div class="ml-1 mr-1">
-                                    <div class="text-center">
-                                        <div style="font-weight: bold;color: #0751ff;font-size: 15px;">PROXIMAMENTE</div>
-                                        <img src="{{ asset('images/app_descarga/google_play_logo.png') }}" alt="google_play_logo" class="img-fluid">
-                                        <div>SDI-PASS - PLAY STORE</div>
-                                    </div>
-                                </div>
-                                <div class="ml-1 mr-1">
-                                    <div class="text-center">
-                                        <div style="font-weight: bold;color: #0751ff;font-size: 15px;">PROXIMAMENTE</div>
-                                        <img src="{{ asset('images/app_descarga/app_store_logo.png') }}" alt="app_store_logo" class="img-fluid">
-                                        <div>SDI-PASS - App Store</div>
+                                    <div class="text-center d-inline">
+                                        <img src="{{ asset('images/app_descarga/app_store_logo.png') }}" alt="app_store_logo" class="img-fluid d-inline" width="150">
                                     </div>
                                 </div>
                             </div>
+                            <!--<div class="mt-5" style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-around; align-items: center;">
 
+                                <div class="ml-1 mr-1 ">
+                                    <div class="text-center">
+                                        <img src="{{ asset('images/app_descarga/google_play_logo.png') }}" alt="google_play_logo" class="img-fluid" width="180">
+                                    </div>
+                                </div>
+                                <div class="ml-1 mr-1">
+                                    <div class="text-center">
+                                        <img src="{{ asset('images/app_descarga/app_store_logo.png') }}" alt="app_store_logo" class="img-fluid" width="180">
+                                    </div>
+                                </div>
+                            </div>-->
                         </div>
                 	</div>
 				</div>
