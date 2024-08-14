@@ -1,23 +1,7 @@
-.card {
-    box-shadow: none!important; 
-    box-shadow: 0 0px 0px 0px !important;
-    margin-bottom: 1rem!important;
-
-}
-
-.card:hover {
-    box-shadow: 0 0px 0px 0px rgba(69, 90, 100, 0.3)!important;
-}
-
-.card-header {
-    padding: 0rem 0.4rem!important;
-    background-color: #E8E8E8!important;
-    color: #565656!important;
-}
 
 .card-body-aten {
-    padding-top: 0.75rem!important;
-    padding-button: 0.188rem!important;
+    padding-top: 0.65rem!important;
+    padding-button: 0.65rem!important;
     padding-left: 0.375rem!important;
     padding-right: 0.375rem!important;
     border-top: 1px solid #E8E8E8!important;
@@ -30,12 +14,12 @@
 .btn.btn-icon{
 	width: 25px !important;
     height: 25px !important;
-    font-size: 18px !important;
+    font-size: 15px !important;
 }
 
 .iconoinput {
     color: #e8e8e8;
-    font-size: 15px;
+    font-size: 14px;
     position: absolute;
     right: 25px;
     padding-top: 10px;
@@ -53,7 +37,7 @@
   width: 100%;
   text-align: left;
   outline: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   transition: 0.4s;
 }
 
@@ -61,7 +45,7 @@
   content: "\2212";
   font-weight: 600;
   float: right;
-  font-size: 1.1rem;
+  font-size: 0.85rem;
   margin-left: 5px;
 }
 
@@ -76,7 +60,7 @@
   width: 100%;
   text-align: left;
   outline: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   transition: 0.4s;
 }
 
@@ -84,7 +68,7 @@
   content: '\002B';
   font-weight: 600;
   float: right;
-  font-size: 1.1rem;
+ font-size: 0.85rem;
   margin-left: 5px;
 }
 

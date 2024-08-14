@@ -66,7 +66,7 @@
                                             </td>
                                             <td>Certificado de Reposo</td>
                                             <td>
-                                                <button type="button" class="btn btn-primary btn-sm" onclick="ver_pdf_certificado_reposo({{$cr->id_ficha_atencion}})"><i class="feather icon-file-plus"></i> Ver certificado</button>
+                                                <button type="button" class="btn btn-secondary-light-c btn-xxs" onclick="ver_pdf_certificado_reposo({{$cr->id_ficha_atencion}})"><i class="feather icon-file"></i> Ver certificado</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -101,7 +101,7 @@
                                             </td>
                                             <td>Interconsulta</td>
                                             <td>
-                                                <button type="button" class="btn btn-primary btn-sm" onclick="ver_pdf_interconsulta({{ $ic->id }});"><i class="feather icon-file-plus"></i> Ver certificado</button>
+                                                <button type="button" class="btn btn-secondary-light-c btn-xxs" onclick="ver_pdf_interconsulta({{ $ic->id }});"><i class="feather icon-file"></i> Ver certificado</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -125,7 +125,7 @@
                                             </td>
                                             <td>Informe Medico</td>
                                             <td>
-                                                <button type="button" class="btn btn-primary btn-sm" onclick="ver_pdf_informe_medico({{ $im->id_ficha_atencion }});"><i class="feather icon-file-plus"></i> Ver certificado</button>
+                                                <button type="button" class="btn btn-secondary-light-c btn-xxs" onclick="ver_pdf_informe_medico({{ $im->id_ficha_atencion }});"><i class="feather icon-file"></i> Ver certificado</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -149,7 +149,7 @@
                                             </td>
                                             <td>Uso Personal</td>
                                             <td>
-                                                <button type="button" class="btn btn-primary btn-sm" onclick="ver_pdf_uso_personal({{ $us->id_ficha_atencion }});"><i class="feather icon-file-plus"></i> Ver certificado</button>
+                                                <button type="button" class="btn btn-secondary-light-c btn-xxs" onclick="ver_pdf_uso_personal({{ $us->id_ficha_atencion }});"><i class="feather icon-file"></i> Ver certificado</button>
                                             </td>
                                         </tr>
                                     @endforeach

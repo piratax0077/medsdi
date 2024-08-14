@@ -9,14 +9,14 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Mis Profesionales</h5>
+                            <h5 class="m-b-10 font-weight-bold">Mis profesionales</h5>
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item">
                                 <a href="{{ ROUTE('paciente.home') }}" data-toggle="tooltip"
                                     data-placement="top" title="Volver a mi escritorio"><i
                                         class="feather icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.mis_profesionales') }}">Mis Profesionales</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.mis_profesionales') }}">Mis profesionales</a></li>
                         </ul>
                     </div>
                 </div>
@@ -103,13 +103,13 @@
                                                 </div>
                                                 <div class="text-center">
                                                     <a href="#!" data-toggle="modal" data-target="#modal-report">
-                                                        <span class="badge badge-primary mt-2">{{ $p->Especialidad()->first()->nombre }}</span>
-                                                        <h5 class="mb-1 mt-2">{{ $p->nombre }} {{ $p->apellido_uno }} {{ $p->apellido_dos }}</h5>
+                                                        <span class="badge badge-primary-light mb-2 mt-2">{{ $p->Especialidad()->first()->nombre }}</span>
+                                                        <h5 class="text-capitalize">{{ $p->nombre }} {{ $p->apellido_uno }} {{ $p->apellido_dos }}</h5>
                                                     </a>
-                                                    <p class="mb-3 text-muted">
+                                                    <p class=" text-muted">
                                                         <!--<i class="feather icon-calendar"></i></p>-->
                                                     <!--<a class="btn btn-sm btn-info" href='{{ url("Paciente/Reservar_Hora/{$p->id_especialidad}/{$p->id_tipo_especialidad}/{$p->id_sub_tipo_especialidad}") }}' role="button">Agendar Hora</a>-->
-                                                    <div class="btn btn-sm btn-info" onclick="hora_medica({{$p->id}},0);">Agendar Hora</div>
+                                                    <div class="btn btn-sm btn-info" onclick="hora_medica({{$p->id}},0);"><i class="feather icon-calendar"></i> Agendar hora</div>
                                                 </div>
                                             </div>
                                         </div>

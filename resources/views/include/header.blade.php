@@ -6,10 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sistema || Redmedichile</title>
+    <title>MED-SDI</title>
     <meta name="description" content="" />
     <meta name="keywords" content="">
-    <meta name="author" content="Redmedichile" />
+    <meta name="author" content="MED-SDI" />
 
     <link rel="stylesheet" href="{{ asset('css/boton-flotante.css') }}">
     <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">

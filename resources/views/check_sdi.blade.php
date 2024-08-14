@@ -18,62 +18,62 @@
     <!-- Tablas ficha médica única-->
     <script>
         $(document).ready(function(){
-    checkToken();
-});
+            checkToken();
+        });
 
-function checkToken(){
-    @php
-    if(Auth::check())
-    echo 'let url = "Check_sdi_token";';
-    else
-    echo 'let url = "Check_sdi_token_external";';
-    @endphp
-    var _token = $('input[name=_token]').val();
-    var token_ = $('#token_').val();   // TOKEN EXTERNO - URL EXTERNA
-    var token = '{{$token}}'; // TOKEN APP
+        function checkToken(){
+            @php
+            if(Auth::check())
+            echo 'let url = "Check_sdi_token";';
+            else
+            echo 'let url = "Check_sdi_token_external";';
+            @endphp
+            var _token = $('input[name=_token]').val();
+            var token_ = $('#token_').val();   // TOKEN EXTERNO - URL EXTERNA
+            var token = '{{$token}}'; // TOKEN APP
 
-    $.ajax({
-        url: url,
-        type: "GET",
-        data: {
-            _token: _token,
-            token: token // TOKEN INTERNO - URL CON LOGIN AUTH
-        },
-        success: (resp)=>{
-            if(resp.estado==1)
-            {
-                if(resp.registro.estado==1)
-                {
-                    if(token_ != '')
-                    top.location.href=$('#url_nueva').val()+'/'+token_; // TOKEN PROFESIONAL PROVISORIO
-                    else
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    _token: _token,
+                    token: token // TOKEN INTERNO - URL CON LOGIN AUTH
+                },
+                success: (resp)=>{
+                    if(resp.estado==1)
                     {
-                        if($('#url_nueva').val().indexOf("?") > -1)
-                        top.location.href=$('#url_nueva').val()+'&token='+token;  // TOKEN APP
-                        else
-                        top.location.href=$('#url_nueva').val()+'?token='+token;  // TOKEN APP
+                        if(resp.registro.estado==1)
+                        {
+                            if(token_ != '')
+                            top.location.href=$('#url_nueva').val()+'/'+token_; // TOKEN PROFESIONAL PROVISORIO
+                            else
+                            {
+                                if($('#url_nueva').val().indexOf("?") > -1)
+                                top.location.href=$('#url_nueva').val()+'&token='+token;  // TOKEN APP
+                                else
+                                top.location.href=$('#url_nueva').val()+'?token='+token;  // TOKEN APP
+                            }
+                        }else{
+                            setTimeout(checkToken,3000);
+                        }
+                    }else{
+                        setTimeout(checkToken,3000);
                     }
-                }else{
-                    setTimeout(checkToken,3000);
+                },
+                error: (resp)=>{
+                    console.warn(resp);
                 }
-            }else{
-                setTimeout(checkToken,3000);
-            }
-        },
-        error: (resp)=>{
-            console.warn(resp);
+            });
+
+
         }
-    });
-
-
-}
     </script>
 
 @endsection
 
 <!-- CONTENT -->
 @section('content')
-@csrf
+    @csrf
     <input type="hidden" id="token_" value="{{$token_}}">
     <input type="hidden" id="token" value="{{$token}}">
     <input type="hidden" id="url_nueva" value="{{$url_nueva}}">

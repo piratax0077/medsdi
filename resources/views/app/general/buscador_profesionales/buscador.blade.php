@@ -27,7 +27,11 @@
                                 <h5 class="m-b-10 font-weight-bold">Reservar hora médica</h5>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="escritorio_paciente.php" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.home') }}" data-toggle="tooltip" data-placement="top"
+                                        title="Volver a mi escritorio">
+                                        <i class="feather icon-home"></i>
+                                    </a>
+                                </li>
                                 <li class="breadcrumb-item"><a href="buscador_profesional_paciente.php">Reservar hora médica</a></li>
                             </ul>
                         </div>
@@ -40,19 +44,19 @@
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header text-white bg-light">
-                            <h4 class="f-18 pt-1 text-c-blue text-center">Reserve su hora médica</h4>
+                            <h4 class="f-22 pt-1 text-c-blue text-center">Reserve su hora médica</h4>
                             <input type="hidden" name="select_tipo_agenda" id="select_tipo_agenda" value="1,2">
                         </div>
                         <div class="card-body">
                             <ul class="nav nav-tabs mb-3 justify-content-center" id="Buscadores" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active text-uppercase" onclick="$('#select_tipo_agenda').val(1);$('#div_resultado_busqueda').html('')" id="buscar_especialidad-tab" data-toggle="tab" href="#buscar_especialidad" role="tab" aria-controls="home" aria-selected="true">Especialidad</a>
+                                <li class="nav-item text-uppercase mx-3">
+                                    <a class="nav-link active" onclick="$('#select_tipo_agenda').val(1);$('#div_resultado_busqueda').html('')" id="buscar_especialidad-tab" data-toggle="tab" href="#buscar_especialidad" role="tab" aria-controls="home" aria-selected="true">Especialidad</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-uppercase" onclick="$('#select_tipo_agenda').val(1);$('#div_resultado_busqueda').html('')" id="buscar_profesional-tab" data-toggle="tab" href="#buscar_profesional" role="tab" aria-controls="buscar_profesional" aria-selected="false">Profesional</a>
+                                <li class="nav-item text-uppercase mx-3">
+                                    <a class="nav-link" onclick="$('#select_tipo_agenda').val(1);$('#div_resultado_busqueda').html('')" id="buscar_profesional-tab" data-toggle="tab" href="#buscar_profesional" role="tab" aria-controls="buscar_profesional" aria-selected="false">Profesional</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-uppercase" onclick="$('#select_tipo_agenda').val(3);$('#div_resultado_busqueda').html('')" id="buscar_videoconsulta-tab" data-toggle="tab" href="#buscar_videoconsulta" role="tab" aria-controls="buscar_videoconsulta" aria-selected="false">Videoconsulta</a>
+                                <li class="nav-item text-uppercase mx-3">
+                                    <a class="nav-link" onclick="$('#select_tipo_agenda').val(3);$('#div_resultado_busqueda').html('')" id="buscar_videoconsulta-tab" data-toggle="tab" href="#buscar_videoconsulta" role="tab" aria-controls="buscar_videoconsulta" aria-selected="false">Videoconsulta</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="BuscadoresContent">
@@ -62,7 +66,7 @@
                                     {{--  <form>  --}}
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 text-center">
-                                                <h6 class="mb-4 mt-2">Ingrese los datos solicitados para buscar hora por especialidad</h6>
+                                                <h6 class="mb-4 mt-2">Ingrese los datos solicitados para buscar horas por especialidad</h6>
                                             </div>
                                         </div>
                                         <div class="form-row">
@@ -157,11 +161,11 @@
                                                         <input type="checkbox" id="buscar_especialidad_hora24" value="1">
                                                         <label for="buscar_especialidad_hora24" class="cr"></label>
                                                     </div>
-                                                    <label><strong>Quiero hora para las próx. 24 hrs</strong></label>
+                                                    <label><strong>Buscar horas para las próx. 24 hrs</strong></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md-12 text-center">
-                                                <button class="btn btn-info" type="bottom" id="btn_buscar_especialidad" onclick="buscar_profesional_especialidad();">Buscar hora</button>
+                                                <button class="btn btn-info" type="bottom" id="btn_buscar_especialidad" onclick="buscar_profesional_especialidad();"><i class="feather icon-search"></i> Buscar horas</button>
                                             </div>
                                         </div>
                                     {{--  </form>  --}}
@@ -172,7 +176,7 @@
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 text-center">
-                                                <h6 class="mb-4 mt-2">Ingrese los datos solicitados para buscar hora por profesional</h6>
+                                                <h6 class="mb-4 mt-2">Ingrese los datos solicitados para buscar horas por profesional</h6>
                                             </div>
                                         </div>
                                         <div class="form-row">
@@ -204,16 +208,17 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-12 col-md-4">
+                                             <div class="col-sm-12 col-md-4">
                                                 <div class="form-group">
-                                                    <div class="custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input" id="buscar_profesional_hora24">
-                                                        <label class="custom-control-label" for="hora24">Buscar horas para las próx. 24 hrs</label>
+                                                    <div class="switch switch-success d-inline m-r-10">
+                                                        <input type="checkbox" id="buscar_profesional_hora24" value="1">
+                                                        <label for="hora24" class="cr"></label>
                                                     </div>
+                                                    <label><strong>Buscar horas para las próx. 24 hrs</strong></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md-12 text-center">
-                                                <button class="btn btn-info" type="button" onclick="buscar_profesional_profesional();">Buscar hora</button>
+                                                <button class="btn btn-info" type="button" onclick="buscar_profesional_profesional();"><i class="feather icon-search"></i> Buscar horas</button>
                                             </div>
                                         </div>
                                     </form>
@@ -224,7 +229,7 @@
                                     {{--  <form>  --}}
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 text-center">
-                                                <h6 class="mb-4 mt-2">Ingrese los datos solicitados para buscar hora por especialidad</h6>
+                                                <h6 class="mb-4 mt-2">Ingrese los datos solicitados para buscar horas por especialidad</h6>
                                             </div>
                                         </div>
                                         <div class="form-row">
@@ -299,11 +304,11 @@
                                                         <input type="checkbox" id="buscar_videoconsulta_hora24" value="1">
                                                         <label for="buscar_videoconsulta_hora24" class="cr"></label>
                                                     </div>
-                                                    <label><strong>Quiero hora para las próx. 24 hrs</strong></label>
+                                                    <label><strong>Buscar horas para las próx. 24 hrs</strong></label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md-12 text-center">
-                                                <button class="btn btn-info" type="bottom" id="btn_buscar_especialidad_video_consulta" onclick="buscar_profesional_especialidad_video_consulta();">Buscar hora</button>
+                                                <button class="btn btn-info" type="bottom" id="btn_buscar_especialidad_video_consulta" onclick="buscar_profesional_especialidad_video_consulta();"><i class="feather icon-search"></i> Buscar horas</button>
                                             </div>
                                         </div>
                                     {{--  </form>  --}}

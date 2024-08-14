@@ -36,12 +36,11 @@
 			<div class="row">
 				<div class="col-sm-12 col-md-6 mx-auto py-2">
 					<div class="card">
-						<div class="card-header pt-2 pb-1">
+						<div class="card-top pt-2">
 							<h5>Registro de profesionales</h5>
-							<p class="p-18 mb-1">Complete los datos para finalizar el registro</p>
+							<p class="p-18">Complete los datos para finalizar el registro</p>
 						</div>
 						<div class="card-body">
-
 		                        <div class="progress" id="js-progress">
 		                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
 		                                <span class="progress-val">40%</span>
@@ -72,7 +71,7 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Rut</label>
+                                                    <label class="floating-label-activo-sm">Rut</label>
                                                     @if ($invitacion)
                                                         <input type="text" class="form-control form-control-sm" name="rut" id="rut" value="{{ $invitacion->rut }}">
                                                     @else
@@ -81,7 +80,7 @@
 
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Nombre</label>
+                                                    <label class="floating-label-activo-sm">Nombre</label>
                                                     @if ($invitacion)
                                                         <input type="text" class="form-control form-control-sm" name="nombre" id="nombre" value="{{ $invitacion->nombre }}">
                                                     @else
@@ -92,7 +91,7 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Primer apellido</label>
+                                                    <label class="floating-label-activo-sm">Primer apellido</label>
                                                     @if ($invitacion)
                                                         <input type="text" class="form-control form-control-sm" name="primer_apellido" id="primer_apellido" value="{{ $invitacion->apellido_uno }}">
                                                     @else
@@ -101,7 +100,7 @@
 
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Segundo apellido</label>
+                                                    <label class="floating-label-activo-sm">Segundo apellido</label>
                                                     @if ($invitacion)
                                                         <input type="text" class="form-control form-control-sm" name="segundo_apellido" id="segundo_apellido" value="{{ $invitacion->apellido_dos }}">
                                                     @else
@@ -126,7 +125,7 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Profesión</label>
+                                                    <label class="floating-label-activo-sm">Profesión</label>
                                                     @if ($invitacion)
                                                         <select class="form-control form-control-sm" id="profesion" name="profesion" onchange="buscar_tipo_especialidad()">
                                                             <option selected value="0">Seleccione</option>
@@ -153,7 +152,7 @@
 
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Especialidad</label>
+                                                    <label class="floating-label-activo-sm">Especialidad</label>
                                                     @if ($invitacion)
                                                         <select class="form-control form-control-sm" id="especialidad" name="especialidad" onchange="buscar_sub_tipo_especialidad()">
                                                             <option selected value="0">Seleccione</option>
@@ -178,7 +177,7 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Tipo Especialidad</label>
+                                                    <label class="floating-label-activo-sm">Tipo especialidad</label>
                                                     @if ($invitacion)
                                                         <select class="form-control form-control-sm" id="sub_tipo_especialidad" name="sub_tipo_especialidad">
                                                             <option selected value="0">Seleccione</option>
@@ -221,18 +220,18 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-8">
-                                                    <label class="floating-label">Dirección</label>
+                                                    <label class="floating-label-activo-sm">Dirección</label>
                                                     <input type="text" class="form-control form-control-sm" name="direccion" id="direccion">
                                                     <i class="zmdi zmdi-card input-icon"></i>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-4">
-                                                    <label class="floating-label">Depto. | Ofic.</label>
+                                                    <label class="floating-label-activo-sm">Nº</label>
                                                     <input type="number" class="form-control form-control-sm" name="numero" id="numero">
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Región</label>
+                                                    <label class="floating-label-activo-sm">Región</label>
                                                     <select class="form-control form-control-sm" id="region" name="region" onchange="buscar_ciudad();">
                                                         <option selected value="0" selected>Seleccione</option>
                                                         @if (isset($region))
@@ -243,7 +242,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Comuna</label>
+                                                    <label class="floating-label-activo-sm">Comuna</label>
                                                     <select class="form-control form-control-sm" id="ciudad" name="ciudad">
                                                         <option selected value="0">Seleccione</option>
                                                         <option>-</option>
@@ -252,16 +251,16 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Celular</label>
+                                                    <label class="floating-label-activo-sm">Celular</label>
                                                     @if ($invitacion)
-                                                        <input type="tel" class="form-control form-control-sm" name="celular" id="celular" value="{{ $invitacion->telefono }}">
+                                                        <input type="tel" class="form-control form-control-sm" name="celular" id="celular" value="{{ $invitacion->telefono }}" placeholder="+569">
                                                     @else
-                                                        <input type="tel" class="form-control form-control-sm" name="celular" id="celular">
+                                                        <input type="tel" class="form-control form-control-sm" name="celular" id="celular" placeholder="+569">
                                                     @endif
 
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label">Teléfono</label>
+                                                    <label class="floating-label-activo-sm">Teléfono</label>
                                                     <input type="tel" class="form-control form-control-sm" name="telefono" id="telefono">
                                                 </div>
                                             </div>

@@ -36,9 +36,9 @@
 			<div class="row">
 				<div class="col-sm-12 col-md-6 mx-auto py-2">
 					<div class="card">
-						<div class="card-header pt-2 pb-1">
+						<div class="card-top pt-2">
 							<h5>Registro de Institución</h5>
-							<p class="p-18 mb-1">Complete los datos para finalizar el registro</p>
+							<p class="p-18">Complete los datos para finalizar el registro</p>
 						</div>
 						<div class="card-body">
 
@@ -107,7 +107,7 @@
                                                     <i class="zmdi zmdi-card input-icon"></i>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-4">
-                                                    <label class="floating-label-activo-sm">Depto. | Ofic.</label>
+                                                    <label class="floating-label-activo-sm">Nº</label>
                                                     <input type="number" class="form-control form-control-sm" name="numero" id="numero">
                                                 </div>
                                             </div>
@@ -154,6 +154,7 @@
                                             <div class="form-row">
                                                 <div class="col-sm-12 col-md-12 text-center mb-3">
                                                     <h5>Información Responsable</h5>
+                                                    <p>Ingrese la información del responsable de la institución</p>
                                                 </div>
                                             </div>
                                             <div class="form-group row ">
@@ -161,29 +162,29 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label-activo-sm">Rut Responsable</label>
+                                                    <label class="floating-label-activo-sm">Rut responsable</label>
                                                     <input type="text" class="form-control form-control-sm" name="responsable_rut" id="responsable_rut">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label-activo-sm">Nombre Responsable</label>
+                                                    <label class="floating-label-activo-sm">Nombre responsable</label>
                                                     <input type="text" class="form-control form-control-sm" name="responsable_nombre" id="responsable_nombre">
                                                 </div>
                                             </div>
 
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label-activo-sm">Apellido Paterno Responsable</label>
+                                                    <label class="floating-label-activo-sm">Primer apellido responsable</label>
                                                     <input type="text" class="form-control form-control-sm" name="responsable_apellido_uno" id="responsable_apellido_uno">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
-                                                    <label class="floating-label-activo-sm">Apellido Materno Responsable</label>
+                                                    <label class="floating-label-activo-sm">Segundo apellido responsable</label>
                                                     <input type="text" class="form-control form-control-sm" name="responsable_apellido_dos" id="responsable_apellido_dos">
                                                 </div>
                                             </div>
 
                                             <div class="form-row">
                                                 <div class="col-sm-12 col-md-12 text-center mb-3">
-                                                    <h5>Información de Contacto del Responsable</h5>
+                                                    <h5>Información de contacto del responsable</h5>
                                                 </div>
                                             </div>
                                             <div class="form-row">
@@ -193,7 +194,7 @@
                                                     <i class="zmdi zmdi-card input-icon"></i>
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-4">
-                                                    <label class="floating-label-activo-sm">Depto. | Ofic.</label>
+                                                    <label class="floating-label-activo-sm">Nº.</label>
                                                     <input type="number" class="form-control form-control-sm" name="responsable_numero" id="responsable_numero">
                                                 </div>
                                             </div>
@@ -221,7 +222,7 @@
                                             <div class="form-row">
                                                 <div class="form-group col-sm-12 col-md-6">
                                                     <label class="floating-label-activo-sm">Celular</label>
-                                                    <input type="tel" class="form-control form-control-sm" name="responsable_celular" id="responsable_celular">
+                                                    <input type="tel" class="form-control form-control-sm" name="responsable_celular" id="responsable_celular" placeholder="+569">
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6">
                                                     <label class="floating-label-activo-sm">Teléfono</label>
@@ -239,7 +240,7 @@
                                             <hr>
                                             <div class="form-row">
                                                 <div class="col-sm-12 col-md-12 text-center mb-3">
-                                                    <h5>Constraseña para el usuario del Responsable</h5>
+                                                    <h5>Constraseña para el usuario del responsable</h5>
                                                 </div>
                                             </div>
                                             <div class="form-row">
