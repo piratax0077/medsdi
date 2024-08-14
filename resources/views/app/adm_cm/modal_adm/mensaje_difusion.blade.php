@@ -160,6 +160,32 @@
             formData.append('misArchivosGes[]', file);
         });
 
+        // validar los campos del formulario
+        if (document.getElementById('de_difusion').value === '') {
+            swal("¡Error!", "El campo 'De' es obligatorio", "error");
+            return;
+        }
+
+        if (document.getElementById('msj_para_difusion').value === '') {
+            swal("¡Error!", "El campo 'Para' es obligatorio", "error");
+            return;
+        }
+
+        if (document.getElementById('titulo_msj_difusion').value === '') {
+            swal("¡Error!", "El campo 'Título' es obligatorio", "error");
+            return;
+        }
+
+        if (document.getElementById('detalle_msj_difusion').value === '') {
+            swal("¡Error!", "El campo 'Asunto' es obligatorio", "error");
+            return;
+        }
+
+        if (document.getElementById('mensaje_msj_difusion').value === '') {
+            swal("¡Error!", "El campo 'Mensaje' es obligatorio", "error");
+            return;
+        }
+
         formData.append('_token', '{{ csrf_token() }}');
         formData.append('de_difusion', document.getElementById('de_difusion').value);
         formData.append('msj_para_difusion', document.getElementById('msj_para_difusion').value);

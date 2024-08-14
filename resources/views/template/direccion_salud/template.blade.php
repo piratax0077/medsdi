@@ -178,7 +178,24 @@
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         $(document).ready(function () {
+            $('#profesionales_ministerio').DataTable({
+                responsive: true,
+            });
+            $('#pacientes_ministerio').DataTable({
+                responsive: true,
+            });
 
+            $('#directores_hosp_ministerio').DataTable({
+                responsive: true,
+            });
+
+            $('#directores_cm_ministerio').DataTable({
+                responsive: true,
+            });
+
+            $('#laboratorios_ministerio').DataTable({
+                responsive: true,
+            });
         });
 
     </script>

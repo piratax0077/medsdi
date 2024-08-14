@@ -418,6 +418,7 @@
             },
         })
         .done(function(data) {
+            console.log(data);
             if (data.estado == 1)
             {
                 /** encontrado */
@@ -589,6 +590,7 @@
             },
         })
         .done(function(data) {
+            console.log(data);
             if (data.estado == 1)
             {
 

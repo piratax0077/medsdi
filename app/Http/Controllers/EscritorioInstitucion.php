@@ -16,16 +16,30 @@ class EscritorioInstitucion extends Controller
         $region = Region::all();
         $tipo_servicio = TipoServicio::all();
         $tipo_institucion = TipoInstitucion::all();
+        // preguntar si el usuario tiene rol de AdministradorLaboratorio
+        $user = Auth::user();
+        $adminLab = false;
+        foreach ($user->roles as $rol) {
+            if ($rol->name == 'AdministradorLaboratorio') {
+                $adminLab = true;
+                break;
+            }
+        }
 
         if (isset($servicio))
         {
             if($servicio->bienvenido == 0)
                 return view('bienvenida.inicio_instituciones')->with(['regiones' => $region ]);
-            else
-                return view('app.adm_cm.home')->with(['institucion' => $servicio,]);
+            else{
+                if($adminLab)
+                    return view('app.laboratorio.adm_general.home',['institucion' => $servicio]);
+                else
+                    return view('app.adm_cm.home')->with(['region' => $region, 'tipo_servicio' => $tipo_servicio, 'tipo_institucion' => $tipo_institucion,'institucion' => $servicio]);
+            }
+
 
             // return view('app.profesional.escritorio_profesional')->with(['region' => $region, 'profesional' => $profesional, 'hora_dia' => $horas_dia]);
-            return view('app.adm_cm.home');
+            return view('app.adm_cm.home',['adminLab' => $adminLab]);
         }
         else
         {

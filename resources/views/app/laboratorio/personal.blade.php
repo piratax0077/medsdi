@@ -11,8 +11,8 @@
                             <h5 class="m-b-10 font-weight-bold">Personal del Centro</h5>
                         </div>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="profesionales_cm">Personal</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('institucion.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('institucion.home') }}">Personal</a></li>
                         </ul>
                     </div>
                 </div>
@@ -159,37 +159,7 @@
                                                     <th class="text-center align-middle">Acción</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="align-middle text-center">
-                                                        <span><strong>Roberto Olguín Díaz</strong></span><br>
-                                                        <span>18.564.323-k</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <span>Ist Viña del Mar</span><br>
-                                                        <span>Ist Quilpué</span><br>
-                                                        <span>Ist San Felipe</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-														<!--Botón Modal-->
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto('asistente publico',{{ $asistente->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
-													</td>
-                                                    <td class="align-middle text-center">
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('asistente publico',{{ $asistente->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm('asistente publico',{{ $asistente->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos('asistente publico',{{ $asistente->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_asistente('asistente publico',{{ $asistente->id }});"><i class="feather icon-edit"></i> Editar</button>
-                                                        <button type="button" class="btn btn-danger btn-sm"><i class="feather icon-x-circle"></i> Desasociar</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -233,37 +203,7 @@
                                                     <th class="text-center align-middle">Acción</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="align-middle text-center">
-                                                        <span><strong>Roberto Olguín Díaz</strong></span><br>
-                                                        <span>18.564.323-k</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <span>Ist Viña del Mar</span><br>
-                                                        <span>Ist Quilpué</span><br>
-                                                        <span>Ist San Felipe</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-														<!--Botón Modal-->
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto('asistente publico',{{ $asistente->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
-													</td>
-                                                    <td class="align-middle text-center">
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('asistente publico',{{ $asistente->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm('asistente publico',{{ $asistente->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos('asistente publico',{{ $asistente->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_asistente('asistente publico',{{ $asistente->id }});"><i class="feather icon-edit"></i> Editar</button>
-                                                        <button type="button" class="btn btn-danger btn-sm"><i class="feather icon-x-circle"></i> Desasociar</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
+                                            <tbody></tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -436,7 +376,7 @@
         {
             let id_lugar_atencion = $('#agregar_profesional_int_id_lugar_atencion').val();
             let id_profesional = $('#agregar_profesional_id_profesional').val();
-            let url = "{{ route('adm_cm.asociar_profesional_existente')}}";
+            let url = "{{ route('laboratorio.asociar_profesional_existente')}}";
 
             $.ajax({
                 url: url,

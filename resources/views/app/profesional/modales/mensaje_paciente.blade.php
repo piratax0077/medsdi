@@ -33,6 +33,7 @@
   <input type="hidden" id="id_paciente_mensaje" name="id_paciente_mensaje" value="">
   <script>
     document.addEventListener('DOMContentLoaded', function(){
+
         // Dropzone
         Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone(".dropzone", {

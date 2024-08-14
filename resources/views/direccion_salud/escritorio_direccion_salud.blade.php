@@ -84,6 +84,26 @@
                             </a>
                         </div>
                     </div>
+                    <div class="col mb-3">
+                        <div class="card-a subir mb-2 h-100 pt-0 pb-0">
+                            <a href="#">
+                                <div class="card-body text-center px-2 pt-2 pb-1" style="cursor:pointer">
+                                    <img class="wid-50 text-center" src="{{ asset('images/iconos/certificados-ro.svg') }}">
+                                    <h6 class="mt-1 f-13">Subir Base de datos Medicos</h6>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <div class="card-a subir mb-2 h-100 pt-0 pb-0">
+                            <a href="#">
+                                <div class="card-body text-center px-2 pt-2 pb-1" style="cursor:pointer">
+                                    <img class="wid-50 text-center" src="{{ asset('images/iconos/certificados-ro.svg') }}">
+                                    <h6 class="mt-1 f-13">Manejo Lista de espera</h6>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
             <!--Botones-->

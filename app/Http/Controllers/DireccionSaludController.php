@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DeclaracionEno;
 use App\Models\GesRegistros;
+use App\Models\Instituciones;
 use App\Models\Paciente;
 use App\Models\Profesional;
 use Illuminate\Http\Request;
@@ -340,10 +341,51 @@ class DireccionSaludController extends Controller
         return view('direccion_salud.escritorio_control_licencia')->with([]);
     }
 
+    public function difusionComunicados(Request $req){
+        return $req;
+    }
+
     public function comunicados()
     {
+        $profesionales = Profesional::all();
+        $pacientes = Paciente::all();
+        $directores_cm = Instituciones::select('instituciones.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
+                                        ->join('profesionales','instituciones.id_director_medico','profesionales.id')
+                                        ->get();
+
+        $laboratorios = Instituciones::where('id_tipo_institucion', 3)->get();
         return view('direccion_salud.escritorio_comunicados')->with([
-            'adm_medico' => false
+            'adm_medico' => false,
+            'lista_profesionales' => $profesionales,
+            'lista_pacientes' => $pacientes,
+            'lista_directores_cm' => $directores_cm,
+            'lista_laboratorios' => $laboratorios,
         ]);
+    }
+
+    public function mensajeDifusionMinisterio(Request $request){
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->mensaje))
+        {
+            $error['mensaje'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'mensaje enviado';
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'Campos requeridos';
+            $datos['error'] = $error;
+        }
+        // retornar a la vista anterior con mensaje
+        return redirect()->back()->with($datos);
     }
 }

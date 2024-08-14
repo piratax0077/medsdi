@@ -1,123 +1,166 @@
-@extends('template.laboratorio.adm_general.template')
+@extends('template.adm_cm.template')
 @section('content')
 
  <!--Container Completo-->
     <div class="pcoded-main-container">
-    <div class="pcoded-content">
-        <!--Header-->
-        <div class="page-header">
-            <div class="page-block">
-                <div class="row align-items-center">
-                    <div class="col-md-12">
-                    <div class="page-header-title">
-                        <h5 class="m-b-10 font-weight-bold">Escritorio Administrador Laboratorio</h5>
-                    </div>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="escritorio_admin_general_laboratorio.php">Mi Escritorio</a>
-                            </li>
-                        </ul>
+        <div class="pcoded-content">
+            <!--Header-->
+            <div class="page-header">
+                <div class="page-block">
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h5 class=" font-weight-bold">Administrador general centro médico</h5>
+                            </div>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="escritorio.php">Mi escritorio</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--Cierre: Header-->
-        <!--Botones superiores-->
-        <div class="row">
-            <div class="col-md-4">
-                    <div class="card subir">
-                        <a href="{{ ROUTE('app.laboratorio.adm_general.admin_laboratorio') }}">
+            <!--Cierre: Header-->
+            <!--Botones-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card subir py-auto bg-info">
+                        <div class="card-body text-center">
+                             <h5 class=" mb-0 text-white f-24">Institucion {{ mb_strtoupper($institucion->nombre) }}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card subir py-auto">
+                        <a href="{{ ROUTE('laboratorio.configuracion') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center" src="{{ asset('images/iconos/perfil_admin.svg') }}">
-
-                                <h5 class="mt-2">Mis administradores</h5>
+                                <img class="wid-50 text-center" src="{{ asset('images/iconos/panel_configuracion.svg') }}">
+                                <h6 class="mt-2 mb-0">Configurar mi centro</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+				<div class="col-md-4">
+                    <div class="card subir py-auto d-none">
+                        <a href="#">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-50 text-center" src="{{ asset('images/iconos/adm_medica.png') }}">
+                                <h6 class="mt-2 mb-0">Administración médica</h6>
                             </div>
                         </a>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card subir">
-                        <a href="{{ ROUTE('app.laboratorio.adm_general.sucursales_laboratorio') }}">
+                    <div class="card subir py-auto">
+                        <a href="{{ ROUTE('laboratorio.area_comercial') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center" src="{{ asset('images/iconos/laboratorio_1.svg') }}">
-                                <h5 class="mt-2">Mis sucursales</h5>
+                                <img class="wid-50 text-center" src="{{ asset('images/iconos/adm_comercial.png') }}">
+                                <h6 class="mt-2 mb-0">Administración comercial</h6>
                             </div>
                         </a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card subir">
-                        <a href="{{ ROUTE('app.laboratorio.adm_general.profesionales_laboratorio') }}">
+                <div class="col-md-3">
+                    <div class="card subir py-auto">
+                        <a href="{{ ROUTE('laboratorio.profesionales_institucion') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center" src="{{ asset('images/iconos/profesional_2.svg') }}">
-                                <h5 class="mt-2">Mis profesionales</h5>
+                                <img class="wid-50 text-center" src="{{ asset('images/iconos/profesionales.svg') }}">
+                                <h6 class="mt-2 mb-0">Profesionales de la Institucion</h6>
                             </div>
                         </a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card subir">
-                        <a href="{{ ROUTE('app.laboratorio.adm_general.asistentes_laboratorio') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center" src="{{ asset('images/iconos/mis_asistentes.svg') }}">
-                                <h5 class="mt-2">Mis asistentes</h5>
+                <div class="col-md-3">
+                    <div class="card subir py-auto">
+                        <a href="{{ ROUTE('laboratorio.mis_profesionales') }}">
+							<div class="card-body text-center" style="cursor:pointer">
+								<img class="wid-50 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
+                                <h6 class="mt-2 mb-0">Agenda de profesionales</h6>
                             </div>
                         </a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card subir">
-                        <a href="{{ ROUTE('app.laboratorio.adm_general.lista_exam') }}">
+                <div class="col-md-3">
+                    <div class="card subir py-auto">
+                        <a href="{{ ROUTE('laboratorio.pacientes') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center" src="{{ asset('images/iconos/examen.svg') }}">
-                                <h5 class="mt-2">Mis exámenes</h5>
+                                <img class="wid-50 text-center" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                <h6 class="mt-2 mb-0">Pacientes</h6>
                             </div>
                         </a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card subir">
-                        <a href="{{ ROUTE('app.laboratorio.adm_general.administracion') }}">
+				 <div class="col-md-3">
+                    <div class="card subir py-auto">
+                        <a href="{{ ROUTE('laboratorio.personal') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center" src="{{ asset('images/iconos/perfiles.svg') }}">
-                                <h5 class="mt-2">Administración</h5>
+                                <img class="wid-60 text-center"  src="{{ asset('images/iconos/personal.png') }}">
+                                <h6 class="mt-1 mb-0">Personal Institucional</h6>
                             </div>
                         </a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card subir">
-                       <a href="{{ ROUTE('app.laboratorio.adm_general.perfil_laboratorio') }}">
+                <div class="col-md-12">
+                    <div class="card subir py-auto bg-warning">
+                        <div class="card-body text-center" style="cursor:pointer">
+                            <h6 class="mb-0 text-white f-20">Areas de la institucion</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card subir py-auto" onclick="en_construccion()";>
+                      {{--  <a href="{{ ROUTE('laboratorio.laboratorio') }}"></a>--}}
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center" src="{{ asset('images/iconos/perfiles.svg') }}">
-                                <h5 class="mt-2">Perfil laboratorio</h5>
+                                <img class="wid-50 text-center"  src="{{ asset('images/iconos/laboratorio.svg') }}">
+                                <h6 class="mt-2 mb-0">Laboratorio</h6>
                             </div>
                         </a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card subir">
-                       <a href="{{ ROUTE('app.laboratorio.adm_general.perfil_admin') }}">
+                <div class="col-md-3">
+                    <div class="card subir py-auto" onclick="en_construccion()";>
+                      {{-- <a href="{{ ROUTE('laboratorio.laboratorio') }}"></a>--}}
                             <div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center" src="{{ asset('images/iconos/perfil_admin.svg') }}">
-                                <h5 class="mt-2">Mi Perfil</h5>
+                                <img class="wid-50 text-center"  src="{{ asset('images/iconos/imagenologia.svg') }}">
+                                <h6 class="mt-2 mb-0">Imagenología</h6>
                             </div>
                         </a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card subir">
-                        <a href="{{ ROUTE('app.laboratorio.adm_general.suscripcion_pago_laboratorio') }}">
+                <div class="col-md-3">
+                    <div class="card subir py-auto" onclick="en_construccion()";>
+                       {{-- <a href="{{ ROUTE('laboratorio.vacunatorio') }}"></a>--}}
                             <div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center" src="{{ asset('images/iconos/suscripcion_pago.svg') }}">
-                                <h5 class="mt-2">Suscripciones y pagos</h5>
+                                <img class="wid-50 text-center"  src="{{ asset('images/iconos/vacunatorio.svg') }}">
+                                <h6 class="mt-2 mb-0">Vacunatorio</h6>
                             </div>
                         </a>
                     </div>
                 </div>
+                <div class="col-md-3">
+                    <div class="card subir py-auto" onclick="en_construccion()";>
+                       {{-- <a href="{{ ROUTE('laboratorio.dental') }}"></a>--}}
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-50 text-center"  src="{{ asset('images/iconos/dental.png') }}">
+                                <h6 class="mt-2 mb-0">Dental</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+				<div class="col-md-12">
+					<div class="card subir py-auto" onclick="en_construccion()";>
+						<a href="#">
+							<div class="card-body text-center" style="cursor:pointer">
+								<img class="wid-50 text-center rounded" src="{{ asset('images/iconos/mis_asistentes.svg') }}">
+								<h6 class="mt-1">Contratar asistentes en linea</h6>
+							</div>
+						</a>
+					</div>
+				</div>
             </div>
         </div>
     </div>
-    <!--Cierre: Container Completo--> 
-
+    <!--Cierre: Container Completo-->
+    @include('app.adm_cm.modales.en_construccion')
 @endsection

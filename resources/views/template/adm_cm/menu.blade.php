@@ -57,7 +57,7 @@
 						</li><!--
 						<li>
 							<a href="suscripcion_estadisticas_cm.php">Estadísticas</a>
-						</li><!--
+						</li>
 						<li>
 							<a href="suscripcion_soporte.php">Soporte</a>
 						</li>

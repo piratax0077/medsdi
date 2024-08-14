@@ -111,7 +111,6 @@ class EscritorioGeneral extends Controller
         if(!empty($request->id_sub_tipo_especialidad))
             $filtro[] = array('id_sub_tipo_especialidad', $request->id_sub_tipo_especialidad);
 
-
         // if(Auth::user()->hasRole('Profesional'))
         // {
         //     $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
@@ -170,6 +169,7 @@ class EscritorioGeneral extends Controller
             $sql .= " LEFT JOIN sub_tipo_especialidad ON (profesionales.id_sub_tipo_especialidad = sub_tipo_especialidad.id) ";
 
             $sql .= " WHERE 1=1";
+
             if(!empty($request->id_especialidad))
                 $sql .= " AND profesionales.id_especialidad = ".$request->id_especialidad."";
             if(!empty($request->id_tipo_especialidad))
@@ -203,27 +203,26 @@ class EscritorioGeneral extends Controller
             if(!empty($request->tipo_agenda))
                 $sql .= " AND profesionales.id IN (SELECT id_profesional FROM `profesional_horarios` WHERE tipo_agenda in (".$request->tipo_agenda.") GROUP BY id_profesional)";
 
-            $sql .= " AND profesionales.id IN (
-                            SELECT profesionales_lugares_atencion.id_profesional
-                            FROM `profesionales_lugares_atencion`
-                            WHERE profesionales_lugares_atencion.`estado` = 1
-                                and profesionales_lugares_atencion.id_lugar_atencion in (
-                                                                                SELECT
-                                                                                    lugares_atencion.id
-                                                                                FROM
-                                                                                    `lugares_atencion`
-                                                                                INNER JOIN direcciones ON direcciones.id = lugares_atencion.id_direccion
-                                                                                INNER JOIN ciudades ON ciudades.id = direcciones.id_ciudad
-                                                                                INNER JOIN regiones ON ciudades.id_region = regiones.id
-                                                                                WHERE  1=1 ";
-                                                                                    if(!empty($request->id_ciudad))
-                                                                                        $sql .= " AND direcciones.id_ciudad = ".$request->id_ciudad."";
-                                                                                    if(!empty($request->id_region))
-                                                                                        $sql .= " AND regiones.id = ".$request->id_region." ";
-                                                                    $sql .= " )
-                            )
-                    ";
-
+            // $sql .= " AND profesionales.id IN (
+            //                 SELECT profesionales_lugares_atencion.id_profesional
+            //                 FROM `profesionales_lugares_atencion`
+            //                 WHERE profesionales_lugares_atencion.`estado` = 1
+            //                     and profesionales_lugares_atencion.id_lugar_atencion in (
+            //                                                                     SELECT
+            //                                                                         lugares_atencion.id
+            //                                                                     FROM
+            //                                                                         `lugares_atencion`
+            //                                                                     INNER JOIN direcciones ON direcciones.id = lugares_atencion.id_direccion
+            //                                                                     INNER JOIN ciudades ON ciudades.id = direcciones.id_ciudad
+            //                                                                     INNER JOIN regiones ON ciudades.id_region = regiones.id
+            //                                                                     WHERE  1=1 ";
+            //                                                                         if(!empty($request->id_ciudad))
+            //                                                                             $sql .= " AND direcciones.id_ciudad = ".$request->id_ciudad."";
+            //                                                                         if(!empty($request->id_region))
+            //                                                                             $sql .= " AND regiones.id = ".$request->id_region." ";
+            //                                                         $sql .= " )
+            //                 )
+            //         ";
             // var_dump($sql);
             $registros = DB::select($sql);
             $registros_validos = array();

@@ -17,8 +17,8 @@
                             <h5 class="m-b-10 font-weight-bold">Profesionales de {{ $institucion->nombre }}</h5>
                         </div>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="adm_cm.home">Profesionales</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('profesional.home') }}">Profesionales</a></li>
                         </ul>
                     </div>
                 </div>
@@ -343,22 +343,84 @@
 
 @section('js-profesionales')
     <script>
-$(document).ready(function(){
-        $('#msj_para_difusion').select2();
-        $('#adjunto').dropzone();
-    });
+        $(document).ready(function(){
+            $('#msj_para_difusion').select2();
+        });
+
+        var myDropzone_ges; // Define la variable globalmente
+        // autodiscover para que Dropzone encuentre todos los elementos con la clase dropzone
+        Dropzone.autoDiscover = false;
+        document.addEventListener("DOMContentLoaded", function() {
+            // Verifica si Dropzone ya está inicializado en el elemento
+            if (Dropzone.instances.length > 0) {
+                Dropzone.instances.forEach(instance => {
+                    if (instance.element.id === "mis-archivos-a-profesional") {
+                        instance.destroy();
+                    }
+                });
+            }
+            // Inicializa Dropzone en el elemento con el ID "mis-archivos-a-profesional"
+            myDropzone_ges = new Dropzone("#mis-archivos-a-profesional", {
+                url: "{{ route('profesional.archivo.carga') }}",
+                method: 'post',
+                createImageThumbnails: true,
+                addRemoveLinks: true,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+                acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
+                maxFilesize: 4, // Tamaño máximo en MiB
+                maxFiles: 4,
+                dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
+                dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+                dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+                dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+                dictInvalidFileType: "No puedes subir archivos de este tipo.",
+                dictCancelUpload: "Cancelar carga",
+                dictUploadCanceled: "Subida cancelada.",
+                dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+                dictRemoveFile: "Eliminar archivo",
+                dictMaxFilesExceeded: "No puede cargar más archivos.",
+                autoProcessQueue: false, // Desactiva el procesamiento automático
+                init: function() {
+                    this.on("sending", function(file, xhr, formData) {
+                        formData.append("id", "{{ Auth::user()->id }}");
+                        formData.append("_token", "{{ csrf_token() }}");
+                    });
+                    this.on("success", function(file, response) {
+                        // Manejar la respuesta de éxito
+                        console.log(response);
+                    });
+                    this.on("error", function(file, message) {
+                        // Manejar el error
+                        console.error(message);
+                    });
+                    this.on("removedfile", function(file) {
+                        // Manejar la eliminación del archivo
+                        console.log("Archivo eliminado");
+                    });
+                    this.on("canceled", function(file) {
+                        // Manejar la cancelación de la carga
+                        console.log("Carga cancelada");
+                    });
+                }
+            });
+
+        });
+
+
         /*-Modals personal-*/
         function contacto(id)
         {
-            let url = "{{ route('adm_cm.profesional_buscar') }}";
+            let url = "{{ route('adm_cm.profesional_buscar', ['id_profesional' => '__id__']) }}";
+            url = url.replace('__id__', id);
+
             $.ajax({
                 url: url,
                 type: "get",
-                data: {
-                    id: id
-                },
             })
             .done(function(data) {
+                console.log(data);
                 if (data.estado == 1)
                 {
                     /** encontrado */
@@ -595,6 +657,57 @@ $(document).ready(function(){
             $('#mensaje_difusion').modal('show');
         }
 
+        function historial(id){
+            // abrir modal de historial
+            $('#historial_mensajes_profesional').modal('show');
+            let url = "{{ ROUTE('adm_cm.historial_mensajes_profesional',['id' => '__ID__']) }}";
+            url = url.replace('__ID__',id);
+
+            $.ajax({
+                type:'get',
+                url: url,
+                success: function(resp){
+                    console.log(resp);
+                    let mensajes = resp.mensajes;
+                    let html = '';
+                    if(mensajes.length == 0){
+                        html += '<div class="row">';
+                        html += '<div class="col-md-12">';
+                        html += '<div class="card">';
+                        html += '<div class="card-header">';
+                        html += '<h4 class="card-title">No hay mensajes</h4>';
+                        html += '</div>';
+                        html += '<div class="card-body">';
+                        html += '<p>No se han enviado mensajes a este profesional.</p>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                    }else{
+                        mensajes.forEach(mensaje => {
+                            html += '<div class="row">';
+                            html += '<div class="col-md-12">';
+                            html += '<div class="card">';
+                            html += '<div class="card-header">';
+                            html += '<h4 class="card-title">'+mensaje.titulo+'</h4>';
+                            html += '</div>';
+                            html += '<div class="card-body">';
+                            html += '<p>'+mensaje.mensaje+'</p>';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '</div>';
+                        });
+                    }
+
+                    $('#historial_mensajes_profesional_body').html(html);
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            })
+        }
+
     </script>
 @endsection
 
@@ -608,6 +721,7 @@ $(document).ready(function(){
     @include('app.adm_cm.modal_adm.asociar_profesional')
     @include('app.adm_cm.modal_adm.mensaje_profesional')
     @include('app.adm_cm.modal_adm.mensaje_difusion')
+    @include('app.adm_cm.modal_adm.historial_mensajes')
 
     @include('app.adm_cm.modal_adm.datos_banco')
     @include('app.adm_cm.modal_adm.horario_usuario')

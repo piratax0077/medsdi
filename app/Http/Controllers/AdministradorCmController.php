@@ -2442,6 +2442,74 @@ class AdministradorCmController extends Controller
         }
     }
 
+    public function mensaje_difusion_ministerio(Request $req){
+        try {
+            $destinatarios = $req->receptores;
+            // Obtener los roles correspondientes
+            $roles = Role::whereIn('id', $destinatarios)->get();
+            // Obtener los nombres de los roles
+            $roleNames = $roles->pluck('name');
+
+            // Obtener todos los usuarios que tienen esos roles
+            $usuariosConRoles = User::whereHas('roles', function($query) use ($roleNames) {
+                $query->whereIn('name', $roleNames);
+            })->get();
+
+            $datos_mensaje = [
+                'titulo' => $req->titulo,
+                'asunto' => $req->detalle,
+                'mensaje' => $req->message,
+            ];
+
+            foreach($usuariosConRoles as $usuario){
+                // enviar un mensaje a cada usuario
+                $nuevo_mensaje = new Mensajes();
+                $nuevo_mensaje->id_usuario = Auth::user()->id;
+                $nuevo_mensaje->destinatarios = json_encode($destinatarios);
+                $nuevo_mensaje->id_receptor = $usuario->id;
+                $nuevo_mensaje->datos_mensaje = json_encode($datos_mensaje);
+                $nuevo_mensaje->tipo_mensaje = 2; // Difusion
+                $nuevo_mensaje->fecha_envio = Carbon::now()->format('Y-m-d H:i:s');
+                $nuevo_mensaje->estado = 1; // 1: No leido, 2: Leido
+
+                $nuevo_mensaje->save();
+            }
+
+            $datos = array();
+            $datos['estado'] = 1;
+            $datos['msj'] = 'mensaje enviado';
+
+            // Manejar archivos adjuntos
+            if ($req->hasFile('archivos')) {
+
+                foreach ($req->file('archivos') as $file) {
+
+                    $filename = time().'_'.$file->getClientOriginalName();
+                    $file->storeAs('uploads/', $filename, 'public');
+
+                    // Aquí puedes guardar la información del archivo en la base de datos si es necesario
+                    // Ejemplo:
+                    // $archivo = new Archivo();
+                    // $archivo->mensaje_id = $nuevo_mensaje->id;
+                    // $archivo->ruta = '/storage/uploads/'.$filename;
+                    // $archivo->save();
+                }
+            }
+
+            return $datos;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function historial_mensajes_profesional($id){
+        $mensajes = Mensajes::where('id_receptor', $id)->orderBy('fecha_envio', 'DESC')->get();
+        foreach($mensajes as $mensaje){
+            $mensaje->datos_mensaje = json_decode($mensaje->datos_mensaje);
+            $mensaje->destinatarios = json_decode($mensaje->destinatarios);
+        }
+        return ['estado' => 1, 'mensajes' => $mensajes];
+    }
 
     public function mensaje_profesional(Request $req){
         try {
@@ -3567,11 +3635,10 @@ class AdministradorCmController extends Controller
         return $datos;
     }
 
-    public function buscar_profesional(Request $request)
+    public function buscar_profesional($id_profesional)
     {
         $datos = array();
-
-        $profesional = Profesional::where('id', $request->id)->first();
+        $profesional = Profesional::where('id', $id_profesional)->first();
 
         if($profesional)
         {

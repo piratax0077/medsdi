@@ -5097,4 +5097,21 @@ class EscritorioProfesional extends Controller
             return $e->getMessage();
         }
      }
+
+     public function descargar_mensaje($id){
+        try {
+            $mensaje = Mensajes::find($id);
+            $mensaje->descarga = 1;
+            $mensaje->save();
+            $remitente = User::find($mensaje->id_usuario);
+            $mensaje->remitente = $remitente->name;
+            $mensaje->datos_mensaje = json_decode($mensaje->datos_mensaje);
+
+            $mensaje->fecha_emision = Carbon::parse($mensaje->created_at)->format('d-m-Y H:i:s');
+            return ['estado' => 1, 'msj' => 'Mensaje descargado','mensaje' => $mensaje];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+     }
 }

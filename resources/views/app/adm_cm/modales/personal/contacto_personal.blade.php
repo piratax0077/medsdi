@@ -50,13 +50,13 @@
     {
         var url = "";
         if(tipo == 'profesional')
-            url = "{{ route('adm_cm.profesional_buscar') }}";
+            url = "{{ url('/Profesionales/buscar') }}"+"/"+id;
         else if(tipo == 'asistente' || tipo == 'asistente publico')
             url = "{{ route('adm_cm.asistente_buscar') }}";
         else if(tipo == 'administrativo')
-            url = "{{ route('adm_cm.profesional_buscar') }}";
+            url = "{{ url('/Profesionales/buscar') }}"+"/"+id;
         else if(tipo == 'limpieza')
-            url = "{{ route('adm_cm.profesional_buscar') }}";
+            url = "{{ url('/Profesionales/buscar') }}"+"/"+id;
         $.ajax({
             url: url,
             type: "get",
