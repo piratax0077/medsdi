@@ -1,5 +1,11 @@
 @extends('template.adm_cm.template')
 @section('content')
+<!--****Container Completo****-->
+<style>
+    .select2-container--open{
+        z-index: 9999999 !important;
+    }
+</style>
 <!--Container Completo-->
 <div class="pcoded-main-container">
     <div class="pcoded-content">
@@ -30,21 +36,39 @@
                     <h5 class="text-white font-weight-bolder">Convenios</h5>
                     <button class="btn btn-info btn-sm mx-2 has-ripple float-right" data-toggle="modal" data-target="#nuevoConvenioInstitucion"><i class="fa fa-plus" aria-hidden="true"></i>Registrar nuevo convenio</button>
                 </div>
-                <div class="card-body">
+                <div class="card-body" id="card_body_convenios_institucion">
                     <table id="tabla_convenios_institucion" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
                         <thead>
                             <tr>
                                 <th class="text-wrap text-center align-middle">Convenio</th>
-                                <th class="text-center align-middle">Codigo</th>
                                 <th class="text-center align-middle">Tipo</th>
-                                <th class="text-center align-middle">Fecha de Atención</th>
-                                <th class="text-center align-middle">Paciente</th>
-                                <th class="text-center align-middle">Valor Total</th>
-                                <th class="text-center align-middle">Estado Consulta</th>
+                                <th class="text-center align-middle">Fecha Inicial</th>
+                                <th class="text-center align-middle">Fecha Final</th>
+                                <th class="text-center align-middle">Productos</th>
+                                <th class="text-center align-middle">Descuento</th>
                                 <th class="text-center align-middle">Accion</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach($convenios_institucion as $convenio)
+                                <tr>
+                                    <td class="align-middle text-center">{{ $convenio->nombre_convenio_institucion }}</td>
+                                    <td class="align-middle text-center">{{ $convenio->tipo_convenio }}</td>
+                                    <td class="align-middle text-center">{{ $convenio->fecha_inicio_convenio_institucion }}</td>
+                                    <td class="align-middle text-center">{{ $convenio->fecha_fin_convenio_institucion }}</td>
+                                    <td class="align-middle text-center">
+                                        @foreach($convenio->tipos_productos as $pc)
+                                            <span>{{ $pc }}</span><br>
+                                        @endforeach
+                                    </td>
+                                    <td class="align-middle text-center">{{ $convenio->porcentaje_convenio_institucion }}%</td>
+                                    <td class="align-middle text-center">
+                                        <button class="btn btn-info btn-sm has-ripple" data-toggle="modal" data-target="#convenioUsuario"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                        <button class="btn btn-warning btn-sm has-ripple" data-toggle="modal" data-target="#editarConvenio"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio({{ $convenio->id }})"><i class="fas fa-trash"></i> </button>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -54,13 +78,11 @@
 </div>
 @endsection
 
-@section('modales')
-    @include('app.adm_cm.modal_adm.convenio_usuario')
-    @include('app.adm_cm.modal_adm.convenio_nuevo')
-@endsection
-
-@section('page-script')
+@section('js-profesionales')
 <script>
+    $(document).ready(function() {
+    $('#productos_convenio_').select2();
+    });
     function guardar_nuevo_convenio_institucion(){
         var nombre_convenio = $('#nombre_convenio').val();
         var tipo_convenio = $('#tipo_convenio').val();
@@ -75,6 +97,7 @@
         var email_representante_convenio = $('#email_representante_convenio').val();
         var direccion_representante_convenio = $('#direccion_representante_convenio').val();
         var observaciones_nuevo_convenio = $('#observaciones_nuevo_convenio').val();
+        var productos_convenio = $('#productos_convenio_').val();
 
         var valido = 1;
         var mensaje = '';
@@ -127,6 +150,10 @@
             valido = 0;
             mensaje += '<li>Ingrese observaciones</li>';
         }
+        if(productos_convenio == null){
+            valido = 0;
+            mensaje += '<li>Seleccione productos a convenir</li>';
+        }
 
         if(valido == 0){
             swal({
@@ -158,49 +185,98 @@
                 email_representante_convenio: email_representante_convenio,
                 direccion_representante_convenio: direccion_representante_convenio,
                 observaciones_nuevo_convenio: observaciones_nuevo_convenio,
+                productos_convenio: productos_convenio,
                 _token: "{{ csrf_token() }}"
             },
             success: function(response){
-                return console.log(response);
+                console.log(response);
                 if(response.status == 200){
-                    alert('Convenio registrado correctamente');
+                    swal({
+                        title: 'Convenio registrado',
+                        text: 'Convenio registrado con éxito',
+                        icon: 'success'
+                    });
                     $('#nuevoConvenioInstitucion').modal('hide');
-                    $('#tabla_convenios_institucion').DataTable().ajax.reload();
+                    $('#card_body_convenios_institucion').empty();
+                    $('#card_body_convenios_institucion').html(response.v);
                 }else{
                     alert('Error al registrar convenio');
                 }
             }
         });
     }
-
     function formatoRut(rut)
-{
-    var valor = rut.value.replace('.','');
-    valor = valor.replace(/\-/g,'');
-
-    cuerpo = valor.slice(0,-1);
-    dv = valor.slice(-1).toUpperCase();
-    rut.value = cuerpo + '-'+ dv
-
-    if(cuerpo.length < 7) { rut.setCustomValidity("RUT Incompleto"); return false;}
-
-    suma = 0;
-    multiplo = 2;
-
-    for(i=1;i<=cuerpo.length;i++)
     {
-        index = multiplo * valor.charAt(cuerpo.length - i);
-        suma = suma + index;
-        if(multiplo < 7) { multiplo = multiplo + 1; } else { multiplo = 2; }
+        var valor = rut.value.replace('.','');
+        valor = valor.replace(/\-/g,'');
+
+        cuerpo = valor.slice(0,-1);
+        dv = valor.slice(-1).toUpperCase();
+        rut.value = cuerpo + '-'+ dv
+
+        if(cuerpo.length < 7) { rut.setCustomValidity("RUT Incompleto"); return false;}
+
+        suma = 0;
+        multiplo = 2;
+
+        for(i=1;i<=cuerpo.length;i++)
+        {
+            index = multiplo * valor.charAt(cuerpo.length - i);
+            suma = suma + index;
+            if(multiplo < 7) { multiplo = multiplo + 1; } else { multiplo = 2; }
+        }
+
+        dvEsperado = 11 - (suma % 11);
+        dv = (dv == 'K')?10:dv;
+        dv = (dv == 0)?11:dv;
+
+        if(dvEsperado != dv) { rut.setCustomValidity("RUT Inválido"); return false; }
+
+        rut.setCustomValidity('');
     }
 
-    dvEsperado = 11 - (suma % 11);
-    dv = (dv == 'K')?10:dv;
-    dv = (dv == 0)?11:dv;
+    function eliminar_convenio(id){
+        swal({
+            title: 'Eliminar convenio',
+            text: '¿Está seguro de eliminar este convenio?',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true
+        }).then((willDelete) => {
+            if(willDelete){
+                confirmar_eliminar_convenio(id);
+            }
+        })
+    }
 
-    if(dvEsperado != dv) { rut.setCustomValidity("RUT Inválido"); return false; }
-
-    rut.setCustomValidity('');
-}
+    function confirmar_eliminar_convenio(id){
+        $.ajax({
+            url: "{{ ROUTE('adm_cm.eliminar_convenio') }}",
+            type: 'POST',
+            data: {
+                id: id,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(response){
+                console.log(response);
+                if(response.status == 200){
+                    swal({
+                        title: 'Convenio eliminado',
+                        text: 'Convenio eliminado con éxito',
+                        icon: 'success'
+                    });
+                    $('#card_body_convenios_institucion').empty();
+                    $('#card_body_convenios_institucion').html(response.v);
+                }else{
+                    alert('Error al eliminar convenio');
+                }
+            }
+        });
+    }
 </script>
+@endsection
+
+@section('modales')
+    @include('app.adm_cm.modal_adm.convenio_usuario')
+    @include('app.adm_cm.modal_adm.convenio_nuevo')
 @endsection

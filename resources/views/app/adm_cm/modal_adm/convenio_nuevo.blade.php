@@ -1,6 +1,6 @@
 <!--datos convenio-->
 <div id="nuevoConvenioInstitucion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="nuevoConvenioInstitucion" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white d-inline mt-1">Convenio Usuario</h5>
@@ -57,7 +57,20 @@
                         </div>
                     </div>
                 </div>
-                <hr>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group ">
+                            <label class="floating-label-activo-sm" for="productos_convenio_">Productos a Convenir</label>
+                            <select class="form-control form-control-sm" name="productos_convenio_" id="productos_convenio_" multiple="multiple">
+                                @foreach($tipoproducto_convenios as $tp)
+                                    <option value="{{ $tp->id }}">{{ $tp->descripcion }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -104,3 +117,8 @@
         </div>
     </div>
 </div>
+
+<script>
+
+
+</script>

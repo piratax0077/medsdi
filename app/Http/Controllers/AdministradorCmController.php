@@ -5950,17 +5950,21 @@ class AdministradorCmController extends Controller
                 }
             }
             $nuevo_convenio = new ConvenioInstitucion();
-            $nuevo_convenio->nombre_representante_convenio = $req->nombre_representante_convenio;
-            $nuevo_convenio->id_tipo_convenio_institucion = intval($req->tipo_convenio);
+            $nuevo_convenio->nombre_representante_convenio_institucion = $req->nombre_representante_convenio;
+            $nuevo_convenio->id_tipo_convenio = intval($req->tipo_convenio);
+            $nuevo_convenio->id_tipo_convenio_institucion = intval($req->tipo_convenio_institucion);
             $nuevo_convenio->nombre_convenio_institucion = $req->nombre_convenio;
-            $nuevo_convenio->fecha_inicio_pago_convenio = $req->fecha_inicial_pago_convenio;
-            $nuevo_convenio->fecha_fin_pago_convenio = $req->fecha_final_pago_convenio;
-            $nuevo_convenio->rut_representante = $req->rut_representante_convenio;
+            $nuevo_convenio->fecha_inicio_convenio_institucion = $req->fecha_inicial_pago_convenio;
+            $nuevo_convenio->fecha_fin_convenio_institucion = $req->fecha_final_pago_convenio;
+            $nuevo_convenio->rut_representante_convenio_institucion = $req->rut_representante_convenio;
             $nuevo_convenio->nombre_representante_convenio_institucion = $req->nombre_representante_convenio;
             $nuevo_convenio->telefono_representante_convenio_institucion = $req->telefono_representante_convenio;
             $nuevo_convenio->email_representante_convenio_institucion = $req->email_representante_convenio;
+            $nuevo_convenio->direccion_representante_convenio_institucion = $req->direccion_representante_convenio;
             $nuevo_convenio->observaciones_convenio_institucion = $req->observaciones_nuevo_convenio;
-            $nuevo_convenio->productos_convenio_institucion = json_encode($req->productos);
+            $nuevo_convenio->productos_convenio_institucion = json_encode($req->productos_convenio);
+            $nuevo_convenio->porcentaje_convenio_institucion = intval($req->porcentaje_dcto);
+            $nuevo_convenio->id_institucion = $institucion->id;
             $nuevo_convenio->estado = 1;
 
             if($nuevo_convenio->save()){
@@ -5979,4 +5983,91 @@ class AdministradorCmController extends Controller
         }
     }
 
+    public function eliminar_convenio(Request $req){
+        try {
+            $institucion = '';
+            $tipo_institucion = '1';
+            $id_busqueda = Auth::user()->id;
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+            if($registro)
+            {
+                // var_dump($registro);
+                // var_dump($registro->UsuarioAdministrador()->first());
+                //var_dump($registro->UsuarioAdministrador()->first()->id);
+                /** INSTITUCION */
+                $institucion = $registro;
+                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                $tipo_institucion = 'institucion';
+
+            }
+            else
+            {
+                $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+                if($registro)
+                {
+                    /** SERVICIOS */
+                    $institucion = $registro;
+                    $tipo_institucion = 'servicio';
+                }
+                else
+                {
+                    /** busqueda por responsable */
+                    $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                    if($responsable)
+                    {
+                        $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            // var_dump($registro);
+                            // var_dump($registro->UsuarioAdministrador()->first());
+                            /** INSTITUCION */
+                            $institucion = $registro;
+                            $tipo_institucion = 'institucion';
+
+                        }
+                        else
+                        {
+                            $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                            if($registro)
+                            {
+                                /** SERVICIOS */
+                                $institucion = $registro;
+                                $tipo_institucion = 'servicio';
+                            }
+                            else
+                            {
+                                return back()->with('error','Institución no encontrada');
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
+                }
+            }
+            $convenio = ConvenioInstitucion::find($req->id);
+            $convenio->delete();
+            $convenios = ConvenioInstitucion::where('id_institucion', $institucion->id)->get();
+            $tipo_convenios = TipoConvenioInstitucion::all();
+            $v = view('fragm.convenios_institucion',[
+                'convenios' => $convenios,
+                'tipo_convenios' => $tipo_convenios
+            ])->render();
+            return ['estado' => 1, 'msj' => 'Convenio eliminado', 'v' => $v];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
 }

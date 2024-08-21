@@ -6,10 +6,17 @@ use Illuminate\Http\Request;
 use App\Models\ConvenioInstitucion;
 use App\Models\TipoConvenio;
 use App\Models\TipoConvenioInstitucion;
+use App\Models\TipoProductoConvenios;
 use App\Models\TipoProducto;
 use App\Models\Responsable;
 use App\Models\TipoPago;
 use App\Models\Convenio;
+
+use App\Models\Instituciones;
+use App\Models\Servicios;
+use App\Models\AdminInstServ;
+// Auth
+use Illuminate\Support\Facades\Auth;
 
 class ConveniosController extends Controller
 {
@@ -20,6 +27,78 @@ class ConveniosController extends Controller
      */
     public function index()
     {
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+
         //
         $tipos_convenio = TipoConvenio::all();
         $tipos_producto = TipoProducto::all();
@@ -27,13 +106,37 @@ class ConveniosController extends Controller
         $tipos_pago = TipoPago::all();
         $convenios = Convenio::all();
         $tipos_convenio_institucion = TipoConvenioInstitucion::all();
+        $tipoproducto_convenios = TipoProductoConvenios::all();
+
+        $convenios_institucion = ConvenioInstitucion::select('convenio_institucion.*','tipo_convenio_institucion.nombre as tipo_convenio')
+        ->join('tipo_convenio_institucion','convenio_institucion.id_tipo_convenio_institucion','=','tipo_convenio_institucion.id')
+        ->where('convenio_institucion.id_institucion',$institucion->id)
+        ->get();
+
+        $tipos_productos = [];
+
+        foreach($convenios_institucion as $convenio)
+        {
+            // pasar el json a array
+            $convenio->productos = json_decode($convenio->productos_convenio_institucion);
+            foreach($convenio->productos as $producto)
+            {
+                $tipo_producto = TipoProductoConvenios::find($producto);
+                array_push($tipos_productos,$tipo_producto->descripcion);
+            }
+
+            $convenio->tipos_productos = $tipos_productos;
+        }
+
         return view ('app.adm_cm.comercial.convenios',[
             'tipos_convenio' => $tipos_convenio,
             'tipos_producto' => $tipos_producto,
             'responsables' => $responsables,
             'tipos_pago' => $tipos_pago,
             'convenios' => $convenios,
-            'tipos_convenio_institucion' => $tipos_convenio_institucion
+            'tipos_convenio_institucion' => $tipos_convenio_institucion,
+            'tipoproducto_convenios' => $tipoproducto_convenios,
+            'convenios_institucion' => $convenios_institucion,
         ]);
     }
 
