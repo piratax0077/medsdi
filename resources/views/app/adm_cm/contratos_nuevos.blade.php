@@ -19,7 +19,24 @@
             </div>
         </div>
         <!--Cierre: Header-->
-
+        <div class="col-md-12">
+            <!--Card Nav Pills-->
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-pills bg-white" id="rrhh_cm" role="tablist">
+                        <li class="nav-item">
+                            <a class="btn btn-outline-info btn-sm mr-1 my-1 active" id="pills-prof_salud-tab" data-toggle="tab" href="#pills-prof-salud" role="tab" aria-controls="pills-prof_salud" aria-selected="false">Profesionales de la salud</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="pills-asistentes-tab" data-toggle="tab" href="#pills-asistentes" role="tab" aria-controls="pills-asistentes" aria-selected="false">Asistentes/Personal</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="pills-limpieza-mantencion-tab" data-toggle="tab" href="#pills-limpieza-mantencion" role="tab" aria-controls="pills-limpieza-mantencion" aria-selected="false">Limpieza y Mantención</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class="col-md-12">
             <!--Cierre: Card Nav Pills-->
             <div class="tab-content" id="rrhh_cm">
@@ -33,10 +50,15 @@
                                     <div class="col-md-12">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <h4 class="text-white f-20 mt-2 mb-2 float-left">Personal Contratado del Centro</h4>
+                                                <h4 class="text-white f-20 mt-2 mb-2 float-left">Profesionales Contratados del Centro</h4>
                                             </div>
                                             <div class="col-md-6">
-
+                                                <div class="btn-group mr-2 float-right mt- mb-">
+                                                    <div class="btn-group mr-2 float-right mt- mb-">
+                                                        <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_contratoprofesional">
+                                                        <i class="feather icon-plus"></i> Registrar Contrato Profesional
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -78,7 +100,8 @@
                                                     <td class="align-middle text-center">
                                                         <button type="button" class="btn btn-success btn-sm" onclick="editar_datosprofesionalc();">
                                                         <i class="feather icon-edit"></i> Editar</button>
-
+                                                        <button type="button" class="btn btn-danger btn-sm">
+                                                        <i class="feather icon-x-circle"></i> Desasociar</button>
                                                     </td>
                                                 </tr>
                                             @endforeach

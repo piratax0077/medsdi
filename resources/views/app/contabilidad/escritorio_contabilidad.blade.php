@@ -67,7 +67,7 @@
 				   {{-- <a href="{{ ROUTE('asistente_adm.asistente_adm_pedidos') }}">--}}
 						<img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
 						<h5 class="mt-1 mb-0">Imposiciones y leyes sociales</h5>
-						
+
 					</a>
 				</div>
 			</div>  --}}-->
@@ -105,8 +105,8 @@
                 </div>
             </div>
             <div class="col">
-                <div class="mb-3 card subir text-center py-2" onclick="en_construccion()"; style="cursor:pointer">
-                    <a href="#">
+                <div class="mb-3 card subir text-center py-2" style="cursor:pointer">
+                    <a href="{{ ROUTE('convenios.index') }}">
                         <img class="wid-50 text-center" src="{{ asset('images/comercial/convenios.png') }}">
                         <h6 class="mt-1 mb-0">Convenios</h6>
                     </a>

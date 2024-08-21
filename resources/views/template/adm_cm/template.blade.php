@@ -182,6 +182,8 @@
             $('#m_remuneraciones').modal('show');
         }
 
+
+
         function buscar_ciudad(id_ciudad=0) {
 
             let region = $('#region_agregar').val();
@@ -285,6 +287,18 @@
                 responsive: true,
             });
 
+            $('#tabla_bonos_ingresos').DataTable({
+                responsive: true,
+            });
+
+            $('#tab_profesionales_cont_centroc').DataTable({
+                responsive: true,
+            });
+
+            $('#tabla_convenios_institucion').DataTable({
+                responsive: true,
+            });
+
             {{--  mensaje de al registrar ficha clinica  --}}
             @if(session('mensaje'))
                 swal({
@@ -344,6 +358,8 @@
                 });
             @endif
         });
+
+
 	</script>
 
     {{--

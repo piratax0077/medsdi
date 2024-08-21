@@ -104,11 +104,11 @@
                 <div class="col-md-12">
                     <div class="card subir py-auto bg-warning">
                         <div class="card-body text-center" style="cursor:pointer">
-                            <h6 class="mb-0 text-white f-20">Areas de la institucion</h6>
+                            <h6 class="mb-0 text-white f-20"></h6>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 d-none">
                     <div class="card subir py-auto" onclick="en_construccion()";>
                       {{--  <a href="{{ ROUTE('laboratorio.laboratorio') }}"></a>--}}
                             <div class="card-body text-center" style="cursor:pointer">
@@ -118,7 +118,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 d-none">
                     <div class="card subir py-auto" onclick="en_construccion()";>
                       {{-- <a href="{{ ROUTE('laboratorio.laboratorio') }}"></a>--}}
                             <div class="card-body text-center" style="cursor:pointer">
@@ -128,7 +128,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 d-none">
                     <div class="card subir py-auto" onclick="en_construccion()";>
                        {{-- <a href="{{ ROUTE('laboratorio.vacunatorio') }}"></a>--}}
                             <div class="card-body text-center" style="cursor:pointer">
@@ -138,7 +138,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 d-none">
                     <div class="card subir py-auto" onclick="en_construccion()";>
                        {{-- <a href="{{ ROUTE('laboratorio.dental') }}"></a>--}}
                             <div class="card-body text-center" style="cursor:pointer">

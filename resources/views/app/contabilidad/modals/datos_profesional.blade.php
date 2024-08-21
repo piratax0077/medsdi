@@ -11,117 +11,120 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Rut</label>
-                                <input type="number" class="form-control form-control-sm" name="rut" id="rut">
+                                <input type="text" class="form-control form-control-sm" oninput="formatoRut(this)" name="rut_nuevo_profesional" id="rut_nuevo_profesional">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Fecha de Ingreso</label>
-                                <input type="date" class="form-control form-control-sm" name="f_ingreso" id="f_ingreso">
+                                <input type="date" class="form-control form-control-sm" name="f_ingreso_nuevo_profesional" id="f_ingreso_nuevo_profesional">
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Nombre</label>
-                                <input class="form-control form-control-sm" name="nombre" id="nombre" type="text" >
+                                <input class="form-control form-control-sm" name="nombre_nuevo_profesional" id="nombre_nuevo_profesional" type="text" >
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Primer Apellido</label>
-                                <input class="form-control form-control-sm" name="apellido1" id="apellido1" type="text" >
+                                <input class="form-control form-control-sm" name="apellido1_nuevo_profesional" id="apellido1_nuevo_profesional" type="text" >
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Segundo Apellido</label>
-                                <input class="form-control form-control-sm" name="apellido2" id="apellido2" type="text" >
+                                <input class="form-control form-control-sm" name="apellido2_nuevo_profesional" id="apellido2_nuevo_profesional" type="text" >
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
-                                <input class="form-control form-control-sm" name="email" id="email" type="email" >
+                                <input class="form-control form-control-sm" name="email_nuevo_profesional" id="email_nuevo_profesional" type="email" >
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                <input class="form-control form-control-sm" name="telefono1" id="telefono1" type="number" >
+                                <input class="form-control form-control-sm" name="telefono1_nuevo_profesional" id="telefono1_nuevo_profesional" type="number" >
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Tel&eacute;fono (opcional)</label>
-                                <input class="form-control form-control-sm" name="telefono2" id="telefono2" type="number" >
+                                <input class="form-control form-control-sm" name="telefono2_nuevo_profesional" id="telefono2_nuevo_profesional" type="number" >
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Direcci&oacute;n N&deg; / Calle</label>
-                                <input class="form-control form-control-sm" name="direccion" id="direccion" type="text">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Comuna</label>
-                                <select class="form-control form-control-sm">
-                                    <option>Seleccione opci&oacute;n</option>
-                                    <optgroup label="Valparaíso">
-                                        <option value="AL">Viña del Mar</option>
-                                        <option value="LA">La Calera</option>
-                                        <option value="VA">Valparaíso</option>
-                                    </optgroup>
-                                </select>
+                                <input class="form-control form-control-sm" name="direccion_nuevo_profesional" id="direccion_nuevo_profesional" type="text">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Regi&oacute;n</label>
-                                <select class="form-control form-control-sm">
+                                <select class="form-control form-control-sm" onchange="buscar_ciudad_profesional();" id="region_nuevo_profesional">
                                     <option>Seleccione opci&oacute;n</option>
-                                    <optgroup label="Valparaíso">
-                                        <option value="AL">Viña del Mar</option>
-                                        <option value="LA">La Calera</option>
-                                        <option value="VA">Valparaíso</option>
-                                    </optgroup>
+                                    @foreach($regiones as $region)
+                                        <option value="{{ $region->id }}">{{ $region->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Comuna</label>
+                                <select class="form-control form-control-sm" id="comuna_nuevo_profesional">
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Profesi&oacute;n</label>
+                                <select name="profesion_nuevo_profesional" id="profesion_nuevo_profesional" class="form-control" onchange="dame_tipo_especialidad()">
+                                    <option value="0">Seleccione opci&oacute;n</option>
+                                    @foreach($especialidades as $especialidad)
+                                        <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="floating-label-activo-sm">Profesi&oacute;n</label>
-                                <input class="form-control form-control-sm" name="profesion" id="profesion" type="text" >
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
                                 <label class="floating-label-activo-sm">Especialidad</label>
-                                <input class="form-control form-control-sm" name="especialidad" id="especialidad" type="text" >
+                                <select name="especialidad_nuevo_profesional" id="especialidad_nuevo_profesional" class="form-control" onchange="dame_subtipo_especialidad()">
+
+                                </select>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Sub-especialidad</label>
-                                <input class="form-control form-control-sm" name="sub_especialidad" id="sub_especialidad" type="text" >
+                                <select name="sub_especialidad_nuevo_profesional" id="sub_especialidad_nuevo_profesional" class="form-control">
+                                    <option value="0">Seleccione opci&oacute;n</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">D&iacute;as de Atenci&oacute;n</label>
-                                <input class="form-control form-control-sm" name="dias_atencion" id="dias_atencion" type="text" >
+                                <input class="form-control form-control-sm" name="dias_atencion_nuevo_profesional" id="dias_atencion_nuevo_profesional" type="text" >
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Horario</label>
-                                <input class="form-control form-control-sm" name="horario" id="horario" type="text" >
+                                <input class="form-control form-control-sm" name="horario_nuevo_profesional" id="horario_nuevo_profesional" type="text" >
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Pacientes por Hora</label>
-                                <input class="form-control form-control-sm" name="p_hora" id="p_hora" type="text" >
+                                <input class="form-control form-control-sm" name="p_hora_nuevo_profesional" id="p_hora_nuevo_profesional" type="text" >
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -143,19 +146,24 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Banco</label>
-                                <input type="text" class="form-control form-control-sm" name="banco" id="banco">
+                                <select class="form-control form-control-sm" name="banco_nuevo_profesional" id="banco_nuevo_profesional">
+                                    <option value="0">Seleccione opci&oacute;n</option>
+                                    @foreach($bancos as $banco)
+                                        <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">N&deg; Cuenta</label>
-                                <input class="form-control form-control-sm" name="n_cta" id="n_cta" type="number" >
+                                <input class="form-control form-control-sm" name="n_cta_nuevo_profesional" id="n_cta_nuevo_profesional" type="number" >
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Sucursal</label>
-                                <input class="form-control form-control-sm" name="sucursal" id="sucursal" type="text" >
+                                <input class="form-control form-control-sm" name="sucursal_nuevo_profesional" id="sucursal_nuevo_profesional" type="text" >
                             </div>
                         </div>
                     </div>
@@ -163,8 +171,178 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info">Registrar profesional</button>
+                <button type="button" class="btn btn-info" onclick="registrar_nuevo_profesional()">Registrar profesional</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    /** buscar ciudad */
+    function buscar_ciudad_profesional(id_ciudad=0) {
+
+        let region = $('#region_nuevo_profesional').val();
+        let url = "{{ route('adm_cm.buscar_ciudad_region') }}";
+        $.ajax({
+
+                url: url,
+                type: "get",
+                data: {
+                    //_token: _token,
+                    region: region,
+                },
+            })
+            .done(function(data) {
+                if (data != null) {
+                    data = JSON.parse(data);
+
+                    let ciudades = $('#comuna_nuevo_profesional');
+
+                    ciudades.find('option').remove();
+                    ciudades.append('<option value="0">seleccione</option>');
+                    $(data).each(function(i, v) { // indice, valor
+                        ciudades.append('<option value="' + v.id + '">' + v.nombre +
+                            '</option>');
+                    })
+
+                    if(id_ciudad != 0)
+                        ciudades.val(id_ciudad);
+
+                } else {
+
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar las ciudades",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    })
+                    // alert('No se pudo Cargar las ciudades');
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+
+    };
+
+    function formatoRut(rut)
+    {
+        var valor = rut.value.replace('.','');
+        valor = valor.replace('-','');
+        cuerpo = valor.slice(0,-1);
+        dv = valor.slice(-1).toUpperCase();
+        rut.value = cuerpo + '-'+ dv
+
+        if(cuerpo.length < 7) { rut.setCustomValidity("RUT Incompleto"); return false;}
+
+        suma = 0;
+        multiplo = 2;
+
+        for(i=1;i<=cuerpo.length;i++)
+        {
+            index = multiplo * valor.charAt(cuerpo.length - i);
+            suma = suma + index;
+            if(multiplo < 7) { multiplo = multiplo + 1; } else { multiplo = 2; }
+        }
+
+        dvEsperado = 11 - (suma % 11);
+        dv = (dv == 'K')?10:dv;
+        dv = (dv == 0)?11:dv;
+
+        if(dvEsperado != dv) { rut.setCustomValidity("RUT InvÃ¡lido"); return false; }
+
+        rut.setCustomValidity('');
+    }
+
+    function dame_tipo_especialidad(){
+        let profesion = $('#profesion_nuevo_profesional').val();
+        let url = "{{ route('web.profesional.buscar_tipo_especialidad') }}";
+        $.ajax({
+
+                url: url,
+                type: "get",
+                data: {
+                    //_token: _token,
+                    id_profesion: profesion,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    registros = data.registros;
+
+                    let especialidades = $('#especialidad_nuevo_profesional');
+
+                    especialidades.find('option').remove();
+                    especialidades.append('<option value="0">seleccione</option>');
+                    $(registros).each(function(i, v) { // indice, valor
+                        especialidades.append('<option value="' + v.id + '">' + v.nombre +
+                            '</option>');
+                    })
+
+                } else {
+
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar las especialidades",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    })
+                    // alert('No se pudo Cargar las ciudades');
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+    }
+
+    function dame_subtipo_especialidad(){
+        let especialidad = $('#especialidad_nuevo_profesional').val();
+        let url = "{{ route('web.profesional.buscar_sub_tipo_especialidad') }}";
+        $.ajax({
+
+                url: url,
+                type: "get",
+                data: {
+                    //_token: _token,
+                    id_tipo_especialidad: especialidad,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    registros = data.registros;
+
+                    let subespecialidades = $('#sub_especialidad_nuevo_profesional');
+
+                    subespecialidades.find('option').remove();
+                    subespecialidades.append('<option value="0">seleccione</option>');
+                    $(registros).each(function(i, v) { // indice, valor
+                        subespecialidades.append('<option value="' + v.id + '">' + v.nombre +
+                            '</option>');
+                    })
+
+                } else {
+
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar las sub-especialidades",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    })
+                    // alert('No se pudo Cargar las ciudades');
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+    }
+
+</script>

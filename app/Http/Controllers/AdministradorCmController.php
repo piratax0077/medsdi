@@ -9,6 +9,10 @@ use App\Models\AreasCm;
 use App\Models\Asistente;
 use App\Models\AsistenteLugarAtencion;
 use App\Models\AsistenteTipo;
+use App\Models\Bancos;
+use App\Models\ConvenioInstitucion;
+use App\Models\ContratoProfesionalInstitucion;
+use App\Models\CuentaBancariaInst;
 use App\Models\TipoAreasCm;
 use Illuminate\Http\Request;
 use App\Models\Region;
@@ -31,6 +35,7 @@ use App\Models\Roles;
 use App\Models\Servicios;
 use App\Models\ServiciosInternos;
 use App\Models\TipoAdministrador;
+use App\Models\TipoCuentaBancaria;
 use App\Models\TipoConvenioInstitucion;
 use App\Models\TipoEspecialidad;
 use App\Models\TipoInstitucion;
@@ -165,6 +170,96 @@ class AdministradorCmController extends Controller
         }
         /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
         return view('app.adm_cm.home')->with(['institucion' => $institucion, 'adm_medico' => $adm_medico]);
+    }
+
+    public function areaContratosNuevos(){
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+
+        $regiones = Region::all();
+        $bancos = Bancos::all();
+        $especialidades = Especialidad::all();
+        $profesionales_contratados = ContratoProfesionalInstitucion::select('contrato_profesional_institucion.*','especialidades.nombre as especialidad')
+            ->join('especialidades','especialidades.id','contrato_profesional_institucion.id_especialidad')
+            ->where('contrato_profesional_institucion.id_institucion',$institucion->id)
+            ->get();
+        return view('app.adm_cm.contratos_nuevos',
+            [
+                'regiones' => $regiones,
+                'bancos' => $bancos,
+                'especialidades' => $especialidades,
+                'profesionales_contratados' => $profesionales_contratados,
+            ]
+        );
     }
 
     public function centroMedico(){
@@ -4623,7 +4718,93 @@ class AdministradorCmController extends Controller
     }
 	public function ContadorRrHh(Request $request)
     {
-        return view('app.contabilidad.secciones_contabilidad.rrhh');
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+
+        $regiones = Region::all();
+        $bancos = Bancos::all();
+        $especialidades = Especialidad::all();
+        $profesionales_contratados = ContratoProfesionalInstitucion::select('contrato_profesional_institucion.*','especialidades.nombre as especialidad')
+            ->join('especialidades','especialidades.id','contrato_profesional_institucion.id_especialidad')
+            ->where('contrato_profesional_institucion.id_institucion',$institucion->id)
+            ->get();
+        return view('app.contabilidad.secciones_contabilidad.rrhh',
+            [
+                'regiones' => $regiones,
+                'bancos' => $bancos,
+                'especialidades' => $especialidades,
+                'profesionales_contratados' => $profesionales_contratados,
+            ]
+        );
     }
     public function ContadorSueldos(Request $request)
     {
@@ -4699,7 +4880,95 @@ class AdministradorCmController extends Controller
 
     /** ADMINISTRADOR COMERCIAL */
     public function configuracion_comercial(){
-        return view('app.adm_cm.configuracion_esc_comercial');
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+
+        $director_comercial = Profesional::find($institucion->id_director_comercial);
+        $tipo_cuentas_bancarias = TipoCuentaBancaria::all();
+        $cuenta_bancaria = CuentaBancariaInst::select('cuenta_bancaria_inst.*','tipo_cuenta_bancaria.descripcion','bancos.nombre as nombre_banco','bancos.id as id_banco')
+                                                ->join('tipo_cuenta_bancaria','cuenta_bancaria_inst.id_tipo_cuenta','=','tipo_cuenta_bancaria.id')
+                                                ->join('bancos','cuenta_bancaria_inst.id_banco','=','bancos.id')
+                                                ->where('id_institucion', $institucion->id)
+                                                ->get();
+
+        $bancos = Bancos::all();
+
+        return view('app.adm_cm.configuracion_esc_comercial',[
+            'institucion' => $institucion,
+            'director_comercial' => $director_comercial,
+            'tipo_cuentas_bancarias' => $tipo_cuentas_bancarias,
+            'cuentas_bancarias' => $cuenta_bancaria ? $cuenta_bancaria : null,
+            'bancos' => $bancos
+        ]);
     }
 
     public function escritorioAdminComercial()
@@ -5085,24 +5354,28 @@ class AdministradorCmController extends Controller
 
             $institucion = Instituciones::where('id', $req->id_institucion)->first();
 
-            if($cargo->id == 1){
+            if($cargo->id == 1)
                 $institucion->id_director_medico = intval($profesional->id);
-                $institucion->update();
-            }
 
-            if($cargo->id == 2){
+
+            if($cargo->id == 2)
                 $institucion->id_subdirector_medico = intval($profesional->id);
-                $institucion->update();
-            }
 
-            if($cargo->id == 3){
+
+            if($cargo->id == 3)
                 $institucion->id_director_gestion_cuidado = intval($profesional->id);
-                $institucion->update();
-            }
+
+
+            if($cargo->id == 4)
+                $institucion->id_director_comercial = intval($profesional->id);
+
+
+            $institucion->update();
 
             $director_cm = Profesional::where('id', $institucion->id_director_medico)->first();
             $subdirector_cm = Profesional::where('id', $institucion->id_subdirector_medico)->first();
             $director_gestion_cuidado = Profesional::where('id', $institucion->id_director_gestion_cuidado)->first();
+            $director_comercial = Profesional::where('id', $institucion->id_director_comercial)->first();
 
             $v = view('fragm.administradores_cm',[
                 'director_cm' => $director_cm ? $director_cm : null,
@@ -5148,6 +5421,562 @@ class AdministradorCmController extends Controller
             return $e->getMessage();
         }
 
+    }
+
+    public function editar_cuenta_bancaria_institucion(Request $req){
+
+        $institucion = '';
+            $tipo_institucion = '1';
+            $id_busqueda = Auth::user()->id;
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+
+        try {
+
+            $nueva_cuenta = CuentaBancariaInst::find($req->id);
+
+            $nueva_cuenta->rut_titular = $req->rut_titular;
+            $nueva_cuenta->nombre_titular = $req->nombre_titular;
+
+            $nueva_cuenta->numero_cuenta = $req->numero_cuenta;
+            $nueva_cuenta->rut_representante = $req->rut_representante;
+            $nueva_cuenta->nombre_representante = $req->nombre_representante;
+            $nueva_cuenta->id_institucion = $institucion->id;
+
+            $nueva_cuenta->id_banco = $req->banco_titular;
+            $nueva_cuenta->id_tipo_cuenta = intval($req->tipo_cuenta);
+
+            $nueva_cuenta->id_responsable = Auth::user()->id;
+            $nueva_cuenta->email = $req->email_titular;
+            $nueva_cuenta->telefono = "123456789";
+            $nueva_cuenta->estado = 1;
+            $nueva_cuenta->observaciones = "Cuenta Bancaria Institucion";
+            $nueva_cuenta->update();
+
+            $cuentas_bancarias = CuentaBancariaInst::select('cuenta_bancaria_inst.*','tipo_cuenta_bancaria.descripcion','bancos.nombre as nombre_banco','bancos.id as id_banco')
+            ->join('tipo_cuenta_bancaria','cuenta_bancaria_inst.id_tipo_cuenta','=','tipo_cuenta_bancaria.id')
+            ->join('bancos','cuenta_bancaria_inst.id_banco','=','bancos.id')
+            ->where('id_institucion', $institucion->id)
+            ->get();
+
+            $tipo_cuentas_bancarias = TipoCuentaBancaria::all();
+
+            $bancos = Bancos::all();
+
+            $v = view('fragm.cuentas_bancarias_inst',[
+            'cuentas_bancarias' => $cuentas_bancarias,
+            'tipo_cuentas_bancarias' => $tipo_cuentas_bancarias,
+            'bancos' => $bancos
+            ])->render();
+
+            return ['estado' => 1, 'msj' => 'Cuenta editada', 'v' => $v];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
+    public function agregar_cuenta_bancaria_institucion(Request $req){
+            $institucion = '';
+            $tipo_institucion = '1';
+            $id_busqueda = Auth::user()->id;
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+
+        try {
+
+            // verificar si el rut ya existe en la base de datos de cuentas bancarias
+            $cuenta_bancaria = CuentaBancariaInst::where('rut_titular', $req->rut_titular)->first();
+            if($cuenta_bancaria)
+                return ['estado' => 0, 'msj' => 'El rut ya se encuentra registrado'];
+
+            $nueva_cuenta = new CuentaBancariaInst();
+
+            $nueva_cuenta->rut_titular = $req->rut_titular;
+            $nueva_cuenta->nombre_titular = $req->nombre_titular;
+
+            $nueva_cuenta->numero_cuenta = intval($req->numero_cuenta);
+            $nueva_cuenta->id_institucion = $institucion->id;
+
+            $nueva_cuenta->id_banco = $req->banco_titular;
+            $nueva_cuenta->id_tipo_cuenta = intval($req->tipo_cuenta);
+            $nueva_cuenta->rut_representante = $req->rut_representante;
+            $nueva_cuenta->nombre_representante = $req->nombre_representante;
+            $nueva_cuenta->id_responsable = Auth::user()->id;
+            $nueva_cuenta->email = $req->email_titular;
+            $nueva_cuenta->telefono = "123456789";
+            $nueva_cuenta->estado = 1;
+            $nueva_cuenta->observaciones = "Cuenta Bancaria Institucion";
+            $nueva_cuenta->save();
+
+            $cuentas_bancarias = CuentaBancariaInst::select('cuenta_bancaria_inst.*','tipo_cuenta_bancaria.descripcion','bancos.nombre as nombre_banco','bancos.id as id_banco')
+                                                    ->join('tipo_cuenta_bancaria','cuenta_bancaria_inst.id_tipo_cuenta','=','tipo_cuenta_bancaria.id')
+                                                    ->join('bancos','cuenta_bancaria_inst.id_banco','=','bancos.id')
+                                                    ->where('id_institucion', $institucion->id)
+                                                    ->get();
+
+            $tipo_cuentas_bancarias = TipoCuentaBancaria::all();
+
+            $bancos = Bancos::all();
+
+            $v = view('fragm.cuentas_bancarias_inst',[
+                'cuentas_bancarias' => $cuentas_bancarias,
+                'tipo_cuentas_bancarias' => $tipo_cuentas_bancarias,
+                'bancos' => $bancos
+            ])->render();
+
+            return ['estado' => 1, 'msj' => 'Cuenta creada', 'v' => $v];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function eliminar_cuenta_bancaria_institucion(Request $req){
+        try {
+            $institucion = '';
+            $tipo_institucion = '1';
+            $id_busqueda = Auth::user()->id;
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+            $cuenta_bancaria = CuentaBancariaInst::where('id', $req->id)->first();
+            $cuenta_bancaria->delete();
+
+            $cuentas_bancarias = CuentaBancariaInst::select('cuenta_bancaria_inst.*','tipo_cuenta_bancaria.descripcion','bancos.nombre as nombre_banco','bancos.id as id_banco')
+                                                    ->join('tipo_cuenta_bancaria','cuenta_bancaria_inst.id_tipo_cuenta','=','tipo_cuenta_bancaria.id')
+                                                    ->join('bancos','cuenta_bancaria_inst.id_banco','=','bancos.id')
+                                                    ->where('id_institucion', $institucion->id)
+                                                    ->get();
+
+            $tipo_cuentas_bancarias = TipoCuentaBancaria::all();
+
+            $bancos = Bancos::all();
+
+            $v = view('fragm.cuentas_bancarias_inst',[
+                'cuentas_bancarias' => $cuentas_bancarias,
+                'tipo_cuentas_bancarias' => $tipo_cuentas_bancarias,
+                'bancos' => $bancos
+            ])->render();
+
+            return ['estado' => 1, 'msj' => 'Cuenta eliminada', 'v' => $v];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function registrar_profesional(Request $req){
+        try {
+            $institucion = '';
+            $tipo_institucion = '1';
+            $id_busqueda = Auth::user()->id;
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+            if($registro)
+            {
+                // var_dump($registro);
+                // var_dump($registro->UsuarioAdministrador()->first());
+                //var_dump($registro->UsuarioAdministrador()->first()->id);
+                /** INSTITUCION */
+                $institucion = $registro;
+                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                $tipo_institucion = 'institucion';
+
+            }
+            else
+            {
+                $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+                if($registro)
+                {
+                    /** SERVICIOS */
+                    $institucion = $registro;
+                    $tipo_institucion = 'servicio';
+                }
+                else
+                {
+                    /** busqueda por responsable */
+                    $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                    if($responsable)
+                    {
+                        $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            // var_dump($registro);
+                            // var_dump($registro->UsuarioAdministrador()->first());
+                            /** INSTITUCION */
+                            $institucion = $registro;
+                            $tipo_institucion = 'institucion';
+
+                        }
+                        else
+                        {
+                            $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                            if($registro)
+                            {
+                                /** SERVICIOS */
+                                $institucion = $registro;
+                                $tipo_institucion = 'servicio';
+                            }
+                            else
+                            {
+                                return back()->with('error','Institución no encontrada');
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
+                }
+            }
+
+            // verificar que el rut no este contratado en la institucion
+            $contrato = ContratoProfesionalInstitucion::where('rut', $req->rut)->where('id_institucion', $institucion->id)->where('email',$req->email)->first();
+            if($contrato)
+                return ['estado' => 0, 'msj' => 'El rut o email ya se encuentra registrado'];
+
+            $nuevo_contrato = new ContratoProfesionalInstitucion();
+            $nuevo_contrato->rut = $req->rut;
+            $nuevo_contrato->fecha_ingreso = $req->f_ingreso;
+            $nuevo_contrato->nombre = $req->nombre;
+            $nuevo_contrato->primer_apellido = $req->apellido1;
+            $nuevo_contrato->segundo_apellido = $req->apellido2;
+            $nuevo_contrato->email = $req->email;
+            $nuevo_contrato->telefono = $req->telefono1;
+            $nuevo_contrato->telefono_dos = $req->telefono2;
+            $nuevo_contrato->direccion = $req->direccion;
+            $nuevo_contrato->id_region = $req->region;
+            $nuevo_contrato->id_comuna = $req->comuna;
+            $nuevo_contrato->id_profesion = $req->profesion;
+            $nuevo_contrato->id_especialidad = $req->especialidad;
+            $nuevo_contrato->id_sub_tipo_especialidad = $req->sub_especialidad;
+            $nuevo_contrato->dias_atencion = $req->dias_atencion;
+            $nuevo_contrato->horario_atencion = $req->horario;
+            $nuevo_contrato->pacientes_hora = $req->p_hora;
+            $nuevo_contrato->id_banco = $req->banco;
+            $nuevo_contrato->numero_cuenta = $req->n_cta;
+            $nuevo_contrato->sucursal = $req->sucursal;
+            $nuevo_contrato->id_institucion = $institucion->id;
+            $nuevo_contrato->id_tipo_contrato = 1; // contrato indefinido (por defecto)
+
+            $nuevo_contrato->save();
+
+            return ['estado' => 1, 'msj' => 'Profesional registrado'];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function registrar_convenio(Request $req){
+        try {
+            $institucion = '';
+            $tipo_institucion = '1';
+            $id_busqueda = Auth::user()->id;
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+            if($registro)
+            {
+                // var_dump($registro);
+                // var_dump($registro->UsuarioAdministrador()->first());
+                //var_dump($registro->UsuarioAdministrador()->first()->id);
+                /** INSTITUCION */
+                $institucion = $registro;
+                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                $tipo_institucion = 'institucion';
+
+            }
+            else
+            {
+                $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+                if($registro)
+                {
+                    /** SERVICIOS */
+                    $institucion = $registro;
+                    $tipo_institucion = 'servicio';
+                }
+                else
+                {
+                    /** busqueda por responsable */
+                    $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                    if($responsable)
+                    {
+                        $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            // var_dump($registro);
+                            // var_dump($registro->UsuarioAdministrador()->first());
+                            /** INSTITUCION */
+                            $institucion = $registro;
+                            $tipo_institucion = 'institucion';
+
+                        }
+                        else
+                        {
+                            $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                            if($registro)
+                            {
+                                /** SERVICIOS */
+                                $institucion = $registro;
+                                $tipo_institucion = 'servicio';
+                            }
+                            else
+                            {
+                                return back()->with('error','Institución no encontrada');
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
+                }
+            }
+            $nuevo_convenio = new ConvenioInstitucion();
+            $nuevo_convenio->nombre_representante_convenio = $req->nombre_representante_convenio;
+            $nuevo_convenio->id_tipo_convenio_institucion = intval($req->tipo_convenio);
+            $nuevo_convenio->nombre_convenio_institucion = $req->nombre_convenio;
+            $nuevo_convenio->fecha_inicio_pago_convenio = $req->fecha_inicial_pago_convenio;
+            $nuevo_convenio->fecha_fin_pago_convenio = $req->fecha_final_pago_convenio;
+            $nuevo_convenio->rut_representante = $req->rut_representante_convenio;
+            $nuevo_convenio->nombre_representante_convenio_institucion = $req->nombre_representante_convenio;
+            $nuevo_convenio->telefono_representante_convenio_institucion = $req->telefono_representante_convenio;
+            $nuevo_convenio->email_representante_convenio_institucion = $req->email_representante_convenio;
+            $nuevo_convenio->observaciones_convenio_institucion = $req->observaciones_nuevo_convenio;
+            $nuevo_convenio->productos_convenio_institucion = json_encode($req->productos);
+            $nuevo_convenio->estado = 1;
+
+            if($nuevo_convenio->save()){
+                $convenios = ConvenioInstitucion::where('id_institucion', $institucion->id)->get();
+                $tipo_convenios = TipoConvenioInstitucion::all();
+                $v = view('fragm.convenios_institucion',[
+                    'convenios' => $convenios,
+                    'tipo_convenios' => $tipo_convenios
+                ])->render();
+                return ['estado' => 1, 'msj' => 'Convenio registrado'];
+            }
+            return $nuevo_convenio;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
     }
 
 }

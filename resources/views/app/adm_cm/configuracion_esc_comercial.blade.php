@@ -1,71 +1,72 @@
 @extends('template.adm_cm.template')
 @section('content')
 <!--Container Completo-->
-<div class="pcoded-main-container">
-    <div class="pcoded-content">
-        <div class="page-header">
-            <div class="page-block">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="page-header-title">
-                            <h5 class="font-weight-bolder">Configurar Mi Escritorio Comercial</h5>
-                        </div>
-                        <ul class="breadcrumb mb-4">
-                            <li class="breadcrumb-item">
-                                <a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                    <i class="feather icon-home"></i>
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a href="#">Perfil Administrador Comercial</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="user-profile user-card mb-4">
-            <div class="card-body py-0">
-                <div class="user-about-block m-0">
+    <div class="pcoded-main-container">
+        <div class="pcoded-content">
+            <div class="page-header">
+                <div class="page-block">
                     <div class="row">
-                        <div class="col-md-12 text-center mt-n3">
-                            <div class="change-profile text-center">
-                                <div class="dropdown w-auto d-inline-block">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <div class="profile-dp">
-                                            <div class="position-relative d-inline-block">
-                                                <img class="img-radius img-fluid wid-100" src="{{ asset('images/iconos/cm-perfiles.png') }}"> alt="User image">
-                                            </div>
-                                            <div class="overlay">
-                                                <span>Actualizar</span>
-                                            </div>
-                                        </div>
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h5 class="font-weight-bolder">Configurar Mi Escritorio Comercial</h5>
+                            </div>
+                            <ul class="breadcrumb mb-4">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
+                                        <i class="feather icon-home"></i>
                                     </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item"><i class="feather icon-upload-cloud mr-2"></i>Cambiar foto de perfil</a>
-                                        <a class="dropdown-item"><i class="feather icon-trash-2 mr-2"></i>Eliminar fotografía</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#">Perfil Administrador Comercial</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="user-profile user-card mb-4">
+                <div class="card-body py-0">
+                    <div class="user-about-block m-0">
+                        <div class="row">
+                            <div class="col-md-12 text-center mt-n3">
+                                <div class="change-profile text-center">
+                                    <div class="dropdown w-auto d-inline-block">
+                                        <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <div class="profile-dp">
+                                                <div class="position-relative d-inline-block">
+                                                    <img class="img-radius img-fluid wid-100" src="{{ asset('images/iconos/cm-perfiles.png') }}"> alt="User image">
+                                                </div>
+                                                <div class="overlay">
+                                                    <span>Actualizar</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item"><i class="feather icon-upload-cloud mr-2"></i>Cambiar foto de perfil</a>
+                                            <a class="dropdown-item"><i class="feather icon-trash-2 mr-2"></i>Eliminar fotografía</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-12 mt-4">
-                            <!-- tab general -->
-                            <div class="user-profile user-card pt-0">
-                                <div class="card-body py-0">
-                                    <div class="user-about-block m-0">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <ul class="nav nav-tabs profile-tabs nav-fill mt-2" id="myTab" role="tablist">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-reset before:active " id="p-adm-tab" data-toggle="tab" href="#p-adm" role="tab" aria-controls="p-adm" aria-selected="true"><i class="feather icon-user mr-2"></i>Perfil administrador Adm Comercial</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-reset" id="info_cuenta_inst_tab" data-toggle="tab" href="#info_cuenta_inst" role="tab" aria-controls="info_cuenta_inst" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Cuenta Institucional</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-reset" id="rol-permiso-tab" data-toggle="tab" href="#rol-permiso" role="tab" aria-controls="rol-permiso" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Asignar Usuario y Clave</a>
-                                                    </li>
-                                                </ul>
+                            <div class="col-md-12 mt-4">
+                                <!-- tab general -->
+                                <div class="user-profile user-card pt-0">
+                                    <div class="card-body py-0">
+                                        <div class="user-about-block m-0">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <ul class="nav nav-tabs profile-tabs nav-fill mt-2" id="myTab" role="tablist">
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-reset before:active " id="p-adm-tab" data-toggle="tab" href="#p-adm" role="tab" aria-controls="p-adm" aria-selected="true"><i class="feather icon-user mr-2"></i>Perfil administrador Adm Comercial</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-reset" id="info_cuenta_inst_tab" data-toggle="tab" href="#info_cuenta_inst" role="tab" aria-controls="info_cuenta_inst" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Cuenta Institucional</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-reset" id="rol-permiso-tab" data-toggle="tab" href="#rol-permiso" role="tab" aria-controls="rol-permiso" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Asignar Usuario y Clave</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -75,594 +76,637 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="tab-content" id="myTabContent">
-                    <!--PERFIL ADMINISTRADOR COMERCIAL-->
-                    <div class="tab-pane fade show active" id="p-adm" role="tabpanel" aria-labelledby="p-adm-tab">
-                        <div class="row mb-3 mt-0">
-                            <div class="col-sm-12 col-md-12">
-                                <div class="card mb-1">
-                                    <div class="card-body">
-                                        <h4 class="f-18 mb-0 text-info">Perfil administrador Comercial de la Institución</h4>
-                                        <input type="hidden" name="id_responsable" id="id_responsable" value="">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tab-content" id="myTabContent">
+                        <!--PERFIL ADMINISTRADOR COMERCIAL-->
+                        <div class="tab-pane fade show active" id="p-adm" role="tabpanel" aria-labelledby="p-adm-tab">
+                            <div class="row mb-3 mt-0">
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="card mb-1">
+                                        <div class="card-body">
+                                            <h4 class="f-18 mb-0 text-info">Perfil administrador Comercial de la Institución</h4>
+                                            <input type="hidden" name="id_responsable" id="id_responsable" value="">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <!--Card Información Básica-->
-                                <div class="card">
-                                    <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                                        <h5 class="mb-0 text-white">Datos Personales</h5>
-                                        <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
-                                            <i class="feather icon-edit"></i>
-                                        </button>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!--Card Información Básica-->
+                                    <div class="card">
+                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Datos Personales</h5>
+                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        @if(isset($director_comercial))
+                                        <!--Datos Personales-->
+                                        <div class="card-body border-top info_basica collapse show" id="info_basica-1">
+                                            <form>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                        <label class="label font-weight-bolder">RUT</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                        <label class="label ">{{ $director_comercial->rut }}</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                        <label class="label font-weight-bolder">Nombre</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="label ">{{ $director_comercial->nombre }} {{ $director_comercial->apellido_uno }} {{ $director_comercial->apellido_dos }}</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                        <label class="label font-weight-bolder">Sexo</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                        <label class="label">{{ $director_comercial->sexo == 'F' ? 'FEMENINO' : 'MASCULINO' }}</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                        <label class="label font-weight-bolder">F. Nacimiento</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                        <label class="label">{{ $director_comercial->fecha_nac }}</label>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        @endif
+                                        <!--Cierre: Datos Personales-->
+                                        <!--(Editar)Datos Personales-->
+                                        <div class="card-body border-top info_basica collapse" id="pinfo_basica_2">
+                                            <form>
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 mb-2">
+                                                        <h6 class="text-c-blue">INFORMACIÓN Y DATOS DE CONTACTO</h6>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">RUT:</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_empleado_rut" id="edit_empleado_rut" value="">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Nombres</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_empleado_nombre" id="edit_empleado_nombre">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Apellido Paterno</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_empleado_apellido_uno" id="edit_empleado_apellido_uno">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Apellido Materno</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_empleado_apellido_dos" id="edit_empleado_apellido_dos">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Sexo</label>
+                                                        <select class="form-control form-control-sm" name="edit_empleado_sexo" id="edit_empleado_sexo">
+                                                            <option value="">Seleccione</option>
+                                                            <option value="F">Femenino</option>
+                                                            <option value="M">Masculino</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Fecha Nacimiento</label>
+                                                        <input type="date" class="form-control form-control-sm" name="edit_empleado_fecha_nacimiento" id="edit_empleado_fecha_nacimiento">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: (Editar)Datos Personales-->
                                     </div>
-                                    <!--Datos Personales-->
-                                    <div class="card-body border-top info_basica collapse show" id="info_basica-1">
-                                        <form>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label font-weight-bolder">Rut</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label ">20.123.365-k</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label font-weight-bolder">Nombre</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="label ">juan jose Perez-Cotapos arguiluyo</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label font-weight-bolder">Sexo</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label">Femenino</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label font-weight-bolder">F. Nacimiento</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label">20/12/1987</label>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <!--Cierre: Datos Personales-->
-                                    <!--(Editar)Datos Personales-->
-                                    <div class="card-body border-top info_basica collapse" id="pinfo_basica_2">
-                                        <form>
-                                            <div class="form-row">
-                                                <div class="col-sm-12 col-md-12 mb-2">
-                                                    <h6 class="text-c-blue">INFORMACIÓN Y DATOS DE CONTACTO</h6>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">RUT:</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_rut" id="edit_empleado_rut" value="">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">Nombres</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_nombre" id="edit_empleado_nombre">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">Apellido Paterno</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_apellido_uno" id="edit_empleado_apellido_uno">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">Apellido Materno</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_apellido_dos" id="edit_empleado_apellido_dos">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">Sexo</label>
-                                                    <select class="form-control form-control-sm" name="edit_empleado_sexo" id="edit_empleado_sexo">
-                                                        <option value="">Seleccione</option>
-                                                        <option value="F">Femenino</option>
-                                                        <option value="M">Masculino</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">Fecha Nacimiento</label>
-                                                    <input type="date" class="form-control form-control-sm" name="edit_empleado_fecha_nacimiento" id="edit_empleado_fecha_nacimiento">
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <!--Cierre: (Editar)Datos Personales-->
+                                    <!--Cierre: Card Datos Personales-->
                                 </div>
-                                <!--Cierre: Card Datos Personales-->
-                            </div>
-                            <div class="col-md-6">
-                                <!--Contraseña-->
-                                <div class="card">
-                                    <div class="card-header d-flex align-items-center justify-content-between bg-info">
-                                        <h5 class="mb-0 text-white">Cambiar contraseña</h5>
-                                        <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
-                                            <i class="feather icon-edit"></i>
-                                        </button>
-                                    </div>
+                                <div class="col-md-6">
                                     <!--Contraseña-->
-                                    <div class="card-body pass_personal collapse show" id="pass_personal_1">
-                                        <form>
-                                            <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label">Contraseña actual</label>
-                                                <div class="col-sm-7 pt-2 ml-2 font-weight-bolder"> •••••••• </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <!--Cierre: Contraseña-->
-                                    <!--(Editar)Contraseña-->
-                                    <div class="card-body pass_personal collapse" id="pass_personal_2">
-                                        <form method="get" action="{{ route('adm_cm.cambio_contrasena_responsable')}}" id="form_cambio_contrasena_perfil_responsable" name="form_cambio_contrasena_perfil_responsable">
-                                            <input type="hidden" name="responsable_id" id="responsable_id" value="">
-                                            @csrf
-                                            <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Contraseña actual</label>
-                                                <div class="col-sm-7">
-                                                    <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña Actual">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Nueva contraseña</label>
-                                                <div class="col-sm-7">
-                                                    <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva Contraseña">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Repitir contraseña</label>
-                                                <div class="col-sm-7">
-                                                    <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la Contraseña">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-sm-12 col-form-label"></label>
-                                                <div class="col-sm-12 d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-sm btn-danger mr-2">Cancelar</button>
-                                                    <button type="submit" class="btn btn-sm btn-info">Guardar cambios</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <!--Cierre: (Editar)Contraseña-->
-                                </div>
-                                <!--Cierre:Contraseña-->
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <!--Card Contacto-->
-                                <div class="card">
-                                    <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                                        <h5 class="mb-0 text-white">Info Contacto</h5>
-                                        <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
-                                            <i class="feather icon-edit"></i>
-                                        </button>
-                                    </div>
-                                    <!--Contacto-->
-                                    <div class="card-body border-top info_contacto collapse show" id="info_contacto_1">
-                                        <form>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label font-weight-bolder">Email</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                    <label class="label ">JperezCotapos@gmail.com</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label font-weight-bolder">Teléfonos</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                    <label class="label ">+5698789665/+5696547589</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                    <label class="label font-weight-bolder">Región</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                    <label class="label">Quinta</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                    <label class="label font-weight-bolder">Ciudad</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                    <label class="label">Viña del mar</label>
-                                                </div>
-                                            </div>
-                                        </form>
-
-                                    </div>
-                                    <!--Cierre: Contacto-->
-                                    <!--(Editar) Contacto-->
-                                    <div class="card-body border-top info_contacto collapse " id="info_contacto_2">
-                                        <form>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                    <label class="floating-label">Correo Electrónico</label>
-                                                    <input type="text" class="form-control form-control-sm" name="Perfil_email" id="Perfil_email" value="">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                    <label class="floating-label">Teléfonos</label>
-                                                    <input type="text" class="form-control form-control-sm" name="Perfil_fono" id="Perfil_fono" value="">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                    <label class="floating-label-activo-sm">Región</label>
-                                                    <select class="form-control form-control-sm" name="edit_empleado_region" id="edit_empleado_region">
-                                                        <option value="">Seleccione</option>
-                                                    </select>
-                                                </div>
-
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                    <label class="floating-label-activo-sm">Ciudad</label>
-                                                    <select class="form-control form-control-sm" name="edit_empleado_ciudad" id="edit_empleado_ciudad">
-                                                        <option value="">Seleccione</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-4">
-                                                    <label class="floating-label">Dirección</label>
-                                                    <input type="text" class="form-control form-control-sm" name="perfil_dire" id="perfil_dire" value="">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                    <label class="floating-label">Piso/Depto</label>
-                                                    <input type="text" class="form-control form-control-sm" name="perfil_numero_dir" id="perfil_numero_dir" value="">
-                                                </div>
-
-                                            </div>
-
-
-                                            <div class="form-group row">
-                                                <label class="col-sm-12 col-form-label"></label>
-                                                <div class="col-sm-12 d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                    <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info">Guardar Cambios</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <!--(Editar) Contacto-->
-                                </div>
-                                <!--Cierre: Card Contacto-->
-                                <!--Card Residencia-->
-                                <div class="card" hidden>
-                                    <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                                        <h5 class="mb-0 text-white">Residencia</h5>
-                                        <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
-                                            <i class="feather icon-edit"></i>
-                                        </button>
-                                    </div>
-                                    <!--Residencia-->
-                                    <div class="card-body border-top info_residencial collapse show" id="info_residencial_1">
-                                        <form>
-                                            <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
-                                                <div class="col-sm-6 my-auto ml-2">
-
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Comuna</label>
-                                                <div class="col-sm-6 my-auto ml-2">
-
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
-                                                <div class="col-sm-6 my-auto ml-2">
-
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <!--Cierre: Residencia-->
-                                    <!--(Editar) Residencia-->
-                                    <div class="card-body border-top info_residencial collapse " id="info_residencial_2">
-                                        <form>
-                                            <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control" onchange="buscar_ciudad_responsable();" id="perfil_region" name="perfil_region">
-                                                        <option value="">Seleccione una Región</option>
-
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Ciudad</label>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control" id="perfil_ciudad" name="perfil_ciudad">
-                                                        <option value="">Seleccione su comuna</option>
-
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Piso/Depto</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-sm-12 col-form-label"></label>
-                                                <div class="col-sm-12 d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                    <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info">Guardar Cambios</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <!--(Editar) Residencia-->
-                                </div>
-                                <!--Cierre: Card Residencia-->
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-header d-flex align-items-center justify-content-between bg-info">
-                                        <h5 class="mb-0 text-white">Agregar Datos para Liquidaciones</h5>
-                                        <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".liquidaciones" aria-expanded="false" aria-controls="liquidaciones_1 liquidaciones_2">
-                                            <i class="feather icon-edit"></i>
-                                        </button>
-                                    </div>
-                                    <div class="card-body border-top liquidaciones collapse show" id="liquidaciones_1">
-                                        <form>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="label font-weight-bolder">Rut</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="label font-weight-bolder">Nombre Titular</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6" style="margin-top:-1.5rem;">
-                                                    <label class="label ">20.123.365-k</label>
-                                                </div>
-
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6" style="margin-top:-1.5rem;">
-                                                    <label class="label ">juan jose Perez-Cotapos arguiluyo</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="label font-weight-bolder">Banco</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="label font-weight-bolder">Tipo de Cuenta</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6" style="margin-top:-1.5rem;">
-                                                    <label class="label">Banco Nacional</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6" style="margin-top:-1.5rem;">
-                                                    <label class="label">corriente</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="label font-weight-bolder">Email deposito</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                    <label class="label font-weight-bolder">N° de Cuenta</label>
-                                                </div>
-
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6" style="margin-top:-1.5rem;">
-                                                    <label class="label">Email@deposito.cl</label>
-                                                </div>
-
-                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6" style="margin-top:-1.5rem;">
-                                                    <label class="label">202000023212</label>
-                                                </div>
-                                            </div>
-                                        </form>
-
-
-                                    </div>
-                                    <div class="card-body liquidaciones collapse" id="liquidaciones_2">
-                                        <form>
-                                            <div class="form-row">
-                                                <div class="col-sm-12 col-md-12 mb-2">
-                                                    <h6 class="text-c-blue">INFORMACIÓN Y DATOS BANCO</h6>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">RUT:</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_rut" id="edit_empleado_rut" value="">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">Nombre Titular</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_nombre" id="edit_empleado_nombre">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">Banco</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_apellido_uno" id="edit_empleado_apellido_uno">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">Email deposito</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_apellido_dos" id="edit_empleado_apellido_dos">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">Tipo de cuenta</label>
-                                                    <select class="form-control form-control-sm" name="edit_empleado_sexo" id="edit_empleado_sexo">
-                                                        <option value="">Seleccione</option>
-                                                        <option value="F">Corriente</option>
-                                                        <option value="M">Vista</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">N° de cuenta</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_fecha_nacimiento" id="edit_empleado_fecha_nacimiento">
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--CIERRE: PERFIL ADMINISTRADOR-->
-                    <div class="tab-pane fade" id="info_cuenta_inst" role="tabpanel" aria-labelledby="info_cuenta_inst-tab">
-                        <div class="row">
-                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card">
-                                    <div class="card-header d-flex align-items-center justify-content-between bg-info">
-                                        <h5 class="mb-0 text-white">Agregar Datos depósitos</h5>
-                                        <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".liquidaciones" aria-expanded="false" aria-controls="liquidaciones_1 liquidaciones_2">
-                                            <i class="feather icon-edit"></i>
-                                        </button>
-                                    </div>
-                                    <div class="card-body border-top liquidaciones collapse show" id="liquidaciones_1">
-                                        <form>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label font-weight-bolder">Rut</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                    <label class="label ">20.123.365-k</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                    <label class="label font-weight-bolder">Nombre Titular</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                    <label class="label ">juan jose Perez-Cotapos arguiluyo</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label font-weight-bolder">Banco</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label">Banco Nacional</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label font-weight-bolder">Email deposito</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label">Email@deposito.cl</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label font-weight-bolder">Tipo de Cuenta</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label">corriente</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label font-weight-bolder">N° de Cuenta</label>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                    <label class="label">202000023212</label>
-                                                </div>
-                                            </div>
-                                        </form>
-
-
-                                    </div>
-                                    <div class="card-body liquidaciones collapse" id="liquidaciones_2">
-                                        <form>
-                                            <div class="form-row">
-                                                <div class="col-sm-12 col-md-12 mb-2">
-                                                    <h6 class="text-c-blue">INFORMACIÓN Y DATOS BANCO</h6>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">RUT:</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_rut" id="edit_empleado_rut" value="">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">Nombre Titular</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_nombre" id="edit_empleado_nombre">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">Banco</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_apellido_uno" id="edit_empleado_apellido_uno">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">Email deposito</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_apellido_dos" id="edit_empleado_apellido_dos">
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">Tipo de cuenta</label>
-                                                    <select class="form-control form-control-sm" name="edit_empleado_sexo" id="edit_empleado_sexo">
-                                                        <option value="">Seleccione</option>
-                                                        <option value="F">Corriente</option>
-                                                        <option value="M">Vista</option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                    <label class="floating-label-activo-sm">N° de cuenta</label>
-                                                    <input type="text" class="form-control form-control-sm" name="edit_empleado_fecha_nacimiento" id="edit_empleado_fecha_nacimiento">
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--ADMINISTRADOR DE ROLES Y PERMISOS-->
-                    <div class="tab-pane fade" id="rol-permiso" role="tabpanel" aria-labelledby="rol-permiso-tab">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <!--Contraseña-->
-                                <div class="card">
-                                    <div class="card-header pt-3 pb-2 bg-light">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <h6 class="f-18 d-inline mt-3 text-info">Asignar y Desasociar Personal de La Institución</h6>
-                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
-                                                    <button type="button" class="btn btn-sm btn-info" onclick="añadir_rol();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir Rol y Usuario</button>
-                                                </div>
-                                            </div>
+                                    <div class="card">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Cambiar contraseña</h5>
+                                            <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
                                         </div>
+                                        <!--Contraseña-->
+                                        <div class="card-body pass_personal collapse show" id="pass_personal_1">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label">Contraseña actual</label>
+                                                    <div class="col-sm-7 pt-2 ml-2 font-weight-bolder"> •••••••• </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Contraseña-->
+                                        <!--(Editar)Contraseña-->
+                                        <div class="card-body pass_personal collapse" id="pass_personal_2">
+                                            <form method="get" action="{{ route('adm_cm.cambio_contrasena_responsable')}}" id="form_cambio_contrasena_perfil_responsable" name="form_cambio_contrasena_perfil_responsable">
+                                                <input type="hidden" name="responsable_id" id="responsable_id" value="">
+                                                @csrf
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Contraseña actual</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña Actual">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nueva contraseña</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva Contraseña">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Repitir contraseña</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la Contraseña">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-sm btn-danger mr-2">Cancelar</button>
+                                                        <button type="submit" class="btn btn-sm btn-info">Guardar cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: (Editar)Contraseña-->
                                     </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-6 col-md-12">
+                                    <!--Cierre:Contraseña-->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!--Card Contacto-->
+                                    <div class="card">
+                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Info Contacto</h5>
+                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Contacto-->
+                                        <div class="card-body border-top info_contacto collapse show" id="info_contacto_1">
+                                            <form>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                        <label class="label font-weight-bolder">Email</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                        <label class="label ">JperezCotapos@gmail.com</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                        <label class="label font-weight-bolder">Teléfonos</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                        <label class="label ">+5698789665/+5696547589</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label font-weight-bolder">Región</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label">Quinta</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label font-weight-bolder">Ciudad</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label">Viña del mar</label>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                        <!--Cierre: Contacto-->
+                                        <!--(Editar) Contacto-->
+                                        <div class="card-body border-top info_contacto collapse " id="info_contacto_2">
+                                            <form>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                        <label class="floating-label">Correo Electrónico</label>
+                                                        <input type="text" class="form-control form-control-sm" name="Perfil_email" id="Perfil_email" value="">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                        <label class="floating-label">Teléfonos</label>
+                                                        <input type="text" class="form-control form-control-sm" name="Perfil_fono" id="Perfil_fono" value="">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                        <label class="floating-label-activo-sm">Región</label>
+                                                        <select class="form-control form-control-sm" name="edit_empleado_region" id="edit_empleado_region">
+                                                            <option value="">Seleccione</option>
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                        <label class="floating-label-activo-sm">Ciudad</label>
+                                                        <select class="form-control form-control-sm" name="edit_empleado_ciudad" id="edit_empleado_ciudad">
+                                                            <option value="">Seleccione</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-4">
+                                                        <label class="floating-label">Dirección</label>
+                                                        <input type="text" class="form-control form-control-sm" name="perfil_dire" id="perfil_dire" value="">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                        <label class="floating-label">Piso/Depto</label>
+                                                        <input type="text" class="form-control form-control-sm" name="perfil_numero_dir" id="perfil_numero_dir" value="">
+                                                    </div>
+
+                                                </div>
 
 
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info">Guardar Cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--(Editar) Contacto-->
+                                    </div>
+                                    <!--Cierre: Card Contacto-->
+                                    <!--Card Residencia-->
+                                    <div class="card" hidden>
+                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Residencia</h5>
+                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <!--Residencia-->
+                                        <div class="card-body border-top info_residencial collapse show" id="info_residencial_1">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
 
-                                                <table id="adm_roles" class="display table table-striped table-xs dt-responsive nowrap">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="text-wrap text-left align-middle">Nombre</th>
-                                                            <th class="text-wrap text-left align-middle">Rut</th>
-															<th class="text-wrap text-left align-middle">Rol</th>
-															<th class="text-wrap text-center align-middle">desasociar</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Comuna</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
 
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-6 my-auto ml-2">
+
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--Cierre: Residencia-->
+                                        <!--(Editar) Residencia-->
+                                        <div class="card-body border-top info_residencial collapse " id="info_residencial_2">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-6">
+                                                        <select class="form-control" onchange="buscar_ciudad_responsable();" id="perfil_region" name="perfil_region">
+                                                            <option value="">Seleccione una Región</option>
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Ciudad</label>
+                                                    <div class="col-sm-6">
+                                                        <select class="form-control" id="perfil_ciudad" name="perfil_ciudad">
+                                                            <option value="">Seleccione su comuna</option>
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Piso/Depto</label>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="col-sm-12 d-flex justify-content-end">
+                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info">Guardar Cambios</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!--(Editar) Residencia-->
+                                    </div>
+                                    <!--Cierre: Card Residencia-->
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Agregar Datos para Liquidaciones</h5>
+                                            <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".liquidaciones" aria-expanded="false" aria-controls="liquidaciones_1 liquidaciones_2">
+                                                <i class="feather icon-edit"></i>
+                                            </button>
+                                        </div>
+                                        <div class="card-body border-top liquidaciones collapse show" id="liquidaciones_1">
+                                            <form>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="label font-weight-bolder">Rut</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="label font-weight-bolder">Nombre Titular</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6" style="margin-top:-1.5rem;">
+                                                        <label class="label ">20.123.365-k</label>
+                                                    </div>
+
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6" style="margin-top:-1.5rem;">
+                                                        <label class="label ">juan jose Perez-Cotapos arguiluyo</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="label font-weight-bolder">Banco</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="label font-weight-bolder">Tipo de Cuenta</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6" style="margin-top:-1.5rem;">
+                                                        <label class="label">Banco Nacional</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6" style="margin-top:-1.5rem;">
+                                                        <label class="label">corriente</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="label font-weight-bolder">Email deposito</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                        <label class="label font-weight-bolder">N° de Cuenta</label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6" style="margin-top:-1.5rem;">
+                                                        <label class="label">Email@deposito.cl</label>
+                                                    </div>
+
+                                                    <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6" style="margin-top:-1.5rem;">
+                                                        <label class="label">202000023212</label>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+
+                                        </div>
+                                        <div class="card-body liquidaciones collapse" id="liquidaciones_2">
+                                            <form>
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 mb-2">
+                                                        <h6 class="text-c-blue">INFORMACIÓN Y DATOS BANCO</h6>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">RUT:</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_empleado_rut" id="edit_empleado_rut" value="">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Nombre Titular</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_empleado_nombre" id="edit_empleado_nombre">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Banco</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_empleado_apellido_uno" id="edit_empleado_apellido_uno">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Email deposito</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_empleado_apellido_dos" id="edit_empleado_apellido_dos">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Tipo de cuenta</label>
+                                                        <select class="form-control form-control-sm" name="edit_empleado_sexo" id="edit_empleado_sexo">
+                                                            <option value="">Seleccione</option>
+                                                            @foreach($tipo_cuentas_bancarias as $tipo_cuenta)
+                                                            <option value="{{ $tipo_cuenta->id }}">{{ $tipo_cuenta->descripcion }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">N° de cuenta</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_empleado_fecha_nacimiento" id="edit_empleado_fecha_nacimiento">
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <!--CIERRE: PERFIL ADMINISTRADOR-->
+                        <div class="tab-pane fade" id="info_cuenta_inst" role="tabpanel" aria-labelledby="info_cuenta_inst-tab">
+                            <div>
+                                <button type="button" class="btn btn-light btn-sm btn-icon m-0 " data-toggle="modal" data-target="#modalAgregarCuentaInst" >
+                                    <i class="feather icon-plus"></i>
+                                </button>
+                            </div>
+                            <div class="row" id="contenedor_cuentas_bancarias">
+                                @foreach($cuentas_bancarias as $cuenta_bancaria)
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Agregar Datos depósitos</h5>
+                                            <div>
+                                                <button type="button" class="btn btn-light btn-sm btn-icon m-0 "  onclick="eliminar_cuenta_bancaria({{ $cuenta_bancaria->id }})">
+                                                    <i class="feather icon-trash"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-light btn-sm btn-icon m-0" data-toggle="collapse" data-target=".liquidaciones_{{ $cuenta_bancaria->id }}" aria-expanded="false" aria-controls="liquidaciones_1_{{ $cuenta_bancaria->id }} liquidaciones_2_{{ $cuenta_bancaria->id }}">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="card-body border-top liquidaciones_{{ $cuenta_bancaria->id }} collapse show" id="liquidaciones_1_{{ $cuenta_bancaria->id }}">
+                                            <form>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label font-weight-bolder">Rut</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label ">{{ $cuenta_bancaria->rut_titular }}</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label font-weight-bolder">Nombre Titular</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label ">{{ $cuenta_bancaria->nombre_titular }}</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label font-weight-bolder">Banco</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label">{{ $cuenta_bancaria->nombre_banco }}</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label font-weight-bolder">Email deposito</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label">{{ $cuenta_bancaria->email }}</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label font-weight-bolder">Tipo de Cuenta</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label">{{ $cuenta_bancaria->descripcion }}</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label font-weight-bolder">N° de Cuenta</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label">{{ $cuenta_bancaria->numero_cuenta }}</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label font-weight-bolder">Rut representante</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label">{{ $cuenta_bancaria->rut_representante }}</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label font-weight-bolder">Nombre representante</label>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                        <label class="label">{{ $cuenta_bancaria->nombre_representante }}</label>
+                                                    </div>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                        <div class="card-body liquidaciones_{{ $cuenta_bancaria->id }} collapse" id="liquidaciones_2_{{ $cuenta_bancaria->id }}">
+
+                                            <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 mb-2">
+                                                        <h6 class="text-c-blue">INFORMACIÓN Y DATOS BANCO</h6>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">RUT:</label>
+                                                        <input type="text" class="form-control form-control-sm" oninput="formatoRut(this)" name="edit_rut_titular_{{ $cuenta_bancaria->id }}" id="edit_rut_titular_{{ $cuenta_bancaria->id }}" value="{{ $cuenta_bancaria->rut_titular }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Nombre Titular</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_nombre_titular_{{ $cuenta_bancaria->id }}" id="edit_nombre_titular_{{ $cuenta_bancaria->id }}" value="{{ $cuenta_bancaria->nombre_titular }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Banco</label>
+                                                        <select name="edit_banco_titular_{{ $cuenta_bancaria->id }}" id="edit_banco_titular_{{ $cuenta_bancaria->id }}" class="form-control form-control-sm">
+                                                            <option value="0">Seleccione</option>
+                                                            @foreach($bancos as $banco)
+                                                            <option value="{{ $banco->id }}" @if($cuenta_bancaria->id_banco == $banco->id) selected @endif>{{ $banco->nombre }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Email deposito</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_email_titular_{{ $cuenta_bancaria->id }}" id="edit_email_titular_{{ $cuenta_bancaria->id }}" value="{{ $cuenta_bancaria->email }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Tipo de cuenta</label>
+                                                        <select class="form-control form-control-sm" name="edit_tipo_cuenta_{{ $cuenta_bancaria->id }}" id="edit_tipo_cuenta_{{ $cuenta_bancaria->id }}">
+                                                            <option value="0">Seleccione</option>
+                                                            @foreach($tipo_cuentas_bancarias as $tipo_cuenta)
+                                                            <option value="{{ $tipo_cuenta->id }}" @if($cuenta_bancaria->id_tipo_cuenta == $tipo_cuenta->id) selected @endif>{{ $tipo_cuenta->descripcion }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">N° de cuenta</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_numero_cuenta_{{ $cuenta_bancaria->id }}" id="edit_numero_cuenta_{{ $cuenta_bancaria->id }}" value="{{ $cuenta_bancaria->numero_cuenta }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Rut Representante</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_rut_representante_{{ $cuenta_bancaria->id }}" id="edit_rut_representante_{{ $cuenta_bancaria->id }}" value="{{ $cuenta_bancaria->rut_representante }}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                        <label class="floating-label-activo-sm">Nombre Representante</label>
+                                                        <input type="text" class="form-control form-control-sm" name="edit_nombre_representante_{{ $cuenta_bancaria->id }}" id="edit_nombre_representante_{{ $cuenta_bancaria->id }}" value="{{ $cuenta_bancaria->nombre_representante }}">
+                                                    </div>
+                                            </div>
+                                            <button type="button" class="btn btn-outline-success btn-sm float-right" onclick="editar_cuenta_bancaria({{ $cuenta_bancaria->id }})"><i class="fas fa-save"></i> Editar</button>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <!--ADMINISTRADOR DE ROLES Y PERMISOS-->
+                        <div class="tab-pane fade" id="rol-permiso" role="tabpanel" aria-labelledby="rol-permiso-tab">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <!--Contraseña-->
+                                    <div class="card">
+                                        <div class="card-header pt-3 pb-2 bg-light">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h6 class="f-18 d-inline mt-3 text-info">Asignar y Desasociar Personal de La Institución</h6>
+                                                    <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                        <button type="button" class="btn btn-sm btn-info" onclick="añadir_rol();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir Rol y Usuario</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-6 col-md-12">
+
+
+
+                                                    <table id="adm_roles" class="display table table-striped table-xs dt-responsive nowrap">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-wrap text-left align-middle">Nombre</th>
+                                                                <th class="text-wrap text-left align-middle">Rut</th>
+                                                                <th class="text-wrap text-left align-middle">Rol</th>
+                                                                <th class="text-wrap text-center align-middle">desasociar</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--CIERRE: ADMINISTRADOR DE ROLES Y PERMISOS-->
+
+
                     </div>
-                    <!--CIERRE: ADMINISTRADOR DE ROLES Y PERMISOS-->
-
-
                 </div>
             </div>
         </div>
     </div>
-</div>
 
     {{--  MODALES CONFIGURACION  --}}
 
@@ -1197,17 +1241,187 @@
 <!--Cierre: Container Completo-->
 @endsection
 
+@section('modales')
+<!-- modalAgregarCuentaInst -->
+<div class="modal fade" id="modalAgregarCuentaInst" tabindex="-1" role="dialog" aria-labelledby="modalAgregarCuentaInst" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Agregar Cuenta Bancaria Institución</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <label class="floating-label-activo-sm">Rut Titular</label>
+                            <input type="text" class="form-control form-control-sm" oninput="formatoRut(this)" name="rut_titular_nuevo" id="rut_titular_nuevo">
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <label class="floating-label-activo-sm">Nombre Titular</label>
+                            <input type="text" class="form-control form-control-sm" name="nombre_titular_nuevo" id="nombre_titular_nuevo">
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <label class="floating-label-activo-sm">Banco Titular</label>
+                            <select name="banco_titular_nuevo" id="banco_titular_nuevo" class="form-control form-control-sm">
+                                <option value="0">Seleccione</option>
+                                @foreach($bancos as $banco)
+                                    <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <label class="floating-label-activo-sm">Email Titular</label>
+                            <input type="email" class="form-control form-control-sm" name="email_titular_nuevo" id="email_titular_nuevo">
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <label class="floating-label-activo-sm">Tipo Cuenta</label>
+                            <select class="form-control form-control-sm" name="tipo_cuenta_nuevo" id="tipo_cuenta_nuevo">
+                                <option value="0">Seleccione</option>
+                                <option value="1">Cuenta Corriente</option>
+                                <option value="2">Cuenta Vista</option>
+                                <option value="3">Cuenta Ahorro</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <label class="floating-label-activo-sm">Número Cuenta</label>
+                            <input type="text" class="form-control form-control-sm" name="numero_cuenta_nuevo" id="numero_cuenta_nuevo">
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <label class="floating-label-activo-sm">Rut Representante</label>
+                            <input type="text" class="form-control form-control-sm" name="rut_representante_nuevo" id="rut_representante_nuevo">
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <label class="floating-label-activo-sm">Nombre Representante</label>
+                            <input type="text" class="form-control form-control-sm" name="nombre_representante_nuevo" id="nombre_representante_nuevo">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="agregar_cuenta_bancaria();">Agregar Cuenta Bancaria</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
 
-@section('page-scripts')
+@section('page-script')
     <!--SCRIPT MODALS-->
     <script>
-        {{--  /*-TABLAS CM-*/  --}}
-        {{--  /*-adm_roles-*/  --}}
-        {{--  $(document).ready(function() {
+
+         $(document).ready(function() {
             $('#adm_roles').DataTable({
                 responsive: true
             });
-        });  --}}
+        });
+
+        function editar_cuenta_bancaria(id){
+            let rut_titular = $('#edit_rut_titular_'+id).val();
+            let nombre_titular = $('#edit_nombre_titular_'+id).val();
+            let banco_titular = $('#edit_banco_titular_'+id).val();
+            let email_titular = $('#edit_email_titular_'+id).val();
+            let tipo_cuenta = $('#edit_tipo_cuenta_'+id).val();
+            let numero_cuenta = $('#edit_numero_cuenta_'+id).val();
+            let rut_representante = $('#edit_rut_representante_'+id).val();
+            let nombre_representante = $('#edit_nombre_representante_'+id).val();
+
+            let valido = 1;
+            let mensaje = '';
+
+            if(rut_titular == ''){
+                mensaje += "Debe ingresar rut<br>";
+                valido = 0;
+            }
+
+            if(nombre_titular == ''){
+                mensaje += "Debe ingresar nombre<br>";
+                valido = 0;
+            }
+
+            if(banco_titular == ''){
+                mensaje += "Debe ingresar banco<br>";
+                valido = 0;
+            }
+
+            if(email_titular == ''){
+                mensaje += "Debe ingresar email<br>";
+                valido = 0;
+            }
+
+            if(tipo_cuenta == 0){
+                mensaje += "Debe seleccionar un tipo de cuenta<br>";
+                valido = 0;
+            }
+
+            if(numero_cuenta == ''){
+                mensaje += "Debe ingresar numero de cuenta<br>";
+                valido = 0;
+            }
+
+            if(valido == 0){
+                swal({
+                    title:'Error',
+                    content: {
+                        element: "div",
+                        attributes: {
+                            innerHTML: mensaje
+                        },
+                    },
+                    icon:'error'
+                });
+
+                return;
+            }
+
+            let data = {
+                rut_titular : rut_titular,
+                nombre_titular : nombre_titular,
+                banco_titular : banco_titular,
+                email_titular : email_titular,
+                tipo_cuenta : tipo_cuenta,
+                numero_cuenta : numero_cuenta,
+                rut_representante : rut_representante,
+                nombre_representante : nombre_representante,
+                id : id,
+                _token: CSRF_TOKEN
+            }
+
+            let url = "{{ route('adm_cm.editar_cuenta_bancaria_institucion') }}";
+
+            $.ajax({
+                        url: url,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: data,
+                    })
+                    .done(function(response) {
+                        console.log(response);
+                        if (response.estado == 1) {
+                            swal({
+                                title: "Cuenta Bancaria editada correctamente",
+                                icon: "success",
+                                buttons: "Aceptar",
+                                Danger: true,
+                            });
+                            $('#contenedor_cuentas_bancarias').empty();
+                            $('#contenedor_cuentas_bancarias').html(response.v);
+                        } else {
+                            swal({
+                                title: response.msj,
+                                icon: "error",
+                                buttons: "Aceptar",
+                                Danger: true,
+                            });
+                        }
+                    })
+                    .fail(function(error) {
+                        console.log("error "+error.responseText);
+                    })
+        }
         /*-Área_cm-*/
         $(document).ready(function() {
             {{--  $('#area_cm').DataTable({
@@ -2029,5 +2243,198 @@
             }
         }
 
+        function agregar_cuenta_bancaria(){
+            let rut_titular = $('#rut_titular_nuevo').val();
+            let nombre_titular = $('#nombre_titular_nuevo').val();
+            let banco_titular = $('#banco_titular_nuevo').val();
+            let email_titular = $('#email_titular_nuevo').val();
+            let tipo_cuenta = $('#tipo_cuenta_nuevo').val();
+            let numero_cuenta = $('#numero_cuenta_nuevo').val();
+            let rut_representante = $('#rut_representante_nuevo').val();
+            let nombre_representante = $('#nombre_representante_nuevo').val();
+
+            let valido = 1;
+            let mensaje = '';
+
+            if(rut_titular == ''){
+                mensaje += "Debe ingresar rut<br>";
+                valido = 0;
+            }
+
+            if(nombre_titular == ''){
+                mensaje += "Debe ingresar nombre<br>";
+                valido = 0;
+            }
+
+            if(banco_titular == 0){
+                mensaje += "Debe seleccionar un banco<br>";
+                valido = 0;
+            }
+
+            if(email_titular == ''){
+                mensaje += "Debe ingresar email<br>";
+                valido = 0;
+            }
+
+            if(tipo_cuenta == 0){
+                mensaje += "Debe seleccionar un tipo de cuenta<br>";
+                valido = 0;
+            }
+
+            if(numero_cuenta == ''){
+                mensaje += "Debe ingresar numero de cuenta<br>";
+                valido = 0;
+            }
+
+            if(valido == 0){
+                swal({
+                    title:'Error',
+                    content: {
+                        element: "div",
+                        attributes: {
+                            innerHTML: mensaje
+                        },
+                    },
+                    icon:'error'
+                });
+
+                return;
+            }
+
+            let data = {
+                rut_titular : rut_titular,
+                nombre_titular : nombre_titular,
+                banco_titular : banco_titular,
+                email_titular : email_titular,
+                tipo_cuenta : tipo_cuenta,
+                numero_cuenta : numero_cuenta,
+                rut_representante : rut_representante,
+                nombre_representante : nombre_representante,
+                _token: CSRF_TOKEN
+            }
+
+            let url = "{{ route('adm_cm.agregar_cuenta_bancaria_institucion') }}";
+
+            $.ajax({
+                        url: url,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: data,
+                    })
+                    .done(function(response) {
+                        console.log(response);
+                        if (response.estado == 1) {
+                            swal({
+                                title: "Cuenta Bancaria agregada correctamente",
+                                icon: "success",
+                                buttons: "Aceptar",
+                                Danger: true,
+                            });
+                            $('#contenedor_cuentas_bancarias').empty();
+                            $('#contenedor_cuentas_bancarias').html(response.v);
+                        } else {
+                            swal({
+                                title: response.msj,
+                                icon: "error",
+                                buttons: "Aceptar",
+                                Danger: true,
+                            });
+                        }
+                        // cerrar modal
+                        $('#modalAgregarCuentaInst').modal('hide');
+                    })
+                    .fail(function(error) {
+                        console.log("error "+error.responseText);
+                    })
+
+        }
+
+    </script>
+
+    <script>
+        function formatoRut(rut)
+        {
+            var valor = rut.value.replace('.','');
+            valor = valor.replace('-','');
+            cuerpo = valor.slice(0,-1);
+            dv = valor.slice(-1).toUpperCase();
+            rut.value = cuerpo + '-'+ dv
+
+            if(cuerpo.length < 7) { rut.setCustomValidity("RUT Incompleto"); return false;}
+
+            suma = 0;
+            multiplo = 2;
+
+            for(i=1;i<=cuerpo.length;i++)
+            {
+                index = multiplo * valor.charAt(cuerpo.length - i);
+                suma = suma + index;
+                if(multiplo < 7) { multiplo = multiplo + 1; } else { multiplo = 2; }
+            }
+
+            dvEsperado = 11 - (suma % 11);
+            dv = (dv == 'K')?10:dv;
+            dv = (dv == 0)?11:dv;
+
+            if(dvEsperado != dv) { rut.setCustomValidity("RUT Inválido"); return false; }
+
+            rut.setCustomValidity('');
+        }
+
+        function eliminar_cuenta_bancaria(id){
+            swal({
+                        title: "Eliminar Cuenta Bancaria",
+                        text: "¿Está seguro de eliminar la cuenta bancaria?",
+                        icon: "warning",
+                        buttons: ["Cancelar", "Eliminar"],
+                        dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            confirmar_eliminar_cuenta_bancaria(id);
+                        } else {
+                            console.log('nada');
+                        }
+                    });
+
+        }
+
+        function confirmar_eliminar_cuenta_bancaria(id){
+            let url = "{{ route('adm_cm.eliminar_cuenta_bancaria_institucion') }}";
+            let data = {
+                id : id,
+                _token: CSRF_TOKEN
+            }
+
+            $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: data,
+            })
+            .done(function(response) {
+                console.log(response);
+                if (response.estado == 1) {
+                    swal({
+                        title: "Cuenta Bancaria eliminada correctamente",
+                        icon: "success",
+                        buttons: "Aceptar",
+                        Danger: true,
+                    });
+                    $('#contenedor_cuentas_bancarias').empty();
+                    $('#contenedor_cuentas_bancarias').html(response.v);
+                } else {
+                    swal({
+                        title: response.msj,
+                        icon: "error",
+                        buttons: "Aceptar",
+                        Danger: true,
+                    });
+                }
+            })
+            .fail(function(error) {
+                console.log("error "+error.responseText);
+            });
+        }
     </script>
 @endsection

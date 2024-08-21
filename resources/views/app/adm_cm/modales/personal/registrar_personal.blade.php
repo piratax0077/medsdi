@@ -34,8 +34,12 @@
                                     <a class="nav-link-aten text-reset" id="info_contrato_pers-tab" data-toggle="tab" href="#info_contrato_pers" role="tab" aria-controls="info_contrato_pers" aria-selected="false">Información de Contrato</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link-aten text-reset" id="leyes_sociales-tab" data-toggle="tab" href="#leyes_sociales" role="tab" aria-controls="leyes_sociales" aria-selected="false">Leyes Sociales</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link-aten text-reset" id="horario_contrato-tab" data-toggle="tab" href="#horario_contrato" role="tab" aria-controls="horario_contrato" aria-selected="false">Horario</a>
                                 </li>
+
                             </ul>
                         </div>
                     </div>
@@ -252,6 +256,49 @@
                                         </div>
                                     </form>
                                 </div>
+                                <!-- LEYES SOCIALES -->
+                                <div class="tab-pane fade show" id="leyes_sociales" role="tabpanel" aria-labelledby="leyes_sociales-tab">
+                                    <div class="form-group form-row">
+                                        <div class="col-md-3">
+                                            <label class="floating-label-activo-sm" for="afp">Seguros</label>
+                                            <select name="afp" id="afp" class="form-control form-control-sm">
+                                                <option value="0">Seleccione</option>
+                                                <option value="1">AFP Capital</option>
+                                                <option value="2">AFP Cuprum</option>
+                                                <option value="3">AFP Habitat</option>
+                                                <option value="4">AFP Modelo</option>
+                                                <option value="5">AFP Planvital</option>
+                                                <option value="6">AFP Provida</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="floating-label-activo-sm" for="salud">Seguros</label>
+                                            <select name="salud" id="salud" class="form-control form-control-sm">
+                                                <option value="0">Seleccione</option>
+                                                <option value="1">Fonasa</option>
+                                                <option value="2">Isapre Banmedica</option>
+                                                <option value="3">Isapre Colmena</option>
+                                                <option value="4">Isapre Consalud</option>
+                                                <option value="5">Isapre Cruz Blanca</option>
+                                                <option value="6">Isapre Nueva Masvida</option>
+                                                <option value="7">Isapre Vida Tres</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm" for="seguros">Seguros</label>
+                                                <input type="text" name="seguros" id="seguros" class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="floating-label-activo-sm" for="cantidad">Cantidad</label>
+                                                <input type="number" name="cantidad" id="cantidad" class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

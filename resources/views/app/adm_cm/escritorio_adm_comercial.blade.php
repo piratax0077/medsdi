@@ -54,7 +54,7 @@
                     <a href="{{ ROUTE('adm_cm.estadisticas') }}">
                     <div class="card-body text-center" style="cursor:pointer">
                         <img class="wid-40 text-center" src="{{ asset('images/iconos/estadisticas.png') }}">
-                        <h6 class="mt-1 mb-0">Estadisticas del CM</h6>
+                        <h6 class="mt-1 mb-0">Estadisticas </h6>
                     </div>
                 </a>
                 </div>
@@ -65,7 +65,7 @@
 					<a href="{{ ROUTE('adm_cm.profesionales') }}">
 						<div class="card-body text-center" style="cursor:pointer">
 							<img class="wid-40 text-center" src="{{ asset('images/iconos/info-profesional.png') }}">
-							<h6 class="mt-1 mb-0">Info profesionales del CM</h6>
+							<h6 class="mt-1 mb-0">Info profesionales </h6>
 						</div>
                     </a>
                 </div>
@@ -76,7 +76,7 @@
                     <a href="{{ ROUTE('adm_cm.sueldos') }}">
                         <div class="card-body text-center" style="cursor:pointer">
                             <img class="wid-40 text-center" src="{{ asset('images/iconos/pago-personal.png') }}">
-                            <h6 class="mt-1 mb-0">Info personal del CM</h6>
+                            <h6 class="mt-1 mb-0">Info personal </h6>
                         </div>
                     </a>
                 </div>
@@ -140,6 +140,16 @@
 						<div class="card-body text-center" style="cursor:pointer">
 							<img class="wid-40 text-center" src="{{ asset('images/iconos/convenios.png') }}">
 							<h6 class="mt-1 mb-0">Convenios</h6>
+						</div>
+                    </a>
+				</div>
+			</div>
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
+				<div class="card mb-3 subir" onclick="en_construccion();">
+				   <a href="#">
+						<div class="card-body text-center" style="cursor:pointer">
+							<img class="wid-40 text-center" src="{{ asset('images/iconos/convenios.png') }}">
+							<h6 class="mt-1 mb-0">Contratos</h6>
 						</div>
                     </a>
 				</div>

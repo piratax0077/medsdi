@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ConvenioInstitucion;
 use App\Models\TipoConvenio;
+use App\Models\TipoConvenioInstitucion;
 use App\Models\TipoProducto;
 use App\Models\Responsable;
 use App\Models\TipoPago;
@@ -24,12 +26,14 @@ class ConveniosController extends Controller
         $responsables = Responsable::all();
         $tipos_pago = TipoPago::all();
         $convenios = Convenio::all();
-        return view ('convenios',[
-            'tipos_convenio' => $tipos_convenio, 
-            'tipos_producto' => $tipos_producto, 
+        $tipos_convenio_institucion = TipoConvenioInstitucion::all();
+        return view ('app.adm_cm.comercial.convenios',[
+            'tipos_convenio' => $tipos_convenio,
+            'tipos_producto' => $tipos_producto,
             'responsables' => $responsables,
             'tipos_pago' => $tipos_pago,
-            'convenios' => $convenios
+            'convenios' => $convenios,
+            'tipos_convenio_institucion' => $tipos_convenio_institucion
         ]);
     }
 
@@ -118,6 +122,14 @@ class ConveniosController extends Controller
     }
 
     public function guardarNuevoConvenio(Request $req){
-        return $req;
+        try {
+            $nuevo_convenio = new ConvenioInstitucion();
+            $nuevo_convenio->nombre_representante_convenio = $req->nombre_representante_convenio;
+            $nuevo_convenio->id_tipo_convenio = $req->id_tipo_convenio;
+            return $nuevo_convenio;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
     }
 }

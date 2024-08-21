@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card subir py-auto">
                         <a href="{{ ROUTE('adm_cm.configuracion') }}">
                             <div class="card-body text-center" style="cursor:pointer">
@@ -41,7 +41,7 @@
                         </a>
                     </div>
                 </div>
-				<div class="col-md-4">
+				<div class="col-md-3">
                     <div class="card subir py-auto">
                         <a href="{{ ROUTE('adm_cm.adm_medico') }}">
                             <div class="card-body text-center" style="cursor:pointer">
@@ -51,7 +51,17 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <div class="card subir py-auto">
+                        <a href="{{ ROUTE('adm_cm.area_contratos_nuevos') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-50 text-center" src="{{ asset('images/iconos/adm_comercial.png') }}">
+                                <h6 class="mt-2 mb-0">Contratos e incorporaciones</h6>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <div class="card subir py-auto">
                         <a href="{{ ROUTE('adm_cm.area_comercial') }}">
                             <div class="card-body text-center" style="cursor:pointer">

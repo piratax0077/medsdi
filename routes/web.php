@@ -1332,6 +1332,7 @@ Route::group([
 
     Route::get('/Administracion', [App\Http\Controllers\AdministradorCmController::class, 'administracion_cm'])->name('adm_cm.administracion_cm');
     Route::get('/Administracion/Comercial', [App\Http\Controllers\AdministradorCmController::class, 'areaComercial'])->name('adm_cm.area_comercial');
+    Route::get('/Administracion/Contratos', [App\Http\Controllers\AdministradorCmController::class, 'areaContratosNuevos'])->name('adm_cm.area_contratos_nuevos');
     Route::get('/Administracion/Comercial/sueldos', [App\Http\Controllers\AdministradorCmController::class, 'sueldos'])->name('adm_cm.sueldos');
     Route::post('/Administracion/Comercial/remuneracion/registrar', [App\Http\Controllers\RemuneracionesController::class, 'registrar'])->name('adm_cm.remuneracion.registrar');
     Route::post('/Administracion/Comercial/remuneracion/pagada', [App\Http\Controllers\RemuneracionesController::class, 'pagada'])->name('adm_cm.remuneracion.pagada');
@@ -1373,6 +1374,13 @@ Route::group([
     // Route::get('/comercial/flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'cargaRendicionCmAdm'])->name('adm_cm.comercial.flujo.caja.index');
 
     Route::post('dame_profesional_cm', [App\Http\Controllers\AdministradorCmController::class, 'dame_profesional'])->name('adm_cm.dame_profesional_cm');
+    Route::post('editar_cuenta_bancaria_institucion',[App\Http\Controllers\AdministradorCmController::class, 'editar_cuenta_bancaria_institucion'])->name('adm_cm.editar_cuenta_bancaria_institucion');
+    Route::post('agregar_cuenta_bancaria_institucion',[App\Http\Controllers\AdministradorCmController::class, 'agregar_cuenta_bancaria_institucion'])->name('adm_cm.agregar_cuenta_bancaria_institucion');
+    Route::post('eliminar_cuenta_bancaria_institucion',[App\Http\Controllers\AdministradorCmController::class, 'eliminar_cuenta_bancaria_institucion'])->name('adm_cm.eliminar_cuenta_bancaria_institucion');
+
+    Route::post('registrar_profesional', [App\Http\Controllers\AdministradorCmController::class, 'registrar_profesional'])->name('adm_cm.registrar_profesional');
+    /** CONVENIOS */
+    Route::post('registrar_convenio', [App\Http\Controllers\AdministradorCmController::class, 'registrar_convenio'])->name('adm_cm.convenio_nuevo');
 });
 
 /** -- LABORATORIO --  **/
@@ -1945,11 +1953,11 @@ Route::post('/buscarProductosBodega', [App\Http\Controllers\BodegasController::c
 Route::post('/guardarAsignacion', [App\Http\Controllers\BodegasController::class,'guardarAsignacion'])->name('bodegas.guardarAsignacion');
 
 // Convenios con controlador del tipo resource
-// Route::resource('convenios', App\Http\Controllers\ConveniosController::class);
-// Route::get('/dameInfoConvenio/{id}', [App\Http\Controllers\ConveniosController::class,'dameInfoConvenio'])->name('convenios.dameInfoConvenio');
-// Route::post('/guardarTipoConvenio', [App\Http\Controllers\ConveniosController::class,'guardarTipoConvenio'])->name('convenios.guardarTipoConvenio');
-// Route::get('/dameTiposConvenio', [App\Http\Controllers\ConveniosController::class,'dameTiposConvenio'])->name('convenios.dameTiposConvenio');
-// Route::post('/guardarNuevoConvenio', [App\Http\Controllers\ConveniosController::class,'guardarNuevoConvenio'])->name('convenios.guardarNuevoConvenio');
+Route::resource('convenios', App\Http\Controllers\ConveniosController::class);
+Route::get('/dameInfoConvenio/{id}', [App\Http\Controllers\ConveniosController::class,'dameInfoConvenio'])->name('convenios.dameInfoConvenio');
+Route::post('/guardarTipoConvenio', [App\Http\Controllers\ConveniosController::class,'guardarTipoConvenio'])->name('convenios.guardarTipoConvenio');
+Route::get('/dameTiposConvenio', [App\Http\Controllers\ConveniosController::class,'dameTiposConvenio'])->name('convenios.dameTiposConvenio');
+Route::post('/guardarNuevoConvenio', [App\Http\Controllers\ConveniosController::class,'guardarNuevoConvenio'])->name('convenios.guardarNuevoConvenio');
 
 // Anteriores
 Route::get('/comercial', [App\Http\Controllers\AdministradorCmController::class,'index'])->name('comercial');

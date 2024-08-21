@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Asistente;
+use App\Models\Bono;
 use App\Models\Compras;
 use App\Models\Proveedor;
 use App\Models\TipoProducto;
 use App\Models\Region;
+use App\Models\Paciente;
+use App\Models\Profesional;
 use App\Models\Producto;
 use App\Models\Compras_detalle;
 use App\Models\Marcas_productos;
@@ -29,32 +33,28 @@ class ComprasController extends Controller
         $marcas = $productos_controller->dameMarcas();
         $unidades_medidas = $productos_controller->dameMedidas();
         return view('app.bodega.compras', [
-            'proveedores' => $proveedores, 
-            'tipos_producto' => $tipos_producto, 
+            'proveedores' => $proveedores,
+            'tipos_producto' => $tipos_producto,
             'region' => $regiones,
             'marcas' => $marcas,
             'unidades_medidas' => $unidades_medidas
         ]);
     }
-	
+
 	public function index(){
-        $proveedores = Proveedor::select('proveedores.*', 'tipo_producto.nombre as tipo_producto')
-        ->join('tipo_producto', 'proveedores.id_tipo_producto', '=', 'tipo_producto.id')
-        ->get();
-        $tipos_producto = TipoProducto::all();
-        $regiones = Region::orderBy('nombre')->get();
-        $productos_controller = new ProductosController();
-        $bodegas_controller = new BodegasController();
-        $marcas = $productos_controller->dameMarcas();
-        $unidades_medidas = $productos_controller->dameMedidas();
-        $bodegas = $bodegas_controller->dameBodegas(1);
-        return view('app.bodega.compras', [
-            'proveedores' => $proveedores, 
-            'tipos_producto' => $tipos_producto, 
-            'region' => $regiones,
-            'marcas' => $marcas,
-            'unidades_medidas' => $unidades_medidas,
-            'bodegas' => $bodegas
+
+
+        $paciente = Paciente::where('id_usuario',Auth::user()->id)->first();
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
+
+
+        $bonos = Bono::filtroRelacion($profesional, $paciente, $asistente)
+                        ->where('numero_sesiones','=','0')
+                        ->get();
+
+        return view('app.adm_cm.comercial.ingresos', [
+            'bonos' => $bonos
         ]);
     }
 
@@ -109,7 +109,7 @@ class ComprasController extends Controller
             //throw $th;
             return $e->getMessage();
         }
-        
+
     }
 
     public function guardarItemFactura(Request $req){
@@ -129,7 +129,7 @@ class ComprasController extends Controller
                 $prod->save();
             }
             $producto = Producto::find($id_producto);
-            
+
             if($producto != null){
                 $this->guardarDetalleFactura($req, $producto);
 
@@ -140,17 +140,17 @@ class ComprasController extends Controller
             }else{
                 return ['mensaje' => $producto];
             }
-            
+
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();
         }
-        
+
     }
 
     public function eliminarItemFactura(Request $req){
         try {
-            
+
             $id_compra = $req->id_compra;
             $id_item = $req->id_item;
             $detalle = Compras_detalle::where('id_compra', $id_compra)->where('id', $id_item)->first();
@@ -174,7 +174,7 @@ class ComprasController extends Controller
     }
 
     public function buscarFacturasPorProveedor(Request $req){
-      
+
         $compras = Compras::select('compras.*', 'proveedores.nombre as proveedor')
         ->join('proveedores', 'compras.id_proveedor', '=', 'proveedores.id')
         ->where('compras.id_proveedor', $req->id_proveedor)
@@ -212,7 +212,7 @@ class ComprasController extends Controller
             //throw $th;
             return $e->getMessage();
         }
-        
+
     }
 
     public function detalleCompraProducto($idProducto){
@@ -259,7 +259,7 @@ class ComprasController extends Controller
                 ->get();
             }
 
-            
+
 
 
 
@@ -268,6 +268,6 @@ class ComprasController extends Controller
             //throw $th;
             return $e->getMessage();
         }
-        
+
     }
 }
