@@ -29,7 +29,7 @@ class CreateConvenioInstitucionTable extends Migration
             $table->string('observaciones_convenio_institucion');
             $table->json('productos_convenio_institucion');
             $table->integer('id_institucion');
-            $table->string('otros');
+            $table->string('otros')->nullable();
             $table->integer('estado');
             $table->timestamps();
         });

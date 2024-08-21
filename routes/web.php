@@ -1380,8 +1380,10 @@ Route::group([
 
     Route::post('registrar_profesional', [App\Http\Controllers\AdministradorCmController::class, 'registrar_profesional'])->name('adm_cm.registrar_profesional');
     /** CONVENIOS */
+    Route::post('dame_convenio', [App\Http\Controllers\AdministradorCmController::class, 'dame_convenio'])->name('adm_cm.dame_convenio');
     Route::post('registrar_convenio', [App\Http\Controllers\AdministradorCmController::class, 'registrar_convenio'])->name('adm_cm.convenio_nuevo');
     Route::post('eliminar_convenio', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_convenio'])->name('adm_cm.eliminar_convenio');
+    Route::post('editar_convenio', [App\Http\Controllers\AdministradorCmController::class, 'editar_convenio'])->name('adm_cm.editar_convenio');
 });
 
 /** -- LABORATORIO --  **/

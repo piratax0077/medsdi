@@ -113,10 +113,11 @@ class ConveniosController extends Controller
         ->where('convenio_institucion.id_institucion',$institucion->id)
         ->get();
 
-        $tipos_productos = [];
+
 
         foreach($convenios_institucion as $convenio)
         {
+            $tipos_productos = [];
             // pasar el json a array
             $convenio->productos = json_decode($convenio->productos_convenio_institucion);
             foreach($convenio->productos as $producto)

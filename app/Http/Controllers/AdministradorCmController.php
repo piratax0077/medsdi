@@ -39,6 +39,7 @@ use App\Models\TipoCuentaBancaria;
 use App\Models\TipoConvenioInstitucion;
 use App\Models\TipoEspecialidad;
 use App\Models\TipoInstitucion;
+use App\Models\TipoProductoConvenios;
 use App\Models\User;
 
 use Spatie\Permission\Models\Role;
@@ -5876,6 +5877,23 @@ class AdministradorCmController extends Controller
         }
     }
 
+    public function dame_convenio(Request $req){
+        try {
+            //code...
+            $convenio = ConvenioInstitucion::select('convenio_institucion.*','tipo_convenio_institucion.nombre as tipo_convenio')
+                                        ->join('tipo_convenio_institucion','convenio_institucion.id_tipo_convenio_institucion','=','tipo_convenio_institucion.id')
+                                        ->where('convenio_institucion.id', $req->id)
+                                        ->first();
+
+            $convenio->productos = json_decode($convenio->productos_convenio_institucion);
+            return ['estado' => 1, 'convenio' => $convenio];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
     public function registrar_convenio(Request $req){
         try {
             $institucion = '';
@@ -5968,13 +5986,33 @@ class AdministradorCmController extends Controller
             $nuevo_convenio->estado = 1;
 
             if($nuevo_convenio->save()){
-                $convenios = ConvenioInstitucion::where('id_institucion', $institucion->id)->get();
+                $convenios = ConvenioInstitucion::select('convenio_institucion.*','tipo_convenio_institucion.nombre as tipo_convenio')
+                                                            ->join('tipo_convenio_institucion','convenio_institucion.id_tipo_convenio_institucion','=','tipo_convenio_institucion.id')
+                                                            ->where('convenio_institucion.id_institucion',$institucion->id)
+                                                            ->get();
+
+
+                foreach($convenios as $convenio)
+                {
+                    $tipos_productos = [];
+                    // pasar el json a array
+                    $convenio->productos = json_decode($convenio->productos_convenio_institucion);
+                    foreach($convenio->productos as $producto)
+                    {
+                        $tipo_producto = TipoProductoConvenios::find($producto);
+                        array_push($tipos_productos,$tipo_producto->descripcion);
+                    }
+
+                    $convenio->tipos_productos = $tipos_productos;
+                }
+
                 $tipo_convenios = TipoConvenioInstitucion::all();
+
                 $v = view('fragm.convenios_institucion',[
-                    'convenios' => $convenios,
+                    'convenios_institucion' => $convenios,
                     'tipo_convenios' => $tipo_convenios
                 ])->render();
-                return ['estado' => 1, 'msj' => 'Convenio registrado'];
+                return ['estado' => 1, 'msj' => 'Convenio registrado', 'v' => $v];
             }
             return $nuevo_convenio;
         } catch (\Exception $e) {
@@ -6058,13 +6096,158 @@ class AdministradorCmController extends Controller
             }
             $convenio = ConvenioInstitucion::find($req->id);
             $convenio->delete();
-            $convenios = ConvenioInstitucion::where('id_institucion', $institucion->id)->get();
+            $convenios = ConvenioInstitucion::select('convenio_institucion.*','tipo_convenio_institucion.nombre as tipo_convenio')
+                                                            ->join('tipo_convenio_institucion','convenio_institucion.id_tipo_convenio_institucion','=','tipo_convenio_institucion.id')
+                                                            ->where('convenio_institucion.id_institucion',$institucion->id)
+                                                            ->get();
+            $tipos_productos = [];
+
+            foreach($convenios as $convenio)
+            {
+                // pasar el json a array
+                $convenio->productos = json_decode($convenio->productos_convenio_institucion);
+                foreach($convenio->productos as $producto)
+                {
+                    $tipo_producto = TipoProductoConvenios::find($producto);
+                    array_push($tipos_productos,$tipo_producto->descripcion);
+                }
+
+                $convenio->tipos_productos = $tipos_productos;
+            }
             $tipo_convenios = TipoConvenioInstitucion::all();
             $v = view('fragm.convenios_institucion',[
-                'convenios' => $convenios,
+                'convenios_institucion' => $convenios,
                 'tipo_convenios' => $tipo_convenios
             ])->render();
             return ['estado' => 1, 'msj' => 'Convenio eliminado', 'v' => $v];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function editar_convenio(Request $req){
+        try {
+            $institucion = '';
+            $tipo_institucion = '1';
+            $id_busqueda = Auth::user()->id;
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+            if($registro)
+            {
+                // var_dump($registro);
+                // var_dump($registro->UsuarioAdministrador()->first());
+                //var_dump($registro->UsuarioAdministrador()->first()->id);
+                /** INSTITUCION */
+                $institucion = $registro;
+                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                $tipo_institucion = 'institucion';
+
+            }
+            else
+            {
+                $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+                if($registro)
+                {
+                    /** SERVICIOS */
+                    $institucion = $registro;
+                    $tipo_institucion = 'servicio';
+                }
+                else
+                {
+                    /** busqueda por responsable */
+                    $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                    if($responsable)
+                    {
+                        $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            // var_dump($registro);
+                            // var_dump($registro->UsuarioAdministrador()->first());
+                            /** INSTITUCION */
+                            $institucion = $registro;
+                            $tipo_institucion = 'institucion';
+
+                        }
+                        else
+                        {
+                            $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                            if($registro)
+                            {
+                                /** SERVICIOS */
+                                $institucion = $registro;
+                                $tipo_institucion = 'servicio';
+                            }
+                            else
+                            {
+                                return back()->with('error','Institución no encontrada');
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
+                }
+            }
+
+            $convenio = ConvenioInstitucion::find($req->id_convenio_institucion);
+
+            $convenio->nombre_representante_convenio_institucion = $req->nombre_representante_convenio_edicion;
+            $convenio->id_tipo_convenio = intval($req->tipo_convenio_edicion);
+            $convenio->id_tipo_convenio_institucion = intval($req->tipo_convenio_institucion_edicion);
+            $convenio->nombre_convenio_institucion = $req->nombre_convenio_edicion;
+            $convenio->fecha_inicio_convenio_institucion = $req->fecha_inicial_pago_convenio_edicion;
+            $convenio->fecha_fin_convenio_institucion = $req->fecha_final_pago_convenio_edicion;
+            $convenio->rut_representante_convenio_institucion = $req->rut_representante_convenio_edicion;
+            $convenio->nombre_representante_convenio_institucion = $req->nombre_representante_convenio_edicion;
+            $convenio->telefono_representante_convenio_institucion = $req->telefono_representante_convenio_edicion;
+            $convenio->email_representante_convenio_institucion = $req->email_representante_convenio_edicion;
+            $convenio->direccion_representante_convenio_institucion = $req->direccion_representante_convenio_edicion;
+            $convenio->observaciones_convenio_institucion = $req->observaciones_nuevo_convenio_edicion;
+            $convenio->productos_convenio_institucion = json_encode($req->productos_convenio_edicion);
+            $convenio->porcentaje_convenio_institucion = intval($req->porcentaje_dcto_edicion);
+            $convenio->id_institucion = $institucion->id;
+            $convenio->estado = 1;
+            $convenio->observaciones_convenio_institucion = $req->observaciones_edicion_convenio;
+
+            if($convenio->save()){
+                $convenios = ConvenioInstitucion::select('convenio_institucion.*','tipo_convenio_institucion.nombre as tipo_convenio')
+                                                            ->join('tipo_convenio_institucion','convenio_institucion.id_tipo_convenio_institucion','=','tipo_convenio_institucion.id')
+                                                            ->where('convenio_institucion.id_institucion',$institucion->id)
+                                                            ->get();
+
+
+                foreach($convenios as $convenio)
+                {
+                    $tipos_productos = [];
+                    // pasar el json a array
+                    $convenio->productos = json_decode($convenio->productos_convenio_institucion);
+                    foreach($convenio->productos as $producto)
+                    {
+                        $tipo_producto = TipoProductoConvenios::find($producto);
+                        array_push($tipos_productos,$tipo_producto->descripcion);
+                    }
+
+                    $convenio->tipos_productos = $tipos_productos;
+                }
+                $tipo_convenios = TipoConvenioInstitucion::all();
+                $v = view('fragm.convenios_institucion',[
+                    'convenios_institucion' => $convenios,
+                    'tipo_convenios' => $tipo_convenios
+                ])->render();
+                return ['estado' => 1, 'msj' => 'Convenio editado', 'v' => $v];
+            }
+            return $convenio;
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();

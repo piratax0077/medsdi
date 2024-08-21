@@ -24,10 +24,16 @@
                 </td>
                 <td class="align-middle text-center">{{ $convenio->porcentaje_convenio_institucion }}%</td>
                 <td class="align-middle text-center">
-                    <button class="btn btn-info btn-sm has-ripple" data-toggle="modal" data-target="#convenioUsuario"><i class="fa fa-eye" aria-hidden="true"></i></button>
-                    <button class="btn btn-warning btn-sm has-ripple" data-toggle="modal" data-target="#editarConvenio"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                    <button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio({{ $convenio->id }})" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio({{ $convenio->id }})"><i class="fas fa-trash"></i> </button>
                 </td>
             </tr>
         @endforeach
     </tbody>
 </table>
+
+<script>
+    $(document).ready(function() {
+        $('#tabla_convenios_institucion').DataTable();
+    });
+</script>

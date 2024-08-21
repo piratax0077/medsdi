@@ -63,8 +63,7 @@
                                     </td>
                                     <td class="align-middle text-center">{{ $convenio->porcentaje_convenio_institucion }}%</td>
                                     <td class="align-middle text-center">
-                                        <button class="btn btn-info btn-sm has-ripple" data-toggle="modal" data-target="#convenioUsuario"><i class="fa fa-eye" aria-hidden="true"></i></button>
-                                        <button class="btn btn-warning btn-sm has-ripple" data-toggle="modal" data-target="#editarConvenio"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                                        <button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio({{ $convenio->id }})" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>
                                         <button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio({{ $convenio->id }})"><i class="fas fa-trash"></i> </button>
                                     </td>
                                 </tr>
@@ -76,13 +75,17 @@
 
     </div>
 </div>
+<!-- DATOS DE VITAL IMPORTANCIA -->
+<input type="hidden" name="id_convenio_institucion" id="id_convenio_institucion" value="">
 @endsection
 
 @section('js-profesionales')
 <script>
     $(document).ready(function() {
-    $('#productos_convenio_').select2();
+        $('#productos_convenio_').select2();
+        $('#productos_convenio_edicion').select2();
     });
+
     function guardar_nuevo_convenio_institucion(){
         var nombre_convenio = $('#nombre_convenio').val();
         var tipo_convenio = $('#tipo_convenio').val();
@@ -190,21 +193,43 @@
             },
             success: function(response){
                 console.log(response);
-                if(response.status == 200){
+                if(response.estado == 1){
                     swal({
                         title: 'Convenio registrado',
-                        text: 'Convenio registrado con éxito',
+                        text: response.msj,
                         icon: 'success'
                     });
                     $('#nuevoConvenioInstitucion').modal('hide');
                     $('#card_body_convenios_institucion').empty();
                     $('#card_body_convenios_institucion').html(response.v);
+                    limpiar_formulario();
                 }else{
-                    alert('Error al registrar convenio');
+                    swal({
+                        title: 'Error',
+                        text: response.msj,
+                        icon: 'error'
+                    });
                 }
             }
         });
     }
+
+    function limpiar_formulario(){
+        $('#nombre_convenio').val('');
+        $('#tipo_convenio').val(0);
+        $('#porcentaje_dcto').val('');
+        $('#tipo_convenio_institucion').val(0);
+        $('#fecha_inicial_pago_convenio').val('');
+        $('#fecha_final_pago_convenio').val('');
+        $('#rut_representante_convenio').val('');
+        $('#nombre_representante_convenio').val('');
+        $('#telefono_representante_convenio').val('');
+        $('#email_representante_convenio').val('');
+        $('#direccion_representante_convenio').val('');
+        $('#observaciones_nuevo_convenio').val('');
+        $('#productos_convenio_').val(null).trigger('change');
+    }
+
     function formatoRut(rut)
     {
         var valor = rut.value.replace('.','');
@@ -259,10 +284,10 @@
             },
             success: function(response){
                 console.log(response);
-                if(response.status == 200){
+                if(response.estado == 1){
                     swal({
                         title: 'Convenio eliminado',
-                        text: 'Convenio eliminado con éxito',
+                        text: response.msj,
                         icon: 'success'
                     });
                     $('#card_body_convenios_institucion').empty();
@@ -273,10 +298,43 @@
             }
         });
     }
+
+    function dame_convenio(id){
+        $.ajax({
+            url: "{{ ROUTE('adm_cm.dame_convenio') }}",
+            type: 'POST',
+            data: {
+                id: id,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(response){
+                $('#id_convenio_institucion').val(id);
+                console.log(response);
+                if(response.estado == 1){
+                    $('#nombre_convenio_edicion').val(response.convenio.nombre_convenio_institucion);
+                    $('#tipo_convenio_edicion').val(response.convenio.id_tipo_convenio);
+                    $('#porcentaje_dcto_edicion').val(response.convenio.porcentaje_convenio_institucion);
+                    $('#tipo_convenio_institucion_edicion').val(response.convenio.id_tipo_convenio_institucion);
+                    $('#fecha_inicial_pago_convenio_edicion').val(response.convenio.fecha_inicio_convenio_institucion);
+                    $('#fecha_final_pago_convenio_edicion').val(response.convenio.fecha_fin_convenio_institucion);
+                    $('#productos_convenio_edicion').val(response.convenio.productos).trigger('change');
+                    $('#rut_representante_convenio_edicion').val(response.convenio.rut_representante_convenio_institucion);
+                    $('#nombre_representante_convenio_edicion').val(response.convenio.nombre_representante_convenio_institucion);
+                    $('#telefono_representante_convenio_edicion').val(response.convenio.telefono_representante_convenio_institucion);
+                    $('#email_representante_convenio_edicion').val(response.convenio.email_representante_convenio_institucion);
+                    $('#direccion_representante_convenio_edicion').val(response.convenio.direccion_representante_convenio_institucion);
+                    $('#observaciones_edicion_convenio').val(response.convenio.observaciones_convenio_institucion);
+                }else{
+                    alert('Error al cargar convenio');
+                }
+            }
+        });
+    }
 </script>
 @endsection
 
 @section('modales')
     @include('app.adm_cm.modal_adm.convenio_usuario')
     @include('app.adm_cm.modal_adm.convenio_nuevo')
+    @include('app.adm_cm.modal_adm.convenio_editar')
 @endsection
