@@ -43,11 +43,9 @@ class ComprasController extends Controller
 
 	public function index(){
 
-
         $paciente = Paciente::where('id_usuario',Auth::user()->id)->first();
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $asistente = Asistente::where('id_usuario',Auth::user()->id)->first();
-
 
         $bonos = Bono::filtroRelacion($profesional, $paciente, $asistente)
                         ->where('numero_sesiones','=','0')
