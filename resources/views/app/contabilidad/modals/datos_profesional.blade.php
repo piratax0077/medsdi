@@ -62,7 +62,18 @@
                                 <input class="form-control form-control-sm" name="direccion_nuevo_profesional" id="direccion_nuevo_profesional" type="text">
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-md-2">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Cargo</label>
+                                <select name="cargo_nuevo_profesional" id="cargo_nuevo_profesional" class="form-control form-control-sm">
+                                    <option value="0">Seleccione opci&oacute;n</option>
+                                    <option value="1">Profesional</option>
+                                    <option value="2">Secretaria</option>
+                                    <option value="3">Administrativo</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-5">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Regi&oacute;n</label>
                                 <select class="form-control form-control-sm" onchange="buscar_ciudad_profesional();" id="region_nuevo_profesional">
@@ -73,7 +84,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-5">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Comuna</label>
                                 <select class="form-control form-control-sm" id="comuna_nuevo_profesional">
@@ -266,7 +277,7 @@
                 type: "get",
                 data: {
                     //_token: _token,
-                    id_profesion: profesion,
+                    id_especialidad: profesion,
                 },
             })
             .done(function(data) {

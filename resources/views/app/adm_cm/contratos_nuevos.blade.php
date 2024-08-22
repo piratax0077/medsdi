@@ -63,12 +63,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body" id="card_body_profesionales_contratados">
                                     <table id="tab_profesionales_cont_centroc" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th class="text-center align-middle">Nombre / Rut</th>
                                                 <th class="text-center align-middle">Cargo</th>
+                                                <th class="text-center align-middle">Profesion</th>
                                                 <th class="text-center align-middle">Tipo de Contrato/Fecha contrato</th>
                                                 <th class="text-center align-middle">Contacto/cuenta</th>
                                                 <th class="text-center align-middle">Remuneración Mes</th>
@@ -82,9 +83,10 @@
                                                         <span><strong>{{ $profesional->nombre }} {{ $profesional->primer_apellido }} {{ $profesional->segundo_apellido }}</strong></span><br>
                                                         <span>{{ $profesional->rut }}</span>
                                                     </td>
+                                                    <td class="align-middle text-center"></td>
                                                     <td class="align-middle text-center">
-                                                        <span>{{ $profesional->profesion }}</span><br>
-                                                        <span>{{ $profesional->especialidad }}</span>
+                                                        <span>{{ $profesional->especialidad }}</span><br>
+                                                        <span>{{ $profesional->tipo_especialidad }}</span>
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         <span>{{ $profesional->tipo_contrato }}</span><br>
@@ -132,7 +134,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body" id="card_body_asistentes_contratados">
                                     <table id="tab_cont_asistentes_centroc" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
                                         <thead>
                                             <tr>
@@ -145,33 +147,19 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <span><strong>Jaime Kriman</strong></span><br>
-                                                    <span>4.345.466-2</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>Asistente atención público</span><br>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>Contrato indefinido</span><br>
-                                                    <span>20/01/2015</span
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <!--Botón Modal-->
-                                                    <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto();" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-home"></i></button>
-                                                    <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datoscuenta();" data-toggle="tooltip" data-placement="top" title="Depositar"><i class="fas fa-hand-holding-usd"></i></button>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                     <span>44 horas semanales <br> 500.000</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <button type="button" class="btn btn-success btn-sm" onclick="editar_datosasistentec();">
-                                                    <i class="feather icon-edit"></i> Editar</button>
-                                                    <button type="button" class="btn btn-danger btn-sm">
-                                                    <i class="feather icon-x-circle"></i> Desasociar</button>
-                                                </td>
-                                            </tr>
+                                            @foreach($asistentes_contratados as $asistente)
+                                                <tr>
+                                                    <td class="align-middle text-center">{{ $asistente->nombre }} {{ $asistente->apellido_paterno }} {{ $asistente->apellido_materno }}<br>{{ $asistente->rut }}</td>
+                                                    <td class="align-middle text-center">{{ $asistente->cargo }}</td>
+                                                    <td class="align-middle text-center">{{ $asistente->tipo_contrato }}<br>{{ $asistente->fecha_ingreso }}</td>
+                                                    <td class="align-middle text-center">{{ $asistente->telefono }} <br> {{ $asistente->email }}</td>
+                                                    <td class="align-middle text-center">${{ number_format($asistente->sueldo_bruto,0,',','.') }} <br>{{ $asistente->horas_contratadas }} hrs.</td>
+                                                    <td class="align-middle text-center">
+                                                        <button class="btn btn-warning btn-sm has-ripple" onclick="dame_asistente({{ $asistente->id }})" data-toggle="modal" data-target="#editarAsistente"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                                                        <button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_asistente({{ $asistente->id }})"><i class="fas fa-trash"></i> </button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -305,6 +293,7 @@
         let direccion = $('#direccion_nuevo_profesional').val();
         let region = $('#region_nuevo_profesional').val();
         let comuna = $('#comuna_nuevo_profesional').val();
+        let cargo = $('#cargo_nuevo_profesional').val();
         let profesion = $('#profesion_nuevo_profesional').val();
         let especialidad = $('#especialidad_nuevo_profesional').val();
         let sub_especialidad = $('#sub_especialidad_nuevo_profesional').val();
@@ -351,6 +340,10 @@
             valido = 0;
             mensaje += '<li>Debe ingresar la direcci&oacute;n del profesional</li>';
         }
+        if(cargo == 0){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar el cargo del profesional</li>';
+        }
         if(region == 0){
             valido = 0;
             mensaje += '<li>Debe seleccionar la regi&oacute;n del profesional</li>';
@@ -358,6 +351,10 @@
         if(comuna == 0){
             valido = 0;
             mensaje += '<li>Debe seleccionar la comuna del profesional</li>';
+        }
+        if(cargo == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el cargo del profesional</li>';
         }
         if(profesion == ''){
             valido = 0;
@@ -425,6 +422,7 @@
             direccion: direccion,
             region: region,
             comuna: comuna,
+            cargo: cargo,
             profesion: profesion,
             especialidad: especialidad,
             sub_especialidad: sub_especialidad,
@@ -455,7 +453,9 @@
                         icon: "success",
                         buttons: "Aceptar",
                         DangerMode: true,
-                    })
+                    });
+                    $('#card_body_profesionales_contratados').empty();
+                    $('#card_body_profesionales_contratados').html(data.v);
                 }else{
                     swal({
                         title: "Error",

@@ -299,6 +299,10 @@
                 responsive: true,
             });
 
+            $('#tab_cont_asistentes_centroc').DataTable({
+                responsive: true,
+            });
+
             {{--  mensaje de al registrar ficha clinica  --}}
             @if(session('mensaje'))
                 swal({

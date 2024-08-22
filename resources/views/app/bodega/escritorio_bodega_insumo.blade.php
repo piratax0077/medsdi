@@ -42,45 +42,17 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
-                        {{--  <a href="{{ ROUTE('asistente_adm.mis_profesionales') }}"></a>--}}
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-50 text-center" src="{{ asset('images/iconos/profesional_1.svg') }}">
-                                <h5 class="mt-2">Stock General</h5>
-                            </div>
-                    </div>
-                </div>
 
                 <div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
-                        {{--  <a href="{{ ROUTE('asistente_adm.mis_profesionales') }}"></a>--}}
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-50 text-center" src="{{ asset('images/iconos/profesional_1.svg') }}">
-                                <h5 class="mt-2">control Ingreso/Salida stock</h5>
-                            </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
-                         {{--  <a href="{{ ROUTE('asistente.flujo_caja') }}"></a>--}}
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-                                <h5 class="mt-1 mb-0"> Control De stock Recibido</h5>
-                            </div>
-                    </div>
-                </div>
-
-				<div class="col-md-4">
                     <div class="card subir" onclick="en_construccion()";>
                         {{--  <a href="{{ ROUTE('asistente_adm.mis_profesionales') }}"></a>--}}
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                                <h5 class="mt-1 mb-0">Control De Entrega Productos</h5>
+                                <h5 class="mt-1 mb-0">Solicitudes Pendientes</h5>
                             </div>
                     </div>
                 </div>
-				<div class="col-md-4">
+                <div class="col-md-4">
 					<div class="card subir" onclick="en_construccion()";>
                         {{--  <a href="{{ ROUTE('asistente_adm.mis_profesionales') }}"></a>--}}
 							<div class="card-body text-center" style="cursor:pointer">
@@ -89,6 +61,15 @@
 							</div>
 					</div>
 				</div>
+                <div class="col-md-4">
+                    <div class="card subir" onclick="en_construccion()";>
+                        {{--  <a href="{{ ROUTE('asistente_adm.mis_profesionales') }}"></a>--}}
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-50 text-center" src="{{ asset('images/iconos/profesional_1.svg') }}">
+                                <h5 class="mt-2">Historial Ingreso/Salida stock</h5>
+                            </div>
+                    </div>
+                </div>
 
 				<div class="col-md-4">
                     <div class="card subir" onclick="en_construccion()";>
@@ -99,15 +80,7 @@
                         </div>
                     </div>
                 </div>
-				<div class="col-md-4">
-					<div class="card subir" onclick="en_construccion()";>
-					   {{--  <a href="{{ ROUTE('asistente_adm.asistente_adm_pedidos') }}"></a>--}}
-							<div class="card-body text-center" style="cursor:pointer">
-								<img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
-								<h5 class="mt-1 mb-0">Otros</h5>
-							</div>
-					</div>
-				</div>
+
             </div>
         </div>
         <!--CIERRE: Row Botones -->

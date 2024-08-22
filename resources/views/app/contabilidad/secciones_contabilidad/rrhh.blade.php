@@ -280,6 +280,7 @@
         let telefono1 = $('#telefono1_nuevo_profesional').val();
         let telefono2 = $('#telefono2_nuevo_profesional').val();
         let direccion = $('#direccion_nuevo_profesional').val();
+        let cargo = $('#cargo_nuevo_profesional').val();
         let region = $('#region_nuevo_profesional').val();
         let comuna = $('#comuna_nuevo_profesional').val();
         let profesion = $('#profesion_nuevo_profesional').val();
@@ -327,6 +328,10 @@
         if(direccion == ''){
             valido = 0;
             mensaje += '<li>Debe ingresar la direcci&oacute;n del profesional</li>';
+        }
+        if(cargo == '' || cargo == 0){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el cargo del profesional</li>';
         }
         if(region == 0){
             valido = 0;
@@ -400,6 +405,7 @@
             telefono1: telefono1,
             telefono2: telefono2,
             direccion: direccion,
+            cargo: cargo,
             region: region,
             comuna: comuna,
             profesion: profesion,

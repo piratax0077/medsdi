@@ -11,13 +11,13 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="floating-label">Nombre Convenio</label>
+                            <label class="floating-label-activo-sm">Nombre Convenio</label>
                             <input type="text" class="form-control" id="nombre_convenio" name="nombre_convenio">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="floating-label">Tipo Convenio</label>
+                            <label class="floating-label-activo-sm">Tipo Convenio</label>
                             <select name="tipo_convenio" id="tipo_convenio" class="form-control">
                                 <option value="0">Seleccione</option>
                                 @foreach($tipos_convenio as $key_tc => $value_tc)
@@ -28,13 +28,13 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="floating-label">Porcentaje</label>
+                            <label class="floating-label-activo-sm">Porcentaje</label>
                             <input type="text" class="form-control" name="porcentaje_dcto" id="porcentaje_dcto">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="floating-label">Tipo Convenio Inst</label>
+                            <label class="floating-label-activo-sm">Tipo Convenio Inst</label>
                             <select name="tipo_convenio_institucion" id="tipo_convenio_institucion" class="form-control">
                                 <option value="0">Seleccione</option>
                                 @foreach($tipos_convenio_institucion as $key_tc => $value_tc)
@@ -46,13 +46,13 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="floating-label">Fecha Inicial</label>
+                            <label class="floating-label-activo-sm">Fecha Inicial</label>
                             <input type="date" class="form-control" value="<?php echo date('Y-m-d') ?>" id="fecha_inicial_pago_convenio" name="fecha_inicial_pago_convenio">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="floating-label">Fecha Final</label>
+                            <label class="floating-label-activo-sm">Fecha Final</label>
                             <input type="date" class="form-control" value="" id="fecha_final_pago_convenio" name="fecha_final_pago_convenio">
                         </div>
                     </div>
@@ -74,31 +74,31 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="floating-label">Rut representante</label>
+                            <label class="floating-label-activo-sm">Rut representante</label>
                             <input type="text" class="form-control" oninput="formatoRut(this)" id="rut_representante_convenio" name="rut_representante_convenio">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="floating-label">Nombre representante</label>
+                            <label class="floating-label-activo-sm">Nombre representante</label>
                             <input type="text" class="form-control" id="nombre_representante_convenio" name="nombre_representante_convenio">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="floating-label">Telefono</label>
+                            <label class="floating-label-activo-sm">Telefono</label>
                             <input type="text" class="form-control" id="telefono_representante_convenio" name="telefono_representante_convenio">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="floating-label">Email</label>
+                            <label class="floating-label-activo-sm">Email</label>
                             <input type="text" class="form-control" id="email_representante_convenio" name="email_representante_convenio">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="floating-label">Direccion</label>
+                            <label class="floating-label-activo-sm">Direccion</label>
                             <input type="text" class="form-control" id="direccion_representante_convenio" name="direccion_representante_convenio">
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label class="floating-label">Observaciones</label>
+                            <label class="floating-label-activo-sm">Observaciones</label>
                             <textarea name="observaciones_nuevo_convenio" id="observaciones_nuevo_convenio" cols="30" rows="10" class="form-control"></textarea>
                         </div>
                     </div>

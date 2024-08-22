@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContratoProfesionalInstitucionTable extends Migration
+class CreateContratoAsistenteInstitucionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,26 +13,23 @@ class CreateContratoProfesionalInstitucionTable extends Migration
      */
     public function up()
     {
-        Schema::create('contrato_profesional_institucion', function (Blueprint $table) {
+        Schema::create('contrato_asistente_institucion', function (Blueprint $table) {
             $table->id();
             $table->string('rut');
             $table->date('fecha_ingreso');
             $table->string('nombre');
-            $table->string('primer_apellido');
-            $table->string('segundo_apellido');
+            $table->string('apellidos');;
             $table->string('email');
             $table->string('telefono');
-            $table->string('telefono_dos')->nullable();
-            $table->string('direccion');
-            $table->integer('id_cargo');
             $table->integer('id_region');
             $table->integer('id_comuna');
-            $table->integer('id_profesion');
-            $table->integer('id_especialidad');
-            $table->integer('id_sub_tipo_especialidad');
-            $table->string('dias_atencion');
-            $table->string('horario_atencion');
-            $table->integer('pacientes_hora');
+            $table->string('direccion');
+            $table->integer('numero');
+            $table->integer('id_cargo');
+            $table->integer('id_funcion');
+            $table->string('otra_funcion');
+            $table->integer('horas_contratadas');
+            $table->double('sueldo_bruto')->nullable();
             $table->integer('id_banco');
             $table->string('numero_cuenta');
             $table->string('sucursal');
@@ -49,6 +46,6 @@ class CreateContratoProfesionalInstitucionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contrato_profesional_institucion');
+        Schema::dropIfExists('contrato_asistente_institucion');
     }
 }

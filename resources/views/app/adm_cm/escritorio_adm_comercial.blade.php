@@ -135,8 +135,8 @@
 				</div>
 			</div>
 			<div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
-				<div class="card mb-3 subir" onclick="en_construccion();">
-				   <a href="#">
+				<div class="card mb-3 subir" >
+				   <a href="{{ ROUTE('convenios.index') }}">
 						<div class="card-body text-center" style="cursor:pointer">
 							<img class="wid-40 text-center" src="{{ asset('images/iconos/convenios.png') }}">
 							<h6 class="mt-1 mb-0">Convenios</h6>

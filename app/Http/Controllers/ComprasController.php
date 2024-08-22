@@ -23,7 +23,7 @@ class ComprasController extends Controller
 {
     //
 
-    public function index_(){
+    public function index(){
         $proveedores = Proveedor::select('proveedores.*', 'tipo_producto.nombre as tipo_producto')
         ->join('tipo_producto', 'proveedores.id_tipo_producto', '=', 'tipo_producto.id')
         ->get();
@@ -41,7 +41,7 @@ class ComprasController extends Controller
         ]);
     }
 
-	public function index(){
+	public function index_(){
 
         $paciente = Paciente::where('id_usuario',Auth::user()->id)->first();
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
