@@ -2172,6 +2172,11 @@ $(document).ready(function() {
 
                                         </li>
 
+                                        <li class="nav-item">
+
+                                            <a class="nav-link" id="cuatro_nutri_tab" data-toggle="pill" href="#cuatro_nutri" role="tab" aria-controls="pills-home" aria-selected="true">Historial total</a>
+
+                                        </li>
                                     </ul>
 
                                 </div>

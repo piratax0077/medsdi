@@ -44,12 +44,13 @@
                 </div>
 
                 <div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
-                        {{--  <a href="{{ ROUTE('asistente_adm.mis_profesionales') }}"></a>--}}
+                    <div class="card subir">
+                         <a href="{{ ROUTE('adm_cm.solicitudes_pendientes') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
                                 <h5 class="mt-1 mb-0">Solicitudes Pendientes</h5>
                             </div>
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-4">

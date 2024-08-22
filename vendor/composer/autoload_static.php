@@ -853,6 +853,7 @@ class ComposerStaticInitb3713ee7b214bd6fe1b501c454bd7de3
         'App\\Models\\ConTraslado' => __DIR__ . '/../..' . '/app/Models/ConTraslado.php',
         'App\\Models\\ConsentimientoFaltante' => __DIR__ . '/../..' . '/app/Models/ConsentimientoFaltante.php',
         'App\\Models\\ContactoEmergencia' => __DIR__ . '/../..' . '/app/Models/ContactoEmergencia.php',
+        'App\\Models\\ContratoAsistenteInstitucion' => __DIR__ . '/../..' . '/app/Models/ContratoAsistenteInstitucion.php',
         'App\\Models\\ContratoDependiente' => __DIR__ . '/../..' . '/app/Models/ContratoDependiente.php',
         'App\\Models\\ContratoHistorico' => __DIR__ . '/../..' . '/app/Models/ContratoHistorico.php',
         'App\\Models\\ContratoProfesionalInstitucion' => __DIR__ . '/../..' . '/app/Models/ContratoProfesionalInstitucion.php',

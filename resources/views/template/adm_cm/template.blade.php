@@ -303,6 +303,18 @@
                 responsive: true,
             });
 
+            $('#tab_cont_limpieza_mantencionc').DataTable({
+                responsive: true,
+            });
+
+            $('#tab_solicitudes_bodega').DataTable({
+                responsive: true,
+            });
+
+            $('#detalle_solicitud_pendiente').DataTable({
+                responsive: true,
+            });
+
             {{--  mensaje de al registrar ficha clinica  --}}
             @if(session('mensaje'))
                 swal({

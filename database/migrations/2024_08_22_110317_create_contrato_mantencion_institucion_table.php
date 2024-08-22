@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContratoAsistenteInstitucionTable extends Migration
+class CreateContratoMantencionInstitucionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateContratoAsistenteInstitucionTable extends Migration
      */
     public function up()
     {
-        Schema::create('contrato_asistente_institucion', function (Blueprint $table) {
+        Schema::create('contrato_mantencion_institucion', function (Blueprint $table) {
             $table->id();
             $table->string('rut');
             $table->date('fecha_ingreso');
@@ -26,10 +26,11 @@ class CreateContratoAsistenteInstitucionTable extends Migration
             $table->integer('id_comuna');
             $table->string('direccion');
             $table->integer('numero');
+            $table->string('id_tipo_mantencion');
             $table->string('id_cargo');
-            $table->string('id_funcion');
-            $table->integer('horas_contratadas');
-            $table->double('sueldo_bruto')->nullable();
+            $table->integer('horas_trabajadas');
+            $table->double('remuneracion')->nullable();
+            $table->integer('id_funcion');
             $table->integer('id_banco');
             $table->string('numero_cuenta');
             $table->string('sucursal');
@@ -46,6 +47,6 @@ class CreateContratoAsistenteInstitucionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contrato_asistente_institucion');
+        Schema::dropIfExists('contrato_mantencion_institucion');
     }
 }

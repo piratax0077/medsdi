@@ -188,7 +188,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body" id="card_body_mantenedores_contratados">
                                     <table id="tab_cont_limpieza_mantencionc" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
                                         <thead>
                                             <tr>
@@ -201,33 +201,19 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <span><strong>Jaime Kriman</strong></span><br>
-                                                    <span>4.345.466-2</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>Asistente atención público</span><br>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>Contrato indefinido</span><br>
-                                                    <span>20/01/2015</span
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <!--Botón Modal-->
-                                                    <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contactoc();" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-home"></i></button>
-                                                    <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datoscuenta();" data-toggle="tooltip" data-placement="top" title="Depositar"><i class="fas fa-hand-holding-usd"></i></button>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                     <span>44 horas semanales <br> 500.000</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_empresac();">
-                                                    <i class="feather icon-edit"></i> Editar</button>
-                                                    <button type="button" class="btn btn-danger btn-sm">
-                                                    <i class="feather icon-x-circle"></i> Desasociar</button>
-                                                </td>
-                                            </tr>
+                                            @foreach($mantenedores_contratados as $mantenedor)
+                                                <tr>
+                                                    <td class="align-middle text-center">{{ $mantenedor->nombre }} {{ $mantenedor->primer_apellido }} {{ $mantenedor->segundo_apellido }}<br>{{ $mantenedor->rut }}</td>
+                                                    <td class="align-middle text-center">{{ $mantenedor->cargo }}</td>
+                                                    <td class="align-middle text-center">{{ $mantenedor->tipo_contrato }}<br>{{ $mantenedor->fecha_ingreso }}</td>
+                                                    <td class="align-middle text-center">{{ $mantenedor->telefono }} <br> {{ $mantenedor->email }}</td>
+                                                    <td class="align-middle text-center">${{ number_format($mantenedor->remuneracion,0,',','.') }} <br>{{ $mantenedor->horas_trabajadas }} hrs.</td>
+                                                    <td class="align-middle text-center">
+                                                        <button class="btn btn-warning btn-sm has-ripple" onclick="dame_mantenedor({{ $mantenedor->id }})" data-toggle="modal" data-target="#editarMantenedor"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                                                        <button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_mantenedor({{ $mantenedor->id }})"><i class="fas fa-trash"></i> </button>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -455,7 +441,7 @@
                         DangerMode: true,
                     });
                     $('#card_body_profesionales_contratados').empty();
-                    $('#card_body_profesionales_contratados').html(data.v);
+                    $('#card_body_profesionales_contratados').append(data.v);
                 }else{
                     swal({
                         title: "Error",
@@ -517,5 +503,72 @@
             });
 
         }
+
+    function eliminar_mantenedor(id){
+        swal({
+            title: '¿Estás seguro de eliminar este mantenedor?',
+            text: "Esta acción no se puede revertir!",
+            icon: 'warning',
+            buttons: {
+                cancel: "Cancelar",
+                confirm: "Eliminar"
+            },
+        })
+        .then((value) => {
+            if(value){
+                confirmar_eliminar_mantenedor(id);
+            }
+        });
+    }
+
+    function confirmar_eliminar_mantenedor(id){
+        let _token = "{{ csrf_token() }}";
+
+        let url = "{{ route('adm_cm.eliminar_personal_mantencion') }}";
+        $.ajax({
+                url: url,
+                type: "post",
+                data: {
+                    _token: _token,
+                    id: id,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+
+                    if (data.estado == 1) {
+                        swal({
+                            title: "Mantenedor eliminado",
+                            text: data.msj,
+                            icon: "success",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                        $('#card_body_mantenedores_contratados').empty();
+                        $('#card_body_mantenedores_contratados').html(data.v);
+                    } else {
+                        swal({
+                            title: "Error",
+                            text: "Error al eliminar el asistente",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        })
+                    }
+                } else {
+
+                    swal({
+                        title: "Error",
+                        text: "Error al eliminar el asistente",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    })
+                    // alert('No se pudo Cargar las ciudades');
+                }
+
+            })
+    }
 
 </script>

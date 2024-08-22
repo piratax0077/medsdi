@@ -75,7 +75,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
-                                    <div class="form-group"> 
+                                    <div class="form-group">
                                         <div class="form-group fill">
                                             <label class="floating-label-activo-sm">Profesión</label>
                                             <select class="form-control form-control-sm">

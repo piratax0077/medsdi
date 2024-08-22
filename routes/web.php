@@ -1382,11 +1382,16 @@ Route::group([
     Route::post('registrar_profesional', [App\Http\Controllers\AdministradorCmController::class, 'registrar_profesional'])->name('adm_cm.registrar_profesional');
     Route::post('registrar_asistente', [App\Http\Controllers\AdministradorCmController::class, 'registrar_asistente'])->name('adm_cm.registrar_asistente');
     Route::post('eliminar_asistente', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_asistente'])->name('adm_cm.eliminar_asistente');
+    Route::post('registrar_personal_mantencion', [App\Http\Controllers\AdministradorCmController::class, 'registrar_personal_mantencion'])->name('adm_cm.registrar_personal_mantencion');
+    Route::post('eliminar_personal_mantencion', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_personal_mantencion'])->name('adm_cm.eliminar_personal_mantencion');
     /** CONVENIOS */
     Route::post('dame_convenio', [App\Http\Controllers\AdministradorCmController::class, 'dame_convenio'])->name('adm_cm.dame_convenio');
     Route::post('registrar_convenio', [App\Http\Controllers\AdministradorCmController::class, 'registrar_convenio'])->name('adm_cm.convenio_nuevo');
     Route::post('eliminar_convenio', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_convenio'])->name('adm_cm.eliminar_convenio');
     Route::post('editar_convenio', [App\Http\Controllers\AdministradorCmController::class, 'editar_convenio'])->name('adm_cm.editar_convenio');
+    /** SOLICITUDES PENDIENTES */
+    Route::get('solicitudes_pendientes', [App\Http\Controllers\AdministradorCmController::class, 'solicitudes_pendientes'])->name('adm_cm.solicitudes_pendientes');
+    Route::post('ver_solicitud', [App\Http\Controllers\AdministradorCmController::class, 'ver_solicitud'])->name('adm_cm.ver_solicitud');
 });
 
 /** -- LABORATORIO --  **/

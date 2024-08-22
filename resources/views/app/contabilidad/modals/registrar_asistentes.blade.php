@@ -509,6 +509,21 @@
     }
 
     function eliminar_asistente(id){
+        swal({
+            title: "Eliminar Asistente",
+            text: "¿Está seguro de eliminar el asistente?",
+            icon: "warning",
+            buttons: ["Cancelar", "Aceptar"],
+            DangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                confirmar_eliminar_asistente(id);
+            }
+        });
+    }
+
+    function confirmar_eliminar_asistente(id){
         let _token = "{{ csrf_token() }}";
 
         let url = "{{ route('adm_cm.eliminar_asistente') }}";

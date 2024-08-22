@@ -211,6 +211,7 @@ return array(
     'App\\Models\\ConTraslado' => $baseDir . '/app/Models/ConTraslado.php',
     'App\\Models\\ConsentimientoFaltante' => $baseDir . '/app/Models/ConsentimientoFaltante.php',
     'App\\Models\\ContactoEmergencia' => $baseDir . '/app/Models/ContactoEmergencia.php',
+    'App\\Models\\ContratoAsistenteInstitucion' => $baseDir . '/app/Models/ContratoAsistenteInstitucion.php',
     'App\\Models\\ContratoDependiente' => $baseDir . '/app/Models/ContratoDependiente.php',
     'App\\Models\\ContratoHistorico' => $baseDir . '/app/Models/ContratoHistorico.php',
     'App\\Models\\ContratoProfesionalInstitucion' => $baseDir . '/app/Models/ContratoProfesionalInstitucion.php',

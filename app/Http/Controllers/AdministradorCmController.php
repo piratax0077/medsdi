@@ -12,9 +12,11 @@ use App\Models\AsistenteTipo;
 use App\Models\Bancos;
 use App\Models\ConvenioInstitucion;
 use App\Models\ContratoAsistenteInstitucion;
+use App\Models\ContratoMantencionInstitucion;
 use App\Models\ContratoProfesionalInstitucion;
 use App\Models\CuentaBancariaInst;
 use App\Models\TipoAreasCm;
+use App\Models\TipoProducto;
 use Illuminate\Http\Request;
 use App\Models\Region;
 use App\Models\Ciudad;
@@ -28,6 +30,8 @@ use App\Models\MensajesDifusion;
 use App\Models\MensajesProfesional;
 use App\Models\Mensajes;
 use App\Models\Paciente;
+use App\Models\Pedido;
+use App\Models\PedidoDetalle;
 use App\Models\Profesional;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalInstitucionConvenio;
@@ -260,13 +264,16 @@ class AdministradorCmController extends Controller
             ->where('contrato_asistente_institucion.id_institucion',$institucion->id)
             ->get();
 
+        $mantenedores_contratados = ContratoMantencionInstitucion::where('id_institucion',$institucion->id)->get();
+
         return view('app.adm_cm.contratos_nuevos',
             [
                 'regiones' => $regiones,
                 'bancos' => $bancos,
                 'especialidades' => $especialidades,
                 'profesionales_contratados' => $profesionales_contratados,
-                'asistentes_contratados' => $asistentes_contratados
+                'asistentes_contratados' => $asistentes_contratados,
+                'mantenedores_contratados' => $mantenedores_contratados,
             ]
         );
     }
@@ -5879,8 +5886,9 @@ class AdministradorCmController extends Controller
 
             $nuevo_contrato->save();
 
-            $profesionales_contratados = ContratoProfesionalInstitucion::select('contrato_profesional_institucion.*','especialidades.nombre as especialidad')
-            ->join('especialidades','especialidades.id','contrato_profesional_institucion.id_especialidad')
+            $profesionales_contratados = ContratoProfesionalInstitucion::select('contrato_profesional_institucion.*','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad')
+            ->join('especialidades','especialidades.id','contrato_profesional_institucion.id_profesion')
+            ->join('tipos_especialidad','tipos_especialidad.id','contrato_profesional_institucion.id_especialidad')
             ->where('contrato_profesional_institucion.id_institucion',$institucion->id)
             ->get();
 
@@ -6473,6 +6481,248 @@ class AdministradorCmController extends Controller
             return $e->getMessage();
         }
 
+
+    }
+
+    public function registrar_personal_mantencion(Request $req){
+        try {
+            $institucion = '';
+            $tipo_institucion = '1';
+            $id_busqueda = Auth::user()->id;
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+            if($registro)
+            {
+                // var_dump($registro);
+                // var_dump($registro->UsuarioAdministrador()->first());
+                //var_dump($registro->UsuarioAdministrador()->first()->id);
+                /** INSTITUCION */
+                $institucion = $registro;
+                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                $tipo_institucion = 'institucion';
+
+            }
+            else
+            {
+                $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+                if($registro)
+                {
+                    /** SERVICIOS */
+                    $institucion = $registro;
+                    $tipo_institucion = 'servicio';
+                }
+                else
+                {
+                    /** busqueda por responsable */
+                    $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                    if($responsable)
+                    {
+                        $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            // var_dump($registro);
+                            // var_dump($registro->UsuarioAdministrador()->first());
+                            /** INSTITUCION */
+                            $institucion = $registro;
+                            $tipo_institucion = 'institucion';
+
+                        }
+                        else
+                        {
+                            $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                            if($registro)
+                            {
+                                /** SERVICIOS */
+                                $institucion = $registro;
+                                $tipo_institucion = 'servicio';
+                            }
+                            else
+                            {
+                                return back()->with('error','Institución no encontrada');
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
+                }
+            }
+
+            $nuevo_contrato_mantencion = new ContratoMantencionInstitucion();
+            $nuevo_contrato_mantencion->rut = $req->rut;
+            $nuevo_contrato_mantencion->fecha_ingreso = $req->fecha;
+            $nuevo_contrato_mantencion->nombre = $req->nombre;
+            $nuevo_contrato_mantencion->primer_apellido = $req->apellido1;
+            $nuevo_contrato_mantencion->segundo_apellido = $req->apellido2;
+            $nuevo_contrato_mantencion->email = $req->email;
+            $nuevo_contrato_mantencion->telefono = $req->telefono;
+            $nuevo_contrato_mantencion->direccion = $req->direccion;
+            $nuevo_contrato_mantencion->numero = $req->numero;
+            $nuevo_contrato_mantencion->id_cargo = $req->profesion;
+            $nuevo_contrato_mantencion->id_region = $req->region;
+            $nuevo_contrato_mantencion->id_comuna = $req->comuna;
+            $nuevo_contrato_mantencion->id_tipo_mantencion = $req->tipo;
+            $nuevo_contrato_mantencion->id_funcion = $req->funcion;
+            $nuevo_contrato_mantencion->horas_trabajadas = $req->horas_trabajadas;
+            $nuevo_contrato_mantencion->remuneracion = intval($req->remuneracion);
+            $nuevo_contrato_mantencion->id_banco = $req->banco;
+            $nuevo_contrato_mantencion->numero_cuenta = $req->n_cta;
+            $nuevo_contrato_mantencion->sucursal = $req->sucursal;
+            $nuevo_contrato_mantencion->id_institucion = $institucion->id;
+            $nuevo_contrato_mantencion->id_tipo_contrato = 1; // contrato indefinido (por defecto)
+
+            if($nuevo_contrato_mantencion->save()){
+                $mantenedores_contratados = ContratoMantencionInstitucion::where('id_institucion',$institucion->id)->get();
+                $v = view('fragm.mantenedores_contratados',[
+                    'mantenedores_contratados' => $mantenedores_contratados,
+                ])->render();
+                return ['estado' => 1, 'msj' => 'Mantenedor registrado', 'v' => $v];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+
+    }
+
+    public function eliminar_personal_mantencion(Request $req){
+        try {
+            $institucion = '';
+            $tipo_institucion = '1';
+            $id_busqueda = Auth::user()->id;
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+            if($registro)
+            {
+                // var_dump($registro);
+                // var_dump($registro->UsuarioAdministrador()->first());
+                //var_dump($registro->UsuarioAdministrador()->first()->id);
+                /** INSTITUCION */
+                $institucion = $registro;
+                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                $tipo_institucion = 'institucion';
+
+            }
+            else
+            {
+                $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+                if($registro)
+                {
+                    /** SERVICIOS */
+                    $institucion = $registro;
+                    $tipo_institucion = 'servicio';
+                }
+                else
+                {
+                    /** busqueda por responsable */
+                    $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                    if($responsable)
+                    {
+                        $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            // var_dump($registro);
+                            // var_dump($registro->UsuarioAdministrador()->first());
+                            /** INSTITUCION */
+                            $institucion = $registro;
+                            $tipo_institucion = 'institucion';
+
+                        }
+                        else
+                        {
+                            $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                            if($registro)
+                            {
+                                /** SERVICIOS */
+                                $institucion = $registro;
+                                $tipo_institucion = 'servicio';
+                            }
+                            else
+                            {
+                                return back()->with('error','Institución no encontrada');
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
+                }
+            }
+            $mantenedor = ContratoMantencionInstitucion::find($req->id);
+            $mantenedor->delete();
+            $mantenedores_contratados = ContratoMantencionInstitucion::where('id_institucion',$institucion->id)->get();
+            $v = view('fragm.mantenedores_contratados',[
+                'mantenedores_contratados' => $mantenedores_contratados,
+            ])->render();
+            return ['estado' => 1, 'msj' => 'Mantenedor eliminado', 'v' => $v];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function solicitudes_pendientes(){
+        $tipos_producto = TipoProducto::all();
+        $empleados = User::all();
+        $pedidos = Pedido::select('pedido.*', 'users.name as usuario')
+            ->leftjoin('users', 'pedido.id_usuario', '=', 'users.id')
+            ->where('pedido.estado', 1)
+            ->get();
+        return view('app.bodega.solicitudes_pendientes',[
+            'pedidos' => $pedidos,
+            'tipos_producto' => $tipos_producto,
+            'empleados' => $empleados
+        ]);
+    }
+
+    public function ver_solicitud(Request $req){
+        try {
+            //code...
+            $tipos_producto = TipoProducto::all();
+            $empleados = User::all();
+            $pedido = Pedido::select('pedido.*', 'users.name as usuario')
+                ->leftjoin('users', 'pedido.id_usuario', '=', 'users.id')
+                ->where('pedido.id', $req->id)
+                ->first();
+            $productos_pedido = PedidoDetalle::select('pedido_detalle.*', 'productos.nombre as nombre_medicamento', 'tipo_producto.nombre as tipo_producto','productos.codigo_interno as codigo','marcas_productos.nombre as marca')
+                                            ->leftjoin('productos', 'pedido_detalle.id_producto', '=', 'productos.id')
+                                            ->leftjoin('tipo_producto', 'productos.id_tipo_producto', '=', 'tipo_producto.id')
+                                            ->leftjoin('marcas_productos', 'productos.id_marca', '=', 'marcas_productos.id')
+                                            ->where('pedido_detalle.id_pedido', $req->id)
+                                            ->where('pedido_detalle.estado', 1)
+                                            ->get();
+
+            return view('app.bodega.solicitud',[
+                'pedido' => $pedido,
+                'productos_pedido' => $productos_pedido,
+                'tipos_producto' => $tipos_producto,
+                'empleados' => $empleados
+            ]);
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
 
     }
 }

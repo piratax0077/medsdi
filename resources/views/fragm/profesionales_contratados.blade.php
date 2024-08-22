@@ -17,8 +17,8 @@
                     <span>{{ $profesional->rut }}</span>
                 </td>
                 <td class="align-middle text-center">
-                    <span>{{ $profesional->profesion }}</span><br>
-                    <span>{{ $profesional->especialidad }}</span>
+                    <span>{{ $profesional->especialidad }}</span><br>
+                    <span>{{ $profesional->tipo_especialidad }}</span>
                 </td>
                 <td class="align-middle text-center">
                     <span>{{ $profesional->tipo_contrato }}</span><br>
