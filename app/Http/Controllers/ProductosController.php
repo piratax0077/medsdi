@@ -113,6 +113,9 @@ class ProductosController extends Controller
             $producto->descripcion = $req->observaciones;
             $producto->id_tipo_producto = $req->tipo_producto;
             $producto->id_unidad_medida = $req->unidad_medida;
+            $producto->almacenamiento = $req->almacenamiento;
+            $producto->tipo_almacenamiento = $req->tipo_almacenamiento;
+            $producto->id_bodega = $req->bodega;
             $producto->id_marca = $req->marca;
             $producto->save();
 

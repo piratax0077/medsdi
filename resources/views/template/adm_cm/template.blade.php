@@ -30,6 +30,9 @@
     <!--Estilos formularios sm-->
     <link rel="stylesheet" href='{{ asset('css/formulario_sm.css') }}'/>
 
+        <!-- fRANCISCO -->
+        <script src="{{ asset('js/compras.js') }}"></script>
+
     <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

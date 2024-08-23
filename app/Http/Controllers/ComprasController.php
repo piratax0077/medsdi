@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\AdminInstServ;
 use App\Models\Asistente;
+use App\Models\Bodega;
 use App\Models\Bono;
 use App\Models\Compras;
 use App\Models\Proveedor;
+use App\Models\Instituciones;
 use App\Models\TipoProducto;
 use App\Models\Region;
 use App\Models\Paciente;
 use App\Models\Profesional;
 use App\Models\Producto;
+use App\Models\Servicios;
 use App\Models\Compras_detalle;
 use App\Models\Marcas_productos;
 use App\Models\Unidades_medidas;
@@ -24,20 +28,94 @@ class ComprasController extends Controller
     //
 
     public function index(){
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
         $proveedores = Proveedor::select('proveedores.*', 'tipo_producto.nombre as tipo_producto')
         ->join('tipo_producto', 'proveedores.id_tipo_producto', '=', 'tipo_producto.id')
         ->get();
+
         $tipos_producto = TipoProducto::all();
         $regiones = Region::orderBy('nombre')->get();
         $productos_controller = new ProductosController();
         $marcas = $productos_controller->dameMarcas();
         $unidades_medidas = $productos_controller->dameMedidas();
+        $bodegas = Bodega::where('id_institucion', $institucion->id)->get();
         return view('app.bodega.compras', [
             'proveedores' => $proveedores,
             'tipos_producto' => $tipos_producto,
             'region' => $regiones,
             'marcas' => $marcas,
-            'unidades_medidas' => $unidades_medidas
+            'unidades_medidas' => $unidades_medidas,
+            'bodegas' => $bodegas,
         ]);
     }
 

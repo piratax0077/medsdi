@@ -1392,6 +1392,9 @@ Route::group([
     /** SOLICITUDES PENDIENTES */
     Route::get('solicitudes_pendientes', [App\Http\Controllers\AdministradorCmController::class, 'solicitudes_pendientes'])->name('adm_cm.solicitudes_pendientes');
     Route::post('ver_solicitud', [App\Http\Controllers\AdministradorCmController::class, 'ver_solicitud'])->name('adm_cm.ver_solicitud');
+    /** CONTROLES DE ALMACENAMIENTO */
+    Route::get('controles_almacenamiento', [App\Http\Controllers\AdministradorCmController::class, 'controles_almacenamiento'])->name('adm_cm.controles_almacenamiento');
+
 });
 
 /** -- LABORATORIO --  **/

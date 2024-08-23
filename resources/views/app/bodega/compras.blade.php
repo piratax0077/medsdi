@@ -177,170 +177,88 @@
     function guardarCompra(){
 
         var proveedor = $('#proveedor_cab').val();
-
         var fecha = $('#fecha').val();
-
         var nro_factura = $('#nro_factura').val();
 
-
-
         // validar que los campos no estén vacíos
-
         if(proveedor === '0'){
-
             // acceder a la funcion mensaje y enviarle los parametros
-
             return mensaje('Debe seleccionar un proveedor','error');
-
         }
-
-
 
         if(fecha === ''){
-
             return mensaje('Debe seleccionar una fecha','error');
-
         }
-
-
 
         if(nro_factura === ''){
-
             return mensaje('Debe ingresar un número de factura','error');
-
         }
 
-
-
         var data = {
-
             proveedor: proveedor,
-
             fecha: fecha,
-
             nro_factura: nro_factura
-
         };
 
 
-
         // headers para enviar el token de csrf
-
         $.ajaxSetup({
-
             headers: {
-
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-
             }
-
         });
 
-
-
         $.ajax({
-
             type: 'POST',
-
             url: "{{ route('guardarCompra') }}",
-
             data: data,
-
             success: function(response) {
-
                 console.log(response);
-
                 let mensaje = response.mensaje;
-
                 if(mensaje === 'OK'){
-
                     $('#id_compra').val(response.id_compra);
-
                     // quitar el atributo disabled a los input dentro del div contenedor_procedimiento
-
                     $('#contenedor_procedimiento input').removeAttr('disabled');
-
                     swal({
-
                         title: "Compra guardada correctamente",
-
                         text: "Desea agregar productos a la factura?",
-
                         icon: "success",
-
                         buttons: true,
-
                         dangerMode: true,
-
-
-
                     }).then((result) => {
-
                         console.log(result);
-
                         if(result){
-
                             $('#contenedor_procedimiento').fadeIn('slow');
-
                         }
-
                     });
 
                     // limpiamos la tabla de productos
-
                     $('#productos_factura').DataTable().clear().draw();
-
                 } else if(mensaje === 'existe') {
-
                     let productos = response.productos;
-
                     // usar la consulta swal
-
                     swal({
-
                         title: "Ya existe una factura con ese numero.",
-
                         text: "Desea cargar los productos de la factura?",
-
                         icon: "warning",
-
                         buttons: true,
-
                         dangerMode: true,
-
-
-
                     }).then((result) => {
-
                         console.log(result);
-
                     if (result) {
-
                         $('#id_compra').val(response.id_compra);
-
                         // quitar el atributo disabled a los input dentro del div contenedor_procedimiento
-
                         $('#contenedor_procedimiento input').removeAttr('disabled');
-
                         swal({
-
                             title: "Productos cargados correctamente",
-
                             text: "Puede agregar más productos si lo desea",
-
                             icon: "success",
-
                             button: "Aceptar",
-
                             position:'top-right',
-
                             timer: 3000,
-
                             timerProgressBar: true,
-
                             toast: true,
-
-                        })
+                        });
 
                         $('#productos_factura').DataTable().clear().draw();
 
@@ -609,307 +527,198 @@ function buscarProductosFactura(idFactura){
 function guardarItemFactura(){
 
     var codigo_interno = $('#codigo_interno').val();
-
     var id_compra = $('#id_compra').val();
-
     var nombre_producto = $('#nombre').val();
-
     var precio = $('#precio').val();
-
     var stock_minimo = $('#stock_minimo').val();
-
     var stock_maximo = $('#stock_maximo').val();
-
     var tipo_producto = $('#producto').val();
-
     var unidad_medida = $('#um').val();
-
+    var almacenamiento = $('#almacenamiento').val();
+    var tipo_almacenamiento = $('#tipo_almacenamiento').val();
     var marca = $('#marca').val();
-
     var cantidad = $('#cantidad').val();
-
     var observaciones = $('#observaciones').val();
-
     var lote = $('#lote').val();
-
     var fecha_vencimiento = $('#fecha_vencimiento').val();
-
     var nuevo=document.getElementById("elegir").value;
-
     var bodega = $('#bodega').val();
-
-
-
-
-
     var id_producto=document.getElementById("id_producto").value;
 
     if(id_producto === '') id_producto = 0;
-
-    // validar
-
-
-
+    var valido = 1;
+    var mensaje = '';
+    if(id_compra == '' || id_compra == 0){
+        mensaje += '<li>Debe seleccionar una compra</li>';
+        valido = 0;
+    }
     if(codigo_interno === ''){
-
-        return mensaje('Debe ingresar el código interno del producto','error');
-
+        mensaje += '<li>Debe ingresar un código interno</li>';
+        valido = 0;
     }
-
-
-
     if(nombre_producto === ''){
-
-        return mensaje('Debe ingresar el nombre del producto','error');
-
+        mensaje += '<li>Debe ingresar un nombre de producto</li>';
+        valido = 0;
     }
-
-
-
     if(precio === ''){
-
-        return mensaje('Debe ingresar el precio del producto','error');
-
+        mensaje += '<li>Debe ingresar un precio</li>';
+        valido = 0;
     }
-
-
-
     if(stock_minimo === ''){
-
-        return mensaje('Debe ingresar el stock mínimo del producto','error');
-
+        mensaje += '<li>Debe ingresar un stock mínimo</li>';
+        valido = 0;
     }
-
-
-
     if(stock_maximo === ''){
-
-       return mensaje('Debe ingresar el stock máximo del producto','error');
-
+        mensaje += '<li>Debe ingresar un stock máximo</li>';
+        valido = 0;
     }
-
-
-
     if(tipo_producto === '0'){
-
-        return mensaje('Debe seleccionar un tipo de producto','error');
-
+        mensaje += '<li>Debe seleccionar un tipo de producto</li>';
+        valido = 0;
     }
-
-
-
     if(unidad_medida === '0'){
-
-        return mensaje('Debe seleccionar una unidad de medida','error');
-
+        mensaje += '<li>Debe seleccionar una unidad de medida</li>';
+        valido = 0;
     }
-
-
+    if(almacenamiento === '' || almacenamiento == 0){
+        mensaje += '<li>Debe ingresar un almacenamiento</li>';
+        valido = 0;
+    }
+    if(almacenamiento == 1){
+        if(tipo_almacenamiento === '' || tipo_almacenamiento == 0){
+            mensaje += '<li>Debe ingresar un tipo de almacenamiento</li>';
+            valido = 0;
+        }
+    }
 
     if(marca === '0'){
-
-        return mensaje('Debe seleccionar una marca','error');
-
+        mensaje += '<li>Debe seleccionar una marca</li>';
+        valido = 0;
     }
-
-
-
     if(cantidad === ''){
-
-        return mensaje('Debe ingresar la cantidad del producto','error');
-
+        mensaje += '<li>Debe ingresar una cantidad</li>';
+        valido = 0;
     }
-
-
-
-    if(lote !== '' && fecha_vencimiento === '') {
-
-        return mensaje('Debe ingresar la fecha de vencimiento','error');
-
+    if(observaciones === ''){
+        mensaje += '<li>Debe ingresar observaciones</li>';
+        valido = 0;
     }
-
-
-
+    if(lote === ''){
+        mensaje += '<li>Debe ingresar un lote</li>';
+        valido = 0;
+    }
+    if(fecha_vencimiento === ''){
+        // mensaje += '<li>Debe ingresar una fecha de vencimiento</li>';
+        // valido = 0;
+    }
     if(bodega === '0'){
-
-        return mensaje('Debe seleccionar una bodega','error');
-
+        mensaje += '<li>Debe seleccionar una bodega</li>';
+        valido = 0;
     }
 
-
-
-
+    if(valido === 0){
+        swal({
+            title: "Error al guardar el producto",
+            content:{
+                    element: "div",
+                    attributes: {
+                        innerHTML: mensaje
+                    }
+                },
+            icon: "error",
+            buttons: true,
+            dangerMode: true,
+        });
+        return false;
+    }
 
     var data = {
-
         nuevo:nuevo,
-
         id_producto:id_producto,
-
         id_compra: id_compra,
-
         codigo_interno: codigo_interno,
-
         nombre_producto: nombre_producto,
-
         cantidad: cantidad,
-
         precio: precio,
-
         stock_minimo: stock_minimo,
-
         stock_maximo: stock_maximo,
-
         tipo_producto: tipo_producto,
-
         unidad_medida: unidad_medida,
-
+        almacenamiento: almacenamiento,
+        tipo_almacenamiento: tipo_almacenamiento,
         marca: marca,
-
         observaciones: observaciones,
-
         lote: lote,
-
         fecha_vencimiento: fecha_vencimiento,
-
         bodega: bodega
-
     };
-
-
 
     // headers para enviar el token de csrf
 
     $.ajaxSetup({
-
         headers: {
-
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-
         }
-
     });
 
-
-
     $.ajax({
-
         type: 'POST',
-
         url: "{{ route('guardarItemFactura') }}",
-
         data: data,
-
         success: function(response) {
-
             console.log(response);
-
             let mensaje = response.mensaje;
-
             let productos = response.productos;
-
             if(mensaje === 'OK'){
-
                 $('#productos_factura').DataTable().clear().draw();
-
                 productos.forEach(producto => {
-
                     console.log(producto);
-
                     let precio_format = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(producto.precio_unitario);
-
                     let total = parseInt(producto.precio_unitario) * parseInt(producto.cantidad);
-
                     let total_format = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(total);
-
                     $('#productos_factura').DataTable().row.add([
-
                         producto.codigo_interno,
-
                         producto.nombre,
-
                         producto.cantidad,
-
                         producto.unidad_medida,
-
                         producto.marca,
-
                         precio_format,
-
                         total_format,
-
                         '<button class="btn btn-danger btn-icon" onclick="eliminarItemFactura('+producto.id_item+')"><i class="fas fa-trash"></i></button>'
-
                     ]).draw();
-
                 });
-
                 swal({
-
                     title: "Producto guardado correctamente",
-
                     text: "¿Desea agregar otro producto?",
-
                     icon: "success",
-
                     buttons: true,
-
                     dangerMode: true,
-
-
-
                 }).then((result) => {
-
                     console.log(result);
-
                     if (result) {
-
                         nuevoItem();
-
                     } else {
-
                         buscarProductosFactura(id_compra);
-
                     }
-
                 });
-
                 nuevoItem();
-
             } else {
-
                 swal({
-
                     title: "Error al guardar el producto",
-
                     text: "¿Desea intentar nuevamente? "+mensaje,
-
                     icon: "error",
-
                     buttons: true,
-
                     dangerMode: true,
-
-
-
                 }).then((result) => {
-
                     console.log(result);
-
                 })
-
             }
-
         },
 
         error: function(response) {
-
             console.log(response);
-
         }
-
     });
-
 }
 
 
@@ -985,41 +794,22 @@ function eliminarItemFactura(idProducto){
 
 
 function nuevoItem(){
-
     // cerrar el buscador de productos
-
     ocultarBuscadorProducto();
-
     $('#codigo_interno').val('');
-
     $('#nombre').val('');
-
     $('#precio').val('');
-
     $('#stock_minimo').val('');
-
     $('#stock_maximo').val('');
-
     $('#producto').val(0);
-
     $('#um').val(0);
-
     $('#marca').val(0);
-
     $('#cantidad').val('');
-
     $('#observaciones').val('');
-
     $('#fecha_vencimiento').val('');
-
     $('#lote').val('');
-
     $('#contenedor_procedimiento').removeClass('d-none').hide().fadeIn('slow');
-
-
-
     $('#elegir').val("SI");
-
 }
 
 
@@ -1799,27 +1589,18 @@ function seleccionarProducto(idproducto){
             nuevoItem();
 
             $('#elegir').val("NO");
-
             $('#codigo_interno').val(producto.codigo_interno);
-
             $('#nombre').val(producto.nombre);
-
             $('#precio').val(producto.precio_unitario);
-
+            $('#stock_minimo').val(producto.stock_minimo);
+            $('#stock_maximo').val(producto.stock_maximo);
             $('#producto').val(producto.id_tipo_producto);
-
             $('#um').val(producto.id_unidad_medida);
-
             $('#marca').val(producto.id_marca);
-
             $('#cantidad').val(producto.cantidad);
-
             $('#observaciones').val(producto.observaciones);
-
             $('#lote').val(producto.lote);
-
             $('#fecha_vencimiento').val(producto.fecha_vencimiento);
-
             ocultarBuscadorProducto();
 
         },
@@ -2732,57 +2513,33 @@ $(document).ready(function() {
                  <div class="card">
 
                     <div class="card-body pb-1">
-
                         <div class="form-row">
-
                             <div class="col-md-3 form-group">
-
                                 <label for="proveedor" class="floating-label-activo-sm">Proveedor</label>
-
                                 <div class="d-flex justify-content-between">
-
                                     <select name="proveedor" class="form-control form-control-sm" id="proveedor_cab">
-
                                         <option value="0">Seleccione</option>
-
                                         @foreach ($proveedores as $proveedor)
-
                                             <option value="{{$proveedor->id}}">{{$proveedor->nombre}}</option>
-
                                         @endforeach
-
                                     </select>
-
                                     <button class="btn btn-primary btn-sm" onclick="agregarProveedor()"><i class="fas fa-plus"></i></button>
-
                                 </div>
-
-
-
                             </div>
 
                             <div class="col-md-3 form-group">
-
                                 <label for="fecha" class="floating-label-activo-sm">Fecha de factura</label>
-
                                 <input type="date" class="form-control form-control-sm" id="fecha">
-
                             </div>
 
                             <div class="col-md-3 form-group">
-
                                 <label for="nro_factura" class="floating-label-activo-sm">Nº Factura</label>
-
                                 <input type="text" class="form-control form-control-sm" id="nro_factura">
-
                             </div>
 
                             <div class="col-md-3 d-flex align-items-start">
-
                                 <button class="btn btn-info btn-sm btn-block" onclick="guardarCompra()"><i class="feather icon-save"></i> Guardar</button>
-
                             </div>
-
                         </div>
 
                         <div id="form_agregar_proveedor" class="d-none">
@@ -2867,7 +2624,7 @@ $(document).ready(function() {
 
                                     <div class="form-group">
 
-                                        <label class="floating-label">Teléfono</label>
+                                        <label class="floating-label-activo-sm">Teléfono</label>
 
                                         <input class="form-control form-control-sm" name="telefono" id="telefono" type="number" >
 
@@ -2879,7 +2636,7 @@ $(document).ready(function() {
 
                                     <div class="form-group">
 
-                                        <label class="floating-label">Teléfono (opcional)</label>
+                                        <label class="floating-label-activo-sm">Teléfono (opcional)</label>
 
                                         <input class="form-control form-control-sm" name="telefono" id="telefono" type="number" >
 
@@ -2891,7 +2648,7 @@ $(document).ready(function() {
 
                                     <div class="form-group">
 
-                                        <label class="floating-label">Dirección / Calle</label>
+                                        <label class="floating-label-activo-sm">Dirección / Calle</label>
 
                                         <input class="form-control form-control-sm" name="direccion" id="direccion" type="text">
 
@@ -3210,29 +2967,26 @@ $(document).ready(function() {
                                     </div>
 
                                 </div>
-
                                 <div class="form-group col-md-3">
-
+                                    <label for="fecha_vencimiento" class="floating-label-activo-sm">¿Almacenamiento?</label>
+                                    <select name="almacenamiento" id="almacenamiento" class="form-control form-control-sm">
+                                        <option value="0">Seleccione</option>
+                                        <option value="1">Si</option>
+                                        <option value="2">No</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="fecha_vencimiento" class="floating-label-activo-sm">Tipo de Almacenamiento</label>
+                                    <select name="tipo_almacenamiento" id="tipo_almacenamiento" class="form-control form-control-sm">
+                                        <option value="0">Seleccione</option>
+                                        <option value="1">Proteccion parcial de la luz</option>
+                                        <option value="2">Proteccion de humedad</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3">
                                     <label for="fecha_vencimiento" class="floating-label-activo-sm">Fecha de Vencimiento</label>
-
                                     <input type="date" class="form-control form-control-sm" id="fecha_vencimiento">
-
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label for="cantidad" class="floating-label-activo-sm">Cantidad</label>
-                                    <input type="number" class="form-control form-control-sm" id="cantidad">
-                                </div>
-
-                                <div class="form-group col-md-3">
-                                    <label for="lote" class="floating-label-activo-sm">Lote</label>
-                                    <input type="text" class="form-control form-control-sm" id="lote">
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label for="observaciones" class="floating-label-activo-sm">Observaciones</label>
-                                    <textarea name="observaciones" id="observaciones" cols="30" rows="3" class="form-control"></textarea>
-                                </div>
-
                                 <div class="form-group col-md-3">
                                     <label for="bodega" class="floating-label-activo-sm">Bodega</label>
                                     <select name="bodega" id="bodega" class="form-control form-control-sm">
@@ -3248,8 +3002,20 @@ $(document).ready(function() {
                                     </select>
 
                                 </div>
+                                <div class="form-group col-md-3">
+                                    <label for="cantidad" class="floating-label-activo-sm">Cantidad</label>
+                                    <input type="number" class="form-control form-control-sm" id="cantidad">
+                                </div>
 
+                                <div class="form-group col-md-3">
+                                    <label for="lote" class="floating-label-activo-sm">Lote</label>
+                                    <input type="text" class="form-control form-control-sm" id="lote">
+                                </div>
 
+                                <div class="form-group col-md-3">
+                                    <label for="observaciones" class="floating-label-activo-sm">Observaciones</label>
+                                    <textarea name="observaciones" id="observaciones" cols="30" rows="3" class="form-control"></textarea>
+                                </div>
 
                             </div>
 

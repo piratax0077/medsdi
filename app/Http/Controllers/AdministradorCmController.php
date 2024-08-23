@@ -3194,6 +3194,9 @@ class AdministradorCmController extends Controller
     public function proveedores(){
         return view('app.adm_cm.proveedores');
     }
+    public function controles_almacenamiento(){
+        return view('app.bodega.controles_almacenamiento');
+    }
 
     // public function asistente_adm_gastos(){
     //     return view('app.adm_cm.gastos');
