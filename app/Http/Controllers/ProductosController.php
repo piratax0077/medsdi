@@ -113,8 +113,8 @@ class ProductosController extends Controller
             $producto->descripcion = $req->observaciones;
             $producto->id_tipo_producto = $req->tipo_producto;
             $producto->id_unidad_medida = $req->unidad_medida;
-            $producto->almacenamiento = $req->almacenamiento;
-            $producto->tipo_almacenamiento = $req->tipo_almacenamiento;
+            $producto->almacenamiento = intval($req->almacenamiento);
+            $producto->id_tipo_almacenamiento = intval($req->tipo_almacenamiento);
             $producto->id_bodega = $req->bodega;
             $producto->id_marca = $req->marca;
             $producto->save();
@@ -198,6 +198,25 @@ class ProductosController extends Controller
         return ['producto' => $producto];
     }
 
+    public function dameProductosAlmacenamiento(){
+        try {
+            $productos = Producto::select('productos.*', 'tipo_producto.nombre as tipo_producto','unidades_medidas.nombre as unidad_medida', 'marcas_productos.nombre as marca','compras_detalle.cantidad','proveedores.nombre as proveedor', 'tipo_almacenamiento_productos.nombre as tipo_almacenamiento')
+            ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+            ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+            ->join('compras_detalle', 'productos.id', 'compras_detalle.id_producto')
+            ->join('compras', 'compras_detalle.id_compra', 'compras.id')
+            ->join('proveedores', 'compras.id_proveedor', 'proveedores.id')
+            ->leftjoin('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+            ->join('tipo_almacenamiento_productos', 'productos.id_tipo_almacenamiento', 'tipo_almacenamiento_productos.id')
+            ->where('productos.almacenamiento', 1)
+            ->get();
 
+            return $productos;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
 
 }

@@ -3195,7 +3195,13 @@ class AdministradorCmController extends Controller
         return view('app.adm_cm.proveedores');
     }
     public function controles_almacenamiento(){
-        return view('app.bodega.controles_almacenamiento');
+        $producto_controller = new ProductosController();
+        // dame productos que necesitan almacenamiento
+        $productos = $producto_controller->dameProductosAlmacenamiento();
+
+        return view('app.bodega.controles_almacenamiento',[
+            'productos' => $productos
+        ]);
     }
 
     // public function asistente_adm_gastos(){

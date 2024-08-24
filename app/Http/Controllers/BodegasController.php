@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Compras;
 use App\Models\Responsable;
 use App\Models\Bodega;
 use App\Models\Producto;
 use App\Models\ProductoBodega;
+use App\Models\Proveedor;
 use App\Models\Compras_detalle;
 use App\Http\Controllers\ProductosController;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +34,7 @@ class BodegasController extends Controller
             //throw $th;
             return $e->getMessage();
         }
-        
+
     }
 
     /**
@@ -67,13 +69,13 @@ class BodegasController extends Controller
                 'email' => $request->email,
                 'id_responsable' => $request->responsable
             ]);
-    
+
             return redirect()->route('bodegas.index')->with('success','Bodega creada exitosamente');
         } catch (\Exception $e) {
             //throw $th;
             return redirect()->route('bodegas.index')->with('error','Error al crear la bodega '.$e->getMessage());
         }
-        
+
     }
 
     /**
@@ -127,7 +129,7 @@ class BodegasController extends Controller
                 $pc = new ProductosController();
                 $productos_ = $pc->buscarProductosTipo(0);
                 $productos = $productos_['productos'];
-                
+
                 return [$productos,0];
             }else{
 
@@ -152,13 +154,13 @@ class BodegasController extends Controller
                 return [$productos,1,$bodega];
             }
 
-            
-            
+
+
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();
         }
-        
+
     }
 
     public function guardarAsignacion(Request $req){
@@ -184,7 +186,7 @@ class BodegasController extends Controller
             return $e->getMessage();
         }
     }
-	
+
 	public function dameBodegas($idinstitucion){
         try {
             $bodegas = Bodega::where('id_institucion',$idinstitucion)->get();
@@ -194,5 +196,27 @@ class BodegasController extends Controller
             return $e->getMessage();
         }
     }
-    
+
+    public function verProductoAlmacenado(Request $req){
+        try {
+            $producto = Producto::select('productos.codigo_interno','productos.id','productos.stock_actual','productos.nombre','productos.descripcion','unidades_medidas.nombre as unidad_medida','compras_detalle.fecha_compra','marcas_productos.nombre as marca','compras_detalle.id as id_compra')
+                        ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
+                        ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
+                        ->join('bodega','productos.id_bodega','bodega.id')
+                        ->join('compras_detalle','productos.id','compras_detalle.id_producto')
+                        ->join('marcas_productos','productos.id_marca','marcas_productos.id')
+                        ->where('productos.id',$req->id)
+                        ->first();
+
+            $compra = Compras::find($producto->id_compra);
+            $proveedor = Proveedor::find($compra->id_proveedor);
+            $producto->proveedor = $proveedor->nombre;
+            $v = view('fragm.ver_producto_almacenado',['producto'=>$producto])->render();
+            return $v;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
 }

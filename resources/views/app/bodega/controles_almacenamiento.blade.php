@@ -35,25 +35,29 @@
                         <table id="tab_solicitudes_bodega" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th class="text-center align-middle">N° Solicitud</th>
-                                    <th class="text-center align-middle">Fecha</th>
-                                    <th class="text-center align-middle">Solicitante</th>
-                                    <th class="text-center align-middle">Observaciones</th>
+                                    <th class="text-center align-middle">Fecha Ingreso</th>
+                                    <th class="text-center align-middle">Codigo Interno</th>
+                                    <th class="text-center align-middle">Producto</th>
+                                    <th class="text-center align-middle">Stock</th>
+                                    <th class="text-center align-middle">Descripcion</th>
+                                    <th class="text-center align-middle">Tipo Almacenamiento</th>
                                     <th class="text-center align-middle">Estado</th>
                                     <th class="text-center align-middle">Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if(isset($pedidos))
-                                @foreach($pedidos as $solicitud)
+                                @if(isset($productos))
+                                @foreach($productos as $p)
                                     <tr>
-                                        <td class="align-middle text-center">{{ $solicitud->id }}</td>
-                                        <td class="align-middle text-center">{{ $solicitud->created_at }}</td>
-                                        <td class="align-middle text-center">{{ $solicitud->usuario}}</td>
-                                        <td class="align-middle text-center">{{ $solicitud->observacion }}</td>
-                                        <td class="align-middle text-center">@if($solicitud->estado == 1) <span class="badge badge-warning">Pendiente</span> @endif</td>
+                                        <td class="align-middle text-center">{{ $p->created_at }}</td>
+                                        <td class="align-middle text-center">{{ $p->codigo_interno }}</td>
+                                        <td class="align-middle text-center">{{ $p->nombre }}</td>
+                                        <td class="align-middle text-center">{{ $p->stock_actual }}</td>
+                                        <td class="align-middle text-center">{{ $p->descripcion }}</td>
+                                        <td class="align-middle text-center">{{ $p->tipo_almacenamiento }}</td>
+                                        <td class="align-middle text-center">@if($p->estado == 1) <span class="badge badge-warning">Pendiente</span> @endif</td>
                                         <td class="align-middle text-center">
-                                            <button class="btn btn-info btn-sm has-ripple" onclick="ver_solicitud({{ $solicitud->id }})" data-toggle="modal" data-target="#verSolicitud"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                                            <button class="btn btn-info btn-sm has-ripple" onclick="ver_producto_almacenado({{ $p->id }})" data-toggle="modal" data-target="#verSolicitud"><i class="fa fa-eye" aria-hidden="true"></i></button>
 
                                         </td>
                                     </tr>
@@ -70,6 +74,43 @@
 
 @section('js-profesionales')
 <script>
-
+    function ver_producto_almacenado(id){
+        $.ajax({
+            url: "{{ ROUTE('bodegas.ver_producto_almacenado') }}",
+            type: "POST",
+            data: {
+                "_token": "{{ csrf_token() }}",
+                "id": id
+            },
+            success: function(response){
+                console.log(response);
+                $('#verSolicitud').modal('show');
+                $('#detalle_pedido_body').html(response);
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+    }
 </script>
+@endsection
+
+@section('modales')
+<!-- MODAL VER PRODUCTO ALMACENADO -->
+<div id="verSolicitud" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="verSolicitud" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Detalle de producto almacenado</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#88;</span></button>
+            </div>
+            <div class="modal-body" id="detalle_pedido_body">
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger btn-sm" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

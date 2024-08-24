@@ -1965,6 +1965,7 @@ Route::get('/seleccionarProducto/{id}', [App\Http\Controllers\ProductosControlle
 Route::resource('bodegas', App\Http\Controllers\BodegasController::class);
 Route::post('/buscarProductosBodega', [App\Http\Controllers\BodegasController::class,'buscarProductosBodega'])->name('bodegas.buscarProductosBodega');
 Route::post('/guardarAsignacion', [App\Http\Controllers\BodegasController::class,'guardarAsignacion'])->name('bodegas.guardarAsignacion');
+Route::post('/ver_producto_almacenado', [App\Http\Controllers\BodegasController::class,'verProductoAlmacenado'])->name('bodegas.ver_producto_almacenado');
 
 // Convenios con controlador del tipo resource
 Route::resource('convenios', App\Http\Controllers\ConveniosController::class);

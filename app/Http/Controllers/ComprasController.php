@@ -16,6 +16,7 @@ use App\Models\Paciente;
 use App\Models\Profesional;
 use App\Models\Producto;
 use App\Models\Servicios;
+use App\Models\TipoAlmacenamientoProductos;
 use App\Models\Compras_detalle;
 use App\Models\Marcas_productos;
 use App\Models\Unidades_medidas;
@@ -109,6 +110,7 @@ class ComprasController extends Controller
         $marcas = $productos_controller->dameMarcas();
         $unidades_medidas = $productos_controller->dameMedidas();
         $bodegas = Bodega::where('id_institucion', $institucion->id)->get();
+        $tipos_almacenamiento = TipoAlmacenamientoProductos::all();
         return view('app.bodega.compras', [
             'proveedores' => $proveedores,
             'tipos_producto' => $tipos_producto,
@@ -116,6 +118,7 @@ class ComprasController extends Controller
             'marcas' => $marcas,
             'unidades_medidas' => $unidades_medidas,
             'bodegas' => $bodegas,
+            'tipos_almacenamiento' => $tipos_almacenamiento,
         ]);
     }
 
