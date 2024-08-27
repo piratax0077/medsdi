@@ -35,6 +35,7 @@
                         <table id="tab_solicitudes_bodega" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
                             <thead>
                                 <tr>
+                                    <th class="text-center align-middle">Imagen</th>
                                     <th class="text-center align-middle">Fecha Ingreso</th>
                                     <th class="text-center align-middle">Codigo Interno</th>
                                     <th class="text-center align-middle">Producto</th>
@@ -49,6 +50,7 @@
                                 @if(isset($productos))
                                 @foreach($productos as $p)
                                     <tr>
+                                        <td><img src="https://placehold.co/600x400" alt="foto" style="width: 100px;"></td>
                                         <td class="align-middle text-center">{{ $p->created_at }}</td>
                                         <td class="align-middle text-center">{{ $p->codigo_interno }}</td>
                                         <td class="align-middle text-center">{{ $p->nombre }}</td>

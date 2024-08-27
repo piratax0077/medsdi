@@ -57,6 +57,7 @@
                                     <table class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%" id="tabla_productos_historial">
                                         <thead>
                                             <tr>
+                                                <th scope="col">Imagen</th>
                                                 <th scope="col">Fecha</th>
                                                 <th scope="col">Producto</th>
                                                 <th scope="col">Cantidad</th>
@@ -68,6 +69,7 @@
                                         <tbody>
                                             @foreach($ingresos as $producto)
                                             <tr>
+                                                <td><img src="https://placehold.co/600x400" alt="foto" style="width: 100px;"></td>
                                                 <td>{{ $producto->created_at }}</td>
                                                 <td>{{ $producto->producto }}</td>
                                                 <td>{{ $producto->cantidad }}</td>
@@ -88,6 +90,7 @@
                                     <table class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%" id="tabla_productos_historial_salida">
                                         <thead>
                                             <tr>
+                                                <th scope="col">Imagen</th>
                                                 <th scope="col">Fecha</th>
                                                 <th scope="col">Producto</th>
                                                 <th scope="col">Cantidad</th>
@@ -99,6 +102,7 @@
                                         <tbody>
                                             @foreach($pedidos as $producto)
                                             <tr>
+                                                <td><img src="https://placehold.co/600x400" alt="foto" style="width: 100px;"></td>
                                                 <td>{{ $producto->created_at }}</td>
                                                 <td>{{ $producto->producto }}</td>
                                                 <td>{{ $producto->cantidad }}</td>

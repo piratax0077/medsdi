@@ -12,6 +12,7 @@
 <table id="detalle_solicitud_pendiente" class="display table table-striped table-xs dt-responsive nowrap" style="width:100%">
     <thead>
         <tr>
+            <th class="align-middle">Imagen</th>
             <th class="align-middle">Código</th>
             <th class="align-middle">Tipo Producto</th>
             <th class="align-middle">Producto</th>
@@ -24,6 +25,7 @@
         @if(isset($productos_pedido))
             @foreach($productos_pedido as $det)
             <tr>
+                <td><img src="https://placehold.co/100x100" alt=""></td>
                 <td class="align-middle">{{ $det->codigo }}</td>
                 <td class="align-middle">{{ $det->tipo_producto }}</td>
                 <td class="align-middle">{{ $det->nombre_medicamento }}</td>
