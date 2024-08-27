@@ -51,7 +51,7 @@
                                         <td class="align-middle text-center">{{ $solicitud->created_at }}</td>
                                         <td class="align-middle text-center">{{ $solicitud->usuario}}</td>
                                         <td class="align-middle text-center">{{ $solicitud->observacion }}</td>
-                                        <td class="align-middle text-center">@if($solicitud->estado == 1) <span class="badge badge-warning">Pendiente</span> @endif</td>
+                                        <td class="align-middle text-center">@if($solicitud->estado == 1) <span class="badge badge-warning">Pendiente</span>@elseif($solicitud->estado == 2) <span class="badge badge-success">Entregado</span> @endif</td>
                                         <td class="align-middle text-center">
                                             <button class="btn btn-info btn-sm has-ripple" onclick="ver_solicitud({{ $solicitud->id }})" data-toggle="modal" data-target="#verSolicitud"><i class="fa fa-eye" aria-hidden="true"></i></button>
 

@@ -6689,7 +6689,6 @@ class AdministradorCmController extends Controller
         $empleados = User::all();
         $pedidos = Pedido::select('pedido.*', 'users.name as usuario')
             ->leftjoin('users', 'pedido.id_usuario', '=', 'users.id')
-            ->where('pedido.estado', 1)
             ->get();
         return view('app.bodega.solicitudes_pendientes',[
             'pedidos' => $pedidos,
@@ -6707,17 +6706,14 @@ class AdministradorCmController extends Controller
                 ->leftjoin('users', 'pedido.id_usuario', '=', 'users.id')
                 ->where('pedido.id', $req->id)
                 ->first();
-            $productos_pedido = PedidoDetalle::select('pedido_detalle.*', 'productos.nombre as nombre_medicamento', 'tipo_producto.nombre as tipo_producto','productos.codigo_interno as codigo','marcas_productos.nombre as marca')
-                                            ->leftjoin('productos', 'pedido_detalle.id_producto', '=', 'productos.id')
-                                            ->leftjoin('tipo_producto', 'productos.id_tipo_producto', '=', 'tipo_producto.id')
-                                            ->leftjoin('marcas_productos', 'productos.id_marca', '=', 'marcas_productos.id')
-                                            ->where('pedido_detalle.id_pedido', $req->id)
-                                            ->where('pedido_detalle.estado', 1)
-                                            ->get();
-
+            $bodega_controlador = new BodegasController();
+            $todos_productos = $bodega_controlador->dameProductosEntregados($req->id);
+            $productos_pedido = $todos_productos['entregados'];
+            $productos_pendientes = $todos_productos['pendientes'];
             return view('app.bodega.solicitud',[
                 'pedido' => $pedido,
                 'productos_pedido' => $productos_pedido,
+                'productos_pendientes' => $productos_pendientes,
                 'tipos_producto' => $tipos_producto,
                 'empleados' => $empleados
             ]);

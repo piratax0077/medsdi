@@ -364,4 +364,59 @@ class BodegasController extends Controller
     public function reportes(){
         return view('app.bodega.reportes');
     }
+
+    public function agregarProductoCarro(Request $req){
+        try {
+            // buscar el pedido solicitado en el detalle del pedido
+            $pedido = PedidoDetalle::where('id',$req->id)->first();
+            $pedido_original = Pedido::where('id',$pedido->id_pedido)->first();
+            // buscar el producto solicitado
+            $producto = Producto::where('id',$pedido->id_producto)->first();
+            $cantidad_solicitada = intval($req->cantidad_entregada);
+            // preguntar si existe el stock suficiente para la entrega
+            if($producto->stock_actual < $cantidad_solicitada){
+                return 'La cantidad solicitada es mayor al stock actual del producto';
+            }
+            if($cantidad_solicitada <= 0){
+                return 'La cantidad solicitada debe ser mayor a 0';
+            }
+
+            // si existe el stock suficiente, se procede a agregar el producto al carro
+            $producto->stock_actual -= $cantidad_solicitada;
+            $producto->save();
+            $pedido->cantidad -= $cantidad_solicitada;
+            $pedido->cantidad_entregada += $cantidad_solicitada;
+            if($pedido->cantidad == 0){
+                $pedido->estado = 0;
+                $pedido_original->estado = 2;
+            }
+            $pedido_original->save();
+            $pedido->save();
+            $todos_entregados = $this->dameProductosEntregados($pedido->id_pedido);
+            $v = view('app.bodega.solicitud',['productos_pedido'=>$todos_entregados['entregados'],'productos_pendientes'=>$todos_entregados['pendientes']])->render();
+            return $v;
+        } catch (\Exception $e) {
+            //throw $th;
+            return ['error'=>$e->getMessage()];
+        }
+
+    }
+
+    public function dameProductosEntregados($id_pedido){
+        $productos_pendientes = PedidoDetalle::select('pedido_detalle.*', 'productos.nombre as nombre_medicamento', 'tipo_producto.nombre as tipo_producto','productos.codigo_interno as codigo','marcas_productos.nombre as marca')
+                                            ->leftjoin('productos', 'pedido_detalle.id_producto', '=', 'productos.id')
+                                            ->leftjoin('tipo_producto', 'productos.id_tipo_producto', '=', 'tipo_producto.id')
+                                            ->leftjoin('marcas_productos', 'productos.id_marca', '=', 'marcas_productos.id')
+                                            ->where('pedido_detalle.id_pedido', $id_pedido)
+                                            ->where('pedido_detalle.estado', 1)
+                                            ->get();
+        $productos_entregados = PedidoDetalle::select('pedido_detalle.*', 'productos.nombre as nombre_medicamento', 'tipo_producto.nombre as tipo_producto','productos.codigo_interno as codigo','marcas_productos.nombre as marca')
+                                            ->leftjoin('productos', 'pedido_detalle.id_producto', '=', 'productos.id')
+                                            ->leftjoin('tipo_producto', 'productos.id_tipo_producto', '=', 'tipo_producto.id')
+                                            ->leftjoin('marcas_productos', 'productos.id_marca', '=', 'marcas_productos.id')
+                                            ->where('pedido_detalle.id_pedido', $id_pedido)
+                                            ->where('pedido_detalle.cantidad_entregada', '>', 0)
+                                            ->get();
+        return ['entregados'=>$productos_entregados,'pendientes'=>$productos_pendientes];
+    }
 }
