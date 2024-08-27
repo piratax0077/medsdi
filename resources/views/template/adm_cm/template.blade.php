@@ -318,6 +318,26 @@
                 responsive: true,
             });
 
+            $('#tabla_productos_historial').DataTable({
+                responsive: true,
+            });
+
+            $('#tabla_productos_historial_salida').DataTable({
+                responsive: true,
+            });
+
+            $('#tabla_reporte_diario').DataTable({
+                responsive: true,
+            });
+
+            $('#tabla_reporte_mensual').DataTable({
+                responsive: true,
+            });
+
+            $('#tabla_reporte_anual').DataTable({
+                responsive: true,
+            });
+
             {{--  mensaje de al registrar ficha clinica  --}}
             @if(session('mensaje'))
                 swal({

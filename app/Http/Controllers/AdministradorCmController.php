@@ -3204,13 +3204,6 @@ class AdministradorCmController extends Controller
         ]);
     }
 
-    // public function asistente_adm_gastos(){
-    //     return view('app.adm_cm.gastos');
-    // }
-	// public function gastos(){
-    //     return view('app.adm_cm.gastos');
-    // }
-
     public function pagos(){
         return view('app.adm_cm.pagos');
     }

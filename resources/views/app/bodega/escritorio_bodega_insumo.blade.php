@@ -64,22 +64,24 @@
 					</div>
 				</div>
                 <div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
-                        {{--  <a href="{{ ROUTE('asistente_adm.mis_profesionales') }}"></a>--}}
+                    <div class="card subir">
+                         <a href="{{ ROUTE('bodegas.historial') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-50 text-center" src="{{ asset('images/iconos/profesional_1.svg') }}">
                                 <h5 class="mt-2">Historial Ingreso/Salida stock</h5>
                             </div>
+                         </a>
                     </div>
                 </div>
 
 				<div class="col-md-4">
-                    <div class="card subir" onclick="en_construccion()";>
-                         {{--  <a href="{{ ROUTE('asistente_adm.gastos') }}"></a>--}}
-                        <div class="card-body text-center" style="cursor:pointer">
-                            <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                            <h5 class="mt-1 mb-0">Reportes</h5>
-                        </div>
+                    <div class="card subir">
+                        <a href="{{ ROUTE('bodegas.reportes') }}">
+                            <div class="card-body text-center" style="cursor:pointer">
+                                <img class="wid-60 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
+                                <h5 class="mt-1 mb-0">Reportes</h5>
+                            </div>
+                        </a>
                     </div>
                 </div>
 
