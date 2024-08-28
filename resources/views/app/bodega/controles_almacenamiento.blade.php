@@ -50,7 +50,7 @@
                                 @if(isset($productos))
                                 @foreach($productos as $p)
                                     <tr>
-                                        <td><img src="https://placehold.co/600x400" alt="foto" style="width: 100px;"></td>
+                                        <td><img src="{{ $p->image_path }}" alt="foto" style="width: 100px;"></td>
                                         <td class="align-middle text-center">{{ $p->created_at }}</td>
                                         <td class="align-middle text-center">{{ $p->codigo_interno }}</td>
                                         <td class="align-middle text-center">{{ $p->nombre }}</td>

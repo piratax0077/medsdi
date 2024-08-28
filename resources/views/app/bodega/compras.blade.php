@@ -1235,6 +1235,8 @@
             var bodega = $('#bodega').val();
             var id_producto = document.getElementById("id_producto").value;
 
+            var imagen = $('#imagen').val();
+
             if (id_producto === '') id_producto = 0;
             var valido = 1;
             var mensaje = '';
@@ -1322,39 +1324,37 @@
                 return false;
             }
 
-            var data = {
-                nuevo: nuevo,
-                id_producto: id_producto,
-                id_compra: id_compra,
-                codigo_interno: codigo_interno,
-                nombre_producto: nombre_producto,
-                cantidad: cantidad,
-                precio: precio,
-                stock_minimo: stock_minimo,
-                stock_maximo: stock_maximo,
-                tipo_producto: tipo_producto,
-                unidad_medida: unidad_medida,
-                almacenamiento: almacenamiento,
-                tipo_almacenamiento: tipo_almacenamiento,
-                marca: marca,
-                observaciones: observaciones,
-                lote: lote,
-                fecha_vencimiento: fecha_vencimiento,
-                bodega: bodega
-            };
+            var formData = new FormData();
+            formData.append('nuevo', nuevo);
+            formData.append('id_producto', id_producto);
+            formData.append('id_compra', id_compra);
+            formData.append('codigo_interno', codigo_interno);
+            formData.append('nombre_producto', nombre_producto);
+            formData.append('cantidad', cantidad);
+            formData.append('precio', precio);
+            formData.append('stock_minimo', stock_minimo);
+            formData.append('stock_maximo', stock_maximo);
+            formData.append('tipo_producto', tipo_producto);
+            formData.append('unidad_medida', unidad_medida);
+            formData.append('almacenamiento', almacenamiento);
+            formData.append('tipo_almacenamiento', tipo_almacenamiento);
+            formData.append('marca', marca);
+            formData.append('observaciones', observaciones);
+            formData.append('lote', lote);
+            formData.append('fecha_vencimiento', fecha_vencimiento);
+            formData.append('bodega', bodega);
 
-            // headers para enviar el token de csrf
+            // Adjuntar el archivo
+            var imagen = $('#imagen')[0].files[0];
+            formData.append('imagen', imagen);
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
+            // Enviar el FormData usando AJAX
             $.ajax({
-                type: 'POST',
                 url: "{{ route('guardarItemFactura') }}",
-                data: data,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function(response) {
                     console.log(response);
                     let mensaje = response.mensaje;
@@ -1412,11 +1412,12 @@
                         })
                     }
                 },
-
-                error: function(response) {
-                    console.log(response);
+                error: function(xhr, status, error) {
+                    // Manejar el error
+                    console.error(error);
                 }
             });
+
         }
 
 

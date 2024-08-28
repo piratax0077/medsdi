@@ -4,7 +4,7 @@
             <tr>
                 <td><strong>Imagen:</strong></td>
                 <td>
-                    <img src="https://placehold.co/600x400" alt="" class="w-100">
+                    <img src="{{ '/storage'.'/'.$producto->image_path }}" alt="" class="w-100">
                 </td>
             </tr>
             <tr>

@@ -84,6 +84,9 @@
                 $('#modalSolicitudDetalle').modal('show');
 
                 $('#detalle_pedido_body').html(response);
+            },
+            error: function(error) {
+                console.log(error);
             }
         });
     }

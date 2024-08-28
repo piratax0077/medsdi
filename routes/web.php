@@ -1970,6 +1970,7 @@ Route::post('/editar_repuesto_almacenado', [App\Http\Controllers\BodegasControll
 Route::get('Administracion/historial_almacen', [App\Http\Controllers\BodegasController::class,'historial_almacen'])->name('bodegas.historial');
 Route::get('Administracion/reportes', [App\Http\Controllers\BodegasController::class,'reportes'])->name('bodegas.reportes');
 Route::post('Administracion/agregar_producto_carro',[App\Http\Controllers\BodegasController::class,'agregarProductoCarro'])->name('bodegas.agregar_producto_carro');
+Route::post('Administracion/eliminar_producto_carro',[App\Http\Controllers\BodegasController::class,'eliminarProductoCarro'])->name('bodegas.devolver_producto');
 // Convenios con controlador del tipo resource
 Route::resource('convenios', App\Http\Controllers\ConveniosController::class);
 Route::get('/dameInfoConvenio/{id}', [App\Http\Controllers\ConveniosController::class,'dameInfoConvenio'])->name('convenios.dameInfoConvenio');

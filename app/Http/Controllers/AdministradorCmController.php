@@ -6710,6 +6710,24 @@ class AdministradorCmController extends Controller
             $todos_productos = $bodega_controlador->dameProductosEntregados($req->id);
             $productos_pedido = $todos_productos['entregados'];
             $productos_pendientes = $todos_productos['pendientes'];
+            foreach($productos_pedido as $producto)
+            {
+                if($producto->image_path !== null)
+                {
+                    $producto->image_path = asset('storage/'.$producto->image_path);
+                }else{
+                    $producto->image_path = asset('img/default.png');
+                }
+            }
+            foreach($productos_pendientes as $producto)
+            {
+                if($producto->image_path !== null)
+                {
+                    $producto->image_path = asset('storage/'.$producto->image_path);
+                }else{
+                    $producto->image_path = asset('img/default.png');
+                }
+            }
             return view('app.bodega.solicitud',[
                 'pedido' => $pedido,
                 'productos_pedido' => $productos_pedido,

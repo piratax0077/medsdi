@@ -103,13 +103,30 @@ class ProductosController extends Controller
             if($producto){
                 return false;
             }
+            // Validar el archivo
+            $req->validate([
+                'imagen' => 'required|file|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+            // Obtener el archivo
+            $file = $req->file('imagen');
+
+            // Definir el nombre del archivo y la ruta donde se guardará
+            $nombreArchivo = time() . '_' . $file->getClientOriginalName();
+            $ruta = public_path('storage/images/farmacia');
+
+            // Mover el archivo a la carpeta public/images/farmacia
+            $file->move($ruta, $nombreArchivo);
+
+            // Obtener la ruta pública del archivo
+            $rutaPublica = 'images/farmacia/' . $nombreArchivo;
+
             $producto = new Producto();
             $producto->codigo_interno = $req->codigo_interno;
             $producto->nombre = $req->nombre_producto;
             $producto->stock_minimo = $req->stock_minimo;
             $producto->stock_maximo = $req->stock_maximo;
             $producto->stock_actual += $req->cantidad;
-            $producto->imagen = 'imagen.jpg';
+            $producto->imagen = $nombreArchivo; // Guardar la ruta pública de la imagen
             $producto->descripcion = $req->observaciones;
             $producto->id_tipo_producto = $req->tipo_producto;
             $producto->id_unidad_medida = $req->unidad_medida;
@@ -117,6 +134,7 @@ class ProductosController extends Controller
             $producto->id_tipo_almacenamiento = intval($req->tipo_almacenamiento);
             $producto->id_bodega = $req->bodega;
             $producto->id_marca = $req->marca;
+            $producto->image_path = $rutaPublica;
             $producto->save();
 
             return $producto->id;
@@ -210,6 +228,16 @@ class ProductosController extends Controller
             ->join('tipo_almacenamiento_productos', 'productos.id_tipo_almacenamiento', 'tipo_almacenamiento_productos.id')
             ->where('productos.almacenamiento', 1)
             ->get();
+
+            foreach($productos as $producto)
+            {
+                if($producto->image_path !== null)
+                {
+                    $producto->image_path = asset('storage/'.$producto->image_path);
+                }else{
+                    $producto->image_path = asset('img/default.png');
+                }
+            }
 
             return $productos;
         } catch (\Exception $e) {

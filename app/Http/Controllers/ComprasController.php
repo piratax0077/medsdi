@@ -305,6 +305,7 @@ class ComprasController extends Controller
             $producto_controlador = new ProductosController();
             if ($req->nuevo == "SI") {
                 $id_producto = $producto_controlador->guardarProducto($req);
+
                 if($id_producto == false){
                     return ['mensaje' => 'El producto ya existe'];
                 }
