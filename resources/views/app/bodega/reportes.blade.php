@@ -56,12 +56,13 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="fecha" class="floating-label-activo-sm">Fecha</label>
-                                        <input type="date" class="form-control w-100" id="fecha">
+                                        <input type="date" class="form-control w-100" id="fecha_reporte_diario">
 
                                     </div>
-                                    <button class="btn btn-outline-success btn-sm w-100 my-3">Buscar</button>
+                                    <button class="btn btn-outline-success btn-sm w-100 my-3" onclick="reporte_diario()">Buscar</button>
+                                    <button class="btn btn-outline-dark btn-sm w-100 my-3" onclick="generar_reporte_diario()">Generar Reporte</button>
                                 </div>
-                                <div class="col-md-9">
+                                <div class="col-md-9" id="contenedor_reporte_diario">
                                     <table class="table w-100" id="tabla_reporte_diario">
                                         <thead>
                                             <tr>
@@ -73,27 +74,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>01/01/2021</td>
-                                                <td>Producto 1</td>
-                                                <td>10</td>
-                                                <td>100</td>
-                                                <td>1000</td>
-                                            </tr>
-                                            <tr>
-                                                <td>01/01/2021</td>
-                                                <td>Producto 2</td>
-                                                <td>20</td>
-                                                <td>200</td>
-                                                <td>4000</td>
-                                            </tr>
-                                            <tr>
-                                                <td>01/01/2021</td>
-                                                <td>Producto 3</td>
-                                                <td>30</td>
-                                                <td>300</td>
-                                                <td>9000</td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -133,9 +113,10 @@
                                         </div>
                                     </div>
 
-                                    <button class="btn btn-outline-success btn-sm w-100 my-3">Buscar</button>
+                                    <button class="btn btn-outline-success btn-sm w-100 my-3" onclick="reporte_mensual()">Buscar</button>
+                                    <button class="btn btn-outline-dark btn-sm w-100 my-3" onclick="generar_reporte_mensual()">Generar Reporte</button>
                                 </div>
-                                <div class="col-md-9">
+                                <div class="col-md-9" id="contenedor_reporte_mensual">
                                     <table class="table w-100" id="tabla_reporte_mensual">
                                         <thead>
                                             <tr>
@@ -147,27 +128,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>01/01/2021</td>
-                                                <td>Producto 1</td>
-                                                <td>10</td>
-                                                <td>100</td>
-                                                <td>1000</td>
-                                            </tr>
-                                            <tr>
-                                                <td>01/01/2021</td>
-                                                <td>Producto 2</td>
-                                                <td>20</td>
-                                                <td>200</td>
-                                                <td>4000</td>
-                                            </tr>
-                                            <tr>
-                                                <td>01/01/2021</td>
-                                                <td>Producto 3</td>
-                                                <td>30</td>
-                                                <td>300</td>
-                                                <td>9000</td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -187,9 +147,10 @@
                                         </select>
 
                                     </div>
-                                    <button class="btn btn-outline-success btn-sm w-100 my-3">Buscar</button>
+                                    <button class="btn btn-outline-success btn-sm w-100 my-3" onclick="reporte_anual()">Buscar</button>
+                                    <button class="btn btn-outline-dark btn-sm w-100 my-3" onclick="generar_reporte_anual()">Generar Reporte</button>
                                 </div>
-                                <div class="col-md-9">
+                                <div class="col-md-9" id="contenedor_reporte_anual">
                                     <table class="table w-100" id="tabla_reporte_anual">
                                         <thead>
                                             <tr>
@@ -201,27 +162,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>01/01/2021</td>
-                                                <td>Producto 1</td>
-                                                <td>10</td>
-                                                <td>100</td>
-                                                <td>1000</td>
-                                            </tr>
-                                            <tr>
-                                                <td>01/01/2021</td>
-                                                <td>Producto 2</td>
-                                                <td>20</td>
-                                                <td>200</td>
-                                                <td>4000</td>
-                                            </tr>
-                                            <tr>
-                                                <td>01/01/2021</td>
-                                                <td>Producto 3</td>
-                                                <td>30</td>
-                                                <td>300</td>
-                                                <td>9000</td>
-                                            </tr>
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -233,4 +174,332 @@
             </div>
         </div>
     </div>
+</div>
+@endsection
+
+@section('js-profesionales')
+<script>
+    function reporte_diario() {
+        var fecha = $('#fecha_reporte_diario').val();
+        if(fecha == '') {
+            swal({
+                title: "Error",
+                text: "Debe seleccionar una fecha",
+                icon: "error",
+                button: "Aceptar"
+            });
+            return;
+        }
+        console.log(fecha);
+        $.ajax({
+            url: "{{ route('bodegas.reporte_diario') }}",
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                fecha: fecha
+            },
+            success: function(data) {
+                console.log(data);
+                $('#contenedor_reporte_diario').html(data.vista);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function generar_reporte_diario(){
+        var fecha = $('#fecha_reporte_diario').val();
+        if(fecha == '') {
+            swal({
+                title: "Error",
+                text: "Debe seleccionar una fecha",
+                icon: "error",
+                button: "Aceptar"
+            });
+            return;
+        }
+        $.ajax({
+            url: "{{ route('bodegas.generar_reporte') }}",
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                fecha: fecha,
+                tipo: 'diario'
+            },
+            success: function(data) {
+                console.log(data);
+                if(data.ruta){
+                    swal({
+                        title: "Reporte generado",
+                        text: "El reporte se ha generado correctamente",
+                        icon: "success",
+                        button: "Aceptar"
+                    }).then(() => {
+                        // Abrir el PDF en una ventana emergente
+                        var width = 800;
+                        var height = 600;
+                        var left = (screen.width - width) / 2;
+                        var top = (screen.height - height) / 2;
+                        window.open(data.ruta, 'Reporte Diario', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                    });
+                }else{
+                    swal({
+                        title: "Error",
+                        text: "Ha ocurrido un error al generar el reporte",
+                        icon: "error",
+                        button: "Aceptar"
+                    });
+                }
+            },
+            error: function(error) {
+                console.log(error);
+                swal({
+                    title: "Error",
+                    text: "Ha ocurrido un error al generar el reporte",
+                    icon: "error",
+                    button: "Aceptar"
+                });
+            }
+        });
+    }
+
+    function reporte_mensual(){
+        var mes = $('#mes').val();
+        var year = $('#mes_year').val();
+
+        var valido = 1;
+        var mensaje = '';
+
+        if(mes == ''){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar un mes</li>';
+        }
+
+        if(year == ''){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar un año</li>';
+        }
+
+        if(valido == 0){
+            swal({
+                title: 'Error',
+                content:{
+                    element: 'div',
+                    attributes:{
+                        innerHTML: mensaje
+                    }
+                },
+                icon: 'error'
+            });
+            return false;
+        }
+
+        $.ajax({
+            url: "{{ route('bodegas.reporte_mensual') }}",
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                mes: mes,
+                year: year
+            },
+            success: function(data) {
+                console.log(data);
+                $('#contenedor_reporte_mensual').html(data.vista);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function generar_reporte_mensual(){
+        var mes = $('#mes').val();
+        var year = $('#mes_year').val();
+
+        var valido = 1;
+        var mensaje = '';
+
+        if(mes == ''){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar un mes</li>';
+        }
+
+        if(year == ''){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar un año</li>';
+        }
+
+        if(valido == 0){
+            swal({
+                title: 'Error',
+                content:{
+                    element: 'div',
+                    attributes:{
+                        innerHTML: mensaje
+                    }
+                },
+                icon: 'error'
+            });
+            return false;
+        }
+
+        $.ajax({
+            url: "{{ route('bodegas.generar_reporte') }}",
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                mes: mes,
+                anio: year,
+                tipo: 'mensual'
+            },
+            success: function(data) {
+                console.log(data);
+                if(data.ruta){
+                    swal({
+                        title: "Reporte generado",
+                        text: "El reporte se ha generado correctamente",
+                        icon: "success",
+                        button: "Aceptar"
+                    }).then(() => {
+                        // Abrir el PDF en una ventana emergente
+                        var width = 800;
+                        var height = 600;
+                        var left = (screen.width - width) / 2;
+                        var top = (screen.height - height) / 2;
+                        window.open(data.ruta, 'Reporte Mensual', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                    });
+                }else{
+                    swal({
+                        title: "Error",
+                        text: "Ha ocurrido un error al generar el reporte",
+                        icon: "error",
+                        button: "Aceptar"
+                    });
+                }
+            },
+            error: function(error) {
+                console.log(error);
+                swal({
+                    title: "Error",
+                    text: "Ha ocurrido un error al generar el reporte",
+                    icon: "error",
+                    button: "Aceptar"
+                });
+            }
+        });
+    }
+
+    function reporte_anual(){
+        var year = $('#year').val();
+
+        var valido = 1;
+        var mensaje = '';
+
+        if(year == ''){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar un año</li>';
+        }
+
+        if(valido == 0){
+            swal({
+                title: 'Error',
+                content:{
+                    element: 'div',
+                    attributes:{
+                        innerHTML: mensaje
+                    }
+                },
+                icon: 'error'
+            });
+            return false;
+        }
+
+        $.ajax({
+            url: "{{ route('bodegas.reporte_anual') }}",
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                anio: year
+            },
+            success: function(data) {
+                console.log(data);
+                $('#contenedor_reporte_anual').html(data.vista);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function generar_reporte_anual(){
+        var year = $('#year').val();
+
+        var valido = 1;
+        var mensaje = '';
+
+        if(year == ''){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar un año</li>';
+        }
+
+        if(valido == 0){
+            swal({
+                title: 'Error',
+                content:{
+                    element: 'div',
+                    attributes:{
+                        innerHTML: mensaje
+                    }
+                },
+                icon: 'error'
+            });
+            return false;
+        }
+
+        $.ajax({
+            url: "{{ route('bodegas.generar_reporte') }}",
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}",
+                anio: year,
+                tipo: 'anual'
+            },
+            success: function(data) {
+                console.log(data);
+                if(data.ruta){
+                    swal({
+                        title: "Reporte generado",
+                        text: "El reporte se ha generado correctamente",
+                        icon: "success",
+                        button: "Aceptar"
+                    }).then(() => {
+                        // Abrir el PDF en una ventana emergente
+                        var width = 800;
+                        var height = 600;
+                        var left = (screen.width - width) / 2;
+                        var top = (screen.height - height) / 2;
+                        window.open(data.ruta, 'Reporte Anual', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                    });
+                }else{
+                    swal({
+                        title: "Error",
+                        text: "Ha ocurrido un error al generar el reporte",
+                        icon: "error",
+                        button: "Aceptar"
+                    });
+                }
+            },
+            error: function(error) {
+                console.log(error);
+                swal({
+                    title: "Error",
+                    text: "Ha ocurrido un error al generar el reporte",
+                    icon: "error",
+                    button: "Aceptar"
+                });
+            }
+        });
+    }
+</script>
 @endsection

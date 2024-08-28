@@ -1433,7 +1433,7 @@ Route::group([
 
     Route::get('/historial_mensajes_profesional/{id}', [App\Http\Controllers\LaboratorioController::class, 'historial_mensajes_profesional'])->name('laboratorio.historial_mensajes_profesional');
     Route::get('/Administracion/Comercial', [App\Http\Controllers\LaboratorioController::class, 'areaComercial'])->name('laboratorio.area_comercial');
-    Route::post('dame_profesional_servicio', [App\Http\Controllers\LaboratorioController::class, 'dame_profesional'])->name('laboratorio.dame_profesional_cm');
+    Route::post('dame_profesional_servicio', [App\Http\Controllers\LaboratorioController::class, 'dame_profesional'])->name('laboratorio.dame_profesional_servicio');
 });
 
 Route::group([
@@ -1971,6 +1971,10 @@ Route::get('Administracion/historial_almacen', [App\Http\Controllers\BodegasCont
 Route::get('Administracion/reportes', [App\Http\Controllers\BodegasController::class,'reportes'])->name('bodegas.reportes');
 Route::post('Administracion/agregar_producto_carro',[App\Http\Controllers\BodegasController::class,'agregarProductoCarro'])->name('bodegas.agregar_producto_carro');
 Route::post('Administracion/eliminar_producto_carro',[App\Http\Controllers\BodegasController::class,'eliminarProductoCarro'])->name('bodegas.devolver_producto');
+Route::post('reporte_diario', [App\Http\Controllers\BodegasController::class,'reporteDiario'])->name('bodegas.reporte_diario');
+Route::post('reporte_mensual', [App\Http\Controllers\BodegasController::class,'reporteMensual'])->name('bodegas.reporte_mensual');
+Route::post('reporte_anual', [App\Http\Controllers\BodegasController::class,'reporteAnual'])->name('bodegas.reporte_anual');
+Route::post('generar_reporte', [App\Http\Controllers\BodegasController::class,'generarReporte'])->name('bodegas.generar_reporte');
 // Convenios con controlador del tipo resource
 Route::resource('convenios', App\Http\Controllers\ConveniosController::class);
 Route::get('/dameInfoConvenio/{id}', [App\Http\Controllers\ConveniosController::class,'dameInfoConvenio'])->name('convenios.dameInfoConvenio');

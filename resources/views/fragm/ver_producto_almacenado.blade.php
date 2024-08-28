@@ -4,7 +4,7 @@
             <tr>
                 <td><strong>Imagen:</strong></td>
                 <td>
-                    <img src="{{ '/storage'.'/'.$producto->image_path }}" alt="" class="w-100">
+                    <img src="{{ $producto->image_path }}" alt="" class="w-100">
                 </td>
             </tr>
             <tr>
@@ -79,11 +79,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#table_productos_almacenados').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
-            }
-        });
+        $('#table_productos_almacenados').DataTable();
     });
 
     function editar_repuesto_almacenado(id){

@@ -6689,6 +6689,7 @@ class AdministradorCmController extends Controller
         $empleados = User::all();
         $pedidos = Pedido::select('pedido.*', 'users.name as usuario')
             ->leftjoin('users', 'pedido.id_usuario', '=', 'users.id')
+            ->where('pedido.estado', 1)
             ->get();
         return view('app.bodega.solicitudes_pendientes',[
             'pedidos' => $pedidos,
@@ -6714,7 +6715,7 @@ class AdministradorCmController extends Controller
             {
                 if($producto->image_path !== null)
                 {
-                    $producto->image_path = asset('storage/'.$producto->image_path);
+                    $producto->image_path = asset($producto->image_path);
                 }else{
                     $producto->image_path = asset('img/default.png');
                 }
@@ -6723,7 +6724,7 @@ class AdministradorCmController extends Controller
             {
                 if($producto->image_path !== null)
                 {
-                    $producto->image_path = asset('storage/'.$producto->image_path);
+                    $producto->image_path = asset($producto->image_path);
                 }else{
                     $producto->image_path = asset('img/default.png');
                 }

@@ -14,7 +14,10 @@ use App\Models\Proveedor;
 use App\Models\Compras_detalle;
 use App\Http\Controllers\ProductosController;
 use Illuminate\Support\Facades\DB;
-
+//Carbon
+use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Instituciones;
 use App\Models\Servicios;
 use App\Models\AdminInstServ;
@@ -216,6 +219,8 @@ class BodegasController extends Controller
                         ->where('productos.id',$req->id)
                         ->first();
 
+            $producto->image_path = asset($producto->image_path);
+
             $compra = Compras::find($producto->id_compra);
             $proveedor = Proveedor::find($compra->id_proveedor);
             $producto->proveedor = $proveedor->nombre;
@@ -355,6 +360,26 @@ class BodegasController extends Controller
         ->where('compras.id_institucion',$institucion->id) // cambiar por la institucion del usuario logueado
         ->get();
 
+        foreach($productos_solicitados as $producto)
+        {
+            if($producto->image_path !== null)
+            {
+                $producto->image_path = asset($producto->image_path);
+            }else{
+                $producto->image_path = asset('img/default.png');
+            }
+        }
+
+        foreach($productos_ingresados as $producto)
+        {
+            if($producto->image_path !== null)
+            {
+                $producto->image_path = asset($producto->image_path);
+            }else{
+                $producto->image_path = asset('img/default.png');
+            }
+        }
+
         return view('app.bodega.historial',[
             'pedidos' => $productos_solicitados,
             'ingresos' => $productos_ingresados,
@@ -363,6 +388,320 @@ class BodegasController extends Controller
 
     public function reportes(){
         return view('app.bodega.reportes');
+    }
+
+    public function reporteDiario(Request $req){
+
+        $productos_solicitados = PedidoDetalle::select('pedido_detalle.*','productos.nombre as producto','productos.codigo_interno','productos.image_path','tipo_producto.nombre as tipo_producto','unidades_medidas.nombre as unidad_medida','marcas_productos.nombre as marca','pedido.estado','pedido.observacion as observaciones')
+        ->join('pedido','pedido_detalle.id_pedido','pedido.id')
+        ->join('productos','pedido_detalle.id_producto','productos.id')
+        ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
+        ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
+        ->join('marcas_productos','productos.id_marca','marcas_productos.id')
+        ->where('pedido.id_institucion',5) // cambiar por la institucion del usuario logueado
+        ->where('pedido.fecha_emision',$req->fecha)
+        ->get();
+
+        foreach($productos_solicitados as $producto)
+        {
+            if($producto->image_path !== null)
+            {
+                $producto->image_path = asset($producto->image_path);
+            }else{
+                $producto->image_path = asset('img/default.png');
+            }
+        }
+
+        $productos_ingresados = Compras_detalle::select('compras_detalle.*','productos.nombre as producto','productos.codigo_interno','productos.image_path','tipo_producto.nombre as tipo_producto','unidades_medidas.nombre as unidad_medida','marcas_productos.nombre as marca','compras.estado','compras.observaciones')
+        ->join('compras','compras_detalle.id_compra','compras.id')
+        ->join('productos','compras_detalle.id_producto','productos.id')
+        ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
+        ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
+        ->join('marcas_productos','productos.id_marca','marcas_productos.id')
+        ->where('compras.id_institucion',5) // cambiar por la institucion del usuario logueado
+        ->where('compras.fecha_emision',$req->fecha)
+        ->get();
+
+        foreach($productos_ingresados as $producto)
+        {
+            if($producto->image_path !== null)
+            {
+                $producto->image_path = asset($producto->image_path);
+            }else{
+                $producto->image_path = asset('img/default.png');
+            }
+        }
+
+        // parsear para ocupar con la libreria Carbon
+        $fecha_formateada = Carbon::parse($req->fecha)->format('d-m-Y');
+
+        $v = view('app.bodega.reporte_diario',[
+            'pedidos' => $productos_solicitados,
+            'ingresos' => $productos_ingresados,
+            'fecha' => $fecha_formateada
+        ])->render();
+
+        return ['mensaje' => 'OK','vista' => $v];
+    }
+
+    public function reporteMensual(Request $req){
+
+            $productos_solicitados = PedidoDetalle::select(
+                'pedido_detalle.*',
+                'productos.nombre as producto',
+                'productos.codigo_interno',
+                'productos.image_path',
+                'tipo_producto.nombre as tipo_producto',
+                'unidades_medidas.nombre as unidad_medida',
+                'marcas_productos.nombre as marca',
+                'pedido.estado',
+                'pedido.observacion as observaciones'
+            )
+            ->join('pedido', 'pedido_detalle.id_pedido', 'pedido.id')
+            ->join('productos', 'pedido_detalle.id_producto', 'productos.id')
+            ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+            ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+            ->join('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+            ->where('pedido.id_institucion', 5) // cambiar por la institucion del usuario logueado
+            ->whereRaw('MONTH(pedido.fecha_emision) = ?', [$req->mes])
+            ->whereRaw('YEAR(pedido.fecha_emision) = ?', [$req->year])
+            ->get();
+
+            foreach($productos_solicitados as $producto)
+            {
+                if($producto->image_path !== null)
+                {
+                    $producto->image_path = asset($producto->image_path);
+                }else{
+                    $producto->image_path = asset('img/default.png');
+                }
+            }
+
+            $productos_ingresados = Compras_detalle::select(
+                'compras_detalle.*',
+                'productos.nombre as producto',
+                'productos.codigo_interno',
+                'productos.image_path',
+                'tipo_producto.nombre as tipo_producto',
+                'unidades_medidas.nombre as unidad_medida',
+                'marcas_productos.nombre as marca',
+                'compras.estado',
+                'compras.observaciones'
+            )
+            ->join('compras', 'compras_detalle.id_compra', 'compras.id')
+            ->join('productos', 'compras_detalle.id_producto', 'productos.id')
+            ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+            ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+            ->join('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+            ->where('compras.id_institucion', 5) // cambiar por la institucion del usuario logueado
+            ->whereRaw('MONTH(compras.fecha_emision) = ?', [$req->mes])
+            ->whereRaw('YEAR(compras.fecha_emision) = ?', [$req->year])
+            ->get();
+
+            foreach($productos_ingresados as $producto)
+            {
+                if($producto->image_path !== null)
+                {
+                    $producto->image_path = asset($producto->image_path);
+                }else{
+                    $producto->image_path = asset('img/default.png');
+                }
+            }
+
+
+                // Convertir el valor numérico del mes en su nombre literal en español
+            setlocale(LC_TIME, 'es_ES.UTF-8');
+            $nombreMes = strftime('%B', mktime(0, 0, 0, $req->mes, 10));
+
+            $v = view('app.bodega.reporte_mensual',[
+                'pedidos' => $productos_solicitados,
+                'ingresos' => $productos_ingresados,
+                'mes' => $nombreMes,
+                'anio' => $req->year
+            ])->render();
+
+            return ['mensaje' => 'OK','vista' => $v];
+    }
+
+    public function reporteAnual(Request $req){
+
+            $productos_solicitados = PedidoDetalle::select(
+                'pedido_detalle.*',
+                'productos.nombre as producto',
+                'productos.codigo_interno',
+                'productos.image_path',
+                'tipo_producto.nombre as tipo_producto',
+                'unidades_medidas.nombre as unidad_medida',
+                'marcas_productos.nombre as marca',
+                'pedido.estado',
+                'pedido.observacion as observaciones'
+            )
+            ->join('pedido', 'pedido_detalle.id_pedido', 'pedido.id')
+            ->join('productos', 'pedido_detalle.id_producto', 'productos.id')
+            ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+            ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+            ->join('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+            ->where('pedido.id_institucion', 5) // cambiar por la institucion del usuario logueado
+            ->whereRaw('YEAR(pedido.fecha_emision) = ?', [$req->anio])
+            ->get();
+
+            foreach($productos_solicitados as $producto)
+            {
+                if($producto->image_path !== null)
+                {
+                    $producto->image_path = asset($producto->image_path);
+                }else{
+                    $producto->image_path = asset('img/default.png');
+                }
+            }
+
+            $productos_ingresados = Compras_detalle::select(
+                'compras_detalle.*',
+                'productos.nombre as producto',
+                'productos.codigo_interno',
+                'productos.image_path',
+                'tipo_producto.nombre as tipo_producto',
+                'unidades_medidas.nombre as unidad_medida',
+                'marcas_productos.nombre as marca',
+                'compras.estado',
+                'compras.observaciones'
+            )
+            ->join('compras', 'compras_detalle.id_compra', 'compras.id')
+            ->join('productos', 'compras_detalle.id_producto', 'productos.id')
+            ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+            ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+            ->join('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+            ->where('compras.id_institucion', 5) // cambiar por la institucion del usuario logueado
+            ->whereRaw('YEAR(compras.fecha_emision) = ?', [$req->anio])
+            ->get();
+
+            foreach($productos_ingresados as $producto)
+            {
+                if($producto->image_path !== null)
+                {
+                    $producto->image_path = asset($producto->image_path);
+                }else{
+                    $producto->image_path = asset('img/default.png');
+                }
+            }
+
+            $v = view('app.bodega.reporte_anual',[
+                'pedidos' => $productos_solicitados,
+                'ingresos' => $productos_ingresados,
+                'anio' => $req->anio
+            ])->render();
+
+            return ['mensaje' => 'OK','vista' => $v];
+    }
+
+
+    public function generarReporte(Request $request)
+    {
+        try {
+            if($request->input('tipo') == 'diario'){
+                // Obtener la fecha del request
+                $fecha = $request->input('fecha');
+                // Obtener los datos necesarios para el reporte diario
+                $reporteDiario = Compras_detalle::select(
+                    'compras_detalle.*',
+                    'productos.nombre as producto',
+                    'productos.codigo_interno',
+                    'productos.image_path',
+                    'tipo_producto.nombre as tipo_producto',
+                    'unidades_medidas.nombre as unidad_medida',
+                    'marcas_productos.nombre as marca',
+                    'compras.estado'
+                )
+                ->join('compras', 'compras_detalle.id_compra', 'compras.id')
+                ->join('productos', 'compras_detalle.id_producto', 'productos.id')
+                ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+                ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+                ->join('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+                ->whereDate('compras.fecha_emision', $fecha)
+                ->get();
+
+                // Renderizar la vista del reporte diario
+                $pdf = Pdf::loadView('app.bodega.reporte_diario_pdf', compact('reporteDiario', 'fecha'));
+
+            // Guardar el PDF en la carpeta public
+                $fileName = 'reporte_diario_' . $fecha . '.pdf';
+                $filePath = public_path('reportes/' . $fileName);
+                file_put_contents($filePath, $pdf->output());
+
+                // Devolver la ruta accesible del archivo PDF
+                return response()->json(['ruta' => asset('reportes/' . $fileName)]);
+            }elseif($request->input('tipo') == 'mensual'){
+                // Obtener el mes y el año del request
+                $mes = $request->input('mes');
+                $anio = $request->input('anio');
+                // Obtener los datos necesarios para el reporte mensual
+                $reporteMensual = Compras_detalle::select(
+                    'compras_detalle.*',
+                    'productos.nombre as producto',
+                    'productos.codigo_interno',
+                    'productos.image_path',
+                    'tipo_producto.nombre as tipo_producto',
+                    'unidades_medidas.nombre as unidad_medida',
+                    'marcas_productos.nombre as marca',
+                    'compras.estado',
+                )
+                ->join('compras', 'compras_detalle.id_compra', 'compras.id')
+                ->join('productos', 'compras_detalle.id_producto', 'productos.id')
+                ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+                ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+                ->join('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+                ->whereMonth('compras.fecha_emision', $mes)
+                ->whereYear('compras.fecha_emision', $anio)
+                ->get();
+
+                // Renderizar la vista del reporte mensual
+                $pdf = Pdf::loadView('app.bodega.reporte_mensual_pdf', compact('reporteMensual', 'mes', 'anio'));
+
+                // Guardar el PDF en la carpeta public
+                $fileName = 'reporte_mensual_' . $mes . '_' . $anio . '.pdf';
+                $filePath = public_path('reportes/' . $fileName);
+                file_put_contents($filePath, $pdf->output());
+
+                // Devolver la ruta accesible del archivo PDF
+                return response()->json(['ruta' => asset('reportes/' . $fileName)]);
+            }elseif($request->input('tipo') == 'anual'){
+                // Obtener el año del request
+                $anio = $request->input('anio');
+                // Obtener los datos necesarios para el reporte anual
+                $reporteAnual = Compras_detalle::select(
+                    'compras_detalle.*',
+                    'productos.nombre as producto',
+                    'productos.codigo_interno',
+                    'productos.image_path',
+                    'tipo_producto.nombre as tipo_producto',
+                    'unidades_medidas.nombre as unidad_medida',
+                    'marcas_productos.nombre as marca',
+                    'compras.estado',
+                )
+                ->join('compras', 'compras_detalle.id_compra', 'compras.id')
+                ->join('productos', 'compras_detalle.id_producto', 'productos.id')
+                ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+                ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+                ->join('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+                ->whereYear('compras.fecha_emision', $anio)
+                ->get();
+
+                // Renderizar la vista del reporte anual
+                $pdf = Pdf::loadView('app.bodega.reporte_anual_pdf', compact('reporteAnual', 'anio'));
+
+                // Guardar el PDF en la carpeta public
+                $fileName = 'reporte_anual_' . $anio . '.pdf';
+                $filePath = public_path('reportes/' . $fileName);
+                file_put_contents($filePath, $pdf->output());
+
+                // Devolver la ruta accesible del archivo PDF
+                return response()->json(['ruta' => asset('reportes/' . $fileName)]);
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
     }
 
     public function agregarProductoCarro(Request $req){
@@ -407,7 +746,7 @@ class BodegasController extends Controller
             {
                 if($producto->image_path !== null)
                 {
-                    $producto->image_path = asset('storage/'.$producto->image_path);
+                    $producto->image_path = asset($producto->image_path);
                 }else{
                     $producto->image_path = asset('img/default.png');
                 }
@@ -416,7 +755,7 @@ class BodegasController extends Controller
             {
                 if($producto->image_path !== null)
                 {
-                    $producto->image_path = asset('storage/'.$producto->image_path);
+                    $producto->image_path = asset($producto->image_path);
                 }else{
                     $producto->image_path = asset('img/default.png');
                 }
@@ -461,7 +800,7 @@ class BodegasController extends Controller
             {
                 if($producto->image_path !== null)
                 {
-                    $producto->image_path = asset('storage/'.$producto->image_path);
+                    $producto->image_path = asset($producto->image_path);
                 }else{
                     $producto->image_path = asset('img/default.png');
                 }
@@ -470,7 +809,7 @@ class BodegasController extends Controller
             {
                 if($producto->image_path !== null)
                 {
-                    $producto->image_path = asset('storage/'.$producto->image_path);
+                    $producto->image_path = asset($producto->image_path);
                 }else{
                     $producto->image_path = asset('img/default.png');
                 }

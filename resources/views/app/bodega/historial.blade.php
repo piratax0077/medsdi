@@ -69,7 +69,7 @@
                                         <tbody>
                                             @foreach($ingresos as $producto)
                                             <tr>
-                                                <td><img src="{{ '/storage'.'/'.$producto->image_path }}" alt="foto" style="width: 100px;"></td>
+                                                <td><img src="{{ $producto->image_path }}" alt="foto" style="width: 100px;"></td>
                                                 <td>{{ $producto->created_at }}</td>
                                                 <td>{{ $producto->producto }}</td>
                                                 <td>{{ $producto->cantidad }}</td>
@@ -102,7 +102,7 @@
                                         <tbody>
                                             @foreach($pedidos as $producto)
                                             <tr>
-                                                <td><img src="{{ '/storage'.'/'.$producto->image_path }}" alt="foto" style="width: 100px;"></td>
+                                                <td><img src="{{$producto->image_path }}" alt="foto" style="width: 100px;"></td>
                                                 <td>{{ $producto->created_at }}</td>
                                                 <td>{{ $producto->producto }}</td>
                                                 <td>{{ $producto->cantidad }}</td>

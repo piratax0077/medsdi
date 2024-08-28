@@ -233,7 +233,7 @@ class ProductosController extends Controller
             {
                 if($producto->image_path !== null)
                 {
-                    $producto->image_path = asset('storage/'.$producto->image_path);
+                    $producto->image_path = asset($producto->image_path);
                 }else{
                     $producto->image_path = asset('img/default.png');
                 }
