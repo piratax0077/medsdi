@@ -1966,7 +1966,7 @@ Route::resource('bodegas', App\Http\Controllers\BodegasController::class);
 Route::post('/buscarProductosBodega', [App\Http\Controllers\BodegasController::class,'buscarProductosBodega'])->name('bodegas.buscarProductosBodega');
 Route::post('/guardarAsignacion', [App\Http\Controllers\BodegasController::class,'guardarAsignacion'])->name('bodegas.guardarAsignacion');
 Route::post('/ver_producto_almacenado', [App\Http\Controllers\BodegasController::class,'verProductoAlmacenado'])->name('bodegas.ver_producto_almacenado');
-Route::post('/editar_repuesto_almacenado', [App\Http\Controllers\BodegasController::class,'editarRepuestoAlmacenado'])->name('bodegas.editar_repuesto_almacenado');
+Route::post('/editar_producto_almacenado', [App\Http\Controllers\BodegasController::class,'editarProductoAlmacenado'])->name('bodegas.editar_producto_almacenado');
 Route::get('Administracion/historial_almacen', [App\Http\Controllers\BodegasController::class,'historial_almacen'])->name('bodegas.historial');
 Route::get('Administracion/reportes', [App\Http\Controllers\BodegasController::class,'reportes'])->name('bodegas.reportes');
 Route::post('Administracion/agregar_producto_carro',[App\Http\Controllers\BodegasController::class,'agregarProductoCarro'])->name('bodegas.agregar_producto_carro');

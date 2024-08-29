@@ -342,12 +342,13 @@ class BodegasController extends Controller
         }
 
         /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
-        $productos_solicitados = PedidoDetalle::select('pedido_detalle.*','productos.nombre as producto','productos.codigo_interno','productos.image_path','tipo_producto.nombre as tipo_producto','unidades_medidas.nombre as unidad_medida','marcas_productos.nombre as marca','pedido.estado','pedido.observacion as observaciones')
+        $productos_solicitados = PedidoDetalle::select('pedido_detalle.*','productos.nombre as producto','productos.codigo_interno','productos.image_path','tipo_producto.nombre as tipo_producto','unidades_medidas.nombre as unidad_medida','marcas_productos.nombre as marca','pedido.estado','pedido.observacion as observaciones','users.name as usuario')
         ->join('pedido','pedido_detalle.id_pedido','pedido.id')
         ->join('productos','pedido_detalle.id_producto','productos.id')
         ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
         ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
         ->join('marcas_productos','productos.id_marca','marcas_productos.id')
+        ->join('users','pedido.id_usuario','users.id')
         ->where('pedido.id_institucion',$institucion->id) // cambiar por la institucion del usuario logueado
         ->get();
 
@@ -384,6 +385,27 @@ class BodegasController extends Controller
             'pedidos' => $productos_solicitados,
             'ingresos' => $productos_ingresados,
         ]);
+    }
+
+    public function editarProductoAlmacenado(Request $req){
+
+        $producto = Producto::select('productos.*','unidades_medidas.nombre as unidad_medida','compras_detalle.fecha_compra','marcas_productos.nombre as marca','compras_detalle.id as id_compra','tipo_producto.nombre as tipo_producto','bodega.nombre as bodega')
+        ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
+        ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
+        ->join('bodega','productos.id_bodega','bodega.id')
+        ->join('compras_detalle','productos.id','compras_detalle.id_producto')
+        ->join('marcas_productos','productos.id_marca','marcas_productos.id')
+        ->where('productos.id',$req->id)
+        ->first();
+        $producto->temperatura = intval($req->temperatura);
+        $producto->observaciones = $req->observaciones;
+        $producto->image_path = asset($producto->image_path);
+        if($producto->save()){
+            $v = view('fragm.ver_producto_almacenado',['producto'=>$producto])->render();
+            return ['mensaje' => 'OK','vista' => $v];
+        }else{
+            return 'Error al actualizar el producto';
+        }
     }
 
     public function reportes(){

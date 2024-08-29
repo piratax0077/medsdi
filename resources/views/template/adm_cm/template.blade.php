@@ -320,6 +320,7 @@
 
             $('#tabla_productos_historial').DataTable({
                 responsive: true,
+
             });
 
             $('#tabla_productos_historial_salida').DataTable({

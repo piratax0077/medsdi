@@ -57,8 +57,9 @@
                                     <table class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%" id="tabla_productos_historial">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Imagen</th>
                                                 <th scope="col">Fecha</th>
+                                                <th scope="col">Imagen</th>
+
                                                 <th scope="col">Producto</th>
                                                 <th scope="col">Cantidad</th>
                                                 <th scope="col">Tipo</th>
@@ -69,8 +70,9 @@
                                         <tbody>
                                             @foreach($ingresos as $producto)
                                             <tr>
-                                                <td><img src="{{ $producto->image_path }}" alt="foto" style="width: 100px;"></td>
                                                 <td>{{ $producto->created_at }}</td>
+                                                <td><img src="{{ $producto->image_path }}" alt="foto" style="width: 100px;"></td>
+
                                                 <td>{{ $producto->producto }}</td>
                                                 <td>{{ $producto->cantidad }}</td>
                                                 <td>{{ $producto->tipo_producto }}</td>
@@ -90,8 +92,9 @@
                                     <table class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%" id="tabla_productos_historial_salida">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Imagen</th>
                                                 <th scope="col">Fecha</th>
+                                                <th scope="col">Imagen</th>
+
                                                 <th scope="col">Producto</th>
                                                 <th scope="col">Cantidad</th>
                                                 <th scope="col">Tipo</th>
@@ -102,12 +105,13 @@
                                         <tbody>
                                             @foreach($pedidos as $producto)
                                             <tr>
-                                                <td><img src="{{$producto->image_path }}" alt="foto" style="width: 100px;"></td>
                                                 <td>{{ $producto->created_at }}</td>
+                                                <td><img src="{{$producto->image_path }}" alt="foto" style="width: 100px;"></td>
+
                                                 <td>{{ $producto->producto }}</td>
-                                                <td>{{ $producto->cantidad }}</td>
+                                                <td>{{ $producto->cantidad_entregada }}</td>
                                                 <td>{{ $producto->tipo_producto }}</td>
-                                                <td>{{ $producto->observaciones }}</td>
+                                                <td>{{ $producto->usuario }}</td>
                                                 <td><button class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i></button></td>
                                             </tr>
                                             @endforeach

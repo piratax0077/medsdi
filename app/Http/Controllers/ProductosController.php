@@ -118,7 +118,7 @@ class ProductosController extends Controller
             $file->move($ruta, $nombreArchivo);
 
             // Obtener la ruta pública del archivo
-            $rutaPublica = 'images/farmacia/' . $nombreArchivo;
+            $rutaPublica = 'storage/images/farmacia/' . $nombreArchivo;
 
             $producto = new Producto();
             $producto->codigo_interno = $req->codigo_interno;

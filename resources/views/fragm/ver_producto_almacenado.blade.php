@@ -49,10 +49,34 @@
                 </td>
             </tr>
         </table>
-        <button class="btn btn-outline-success btn-sm my-2 w-100" onclick="editar_repuesto_almacenado({{ $producto->id }})"><i class="fas fa-save"></i> Guardar</button>
+        <button class="btn btn-outline-success btn-sm my-2 w-100" onclick="editar_producto_almacenado({{ $producto->id }})"><i class="fas fa-save"></i> Guardar</button>
     </div>
     <div class="col-md-8">
+        <h3>Registros de temperaturas</h3>
         <table class="table table-striped" id="table_productos_almacenados">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Stock</th>
+                    <th>Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(isset($movimientos))
+                @foreach($movimientos as $m)
+                <tr>
+                    <td>{{ $m->created_at }}</td>
+                    <td>{{ $m->usuario }}</td>
+                    <td>{{ $m->stock }}</td>
+                    <td>{{ $m->descripcion }}</td>
+                </tr>
+                @endforeach
+                @endif
+            </tbody>
+        </table>
+        <h3>Observaciones Direccion de salud</h3>
+        <table class="table table-striped mt-2" id="table_productos_prueba">
             <thead>
                 <tr>
                     <th>Fecha</th>
@@ -82,7 +106,7 @@
         $('#table_productos_almacenados').DataTable();
     });
 
-    function editar_repuesto_almacenado(id){
+    function editar_producto_almacenado(id){
         var temperatura = $('#temperatura_producto').val();
         var observaciones = $('#observaciones_producto').val();
 
@@ -113,7 +137,7 @@
         }
 
         $.ajax({
-            url: "{{ ROUTE('bodegas.editar_repuesto_almacenado') }}",
+            url: "{{ ROUTE('bodegas.editar_producto_almacenado') }}",
             type: "POST",
             data: {
                 "_token": "{{ csrf_token() }}",
@@ -122,11 +146,15 @@
                 "observaciones": observaciones
             },
             success: function(response){
-                return console.log(response);
-                if(response == 1){
-                    alert('Producto actualizado correctamente');
-                }else{
-                    alert('Error al actualizar el producto');
+                if(response.mensaje == 'OK'){
+                    swal({
+                        title: 'Exito',
+                        icon: 'success',
+                        text: 'Producto actualizado correctamente'
+                    });
+                    console.log(response);
+                    // $('#verSolicitud').modal('show');
+                    $('#detalle_pedido_body').html(response.vista);
                 }
             }
         });

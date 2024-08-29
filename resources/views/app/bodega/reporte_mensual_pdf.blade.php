@@ -23,6 +23,7 @@
 </head>
 <body>
     <h1>Reporte Mensual - {{ $mes }} {{ $anio }}</h1>
+    <img src="{{ asset('images/iconos/cm-perfiles.png') }}" alt="logo" class="logo">
     <table>
         <thead>
             <tr>
