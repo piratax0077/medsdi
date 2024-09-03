@@ -1,18 +1,18 @@
 {{--  MODAL AGREGAR RESUMEN CONTRATO, ROLES, ACCESO --}}
-<div id="modal_agregar_personal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_agregar_personal" aria-hidden="true">
+<div id="modal_agregar_personal_administrativo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_agregar_personal_administrativo" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Agregar Empleado Nuevo</h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Agregar Empleado Nuevo Administrativo</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <form>
-                        <input type="hidden" name="add_empleado_id_institucion" id="add_empleado_id_institucion" value="{{ $institucion->id }}">
-                        <input type="hidden" name="add_empleado_id_lugar_atencion" id="add_empleado_id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
-                        <input type="hidden" name="add_empleado_id_admin_creador" id="add_empleado_id_admin_creador" value="{{ Auth::user()->id }}">
-                        <input type="hidden" name="add_empleado_id_tipo_admin_creador" id="add_empleado_id_tipo_admin_creador" value="{{ Auth::user()->Roles()->first()->id }}">
-                        <input type="hidden" name="add_empleado_clave_ingreso" id="add_empleado_clave_ingreso" value="{{ rand(11111,99999) }}">
+                        <input type="hidden" name="add_empleado_id_institucion_administrativo" id="add_empleado_id_institucion_administrativo" value="{{ $institucion->id }}">
+                        <input type="hidden" name="add_empleado_id_lugar_atencion_administrativo" id="add_empleado_id_lugar_atencion_administrativo" value="{{ $institucion->id_lugar_atencion }}">
+                        <input type="hidden" name="add_empleado_id_admin_creador_administrativo" id="add_empleado_id_admin_creador_administrativo" value="{{ Auth::user()->id }}">
+                        <input type="hidden" name="add_empleado_id_tipo_admin_creador_administrativo" id="add_empleado_id_tipo_admin_creador_administrativo" value="{{ Auth::user()->Roles()->first()->id }}">
+                        <input type="hidden" name="add_empleado_clave_ingreso_administrativo" id="add_empleado_clave_ingreso_administrativo" value="{{ rand(11111,99999) }}">
                     <div class="row">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <script>
@@ -25,19 +25,19 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset active" id="info-tipo_contrato-tab" data-toggle="tab" href="#info-tipo_contrato" role="tab" aria-controls="info-tipo_contrato" aria-selected="true">Tipo Contrato</a>
+                                    <a class="nav-link-aten text-reset active" id="info-tipo_contrato_administrativo-tab" data-toggle="tab" href="#info-tipo_contrato_administrativo" role="tab" aria-controls="info-tipo_contrato_administrativo" aria-selected="true">Tipo Contrato</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="info_personal_cont-tab" data-toggle="tab" href="#info_personal_cont" role="tab" aria-controls="info_personal_cont" aria-selected="false">Información Personal</a>
+                                    <a class="nav-link-aten text-reset" id="info_personal_cont_administrativo-tab" data-toggle="tab" href="#info_personal_cont_administrativo" role="tab" aria-controls="info_personal_cont_administrativo" aria-selected="false">Información Personal</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="info_contrato_pers-tab" data-toggle="tab" href="#info_contrato_pers" role="tab" aria-controls="info_contrato_pers" aria-selected="false">Información de Contrato</a>
+                                    <a class="nav-link-aten text-reset" id="info_contrato_pers_administrativo-tab" data-toggle="tab" href="#info_contrato_pers_administrativo" role="tab" aria-controls="info_contrato_pers_administrativo" aria-selected="false">Información de Contrato</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="leyes_sociales-tab" data-toggle="tab" href="#leyes_sociales" role="tab" aria-controls="leyes_sociales" aria-selected="false">Leyes Sociales</a>
+                                    <a class="nav-link-aten text-reset" id="leyes_sociales_administrativo-tab" data-toggle="tab" href="#leyes_sociales_administrativo" role="tab" aria-controls="leyes_sociales_administrativo" aria-selected="false">Leyes Sociales</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="horario_contrato-tab" data-toggle="tab" href="#horario_contrato" role="tab" aria-controls="horario_contrato" aria-selected="false">Horario</a>
+                                    <a class="nav-link-aten text-reset" id="horario_contrato_administrativo-tab" data-toggle="tab" href="#horario_contrato_administrativo" role="tab" aria-controls="horario_contrato_administrativo" aria-selected="false">Horario</a>
                                 </li>
 
                             </ul>
@@ -47,13 +47,13 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="tab-content" id="info-ingreso">
                                 <!---->
-                                <div class="tab-pane fade show active" id="info-tipo_contrato" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
+                                <div class="tab-pane fade show active" id="info-tipo_contrato_administrativo" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
                                     <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <select class="form-control form-control-sm" name="add_empleado_tipo_contrato" id="add_empleado_tipo_contrato">
+                                        <select class="form-control form-control-sm" name="_administrativo" id="add_empleado_tipo_contrato_administrativo">
                                             <option value="">Seleccione</option>
-                                            @if ($lista_tipo_contrato)
-                                                @foreach ($lista_tipo_contrato as $item)
-                                                    <option value="{{ $item['nombre'] }}" data-id="{{ $item['id'] }}">{{ $item['nombre'] }}</option>
+                                            @if ($lista_tipo_administrativo)
+                                                @foreach ($lista_tipo_administrativo as $item)
+                                                    <option value="{{ $item['nombres'] }}" data-id="{{ $item['id'] }}">{{ $item['nombres'] }}</option>
                                                 @endforeach
                                             @endif
                                             {{--  asistente tipo  --}}
@@ -63,7 +63,7 @@
                                     </div>
                                 </div>
                                     <!--INFO PERSONAL-->
-                                <div class="tab-pane fade show" id="info_personal_cont" role="tabpanel" aria-labelledby="info_personal_cont-tab">
+                                <div class="tab-pane fade show" id="info_personal_cont_administrativo" role="tabpanel" aria-labelledby="info_personal_cont-tab">
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
@@ -71,23 +71,23 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">RUT:</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_rut" id="add_empleado_rut">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_rut_administrativo" id="add_empleado_rut_administrativo">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Nombres</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_nombre" id="add_empleado_nombre">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_nombre_administrativo" id="add_empleado_nombre_administrativo">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Apellido Paterno</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_uno" id="add_empleado_apellido_uno">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_uno_administrativo" id="add_empleado_apellido_uno_administrativo">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Apellido Materno</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_dos" id="add_empleado_apellido_dos">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_dos_administrativo" id="add_empleado_apellido_dos_administrativo">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Sexo</label>
-                                                <select class="form-control form-control-sm" name="add_empleado_sexo" id="add_empleado_sexo">
+                                                <select class="form-control form-control-sm" name="add_empleado_sexo_administrativo" id="add_empleado_sexo_administrativo">
                                                     <option value="">Seleccione</option>
                                                     <option value="F">Femenino</option>
                                                     <option value="M">Masculino</option>
@@ -95,21 +95,21 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Fecha Nacimiento</label>
-                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_nacimiento" id="add_empleado_fecha_nacimiento">
+                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_nacimiento_administrativo" id="add_empleado_fecha_nacimiento_administrativo">
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Email:</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_email" id="add_empleado_email">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_email_administrativo" id="add_empleado_email_administrativo">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Teléfono</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_telefono" id="add_empleado_telefono">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_telefono_administrativo" id="add_empleado_telefono_administrativo">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Región</label>
-                                                <select class="form-control form-control-sm" name="add_empleado_region" id="add_empleado_region" onchange="buscar_ciudad_nuevo_empleado();">
+                                                <select class="form-control form-control-sm" name="add_empleado_region_administrativo" id="add_empleado_region_administrativo" onchange="buscar_ciudad_nuevo_empleado_administrativo();">
                                                     <option value="">Seleccione</option>
                                                     @if($regiones)
                                                         @foreach ($regiones as $reg )
@@ -121,23 +121,23 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Ciudad</label>
-                                                <select class="form-control form-control-sm" name="add_empleado_ciudad" id="add_empleado_ciudad">
+                                                <select class="form-control form-control-sm" name="add_empleado_ciudad_administrativo" id="add_empleado_ciudad_administrativo">
                                                     <option value="">Seleccione</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Dirección</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_direccion" id="add_empleado_direccion">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_direccion_administrativo" id="add_empleado_direccion_administrativo">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Número</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_numero" id="add_empleado_numero">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_numero_administrativo" id="add_empleado_numero_administrativo">
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                                 <!--INFO CONTRATO-->
-                                <div class="tab-pane fade show" id="info_contrato_pers" role="tabpanel" aria-labelledby="info_contrato_pers-tab">
+                                <div class="tab-pane fade show" id="info_contrato_pers_administrativo" role="tabpanel" aria-labelledby="info_contrato_pers-tab">
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
@@ -218,7 +218,7 @@
                                     </form>
                                 </div>
                                 <!--INFO CONTRATO-->
-                                <div class="tab-pane fade show" id="horario_contrato" role="tabpanel" aria-labelledby="horario_contrato-tab">
+                                <div class="tab-pane fade show" id="horario_contrato_administrativo" role="tabpanel" aria-labelledby="horario_contrato-tab">
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
@@ -257,7 +257,7 @@
                                     </form>
                                 </div>
                                 <!-- LEYES SOCIALES -->
-                                <div class="tab-pane fade show" id="leyes_sociales" role="tabpanel" aria-labelledby="leyes_sociales-tab">
+                                <div class="tab-pane fade show" id="leyes_sociales_administrativo" role="tabpanel" aria-labelledby="leyes_sociales-tab">
                                     <div class="form-group form-row">
                                         <div class="col-md-3">
                                             <label class="floating-label-activo-sm" for="afp">Seguros</label>
@@ -306,7 +306,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm mx-auto" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="registrar_nuevo_empleado();">Añadir al Equipo</button>
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="registrar_nuevo_empleado_administrativo();">Añadir al Equipo</button>
                 {{--  <button type="button" class="btn btn-primary">Ver formulario (PDF)</button>  --}}
                 </form>
             </div>
@@ -328,15 +328,11 @@
         });
     });
 
-    function registrar_personal() {
-        $('#modal_agregar_personal').modal('show');
-        limpiar_formulario();
-    }
 
     {{-- BUSCAR CIUDAD DE REGISTRAR --}}
-    function buscar_ciudad_nuevo_empleado(id_ciudad=0)
+    function buscar_ciudad_nuevo_empleado_administrativo(id_ciudad=0)
     {
-        let region = $('#add_empleado_region').val();
+        let region = $('#add_empleado_region_administrativo').val();
         let url = "{{ route('adm_cm.buscar_ciudad_region') }}";
         $.ajax({
             url: url,
@@ -350,7 +346,7 @@
             {
                 data = JSON.parse(data);
 
-                let ciudades = $('#add_empleado_ciudad');
+                let ciudades = $('#add_empleado_ciudad_administrativo');
 
                 ciudades.find('option').remove();
                 ciudades.append('<option value="0">Seleccione</option>');
@@ -379,23 +375,23 @@
     };
 
 
-    function registrar_nuevo_empleado()
+    function registrar_nuevo_empleado_administrativo()
     {
         var valido = 1;
         var mensaje = '';
-        let id_institucion = $('#add_empleado_id_institucion').val();
-        let id_lugar_atencion = $('#add_empleado_id_lugar_atencion').val();
-        let id_admin_creador = $('#add_empleado_id_admin_creador').val();
-        let id_tipo_admin_creador = $('#add_empleado_id_tipo_admin_creador').val();
-        let tipo_contrato = $('#add_empleado_tipo_contrato').val();
+        let id_institucion = $('#add_empleado_id_institucion_administrativo').val();
+        let id_lugar_atencion = $('#add_empleado_id_lugar_atencion_administrativo').val();
+        let id_admin_creador = $('#add_empleado_id_admin_creador_administrativo').val();
+        let id_tipo_admin_creador = $('#add_empleado_id_tipo_admin_creador_administrativo').val();
+        let tipo_contrato = $('#add_empleado_tipo_contrato_administrativo').val();
 
-        let rut = $('#add_empleado_rut').val();
-        let nombre = $('#add_empleado_nombre').val();
-        let apellido_uno = $('#add_empleado_apellido_uno').val();
-        let apellido_dos = $('#add_empleado_apellido_dos').val();
-        let sexo = $('#add_empleado_sexo').val();
-        let fecha_nacimiento = $('#add_empleado_fecha_nacimiento').val();
-        let email = $('#add_empleado_email').val();
+        let rut = $('#add_empleado_rut_administrativo').val();
+        let nombre = $('#add_empleado_nombre_administrativo').val();
+        let apellido_uno = $('#add_empleado_apellido_uno_administrativo').val();
+        let apellido_dos = $('#add_empleado_apellido_dos_administrativo').val();
+        let sexo = $('#add_empleado_sexo_administrativo').val();
+        let fecha_nacimiento = $('#add_empleado_fecha_nacimiento_administrativo').val();
+        let email = $('#add_empleado_email_administrativo').val();
 
         let fecha_inicio = $('#add_empleado_fecha_inicio').val();
         let fecha_termino = $('#add_empleado_fecha_termino').val();
@@ -430,9 +426,9 @@
             caja_compensacion_porcentaje = '0';
 
 
-        let telefono = $('#add_empleado_telefono').val();
-        let region = $('#add_empleado_region').val();
-        let ciudad = $('#add_empleado_ciudad').val();
+        let telefono = $('#add_empleado_telefono_administrativo').val();
+        let region = $('#add_empleado_region_administrativo').val();
+        let ciudad = $('#add_empleado_ciudad_administrativo').val();
         let direccion = $('#add_empleado_direccion').val();
         let numero = $('#add_empleado_numero').val();
         let dias_laborales = $('#add_empleado_dias_laborales').val();

@@ -10,6 +10,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
         th, td {
             border: 1px solid #000;
@@ -23,30 +24,61 @@
 </head>
 <body>
     <h1>Reporte Mensual - {{ $mes }} {{ $anio }}</h1>
-    <img src="{{ asset('images/iconos/cm-perfiles.png') }}" alt="logo" class="logo">
+    @if($comprasMensuales->count() > 0)
+    <h4>Compras</h4>
     <table>
         <thead>
             <tr>
                 <th>Producto</th>
                 <th>Código Interno</th>
-                <th>Tipo de Producto</th>
-                <th>Unidad de Medida</th>
                 <th>Marca</th>
-                <th>Observaciones</th>
+                <th>Cantidad</th>
+                <th>P.U.</th>
+                <th>Total</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($reporteMensual as $detalle)
+            @foreach($comprasMensuales as $detalle)
                 <tr>
                     <td>{{ $detalle->producto }}</td>
                     <td>{{ $detalle->codigo_interno }}</td>
-                    <td>{{ $detalle->tipo_producto }}</td>
-                    <td>{{ $detalle->unidad_medida }}</td>
                     <td>{{ $detalle->marca }}</td>
-                    <td>{{ $detalle->observaciones }}</td>
+                    <td>{{ $detalle->cantidad }}</td>
+                    <td>$ {{ number_format($detalle->precio_compra,0,',','.') }}</td>
+                    <td>$ {{ number_format(($detalle->precio_compra * $detalle->cantidad),0,',','.') }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+    @endif
+    @if($salidasMensuales->count() > 0)
+    <h4>Salidas</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Código Interno</th>
+                <th>Cantidad</th>
+                <th>Tipo de Producto</th>
+                <th>Unidad de Medida</th>
+                <th>Marca</th>
+                <th>Receptor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($salidasMensuales as $detalle)
+                <tr>
+                    <td>{{ $detalle->producto }}</td>
+                    <td>{{ $detalle->codigo_interno }}</td>
+                    <td>{{ $detalle->cantidad_entregada }}</td>
+                    <td>{{ $detalle->tipo_producto }}</td>
+                    <td>{{ $detalle->unidad_medida }}</td>
+                    <td>{{ $detalle->marca }}</td>
+                    <td>{{ $detalle->usuario }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    @endif
 </body>
 </html>
