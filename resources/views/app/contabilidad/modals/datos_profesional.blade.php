@@ -219,7 +219,7 @@
                                         </div>
                                         <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                             <label class="floating-label-activo-sm">Fecha Inicio</label>
-                                            <input type="date" class="form-control form-control-sm" name="empleado_fecha_inicio" id="empleado_fecha_inicio">
+                                            <input type="date" class="form-control form-control-sm" name="empleado_fecha_inicio" id="empleado_fecha_inicio" value="{{ date('Y-m-d') }}">
                                         </div>
                                         <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                             <label class="floating-label-activo-sm">Fecha Termino</label>

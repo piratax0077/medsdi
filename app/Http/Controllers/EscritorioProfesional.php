@@ -498,6 +498,7 @@ class EscritorioProfesional extends Controller
             }
 
             $lugar_atencion_prof = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->count();
+
             $mensajes = $this->dame_mensajes($profesional->id);
 
             //if($profesional->bienvenida == 0)

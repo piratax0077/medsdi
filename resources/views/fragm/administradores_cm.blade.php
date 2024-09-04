@@ -324,7 +324,7 @@
         <!--Card Información Básica-->
         <div class="card">
             <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                <h5 class="mb-0 text-white">Datos Personales SubDirector Medico</h5>
+                <h5 class="mb-0 text-white">Datos Personales Administrador Comercial</h5>
                 <button type="button" class="btn btn-outline-danger btn-sm float-right" onclick="eliminar_admin_cm(2,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
                 <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica_subdirector_cm" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
                     <i class="feather icon-edit"></i>
@@ -644,7 +644,7 @@
         <!--Card Información Básica-->
         <div class="card">
             <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                <h5 class="mb-0 text-white">Datos Personales SubDirector Gestion Cuidado</h5>
+                <h5 class="mb-0 text-white">Datos Personales Administrador Farmacia</h5>
                 <button type="button" class="btn btn-outline-danger btn-sm float-right" onclick="eliminar_admin_cm(3,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
                 <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
                     <i class="feather icon-edit"></i>

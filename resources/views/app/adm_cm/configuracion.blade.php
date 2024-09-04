@@ -65,10 +65,10 @@
                                                         <a class="nav-link text-reset active" id="p-cm-tab" data-toggle="tab" href="#p-cm" role="tab" aria-controls="p-cm" aria-selected="false"><i class="feather icon-home mr-2"></i>Perfil de la Institución</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-reset " id="p-adm-tab" data-toggle="tab" href="#p-adm" role="tab" aria-controls="p-adm" aria-selected="true"><i class="feather icon-user mr-2"></i>Perfil administrador</a>
+                                                        <a class="nav-link text-reset " id="p-adm-tab" data-toggle="tab" href="#p-adm" role="tab" aria-controls="p-adm" aria-selected="true"><i class="feather icon-user mr-2"></i>Perfil administrador general</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-reset" id="rol-permiso-adm-med-tab" data-toggle="tab" href="#rol-permiso-adm-med" role="tab" aria-controls="rol-permiso-adm-med" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Perfil administrador medico</a>
+                                                        <a class="nav-link text-reset" id="rol-permiso-adm-med-tab" data-toggle="tab" href="#rol-permiso-adm-med" role="tab" aria-controls="rol-permiso-adm-med" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Inscripción y manejo de administradores</a>
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link text-reset" id="ar-dep-tab" data-toggle="tab" href="#ar-dep" role="tab" aria-controls="ar-dep" aria-selected="false"><i class="fa-solid fa-stethoscope mr-2"></i>Especialidades y áreas</a>
@@ -1051,7 +1051,7 @@
                                     <!--Card Información Básica-->
                                     <div class="card">
                                         <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                                            <h5 class="mb-0 text-white">Datos Personales SubDirector Medico</h5>
+                                            <h5 class="mb-0 text-white">Datos Personales Administrador Comercial</h5>
                                             <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_admin_cm(2,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
                                             <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica_subdirector_cm" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
                                                 <i class="feather icon-edit"></i>
@@ -1371,7 +1371,7 @@
                                     <!--Card Información Básica-->
                                     <div class="card">
                                         <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                                            <h5 class="mb-0 text-white">Datos Personales SubDirector Gestion Cuidado</h5>
+                                            <h5 class="mb-0 text-white">Datos Personales Administrador Farmacia</h5>
                                             <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_admin_cm(3,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
                                             <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
                                                 <i class="feather icon-edit"></i>
@@ -2270,7 +2270,7 @@
                                     <select class="form-control form-control-sm" id="cargo">
                                         <option value="0">Seleccione</option>
                                         @foreach($cargos as $cargo)
-                                            <option value="{{ $cargo->id }}">{{ $cargo->descripcion }}</option>
+                                            <option value="{{ $cargo->id }}">{{ $cargo->nombres }}</option>
                                         @endforeach
                                     </select>
                                 </div>

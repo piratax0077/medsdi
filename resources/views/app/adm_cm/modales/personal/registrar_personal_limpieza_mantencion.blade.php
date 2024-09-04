@@ -1,90 +1,114 @@
+<!--****Container Completo****-->
+<style>
+    .select2-container--open{
+        z-index: 9999999 !important;
+    }
+</style>
 {{--  MODAL AGREGAR RESUMEN CONTRATO, ROLES, ACCESO --}}
-<div id="modal_agregar_personal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_agregar_personal" aria-hidden="true">
+<div id="registrar_personalaseoymantencion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="registrar_personalaseoymantencion" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Agregar Empleado Nuevo</h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Agregar Mantención y Limpieza</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
+                <input type="hidden" name="add_empleado_id_institucion_mantencion" id="add_empleado_id_institucion_mantencion" value="{{ $institucion->id }}">
+                <input type="hidden" name="add_empleado_id_lugar_atencion_mantencion" id="add_empleado_id_lugar_atencion_mantencion" value="{{ $institucion->id_lugar_atencion }}">
+                <input type="hidden" name="add_empleado_id_admin_creador_mantencion" id="add_empleado_id_admin_creador_mantencion" value="{{ Auth::user()->id }}">
+                <input type="hidden" name="add_empleado_id_tipo_admin_creador_mantencion" id="add_empleado_id_tipo_admin_creador_mantencion" value="{{ Auth::user()->Roles()->first()->id }}">
+                <input type="hidden" name="add_empleado_clave_ingreso_mantencion" id="add_empleado_clave_ingreso_mantencion" value="{{ rand(11111,99999) }}">
                 <form>
-                        <input type="hidden" name="add_empleado_id_institucion" id="add_empleado_id_institucion" value="{{ $institucion->id }}">
-                        <input type="hidden" name="add_empleado_id_lugar_atencion" id="add_empleado_id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
-                        <input type="hidden" name="add_empleado_id_admin_creador" id="add_empleado_id_admin_creador" value="{{ Auth::user()->id }}">
-                        <input type="hidden" name="add_empleado_id_tipo_admin_creador" id="add_empleado_id_tipo_admin_creador" value="{{ Auth::user()->Roles()->first()->id }}">
-                        <input type="hidden" name="add_empleado_clave_ingreso" id="add_empleado_clave_ingreso" value="{{ rand(11111,99999) }}">
                     <div class="row">
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                            <script>
-                            var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-
-                            var f=new Date();
-                            document.write( f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
-                            </script>
-                        </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset active" id="info-tipo_contrato-tab" data-toggle="tab" href="#info-tipo_contrato" role="tab" aria-controls="info-tipo_contrato" aria-selected="true">Tipo Contrato</a>
+                                    <a class="nav-link-aten text-reset active" id="info-tipo_contrato_mantencion-tab" data-toggle="tab" href="#info-tipo_contrato_mantencion" role="tab" aria-controls="info-tipo_contrato" aria-selected="true">Tipo Contrato</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="info_personal_cont-tab" data-toggle="tab" href="#info_personal_cont" role="tab" aria-controls="info_personal_cont" aria-selected="false">Información Personal</a>
+                                    <a class="nav-link-aten text-reset" id="info_personal_cont_mantencion-tab" data-toggle="tab" href="#info_personal_cont_mantencion" role="tab" aria-controls="info_personal_cont" aria-selected="false">Información Personal</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="info_contrato_pers-tab" data-toggle="tab" href="#info_contrato_pers" role="tab" aria-controls="info_contrato_pers" aria-selected="false">Información de Contrato</a>
+                                    <a class="nav-link-aten text-reset" id="info_contrato_pers_mantencion-tab" data-toggle="tab" href="#info_contrato_pers_mantencion" role="tab" aria-controls="info_contrato_pers" aria-selected="false">Información de Contrato</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="leyes_sociales-tab" data-toggle="tab" href="#leyes_sociales" role="tab" aria-controls="leyes_sociales" aria-selected="false">Leyes Sociales</a>
+                                    <a class="nav-link-aten text-reset" id="leyes_sociales_mantencion-tab" data-toggle="tab" href="#leyes_sociales_mantencion" role="tab" aria-controls="leyes_sociales" aria-selected="false">Leyes Sociales</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link-aten text-reset" id="horario_contrato-tab" data-toggle="tab" href="#horario_contrato" role="tab" aria-controls="horario_contrato" aria-selected="false">Horario</a>
+                                    <a class="nav-link-aten text-reset" id="horario_contrato_mantencion-tab" data-toggle="tab" href="#horario_contrato_mantencion" role="tab" aria-controls="horario_contrato" aria-selected="false">Horario</a>
                                 </li>
 
                             </ul>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="tab-content" id="info-ingreso">
-                                <!---->
-                                <div class="tab-pane fade show active" id="info-tipo_contrato" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <select class="form-control form-control-sm" name="add_empleado_tipo_contrato" id="add_empleado_tipo_contrato">
-                                            <option value="">Seleccione</option>
-                                            @if ($lista_tipo_contrato)
-                                                @foreach ($lista_tipo_contrato as $item)
-                                                    <option value="{{ $item['nombre'] }}" data-id="{{ $item['id'] }}">{{ $item['nombre'] }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
+                            <div class="tab-content" id="myTabContent">
+                                {{--  TIPO CONTRATO  --}}
+                                <div class="tab-pane fade show active" id="info-tipo_contrato_mantencion" role="tabpanel" aria-labelledby="info-tipo_contrato_mantencion-tab">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="form-group">
+                                                <label for="add_empleado_tipo_contrato_mantencion">Tipo Contrato</label>
+                                                <select class="form-control" id="add_empleado_tipo_contrato_mantencion">
+                                                    <option value="0">Seleccione</option>
+                                                    <option value="GASFITERÍA">Gasfitería</option>
+                                                    <option value="ELECTRICIDAD">Electricidad</option>
+                                                    <option value="CARPINTERÍA">Carpintería</option>
+                                                    <option value="PINTURA">Pintura</option>
+                                                    <option value="JARDINERÍA">Jardinería</option>
+                                                    <option value="LIMPIEZA">Limpieza</option>
+                                                    <option value="MANTENCIÓN">Mantención</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                    <!--INFO PERSONAL-->
-                                <div class="tab-pane fade show" id="info_personal_cont" role="tabpanel" aria-labelledby="info_personal_cont-tab">
+                                <div class="tab-pane fade" id="info_personal_cont_mantencion" role="tabpabel" aria-labelledby="info_personal_cont_mantencion-tab">
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
                                                 <h6 class="text-c-blue">INFORMACIÓN Y DATOS DE CONTACTO</h6>
                                             </div>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 d-flex">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="tipo_mantenedor" id="tipo_mantenedor-empresa" value="empresa" onclick="que_mantenedor()">
+                                                    <label class="form-check-label" for="tipo_mantenedor-empresa">
+                                                      Empresa
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="tipo_mantenedor" id="tipo_mantenedor-persona" value="persona" onclick="que_mantenedor()" checked>
+                                                    <label class="form-check-label" for="tipo_mantenedor-persona">
+                                                        Persona Natural
+                                                    </label>
+                                                </div>
+                                            </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">RUT:</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_rut" id="add_empleado_rut">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_rut_mantencion" id="add_empleado_rut_mantencion">
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                <label class="floating-label-activo-sm">Razón Social:</label>
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_rz_mantencion" id="add_empleado_rz_mantencion" disabled>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                <label class="floating-label-activo-sm">Giro:</label>
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_giro_mantencion" id="add_empleado_giro_mantencion" disabled>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Nombres</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_nombre" id="add_empleado_nombre">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_nombre_mantencion" id="add_empleado_nombre_mantencion">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Apellido Paterno</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_uno" id="add_empleado_apellido_uno">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_uno_mantencion" id="add_empleado_apellido_uno_mantencion">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Apellido Materno</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_dos" id="add_empleado_apellido_dos">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_dos_mantencion" id="add_empleado_apellido_dos_mantencion">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Sexo</label>
-                                                <select class="form-control form-control-sm" name="add_empleado_sexo" id="add_empleado_sexo">
+                                                <select class="form-control form-control-sm" name="add_empleado_sexo_mantencion" id="add_empleado_sexo_mantencion">
                                                     <option value="">Seleccione</option>
                                                     <option value="F">Femenino</option>
                                                     <option value="M">Masculino</option>
@@ -92,21 +116,21 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Fecha Nacimiento</label>
-                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_nacimiento" id="add_empleado_fecha_nacimiento">
+                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_nacimiento_mantencion" id="add_empleado_fecha_nacimiento_mantencion">
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Email:</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_email" id="add_empleado_email">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_email_mantencion" id="add_empleado_email_mantencion">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Teléfono</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_telefono" id="add_empleado_telefono">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_telefono_mantencion" id="add_empleado_telefono_mantencion">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Región</label>
-                                                <select class="form-control form-control-sm" name="add_empleado_region" id="add_empleado_region" onchange="buscar_ciudad_nuevo_empleado();">
+                                                <select class="form-control form-control-sm" name="add_empleado_region_mantencion" id="add_empleado_region_mantencion" onchange="buscar_ciudad_nuevo_mantencion();">
                                                     <option value="">Seleccione</option>
                                                     @if($regiones)
                                                         @foreach ($regiones as $reg )
@@ -118,23 +142,22 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Ciudad</label>
-                                                <select class="form-control form-control-sm" name="add_empleado_ciudad" id="add_empleado_ciudad">
+                                                <select class="form-control form-control-sm" name="add_empleado_ciudad_mantencion" id="add_empleado_ciudad_mantencion">
                                                     <option value="">Seleccione</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Dirección</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_direccion" id="add_empleado_direccion">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_direccion_mantencion" id="add_empleado_direccion_mantencion">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Número</label>
-                                                <input type="text" class="form-control form-control-sm" name="add_empleado_numero" id="add_empleado_numero">
+                                                <input type="text" class="form-control form-control-sm" name="add_empleado_numero_mantencion" id="add_empleado_numero_mantencion">
                                             </div>
                                         </div>
                                     </form>
                                 </div>
-                                <!--INFO CONTRATO-->
-                                <div class="tab-pane fade show" id="info_contrato_pers" role="tabpanel" aria-labelledby="info_contrato_pers-tab">
+                                <div class="tab-pane fade" id="info_contrato_pers_mantencion" role="tabpabel" aria-labelledby="info_contrato_pers_mantencion-tab">
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
@@ -142,123 +165,83 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Fecha Inicio</label>
-                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_inicio" id="add_empleado_fecha_inicio">
+                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_inicio_mantencion" id="add_empleado_fecha_inicio_mantencion">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Fecha Termino</label>
-                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_termino" id="add_empleado_fecha_termino">
+                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_termino_mantencion" id="add_empleado_fecha_termino_mantencion">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-6 col-lg-6"style="text-align:right">
                                                 <label  class="cr">Indefinido</label>
-                                                <input type="hidden" id="add_cont_indefinido" name="add_cont_indefinido" value="0">
+                                                <input type="hidden" id="add_cont_indefinido_mantencion" name="add_cont_indefinido_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_contrato_indef', 'add_cont_indefinido', ' ');" id="add_empleado_check_contrato_indef" name="add_empleado_check_contrato_indef" value="">
-                                                    <label for="add_empleado_check_contrato_indef" class="cr"></label>
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_contrato_indef_mantencion', 'add_cont_indefinido_mantencion', ' ');" id="add_empleado_check_contrato_indef_mantencion" name="add_empleado_check_contrato_indef_mantencion" value="">
+                                                    <label for="add_empleado_check_contrato_indef_mantencion" class="cr"></label>
                                                 </div>
                                             </div>
 
 
                                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                                 <label class="floating-label-activo-sm">Monto Imponible</label>
-                                                <input type="number" class="form-control form-control-sm" name="add_empleado_monto_imponible" id="add_empleado_monto_imponible">
+                                                <input type="number" class="form-control form-control-sm" name="add_empleado_monto_imponible_mantencion" id="add_empleado_monto_imponible_mantencion">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label  class="floating-label-activo-sm">Locomoción</label>
-                                                <input type="hidden" id="add_empleado_locomocion" name="add_empleado_locomocion" value="0">
+                                                <input type="hidden" id="add_empleado_locomocion_mantencion" name="add_empleado_locomocion_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_locomocion', 'add_empleado_locomocion', 'add_empleado_locomocion_porcentaje');" id="add_empleado_check_locomocion" name="add_empleado_check_locomocion" value="">
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_locomocion_mantencion', 'add_empleado_locomocion_mantencion', 'add_empleado_locomocion_porcentaje_mantencion');" id="add_empleado_check_locomocion_mantencion" name="add_empleado_check_locomocion_mantencion" value="">
                                                     <label for="add_empleado_check_locomocion" class="cr"></label>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_locomocion_porcentaje" id="add_empleado_locomocion_porcentaje" value="N/A">
+                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_locomocion_porcentaje_mantencion" id="add_empleado_locomocion_porcentaje_mantencion" value="N/A">
                                             </div>
 
 
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Colación</label>
-                                                 <input type="hidden" id="add_empleado_colacion" name="add_empleado_colacion" value="0">
+                                                <input type="hidden" id="add_empleado_colacion_mantencion" name="add_empleado_colacion_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_colacion', 'add_empleado_colacion', 'add_empleado_colacion_porcentaje');" id="add_empleado_check_colacion" name="add_empleado_check_colacion" value="">
-                                                    <label for="add_empleado_check_colacion" class="cr"></label>
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_colacion_mantencion', 'add_empleado_colacion_mantencion', 'add_empleado_colacion_porcentaje_mantencion');" id="add_empleado_check_colacion_mantencion" name="add_empleado_check_colacion_mantencion" value="">
+                                                    <label for="add_empleado_check_colacion_mantencion" class="cr"></label>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_colacion_porcentaje" id="add_empleado_colacion_porcentaje" value="N/A">
+                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_colacion_porcentaje_mantencion" id="add_empleado_colacion_porcentaje_mantencion" value="N/A">
                                             </div>
 
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Asignación Familar</label>
-                                                <input type="hidden" id="add_empleado_asignacion_familiar" name="add_empleado_asignacion_familiar" value="0">
+                                                <input type="hidden" id="add_empleado_asignacion_familiar_mantencion" name="add_empleado_asignacion_familiar_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_asignacion_familiar', 'add_empleado_asignacion_familiar', 'add_empleado_asignacion_familiar_cantidad');" id="add_empleado_check_asignacion_familiar" name="add_empleado_check_asignacion_familiar" value="">
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_asignacion_familiar_mantencion', 'add_empleado_asignacion_familiar_mantencion', 'add_empleado_asignacion_familiar_cantidad_mantencion');" id="add_empleado_check_asignacion_familiar_mantencion" name="add_empleado_check_asignacion_familiar_mantencion" value="">
                                                     <label for="add_empleado_check_asignacion_familiar" class="cr"></label>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_asignacion_familiar_cantidad" id="add_empleado_asignacion_familiar_cantidad" value="N/A">
+                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_asignacion_familiar_cantidad_mantencion" id="add_empleado_asignacion_familiar_cantidad_mantencion" value="N/A">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Cajas de Compensación</label>
-                                                <input type="hidden" id="add_empleado_caja_compensacion" name="add_empleado_caja_compensacion" value="0">
+                                                <input type="hidden" id="add_empleado_caja_compensacion_mantencion" name="add_empleado_caja_compensacion_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_caja_compensacion', 'add_empleado_caja_compensacion', 'add_empleado_caja_compensacion_porcentaje');" id="add_empleado_check_caja_compensacion" name="add_empleado_check_caja_compensacion" value="">
-                                                    <label for="add_empleado_check_caja_compensacion" class="cr"></label>
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_caja_compensacion_mantencion', 'add_empleado_caja_compensacion_mantencion', 'add_empleado_caja_compensacion_porcentaje_mantencion');" id="add_empleado_check_caja_compensacion_mantencion" name="add_empleado_check_caja_compensacion_mantencion" value="">
+                                                    <label for="add_empleado_check_caja_compensacion_mantencion" class="cr"></label>
                                                 </div>
 
                                             </div>
 
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_caja_compensacion_porcentaje" id="add_empleado_caja_compensacion_porcentaje" value="N/A">
+                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_caja_compensacion_porcentaje_mantencion" id="add_empleado_caja_compensacion_porcentaje_mantencion" value="N/A">
                                             </div>
                                         </div>
                                     </form>
                                 </div>
-                                <!--INFO CONTRATO-->
-                                <div class="tab-pane fade show" id="horario_contrato" role="tabpanel" aria-labelledby="horario_contrato-tab">
-                                    <form>
-                                        <div class="form-row">
-                                            <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">HORARIO DE TRABAJO</h6>
-                                            </div>
-                                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                <label class="floating-label-activo-sm">Días de Trabajo</label>
-                                                <select class="js-example-basic-multiple" name="add_empleado_dias_laborales_asistente" id="add_empleado_dias_laborales_asistente" multiple="multiple">
-                                                    <option value="1">Lunes</option>
-                                                    <option value="2">Martes</option>
-                                                    <option value="3">Miercoles</option>
-                                                    <option value="4">Jueves</option>
-                                                    <option value="5">Viernes</option>
-                                                    <option value="6">Sabado</option>
-                                                    <option value="7">Domingo</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Hora entrada</label>
-                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada" name="add_empleado_hora_entrada" value="08:00">
-                                            </div>
-
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Hora salida</label>
-                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida" name="add_empleado_hora_salida" value="19:00">
-                                            </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Hora Inicio Colación</label>
-                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_colacion" name="add_empleado_hora_entrada_colacion" value="12:00">
-                                            </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Hora término colación</label>
-                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_colacion" name="add_empleado_hora_salida_colacion" value="13:00">
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- LEYES SOCIALES -->
-                                <div class="tab-pane fade show" id="leyes_sociales" role="tabpanel" aria-labelledby="leyes_sociales-tab">
+                                <div class="tab-pane fade" id="leyes_sociales_mantencion" role="tabpabel" aria-labelledby="leyes_sociales_mantencion-tab">
                                     <div class="form-group form-row">
                                         <div class="col-md-3">
                                             <label class="floating-label-activo-sm" for="afp">Seguros</label>
-                                            <select name="afp" id="afp" class="form-control form-control-sm">
+                                            <select name="afp_mantencion" id="afp_mantencion" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
                                                 <option value="1">AFP Capital</option>
                                                 <option value="2">AFP Cuprum</option>
@@ -270,7 +253,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="floating-label-activo-sm" for="salud">Seguros</label>
-                                            <select name="salud" id="salud" class="form-control form-control-sm">
+                                            <select name="salud_mantencion" id="salud_mantencion" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
                                                 <option value="1">Fonasa</option>
                                                 <option value="2">Isapre Banmedica</option>
@@ -284,28 +267,67 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="seguros">Seguros</label>
-                                                <input type="text" name="seguros" id="seguros" class="form-control form-control-sm">
+                                                <input type="text" name="seguros_mantencion" id="seguros_mantencion" class="form-control form-control-sm">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="cantidad">Cantidad</label>
-                                                <input type="number" name="cantidad" id="cantidad" class="form-control form-control-sm">
+                                                <input type="number" name="cantidad_mantencion" id="cantidad_mantencion" class="form-control form-control-sm">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="tab-pane fade" id="horario_contrato_mantencion" role="tabpabel" aria-labelledby="horario_contrato_mantencion-tab">
+                                    <form>
+                                        <div class="form-row">
+                                            <div class="col-sm-12 col-md-12 mb-2">
+                                                <h6 class="text-c-blue">HORARIO DE TRABAJO</h6>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                                <label class="floating-label-activo-sm">Días de Trabajo</label>
+                                                <select class="js-example-basic-multiple" name="add_empleado_dias_laborales_mantencion" id="add_empleado_dias_laborales_mantencion" multiple="multiple">
+                                                    <option value="1">Lunes</option>
+                                                    <option value="2">Martes</option>
+                                                    <option value="3">Miercoles</option>
+                                                    <option value="4">Jueves</option>
+                                                    <option value="5">Viernes</option>
+                                                    <option value="6">Sabado</option>
+                                                    <option value="7">Domingo</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                <label class="floating-label-activo-sm">Hora entrada</label>
+                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_mantencion" name="add_empleado_hora_entrada_mantencion" value="08:00">
+                                            </div>
 
+                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                <label class="floating-label-activo-sm">Hora salida</label>
+                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_mantencion" name="add_empleado_hora_salida_mantencion" value="19:00">
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                <label class="floating-label-activo-sm">Hora Inicio Colación</label>
+                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_colacion_mantencion" name="add_empleado_hora_entrada_colacion_mantencion" value="12:00">
+                                            </div>
+                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                                <label class="floating-label-activo-sm">Hora término colación</label>
+                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_colacion_mantencion" name="add_empleado_hora_salida_colacion_mantencion" value="13:00">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
+                                {{--  INFORMACION PERSONAL  --}}
                         </div>
+
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm mx-auto" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="registrar_nuevo_empleado();">Añadir al Equipo</button>
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="registrar_nuevo_empleado_mantencion();">Añadir al Equipo</button>
                 {{--  <button type="button" class="btn btn-primary">Ver formulario (PDF)</button>  --}}
-                </form>
+
             </div>
         </div>
     </div>
@@ -318,6 +340,12 @@
     $(document).ready(function() {
         {{--  FORMATEO DE RUT AGREGAR NUEVO PROFESIONAL   --}}
         $("#add_empleado_rut").rut({
+            formatOn: 'keyup',
+            minimumLength: 2,
+            validateOn: 'change',
+            useThousandsSeparator : false
+        });
+        $('#add_empleado_rut_mantencion').rut({
             formatOn: 'keyup',
             minimumLength: 2,
             validateOn: 'change',
@@ -379,69 +407,155 @@
         });
     };
 
+    function buscar_ciudad_nuevo_mantencion(){
+        let region = $('#add_empleado_region_mantencion').val();
+        let url = "{{ route('adm_cm.buscar_ciudad_region') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                region: region,
+            },
+        })
+        .done(function(data) {
+            if (data != null)
+            {
+                data = JSON.parse(data);
+                let ciudades = $('#add_empleado_ciudad_mantencion');
 
-    function registrar_nuevo_empleado()
+                ciudades.find('option').remove();
+                ciudades.append('<option value="0">Seleccione</option>');
+                $(data).each(function(i, v) { // indice, valor
+                    ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                });
+
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar las ciudades",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    };
+
+
+    function registrar_nuevo_empleado_mantencion()
     {
         var valido = 1;
         var mensaje = '';
-        let id_institucion = $('#add_empleado_id_institucion').val();
-        let id_lugar_atencion = $('#add_empleado_id_lugar_atencion').val();
-        let id_admin_creador = $('#add_empleado_id_admin_creador').val();
-        let id_tipo_admin_creador = $('#add_empleado_id_tipo_admin_creador').val();
-        let tipo_contrato = $('#add_empleado_tipo_contrato').val();
+        let id_institucion = $('#add_empleado_id_institucion_mantencion').val();
+        let id_lugar_atencion = $('#add_empleado_id_lugar_atencion_mantencion').val();
+        let id_admin_creador = $('#add_empleado_id_admin_creador_mantencion').val();
+        let id_tipo_admin_creador = $('#add_empleado_id_tipo_admin_creador_mantencion').val();
+        let tipo_contrato = $('#add_empleado_tipo_contrato_mantencion').val();
 
-        let rut = $('#add_empleado_rut').val();
-        let nombre = $('#add_empleado_nombre').val();
-        let apellido_uno = $('#add_empleado_apellido_uno').val();
-        let apellido_dos = $('#add_empleado_apellido_dos').val();
-        let sexo = $('#add_empleado_sexo').val();
-        let fecha_nacimiento = $('#add_empleado_fecha_nacimiento').val();
-        let email = $('#add_empleado_email').val();
 
-        let fecha_inicio = $('#add_empleado_fecha_inicio').val();
-        let fecha_termino = $('#add_empleado_fecha_termino').val();
-        let monto_imponible = $('#add_empleado_monto_imponible').val();
 
-        let locomocion = ( $('#add_empleado_locomocion').val() == ''?'0':$('#add_empleado_locomocion').val() );
+        let rut = $('#add_empleado_rut_mantencion').val();
+        let nombre = $('#add_empleado_nombre_mantencion').val();
+
+        let tipo_mantenedor = $('input:radio[name=tipo_mantenedor]:checked').val();
+
+        if(tipo_mantenedor == 'empresa')
+        {
+            var t_m = 1;
+
+            var rz = $('#add_empleado_rz_mantencion').val();
+            var giro = $('#add_empleado_giro_mantencion').val();
+            // validar si es empresa
+            if(rz == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Razón Social\n';
+            }
+            if(giro == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Giro\n';
+            }
+
+        }
+        else
+        {
+            var t_m = 0;
+
+            var rz = '';
+            var giro = '';
+
+            var apellido_uno = $('#add_empleado_apellido_uno_mantencion').val();
+            var apellido_dos = $('#add_empleado_apellido_dos_mantencion').val();
+
+            if(apellido_uno == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Apellido Paterno\n';
+            }
+            if(apellido_dos == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Apellido Materno\n';
+            }
+        }
+
+        tipo_mantenedor = t_m;
+
+
+        let sexo = $('#add_empleado_sexo_mantencion').val();
+        let fecha_nacimiento = $('#add_empleado_fecha_nacimiento_mantencion').val();
+        let email = $('#add_empleado_email_mantencion').val();
+
+        let fecha_inicio = $('#add_empleado_fecha_inicio_mantencion').val();
+        let fecha_termino = $('#add_empleado_fecha_termino_mantencion').val();
+        let monto_imponible = $('#add_empleado_monto_imponible_mantencion').val();
+
+        let locomocion = ( $('#add_empleado_locomocion_mantencion').val() == ''?'0':$('#add_empleado_locomocion_mantencion').val() );
         var locomocion_porcentaje = '';
         if(locomocion == 1)
-            locomocion_porcentaje = $('#add_empleado_locomocion_porcentaje').val();
+            locomocion_porcentaje = $('#add_empleado_locomocion_porcentaje_mantencion').val();
         else
             locomocion_porcentaje = '0';
 
-        let colacion = ( $('#add_empleado_colacion').val() == ''?'0':$('#add_empleado_colacion').val() );
+        let colacion = ( $('#add_empleado_colacion_mantencion').val() == ''?'0':$('#add_empleado_colacion_mantencion').val() );
         var colacion_porcentaje = '';
         if(colacion == 1)
-            colacion_porcentaje = $('#add_empleado_colacion_porcentaje').val();
+            colacion_porcentaje = $('#add_empleado_colacion_porcentaje_mantencion').val();
         else
             colacion_porcentaje = '0';
 
-        let asignacion_familiar = ( $('#add_empleado_asignacion_familiar').val() == ''?'0':$('#add_empleado_asignacion_familiar').val() );
+        let asignacion_familiar = ( $('#add_empleado_asignacion_familiar_mantencion').val() == ''?'0':$('#add_empleado_asignacion_familiar_mantencion').val() );
         var asignacion_familiar_cantidad = '';
         if(asignacion_familiar == 1)
-            asignacion_familiar_cantidad = $('#add_empleado_asignacion_familiar_cantidad').val();
+            asignacion_familiar_cantidad = $('#add_empleado_asignacion_familiar_cantidad_mantencion').val();
         else
             asignacion_familiar_cantidad = '0';
 
-        let caja_compensacion = ( $('#add_empleado_caja_compensacion').val() == ''?'0':$('#add_empleado_caja_compensacion').val() );
+        let caja_compensacion = ( $('#add_empleado_caja_compensacion_mantencion').val() == ''?'0':$('#add_empleado_caja_compensacion_mantencion').val() );
         var caja_compensacion_porcentaje = '';
         if(caja_compensacion == 1)
-            caja_compensacion_porcentaje = $('#add_empleado_caja_compensacion_porcentaje').val();
+            caja_compensacion_porcentaje = $('#add_empleado_caja_compensacion_porcentaje_mantencion').val();
         else
             caja_compensacion_porcentaje = '0';
 
 
-        let telefono = $('#add_empleado_telefono').val();
-        let region = $('#add_empleado_region').val();
-        let ciudad = $('#add_empleado_ciudad').val();
-        let direccion = $('#add_empleado_direccion').val();
-        let numero = $('#add_empleado_numero').val();
-        let dias_laborales = $('#add_empleado_dias_laborales_asistente').val();
-        let hora_entrada = $('#add_empleado_hora_entrada').val();
-        let hora_salida = $('#add_empleado_hora_salida').val();
-        let hora_entrada_colacion = $('#add_empleado_hora_entrada_colacion').val();
-        let hora_salida_colacion = $('#add_empleado_hora_salida_colacion').val();
-        let clave_ingreso = $('#add_empleado_clave_ingreso').val();
+        let telefono = $('#add_empleado_telefono_mantencion').val();
+        let region = $('#add_empleado_region_mantencion').val();
+        let ciudad = $('#add_empleado_ciudad_mantencion').val();
+        let direccion = $('#add_empleado_direccion_mantencion').val();
+        let numero = $('#add_empleado_numero_mantencion').val();
+        let dias_laborales = $('#add_empleado_dias_laborales_mantencion').val();
+        let hora_entrada = $('#add_empleado_hora_entrada_mantencion').val();
+        let hora_salida = $('#add_empleado_hora_salida_mantencion').val();
+        let hora_entrada_colacion = $('#add_empleado_hora_entrada_colacion_mantencion').val();
+        let hora_salida_colacion = $('#add_empleado_hora_salida_colacion_mantencion').val();
+        let clave_ingreso = $('#add_empleado_clave_ingreso_mantencion').val();
         let _token = CSRF_TOKEN;
 
         if(id_institucion == '')
@@ -464,7 +578,7 @@
             valido = 0;
             mensaje += 'Campo requerido Tipo Usuario Creador\n';
         }
-        if(tipo_contrato == '')
+        if(tipo_contrato == '' || tipo_contrato == 0)
         {
             valido = 0;
             mensaje += 'Campo requerido Tipo Contrato\n';
@@ -620,11 +734,9 @@
                     id_institucion: id_institucion,
                     id_lugar_atencion: id_lugar_atencion,
                     id_admin_creador: id_admin_creador,
-
                     id_tipo_admin_creador: id_tipo_admin_creador,
-
                     tipo_contrato: tipo_contrato,
-
+                    tipo_mantenedor: tipo_mantenedor,
                     rut: rut,
                     nombre: nombre,
                     apellido_uno: apellido_uno,
@@ -637,11 +749,9 @@
                     ciudad: ciudad,
                     direccion: direccion,
                     numero: numero,
-
                     fecha_inicio: fecha_inicio,
                     fecha_termino: fecha_termino,
                     monto_imponible: monto_imponible,
-
                     locomocion: locomocion,
                     locomocion_porcentaje: locomocion_porcentaje,
                     colacion: colacion,
@@ -650,16 +760,13 @@
                     asignacion_familiar_cantidad: asignacion_familiar_cantidad,
                     caja_compensacion: caja_compensacion,
                     caja_compensacion_porcentaje: caja_compensacion_porcentaje,
-
                     dias_laborales: dias_laborales,
                     hora_entrada: hora_entrada,
                     hora_salida: hora_salida,
                     hora_entrada_colacion: hora_entrada_colacion,
                     hora_salida_colacion: hora_salida_colacion,
-
                     otro: '',
                     otro_2: '',
-
                     clave_ingreso: clave_ingreso,
                 },
             })
@@ -752,26 +859,47 @@
         $('#modal_agregar_personal').find('input,textarea,select,checkbox').each(function(key, element){
             if($(element).attr('type') == 'checkbox')
                 $(element).prop('checked', '');
-            else if($(element).attr('id') == 'add_empleado_hora_entrada')
+            else if($(element).attr('id') == 'add_empleado_hora_entrada_mantencion')
                 $(element).val('08:00');
-            else if($(element).attr('id') == 'add_empleado_hora_salida')
+            else if($(element).attr('id') == 'add_empleado_hora_salida_mantencion')
                 $(element).val('19:00');
-            else if($(element).attr('id') == 'add_empleado_hora_entrada_colacion')
+            else if($(element).attr('id') == 'add_empleado_hora_entrada_colacion_mantencion')
                 $(element).val('12:00');
-            else if($(element).attr('id') == 'add_empleado_hora_salida_colacion')
+            else if($(element).attr('id') == 'add_empleado_hora_salida_colacion_mantencion')
                 $(element).val('13:00');
-            else if($(element).attr('id') == 'add_empleado_hora_salida_colacion')
-                $(element).val('13:00');
-            else if($(element).attr('id') == 'add_empleado_id_institucion')
+            else if($(element).attr('id') == 'add_empleado_id_institucion_mantencion')
                 $(element).val();
-            else if($(element).attr('id') == 'add_empleado_id_lugar_atencion')
+            else if($(element).attr('id') == 'add_empleado_id_lugar_atencion_mantencion')
                 $(element).val();
-            else if($(element).attr('id') == 'add_empleado_id_admin_creador')
+            else if($(element).attr('id') == 'add_empleado_id_admin_creador_mantencion')
                 $(element).val();
-            else if($(element).attr('id') == 'add_empleado_id_tipo_admin_creador')
+            else if($(element).attr('id') == 'add_empleado_id_tipo_admin_creador_mantencion')
                 $(element).val();
             else
                 $(element).val('');
         });
+    }
+
+    function que_mantenedor() {
+        // Obtener los elementos de los inputs
+        var rzInput = document.getElementById('add_empleado_rz_mantencion');
+        var giroInput = document.getElementById('add_empleado_giro_mantencion');
+        var apellidoUnoInput = document.getElementById('add_empleado_apellido_uno_mantencion');
+        var apellidoDosInput = document.getElementById('add_empleado_apellido_dos_mantencion');
+
+        // Verificar cuál opción de radio está seleccionada
+        if (document.getElementById('tipo_mantenedor-empresa').checked) {
+            // Si se selecciona "Empresa", habilitar los inputs
+            rzInput.removeAttribute('disabled');
+            giroInput.removeAttribute('disabled');
+            apellidoUnoInput.setAttribute('disabled', 'disabled');
+            apellidoDosInput.setAttribute('disabled', 'disabled');
+        } else {
+            // Si se selecciona "Persona Natural", deshabilitar los inputs
+            rzInput.setAttribute('disabled', 'disabled');
+            giroInput.setAttribute('disabled', 'disabled');
+            apellidoUnoInput.removeAttribute('disabled');
+            apellidoDosInput.removeAttribute('disabled');
+        }
     }
 </script>

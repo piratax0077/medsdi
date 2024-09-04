@@ -27,12 +27,6 @@
                             <li class="nav-item">
                                 <a class="btn btn-outline-info btn-sm mr-1 my-1 active" id="asistentes-tab" data-toggle="tab" href="#asistentes" role="tab" aria-controls="asistentes" aria-selected="false">Asistentes</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="btn btn-outline-info btn-sm mr-1 my-1" id="administrativos-tab" data-toggle="tab" href="#administrativos" role="tab" aria-controls="administrativos" aria-selected="false">Personal administrativo</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="btn btn-outline-info btn-sm mr-1 my-1" id="limpieza-mantencion-tab" data-toggle="tab" href="#limpieza-mantencion" role="tab" aria-controls="limpieza-mantencion" aria-selected="false">Limpieza y Mantención</a>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -124,153 +118,6 @@
 
                     <!--Cierre: Tab asistentes-->
 
-                    <!--Tab personal administrativo-->
-                    <div class="tab-pane fade" id="administrativos" role="tabpanel" aria-labelledby="administrativos-tab">
-                        <div class="row mb-n4">
-                            <div class="col-sm-12">
-                                <div class="card">
-                                    <div class="card-header bg-info">
-                                        <div class="col-md-12">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <h4 class="text-white f-20 mt-2 mb-2 float-left">Personal administrativo</h4>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="btn-group mr-2 float-right mt- mb-">
-                                                        <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_administrativo();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo/a personal administrativo</button>
-                                                        <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="Asociar_personal();">Asociar personal administrativo</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <table id="administrativo_personal" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center align-middle">Nombre / Rut</th>
-                                                    <th class="text-center align-middle">Sucursales</th>
-                                                    <th class="text-center align-middle">Contacto</th>
-													<th class="text-center align-middle">Datos</th>
-                                                    <th class="text-center align-middle">Rol y permisos</th>
-                                                    <th class="text-center align-middle">Acción</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="align-middle text-center">
-                                                        <span><strong>Roberto Olguín Díaz</strong></span><br>
-                                                        <span>18.564.323-k</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <span>Ist Viña del Mar</span><br>
-                                                        <span>Ist Quilpué</span><br>
-                                                        <span>Ist San Felipe</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-														<!--Botón Modal-->
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto('asistente publico',{{ $asistente->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
-													</td>
-                                                    <td class="align-middle text-center">
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('asistente publico',{{ $asistente->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm('asistente publico',{{ $asistente->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos('asistente publico',{{ $asistente->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_asistente('asistente publico',{{ $asistente->id }});"><i class="feather icon-edit"></i> Editar</button>
-                                                        <button type="button" class="btn btn-danger btn-sm"><i class="feather icon-x-circle"></i> Desasociar</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Cierre: Tab personal administrativo-->
-
-                    <!--Tab personal limpieza y mantencion-->
-                    <div class="tab-pane fade" id="limpieza-mantencion" role="tabpanel" aria-labelledby="limpieza-mantencion-tab">
-                        <div class="row mb-n4">
-                            <div class="col-sm-12">
-                                <div class="card">
-                                    <div class="card-header bg-info">
-                                        <div class="col-md-12">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <h4 class="text-white f-20 mt-2 mb-2 float-left">Limpieza y mantención</h4>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="btn-group mr-2 float-right mt- mb-">
-                                                        <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_limpieza_mantencion();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo/a personal de limpieza y mantencion</button>
-                                                        <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="Asociar_personal();">Asociar personal de limpieza y mantencion</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <table id="limpieza_mantencion_personal" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center align-middle">Nombre / Rut</th>
-                                                    <th class="text-center align-middle">Sucursales</th>
-                                                    <th class="text-center align-middle">Contacto</th>
-													<th class="text-center align-middle">Datos</th>
-                                                    <th class="text-center align-middle">Rol y permisos</th>
-                                                    <th class="text-center align-middle">Acción</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="align-middle text-center">
-                                                        <span><strong>Roberto Olguín Díaz</strong></span><br>
-                                                        <span>18.564.323-k</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <span>Ist Viña del Mar</span><br>
-                                                        <span>Ist Quilpué</span><br>
-                                                        <span>Ist San Felipe</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-														<!--Botón Modal-->
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto('asistente publico',{{ $asistente->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
-													</td>
-                                                    <td class="align-middle text-center">
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('asistente publico',{{ $asistente->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm('asistente publico',{{ $asistente->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos('asistente publico',{{ $asistente->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_asistente('asistente publico',{{ $asistente->id }});"><i class="feather icon-edit"></i> Editar</button>
-                                                        <button type="button" class="btn btn-danger btn-sm"><i class="feather icon-x-circle"></i> Desasociar</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Cierre: Tab personal limpieza y mantencion-->
                 </div>
                 <!--Cierre: Pills-->
             </div>
@@ -293,7 +140,12 @@
             });
 
             $(".js-example-basic-multiple").select2();
-
+            $('#add_empleado_rut_administrativo').rut({
+                formatOn: 'keyup',
+                minimumLength: 2,
+                validateOn: 'change',
+                useThousandsSeparator : false
+            });
         })
 
 

@@ -262,11 +262,100 @@ class AdministradorCmController extends Controller
             ->where('profesionales_lugares_atencion.id_lugar_atencion',$institucion->id_lugar_atencion)
             ->get();
 
+
         $asistentes_contratados = ContratoAsistenteInstitucion::select('contrato_asistente_institucion.*')
             ->where('contrato_asistente_institucion.id_institucion',$institucion->id)
             ->get();
 
-        $mantenedores_contratados = ContratoMantencionInstitucion::where('id_institucion',$institucion->id)->get();
+        $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+        $lista_administrativo = array();
+        if($LugarAtencion)
+        {
+            $lista_administrativo = $LugarAtencion->AdministrativoInstitucion()->get();
+
+            if($lista_administrativo)
+            {
+                foreach ($lista_administrativo as $key => $value)
+                {
+
+                    /** roles */
+                    $usuario = User::where('id', $value->id_admin)->first();
+                    $roles = $usuario->roles()->get();
+                    $array_roles = array();
+                    foreach ($roles as $key_2 => $value_2) {
+                        array_push($array_roles, $value_2->name);
+                    }
+
+                    if(!empty($array_roles))
+                        $lista_administrativo[$key]->roles = implode(",",$array_roles);
+                    else
+                        $lista_administrativo[$key]->roles = '';
+
+                    /** tipo administrativo */
+                    $lista_administrativo[$key]->tipo_administrativo = TipoAdministrador::find($value->id_tipo_administrador);
+
+                    /** info contrato */
+                    $filtro_cont = array();
+                    $filtro_cont[] = array('id_lugar_atencion', $institucion->id_lugar_atencion);
+                    $filtro_cont[] = array('id_empleado', $value->id);
+                    $lista_administrativo[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion')->where($filtro_cont)->first();
+                }
+            }
+        }
+
+        $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+        $lista_mantencion = array();
+        if($LugarAtencion)
+        {
+            $lista_mantencion = $LugarAtencion->MantencionInstitucion()->get();
+
+            if($lista_mantencion)
+            {
+                foreach ($lista_mantencion as $key => $value)
+                {
+                    /** roles */
+                    $usuario = User::where('id', $value->id_admin)->first();
+                    $roles = $usuario->roles()->get();
+                    $array_roles = array();
+                    foreach ($roles as $key_2 => $value_2) {
+                        array_push($array_roles, $value_2->name);
+                    }
+
+                    if(!empty($array_roles))
+                        $lista_mantencion[$key]->roles = implode(",",$array_roles);
+                    else
+                        $lista_mantencion[$key]->roles = '';
+
+                    /** info contrato */
+                    $filtro_cont = array();
+                    $filtro_cont[] = array('id_lugar_atencion', $institucion->id_lugar_atencion);
+                    $filtro_cont[] = array('id_empleado', $value->id);
+                    $lista_mantencion[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion')->where($filtro_cont)->first();
+                }
+            }
+        }
+
+        /** LISTA CONTRATO */
+        $lista_tipo_asistente = AsistenteTipo::select('id', 'nombre')->where('estado',1)->get();
+        $lista_tipo_administrador = TipoAdministrador::select('id', 'nombres')->where('estado',1)->get();
+
+        $lista_tipo_contrato = array();
+        foreach ($lista_tipo_asistente as $key => $value) {
+            array_push($lista_tipo_contrato,array(
+                'id' => $value->id,
+                'nombre' => strtoupper($value->nombre),
+            ));
+        }
+        foreach ($lista_tipo_administrador as $key => $value) {
+            array_push($lista_tipo_contrato,array(
+                'id' => $value->id,
+                'nombre' => strtoupper($value->nombres),
+            ));
+        }
+        /** FIN LISTA CONTRATO */
+
+        $lista_tipo_administrativo = TipoAdministrador::where('estado', 1)->get();
+
 
         return view('app.adm_cm.contratos_nuevos',
             [
@@ -274,9 +363,11 @@ class AdministradorCmController extends Controller
                 'bancos' => $bancos,
                 'especialidades' => $especialidades,
                 'profesionales_contratados' => $profesionales_contratados,
-                'asistentes_contratados' => $asistentes_contratados,
-                'mantenedores_contratados' => $mantenedores_contratados,
-                'institucion' => $institucion
+                'institucion' => $institucion,
+                'lista_administrativo' => $lista_administrativo,
+                'lista_tipo_contrato' => (object)$lista_tipo_contrato,
+                'lista_tipo_administrativo' => $lista_tipo_administrativo,
+                'lista_mantencion' => $lista_mantencion,
             ]
         );
     }
@@ -509,7 +600,7 @@ class AdministradorCmController extends Controller
             }
         }
 
-        $cargos = AdminMed::all();
+        $cargos = $lista_tipo_administrador;
 
         $usuario_director_cm = User::find($institucion->id_director_medico);
         $usuario_subdirector_cm = User::find($institucion->id_subdirector_medico);
@@ -2128,6 +2219,7 @@ class AdministradorCmController extends Controller
         if($LugarAtencion)
         {
             $profesionales = $LugarAtencion->Profesionales()->get();
+
             if($profesionales)
             {
 
@@ -2860,6 +2952,44 @@ class AdministradorCmController extends Controller
         }
         /** FIN CARGA DE ASISTENTES */
 
+        /** CARGA DE ADMINISTRATIVOS */
+        $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+        $lista_administrativo = array();
+        if($LugarAtencion)
+        {
+            $lista_administrativo = $LugarAtencion->AdministrativoInstitucion()->get();
+
+            if($lista_administrativo)
+            {
+                foreach ($lista_administrativo as $key => $value)
+                {
+
+                    /** roles */
+                    $usuario = User::where('id', $value->id_admin)->first();
+                    $roles = $usuario->roles()->get();
+                    $array_roles = array();
+                    foreach ($roles as $key_2 => $value_2) {
+                        array_push($array_roles, $value_2->name);
+                    }
+
+                    if(!empty($array_roles))
+                        $lista_administrativo[$key]->roles = implode(",",$array_roles);
+                    else
+                        $lista_administrativo[$key]->roles = '';
+
+                    /** tipo administrativo */
+                    $lista_administrativo[$key]->tipo_administrativo = TipoAdministrador::find($value->id_tipo_administrador);
+
+                    /** info contrato */
+                    $filtro_cont = array();
+                    $filtro_cont[] = array('id_lugar_atencion', $institucion->id_lugar_atencion);
+                    $filtro_cont[] = array('id_empleado', $value->id);
+                    $lista_administrativo[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion')->where($filtro_cont)->first();
+                }
+            }
+        }
+
+
         /** LISTA CONTRATO */
         $lista_tipo_asistente = AsistenteTipo::select('id', 'nombre')->where('estado',1)->get();
         $lista_tipo_administrador = TipoAdministrador::select('id', 'nombres')->where('estado',1)->get();
@@ -2896,6 +3026,8 @@ class AdministradorCmController extends Controller
 
         $lista_tipo_administrativo = TipoAdministrador::where('estado', 1)->get();
 
+
+
         return view('app.adm_cm.personal')->with([
             'responsable' => $responsable,
             'institucion' => $institucion,
@@ -2906,7 +3038,8 @@ class AdministradorCmController extends Controller
             'ciudades' => $ciudades,
             'lista_tipo_asistente' => $lista_tipo_asistente,
             'adm_medico' => $adm_medico,
-            'lista_tipo_administrativo' => $lista_tipo_administrativo
+            'lista_tipo_administrativo' => $lista_tipo_administrativo,
+            'lista_administrativo' => $lista_administrativo
         ]);;
     }
 
@@ -5421,7 +5554,7 @@ class AdministradorCmController extends Controller
 
             $user = User::find($profesional->id_usuario);
             // Tabla donde estan todos los tipos de administraciones medicas
-            $cargo = AdminMed::where('id', $req->cargo)->first();
+            $cargo = TipoAdministrador::where('id', $req->cargo)->first();
 
             $institucion = Instituciones::where('id', $req->id_institucion)->first();
 

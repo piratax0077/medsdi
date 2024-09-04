@@ -145,17 +145,17 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Fecha Inicio</label>
-                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_inicio" id="add_empleado_fecha_inicio">
+                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_inicio_administrativo" id="add_empleado_fecha_inicio_administrativo">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Fecha Termino</label>
-                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_termino" id="add_empleado_fecha_termino">
+                                                <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_termino_administrativo" id="add_empleado_fecha_termino_administrativo">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-6 col-lg-6"style="text-align:right">
                                                 <label  class="cr">Indefinido</label>
-                                                <input type="hidden" id="add_cont_indefinido" name="add_cont_indefinido" value="0">
+                                                <input type="hidden" id="add_cont_indefinido_administrativo" name="add_cont_indefinido_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_contrato_indef', 'add_cont_indefinido', ' ');" id="add_empleado_check_contrato_indef" name="add_empleado_check_contrato_indef" value="">
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_contrato_indef_administrativo', 'add_cont_indefinido_administrativo_administrativo', ' ');" id="add_empleado_check_contrato_indef_administrativo" name="add_empleado_check_contrato_indef_administrativo" value="">
                                                     <label for="add_empleado_check_contrato_indef" class="cr"></label>
                                                 </div>
                                             </div>
@@ -163,56 +163,56 @@
 
                                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                                 <label class="floating-label-activo-sm">Monto Imponible</label>
-                                                <input type="number" class="form-control form-control-sm" name="add_empleado_monto_imponible" id="add_empleado_monto_imponible">
+                                                <input type="number" class="form-control form-control-sm" name="add_empleado_monto_imponible_administrativo" id="add_empleado_monto_imponible_administrativo">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label  class="floating-label-activo-sm">Locomoción</label>
-                                                <input type="hidden" id="add_empleado_locomocion" name="add_empleado_locomocion" value="0">
+                                                <input type="hidden" id="add_empleado_locomocion_administrativo" name="add_empleado_locomocion_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_locomocion', 'add_empleado_locomocion', 'add_empleado_locomocion_porcentaje');" id="add_empleado_check_locomocion" name="add_empleado_check_locomocion" value="">
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_locomocion_administrativo', 'add_empleado_locomocion_administrativo', 'add_empleado_locomocion_porcentaje_administrativo');" id="add_empleado_check_locomocion_administrativo" name="add_empleado_check_locomocion_administrativo" value="">
                                                     <label for="add_empleado_check_locomocion" class="cr"></label>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_locomocion_porcentaje" id="add_empleado_locomocion_porcentaje" value="N/A">
+                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_locomocion_porcentaje_administrativo" id="add_empleado_locomocion_porcentaje_administrativo" value="N/A">
                                             </div>
 
 
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Colación</label>
-                                                 <input type="hidden" id="add_empleado_colacion" name="add_empleado_colacion" value="0">
+                                                 <input type="hidden" id="add_empleado_colacion_administrativo" name="add_empleado_colacion_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_colacion', 'add_empleado_colacion', 'add_empleado_colacion_porcentaje');" id="add_empleado_check_colacion" name="add_empleado_check_colacion" value="">
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_colacion_administrativo', 'add_empleado_colacion_administrativo', 'add_empleado_colacion_porcentaje_administrativo');" id="add_empleado_check_colacion_administrativo" name="add_empleado_check_colacion_administrativo" value="">
                                                     <label for="add_empleado_check_colacion" class="cr"></label>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_colacion_porcentaje" id="add_empleado_colacion_porcentaje" value="N/A">
+                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_colacion_porcentaje_administrativo" id="add_empleado_colacion_porcentaje_administrativo" value="N/A">
                                             </div>
 
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Asignación Familar</label>
-                                                <input type="hidden" id="add_empleado_asignacion_familiar" name="add_empleado_asignacion_familiar" value="0">
+                                                <input type="hidden" id="add_empleado_asignacion_familiar_administrativo" name="add_empleado_asignacion_familiar_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_asignacion_familiar', 'add_empleado_asignacion_familiar', 'add_empleado_asignacion_familiar_cantidad');" id="add_empleado_check_asignacion_familiar" name="add_empleado_check_asignacion_familiar" value="">
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_asignacion_familiar_administrativo', 'add_empleado_asignacion_familiar_administrativo', 'add_empleado_asignacion_familiar_cantidad_administrativo');" id="add_empleado_check_asignacion_familiar_administrativo" name="add_empleado_check_asignacion_familiar_administrativo" value="">
                                                     <label for="add_empleado_check_asignacion_familiar" class="cr"></label>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_asignacion_familiar_cantidad" id="add_empleado_asignacion_familiar_cantidad" value="N/A">
+                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_asignacion_familiar_cantidad_administrativo" id="add_empleado_asignacion_familiar_cantidad_administrativo" value="N/A">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
                                                 <label class="floating-label-activo-sm">Cajas de Compensación</label>
-                                                <input type="hidden" id="add_empleado_caja_compensacion" name="add_empleado_caja_compensacion" value="0">
+                                                <input type="hidden" id="add_empleado_caja_compensacion_administrativo" name="add_empleado_caja_compensacion_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_caja_compensacion', 'add_empleado_caja_compensacion', 'add_empleado_caja_compensacion_porcentaje');" id="add_empleado_check_caja_compensacion" name="add_empleado_check_caja_compensacion" value="">
-                                                    <label for="add_empleado_check_caja_compensacion" class="cr"></label>
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_caja_compensacion_administrativo', 'add_empleado_caja_compensacion_administrativo', 'add_empleado_caja_compensacion_porcentaje_administrativo');" id="add_empleado_check_caja_compensacion_administrativo" name="add_empleado_check_caja_compensacion_administrativo" value="">
+                                                    <label for="add_empleado_check_caja_compensacion_administrativo" class="cr"></label>
                                                 </div>
 
                                             </div>
 
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_caja_compensacion_porcentaje" id="add_empleado_caja_compensacion_porcentaje" value="N/A">
+                                                <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_caja_compensacion_porcentaje_administrativo" id="add_empleado_caja_compensacion_porcentaje_administrativo" value="N/A">
                                             </div>
                                         </div>
                                     </form>
@@ -226,7 +226,7 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                                 <label class="floating-label-activo-sm">Días de Trabajo</label>
-                                                <select class="js-example-basic-multiple" name="add_empleado_dias_laborales" id="add_empleado_dias_laborales" multiple="multiple">
+                                                <select class="js-example-basic-multiple" name="add_empleado_dias_laborales_administrativo" id="add_empleado_dias_laborales_administrativo" multiple="multiple">
                                                     <option value="1">Lunes</option>
                                                     <option value="2">Martes</option>
                                                     <option value="3">Miercoles</option>
@@ -238,20 +238,20 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Hora entrada</label>
-                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada" name="add_empleado_hora_entrada" value="08:00">
+                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_administrativo" name="add_empleado_hora_entrada_administrativo" value="08:00">
                                             </div>
 
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Hora salida</label>
-                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida" name="add_empleado_hora_salida" value="19:00">
+                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_administrativo" name="add_empleado_hora_salida_administrativo" value="19:00">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Hora Inicio Colación</label>
-                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_colacion" name="add_empleado_hora_entrada_colacion" value="12:00">
+                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_colacion_administrativo" name="add_empleado_hora_entrada_colacion_administrativo" value="12:00">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Hora término colación</label>
-                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_colacion" name="add_empleado_hora_salida_colacion" value="13:00">
+                                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_colacion_administrativo" name="add_empleado_hora_salida_colacion_administrativo" value="13:00">
                                             </div>
                                         </div>
                                     </form>
@@ -261,7 +261,7 @@
                                     <div class="form-group form-row">
                                         <div class="col-md-3">
                                             <label class="floating-label-activo-sm" for="afp">Seguros</label>
-                                            <select name="afp" id="afp" class="form-control form-control-sm">
+                                            <select name="afp_administrativo" id="afp_administrativo" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
                                                 <option value="1">AFP Capital</option>
                                                 <option value="2">AFP Cuprum</option>
@@ -273,7 +273,7 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="floating-label-activo-sm" for="salud">Seguros</label>
-                                            <select name="salud" id="salud" class="form-control form-control-sm">
+                                            <select name="salud_administrativo" id="salud_administrativo" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
                                                 <option value="1">Fonasa</option>
                                                 <option value="2">Isapre Banmedica</option>
@@ -287,13 +287,13 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="seguros">Seguros</label>
-                                                <input type="text" name="seguros" id="seguros" class="form-control form-control-sm">
+                                                <input type="text" name="seguros_administrativo" id="seguros_administrativo" class="form-control form-control-sm">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="cantidad">Cantidad</label>
-                                                <input type="number" name="cantidad" id="cantidad" class="form-control form-control-sm">
+                                                <input type="number" name="cantidad_administrativo" id="cantidad_administrativo" class="form-control form-control-sm">
                                             </div>
                                         </div>
                                     </div>
@@ -393,35 +393,35 @@
         let fecha_nacimiento = $('#add_empleado_fecha_nacimiento_administrativo').val();
         let email = $('#add_empleado_email_administrativo').val();
 
-        let fecha_inicio = $('#add_empleado_fecha_inicio').val();
-        let fecha_termino = $('#add_empleado_fecha_termino').val();
-        let monto_imponible = $('#add_empleado_monto_imponible').val();
+        let fecha_inicio = $('#add_empleado_fecha_inicio_administrativo').val();
+        let fecha_termino = $('#add_empleado_fecha_termino_administrativo').val();
+        let monto_imponible = $('#add_empleado_monto_imponible_administrativo').val();
 
-        let locomocion = ( $('#add_empleado_locomocion').val() == ''?'0':$('#add_empleado_locomocion').val() );
+        let locomocion = ( $('#add_empleado_locomocion_administrativo').val() == ''?'0':$('#add_empleado_locomocion_administrativo').val() );
         var locomocion_porcentaje = '';
         if(locomocion == 1)
-            locomocion_porcentaje = $('#add_empleado_locomocion_porcentaje').val();
+            locomocion_porcentaje = $('#add_empleado_locomocion_porcentaje_administrativo').val();
         else
             locomocion_porcentaje = '0';
 
-        let colacion = ( $('#add_empleado_colacion').val() == ''?'0':$('#add_empleado_colacion').val() );
+        let colacion = ( $('#add_empleado_colacion_administrativo').val() == ''?'0':$('#add_empleado_colacion_administrativo').val() );
         var colacion_porcentaje = '';
         if(colacion == 1)
-            colacion_porcentaje = $('#add_empleado_colacion_porcentaje').val();
+            colacion_porcentaje = $('#add_empleado_colacion_porcentaje_administrativo').val();
         else
             colacion_porcentaje = '0';
 
-        let asignacion_familiar = ( $('#add_empleado_asignacion_familiar').val() == ''?'0':$('#add_empleado_asignacion_familiar').val() );
+        let asignacion_familiar = ( $('#add_empleado_asignacion_familiar_administrativo').val() == ''?'0':$('#add_empleado_asignacion_familiar_administrativo').val() );
         var asignacion_familiar_cantidad = '';
         if(asignacion_familiar == 1)
-            asignacion_familiar_cantidad = $('#add_empleado_asignacion_familiar_cantidad').val();
+            asignacion_familiar_cantidad = $('#add_empleado_asignacion_familiar_cantidad_administrativo').val();
         else
             asignacion_familiar_cantidad = '0';
 
-        let caja_compensacion = ( $('#add_empleado_caja_compensacion').val() == ''?'0':$('#add_empleado_caja_compensacion').val() );
+        let caja_compensacion = ( $('#add_empleado_caja_compensacion_administrativo').val() == ''?'0':$('#add_empleado_caja_compensacion_administrativo').val() );
         var caja_compensacion_porcentaje = '';
         if(caja_compensacion == 1)
-            caja_compensacion_porcentaje = $('#add_empleado_caja_compensacion_porcentaje').val();
+            caja_compensacion_porcentaje = $('#add_empleado_caja_compensacion_porcentaje_administrativo').val();
         else
             caja_compensacion_porcentaje = '0';
 
@@ -429,14 +429,14 @@
         let telefono = $('#add_empleado_telefono_administrativo').val();
         let region = $('#add_empleado_region_administrativo').val();
         let ciudad = $('#add_empleado_ciudad_administrativo').val();
-        let direccion = $('#add_empleado_direccion').val();
-        let numero = $('#add_empleado_numero').val();
-        let dias_laborales = $('#add_empleado_dias_laborales').val();
-        let hora_entrada = $('#add_empleado_hora_entrada').val();
-        let hora_salida = $('#add_empleado_hora_salida').val();
-        let hora_entrada_colacion = $('#add_empleado_hora_entrada_colacion').val();
-        let hora_salida_colacion = $('#add_empleado_hora_salida_colacion').val();
-        let clave_ingreso = $('#add_empleado_clave_ingreso').val();
+        let direccion = $('#add_empleado_direccion_administrativo').val();
+        let numero = $('#add_empleado_numero_administrativo').val();
+        let dias_laborales = $('#add_empleado_dias_laborales_administrativo').val();
+        let hora_entrada = $('#add_empleado_hora_entrada_administrativo').val();
+        let hora_salida = $('#add_empleado_hora_salida_administrativo').val();
+        let hora_entrada_colacion = $('#add_empleado_hora_entrada_colacion_administrativo').val();
+        let hora_salida_colacion = $('#add_empleado_hora_salida_colacion_administrativo').val();
+        let clave_ingreso = $('#add_empleado_clave_ingreso_administrativo').val();
         let _token = CSRF_TOKEN;
 
         if(id_institucion == '')
@@ -659,6 +659,7 @@
                 },
             })
             .done(function(data) {
+                console.log(data);
                 if (data != null) {
                     if(data.estado == 1)
                     {
@@ -670,7 +671,10 @@
                             icon: "success",
                             buttons: "Aceptar",
                         });
-                        limpiar_formulario();
+                        // reload
+                        setTimeout(function(){
+                            location.reload();
+                        }, 2000);
                     }
                     else
                     {
@@ -768,4 +772,5 @@
                 $(element).val('');
         });
     }
+
 </script>
