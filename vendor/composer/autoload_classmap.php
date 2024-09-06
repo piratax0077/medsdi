@@ -382,6 +382,7 @@ return array(
     'App\\Models\\LogUsersDevices' => $baseDir . '/app/Models/LogUsersDevices.php',
     'App\\Models\\LugarAtencion' => $baseDir . '/app/Models/LugarAtencion.php',
     'App\\Models\\LugarAtencionUser' => $baseDir . '/app/Models/LugarAtencionUser.php',
+    'App\\Models\\MantencionLugarAtencion' => $baseDir . '/app/Models/MantencionLugarAtencion.php',
     'App\\Models\\Marcas_productos' => $baseDir . '/app/Models/Marcas_productos.php',
     'App\\Models\\MaterialesInsumosPaciente' => $baseDir . '/app/Models/MaterialesInsumosPaciente.php',
     'App\\Models\\MedicamentoUsoCronicoGeneral' => $baseDir . '/app/Models/MedicamentoUsoCronicoGeneral.php',

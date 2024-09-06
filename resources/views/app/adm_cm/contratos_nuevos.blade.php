@@ -92,7 +92,8 @@
                                                     <td class="align-middle text-center"></td>
                                                     <td class="align-middle text-center">
                                                         <span>{{ $profesional->especialidad }}</span><br>
-                                                        <span>{{ $profesional->tipo_especialidad }}</span>
+                                                        <span>{{ $profesional->tipo_especialidad }}</span><br>
+                                                        <span>{{ $profesional->sub_tipo_especialidad }}</span>
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         <span>{{ $profesional->tipo_contrato == 1 ? 'INDEFINIDO' : '' }}</span><br>
@@ -106,7 +107,7 @@
                                                         <span>{{ $profesional->horas_semanales }} horas semanales <br> ${{ number_format($profesional->monto_imponible, 0, ",", ".") }}</span>
                                                     </td>
                                                     <td class="align-middle text-center">
-                                                        <button type="button" class="btn btn-success btn-sm" onclick="editar_datosprofesionalc();">
+                                                        <button type="button" class="btn btn-success btn-sm" onclick="editar_datosprofesionalc({{ $profesional->id_profesional }});">
                                                         <i class="feather icon-edit"></i> Editar</button>
                                                         <button type="button" class="btn btn-danger btn-sm">
                                                         <i class="feather icon-x-circle"></i> Desasociar</button>
@@ -301,7 +302,7 @@
     @include('app.adm_cm.modales.personal.datos_banco')
     @include('app.adm_cm.modales.personal.horario_personal')
     @include('app.adm_cm.modales.personal.permisos_rol')
-    @include('app.adm_cm.modales.personal.editar_personal')
+    @include('app.adm_cm.modales.personal.editar_profesional')
 
     @include('app.adm_cm.modales.personal.finalizar_personal')
 
@@ -330,6 +331,10 @@
                 placeholder: "Seleccione los días laborales",
                 allowClear: true
             });
+            $('#edit_dias_laborales').select2({
+                placeholder: "Seleccione los días laborales",
+                allowClear: true
+            });
             $('#add_empleado_rut_administrativo').rut({
                 formatOn: 'keyup',
                 minimumLength: 2,
@@ -351,9 +356,254 @@
     }
     function contactoc(){ $('#contacto').modal('show');}
 
-    function editar_datosprofesionalc(){
-        $('#editardatosprofesional').modal('show');
+    function editar_datosprofesionalc(id){
+        $('#editar_profesional_cm').modal('show');
+        let url = "{{ url('Laboratorio/Profesionales/buscar') }}"+"/"+id;
+        $.ajax({
+            url: url,
+            type: "get",
+        })
+        .done(async function(data) {
+            if (data != null)
+            {
+                if(data.estado == 1)
+                {
+                    console.log(data.registro.contrato);
+                    $('#id_profesional_edit').val(data.registro.id);
+                    $('#id_contrato_edit').val(data.registro.contrato.id);
+
+                    $('#edit_profesion_nuevo_profesional').val(data.registro.contrato.id_especialidad);
+                   cargar_tipos_especialidad(data.registro.contrato.id_especialidad, data.registro.contrato.id_tipo_especialidad);
+                    // data.direccion;
+                    cargar_subtipo_especialidad(data.registro.contrato.id_tipo_especialidad, data.registro.contrato.id_subtipo_especialidad);
+
+                    $('#edit_rut_nuevo_profesional').val(data.registro.rut);
+                    $('#edit_f_ingreso_nuevo_profesional').val(data.registro.contrato.fecha_inicio);
+                    $('#nombre_nuevo_profesional_edit').val(data.registro.nombre);
+                    $('#edit_apellido1_nuevo_profesional').val(data.registro.apellido_uno);
+                    $('#edit_apellido2_nuevo_profesional').val(data.registro.apellido_dos);
+                    $('#edit_prof_sexo').val(data.registro.sexo);
+                    $('#edit_fecha_nacimiento').val(data.registro.fecha_nac);
+                    $('#edit_email_nuevo_profesional').val(data.registro.email);
+                    $('#edit_telefono1_nuevo_profesional').val(data.registro.telefono_uno);
+                    $('#edit_telefono2_nuevo_profesional').val(data.registro.telefono_dos);
+                    $('#edit_direccion_nuevo_profesional').val(data.direccion);
+
+                    // data.registro.direccion.id;
+                    $('#edit_region_nuevo_profesional').val(data.registro.direccion.ciudad.id_region);
+                    $('#edit_fecha_nacimiento').val(data.registro.fecha_nacimiento);
+
+                    console.log(data.registro.direccion.ciudad.id_region);
+
+                    try {
+                            await buscar_ciudad_editar_prof(data.registro.direccion.ciudad.id_region);
+                            $('#edit_comuna_nuevo_profesional').val(data.registro.direccion.id_ciudad);
+                        } catch (error) {
+                            console.error("Error al actualizar la ciudad:", error);
+                        }
+
+                    $('#edit_prof_monto_imponible').val(data.registro.contrato.monto_imponible);
+                    $('#edit_banco_nuevo_profesional').val(data.registro.contrato.id_banco);
+                    $('#edit_n_cta_nuevo_profesional').val(data.registro.contrato.numero_cuenta);
+                    $('#edit_sucursal_nuevo_profesional').val(data.registro.contrato.sucursal);
+
+                    console.log(data.registro.contrato.dias_laborales);
+
+                    // Seleccionar los días laborales obtenidos
+                    $('#edit_dias_laborales').val(data.registro.contrato.dias_laborales).trigger('change');
+                    $('#edit_prof_hora_entrada').val(data.registro.contrato.hora_ingreso);
+                    $('#edit_prof_hora_salida').val(data.registro.contrato.hora_salida);
+                    $('#edit_prof_hora_entrada_colacion').val(data.registro.contrato.hora_inicio_colacion);
+                    $('#edit_prof_hora_salida_colacion').val(data.registro.contrato.hora_termino_colacion);
+
+                    $('#edit_prof_id_prof').val(data.registro.id);
+
+
+                    $('#edit_prof_direccion').val(data.registro.direccion.direccion);
+                    $('#edit_prof_numero').val(data.registro.direccion.numero_dir);
+
+
+                    // data.registro.direccion.ciudad.id
+                    // data.registro.direccion.ciudad.nombre
+
+                    $('#edit_prof_id_contrato').val(data.registro.contrato.id);
+                    $('#edit_prof_tipo_contrato').val(data.registro.contrato.tipo_prof);
+                    // data.registro.contrato.id_prof;
+                    $('#edit_prof_rut').val(data.registro.contrato.rut);
+                    $('#edit_prof_nombre').val(data.registro.contrato.nombres);
+                    $('#edit_prof_apellido_uno').val(data.registro.contrato.apellido_uno);
+                    $('#edit_prof_apellido_dos').val(data.registro.contrato.apellido_dos);
+                    $('#edit_prof_telefono').val(data.registro.contrato.telefono);
+                    $('#edit_prof_email').val(data.registro.contrato.email);
+                    // data.registro.contrato.id_institucion;
+                    // data.registro.contrato.id_lugar_atencion;
+                    // data.registro.contrato.tipo_contrato;
+
+                    $('#edit_prof_check_contrato_indef').val(data.registro.contrato.tipo_contrato);
+                    if(data.registro.contrato.tipo_contrato == 1)
+                        $('#edit_prof_check_contrato_indef').prop('checked', true);
+                    else
+                        $('#edit_prof_check_contrato_indef').prop('checked', false);
+                    contrato_indefinido('edit_prof_check_contrato_indef', 'edit_prof_cont_indefinido', 'edit_prof_fecha_termino');
+
+                    $('#edit_prof_fecha_inicio').val(data.registro.contrato.fecha_inicio);
+                    $('#edit_prof_fecha_termino').val(data.registro.contrato.fecha_termino);
+                    $('#edit_prof_monto_imponible').val(data.registro.contrato.monto_imponible);
+
+                    if(data.registro.contrato.locomocion == 1)
+                        $('#edit_prof_check_locomocion').prop('checked', true);
+                    else
+                        $('#edit_prof_check_locomocion').prop('checked', false);
+                    activar_check('edit_prof_check_locomocion', 'edit_prof_locomocion', 'edit_prof_locomocion_porcentaje');
+                    $('#edit_prof_locomocion_porcentaje').val(data.registro.contrato.locomocion_porcentaje);
+
+                    if(data.registro.contrato.colacion == 1)
+                        $('#edit_prof_check_colacion').prop('checked', true);
+                    else
+                        $('#edit_prof_check_colacion').prop('checked', false);
+                    activar_check('edit_prof_check_colacion', 'edit_prof_colacion', 'edit_prof_colacion_porcentaje');
+                    $('#edit_prof_colacion_porcentaje').val(data.registro.contrato.colacion_porcentaje);
+
+                    if(data.registro.contrato.asignacion_familiar == 1)
+                        $('#edit_prof_check_asignacion_familiar').prop('checked', true);
+                    else
+                        $('#edit_prof_check_asignacion_familiar').prop('checked', false);
+                    activar_check('edit_prof_check_asignacion_familiar', 'edit_prof_asignacion_familiar', 'edit_prof_asignacion_familiar_cantidad');
+                    $('#edit_prof_asignacion_familiar_cantidad').val(data.registro.contrato.asignacion_familiar_cantidad);
+
+                    if(data.registro.contrato.caja_compensacion == 1)
+                        $('#edit_prof_check_caja_compensacion').prop('checked', true);
+                    else
+                        $('#edit_prof_check_caja_compensacion').prop('checked', false);
+                    activar_check('edit_prof_check_caja_compensacion', 'edit_prof_caja_compensacion', 'edit_prof_caja_compensacion_porcentaje');
+                    $('#edit_prof_caja_compensacion_porcentaje').val(data.registro.contrato.caja_compensacion_porcentaje);
+
+
+                }
+                else
+                {
+
+                }
+
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar las ciudades",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
     }
+
+    function cargar_tipos_especialidad(id_especialidad, id_tipo_especialidad = null){
+        let url = "{{ route('web.profesional.buscar_tipo_especialidad') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data:{
+                id_especialidad: id_especialidad
+            },
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data != null)
+            {
+                if(data.estado == 1)
+                {
+                    $('#edit_especialidad_nuevo_profesional').empty();
+                    $('#edit_especialidad_nuevo_profesional').append('<option value="">Seleccione el tipo de especialidad</option>');
+                    data.registros.forEach(tipo => {
+                        $('#edit_especialidad_nuevo_profesional').append('<option value="'+tipo.id+'">'+tipo.nombre+'</option>');
+                    });
+
+                    if(id_tipo_especialidad != null)
+                        $('#edit_especialidad_nuevo_profesional').val(id_tipo_especialidad);
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar los tipos de especialidad",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar los tipos de especialidad",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function cargar_subtipo_especialidad(id_tipo_especialidad, id_subtipo_especialidad = null){
+        let url = "{{ route('web.profesional.buscar_sub_tipo_especialidad') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data:{
+                id_tipo_especialidad: id_tipo_especialidad
+            },
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data != null)
+            {
+                if(data.estado == 1)
+                {
+                    $('#edit_sub_especialidad_nuevo_profesional').empty();
+                    $('#edit_sub_especialidad_nuevo_profesional').append('<option value="">Seleccione el subtipo de especialidad</option>');
+                    data.registros.forEach(subtipo => {
+                        $('#edit_sub_especialidad_nuevo_profesional').append('<option value="'+subtipo.id+'">'+subtipo.nombre+'</option>');
+                    });
+
+                    if(id_subtipo_especialidad != null)
+                        $('#edit_sub_especialidad_nuevo_profesional').val(id_subtipo_especialidad);
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar los subtipos de especialidad",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar los subtipos de especialidad",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
     function editar_datosasistentec(){
         $('#editar_contratoasistentes').modal('show');
     }
@@ -365,6 +615,7 @@
 
         let valido = 1;
         let mensaje = '';
+
         let id_institucion = $('#id_institucion').val();
         let id_lugar_atencion = $('#id_lugar_atencion').val();
         let id_admin_creador = $('#id_admin_creador').val();
@@ -622,7 +873,6 @@
             banco: banco,
             n_cta: n_cta,
             sucursal: sucursal,
-            _token: "{{ csrf_token() }}",
         }
 
 
@@ -722,6 +972,22 @@
                 confirmar_eliminar_mantenedor(id);
             }
         });
+    }
+
+    function activar_check(check, input_base, input_valor)
+    {
+        if($('#'+check).prop('checked'))
+        {
+            $('#'+input_base).val(1);
+            $('#'+input_valor).val(0);
+            $('#'+input_valor).attr('disabled', false);
+        }
+        else
+        {
+            $('#'+input_base).val(0);
+            $('#'+input_valor).val('N/A');
+            $('#'+input_valor).attr('disabled', true);
+        }
     }
 
     function confirmar_eliminar_mantenedor(id){
@@ -887,6 +1153,7 @@ $.ajax({
     console.log(jqXHR, ajaxOptions, thrownError)
 });
 }
+
 
 function regresar_a_busqueda()
 {

@@ -10,6 +10,8 @@
                     <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
                     <input type="hidden" name="id_admin_creador" id="id_admin_creador" value="{{ Auth::user()->id }}">
                     <input type="hidden" name="id_tipo_admin_creador" id="id_tipo_admin_creador" value="{{ Auth::user()->Roles()->first()->id }}">
+                    <input type="hidden" name="id_profesional_edit" id="id_profesional_edit" value="">
+                    <input type="hidden" name="id_contrato_edit" id="id_contrato_edit" value="">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
                         <li class="nav-item">
@@ -131,18 +133,7 @@
                                     <input class="form-control form-control-sm" name="direccion_nuevo_profesional" id="direccion_nuevo_profesional" type="text">
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Cargo</label>
-                                    <select name="cargo_nuevo_profesional" id="cargo_nuevo_profesional" class="form-control form-control-sm">
-                                        <option value="0">Seleccione opci&oacute;n</option>
-                                        <option value="1">Profesional</option>
-                                        <option value="2">Secretaria</option>
-                                        <option value="3">Administrativo</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-5">
+                            <div class="col-sm-6">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Regi&oacute;n</label>
                                     <select class="form-control form-control-sm" onchange="buscar_ciudad_profesional();" id="region_nuevo_profesional">
@@ -153,7 +144,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-5">
+                            <div class="col-sm-6">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Comuna</label>
                                     <select class="form-control form-control-sm" id="comuna_nuevo_profesional">

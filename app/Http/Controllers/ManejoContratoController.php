@@ -1168,6 +1168,140 @@ class ManejoContratoController extends Controller
         return $datos;
     }
 
+    public function editarProfesional(Request $request){
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $registro_profesional = Profesional::find($request->id_prof);
+            if($registro_profesional)
+            {
+                $registro_contrato = ContratoDependienteProfesional::find($request->id_contrato);
+                $registro_contrato->dias_laborales = json_decode($registro_contrato->dias_laborales);
+
+                if($registro_contrato)
+                {
+                    $filtro = array();
+                    $filtro[] = array('id_profesional',$request->id_prof);
+                    $filtro[] = array('id_lugar_atencion',$request->id_lugar_atencion);
+                    $filtro[] = array('estado',1);
+                    $registro_prof_lugar = ProfesionalesLugaresAtencion::where($filtro)->first();
+
+                    $registro_profesional->rut = $request->rut;
+                    $registro_profesional->nombre = $request->nombre;
+                    $registro_profesional->apellido_uno = $request->apellido1;
+                    $registro_profesional->apellido_dos = $request->apellido2;
+                    $registro_profesional->telefono_uno = $request->telefono1;
+                    if(!empty($request->telefono2))
+                        $registro_profesional->telefono2 = $request->telefono2;
+                    $registro_profesional->sexo = $request->sexo;
+                    $registro_profesional->email = $request->email;
+                    $registro_profesional->fecha_nacimiento = $request->fecha_nacimiento;
+
+                    if($registro_profesional->save())
+                    {
+                        $datos['update_profesionales']['estado'] = 1;
+                        $datos['update_profesionales']['msj'] = 'Datos Profesional Actualizados';
+
+                        /** MODIFICAR DIRECCION */
+                        // $registro_asistente->id_direccion = $request->id_direccion;
+                        $registro_direccion = Direccion::find($registro_profesional->id_direccion);
+                        if($registro_direccion)
+                        {
+                            /** update de direccion */
+                            $registro_direccion->direccion = $request->direccion;
+                            $registro_direccion->numero = $request->numero;
+                            $registro_direccion->ciudad = $request->ciudad;
+
+                            if($registro_profesional->save())
+                            {
+                                $datos['update_profesionales']['direccion']['estado'] = 1;
+                                $datos['update_profesionales']['direccion']['msj'] = 'Datos Direccion Profesional Actualizados';
+                            }
+                            else
+                            {
+                                $datos['update_profesionales']['direccion']['estado'] = 0;
+                                $datos['update_profesionales']['direccion']['msj'] = 'Datos Direccion Profesional Actualizacion con falla';
+                            }
+
+                        }
+                        else
+                        {
+                            /** registro direccion */
+                            $registro_direccion = new Direccion();
+                            $registro_direccion->direccion = $request->direccion;
+                            $registro_direccion->numero = $request->numero;
+                            $registro_direccion->ciudad = $request->ciudad;
+
+                            if($registro_direccion->save())
+                            {
+                                $datos['update_profesionales']['direccion']['estado'] = 1;
+                                $datos['update_profesionales']['direccion']['msj'] = 'Datos Direccion Profesional Registrada';
+
+                                $registro_profesional->id_direccion = $registro_direccion->id;
+                                if($registro_profesional->save())
+                                {
+                                    $datos['update_profesionales']['direccion']['registro']['estado'] = 1;
+                                    $datos['update_profesionales']['direccion']['registro']['msj'] = 'Datos Profesional Direccion Actualizado';
+                                }
+                                else
+                                {
+                                    $datos['update_profesionales']['direccion']['registro']['estado'] = 0;
+                                    $datos['update_profesionales']['direccion']['registro']['msj'] = 'Datos Profesional Direccon con Falla';
+                                }
+
+                            }
+                            else
+                            {
+                                $datos['update_profesionales']['direccion']['estado'] = 0;
+                                $datos['update_profesionales']['direccion']['msj'] = 'Datos Direccion Profesional Registro con Falla';
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        $datos['update_profesionales']['estado'] = 0;
+                        $datos['update_profesionales']['msj'] = 'Datos Profesional Actualizacion con falla';
+                    }
+
+                    /** ACTUALIZACION CONTRATO */
+
+                    $registro = User::find(Auth::user()->id);
+                    $roles = $registro->roles()->get();
+                    $lista_roles = '';
+                    foreach ($roles as $key => $value)
+                        {
+                        $lista_roles = $value->id.'|';
+                    }
+                    $lista_roles = substr($lista_roles, 0, -1);
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Contrato no encontrado';
+                }
+
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Profesional no encontrado';
+            }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
     static public function registroPerfil($registros)
     {
         $datos = array();
@@ -1534,6 +1668,7 @@ class ManejoContratoController extends Controller
                 $registro_profesional->apellido_dos = $registros->apellido2;
                 $registro_profesional->sexo = $registros->sexo;
                 $registro_profesional->rut = $registros->rut;
+                $registro_profesional->fecha_nacimiento = $registros->fecha_nacimiento;
                 $registro_profesional->email = $registros->email;
                 $registro_profesional->bienvenida = 0;
                 $registro_profesional->telefono_uno = $registros->telefono1;
@@ -2498,6 +2633,9 @@ class ManejoContratoController extends Controller
                     $request->hora_salida,
                     $request->hora_entrada_colacion,
                     $request->hora_salida_colacion,
+                    $request->banco,
+                    $request->n_cta,
+                    $request->sucursal,
                     Carbon::now(),
                 );
                 $datos['registro_contrato'] = $registro_contrato;
@@ -2557,6 +2695,9 @@ class ManejoContratoController extends Controller
         $hora_salida,
         $hora_inicio_colacion,
         $hora_termino_colacion,
+        $banco,
+        $n_cta,
+        $sucursal,
         $fecha_creacion
     )
     {
@@ -2677,6 +2818,9 @@ class ManejoContratoController extends Controller
             $contrato->fecha_inicio = $fecha_inicio;
             $contrato->fecha_termino = $fecha_termino;
             $contrato->monto_imponible = $monto_imponible;
+            $contrato->id_banco = $banco;
+            $contrato->numero_cuenta = $n_cta;
+            $contrato->sucursal = $sucursal;
             $contrato->locomocion = $locomocion;
             $contrato->locomocion_porcentaje = $locomocion_porcentaje;
             $contrato->colacion = $colacion;

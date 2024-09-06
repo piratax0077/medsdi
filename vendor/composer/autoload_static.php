@@ -1024,6 +1024,7 @@ class ComposerStaticInitb3713ee7b214bd6fe1b501c454bd7de3
         'App\\Models\\LogUsersDevices' => __DIR__ . '/../..' . '/app/Models/LogUsersDevices.php',
         'App\\Models\\LugarAtencion' => __DIR__ . '/../..' . '/app/Models/LugarAtencion.php',
         'App\\Models\\LugarAtencionUser' => __DIR__ . '/../..' . '/app/Models/LugarAtencionUser.php',
+        'App\\Models\\MantencionLugarAtencion' => __DIR__ . '/../..' . '/app/Models/MantencionLugarAtencion.php',
         'App\\Models\\Marcas_productos' => __DIR__ . '/../..' . '/app/Models/Marcas_productos.php',
         'App\\Models\\MaterialesInsumosPaciente' => __DIR__ . '/../..' . '/app/Models/MaterialesInsumosPaciente.php',
         'App\\Models\\MedicamentoUsoCronicoGeneral' => __DIR__ . '/../..' . '/app/Models/MedicamentoUsoCronicoGeneral.php',

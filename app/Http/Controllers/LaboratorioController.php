@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\Region;
 use App\Models\Ciudad;
 use App\Models\ContratoDependiente;
+use App\Models\ContratoDependienteProfesional;
 use App\Models\Direccion;
 use App\Models\Especialidad;
 use App\Models\EspecialidadesCm;
@@ -33,6 +34,7 @@ use App\Models\ServiciosInternos;
 use App\Models\TipoAdministrador;
 use App\Models\TipoConvenioInstitucion;
 use App\Models\TipoEspecialidad;
+use App\Models\SubTipoEspecialidad;
 use App\Models\TipoInstitucion;
 use App\Models\User;
 
@@ -792,6 +794,132 @@ class LaboratorioController extends Controller
                 if($direccion)
                     $direccion_text = $direccion->direccion.', '.$direccion->ciudad->nombre;
             }
+
+            $id_busqueda = Auth::user()->id;
+
+            /** INFORMACION DE INSTITUCION Y RESPONSABLE */
+            if(Auth::user()->id == 3)
+            {
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
+            }
+            else
+            {
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
+
+            if($registro)
+            {
+                // var_dump($registro);
+                // var_dump($registro->UsuarioAdministrador()->first());
+                //var_dump($registro->UsuarioAdministrador()->first()->id);
+                /** INSTITUCION */
+                $institucion = $registro;
+                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                $tipo_institucion = 'institucion';
+
+            }
+            else
+            {
+                $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+                if($registro)
+                {
+                    /** SERVICIOS */
+                    $institucion = $registro;
+                    $tipo_institucion = 'servicio';
+                }
+                else
+                {
+                    /** busqueda por responsable */
+                    $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                    if($responsable)
+                    {
+                        $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            // var_dump($registro);
+                            // var_dump($registro->UsuarioAdministrador()->first());
+                            /** INSTITUCION */
+                            $institucion = $registro;
+                            $tipo_institucion = 'institucion';
+
+                        }
+                        else
+                        {
+                            $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                            if($registro)
+                            {
+                                /** SERVICIOS */
+                                $institucion = $registro;
+                                $tipo_institucion = 'servicio';
+                            }
+                            else
+                            {
+
+                                $result_contrato = ContratoDependiente::where('tipo_empleado', 'like', '%ADMINISTRADOR%')
+                                        ->where('id_empleado', $responsable->id)
+                                        ->whereIn('estado', [2,3])
+                                        ->first();
+
+                                if($result_contrato)
+                                {
+                                    $registro = Instituciones::where('id',$result_contrato->id_institucion)->first();
+                                    if($registro)
+                                    {
+                                        /** INSTITUCION */
+                                        $institucion = $registro;
+                                        $tipo_institucion = 'institucion';
+                                    }
+                                    else
+                                    {
+                                        $registro = Servicios::where('id',$result_contrato->id_institucion)->first();
+                                        if($registro)
+                                        {
+                                            /** SERVICIOS */
+                                            $institucion = $registro;
+                                            $tipo_institucion = 'servicio';
+                                        }
+                                        else
+                                        {
+                                            return back()->with('error','Institución no encontrada');
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    return back()->with('error','Permisos de usuario no validos para Ingresar al modulo');
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
+
+                }
+            }
+            /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
+
+            /** CARGA DE ASISTENTES */
+            $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+            $filtro = array();
+            $filtro[] = array('id_profesional', $profesional->id);
+            // $filtro[] = array('estado', 2);
+            $filtro[] = array('id_lugar_atencion', $LugarAtencion->id);
+            $profesional->contrato = ContratoDependienteProfesional::where($filtro)->first();
+
+            $profesional->direccion = Direccion::with('Ciudad')->find($profesional->id_direccion);
+
+            $profesional->contrato->dias_laborales = json_decode($profesional->contrato->dias_laborales);
+
+
+            $profesional->especialidad = Especialidad::where('id',$profesional['contrato']['id_especialidad'])->first();
+            $profesional->tipo_especialidad = TipoEspecialidad::where('id',$profesional['contrato']['id_tipo_especialidad'])->first();
+            $profesional->sub_tipo_especialidad = SubTipoEspecialidad::where('id',$profesional['contrato']['id_subtipo_especialidad'])->first();
+
+
             $datos['estado'] = 1;
             $datos['msj'] = 'registro';
             $datos['registro'] = $profesional;

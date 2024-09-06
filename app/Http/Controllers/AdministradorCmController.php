@@ -254,11 +254,12 @@ class AdministradorCmController extends Controller
         $regiones = Region::all();
         $bancos = Bancos::all();
         $especialidades = Especialidad::all();
-        $profesionales_contratados = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.id','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos','profesionales.rut','contrato_dependiente_profesional.*','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad')
+        $profesionales_contratados = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.id','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos','profesionales.rut','contrato_dependiente_profesional.*','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad','sub_tipo_especialidad.nombre as sub_tipo_especialidad')
             ->leftjoin('profesionales','profesionales.id','=','profesionales_lugares_atencion.id_profesional')
             ->leftjoin('contrato_dependiente_profesional','contrato_dependiente_profesional.id_profesional','=','profesionales_lugares_atencion.id_profesional')
             ->leftjoin('especialidades','contrato_dependiente_profesional.id_especialidad','=','especialidades.id')
             ->leftjoin('tipos_especialidad','contrato_dependiente_profesional.id_tipo_especialidad','=','tipos_especialidad.id')
+            ->leftjoin('sub_tipo_especialidad','contrato_dependiente_profesional.id_subtipo_especialidad','=','sub_tipo_especialidad.id')
             ->where('profesionales_lugares_atencion.id_lugar_atencion',$institucion->id_lugar_atencion)
             ->get();
 
@@ -3931,10 +3932,10 @@ class AdministradorCmController extends Controller
         return $datos;
     }
 
-    public function buscar_profesional($id_profesional)
+    public function buscar_profesional(Request $req)
     {
         $datos = array();
-        $profesional = Profesional::where('id', $id_profesional)->first();
+        $profesional = Profesional::where('id', $req->id_profesional)->first();
 
         if($profesional)
         {
