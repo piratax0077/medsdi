@@ -357,7 +357,6 @@ class AdministradorCmController extends Controller
 
         $lista_tipo_administrativo = TipoAdministrador::where('estado', 1)->get();
 
-
         return view('app.adm_cm.contratos_nuevos',
             [
                 'regiones' => $regiones,
@@ -372,6 +371,7 @@ class AdministradorCmController extends Controller
             ]
         );
     }
+
 
     public function centroMedico(){
         return view('app.adm_cm.home');
@@ -4107,6 +4107,42 @@ class AdministradorCmController extends Controller
         }
 
         return $datos;
+    }
+
+    public function buscar_administrativo(Request $req){
+
+        $datos = array();
+        $administrativo = AdminInstServ::where('id', $req->id)->first();
+        // buscamos al profesional relacionado
+
+
+        if($administrativo)
+        {
+            $direccion_text = 'No Informada';
+            if($administrativo->id_direccion != '' || $administrativo->id_direccion!=0)
+            {
+                $direccion = Direccion::where('id', $administrativo->id_direccion)->first();
+                if($direccion)
+                    $direccion_text = $direccion->direccion.', '.$direccion->ciudad->nombre;
+            }
+
+            $administrativo->contrato = ContratoDependiente::where('id_empleado', $administrativo->id)->first();
+
+            $administrativo->direccion = Direccion::with('Ciudad')->find($administrativo->id_direccion);
+
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registro';
+            $datos['registro'] = $administrativo;
+            $datos['direccion'] = $direccion_text;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'sin registro';
+        }
+
+        return $datos;
+
     }
 
 

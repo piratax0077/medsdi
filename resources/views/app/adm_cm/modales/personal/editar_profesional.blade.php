@@ -360,7 +360,7 @@
         let id_profesion = $('#edit_profesion_nuevo_profesional').val();
         let id_especialidad = $('#edit_especialidad_nuevo_profesional').val();
         let id_sub_especialidad = $('#edit_sub_especialidad_nuevo_profesional').val();
-        let tipo_contrato = 'Profesional';
+        let tipo_contrato = '1';
 
         let rut = $('#edit_rut_nuevo_profesional').val();
         let f_ingreso = $('#edit_f_ingreso_nuevo_profesional').val();
@@ -690,11 +690,11 @@
                 },
             })
             .done(function(data) {
-                return console.log(data);
+                console.log(data);
                 if (data != null) {
                     if(data.estado == 1)
                     {
-                        $('#editar_asistente_cm').modal('hide');
+                        $('#editar_profesional_cm').modal('hide');
 
                         swal({
                             title: "Edicion de Personal",
@@ -702,7 +702,9 @@
                             icon: "success",
                             buttons: "Aceptar",
                         });
-                        limpiar_formulario();
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000);
                     }
                     else
                     {
@@ -757,8 +759,7 @@
         }
     }
 
-    {{-- BUSCAR CIUDAD DE REGISTRAR --}}
-        function buscar_ciudad_editar_prof(id_ciudad = 0) {
+    function buscar_ciudad_editar_prof(id_ciudad = 0) {
         return new Promise((resolve, reject) => {
             let region = $('#edit_region_nuevo_profesional').val();
             console.log(region);

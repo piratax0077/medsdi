@@ -190,7 +190,7 @@
                                                 <input type="hidden" id="add_empleado_locomocion_mantencion" name="add_empleado_locomocion_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
                                                     <input type="checkbox" onchange="activar_check('add_empleado_check_locomocion_mantencion', 'add_empleado_locomocion_mantencion', 'add_empleado_locomocion_porcentaje_mantencion');" id="add_empleado_check_locomocion_mantencion" name="add_empleado_check_locomocion_mantencion" value="">
-                                                    <label for="add_empleado_check_locomocion" class="cr"></label>
+                                                    <label for="add_empleado_check_locomocion_mantencion" class="cr"></label>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">
@@ -215,7 +215,7 @@
                                                 <input type="hidden" id="add_empleado_asignacion_familiar_mantencion" name="add_empleado_asignacion_familiar_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
                                                     <input type="checkbox" onchange="activar_check('add_empleado_check_asignacion_familiar_mantencion', 'add_empleado_asignacion_familiar_mantencion', 'add_empleado_asignacion_familiar_cantidad_mantencion');" id="add_empleado_check_asignacion_familiar_mantencion" name="add_empleado_check_asignacion_familiar_mantencion" value="">
-                                                    <label for="add_empleado_check_asignacion_familiar" class="cr"></label>
+                                                    <label for="add_empleado_check_asignacion_familiar_mantencion" class="cr"></label>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-3 col-lg-3">

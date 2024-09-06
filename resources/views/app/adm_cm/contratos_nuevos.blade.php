@@ -184,7 +184,7 @@
                                                             <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos('asistente publico',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
                                                         </td>
                                                         <td class="align-middle text-center">
-                                                            <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_asistente('asistente publico',{{ $administrativo->id }});"><i class="feather icon-edit"></i> Editar</button>
+                                                            <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_administrativo({{ $administrativo->id }});"><i class="feather icon-edit"></i> Editar</button>
                                                             <button type="button" class="btn btn-danger btn-sm"><i class="feather icon-x-circle"></i> Desasociar</button>
                                                         </td>
                                                     </tr>
@@ -290,19 +290,19 @@
     @include('app.contabilidad.modals.datoscuenta')
     @include('app.contabilidad.modals.contacto')
     @include('app.contabilidad.modals.contacto_ser')
-    @include('app.contabilidad.modals.editar_profesional')
-    @include('app.contabilidad.modals.editar_asistentes')
+
 
     @include('app.adm_cm.modales.personal.registrar_personal')
     @include('app.adm_cm.modales.personal.registrar_personal_administrativo')
 
-    @include('app.adm_cm.modales.personal.registrar_personal')
-    @include('app.adm_cm.modales.personal.registrar_personal_administrativo')
     @include('app.adm_cm.modales.personal.contacto_personal')
     @include('app.adm_cm.modales.personal.datos_banco')
     @include('app.adm_cm.modales.personal.horario_personal')
     @include('app.adm_cm.modales.personal.permisos_rol')
+
+    @include('app.contabilidad.modals.editar_asistentes')
     @include('app.adm_cm.modales.personal.editar_profesional')
+    @include('app.adm_cm.modales.personal.editar_administrativos')
 
     @include('app.adm_cm.modales.personal.finalizar_personal')
 
@@ -500,6 +500,352 @@
         .fail(function(jqXHR, ajaxOptions, thrownError) {
             console.log(jqXHR, ajaxOptions, thrownError)
         });
+    }
+
+    function editar_datos_administrativo(id){
+        $('#modal_editar_personal_administrativo').modal('show');
+        let url = "{{ route('adm_cm.administrativo_buscar') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data:{
+                id: id
+            },
+        })
+        .done(async function(data) {
+            console.log(data);
+            if (data != null)
+            {
+                if(data.estado == 1)
+                {
+                    $('#edit_tipo_contrato_administrativo').val(data.registro.contrato.tipo_contrato);
+                    $('#edit_id_administrativo').val(data.registro.id);
+                    $('#edit_rut_administrativo').val(data.registro.rut);
+                    $('#edit_nombre_administrativo').val(data.registro.nombres);
+                    $('#edit_apellido_uno_administrativo').val(data.registro.apellido_uno);
+                    $('#edit_apellido_dos_administrativo').val(data.registro.apellido_dos);
+                    $('#edit_sexo_administrativo').val(data.registro.sexo);
+                    $('#edit_fecha_nacimiento_administrativo').val(data.registro.fecha_nac);
+                    $('#edit_email_administrativo').val(data.registro.email);
+                    $('#edit_telefono_administrativo').val(data.registro.telefono);
+                    $('#edit_direccion_administrativo').val(data.direccion);
+                    $('#edit_region_administrativo').val(data.registro.direccion.ciudad.id_region);
+                    $('#edit_ciudad_administrativo').val(data.registro.direccion.ciudad.id);
+                    $('#edit_numero_administrativo').val(data.registro.direccion.numero_dir);
+
+
+                    try {
+                        await buscar_ciudad_editar_admin(data.registro.direccion.ciudad.id_region);
+                        $('#edit_ciudad_administrativo').val(data.registro.direccion.id_ciudad);
+                    } catch (error) {
+                        console.error("Error al actualizar la ciudad:", error);
+                    }
+
+                    $('#edit_fecha_inicio_administrativo').val(data.registro.contrato.fecha_inicio);
+                    $('#edit_check_contrato_indef_administrativo').val(data.registro.contrato.tipo_contrato);
+                    if(data.registro.contrato.tipo_contrato == 1)
+                        $('#edit_check_contrato_indef_administrativo').prop('checked', true);
+                    else
+                        $('#edit_check_contrato_indef_administrativo').prop('checked', false);
+                    contrato_indefinido('edit_check_contrato_indef_administrativo', 'edit_prof_cont_indefinido', 'edit_prof_fecha_termino');
+                    $('#edit_monto_imponible_administrativo').val(data.registro.contrato.monto_imponible);
+
+                    if(data.registro.contrato.locomocion == 1)
+                        $('#edit_check_locomocion_administrativo').prop('checked', true);
+                    else
+                        $('#edit_check_locomocion_administrativo').prop('checked', false);
+
+                    activar_check('edit_check_locomocion_administrativo', 'edit_locomocion_administrativo', 'edit_locomocion_porcentaje_administrativo');
+
+                    if(data.registro.contrato.colacion == 1)
+                        $('#edit_check_colacion_administrativo').prop('checked', true);
+                    else
+                        $('#edit_check_colacion_administrativo').prop('checked', false);
+
+                    activar_check('edit_check_colacion_administrativo', 'edit_colacion_administrativo', 'edit_colacion_porcentaje_administrativo');
+
+                    if(data.registro.contrato.asignacion_familiar == 1)
+                        $('#edit_check_asignacion_familiar_administrativo').prop('checked', true);
+                    else
+                        $('#edit_check_asignacion_familiar_administrativo').prop('checked', false);
+
+                    activar_check('edit_check_asignacion_familiar_administrativo', 'edit_asignacion_familiar_administrativo', 'edit_asignacion_familiar_cantidad_administrativo');
+
+                    if(data.registro.contrato.caja_compensacion == 1)
+                        $('#edit_check_caja_compensacion_administrativo').prop('checked', true);
+                    else
+                        $('#edit_check_caja_compensacion_administrativo').prop('checked', false);
+
+                    activar_check('edit_check_caja_compensacion_administrativo', 'edit_caja_compensacion_administrativo', 'edit_caja_compensacion_porcentaje_administrativo');
+
+                    // data.registro.contrato.otro;
+                    $('#edit_dias_laborales_administrativo').val(data.registro.contrato.dias_laborales.split(",")).select2();
+                    $('#edit_hora_entrada_administrativo').val(data.registro.contrato.hora_ingreso);
+                    $('#edit_hora_salida_administrativo').val(data.registro.contrato.hora_salida);
+                    $('#edit_hora_entrada_colacion_administrativo').val(data.registro.contrato.hora_inicio_colacion);
+                    $('#edit_hora_salida_colacion_administrativo').val(data.registro.contrato.hora_termino_colacion);
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar los datos del administrativo",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar los datos del administrativo",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        });
+
+    }
+
+    function editar_nuevo_empleado_administrativo(){
+        let valido = 1;
+        let mensaje = '';
+
+        let id_administrativo = $('#edit_id_administrativo').val();
+        let rut = $('#edit_rut_administrativo').val();
+        let f_ingreso = $('#edit_fecha_inicio_administrativo').val();
+        let nombre = $('#edit_nombre_administrativo').val();
+        let apellido1 = $('#edit_apellido_uno_administrativo').val();
+        let apellido2 = $('#edit_apellido_dos_administrativo').val();
+        let sexo = $('#edit_sexo_administrativo').val();
+        let fecha_nacimiento = $('#edit_fecha_nacimiento_administrativo').val();
+        let email = $('#edit_email_administrativo').val();
+        let telefono = $('#edit_telefono_administrativo').val();
+        let direccion = $('#edit_direccion_administrativo').val();
+        let region = $('#edit_region_administrativo').val();
+        let ciudad = $('#edit_ciudad_administrativo').val();
+        let numero = $('#edit_numero_administrativo').val();
+
+        let fecha_inicio = $('#edit_fecha_inicio_administrativo').val();
+        let fecha_termino = $('#edit_fecha_termino_administrativo').val();
+        let monto_imponible = $('#edit_monto_imponible_administrativo').val();
+
+        let locomocion = ( $('#edit_check_locomocion_administrativo').is(':checked')?1:0 );
+        let locomocion_porcentaje = $('#edit_locomocion_porcentaje_administrativo').val();
+
+        let colacion = ( $('#edit_check_colacion_administrativo').is(':checked')?1:0 );
+        let colacion_porcentaje = $('#edit_colacion_porcentaje_administrativo').val();
+
+        let asignacion_familiar = ( $('#edit_check_asignacion_familiar_administrativo').is(':checked')?1:0 );
+        let asignacion_familiar_cantidad = $('#edit_asignacion_familiar_cantidad_administrativo').val();
+
+        let caja_compensacion = ( $('#edit_check_caja_compensacion_administrativo').is(':checked')?1:0 );
+        let caja_compensacion_porcentaje = $('#edit_caja_compensacion_porcentaje_administrativo').val();
+
+        let dias_laborales = $('#edit_dias_laborales_administrativo').val();
+        let hora_entrada = $('#edit_hora_entrada_administrativo').val();
+        let hora_salida = $('#edit_hora_salida_administrativo').val();
+        let hora_entrada_colacion = $('#edit_hora_entrada_colacion_administrativo').val();
+        let hora_salida_colacion = $('#edit_hora_salida_colacion_administrativo').val();
+
+        let tipo_contrato = $('#edit_tipo_contrato_administrativo').val();
+
+        if(rut == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el rut del administrativo</li>';
+        }
+        if(f_ingreso == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la fecha de ingreso del administrativo</li>';
+        }
+        if(nombre == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el nombre del administrativo</li>';
+        }
+        if(apellido1 == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el primer apellido del administrativo</li>';
+        }
+        if(apellido2 == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el segundo apellido del administrativo</li>';
+        }
+        if(sexo == ''){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar el sexo del administrativo</li>';
+        }
+        if(fecha_nacimiento == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la fecha de nacimiento del administrativo</li>';
+        }
+        if(email == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el email del administrativo</li>';
+        }
+        if(telefono == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el teléfono del administrativo</li>';
+        }
+        if(direccion == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la dirección del administrativo</li>';
+        }
+        if(region == ''){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar la región del administrativo</li>';
+        }
+        if(ciudad == ''){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar la ciudad del administrativo</li>';
+        }
+        if(numero == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el número de la dirección del administrativo</li>';
+        }
+        if(fecha_inicio == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la fecha de inicio del contrato del administrativo</li>';
+        }
+        if(fecha_termino == '' && tipo_contrato != 1){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la fecha de término del contrato del administrativo</li>';
+        }
+        if(monto_imponible == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el monto imponible del administrativo</li>';
+        }
+        if(locomocion == 1 && locomocion_porcentaje == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el porcentaje de locomoción del administrativo</li>';
+        }
+        if(colacion == 1 && colacion_porcentaje == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el porcentaje de colación del administrativo</li>';
+        }
+        if(asignacion_familiar == 1 && asignacion_familiar_cantidad == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la cantidad de asignación familiar del administrativo</li>';
+        }
+        if(caja_compensacion == 1 && caja_compensacion_porcentaje == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar el porcentaje de caja de compensación del administrativo</li>';
+        }
+        if(dias_laborales == null){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar los días laborales del administrativo</li>';
+        }
+        if(hora_entrada == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la hora de entrada del administrativo</li>';
+        }
+        if(hora_salida == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la hora de salida del administrativo</li>';
+        }
+        if(hora_entrada_colacion == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la hora de entrada de colación del administrativo</li>';
+        }
+        if(hora_salida_colacion == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar la hora de salida de colación del administrativo</li>';
+        }
+
+        if(valido == 0){
+            swal({
+                title: "Error",
+                content:{
+                    element: "ul",
+                    attributes: {
+                        innerHTML: mensaje
+                    }
+                },
+                icon: "error",
+            });
+            return false;
+        }
+        else
+        {
+            let url = "{{ route('adm_cm.administrativo_editar') }}";
+            $.ajax({
+                url: url,
+                type: "post",
+                data:{
+                    id_administrativo: id_administrativo,
+                    rut: rut,
+                    f_ingreso: f_ingreso,
+                    nombre: nombre,
+                    apellido1: apellido1,
+                    apellido2: apellido2,
+                    sexo: sexo,
+                    fecha_nacimiento: fecha_nacimiento,
+                    email: email,
+                    telefono: telefono,
+                    direccion: direccion,
+                    region: region,
+                    ciudad: ciudad,
+                    numero: numero,
+                    fecha_inicio: fecha_inicio,
+                    fecha_termino: fecha_termino,
+                    monto_imponible: monto_imponible,
+                    locomocion: locomocion,
+                    locomocion_porcentaje: locomocion_porcentaje,
+                    colacion: colacion,
+                    colacion_porcentaje: colacion_porcentaje,
+                    asignacion_familiar: asignacion_familiar,
+                    asignacion_familiar_cantidad: asignacion_familiar_cantidad,
+                    caja_compensacion: caja_compensacion,
+                    caja_compensacion_porcentaje: caja_compensacion_porcentaje,
+                    dias_laborales: dias_laborales,
+                    hora_entrada: hora_entrada,
+                    hora_salida: hora_salida,
+                    hora_entrada_colacion: hora_entrada_colacion,
+                    hora_salida_colacion: hora_salida_colacion,
+                    _token: "{{ csrf_token() }}",
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null)
+                {
+                    if(data.estado == 1)
+                    {
+                        swal({
+                            title: "Exito",
+                            text: "Administrativo editado correctamente",
+                            icon: "success",
+                            buttons: "Aceptar",
+                        })
+                        .then((value) => {
+                            location.reload();
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al editar el administrativo",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al editar el administrativo",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+        }
     }
 
     function cargar_tipos_especialidad(id_especialidad, id_tipo_especialidad = null){

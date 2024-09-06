@@ -1169,6 +1169,7 @@ class ManejoContratoController extends Controller
     }
 
     public function editarProfesional(Request $request){
+
         $datos = array();
         $error = array();
         $valido = 1;
@@ -1277,6 +1278,51 @@ class ManejoContratoController extends Controller
                         $lista_roles = $value->id.'|';
                     }
                     $lista_roles = substr($lista_roles, 0, -1);
+
+                    $registro_contrato->id_especialidad = $request->profesion;
+                    $registro_contrato->id_tipo_especialidad = $request->especialidad;
+                    $registro_contrato->id_subtipo_especialidad = $request->sub_especialidad;
+                    $registro_contrato->id_profesional = $request->id_prof;
+                    $registro_contrato->rut = $request->rut;
+                    $registro_contrato->nombres = $request->nombre;
+                    $registro_contrato->apellido_uno = $request->apellido1;
+                    $registro_contrato->apellido_dos = $request->apellido2;
+                    $registro_contrato->telefono = $request->telefono1;
+                    $registro_contrato->email = $request->email;
+                    $registro_contrato->id_institucion = $request->id_institucion;
+                    $registro_contrato->id_lugar_atencion = $request->id_lugar_atencion;
+                    $registro_contrato->tipo_contrato = $request->tipo_contrato;
+                    $registro_contrato->fecha_inicio = $request->fecha_inicio;
+                    $registro_contrato->fecha_termino = $request->fecha_termino;
+                    $registro_contrato->monto_imponible = $request->monto_imponible;
+                    $registro_contrato->id_banco = $request->banco;
+                    $registro_contrato->numero_cuenta = $request->n_cta;
+                    $registro_contrato->sucursal = $request->sucursal;
+                    $registro_contrato->locomocion = $request->locomocion;
+                    $registro_contrato->locomocion_porcentaje = $request->locomocion_porcentaje;
+                    $registro_contrato->colacion = $request->colacion;
+                    $registro_contrato->colacion_porcentaje = $request->colacion_porcentaje;
+                    $registro_contrato->asignacion_familiar = $request->asignacion_familiar;
+                    $registro_contrato->asignacion_familiar_cantidad = $request->asignacion_familiar_cantidad;
+                    $registro_contrato->caja_compensacion = $request->caja_compensacion;
+                    $registro_contrato->caja_compensacion_porcentaje = $request->caja_compensacion_porcentaje;
+                    $registro_contrato->otro = $request->otro;
+                    $registro_contrato->dias_laborales = json_encode($request->dias_laborales);
+                    $registro_contrato->hora_ingreso = $request->hora_entrada;
+                    $registro_contrato->hora_salida = $request->hora_salida;
+                    $registro_contrato->hora_inicio_colacion = $request->hora_entrada_colacion;
+                    $registro_contrato->hora_termino_colacion = $request->hora_salida_colacion;
+                    $registro_contrato->fecha_creacion = date('Y-m-d H:i:s');
+
+                    if($registro_contrato->save()){
+                        $datos['update_contrato']['estado'] = 1;
+                        $datos['update_contrato']['msj'] = 'Datos Contrato Profesional Actualizado';
+                        $datos['estado'] = 1;
+                    }else{
+                        $datos['update_contrato']['estado'] = 0;
+                        $datos['update_contrato']['msj'] = 'Datos Contrato Profesional Actualizacion con Falla';
+                        $datos['estado'] = 0;
+                    }
                 }
                 else
                 {
@@ -1300,6 +1346,10 @@ class ManejoContratoController extends Controller
         }
 
         return $datos;
+    }
+
+    public function editarAdministrativo(Request $request){
+        return $request;
     }
 
     static public function registroPerfil($registros)
