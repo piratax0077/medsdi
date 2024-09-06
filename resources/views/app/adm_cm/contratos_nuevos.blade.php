@@ -74,7 +74,6 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center align-middle">Nombre / Rut</th>
-                                                <th class="text-center align-middle">Cargo</th>
                                                 <th class="text-center align-middle">Profesion</th>
                                                 <th class="text-center align-middle">Tipo de Contrato/Fecha contrato</th>
                                                 <th class="text-center align-middle">Contacto/cuenta</th>
@@ -89,7 +88,6 @@
                                                         <span><strong>{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</strong></span><br>
                                                         <span>{{ $profesional->rut }}</span>
                                                     </td>
-                                                    <td class="align-middle text-center"></td>
                                                     <td class="align-middle text-center">
                                                         <span>{{ $profesional->especialidad }}</span><br>
                                                         <span>{{ $profesional->tipo_especialidad }}</span><br>
@@ -151,7 +149,7 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-center align-middle">Nombre / Rut</th>
-                                                    <th class="text-center align-middle">Sucursales</th>
+                                                    <th class="text-center align-middle">Dirección</th>
                                                     <th class="text-center align-middle">Contacto</th>
 													<th class="text-center align-middle">Datos</th>
                                                     <th class="text-center align-middle">Rol y permisos</th>
@@ -518,6 +516,7 @@
             {
                 if(data.estado == 1)
                 {
+                    $('#id_contrato_edit').val(data.registro.contrato.id);
                     $('#edit_tipo_contrato_administrativo').val(data.registro.contrato.tipo_contrato);
                     $('#edit_id_administrativo').val(data.registro.id);
                     $('#edit_rut_administrativo').val(data.registro.rut);
@@ -652,6 +651,7 @@
         let hora_salida_colacion = $('#edit_hora_salida_colacion_administrativo').val();
 
         let tipo_contrato = $('#edit_tipo_contrato_administrativo').val();
+        let id_contrato = $('#id_contrato_edit').val();
 
         if(rut == ''){
             valido = 0;
@@ -804,6 +804,9 @@
                     hora_salida: hora_salida,
                     hora_entrada_colacion: hora_entrada_colacion,
                     hora_salida_colacion: hora_salida_colacion,
+                    id_contrato: id_contrato,
+                    tipo_contrato: tipo_contrato,
+                    id_lugar_atencion: "{{ $institucion->id_lugar_atencion }}",
                     _token: "{{ csrf_token() }}",
                 },
             })

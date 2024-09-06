@@ -98,10 +98,12 @@ Route::group([
 
 //Admnistracion
 Route::group([
-    'middleware' => ['role:Admin'],
+    'middleware' => ['role:Admin|Administrador-SDI'],
     'prefix' => 'Administracion',
 ], function () {
-    Route::get('Home', [App\Http\Controllers\AdminController::class, 'index'])->name('administrador.home');
+    Route::get('Home', [App\Http\Controllers\AdminController::class, 'index'])->name('administracion.home');
+	Route::get('Configuracion', [App\Http\Controllers\AdminController::class, 'config_sdi'])->name('administracion.configuracion');
+	Route::get('Profesionales', [App\Http\Controllers\AdminController::class, 'Profesionales_sdi'])->name('administracion.profesionales');
     Route::get('/Roles_Permisos', [App\Http\Controllers\AdminController::class, 'roles_permisos'])->name('admin.roles_permisos');
     Route::get('/Agregar_permiso', [App\Http\Controllers\AdminController::class, 'agregar_permiso'])->name('admin.agregar_permiso');
 });
@@ -666,6 +668,7 @@ Route::group([
     /** REGISTRO DE RECOMENDACION */
     Route::post('/receta/registro', [App\Http\Controllers\RecomendacionController::class, 'registroRecomendacion'])->name('profesional.receta.registro');
     Route::get('/receta/ver', [App\Http\Controllers\RecomendacionController::class, 'verRecomendaciones'])->name('profesional.receta.ver');
+	Route::get('/receta/paciente/cantidad', [App\Http\Controllers\RecomendacionController::class, 'verRecetaPacienteCantidad'])->name('profesional.receta.paciente.cantidad');
     // Route::get('/receta/pdf', [App\Http\Controllers\RecomendacionController::class, 'verPDF'])->name('profesional.receta.pdf');
 
 	/** GINECO OBSTETRICO */
@@ -1296,7 +1299,6 @@ Route::group([
     Route::post('/Administrativo/editar', [App\Http\Controllers\ManejoContratoController::class, 'editarAdministrativo'])->name('adm_cm.administrativo_editar');
     Route::get('/Profesional/lugar_atencion/horario', [App\Http\Controllers\AdministradorCmController::class, 'mi_horario_lugar_atencion'])->name('adm_cm.prof_horario_lugar_atencion');
 	Route::post('/Personal/registro', [App\Http\Controllers\ManejoContratoController::class, 'registrarPersonal'])->name('adm_cm.registrar_personal');
-    Route::post('/Profesional/registro', [App\Http\Controllers\ManejoContratoController::class, 'registrarProfesional'])->name('adm_cm.registrar_profesional');
 	Route::post('/Personal/editar', [App\Http\Controllers\ManejoContratoController::class, 'editarPersonal'])->name('adm_cm.editar_personal');
     Route::post('/Profesional/editar', [App\Http\Controllers\ManejoContratoController::class, 'editarProfesional'])->name('adm_cm.editar_profesional');
 	Route::post('/Personal/horario/editar', [App\Http\Controllers\ManejoContratoController::class, 'modificarHorario'])->name('adm_cm.personal.horario.editar');
@@ -1383,6 +1385,7 @@ Route::group([
     Route::post('agregar_cuenta_bancaria_institucion',[App\Http\Controllers\AdministradorCmController::class, 'agregar_cuenta_bancaria_institucion'])->name('adm_cm.agregar_cuenta_bancaria_institucion');
     Route::post('eliminar_cuenta_bancaria_institucion',[App\Http\Controllers\AdministradorCmController::class, 'eliminar_cuenta_bancaria_institucion'])->name('adm_cm.eliminar_cuenta_bancaria_institucion');
 
+    Route::post('registrar_profesional', [App\Http\Controllers\AdministradorCmController::class, 'registrar_profesional'])->name('adm_cm.registrar_profesional');
     Route::post('registrar_asistente', [App\Http\Controllers\AdministradorCmController::class, 'registrar_asistente'])->name('adm_cm.registrar_asistente');
     Route::post('eliminar_asistente', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_asistente'])->name('adm_cm.eliminar_asistente');
     Route::post('registrar_personal_mantencion', [App\Http\Controllers\AdministradorCmController::class, 'registrar_personal_mantencion'])->name('adm_cm.registrar_personal_mantencion');

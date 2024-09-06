@@ -1349,7 +1349,213 @@ class ManejoContratoController extends Controller
     }
 
     public function editarAdministrativo(Request $request){
-        return $request;
+
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $registro_administrativo = AdminInstServ::find($request->id_administrativo);
+
+            if($registro_administrativo)
+            {
+                $registro_contrato = ContratoDependiente::find($request->id_contrato);
+                $registro_contrato->dias_laborales = json_decode($registro_contrato->dias_laborales);
+
+                if($registro_contrato)
+                {
+                    $filtro = array();
+                    $filtro[] = array('id_admin',$request->id_administrativo);
+                    $filtro[] = array('id_lugar_atencion',$request->id_lugar_atencion);
+                    $filtro[] = array('estado',1);
+                    $registro_admin_lugar = AdminLugarAtencion::where($filtro)->first();
+
+                    $registro_administrativo->rut = $request->rut;
+                    $registro_administrativo->nombres = $request->nombre;
+                    $registro_administrativo->apellido_uno = $request->apellido1;
+                    $registro_administrativo->apellido_dos = $request->apellido2;
+                    $registro_administrativo->telefono_uno = $request->telefono;
+                    if(!empty($request->telefono2))
+                        $registro_administrativo->telefono_dos = $request->telefono2;
+                    $registro_administrativo->sexo = $request->sexo;
+                    $registro_administrativo->email = $request->email;
+                    $registro_administrativo->fecha_nac = $request->fecha_nacimiento;
+
+                    try {
+                        if($registro_administrativo->save())
+                        {
+                            $datos['update_administrativo']['estado'] = 1;
+                            $datos['update_administrativo']['msj'] = 'Datos Administrativo Actualizados';
+
+                            /** MODIFICAR DIRECCION */
+                            // $registro_asistente->id_direccion = $request->id_direccion;
+                            $registro_direccion = Direccion::find($registro_administrativo->id_direccion);
+                            if($registro_direccion)
+                            {
+                                /** update de direccion */
+                                $registro_direccion->direccion = $request->direccion;
+                                $registro_direccion->numero = $request->numero;
+                                $registro_direccion->ciudad = $request->ciudad;
+
+                                if($registro_administrativo->save())
+                                {
+                                    $datos['update_administrativo']['direccion']['estado'] = 1;
+                                    $datos['update_administrativo']['direccion']['msj'] = 'Datos Direccion Administrativo Actualizados';
+                                }
+                                else
+                                {
+                                    $datos['update_administrativo']['direccion']['estado'] = 0;
+                                    $datos['update_administrativo']['direccion']['msj'] = 'Datos Direccion Administrativo Actualizacion con falla';
+                                }
+
+                            }
+
+                            else
+                            {
+                                /** registro direccion */
+                                $registro_direccion = new Direccion();
+                                $registro_direccion->direccion = $request->direccion;
+                                $registro_direccion->numero = $request->numero;
+                                $registro_direccion->ciudad = $request->ciudad;
+
+                                if($registro_direccion->save())
+                                {
+                                    $datos['update_administrativo']['direccion']['estado'] = 1;
+                                    $datos['update_administrativo']['direccion']['msj'] = 'Datos Direccion Administrativo Registrada';
+
+                                    $registro_administrativo->id_direccion = $registro_direccion->id;
+                                    if($registro_administrativo->save())
+                                    {
+                                        $datos['update_administrativo']['direccion']['registro']['estado'] = 1;
+                                        $datos['update_administrativo']['direccion']['registro']['msj'] = 'Datos Administrativo Direccion Actualizado';
+                                    }
+                                    else
+                                    {
+                                        $datos['update_administrativo']['direccion']['registro']['estado'] = 0;
+                                        $datos['update_administrativo']['direccion']['registro']['msj'] = 'Datos Administrativo Direccon con Falla';
+                                    }
+
+                                }
+                                else
+                                {
+                                    $datos['update_administrativo']['direccion']['estado'] = 0;
+                                    $datos['update_administrativo']['direccion']['msj'] = 'Datos Direccion Administrativo Registro con Falla';
+                                }
+
+                            }
+
+                        }
+
+                        else
+                        {
+                            $datos['update_administrativo']['estado'] = 0;
+                            $datos['update_administrativo']['msj'] = 'Datos Administrativo Actualizacion con falla';
+                        }
+                    } catch (\Exception $e) {
+                        //throw $th;
+                        return $e->getMessage();
+                    }
+
+
+                    /** ACTUALIZACION CONTRATO */
+
+                    $registro = User::find(Auth::user()->id);
+                    $roles = $registro->roles()->get();
+                    $lista_roles = '';
+                    foreach ($roles as $key => $value)
+                    {
+                        $lista_roles = $value->id.'|';
+                    }
+                    $lista_roles = substr($lista_roles, 0, -1);
+                    return $request;
+                    $tipo_empleado = TipoAdministrador::where(DB::raw('UPPER(nombre)'), strtoupper($request->tipo_empleado))->first();
+
+                    $registro_contrato->tipo_empleado = $request->tipo_empleado;
+                    $registro_contrato->rut = $request->rut;
+                    $registro_contrato->nombres = $request->nombre;
+                    $registro_contrato->apellido_uno = $request->apellido_uno;
+                    $registro_contrato->apellido_dos = $request->apellido_dos;
+                    $registro_contrato->telefono = $request->telefono;
+                    $registro_contrato->email = $request->email;
+                    $registro_contrato->id_institucion = $request->id_institucion;
+                    $registro_contrato->id_lugar_atencion = $request->id_lugar_atencion;
+                    $registro_contrato->tipo_contrato = $request->tipo_contrato;
+                    $registro_contrato->fecha_inicio = $request->fecha_inicio;
+                    $registro_contrato->fecha_termino = $request->fecha_termino;
+                    $registro_contrato->monto_imponible = $request->monto_imponible;
+                    $registro_contrato->locomocion = $request->locomocion;
+                    $registro_contrato->locomocion_porcentaje = $request->locomocion_porcentaje;
+                    $registro_contrato->colacion = $request->colacion;
+                    $registro_contrato->colacion_porcentaje = $request->colacion_porcentaje;
+                    $registro_contrato->asignacion_familiar = $request->asignacion_familiar;
+                    $registro_contrato->asignacion_familiar_cantidad = $request->asignacion_familiar_cantidad;
+                    $registro_contrato->caja_compensacion = $request->caja_compensacion;
+                    $registro_contrato->caja_compensacion_porcentaje = $request->caja_compensacion_porcentaje;
+                    // $registro_contrato->otro = '';
+                    $registro_contrato->dias_laborales = implode(',', $request->dias_laborales);
+                    $registro_contrato->hora_ingreso = $request->hora_entrada;
+                    $registro_contrato->hora_salida = $request->hora_salida;
+                    $registro_contrato->hora_inicio_colacion = $request->hora_entrada_colacion;
+                    $registro_contrato->hora_termino_colacion = $request->hora_salida_colacion;
+                    $registro_contrato->fecha_creacion = date('Y-m-d H:i:s');
+                    $registro_contrato->id_admin_creador = Auth::user()->id;
+                    $registro_contrato->id_tipo_admin_creador = $lista_roles;
+
+                    return $registro_contrato;
+                    if($registro_contrato->save())
+                    {
+                        $datos['update_contrato']['estado'] = 1;
+                        $datos['update_contrato']['msj'] = 'Datos Contrato Administrativo Actualizado';
+
+                        $requestHistorico = new Request(array(
+                            'id_contrato' => $registro_contrato->id,
+                            'id_user' => Auth::user()->id,
+                            'data' => json_encode($request->all()),
+                            'fecha' => date('Y-m-d'),
+                            'hora' => date('H:i:s'),
+                            'tipo_verificacion_usuario' => null,
+                            'codigo_verificacion_usuario' => null,
+                            'fecha_codigo_usuario' => null,
+                            'tipo_verificacion_tercero' => null,
+                            'codigo_verificacion_tercero' => null,
+                            'fecha_codigo_tercero' => null,
+                            'procesado' => null,
+                        ));
+                        $datos['historico'] = static::registrarHistorico($requestHistorico);
+
+                        $datos['estado'] = 1;
+                    }
+                    else
+                    {
+                        $datos['update_contrato']['estado'] = 0;
+                        $datos['update_contrato']['msj'] = 'Datos Contrato Administrativo Actualizacion con Falla';
+                        $datos['estado'] = 0;
+                    }
+
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Contrato no encontrado';
+                }
+
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Administrativo no encontrado';
+            }
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
     }
 
     static public function registroPerfil($registros)

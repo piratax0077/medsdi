@@ -1,4 +1,4 @@
-@extends('template.adm_cm.template')
+@extends('template.administracion.template')
 @section('content')
 <!--Container Completo-->
 <div class="pcoded-main-container">
@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="font-weight-bolder">Configurar Mi Institución</h5>
+                            <h5 class="font-weight-bolder">Configurar General Administración S_D_I</h5>
                         </div>
                         <ul class="breadcrumb mb-4">
                             <li class="breadcrumb-item">
@@ -69,6 +69,9 @@
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link text-reset" id="rol-permiso-adm-med-tab" data-toggle="tab" href="#rol-permiso-adm-med" role="tab" aria-controls="rol-permiso-adm-med" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Perfil administrador medico</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-reset" id="ar-dep-tab" data-toggle="tab" href="#ar-dep" role="tab" aria-controls="ar-dep" aria-selected="false"><i class="fa-solid fa-stethoscope mr-2"></i>Asignación de roles y permisos</a>
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link text-reset" id="ar-dep-tab" data-toggle="tab" href="#ar-dep" role="tab" aria-controls="ar-dep" aria-selected="false"><i class="fa-solid fa-stethoscope mr-2"></i>Especialidades y áreas</a>
