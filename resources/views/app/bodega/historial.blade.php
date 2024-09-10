@@ -77,7 +77,11 @@
                                                 <td>{{ $producto->cantidad }}</td>
                                                 <td>{{ $producto->tipo_producto }}</td>
                                                 <td>{{ $producto->observaciones }}</td>
-                                                <td><button class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i></button></td>
+                                                <td>
+                                                    <button class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i></button>
+                                                    <button class="btn btn-outline-warning btn-sm" onclick="editar_producto_inventario({{ $producto->id }})"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger btn-sm" onclick="eliminar_producto_inventario({{ $producto->id }})"><i class="fas fa-trash"></i></button>
+                                                </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -112,7 +116,11 @@
                                                 <td>{{ $producto->cantidad_entregada }}</td>
                                                 <td>{{ $producto->tipo_producto }}</td>
                                                 <td>{{ $producto->usuario }}</td>
-                                                <td><button class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i></button></td>
+                                                <td>
+                                                    <button class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i></button>
+                                                    <button class="btn btn-outline-warning btn-sm" onclick="editar_producto_inventario({{ $producto->id }})"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-outline-danger btn-sm" onclick="eliminar_producto({{ $producto->id }})"><i class="fas fa-trash"></i></button>
+                                                </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -127,3 +135,43 @@
         </div>
     </div>
 @endsection
+
+<script>
+    function eliminar_producto_inventario(id){
+        swal({
+            title: "¿Estás seguro?",
+            text: "Una vez eliminado, no podrás recuperar este producto!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                confirmar_eliminar_producto_inventario(id);
+            }
+        });
+    }
+
+    function confirmar_eliminar_producto_inventario(id){
+        var url = "{{ route('bodegas.eliminar_producto')}}";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                id: id,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(data){
+                console.log(data);
+                if(data == 'ok'){
+                    alert('Producto eliminado');
+                    location.reload();
+                }
+            }
+        });
+    }
+
+    function editar_producto_inventario(){
+        alert('editar');
+    }
+</script>

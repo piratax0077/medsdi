@@ -54,7 +54,7 @@
         </div>
     </div>
 </div>
-@if(isset($instituciones) && count($instituciones) > 0)
+@if(isset($instituciones))
 <!-- MODAL SELECCIONAR INSTITUCION -->
 <div class="modal fade" id="modalSeleccionarInstitucion" tabindex="-1" aria-labelledby="modalSeleccionarInstitucionLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -90,6 +90,7 @@
 @section('page-script')
 <script>
     window.onload= function(){
+        console.log('hola');
         // mostrar modal
         $('#modalSeleccionarInstitucion').modal('show');
     }

@@ -9,6 +9,7 @@ use App\Models\Bodega;
 use App\Models\Pedido;
 use App\Models\PedidoDetalle;
 use App\Models\Producto;
+use App\Models\ProductoAlmacenado;
 use App\Models\ProductoBodega;
 use App\Models\Proveedor;
 use App\Models\Compras_detalle;
@@ -22,6 +23,7 @@ use App\Models\Instituciones;
 use App\Models\Servicios;
 use App\Models\AdminInstServ;
 use App\Models\ContratoDependiente;
+use App\Models\Temperatura;
 use Illuminate\Support\Facades\Auth;
 
 class BodegasController extends Controller
@@ -210,12 +212,13 @@ class BodegasController extends Controller
 
     public function verProductoAlmacenado(Request $req){
         try {
-            $producto = Producto::select('productos.*','unidades_medidas.nombre as unidad_medida','compras_detalle.fecha_compra','marcas_productos.nombre as marca','compras_detalle.id as id_compra','tipo_producto.nombre as tipo_producto','bodega.nombre as bodega')
+            $producto = Producto::select('productos.*','unidades_medidas.nombre as unidad_medida','compras_detalle.fecha_compra','marcas_productos.nombre as marca','compras_detalle.id as id_compra','tipo_producto.nombre as tipo_producto','bodega.nombre as bodega','temperaturas.descripcion as tipo_temperatura')
                         ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
                         ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
                         ->join('bodega','productos.id_bodega','bodega.id')
                         ->join('compras_detalle','productos.id','compras_detalle.id_producto')
                         ->join('marcas_productos','productos.id_marca','marcas_productos.id')
+                        ->leftjoin('temperaturas','productos.id_temperatura','temperaturas.id')
                         ->where('productos.id',$req->id)
                         ->first();
 
@@ -224,7 +227,21 @@ class BodegasController extends Controller
             $compra = Compras::find($producto->id_compra);
             $proveedor = Proveedor::find($compra->id_proveedor);
             $producto->proveedor = $proveedor->nombre;
-            $v = view('fragm.ver_producto_almacenado',['producto'=>$producto])->render();
+            $temperaturas = Temperatura::all();
+            $movimientos = ProductoAlmacenado::where('id_producto',$req->id)->get();
+            foreach($movimientos as $movimiento){
+                $tipo_temperatura = Temperatura::find($movimiento->id_temperatura);
+                if($tipo_temperatura){
+                    $movimiento->tipo_temperatura = $tipo_temperatura->descripcion;
+                }else{
+                    $movimiento->tipo_temperatura = 'Sin especificar';
+                }
+            }
+            $v = view('fragm.ver_producto_almacenado',[
+                'producto'=>$producto,
+                'temperaturas' => $temperaturas,
+                'movimientos' => $movimientos
+                ])->render();
             return $v;
         } catch (\Exception $e) {
             //throw $th;
@@ -388,23 +405,97 @@ class BodegasController extends Controller
     }
 
     public function editarProductoAlmacenado(Request $req){
+        try {
+            //code...
+            $producto = Producto::select('productos.*','unidades_medidas.nombre as unidad_medida','compras_detalle.fecha_compra','marcas_productos.nombre as marca','compras_detalle.id as id_compra','tipo_producto.nombre as tipo_producto','bodega.nombre as bodega')
+            ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
+            ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
+            ->join('bodega','productos.id_bodega','bodega.id')
+            ->join('compras_detalle','productos.id','compras_detalle.id_producto')
+            ->join('marcas_productos','productos.id_marca','marcas_productos.id')
+            ->where('productos.id',$req->id)
+            ->first();
+            $producto->temperatura = intval($req->temperatura);
+            $producto->observaciones = $req->observaciones;
+            $producto->id_temperatura = $req->id_temperatura;
+            $producto->image_path = asset($producto->image_path);
+            $compra = Compras::find($producto->id_compra);
+            $proveedor = Proveedor::find($compra->id_proveedor);
 
-        $producto = Producto::select('productos.*','unidades_medidas.nombre as unidad_medida','compras_detalle.fecha_compra','marcas_productos.nombre as marca','compras_detalle.id as id_compra','tipo_producto.nombre as tipo_producto','bodega.nombre as bodega')
-        ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
-        ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
-        ->join('bodega','productos.id_bodega','bodega.id')
-        ->join('compras_detalle','productos.id','compras_detalle.id_producto')
-        ->join('marcas_productos','productos.id_marca','marcas_productos.id')
-        ->where('productos.id',$req->id)
-        ->first();
-        $producto->temperatura = intval($req->temperatura);
-        $producto->observaciones = $req->observaciones;
-        $producto->image_path = asset($producto->image_path);
-        if($producto->save()){
-            $v = view('fragm.ver_producto_almacenado',['producto'=>$producto])->render();
+            if($producto->save()){
+                $producto_almacenado = new ProductoAlmacenado();
+                $producto_almacenado->id_producto = $producto->id;
+                $producto_almacenado->id_bodega = $producto->id_bodega;
+                $producto_almacenado->temperatura = $req->temperatura;
+                $producto_almacenado->id_temperatura = $req->id_temperatura;
+                $producto_almacenado->id_responsable = $req->id_responsable;
+                $producto_almacenado->cantidad = $req->cantidad;
+                $producto_almacenado->fecha_ingreso = $req->fecha_ingreso;
+                $producto_almacenado->fecha_vencimiento = $req->fecha_vencimiento;
+                $producto_almacenado->observaciones = $req->observaciones;
+                $producto_almacenado->save();
+                $temperaturas = Temperatura::all();
+                $movimientos = ProductoAlmacenado::where('id_producto',$req->id)->get();
+                $producto->proveedor = $proveedor->nombre;
+                foreach($movimientos as $movimiento){
+                    $tipo_temperatura = Temperatura::find($movimiento->id_temperatura);
+                    if($tipo_temperatura){
+                        $movimiento->tipo_temperatura = $tipo_temperatura->descripcion;
+                    }else{
+                        $movimiento->tipo_temperatura = 'Sin especificar';
+                    }
+                }
+                $v = view('fragm.ver_producto_almacenado',[
+                    'producto'=>$producto,
+                    'temperaturas' => $temperaturas,
+                    'producto_almacenado' => $producto_almacenado,
+                    'movimientos' => $movimientos
+                    ])->render();
+                return ['mensaje' => 'OK','vista' => $v];
+            }else{
+                return 'Error al actualizar el producto';
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
+    public function eliminarRegistroTemperatura(Request $req){
+        try {
+            $registro = ProductoAlmacenado::find($req->id);
+            $producto_almacenado = $registro;
+            $producto = Producto::select('productos.*','unidades_medidas.nombre as unidad_medida','compras_detalle.fecha_compra','marcas_productos.nombre as marca','compras_detalle.id as id_compra','tipo_producto.nombre as tipo_producto','bodega.nombre as bodega')
+                                    ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
+                                    ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
+                                    ->join('bodega','productos.id_bodega','bodega.id')
+                                    ->join('compras_detalle','productos.id','compras_detalle.id_producto')
+                                    ->join('marcas_productos','productos.id_marca','marcas_productos.id')
+                                    ->where('productos.id',$registro->id_producto)
+                                    ->first();
+            $registro->delete();
+            $temperaturas = Temperatura::all();
+            $movimientos = ProductoAlmacenado::where('id_producto',$registro->id_producto)->get();
+
+            foreach($movimientos as $movimiento){
+                $tipo_temperatura = Temperatura::find($movimiento->id_temperatura);
+                if($tipo_temperatura){
+                    $movimiento->tipo_temperatura = $tipo_temperatura->descripcion;
+                }else{
+                    $movimiento->tipo_temperatura = 'Sin especificar';
+                }
+            }
+            $v = view('fragm.ver_producto_almacenado',[
+                'producto'=>$producto,
+                'temperaturas' => $temperaturas,
+                'producto_almacenado' => $producto_almacenado,
+                'movimientos' => $movimientos
+                ])->render();
             return ['mensaje' => 'OK','vista' => $v];
-        }else{
-            return 'Error al actualizar el producto';
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
         }
     }
 
@@ -414,12 +505,13 @@ class BodegasController extends Controller
 
     public function reporteDiario(Request $req){
 
-        $productos_solicitados = PedidoDetalle::select('pedido_detalle.*','productos.nombre as producto','productos.codigo_interno','productos.image_path','tipo_producto.nombre as tipo_producto','unidades_medidas.nombre as unidad_medida','marcas_productos.nombre as marca','pedido.estado','pedido.observacion as observaciones')
+        $productos_solicitados = PedidoDetalle::select('pedido_detalle.*','productos.nombre as producto','productos.codigo_interno','productos.image_path','tipo_producto.nombre as tipo_producto','unidades_medidas.nombre as unidad_medida','marcas_productos.nombre as marca','pedido.estado','pedido.observacion as observaciones','users.name as usuario','pedido.fecha_emision')
         ->join('pedido','pedido_detalle.id_pedido','pedido.id')
         ->join('productos','pedido_detalle.id_producto','productos.id')
         ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
         ->join('unidades_medidas','productos.id_unidad_medida','unidades_medidas.id')
         ->join('marcas_productos','productos.id_marca','marcas_productos.id')
+        ->join('users','pedido.id_usuario','users.id')
         ->where('pedido.id_institucion',5) // cambiar por la institucion del usuario logueado
         ->where('pedido.fecha_emision',$req->fecha)
         ->get();
@@ -434,7 +526,7 @@ class BodegasController extends Controller
             }
         }
 
-        $productos_ingresados = Compras_detalle::select('compras_detalle.*','productos.nombre as producto','productos.codigo_interno','productos.image_path','tipo_producto.nombre as tipo_producto','unidades_medidas.nombre as unidad_medida','marcas_productos.nombre as marca','compras.estado','compras.observaciones')
+        $productos_ingresados = Compras_detalle::select('compras_detalle.*','productos.nombre as producto','productos.codigo_interno','productos.image_path','tipo_producto.nombre as tipo_producto','unidades_medidas.nombre as unidad_medida','marcas_productos.nombre as marca','compras.estado','compras.observaciones','compras.fecha_emision')
         ->join('compras','compras_detalle.id_compra','compras.id')
         ->join('productos','compras_detalle.id_producto','productos.id')
         ->join('tipo_producto','productos.id_tipo_producto','tipo_producto.id')
@@ -477,13 +569,16 @@ class BodegasController extends Controller
                 'unidades_medidas.nombre as unidad_medida',
                 'marcas_productos.nombre as marca',
                 'pedido.estado',
-                'pedido.observacion as observaciones'
+                'pedido.observacion as observaciones',
+                'users.name as usuario',
+                'pedido.fecha_emision'
             )
             ->join('pedido', 'pedido_detalle.id_pedido', 'pedido.id')
             ->join('productos', 'pedido_detalle.id_producto', 'productos.id')
             ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
             ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
             ->join('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+            ->join('users', 'pedido.id_usuario', 'users.id')
             ->where('pedido.id_institucion', 5) // cambiar por la institucion del usuario logueado
             ->whereRaw('MONTH(pedido.fecha_emision) = ?', [$req->mes])
             ->whereRaw('YEAR(pedido.fecha_emision) = ?', [$req->year])
@@ -508,7 +603,8 @@ class BodegasController extends Controller
                 'unidades_medidas.nombre as unidad_medida',
                 'marcas_productos.nombre as marca',
                 'compras.estado',
-                'compras.observaciones'
+                'compras.observaciones',
+                'compras.fecha_emision'
             )
             ->join('compras', 'compras_detalle.id_compra', 'compras.id')
             ->join('productos', 'compras_detalle.id_producto', 'productos.id')
@@ -556,13 +652,16 @@ class BodegasController extends Controller
                 'unidades_medidas.nombre as unidad_medida',
                 'marcas_productos.nombre as marca',
                 'pedido.estado',
-                'pedido.observacion as observaciones'
+                'pedido.observacion as observaciones',
+                'users.name as usuario',
+                'pedido.fecha_emision'
             )
             ->join('pedido', 'pedido_detalle.id_pedido', 'pedido.id')
             ->join('productos', 'pedido_detalle.id_producto', 'productos.id')
             ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
             ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
             ->join('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+            ->join('users', 'pedido.id_usuario', 'users.id')
             ->where('pedido.id_institucion', 5) // cambiar por la institucion del usuario logueado
             ->whereRaw('YEAR(pedido.fecha_emision) = ?', [$req->anio])
             ->get();
@@ -586,7 +685,8 @@ class BodegasController extends Controller
                 'unidades_medidas.nombre as unidad_medida',
                 'marcas_productos.nombre as marca',
                 'compras.estado',
-                'compras.observaciones'
+                'compras.observaciones',
+                'compras.fecha_emision'
             )
             ->join('compras', 'compras_detalle.id_compra', 'compras.id')
             ->join('productos', 'compras_detalle.id_producto', 'productos.id')
@@ -624,7 +724,7 @@ class BodegasController extends Controller
                 // Obtener la fecha del request
                 $fecha = $request->input('fecha');
                 // Obtener los datos necesarios para el reporte diario
-                $reporteDiario = Compras_detalle::select(
+                $comprasDiarias = Compras_detalle::select(
                     'compras_detalle.*',
                     'productos.nombre as producto',
                     'productos.codigo_interno',
@@ -642,8 +742,28 @@ class BodegasController extends Controller
                 ->whereDate('compras.fecha_emision', $fecha)
                 ->get();
 
+                $salidasDiarias = PedidoDetalle::select(
+                    'pedido_detalle.*',
+                    'productos.nombre as producto',
+                    'productos.codigo_interno',
+                    'productos.image_path',
+                    'tipo_producto.nombre as tipo_producto',
+                    'unidades_medidas.nombre as unidad_medida',
+                    'marcas_productos.nombre as marca',
+                    'pedido.estado',
+                    'users.name as usuario'
+                )
+                ->join('pedido', 'pedido_detalle.id_pedido', 'pedido.id')
+                ->join('productos', 'pedido_detalle.id_producto', 'productos.id')
+                ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+                ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+                ->join('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+                ->join('users', 'pedido.id_usuario', 'users.id')
+                ->whereDate('pedido.fecha_emision', $fecha)
+                ->get();
+
                 // Renderizar la vista del reporte diario
-                $pdf = Pdf::loadView('app.bodega.reporte_diario_pdf', compact('reporteDiario', 'fecha'));
+                $pdf = Pdf::loadView('app.bodega.reporte_diario_pdf', compact('comprasDiarias','salidasDiarias', 'fecha'));
 
             // Guardar el PDF en la carpeta public
                 $fileName = 'reporte_diario_' . $fecha . '.pdf';
@@ -657,7 +777,7 @@ class BodegasController extends Controller
                 $mes = $request->input('mes');
                 $anio = $request->input('anio');
                 // Obtener los datos necesarios para el reporte mensual
-                $reporteMensual = Compras_detalle::select(
+                $comprasMensuales = Compras_detalle::select(
                     'compras_detalle.*',
                     'productos.nombre as producto',
                     'productos.codigo_interno',
@@ -676,8 +796,30 @@ class BodegasController extends Controller
                 ->whereYear('compras.fecha_emision', $anio)
                 ->get();
 
+                // salidas mensuales
+                $salidasMensuales = PedidoDetalle::select(
+                    'pedido_detalle.*',
+                    'productos.nombre as producto',
+                    'productos.codigo_interno',
+                    'productos.image_path',
+                    'tipo_producto.nombre as tipo_producto',
+                    'unidades_medidas.nombre as unidad_medida',
+                    'marcas_productos.nombre as marca',
+                    'pedido.estado',
+                    'users.name as usuario'
+                )
+                ->join('pedido', 'pedido_detalle.id_pedido', 'pedido.id')
+                ->join('productos', 'pedido_detalle.id_producto', 'productos.id')
+                ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+                ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+                ->join('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+                ->join('users', 'pedido.id_usuario', 'users.id')
+                ->whereMonth('pedido.fecha_emision', $mes)
+                ->whereYear('pedido.fecha_emision', $anio)
+                ->get();
+
                 // Renderizar la vista del reporte mensual
-                $pdf = Pdf::loadView('app.bodega.reporte_mensual_pdf', compact('reporteMensual', 'mes', 'anio'));
+                $pdf = Pdf::loadView('app.bodega.reporte_mensual_pdf', compact('comprasMensuales','salidasMensuales', 'mes', 'anio'));
 
                 // Guardar el PDF en la carpeta public
                 $fileName = 'reporte_mensual_' . $mes . '_' . $anio . '.pdf';
@@ -690,7 +832,7 @@ class BodegasController extends Controller
                 // Obtener el año del request
                 $anio = $request->input('anio');
                 // Obtener los datos necesarios para el reporte anual
-                $reporteAnual = Compras_detalle::select(
+                $comprasAnuales = Compras_detalle::select(
                     'compras_detalle.*',
                     'productos.nombre as producto',
                     'productos.codigo_interno',
@@ -708,8 +850,29 @@ class BodegasController extends Controller
                 ->whereYear('compras.fecha_emision', $anio)
                 ->get();
 
+                // salidas anuales
+                $salidasAnuales = PedidoDetalle::select(
+                    'pedido_detalle.*',
+                    'productos.nombre as producto',
+                    'productos.codigo_interno',
+                    'productos.image_path',
+                    'tipo_producto.nombre as tipo_producto',
+                    'unidades_medidas.nombre as unidad_medida',
+                    'marcas_productos.nombre as marca',
+                    'pedido.estado',
+                    'users.name as usuario'
+                )
+                ->join('pedido', 'pedido_detalle.id_pedido', 'pedido.id')
+                ->join('productos', 'pedido_detalle.id_producto', 'productos.id')
+                ->join('tipo_producto', 'productos.id_tipo_producto', 'tipo_producto.id')
+                ->join('unidades_medidas', 'productos.id_unidad_medida', 'unidades_medidas.id')
+                ->join('marcas_productos', 'productos.id_marca', 'marcas_productos.id')
+                ->join('users', 'pedido.id_usuario', 'users.id')
+                ->whereYear('pedido.fecha_emision', $anio)
+                ->get();
+
                 // Renderizar la vista del reporte anual
-                $pdf = Pdf::loadView('app.bodega.reporte_anual_pdf', compact('reporteAnual', 'anio'));
+                $pdf = Pdf::loadView('app.bodega.reporte_anual_pdf', compact('comprasAnuales','salidasAnuales', 'anio'));
 
                 // Guardar el PDF en la carpeta public
                 $fileName = 'reporte_anual_' . $anio . '.pdf';
@@ -860,5 +1023,9 @@ class BodegasController extends Controller
                                             ->where('pedido_detalle.cantidad_entregada', '>', 0)
                                             ->get();
         return ['entregados'=>$productos_entregados,'pendientes'=>$productos_pendientes];
+    }
+
+    public function eliminarProductoBodega(Request $req){
+        return $req;
     }
 }

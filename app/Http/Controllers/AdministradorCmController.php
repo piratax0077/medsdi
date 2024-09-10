@@ -254,10 +254,12 @@ class AdministradorCmController extends Controller
         $regiones = Region::all();
         $bancos = Bancos::all();
         $especialidades = Especialidad::all();
-        $profesionales_contratados = ContratoProfesionalInstitucion::select('contrato_profesional_institucion.*','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad')
-            ->join('especialidades','especialidades.id','contrato_profesional_institucion.id_profesion')
-            ->join('tipos_especialidad','tipos_especialidad.id','contrato_profesional_institucion.id_especialidad')
-            ->where('contrato_profesional_institucion.id_institucion',$institucion->id)
+        $profesionales_contratados = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.id','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos','profesionales.rut','contrato_dependiente_profesional.*','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad')
+            ->leftjoin('profesionales','profesionales.id','=','profesionales_lugares_atencion.id_profesional')
+            ->leftjoin('contrato_dependiente_profesional','contrato_dependiente_profesional.id_profesional','=','profesionales_lugares_atencion.id_profesional')
+            ->leftjoin('especialidades','contrato_dependiente_profesional.id_especialidad','=','especialidades.id')
+            ->leftjoin('tipos_especialidad','contrato_dependiente_profesional.id_tipo_especialidad','=','tipos_especialidad.id')
+            ->where('profesionales_lugares_atencion.id_lugar_atencion',$institucion->id_lugar_atencion)
             ->get();
 
         $asistentes_contratados = ContratoAsistenteInstitucion::select('contrato_asistente_institucion.*')
@@ -274,6 +276,7 @@ class AdministradorCmController extends Controller
                 'profesionales_contratados' => $profesionales_contratados,
                 'asistentes_contratados' => $asistentes_contratados,
                 'mantenedores_contratados' => $mantenedores_contratados,
+                'institucion' => $institucion
             ]
         );
     }
@@ -508,11 +511,27 @@ class AdministradorCmController extends Controller
 
         $cargos = AdminMed::all();
 
-        $director_cm = Profesional::find($institucion->id_director_medico);
+        $usuario_director_cm = User::find($institucion->id_director_medico);
+        $usuario_subdirector_cm = User::find($institucion->id_subdirector_medico);
+        $usuario_director_gestion_cuidado = User::find($institucion->id_director_gestion_cuidado);
 
-        $subdirector_cm = Profesional::find($institucion->id_subdirector_medico);
+        if($usuario_director_cm){
+            $director_cm = Profesional::where('id_usuario',$usuario_director_cm->id)->first();
+        }else{
+            $director_cm = null;
+        }
 
-        $director_gestion_cuidado = Profesional::find($institucion->id_director_gestion_cuidado);
+        if($usuario_subdirector_cm){
+            $subdirector_cm = Profesional::where('id_usuario',$usuario_subdirector_cm->id)->first();
+        }else{
+            $subdirector_cm = null;
+        }
+
+        if($usuario_director_gestion_cuidado){
+            $director_gestion_cuidado = Profesional::where('id_usuario',$usuario_director_gestion_cuidado->id)->first();
+        }else{
+            $director_gestion_cuidado = null;
+        }
 
 
         return view('app.adm_cm.configuracion')->with([
@@ -689,9 +708,34 @@ class AdministradorCmController extends Controller
             }
             $institucion->update();
 
-            $director_cm = Profesional::where('id', $institucion->id_director_medico)->first();
-            $subdirector_cm = Profesional::where('id', $institucion->id_subdirector_medico)->first();
-            $director_gestion_cuidado = Profesional::where('id', $institucion->id_director_gestion_cuidado)->first();
+            // se elimina el rol de director medico
+            $rol = Role::where('name','AdministradorMedico')->first();
+            $usuario = User::where('id',$responsable->id)->first();
+            $usuario->removeRole($rol);
+
+            if($institucion->id_director_medico){
+                $director_cm = Profesional::where('id_usuario', $institucion->id_director_medico)->first();
+            }else{
+                $director_cm = null;
+            }
+
+            if($institucion->id_subdirector_medico){
+                $subdirector_cm = Profesional::where('id_usuario', $institucion->id_subdirector_medico)->first();
+            }else{
+                $subdirector_cm = null;
+            }
+
+            if($institucion->id_director_gestion_cuidado){
+                $director_gestion_cuidado = Profesional::where('id_usuario', $institucion->id_director_gestion_cuidado)->first();
+            }else{
+                $director_gestion_cuidado = null;
+            }
+
+            if($institucion->id_director_comercial){
+                $director_comercial = Profesional::where('id_usuario', $institucion->id_director_comercial)->first();
+            }else{
+                $director_comercial = null;
+            }
 
             $v = view('fragm.administradores_cm',[
                 'director_cm' => $director_cm ? $director_cm : null,
@@ -2156,7 +2200,9 @@ class AdministradorCmController extends Controller
         }
         else
         {
-            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            // Modificado por Francisco para traer la institucion buscada por id
+            // $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            $registro = Instituciones::where('id',$id)->first();
         }
 
         if($registro)
@@ -2299,6 +2345,7 @@ class AdministradorCmController extends Controller
 
         $usuario = Auth::user();
         $roles_ = $usuario->roles()->orderBy('id', 'DESC')->pluck('name')->toArray();
+
         $adm_medico = false;
         foreach($roles_ as $rol){
             if($rol == 'AdministradorMedico'){
@@ -2847,6 +2894,8 @@ class AdministradorCmController extends Controller
             }
         }
 
+        $lista_tipo_administrativo = TipoAdministrador::where('estado', 1)->get();
+
         return view('app.adm_cm.personal')->with([
             'responsable' => $responsable,
             'institucion' => $institucion,
@@ -2857,6 +2906,7 @@ class AdministradorCmController extends Controller
             'ciudades' => $ciudades,
             'lista_tipo_asistente' => $lista_tipo_asistente,
             'adm_medico' => $adm_medico,
+            'lista_tipo_administrativo' => $lista_tipo_administrativo
         ]);;
     }
 
@@ -5365,35 +5415,66 @@ class AdministradorCmController extends Controller
             }
         }
         try {
+
             $responsable_ = ProfesionalesLugaresAtencion::where('id', $req->responsable)->first();
             if($responsable_) $profesional = Profesional::find($responsable_->id_profesional);
 
+            $user = User::find($profesional->id_usuario);
+            // Tabla donde estan todos los tipos de administraciones medicas
             $cargo = AdminMed::where('id', $req->cargo)->first();
 
             $institucion = Instituciones::where('id', $req->id_institucion)->first();
 
-            if($cargo->id == 1)
-                $institucion->id_director_medico = intval($profesional->id);
+            if($cargo->id == 1){
+                $institucion->id_director_medico = intval($user->id);
+                $user->assignRole(3); // Profesional
+                $user->assignRole(23); // Director Médico
+            }
+
+            if($cargo->id == 2){
+                $institucion->id_subdirector_medico = intval($user->id);
+                $user->assignRole(3); // Profesional
+            }
 
 
-            if($cargo->id == 2)
-                $institucion->id_subdirector_medico = intval($profesional->id);
+            if($cargo->id == 3){
+                $institucion->id_director_gestion_cuidado = intval($user->id);
+                $user->assignRole(3); // Profesional
+            }
 
 
-            if($cargo->id == 3)
-                $institucion->id_director_gestion_cuidado = intval($profesional->id);
 
-
-            if($cargo->id == 4)
-                $institucion->id_director_comercial = intval($profesional->id);
+            if($cargo->id == 4){
+                $institucion->id_director_comercial = intval($user->id);
+                $user->assignRole(3); // Profesional
+            }
 
 
             $institucion->update();
 
-            $director_cm = Profesional::where('id', $institucion->id_director_medico)->first();
-            $subdirector_cm = Profesional::where('id', $institucion->id_subdirector_medico)->first();
-            $director_gestion_cuidado = Profesional::where('id', $institucion->id_director_gestion_cuidado)->first();
-            $director_comercial = Profesional::where('id', $institucion->id_director_comercial)->first();
+            if($institucion->id_director_medico){
+                $director_cm = Profesional::where('id_usuario', $institucion->id_director_medico)->first();
+            }else{
+                $director_cm = null;
+            }
+
+            if($institucion->id_subdirector_medico){
+                $subdirector_cm = Profesional::where('id_usuario', $institucion->id_subdirector_medico)->first();
+            }else{
+                $subdirector_cm = null;
+            }
+
+            if($institucion->id_director_gestion_cuidado){
+                $director_gestion_cuidado = Profesional::where('id_usuario', $institucion->id_director_gestion_cuidado)->first();
+            }else{
+                $director_gestion_cuidado = null;
+            }
+
+            if($institucion->id_director_comercial){
+                $director_comercial = Profesional::where('id_usuario', $institucion->id_director_comercial)->first();
+            }else{
+                $director_comercial = null;
+            }
 
             $v = view('fragm.administradores_cm',[
                 'director_cm' => $director_cm ? $director_cm : null,
@@ -5784,6 +5865,7 @@ class AdministradorCmController extends Controller
 
     public function registrar_profesional(Request $req){
         try {
+            return $req;
             $institucion = '';
             $tipo_institucion = '1';
             $id_busqueda = Auth::user()->id;

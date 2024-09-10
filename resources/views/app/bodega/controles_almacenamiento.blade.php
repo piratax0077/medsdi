@@ -35,14 +35,14 @@
                         <table id="tab_solicitudes_bodega" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th class="text-center align-middle">Imagen</th>
                                     <th class="text-center align-middle">Fecha Ingreso</th>
+                                    <th class="text-center align-middle">Imagen</th>
+
                                     <th class="text-center align-middle">Codigo Interno</th>
                                     <th class="text-center align-middle">Producto</th>
                                     <th class="text-center align-middle">Stock</th>
                                     <th class="text-center align-middle">Descripcion</th>
                                     <th class="text-center align-middle">Tipo Almacenamiento</th>
-                                    <th class="text-center align-middle">Estado</th>
                                     <th class="text-center align-middle">Acción</th>
                                 </tr>
                             </thead>
@@ -50,14 +50,14 @@
                                 @if(isset($productos))
                                 @foreach($productos as $p)
                                     <tr>
-                                        <td><img src="{{ $p->image_path }}" alt="foto" style="width: 100px;"></td>
                                         <td class="align-middle text-center">{{ $p->created_at }}</td>
+                                        <td><img src="{{ $p->image_path }}" alt="foto" style="width: 100px;"></td>
+
                                         <td class="align-middle text-center">{{ $p->codigo_interno }}</td>
                                         <td class="align-middle text-center">{{ $p->nombre }}</td>
                                         <td class="align-middle text-center">{{ $p->stock_actual }}</td>
                                         <td class="align-middle text-center">{{ $p->descripcion }}</td>
                                         <td class="align-middle text-center">{{ $p->tipo_almacenamiento }}</td>
-                                        <td class="align-middle text-center">@if($p->estado == 1) <span class="badge badge-warning">Pendiente</span> @endif</td>
                                         <td class="align-middle text-center">
                                             <button class="btn btn-info btn-sm has-ripple" onclick="ver_producto_almacenado({{ $p->id }})" data-toggle="modal" data-target="#verSolicitud"><i class="fa fa-eye" aria-hidden="true"></i></button>
 

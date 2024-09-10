@@ -86,6 +86,7 @@
                                         <div class="form-group">
                                             <label for="mes" class="floating-label-activo-sm">Mes</label>
                                             <select class="form-control w-100" id="mes">
+                                                <option value="0">Seleccione</option>
                                                 <option value="1">Enero</option>
                                                 <option value="2">Febrero</option>
                                                 <option value="3">Marzo</option>
@@ -104,6 +105,7 @@
                                         <div class="form-group">
                                             <label for="mes_year" class="floating-label-activo-sm">Mes</label>
                                             <select class="form-control w-100" id="mes_year">
+                                                <option value="0">Seleccione</option>
                                                 <option value="2021">2021</option>
                                                 <option value="2022">2022</option>
                                                 <option value="2023">2023</option>
@@ -209,6 +211,20 @@
     }
 
     function generar_reporte_diario(){
+        swal({
+            title: "Generar reporte",
+            text: "¿Está seguro de generar el reporte diario?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((aceptar) => {
+            if(aceptar){
+                confirmar_generar_reporte_diario();
+            }
+        })
+    }
+
+    function confirmar_generar_reporte_diario(){
         var fecha = $('#fecha_reporte_diario').val();
         if(fecha == '') {
             swal({
@@ -314,6 +330,20 @@
     }
 
     function generar_reporte_mensual(){
+        swal({
+            title: "Generar reporte",
+            text: "¿Está seguro de generar el reporte mensual?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((aceptar) => {
+            if(aceptar){
+                confirmar_generar_reporte_mensual();
+            }
+        })
+    }
+
+    function confirmar_generar_reporte_mensual(){
         var mes = $('#mes').val();
         var year = $('#mes_year').val();
 
@@ -433,6 +463,20 @@
     }
 
     function generar_reporte_anual(){
+        swal({
+            title: "Generar reporte",
+            text: "¿Está seguro de generar el reporte anual?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((aceptar) => {
+            if(aceptar){
+                confirmar_generar_reporte_anual();
+            }
+        })
+    }
+
+    function confirmar_generar_reporte_anual(){
         var year = $('#year').val();
 
         var valido = 1;

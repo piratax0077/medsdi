@@ -6,93 +6,33 @@
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#88;</span></button>
             </div>
             <div class="modal-body">
-                <form>
+                <input type="hidden" name="id_institucion" id="id_institucion" value="{{ $institucion->id }}">
+                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
+                    <input type="hidden" name="id_admin_creador" id="id_admin_creador" value="{{ Auth::user()->id }}">
+                    <input type="hidden" name="id_tipo_admin_creador" id="id_tipo_admin_creador" value="{{ Auth::user()->Roles()->first()->id }}">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link-aten text-reset active" id="info-tipo_contrato-tab" data-toggle="tab" href="#info-tipo_contrato" role="tab" aria-controls="info-tipo_contrato" aria-selected="true">Tipo Contrato</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link-aten text-reset" id="info_personal_cont-tab" data-toggle="tab" href="#info_personal_cont" role="tab" aria-controls="info_personal_cont" aria-selected="false">Información Personal</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link-aten text-reset" id="info_contrato_pers-tab" data-toggle="tab" href="#info_contrato_pers" role="tab" aria-controls="info_contrato_pers" aria-selected="false">Información de Contrato</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link-aten text-reset" id="leyes_sociales-tab" data-toggle="tab" href="#leyes_sociales" role="tab" aria-controls="leyes_sociales" aria-selected="false">Leyes Sociales</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link-aten text-reset" id="horario_contrato-tab" data-toggle="tab" href="#horario_contrato" role="tab" aria-controls="horario_contrato" aria-selected="false">Horario</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="info-tipo_contrato" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
                     <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Rut</label>
-                                <input type="text" class="form-control form-control-sm" oninput="formatoRut(this)" name="rut_nuevo_profesional" id="rut_nuevo_profesional">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Fecha de Ingreso</label>
-                                <input type="date" class="form-control form-control-sm" name="f_ingreso_nuevo_profesional" id="f_ingreso_nuevo_profesional">
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Nombre</label>
-                                <input class="form-control form-control-sm" name="nombre_nuevo_profesional" id="nombre_nuevo_profesional" type="text" >
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Primer Apellido</label>
-                                <input class="form-control form-control-sm" name="apellido1_nuevo_profesional" id="apellido1_nuevo_profesional" type="text" >
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Segundo Apellido</label>
-                                <input class="form-control form-control-sm" name="apellido2_nuevo_profesional" id="apellido2_nuevo_profesional" type="text" >
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
-                                <input class="form-control form-control-sm" name="email_nuevo_profesional" id="email_nuevo_profesional" type="email" >
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                <input class="form-control form-control-sm" name="telefono1_nuevo_profesional" id="telefono1_nuevo_profesional" type="number" >
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Tel&eacute;fono (opcional)</label>
-                                <input class="form-control form-control-sm" name="telefono2_nuevo_profesional" id="telefono2_nuevo_profesional" type="number" >
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Direcci&oacute;n N&deg; / Calle</label>
-                                <input class="form-control form-control-sm" name="direccion_nuevo_profesional" id="direccion_nuevo_profesional" type="text">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Cargo</label>
-                                <select name="cargo_nuevo_profesional" id="cargo_nuevo_profesional" class="form-control form-control-sm">
-                                    <option value="0">Seleccione opci&oacute;n</option>
-                                    <option value="1">Profesional</option>
-                                    <option value="2">Secretaria</option>
-                                    <option value="3">Administrativo</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-5">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Regi&oacute;n</label>
-                                <select class="form-control form-control-sm" onchange="buscar_ciudad_profesional();" id="region_nuevo_profesional">
-                                    <option>Seleccione opci&oacute;n</option>
-                                    @foreach($regiones as $region)
-                                        <option value="{{ $region->id }}">{{ $region->nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-5">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Comuna</label>
-                                <select class="form-control form-control-sm" id="comuna_nuevo_profesional">
-
-                                </select>
-                            </div>
-                        </div>
-
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Profesi&oacute;n</label>
@@ -120,65 +60,280 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">D&iacute;as de Atenci&oacute;n</label>
-                                <input class="form-control form-control-sm" name="dias_atencion_nuevo_profesional" id="dias_atencion_nuevo_profesional" type="text" >
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Horario</label>
-                                <input class="form-control form-control-sm" name="horario_nuevo_profesional" id="horario_nuevo_profesional" type="text" >
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Pacientes por Hora</label>
-                                <input class="form-control form-control-sm" name="p_hora_nuevo_profesional" id="p_hora_nuevo_profesional" type="text" >
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <div class="switch switch-success d-inline m-r-10">
-                                    <input type="checkbox" id="correo-cont" checked="">
-                                    <label for="correo-cont" class="cr"></label>
-                                </div>
-                                <label>Notificar por correo electr&oacute;nico</label>
-                            </div>
-                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <h5>Datos Bancarios Para Dep&oacute;sito</h5>
+                    </div>
+
+                    <div class="tab-pane fade" id="info_personal_cont" role="tabpanel" aria-labelledby="info_personal_cont-tab">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Rut</label>
+                                    <input type="text" class="form-control form-control-sm" oninput="formatoRut(this)" name="rut_nuevo_profesional" id="rut_nuevo_profesional">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Banco</label>
-                                <select class="form-control form-control-sm" name="banco_nuevo_profesional" id="banco_nuevo_profesional">
-                                    <option value="0">Seleccione opci&oacute;n</option>
-                                    @foreach($bancos as $banco)
-                                        <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
-                                    @endforeach
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Fecha de Ingreso</label>
+                                    <input type="date" class="form-control form-control-sm" name="f_ingreso_nuevo_profesional" id="f_ingreso_nuevo_profesional" value="{{ date('Y-m-d') }}">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Nombre</label>
+                                    <input class="form-control form-control-sm" name="nombre_nuevo_profesional" id="nombre_nuevo_profesional" type="text" >
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Primer Apellido</label>
+                                    <input class="form-control form-control-sm" name="apellido1_nuevo_profesional" id="apellido1_nuevo_profesional" type="text" >
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Segundo Apellido</label>
+                                    <input class="form-control form-control-sm" name="apellido2_nuevo_profesional" id="apellido2_nuevo_profesional" type="text" >
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="floating-label-activo-sm">Sexo</label>
+                                <select class="form-control form-control-sm" name="empleado_sexo" id="empleado_sexo">
+                                    <option value="">Seleccione</option>
+                                    <option value="F">Femenino</option>
+                                    <option value="M">Masculino</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">N&deg; Cuenta</label>
-                                <input class="form-control form-control-sm" name="n_cta_nuevo_profesional" id="n_cta_nuevo_profesional" type="number" >
+                            <div class="col-sm-4">
+                                <label class="floating-label-activo-sm">Fecha Nacimiento</label>
+                                <input type="date" class="form-control form-control-sm" name="fecha_nacimiento" id="fecha_nacimiento">
                             </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Sucursal</label>
-                                <input class="form-control form-control-sm" name="sucursal_nuevo_profesional" id="sucursal_nuevo_profesional" type="text" >
+                            <div class="col-sm-4">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
+                                    <input class="form-control form-control-sm" name="email_nuevo_profesional" id="email_nuevo_profesional" type="email" >
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Tel&eacute;fono</label>
+                                    <input class="form-control form-control-sm" name="telefono1_nuevo_profesional" id="telefono1_nuevo_profesional" type="number" >
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Tel&eacute;fono (opcional)</label>
+                                    <input class="form-control form-control-sm" name="telefono2_nuevo_profesional" id="telefono2_nuevo_profesional" type="number" >
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Direcci&oacute;n N&deg; / Calle</label>
+                                    <input class="form-control form-control-sm" name="direccion_nuevo_profesional" id="direccion_nuevo_profesional" type="text">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Cargo</label>
+                                    <select name="cargo_nuevo_profesional" id="cargo_nuevo_profesional" class="form-control form-control-sm">
+                                        <option value="0">Seleccione opci&oacute;n</option>
+                                        <option value="1">Profesional</option>
+                                        <option value="2">Secretaria</option>
+                                        <option value="3">Administrativo</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Regi&oacute;n</label>
+                                    <select class="form-control form-control-sm" onchange="buscar_ciudad_profesional();" id="region_nuevo_profesional">
+                                        <option>Seleccione opci&oacute;n</option>
+                                        @foreach($regiones as $region)
+                                            <option value="{{ $region->id }}">{{ $region->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Comuna</label>
+                                    <select class="form-control form-control-sm" id="comuna_nuevo_profesional">
+
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="switch switch-success d-inline m-r-10">
+                                        <input type="checkbox" id="correo-cont" checked="">
+                                        <label for="correo-cont" class="cr"></label>
+                                    </div>
+                                    <label>Notificar por correo electr&oacute;nico</label>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </form>
+
+                    <div class="tab-pane fade" id="info_contrato_pers" role="tabpanel" aria-labelledby="info_contrato_pers-tab">
+                        <div class="row">
+
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <h5>Datos Bancarios Para Dep&oacute;sito</h5>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Banco</label>
+                                    <select class="form-control form-control-sm" name="banco_nuevo_profesional" id="banco_nuevo_profesional">
+                                        <option value="0">Seleccione opci&oacute;n</option>
+                                        @foreach($bancos as $banco)
+                                            <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">N&deg; Cuenta</label>
+                                    <input class="form-control form-control-sm" name="n_cta_nuevo_profesional" id="n_cta_nuevo_profesional" type="number" >
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Sucursal</label>
+                                    <input class="form-control form-control-sm" name="sucursal_nuevo_profesional" id="sucursal_nuevo_profesional" type="text" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="leyes_sociales" role="tabpanel" aria-labelledby="leyes_sociales-tab">
+                        <div class="row">
+                            <div class="col-12">
+                                <form>
+                                    <div class="form-row">
+                                        <div class="col-sm-12 col-md-12 mb-2">
+                                            <h6 class="text-c-blue">INFORMACIÓN Y DATOS DEL CONTRATO</h6>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <label class="floating-label-activo-sm">Fecha Inicio</label>
+                                            <input type="date" class="form-control form-control-sm" name="empleado_fecha_inicio" id="empleado_fecha_inicio">
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <label class="floating-label-activo-sm">Fecha Termino</label>
+                                            <input type="date" class="form-control form-control-sm" name="empleado_fecha_termino" id="empleado_fecha_termino">
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6"style="text-align:right">
+                                            <label  class="cr">Indefinido</label>
+                                            <input type="hidden" id="cont_indefinido" name="cont_indefinido" value="0">
+                                            <div class="switch switch-success d-inline m-r-10">
+                                                <input type="checkbox" onchange="activar_check('empleado_check_contrato_indef', 'cont_indefinido', ' ');" id="empleado_check_contrato_indef" name="empleado_check_contrato_indef" value="">
+                                                <label for="empleado_check_contrato_indef" class="cr"></label>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                            <label class="floating-label-activo-sm">Monto Imponible</label>
+                                            <input type="number" class="form-control form-control-sm" name="empleado_monto_imponible" id="empleado_monto_imponible">
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <label  class="floating-label-activo-sm">Locomoción</label>
+                                            <input type="hidden" id="empleado_locomocion" name="empleado_locomocion" value="0">
+                                            <div class="switch switch-success d-inline m-r-10">
+                                                <input type="checkbox" onchange="activar_check('empleado_check_locomocion', 'empleado_locomocion', 'empleado_locomocion_porcentaje');" id="empleado_check_locomocion" name="empleado_check_locomocion" value="">
+                                                <label for="empleado_check_locomocion" class="cr"></label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <input type="number" disabled="disabled" class="form-control form-control-sm" name="empleado_locomocion_porcentaje" id="empleado_locomocion_porcentaje" value="N/A">
+                                        </div>
+
+
+                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <label class="floating-label-activo-sm">Colación</label>
+                                             <input type="hidden" id="empleado_colacion" name="empleado_colacion" value="0">
+                                            <div class="switch switch-success d-inline m-r-10">
+                                                <input type="checkbox" onchange="activar_check('empleado_check_colacion', 'empleado_colacion', 'empleado_colacion_porcentaje');" id="empleado_check_colacion" name="empleado_check_colacion" value="">
+                                                <label for="empleado_check_colacion" class="cr"></label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <input type="number" disabled="disabled" class="form-control form-control-sm" name="empleado_colacion_porcentaje" id="empleado_colacion_porcentaje" value="N/A">
+                                        </div>
+
+                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <label class="floating-label-activo-sm">Asignación Familar</label>
+                                            <input type="hidden" id="empleado_asignacion_familiar" name="empleado_asignacion_familiar" value="0">
+                                            <div class="switch switch-success d-inline m-r-10">
+                                                <input type="checkbox" onchange="activar_check('empleado_check_asignacion_familiar', 'empleado_asignacion_familiar', 'empleado_asignacion_familiar_cantidad');" id="empleado_check_asignacion_familiar" name="empleado_check_asignacion_familiar" value="">
+                                                <label for="empleado_check_asignacion_familiar" class="cr"></label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <input type="number" disabled="disabled" class="form-control form-control-sm" name="empleado_asignacion_familiar_cantidad" id="empleado_asignacion_familiar_cantidad" value="N/A">
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <label class="floating-label-activo-sm">Cajas de Compensación</label>
+                                            <input type="hidden" id="empleado_caja_compensacion" name="empleado_caja_compensacion" value="0">
+                                            <div class="switch switch-success d-inline m-r-10">
+                                                <input type="checkbox" onchange="activar_check('empleado_check_caja_compensacion', 'empleado_caja_compensacion', 'empleado_caja_compensacion_porcentaje');" id="empleado_check_caja_compensacion" name="empleado_check_caja_compensacion" value="">
+                                                <label for="empleado_check_caja_compensacion" class="cr"></label>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <input type="number" disabled="disabled" class="form-control form-control-sm" name="empleado_caja_compensacion_porcentaje" id="empleado_caja_compensacion_porcentaje" value="N/A">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="horario_contrato" role="tabpanel" aria-labelledby="horario_contrato-tab">
+                        <form>
+                            <div class="form-row">
+                                <div class="col-sm-12 col-md-12 mb-2">
+                                    <h6 class="text-c-blue">HORARIO DE TRABAJO</h6>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                    <label class="floating-label-activo-sm">Días de Trabajo</label>
+                                    <select class="js-example-basic-multiple" name="dias_laborales" id="dias_laborales" multiple="multiple">
+                                        <option value="1">Lunes</option>
+                                        <option value="2">Martes</option>
+                                        <option value="3">Miercoles</option>
+                                        <option value="4">Jueves</option>
+                                        <option value="5">Viernes</option>
+                                        <option value="6">Sabado</option>
+                                        <option value="7">Domingo</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                    <label class="floating-label-activo-sm">Hora entrada</label>
+                                    <input type="time" class="form-control form-control-sm" id="hora_entrada" name="hora_entrada" value="08:00">
+                                </div>
+
+                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                    <label class="floating-label-activo-sm">Hora salida</label>
+                                    <input type="time" class="form-control form-control-sm" id="hora_salida" name="hora_salida" value="19:00">
+                                </div>
+                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                    <label class="floating-label-activo-sm">Hora Inicio Colación</label>
+                                    <input type="time" class="form-control form-control-sm" id="hora_entrada_colacion" name="hora_entrada_colacion" value="12:00">
+                                </div>
+                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                    <label class="floating-label-activo-sm">Hora término colación</label>
+                                    <input type="time" class="form-control form-control-sm" id="hora_salida_colacion" name="hora_salida_colacion" value="13:00">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
@@ -189,6 +344,11 @@
 </div>
 
 <script>
+
+    $(document).ready(function() {
+        $('#dias_laborales').select2();
+    });
+
     /** buscar ciudad */
     function buscar_ciudad_profesional(id_ciudad=0) {
 
@@ -354,6 +514,22 @@
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
+    }
+
+    function activar_check(check, input_base, input_valor)
+    {
+        if($('#'+check).prop('checked'))
+        {
+            $('#'+input_base).val(1);
+            $('#'+input_valor).val(0);
+            $('#'+input_valor).attr('disabled', false);
+        }
+        else
+        {
+            $('#'+input_base).val(0);
+            $('#'+input_valor).val('N/A');
+            $('#'+input_valor).attr('disabled', true);
+        }
     }
 
 </script>

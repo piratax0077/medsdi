@@ -8,18 +8,22 @@ use App\Models\Asistente;
 use App\Models\AsistenteLugarAtencion;
 use App\Models\AsistenteTipo;
 use App\Models\ContratoDependiente;
+use App\Models\ContratoDependienteProfesional;
 use App\Models\ContratoHistorico;
 use App\Models\Direccion;
 use App\Models\Instituciones;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\Profesional;
+use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\Servicios;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+
+use Carbon\Carbon;
 
 class ManejoContratoController extends Controller
 {
@@ -1282,6 +1286,240 @@ class ManejoContratoController extends Controller
         return (object)$datos;
     }
 
+    public function registroPerfilProfesional($registros)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($registros->rut))
+        {
+            $error['rut'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->nombre))
+        {
+            $error['nombre'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->apellido1))
+        {
+            $error['apellido_uno'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->apellido2))
+        {
+            $error['apellido_dos'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->fecha_nacimiento))
+        {
+            $error['fecha_nacimiento'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->sexo))
+        {
+            $error['sexo'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->email))
+        {
+            $error['email'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->telefono1))
+        {
+            $error['telefono'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->direccion))
+        {
+            $error['direccion'] = 'Campo requerido';
+            $valido = 0;
+        }
+        if(empty($registros->comuna))
+        {
+            $error['ciudad'] = 'Campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $validar_profesional = Profesional::where('email', $registros->email)->first();
+            if($validar_profesional)
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Profesional ya registrado';
+                $datos['result'] = $validar_profesional;
+            }
+            else
+            {
+                // Buscar usuario relacionado
+                $validarUsuarios = Paciente::where('email', $registros->email)->first();
+                if(!$validarUsuarios)
+                {
+                    $validarUsuarios = Profesional::where('email', $registros->email)->first();
+                    if(!$validarUsuarios)
+                    {
+                        $validarUsuarios = AdminInstServ::where('email', $registros->email)->first();
+                    }
+                    else
+                    {
+                        $id_asistente_user = $validarUsuarios->id_usuario;
+                    }
+                }
+                else
+                {
+                    $id_asistente_user = $validarUsuarios->id_usuario;
+                }
+
+                $registro_profesional = new Profesional();
+                $registro_profesional->nombre = $registros->nombre;
+                $registro_profesional->apellido_uno = $registros->apellido1;
+                $registro_profesional->apellido_dos = $registros->apellido2;
+                $registro_profesional->sexo = $registros->sexo;
+                $registro_profesional->rut = $registros->rut;
+                $registro_profesional->email = $registros->email;
+                $registro_profesional->bienvenida = 0;
+                $registro_profesional->telefono_uno = $registros->telefono1;
+                $registro_profesional->telefono_dos = '';
+                $registro_profesional->estado = 1;
+                $registro_profesional->certificado = 1;
+
+                $registro_profesional->id_usuario = (empty($id_asistente_user))?0:$id_asistente_user;
+
+                $direccion = new Direccion();
+                $direccion->direccion = $registros->direccion;
+                $direccion->numero_dir =123;
+                $direccion->id_ciudad = $registros->comuna;
+                if ($direccion->save())
+                {
+                    $registro_profesional->id_direccion = $direccion->id;
+                    $datos['registro']['direccion']['estado'] = 1;
+                    $datos['registro']['direccion']['msj'] = 'registro exitoso';
+                }
+                else
+                {
+                    $registro_profesional->id_direccion = 0;
+                    $datos['registro']['direccion']['estado'] = 0;
+                    $datos['registro']['direccion']['msj'] = 'falla al registrar';
+                }
+
+                if($registro_profesional->save()){
+                    return 'Profesional registrado';
+                    $datos['registro_profesional']['estado'] = 1;
+                    $datos['registro_profesional']['msj'] = 'registro';
+
+                    $id_profesional = $registro_profesional->id;
+
+                    if(empty($id_profesional))
+                    {
+                        $profesiona_user = new User();
+                        $profesiona_user->email = $registros->email;
+                        $pass_temp = rand(11111,99999);
+                        $profesiona_user->password = Hash::make($pass_temp);
+                        $profesiona_user->name = $registros->nombre.' '.$registros->apellido1.' '.$registros->apellido2;
+                        if ($profesiona_user->save())
+                        {
+                            $datos['user']['estado'] = 1;
+                            $datos['user']['result'] = $profesiona_user;
+                            /** asignando rol de adminstrador de institucion */
+                            $profesiona_user->assignRole(3);
+                            $profesiona_user->assignRole(23);
+                            $id_profesiona_user = $profesiona_user->id;
+
+                            // asignamos el usuario al profesional
+                            $registro_profesional->id_usuario = $id_profesiona_user;
+                            $registro_profesional->save();
+
+                            /** envio de correo de confirmacion  */
+                            $blade = 'bienvenida_asistente_usuario';
+                            $to = array(
+                                    array('email' => $profesiona_user->email,'name' => $profesiona_user->name),
+                                );
+                            $cc = array();
+                            $bcc = array();
+                            $asunto = 'MED-SDI - Bienvenido!';
+                            $body = array(
+                                'nombre' => $profesiona_user->name,
+                                'user' => $profesiona_user->email,
+                                'pass' => $pass_temp,
+                            );
+                            $archivo = '';/** pendiente */
+                            $id_institucion = '';
+
+                            $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                            if($result_mail['estado'])
+                            {
+                                $datos['mail']['estado'] = 1;
+                                $datos['mail']['msj'] = 'Notificacion de bienvenida enviado';
+                            }
+                            else
+                            {
+                                $datos['mail']['estado'] = 0;
+                                $datos['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                            }
+                        }
+                        else
+                        {
+                            $datos['user']['estado'] = 0;
+                            $datos['user']['result'] = $profesiona_user;
+                        }
+                    }
+
+                    // $profesional_lugar_atencion = new ProfesionalesLugaresAtencion();
+                    // $profesional_lugar_atencion->id_profesional = $id_profesional;
+                    // $profesional_lugar_atencion->id_lugar_atencion = $registros->id_lugar_atencion;
+                    // $profesional_lugar_atencion->estado = 1;
+
+                    // if($profesional_lugar_atencion->save())
+                    // {
+                    //     $datos['profesional_lugar_atencion']['estado'] = 1;
+                    //     $datos['profesional_lugar_atencion']['msj'] = 'Asignacion de profesional exitosa';
+                    // }
+                    // else
+                    // {
+                    //     $datos['estado'] = 0;
+                    //     $datos['msj'] = 'Falla en Asignando Profesional a Lugar de Atencion';
+
+                    //     $datos['profesional_lugar_atencion']['estado'] = 0;
+                    //     $datos['profesional_lugar_atencion']['msj'] = 'Asignacion de profesional fallida';
+                    // }
+
+                    $registro_profesional->id_usuario = (empty($id_profesional_user))?0:$id_profesional_user;
+
+                    if($registro_profesional->save())
+                    {
+                        $datos['registro_profesional']['update']['estado'] = 1;
+                        $datos['registro_profesional']['update']['msj'] = 'registro';
+                    }
+                    else
+                    {
+                        $datos['registro_profesional']['update']['estado'] = 0;
+                        $datos['registro_profesional']['update']['msj'] = 'fallo registro';
+                    }
+                }
+            }
+
+            $datos['estado'] = 1;
+            $datos['msj'] = 'perfil creado';
+            $datos['result'] = (object)array(
+                'id_profesional' => 3,
+                'id_profesional_usuario' => 544,
+            );
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
     public function modificarHorario(Request $request)
     {
         $datos = array();
@@ -1609,4 +1847,330 @@ class ManejoContratoController extends Controller
         return $datos;
     }
 
+    /* MANEJOR CONTRATOS PROFESIONALES */
+    public function registrarProfesional(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+        /** VALIDAR EXISTENCIA DE CONTRATO ACTUAL ACTIVO */
+        $validacion_contrato = ContratoDependienteProfesional::where('email', $request->email)->whereIn('estado', [1,2,3])->get();
+        if($validacion_contrato->count() > 0)
+        {
+            $error['validacion_contrado'] = 'El Email esta siendo utilizado en un contrato (Nuevo, Activo o Vencido), valide la información.';
+            // $error['info'] = $validacion_contrato;
+            // $error['count'] = $validacion_contrato->count();
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $result_registro_perfil = static::registroPerfilProfesional($request);
+
+            if($result_registro_perfil['estado'] == 1){
+
+                $id_profesional = $result_registro_perfil['result']->id_profesional;
+                $id_profesional_usuario = $result_registro_perfil['result']->id_profesional_usuario;
+
+                /** CREAR CONTRATO */
+                $registro = User::find(Auth::user()->id);
+                $roles = $registro->roles()->get();
+                $lista_roles = '';
+                foreach ($roles as $key => $value)
+                    {
+                    $lista_roles = $value->id.'|';
+                }
+                $lista_roles = substr($lista_roles, 0, -1);
+                /**
+                 * # TIPOS DE CONTRATOS DEPENDIENTES
+                 * 1. CONTRATO INDEFINIDO
+                 * 2. CONTRATO DEFINIDO
+                 * */
+                $tipo_contrato = 1;
+                if(!empty($request->fecha_termino))
+                    $tipo_contrato = 2;
+                $request->tipo_contrato = 1;
+
+                $registro_contrato = static::registrarContratoProfesional(
+                    1,
+                    $request->profesion,
+                    $request->especialidad,
+                    $request->sub_especialidad,
+                    $id_profesional,
+                    $request->rut,
+                    $request->nombre,
+                    $request->apellido1,
+                    $request->apellido2,
+                    $request->telefono1,
+                    $request->email,
+                    $request->id_institucion,
+                    $request->id_lugar_atencion,
+                    $tipo_contrato,
+                    $request->fecha_inicio,
+                    $request->fecha_termino,
+                    $request->monto_imponible,
+                    $request->locomocion,
+                    $request->locomocion_porcentaje,
+                    $request->colacion,
+                    $request->colacion_porcentaje,
+                    $request->asignacion_familiar,
+                    $request->asignacion_familiar_cantidad,
+                    $request->caja_compensacion,
+                    $request->caja_compensacion_porcentaje,
+                    '',
+                    $request->dias_laborales,
+                    $request->hora_entrada,
+                    $request->hora_salida,
+                    $request->hora_entrada_colacion,
+                    $request->hora_salida_colacion,
+                    Carbon::now(),
+                );
+                return $registro_contrato;
+                $datos['registro_contrato'] = $registro_contrato;
+
+                if($registro_contrato['estado'] == 1)
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Registro Exitoso';
+                    $datos['result'] = $registro_contrato;
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Problema al registrar contrato';
+                    $datos['result'] = $registro_contrato;
+                }
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    static public function registrarContratoProfesional(
+        $tipo_empleado,
+        $profesion,
+        $especialidad,
+        $sub_especialidad,
+        $id_profesional,
+        $rut,
+        $nombres,
+        $apellido_uno,
+        $apellido_dos,
+        $telefono,
+        $email,
+        $id_institucion,
+        $id_lugar_atencion,
+        $tipo_contrato,
+        $fecha_inicio,
+        $fecha_termino,
+        $monto_imponible,
+        $locomocion,
+        $locomocion_porcentaje,
+        $colacion,
+        $colacion_porcentaje,
+        $asignacion_familiar,
+        $asignacion_familiar_cantidad,
+        $caja_compensacion,
+        $caja_compensacion_porcentaje,
+        $otro,
+        $dias_laborales,
+        $hora_ingreso,
+        $hora_salida,
+        $hora_inicio_colacion,
+        $hora_termino_colacion,
+        $fecha_creacion,
+    )
+    {
+        $datos = array();
+        $filtro = array();
+        $valido = 1;
+        $error = array();
+
+
+        if(empty($tipo_empleado))
+        {
+            $error['tipo_empleado'] = 'campo requerido';
+            $valido = 0;
+        }
+        // if(empty($id_empleado))
+        // {
+        //     $error['id_empleado'] = 'campo requerido';
+        //     $valido = 0;
+        // }
+        if(empty($rut))
+        {
+            $error['rut'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($nombres))
+        {
+            $error['nombres'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($apellido_uno))
+        {
+            $error['apellido_uno'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($apellido_dos))
+        {
+            $error['apellido_dos'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($telefono))
+        {
+            $error['telefono'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($email))
+        {
+            $error['email'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($id_institucion))
+        {
+            $error['id_institucion'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($id_lugar_atencion))
+        {
+            $error['id_lugar_atencion'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($tipo_contrato))
+        {
+            $error['tipo_contrato'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($fecha_inicio))
+        {
+            $error['fecha_inicio'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($monto_imponible))
+        {
+            $error['monto_imponible'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($dias_laborales))
+        {
+            $error['dias_laborales'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($hora_ingreso))
+        {
+            $error['hora_ingreso'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($hora_salida))
+        {
+            $error['hora_salida'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($hora_inicio_colacion))
+        {
+            $error['hora_inicio_colacion'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($hora_termino_colacion))
+        {
+            $error['hora_termino_colacion'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido == 1)
+        {
+            $contrato = new ContratoDependienteProfesional();
+
+            $contrato->id_especialidad = $profesion;
+            $contrato->id_tipo_especialidad = $especialidad;
+            $contrato->id_subtipo_especialidad = $sub_especialidad;
+            $contrato->id_profesional = $id_profesional;
+            $contrato->rut = $rut;
+            $contrato->nombres = $nombres;
+            $contrato->apellido_uno = $apellido_uno;
+            $contrato->apellido_dos = $apellido_dos;
+            $contrato->telefono = $telefono;
+            $contrato->email = $email;
+            $contrato->id_institucion = $id_institucion;
+            $contrato->id_lugar_atencion = $id_lugar_atencion;
+            $contrato->tipo_contrato = $tipo_contrato;
+            $contrato->fecha_inicio = $fecha_inicio;
+            $contrato->fecha_termino = $fecha_termino;
+            $contrato->monto_imponible = $monto_imponible;
+            $contrato->locomocion = $locomocion;
+            $contrato->locomocion_porcentaje = $locomocion_porcentaje;
+            $contrato->colacion = $colacion;
+            $contrato->colacion_porcentaje = $colacion_porcentaje;
+            $contrato->asignacion_familiar = $asignacion_familiar;
+            $contrato->asignacion_familiar_cantidad = $asignacion_familiar_cantidad;
+            $contrato->caja_compensacion = $caja_compensacion;
+            $contrato->caja_compensacion_porcentaje = $caja_compensacion_porcentaje;
+            $contrato->otro = $otro;
+            $contrato->dias_laborales = json_encode($dias_laborales);
+            $contrato->hora_ingreso = $hora_ingreso;
+            $contrato->hora_salida = $hora_salida;
+            $contrato->hora_inicio_colacion = $hora_inicio_colacion;
+            $contrato->hora_termino_colacion = $hora_termino_colacion;
+            $contrato->fecha_creacion = $fecha_creacion;
+
+            if($contrato->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registro realizado';
+                $datos['last_id'] = $contrato->id;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'falla registro';
+                $datos['request'] = array(
+                    'profesion' => $profesion,
+                    'especialidad' => $especialidad,
+                    'sub_especialidad' => $sub_especialidad,
+                    'otra_profesion' => $otra_profesion,
+                    'rut' => $rut,
+                    'nombres' => $nombres,
+                    'apellido_uno' => $apellido_uno,
+                    'apellido_dos' => $apellido_dos,
+                    'telefono' => $telefono,
+                    'email' => $email,
+                    'id_institucion' => $id_institucion,
+                    'id_lugar_atencion' => $id_lugar_atencion,
+                    'tipo_contrato' => $tipo_contrato,
+                    'fecha_inicio' => $fecha_inicio,
+                    'fecha_termino' => $fecha_termino,
+                    'monto_imponible' => $monto_imponible,
+                    'locomocion' => $locomocion,
+                    'locomocion_porcentaje' => $locomocion_porcentaje,
+                    'colacion' => $colacion,
+                    'colacion_porcentaje' => $colacion_porcentaje,
+                    'asignacion_familiar' => $asignacion_familiar,
+                    'asignacion_familiar_cantidad' => $asignacion_familiar_cantidad,
+                    'caja_compensacion' => $caja_compensacion,
+                    'caja_compensacion_porcentaje' => $caja_compensacion_porcentaje,
+                    'otro' => $otro,
+                    'dias_laborales' => $dias_laborales,
+                    'hora_ingreso' => $hora_ingreso,
+                    'hora_salida' => $hora_salida,
+                    'hora_inicio_colacion' => $hora_inicio_colacion,
+                    'hora_termino_colacion' => $hora_termino_colacion,
+                    'fecha_creacion' => $fecha_creacion,
+                                        );
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+        return (object)$datos;
+    }
 }

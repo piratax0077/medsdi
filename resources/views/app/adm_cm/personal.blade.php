@@ -667,11 +667,16 @@
             });
         }
 
+        function registrar_administrativo(){
+            $('#modal_agregar_personal_administrativo').modal('show');
+        }
+
     </script>
 @endsection
 
 @section('modales')
     @include('app.adm_cm.modales.personal.registrar_personal')
+    @include('app.adm_cm.modales.personal.registrar_personal_administrativo')
     @include('app.adm_cm.modales.personal.contacto_personal')
     @include('app.adm_cm.modales.personal.datos_banco')
     @include('app.adm_cm.modales.personal.horario_personal')
