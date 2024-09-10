@@ -668,7 +668,7 @@ class ManejoContratoController extends Controller
 
         if($valido)
         {
-            $lista_tipo_asitente = array('ASISTENTE PUBLICO', 'ASISTENTE JEFA CAJA', 'ASISTENTE ADMINISTRATIVO', 'ASISTENTE ONLINE', 'ASISTENTE CONSULTA', 'ASISTENTE MANEJO DE AGENDA');
+            $lista_tipo_asitente = array('ASISTENTE PUBLICO', 'ASISTENTE JEFA CAJA', 'ASISTENTE ADMINISTRATIVO', 'ASISTENTE ONLINE', 'ASISTENTE CONSULTA', 'ASISTENTE MANEJO DE AGENDA', 'ASISTENTE LABORATORIO');
             $lista_tipo_admi_inst_serv = array('ADMINISTRADOR DE CM', 'ADMINISTRADOR DE SERVICIOS');
 
             /** registro asistente */
@@ -1077,6 +1077,7 @@ class ManejoContratoController extends Controller
             // 3 - Asistente Administrativo
             // 4 - Asistente Online
             // 5 - Asistente Consulta
+            // 5 - Asistente Consulta
             $tipo = 0;
             $rol_asignar = '';
             $id_asistente = 0;
@@ -1111,6 +1112,11 @@ class ManejoContratoController extends Controller
                     if($tipo == 0){
                         $rol_asignar = 'Asistente Manejo de Agenda';
                         $tipo = 6;
+                    }
+                case 'ASISTENTE LABORATORIO':
+                    if($tipo == 0){
+                        $rol_asignar = 'Asistente Laboratorio';
+                        $tipo = 12;
                     }
 
                     $validar_asistente = Asistente::where('email', $registros->email)->first();

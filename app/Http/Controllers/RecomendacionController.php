@@ -948,4 +948,46 @@ class RecomendacionController extends Controller
 
     }
 
+    public function verRecetaPacienteCantidad(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $filtro = array();
+        $valido = 1;
+
+        if(empty($request->id_paciente))
+        {
+            $error['id_paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            if(empty($request->id_profesional))
+                $filtro[] = array('aficionado', $request->id_profesional);
+
+            if(empty($request->id_paciente))
+                $filtro[] = array('activo', $request->id_paciente);
+
+            if(empty($request->tipo_control))
+                $filtro[] = array('control', $request->tipo_control);
+
+            $registros = Recomendacion::where($filtro)->get();
+            $cantidad = $registros->count();
+
+            $datos['estado'] = 1;
+            $datos['msj'] = 'registros';
+            $datos['registros'] = $registros;
+            $datos['cantidad'] = $cantidad;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
 }

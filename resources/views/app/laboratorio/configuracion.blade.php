@@ -1755,8 +1755,8 @@
                     <!--ESPECIALIDADES Y ÁREAS-->
                     <div class="tab-pane fade" id="ar-dep" role="tabpanel" aria-labelledby="ar-dep-tab">
                         <div class="row">
+                            <!--Especialidades-->
                             <div class="col-md-4">
-                                <!--Especialidades-->
                                 <div class="card">
                                     <div class="card-header pt-3 pb-2 bg-light">
                                         <div class="row">
@@ -1808,8 +1808,9 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!--Área-->
                             <div class="col-md-4">
-                                <!--Área-->
                                 <div class="card">
                                     <div class="card-header pt-3 pb-2 bg-light">
                                         <div class="row">
@@ -1849,8 +1850,9 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!--Servicios-->
                             <div class="col-md-4">
-                                <!--Área-->
                                 <div class="card">
                                     <div class="card-header pt-3 pb-2 bg-light">
                                         <div class="row">
@@ -1891,6 +1893,53 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Procedimientos -->
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header pt-3 pb-2 bg-light">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h6 class="f-18 d-inline mt-3 text-info">Procedimientos</h6>
+                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="ag_procedimiento();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-md-12">
+                                                <table id="procedimiento_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-wrap text-left align-middle">Nombre</th>
+                                                            <th class="text-wrap text-left align-middle">Descripcion</th>
+                                                            {{-- <th class="text-wrap text-left align-middle">minutos_bloque</th> --}}
+                                                            <th class="text-wrap text-left align-middle">Cantidad Bloques</th>
+                                                            <th class="text-wrap text-left align-middle">Eliminar</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($procedimeintos as $proced)
+                                                        <tr>
+                                                            <td class="align-middle text-left">{{ $proced->nombre }}</td>
+                                                            <td class="align-middle text-left">{{ $proced->descripcion }}</td>
+                                                            {{-- <td class="align-middle text-left">{{ $proced->minutos_bloque }}</td> --}}
+                                                            <td class="align-middle text-left">{{ $proced->cantidad_bloques }}</td>
+                                                            <td class="align-middle text-left">
+                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm({{ $proced->id }});"><i class="feather icon-trash"></i></button>
+                                                            </td>
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
@@ -2392,6 +2441,51 @@
         </div>
     </div>
 
+    {{--  MODAL PROCEDIMIENTO  --}}
+    <div id="a_procedimiento" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_procedimiento" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white text-center">Añadir Procedimiento</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label">Nombre</label>
+                                    <div class="d-flex justify-content-between">
+                                        <input class="form-control form-control-sm" type="text" name="a_procedimeinto_nombre" id="a_procedimeinto_nombre" value="">
+                                    </div>
+                                </div>
+
+                                <div class="form-group fill">
+                                    <label class="floating-label">Descripción</label>
+                                    <div class="d-flex justify-content-between">
+                                        <input class="form-control form-control-sm" type="text" name="a_procedimeinto_descripcion" id="a_procedimeinto_descripcion" value="">
+                                    </div>
+                                </div>
+
+                                <div class="form-group fill">
+                                    <label class="floating-label">Cantidad Bloques</label>
+                                    <div class="d-flex justify-content-between">
+                                        <input class="form-control form-control-sm" type="number" name="a_procedimeinto_cantidad_bloques" id="a_procedimeinto_cantidad_bloques" value="">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_procedimiento()">Añadir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{--  MODAL ESPECIALIDADES  --}}
     <div id="a_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_especialidad" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -2440,6 +2534,7 @@
             </div>
         </div>
     </div>
+
     {{-- MODAL EDITAR ESPECIALIDAD --}}
     <div id="editar_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editar_especialidad" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -2521,43 +2616,45 @@
             </div>
         </div>
     </div>
-{{--  MODAL ESPECIALIDADES  --}}
-<div id="a_otra_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_otra_especialidad" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Añadir otra especialidad</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group fill">
-                                <!--Cargar especialidades-->
-                                <label class="floating-label">Especialidad</label>
-                                <select class="form-control form-control-sm" id="especialidad_cm_otra" name="especialidad_cm_otra">
-                                    <option>Seleccione</option>
-                                    @if(isset($especialidades))
-                                        @foreach ($especialidades as $especialidad)
-                                            <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
+
+    {{--  MODAL ESPECIALIDADES  --}}
+    <div id="a_otra_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_otra_especialidad" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white text-center">Añadir otra especialidad</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <!--Cargar especialidades-->
+                                    <label class="floating-label">Especialidad</label>
+                                    <select class="form-control form-control-sm" id="especialidad_cm_otra" name="especialidad_cm_otra">
+                                        <option>Seleccione</option>
+                                        @if(isset($especialidades))
+                                            @foreach ($especialidades as $especialidad)
+                                                <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_otra_especialidad_cm()">Añadir</button>
+                </div>
+                </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_otra_especialidad_cm()">Añadir</button>
-            </div>
-            </form>
         </div>
     </div>
-</div>
-<input type="hidden" id="id_especialidad_cm" name="id_especialidad_cm" value="">
-<input type="hidden" id="id_institucion" name="id_institucion" value="">
-<input type="hidden" id="id_lugar_atencion" name="id_lugar_atencion" value="">
+
+    <input type="hidden" id="id_especialidad_cm" name="id_especialidad_cm" value="">
+    <input type="hidden" id="id_institucion" name="id_institucion" value="">
+    <input type="hidden" id="id_lugar_atencion" name="id_lugar_atencion" value="">
 <!--Cierre: Container Completo-->
 @endsection
 
@@ -2620,11 +2717,13 @@
             $('#a_servicio').modal('show');
         }
 
+        function ag_procedimiento(){
+            $('#a_procedimiento').modal('show');
+        }
+
         /*-Rol-*/
         function añadir_rol() {
             $('#a_rol').modal('show');
-
-
         }
 
         /*-Permisos-*/
@@ -4720,6 +4819,181 @@
                 swal({
                     title: "Error",
                     text: "Error al cargar ingresar administrador",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function guardar_procedimiento(){
+        let nombre = $('#a_procedimeinto_nombre').val();
+        let descripcion = $('#a_procedimeinto_descripcion').val();
+        let cantidad_bloques = $('#a_procedimeinto_cantidad_bloques').val();
+        let valido = 1;
+        let mensaje = '';
+        // validar campos
+        if(nombre == 0)
+        {
+            valido = 0;
+            mensaje += 'Campo requerido nombre\n';
+        }
+        // if(descripcion == 0)
+        // {
+        //     valido = 0;
+        //     mensaje += 'Campo requerido descripcion\n';
+        // }
+        if(cantidad_bloques == 0)
+        {
+            valido = 0;
+            mensaje += 'Campo requerido cantidad bloques\n';
+        }
+
+
+        if(valido == 1)
+        {
+            let data = {
+                id_lugar_atencion : '{{ $institucion->id_lugar_atencion }}',
+                nombre : nombre,
+                descripcion : descripcion,
+                minutos_bloque : 15,
+                cantidad_bloques : cantidad_bloques,
+                otros : '',
+                _token: CSRF_TOKEN,
+            }
+
+            let url = "{{ route('adm_cm.procedimiento.registrar') }}";
+
+            $.ajax({
+                url: url,
+                type: "post",
+                data: data,
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    if(data.estado == 1)
+                    {
+                        // cerrar modal
+                        $('#a_procedimiento').modal('hide');
+                        let registros = data.registros;
+                        $('#procedimiento_cm tbody').empty();
+                        $(registros).each(function(i, v) { // indice, valor
+                            $('#procedimiento_cm tbody').append(`
+                            <tr>
+                                <td class="align-items-left text-left">${v.nombre}s</td>
+                                <td class="align-items-left text-left">${v.descripcion}</td>
+                                <td class="align-items-left text-left">${v.cantidad_bloques}</td>
+                                <td class="align-items-left text-left">
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                </td>
+                            </tr>
+                            `);
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar Procedimiento",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar Procedimiento",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+
+        }
+        else
+        {
+            swal({
+                title: "Campos requeridos",
+                text: mensaje,
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+        }
+    }
+
+    function eliminar_procedimiento_cm(id){
+        swal({
+            title: "Eliminar procedimiento",
+            text: "¿Está seguro que desea eliminar el procedimiento?",
+            icon: "warning",
+            buttons: ["Cancelar", "Aceptar"],
+            DangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                confirmar_eliminar_procedimiento(id);
+            }
+        });
+    }
+
+    function confirmar_eliminar_procedimiento(id){
+        let data = {
+            id : id,
+            estado : '0',
+            _token: CSRF_TOKEN,
+        };
+        let url = "{{ route('adm_cm.procedimiento.modificar') }}";
+        $.ajax({
+            url: url,
+            type: "post",
+            data: data,
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data != null) {
+                if(data.estado == 1)
+                {
+                    let registros = data.registros;
+                    $('#procedimiento_cm tbody').empty();
+                    $(registros).each(function(i, v) { // indice, valor
+                        $('#procedimiento_cm tbody').append(`
+                        <tr>
+                            <td class="align-items-left text-left">${v.nombre}s</td>
+                            <td class="align-items-left text-left">${v.descripcion}</td>
+                            <td class="align-items-left text-left">${v.cantidad_bloque}</td>
+                            <td class="align-items-left text-left">
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                            </td>
+                        </tr>
+                        `);
+                    });
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al elimianr procedimiento",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error eliminar procedimiento",
                     icon: "error",
                     buttons: "Aceptar",
                     DangerMode: true,

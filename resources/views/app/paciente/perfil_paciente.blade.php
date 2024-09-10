@@ -472,61 +472,66 @@
                                                         </div>
                                                         <!--Datos profesional-->
                                                         <div class="card-body info_basica_sos collapse show" id="info_basica_sos_1">
-                                                            <div class="form-row">
-                                                                <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                                                                    <label class="font-weight-bolder ml-0 mb-0">Fecha</label>
-                                                                    <div>
-                                                                        @if ($log_datos_medicos[0])
-                                                                            {{ date('d-m-Y H:i:s',strtotime($log_datos_medicos[0]->created_at)) }}
-                                                                        @else
-                                                                            00-00-000 00:00:00
-                                                                        @endif
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                                                                    <label class="font-weight-bolder ml-0 mb-0">Nombre del Profesional</label>
-                                                                    <div>
-                                                                        @if ($log_datos_medicos[0])
-                                                                            {{ $log_datos_medicos[0]->nombre . ' ' . $log_datos_medicos[0]->apellido_uno . ' ' . $log_datos_medicos[0]->apellido_dos }}
-                                                                        @else
-                                                                            -
-                                                                        @endif
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                                                                    <label class="font-weight-bolder ml-0 mb-0">Rut del Profesional</label>
-                                                                    <div>
-                                                                        @if ($log_datos_medicos[0])
-                                                                            {{ $log_datos_medicos[0]->rut }}
-                                                                        @else
-                                                                            -
-                                                                        @endif
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                                                                    <label class="font-weight-bolder ml-0 mb-0">Especialidad</label>
-                                                                    <div>
-                                                                        @if ($log_datos_medicos[0])
-                                                                            {{ $log_datos_medicos[0]->tipo_especialidad }}
-                                                                            @if ($log_datos_medicos[0]->sub_tipo_especialidad)
-                                                                                , {{ $log_datos_medicos[0]->sub_tipo_especialidad}}
+                                                            @if (count($log_datos_medicos)>0)
+                                                                <div class="form-row">
+                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                                                                        <label class="font-weight-bolder ml-0 mb-0">Fecha</label>
+                                                                        <div>
+                                                                            @if ($log_datos_medicos[0])
+                                                                                {{ date('d-m-Y H:i:s',strtotime($log_datos_medicos[0]->created_at)) }}
+                                                                            @else
+                                                                                00-00-000 00:00:00
                                                                             @endif
-                                                                        @else
-                                                                            -
-                                                                        @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                                                                        <label class="font-weight-bolder ml-0 mb-0">Nombre del Profesional</label>
+                                                                        <div>
+                                                                            @if ($log_datos_medicos[0])
+                                                                                {{ $log_datos_medicos[0]->nombre . ' ' . $log_datos_medicos[0]->apellido_uno . ' ' . $log_datos_medicos[0]->apellido_dos }}
+                                                                            @else
+                                                                                -
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                                                                        <label class="font-weight-bolder ml-0 mb-0">Rut del Profesional</label>
+                                                                        <div>
+                                                                            @if ($log_datos_medicos[0])
+                                                                                {{ $log_datos_medicos[0]->rut }}
+                                                                            @else
+                                                                                -
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                                                                        <label class="font-weight-bolder ml-0 mb-0">Especialidad</label>
+                                                                        <div>
+                                                                            @if ($log_datos_medicos[0])
+                                                                                {{ $log_datos_medicos[0]->tipo_especialidad }}
+                                                                                @if ($log_datos_medicos[0]->sub_tipo_especialidad)
+                                                                                    , {{ $log_datos_medicos[0]->sub_tipo_especialidad}}
+                                                                                @endif
+                                                                            @else
+                                                                                -
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group col-sm-12 col-md-6 col-lg-12 col-xl-12">
+                                                                        <label class="font-weight-bolder ml-0 mb-0">Detalle de actualización</label>
+                                                                        <div>
+                                                                            @if ($log_datos_medicos[0])
+                                                                                {!! $log_datos_medicos[0]->datos !!}
+                                                                            @else
+                                                                                -
+                                                                            @endif
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group col-sm-12 col-md-6 col-lg-12 col-xl-12">
-                                                                    <label class="font-weight-bolder ml-0 mb-0">Detalle de actualización</label>
-                                                                    <div>
-                                                                        @if ($log_datos_medicos[0])
-                                                                            {!! $log_datos_medicos[0]->datos !!}
-                                                                        @else
-                                                                            -
-                                                                        @endif
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                            @else
+                                                                {{--  --}}
+                                                            @endif
+
                                                         </div>
                                                         <!--Cierre: Datos profesional-->
                                                     </div>

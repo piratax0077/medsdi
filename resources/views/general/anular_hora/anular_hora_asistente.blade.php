@@ -323,7 +323,7 @@
         console.log('carga_tipos_agendas_anular');
         console.log(tipos_agendas);
         $("#anular_agenda").html('');
-        arrayTipoAgenda = ['', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes'];
+        arrayTipoAgenda = ['', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes','Modular'];
         $.each(tipos_agendas, function (key, value)
         {
             $("#anular_agenda").append('<option value="'+value+'">'+arrayTipoAgenda[value]+'</option>');

@@ -1115,6 +1115,9 @@ class EscritorioAsistente extends Controller
                     case 'E': // 4
                         $texto_alias_examen = 'Consulta Examen';
                         break;
+                    case 'P': // 5
+                        $texto_alias_examen = 'Procedimiento';
+                        break;
                 }
 
                 $hora_medica = new HoraMedica();
@@ -1131,6 +1134,7 @@ class EscritorioAsistente extends Controller
 
                 $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
                 $hora_medica->alias_examen = $texto_alias_examen;
+                $hora_medica->id_procedimiento = $request->reserva_hora_id_procedimiento;
 
                 $hora_medica->descripcion = $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
 
@@ -1249,6 +1253,11 @@ class EscritorioAsistente extends Controller
                 $filtro_tipo_hora_medica = array('E');
                 $texto_alias_examen = 'Consulta Examen';
                 break;
+            case 'P': // 5
+                // $filtro_tipo_hora_medica = array(4);
+                $filtro_tipo_hora_medica = array('P');
+                $texto_alias_examen = 'Procedimiento';
+                break;
         }
 
         # ESTADOS DE HORA DE ATENCION
@@ -1306,6 +1315,7 @@ class EscritorioAsistente extends Controller
 
         $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
         $hora_medica->alias_examen = $texto_alias_examen;
+        $hora_medica->id_procedimiento = $request->id_procedimiento;
 
         $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
         $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
