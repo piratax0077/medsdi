@@ -1,9 +1,5 @@
 <!--****Container Completo****-->
-<style>
-    .select2-container--open{
-        z-index: 9999999 !important;
-    }
-</style>
+
 {{--  MODAL AGREGAR RESUMEN CONTRATO, ROLES, ACCESO --}}
 <div id="registrar_personalaseoymantencion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="registrar_personalaseoymantencion" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -95,7 +91,7 @@
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_giro_mantencion" id="add_empleado_giro_mantencion" disabled>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Nombres</label>
+                                                <label class="floating-label-activo-sm">Nombres (o Empresa)</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_nombre_mantencion" id="add_empleado_nombre_mantencion">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
@@ -457,10 +453,10 @@
         let id_tipo_admin_creador = $('#add_empleado_id_tipo_admin_creador_mantencion').val();
         let tipo_contrato = $('#add_empleado_tipo_contrato_mantencion').val();
 
-
-
         let rut = $('#add_empleado_rut_mantencion').val();
         let nombre = $('#add_empleado_nombre_mantencion').val();
+        let sexo = $('#add_empleado_sexo_mantencion').val();
+        let fecha_nacimiento = $('#add_empleado_fecha_nacimiento_mantencion').val();
 
         let tipo_mantenedor = $('input:radio[name=tipo_mantenedor]:checked').val();
 
@@ -503,13 +499,19 @@
                 valido = 0;
                 mensaje += 'Campo requerido Apellido Materno\n';
             }
+            if(sexo == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Sexo\n';
+            }
+            if(fecha_nacimiento == '')
+            {
+                valido = 0;
+                mensaje += 'Campo requerido Fecha Nacimiento\n';
+            }
         }
 
         tipo_mantenedor = t_m;
-
-
-        let sexo = $('#add_empleado_sexo_mantencion').val();
-        let fecha_nacimiento = $('#add_empleado_fecha_nacimiento_mantencion').val();
         let email = $('#add_empleado_email_mantencion').val();
 
         let fecha_inicio = $('#add_empleado_fecha_inicio_mantencion').val();
@@ -592,16 +594,6 @@
         {
             valido = 0;
             mensaje += 'Campo requerido Nombre\n';
-        }
-        if(apellido_uno == '')
-        {
-            valido = 0;
-            mensaje += 'Campo requerido Apellido Paterno\n';
-        }
-        if(apellido_dos == '')
-        {
-            valido = 0;
-            mensaje += 'Campo requerido Apellido Materno\n';
         }
         if(email == '')
         {
@@ -775,15 +767,17 @@
                 if (data != null) {
                     if(data.estado == 1)
                     {
-                        $('#modal_agregar_personal').modal('hide');
+                        $('#registrar_personalaseoymantencion').modal('hide');
 
                         swal({
                             title: "Ingreso de Personal",
                             text: 'Registro Exitoso.',
                             icon: "success",
                             buttons: "Aceptar",
+                        })
+                        .then((value) => {
+                            location.reload();
                         });
-                        limpiar_formulario();
                     }
                     else
                     {
@@ -886,20 +880,41 @@
         var giroInput = document.getElementById('add_empleado_giro_mantencion');
         var apellidoUnoInput = document.getElementById('add_empleado_apellido_uno_mantencion');
         var apellidoDosInput = document.getElementById('add_empleado_apellido_dos_mantencion');
+        var fechaNacimientoInput = document.getElementById('add_empleado_fecha_nacimiento_mantencion');
+        var sexoInput = document.getElementById('add_empleado_sexo_mantencion');
 
         // Verificar cuál opción de radio está seleccionada
         if (document.getElementById('tipo_mantenedor-empresa').checked) {
+            console.log('Empresa');
             // Si se selecciona "Empresa", habilitar los inputs
             rzInput.removeAttribute('disabled');
+            rzInput.style.display = 'block';
             giroInput.removeAttribute('disabled');
+            giroInput.style.display = 'block';
             apellidoUnoInput.setAttribute('disabled', 'disabled');
+            apellidoUnoInput.style.display = 'none';
             apellidoDosInput.setAttribute('disabled', 'disabled');
+            apellidoDosInput.style.display = 'none';
+            fechaNacimientoInput.setAttribute('disabled', 'disabled');
+            fechaNacimientoInput.style.display = 'none';
+            sexoInput.setAttribute('disabled', 'disabled');
+            sexoInput.style.display = 'none';
         } else {
+            console.log('Persona Natural');
             // Si se selecciona "Persona Natural", deshabilitar los inputs
             rzInput.setAttribute('disabled', 'disabled');
+            rzInput.style.display = 'none';
             giroInput.setAttribute('disabled', 'disabled');
+            giroInput.style.display = 'none';
             apellidoUnoInput.removeAttribute('disabled');
+            apellidoUnoInput.style.display = 'block';
             apellidoDosInput.removeAttribute('disabled');
+            apellidoDosInput.style.display = 'block';
+            fechaNacimientoInput.removeAttribute('disabled');
+            fechaNacimientoInput.style.display = 'block';
+
+            sexoInput.removeAttribute('disabled');
+            sexoInput.style.display = 'block';
         }
     }
 </script>

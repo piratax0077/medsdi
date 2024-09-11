@@ -125,10 +125,16 @@
                                     <input class="form-control form-control-sm" name="edit_telefono2_nuevo_profesional" id="edit_telefono2_nuevo_profesional" type="number" >
                                 </div>
                             </div>
-                            <div class="col-sm-12">
+                            <div class="col-sm-8">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Direcci&oacute;n N&deg; / Calle</label>
                                     <input class="form-control form-control-sm" name="edit_direccion_nuevo_profesional" id="edit_direccion_nuevo_profesional" type="text">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">N&deg; Casa / Depto</label>
+                                    <input class="form-control form-control-sm" name="edit_numero_nuevo_profesional" id="edit_numero_nuevo_profesional" type="text">
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -479,16 +485,16 @@
             valido = 0;
             mensaje += 'Campo requerido ID Profesion\n';
         }
-        if(id_especialidad == '')
-        {
-            valido = 0;
-            mensaje += 'Campo requerido ID Especialidad\n';
-        }
-        if(id_sub_especialidad == '')
-        {
-            valido = 0;
-            mensaje += 'Campo requerido ID Sub Especialidad\n';
-        }
+        // if(id_especialidad == '')
+        // {
+        //     valido = 0;
+        //     mensaje += 'Campo requerido ID Especialidad\n';
+        // }
+        // if(id_sub_especialidad == '')
+        // {
+        //     valido = 0;
+        //     mensaje += 'Campo requerido ID Sub Especialidad\n';
+        // }
         if(rut == '')
         {
             valido = 0;
@@ -701,10 +707,10 @@
                             text: 'Edicion Exitoso.',
                             icon: "success",
                             buttons: "Aceptar",
-                        });
-                        setTimeout(() => {
+                        })
+                        .then((value) => {
                             location.reload();
-                        }, 2000);
+                        });
                     }
                     else
                     {

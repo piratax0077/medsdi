@@ -5,15 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\AdminInstServ;
 use App\Models\AdminMed;
+use App\Models\AdminMantenInst;
 use App\Models\AreasCm;
 use App\Models\Asistente;
 use App\Models\AsistenteLugarAtencion;
 use App\Models\AsistenteTipo;
 use App\Models\Bancos;
 use App\Models\ConvenioInstitucion;
-use App\Models\ContratoAsistenteInstitucion;
-use App\Models\ContratoMantencionInstitucion;
-use App\Models\ContratoProfesionalInstitucion;
+use App\Models\ContratoDependienteProfesional;
 use App\Models\CuentaBancariaInst;
 use App\Models\TipoAreasCm;
 use App\Models\TipoProducto;
@@ -45,6 +44,7 @@ use App\Models\TipoConvenioInstitucion;
 use App\Models\TipoEspecialidad;
 use App\Models\TipoInstitucion;
 use App\Models\TipoProductoConvenios;
+use App\Models\SubTipoEspecialidad;
 use App\Models\User;
 
 use Spatie\Permission\Models\Role;
@@ -254,19 +254,30 @@ class AdministradorCmController extends Controller
         $regiones = Region::all();
         $bancos = Bancos::all();
         $especialidades = Especialidad::all();
-        $profesionales_contratados = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.id','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos','profesionales.rut','contrato_dependiente_profesional.*','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad','sub_tipo_especialidad.nombre as sub_tipo_especialidad')
-            ->leftjoin('profesionales','profesionales.id','=','profesionales_lugares_atencion.id_profesional')
-            ->leftjoin('contrato_dependiente_profesional','contrato_dependiente_profesional.id_profesional','=','profesionales_lugares_atencion.id_profesional')
-            ->leftjoin('especialidades','contrato_dependiente_profesional.id_especialidad','=','especialidades.id')
-            ->leftjoin('tipos_especialidad','contrato_dependiente_profesional.id_tipo_especialidad','=','tipos_especialidad.id')
-            ->leftjoin('sub_tipo_especialidad','contrato_dependiente_profesional.id_subtipo_especialidad','=','sub_tipo_especialidad.id')
+        $profesionales_contratados = ProfesionalesLugaresAtencion::select('profesionales.*','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad','sub_tipo_especialidad.nombre as sub_tipo_especialidad')
+            ->join('profesionales','profesionales_lugares_atencion.id_profesional','=','profesionales.id')
+            ->join('especialidades','profesionales.id_especialidad','=','especialidades.id')
+            ->leftjoin('tipos_especialidad','profesionales.id_tipo_especialidad','=','tipos_especialidad.id')
+            ->leftjoin('sub_tipo_especialidad','profesionales.id_sub_tipo_especialidad','=','sub_tipo_especialidad.id')
             ->where('profesionales_lugares_atencion.id_lugar_atencion',$institucion->id_lugar_atencion)
             ->get();
 
+        foreach($profesionales_contratados as $profesional){
+            $contrato = ContratoDependienteProfesional::where('id_profesional',$profesional->id)->first();
+            if($contrato){
+                $profesional->contrato = $contrato;
+                $especialidad_contrato = Especialidad::find($contrato->id_especialidad);
+                $profesional->especialidad_contrato = $especialidad_contrato;
+                $tipo_especialidad = TipoEspecialidad::find($contrato->id_tipo_especialidad);
+                if($tipo_especialidad) $profesional->tipo_especialidad_contrato = $tipo_especialidad->nombre;
+                $sub_tipo_especialidad = SubTipoEspecialidad::find($contrato->id_sub_tipo_especialidad);
+                if($sub_tipo_especialidad) $profesional->sub_tipo_especialidad_contrato = $sub_tipo_especialidad->nombre;
 
-        $asistentes_contratados = ContratoAsistenteInstitucion::select('contrato_asistente_institucion.*')
-            ->where('contrato_asistente_institucion.id_institucion',$institucion->id)
-            ->get();
+            }else{
+                $profesional->contrato = null;
+            }
+            $profesional->horas_semanales = 45;
+        }
 
         $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
         $lista_administrativo = array();
@@ -299,7 +310,7 @@ class AdministradorCmController extends Controller
                     $filtro_cont = array();
                     $filtro_cont[] = array('id_lugar_atencion', $institucion->id_lugar_atencion);
                     $filtro_cont[] = array('id_empleado', $value->id);
-                    $lista_administrativo[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion')->where($filtro_cont)->first();
+                    $lista_administrativo[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion','tipo_empleado')->where($filtro_cont)->first();
                 }
             }
         }
@@ -316,22 +327,30 @@ class AdministradorCmController extends Controller
                 {
                     /** roles */
                     $usuario = User::where('id', $value->id_admin)->first();
-                    $roles = $usuario->roles()->get();
-                    $array_roles = array();
-                    foreach ($roles as $key_2 => $value_2) {
-                        array_push($array_roles, $value_2->name);
+                    if($usuario){
+                        $roles = $usuario->roles()->get();
+                        $array_roles = array();
+                        foreach ($roles as $key_2 => $value_2) {
+                            array_push($array_roles, $value_2->name);
+                        }
+
+                        if(!empty($array_roles))
+                            $lista_mantencion[$key]->roles = implode(",",$array_roles);
+                        else
+                            $lista_mantencion[$key]->roles = '';
                     }
 
-                    if(!empty($array_roles))
-                        $lista_mantencion[$key]->roles = implode(",",$array_roles);
-                    else
-                        $lista_mantencion[$key]->roles = '';
+                    if($value->empresa == 1){
+                        $lista_mantencion[$key]->empresa = true;
+                    }else{
+                        $lista_mantencion[$key]->empresa = false;
+                    }
 
                     /** info contrato */
                     $filtro_cont = array();
                     $filtro_cont[] = array('id_lugar_atencion', $institucion->id_lugar_atencion);
                     $filtro_cont[] = array('id_empleado', $value->id);
-                    $lista_mantencion[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion')->where($filtro_cont)->first();
+                    $lista_mantencion[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion','tipo_empleado')->where($filtro_cont)->first();
                 }
             }
         }
@@ -3934,30 +3953,37 @@ class AdministradorCmController extends Controller
 
     public function buscar_profesional(Request $req)
     {
-        $datos = array();
-        $profesional = Profesional::where('id', $req->id_profesional)->first();
+        try {
+            return $req;
+            $datos = array();
+            $profesional = Profesional::where('id', $req->id_profesional)->first();
 
-        if($profesional)
-        {
-            $direccion_text = 'No Informada';
-            if($profesional->id_direccion != '' || $profesional->id_direccion!=0)
+            if($profesional)
             {
-                $direccion = Direccion::where('id', $profesional->id_direccion)->first();
-                if($direccion)
-                    $direccion_text = $direccion->direccion.', '.$direccion->ciudad->nombre;
+                $direccion_text = 'No Informada';
+                if($profesional->id_direccion != '' || $profesional->id_direccion!=0)
+                {
+                    $direccion = Direccion::where('id', $profesional->id_direccion)->first();
+                    if($direccion)
+                        $direccion_text = $direccion->direccion.', '.$direccion->ciudad->nombre;
+                }
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registro';
+                $datos['registro'] = $profesional;
+                $datos['direccion'] = $direccion_text;
             }
-            $datos['estado'] = 1;
-            $datos['msj'] = 'registro';
-            $datos['registro'] = $profesional;
-            $datos['direccion'] = $direccion_text;
-        }
-        else
-        {
-            $datos['estado'] = 0;
-            $datos['msj'] = 'sin registro';
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registro';
+            }
+
+            return $datos;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
         }
 
-        return $datos;
     }
 
     public function buscar_asistente(Request $request)
@@ -4115,7 +4141,6 @@ class AdministradorCmController extends Controller
         $administrativo = AdminInstServ::where('id', $req->id)->first();
         // buscamos al profesional relacionado
 
-
         if($administrativo)
         {
             $direccion_text = 'No Informada';
@@ -4145,6 +4170,40 @@ class AdministradorCmController extends Controller
 
     }
 
+    public function buscar_mantencion(Request $req){
+
+            $datos = array();
+            $mantencion = AdminMantenInst::where('id', $req->id)->first();
+
+            // buscamos al profesional relacionado
+
+            if($mantencion)
+            {
+                $direccion_text = 'No Informada';
+                if($mantencion->id_direccion != '' || $mantencion->id_direccion!=0)
+                {
+                    $direccion = Direccion::where('id', $mantencion->id_direccion)->first();
+                    if($direccion)
+                        $direccion_text = $direccion->direccion.', '.$direccion->ciudad->nombre;
+                }
+
+                $mantencion->contrato = ContratoDependiente::where('id_empleado', $mantencion->id)->first();
+
+                $mantencion->direccion = Direccion::with('Ciudad')->find($mantencion->id_direccion);
+
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registro';
+                $datos['registro'] = $mantencion;
+                $datos['direccion'] = $direccion_text;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'sin registro';
+            }
+
+            return $datos;
+    }
 
     public function buscar_paciente_rut(Request $request)
     {
@@ -6035,7 +6094,6 @@ class AdministradorCmController extends Controller
 
     public function registrar_profesional(Request $req){
         try {
-            return $req;
             $institucion = '';
             $tipo_institucion = '1';
             $id_busqueda = Auth::user()->id;
@@ -6123,13 +6181,13 @@ class AdministradorCmController extends Controller
             $nuevo_contrato->telefono = $req->telefono1;
             $nuevo_contrato->telefono_dos = $req->telefono2;
             $nuevo_contrato->direccion = $req->direccion;
-            $nuevo_contrato->id_cargo = $req->cargo;
+            $nuevo_contrato->id_cargo = 1;
             $nuevo_contrato->id_region = $req->region;
             $nuevo_contrato->id_comuna = $req->comuna;
             $nuevo_contrato->id_profesion = $req->profesion;
             $nuevo_contrato->id_especialidad = $req->especialidad;
             $nuevo_contrato->id_sub_tipo_especialidad = $req->sub_especialidad;
-            $nuevo_contrato->dias_atencion = $req->dias_atencion;
+            $nuevo_contrato->dias_laborales = $req->dias_laborales;
             $nuevo_contrato->horario_atencion = $req->horario;
             $nuevo_contrato->pacientes_hora = $req->p_hora;
             $nuevo_contrato->id_banco = $req->banco;

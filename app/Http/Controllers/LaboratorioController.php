@@ -784,7 +784,6 @@ class LaboratorioController extends Controller
     {
         $datos = array();
         $profesional = Profesional::where('id', $id_profesional)->first();
-
         if($profesional)
         {
             $direccion_text = 'No Informada';
@@ -908,17 +907,17 @@ class LaboratorioController extends Controller
             $filtro[] = array('id_profesional', $profesional->id);
             // $filtro[] = array('estado', 2);
             $filtro[] = array('id_lugar_atencion', $LugarAtencion->id);
+
             $profesional->contrato = ContratoDependienteProfesional::where($filtro)->first();
 
             $profesional->direccion = Direccion::with('Ciudad')->find($profesional->id_direccion);
 
-            $profesional->contrato->dias_laborales = json_decode($profesional->contrato->dias_laborales);
 
-
-            $profesional->especialidad = Especialidad::where('id',$profesional['contrato']['id_especialidad'])->first();
-            $profesional->tipo_especialidad = TipoEspecialidad::where('id',$profesional['contrato']['id_tipo_especialidad'])->first();
-            $profesional->sub_tipo_especialidad = SubTipoEspecialidad::where('id',$profesional['contrato']['id_subtipo_especialidad'])->first();
-
+            if($profesional->contrato !== null){
+                $profesional->especialidad = Especialidad::where('id',$profesional['contrato']['id_especialidad'])->first();
+                $profesional->tipo_especialidad = TipoEspecialidad::where('id',$profesional['contrato']['id_tipo_especialidad'])->first();
+                $profesional->sub_tipo_especialidad = SubTipoEspecialidad::where('id',$profesional['contrato']['id_subtipo_especialidad'])->first();
+            }
 
             $datos['estado'] = 1;
             $datos['msj'] = 'registro';

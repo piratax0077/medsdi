@@ -52,6 +52,7 @@
             },
         })
         .done(function(data) {
+            console.log(data);
             if (data != null)
             {
                 if(data.estado == 1)

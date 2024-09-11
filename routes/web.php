@@ -1296,11 +1296,14 @@ Route::group([
 	Route::post('/Profesionales/asociar/nuevo', [App\Http\Controllers\AdministradorCmController::class, 'asociarProfesionalNuevo'])->name('adm_cm.asociar_profesional_nuevo');
 	Route::get('/Profesionales/buscar', [App\Http\Controllers\AdministradorCmController::class, 'buscar_profesional'])->name('adm_cm.profesional_buscar');
     Route::get('/Administrativo/buscar', [App\Http\Controllers\AdministradorCmController::class, 'buscar_administrativo'])->name('adm_cm.administrativo_buscar');
+    Route::get('/Mantencion/buscar', [App\Http\Controllers\AdministradorCmController::class, 'buscar_mantencion'])->name('adm_cm.mantencion_buscar');
     Route::post('/Administrativo/editar', [App\Http\Controllers\ManejoContratoController::class, 'editarAdministrativo'])->name('adm_cm.administrativo_editar');
+
     Route::get('/Profesional/lugar_atencion/horario', [App\Http\Controllers\AdministradorCmController::class, 'mi_horario_lugar_atencion'])->name('adm_cm.prof_horario_lugar_atencion');
 	Route::post('/Personal/registro', [App\Http\Controllers\ManejoContratoController::class, 'registrarPersonal'])->name('adm_cm.registrar_personal');
 	Route::post('/Personal/editar', [App\Http\Controllers\ManejoContratoController::class, 'editarPersonal'])->name('adm_cm.editar_personal');
     Route::post('/Profesional/editar', [App\Http\Controllers\ManejoContratoController::class, 'editarProfesional'])->name('adm_cm.editar_profesional');
+    Route::post('/Mantencion/editar', [App\Http\Controllers\ManejoContratoController::class, 'editarMantencion'])->name('adm_cm.editar_mantencion');
 	Route::post('/Personal/horario/editar', [App\Http\Controllers\ManejoContratoController::class, 'modificarHorario'])->name('adm_cm.personal.horario.editar');
 	Route::get('/profesionales/liquidacion', [App\Http\Controllers\AdministradorCmController::class, 'adm_liquidacion_profesionales'])->name('adm_cm.liquidacion_profesionales');
 
@@ -1314,6 +1317,8 @@ Route::group([
     Route::get('/Personal/Asistente/buscar', [App\Http\Controllers\AdministradorCmController::class, 'buscar_asistente'])->name('adm_cm.asistente_buscar');
     Route::get('/Personal/lugar_atencion/contrato/buscar', [App\Http\Controllers\ManejoContratoController::class, 'verContratoEmpleado'])->name('adm_cm.empleado_contrato_lugar_atencion');
     Route::get('/Personal/lugar_atencion/horario/buscar', [App\Http\Controllers\ManejoContratoController::class, 'verHorarioEmpleado'])->name('adm_cm.empleado_horario_lugar_atencion');
+    Route::get('/Administrativo/lugar_atencion/horario/buscar', [App\Http\Controllers\ManejoContratoController::class, 'verHorarioEmpleadoAdmin'])->name('adm_cm.empleado_admin_horario_lugar_atencion');
+    Route::get('/Mantenimiento/lugar_atencion/horario/buscar', [App\Http\Controllers\ManejoContratoController::class, 'verHorarioEmpleadoMantencion'])->name('adm_cm.empleado_mantencion_horario_lugar_atencion');
     Route::post('/Personal/asistente/modificar/permisos', [App\Http\Controllers\AdministradorCmController::class, 'modificar_rol_asistente'])->name('adm_cm.personal.asistente.actualizar.rol');
 
 	Route::get('/Pacientes', [App\Http\Controllers\AdministradorCmController::class, 'adm_buscar_pacientes'])->name('adm_cm.pacientes');
@@ -1385,7 +1390,7 @@ Route::group([
     Route::post('agregar_cuenta_bancaria_institucion',[App\Http\Controllers\AdministradorCmController::class, 'agregar_cuenta_bancaria_institucion'])->name('adm_cm.agregar_cuenta_bancaria_institucion');
     Route::post('eliminar_cuenta_bancaria_institucion',[App\Http\Controllers\AdministradorCmController::class, 'eliminar_cuenta_bancaria_institucion'])->name('adm_cm.eliminar_cuenta_bancaria_institucion');
 
-    Route::post('registrar_profesional', [App\Http\Controllers\AdministradorCmController::class, 'registrar_profesional'])->name('adm_cm.registrar_profesional');
+    Route::post('registrar_profesional', [App\Http\Controllers\ManejoContratoController::class, 'registrarProfesional'])->name('adm_cm.registrar_profesional');
     Route::post('registrar_asistente', [App\Http\Controllers\AdministradorCmController::class, 'registrar_asistente'])->name('adm_cm.registrar_asistente');
     Route::post('eliminar_asistente', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_asistente'])->name('adm_cm.eliminar_asistente');
     Route::post('registrar_personal_mantencion', [App\Http\Controllers\AdministradorCmController::class, 'registrar_personal_mantencion'])->name('adm_cm.registrar_personal_mantencion');

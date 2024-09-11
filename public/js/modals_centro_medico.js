@@ -37,9 +37,7 @@ function registrar_administrativo() {
     $('#registrar_administrativo_cm').modal('show');
 }
 
-function editar_datos_administrativo() {
-    $('#editar_administrativo_cm').modal('show');
-}
+
 
 function rol_permisos_administrativo() {
     $('#rol_permisos_administrativo_cm').modal('show');
@@ -102,7 +100,7 @@ function editar_proveedor(id) {
         $('#editar_proveedor_cm form').attr('action', '/editarProveedor');
         // agregar method post
         $('#editar_proveedor_cm form').attr('method', 'post');
-        
+
         $('#editar_proveedor_cm').modal('show');
         $('#editar_proveedor_cm #nombre').val(proveedor.nombre);
         $('#editar_proveedor_cm #prov_prod_').val(proveedor.id_tipo_producto);

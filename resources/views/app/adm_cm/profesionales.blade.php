@@ -39,9 +39,10 @@
                             <li class="nav-item">
                                 <a class="btn btn-outline-info btn-sm mr-1 my-1" id="otros_prof-tab" data-toggle="tab" href="#otros_prof" role="tab" aria-controls="otros_prof" aria-selected="false">Otros Profesionales de la salud</a>
                             </li>
+							<!--
                             <li class="nav-item">
                                 <a class="btn btn-outline-info btn-sm mr-1 my-1" id="personal_inst-tab" data-toggle="tab" href="#personal_inst" role="tab" aria-controls="otros_prof" aria-selected="false">Personal Institucional</a>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                 </div>

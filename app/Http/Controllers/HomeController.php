@@ -44,6 +44,7 @@ class HomeController extends Controller
 
         // }
 
+
         // switch ($usuario->roles()->first()->name) {
         switch ($roles_principal->name) {
             case 'Admin':
@@ -103,6 +104,9 @@ class HomeController extends Controller
             case 'AdministradorLaboratorio':
                 return redirect()->route('institucion.home');
                 break;
+			case 'Administrador-SDI':
+				return redirect()->route('administracion.home');
+				break;
             default:
                 return redirect('/Acceso');
                 break;

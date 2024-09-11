@@ -109,7 +109,7 @@
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
                                                 <label class="floating-label-activo-sm">Región</label>
-                                                <select class="form-control form-control-sm" name="add_empleado_region_administrativo" id="add_empleado_region_administrativo" onchange="buscar_ciudad_nuevo_empleado_administrativo();">
+                                                <select class="form-control form-control-sm" name="add_empleado_region_administrativo" id="add_empleado_region_administrativo" onchange="buscar_ciudad_nuevo_empleado_administrativo_();">
                                                     <option value="">Seleccione</option>
                                                     @if($regiones)
                                                         @foreach ($regiones as $reg )
@@ -330,7 +330,7 @@
 
 
     {{-- BUSCAR CIUDAD DE REGISTRAR --}}
-    function buscar_ciudad_nuevo_empleado_administrativo(id_ciudad=0)
+    function buscar_ciudad_nuevo_empleado_administrativo_(id_ciudad=0)
     {
         let region = $('#add_empleado_region_administrativo').val();
         let url = "{{ route('adm_cm.buscar_ciudad_region') }}";

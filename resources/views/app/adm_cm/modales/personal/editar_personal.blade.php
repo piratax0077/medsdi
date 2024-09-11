@@ -310,7 +310,7 @@
                     // data.registro.direccion.ciudad.nombre
 
                     $('#edit_empleado_id_contrato').val(data.registro.contrato.id);
-                    $('#edit_empleado_tipo_contrato').val(data.registro.contrato.tipo_empleado);
+                    $('#edit_empleado_tipo_contrato').val(data.registro.contrato.tipo_contrato);
                     // data.registro.contrato.id_empleado;
                     $('#edit_empleado_rut').val(data.registro.contrato.rut);
                     $('#edit_empleado_nombre').val(data.registro.contrato.nombres);

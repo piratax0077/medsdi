@@ -14,6 +14,7 @@
                         <input type="hidden" name="edit_id_tipo_admin_creador_administrativo" id="edit_id_tipo_admin_creador_administrativo" value="{{ Auth::user()->Roles()->first()->id }}">
                         <input type="hidden" name="edit_clave_ingreso_administrativo" id="edit_clave_ingreso_administrativo" value="{{ rand(11111,99999) }}">
                         <input type="hidden" name="edit_id_administrativo" id="edit_id_administrativo" value="">
+                        <input type="hidden" name="edit_id_contrato_administrativo" id="edit_id_contrato_administrativo" value="">
                      <div class="row">
                         <div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <script>
@@ -54,7 +55,7 @@
                                             <option value="">Seleccione</option>
                                             @if ($lista_tipo_administrativo)
                                                 @foreach ($lista_tipo_administrativo as $item)
-                                                    <option value="{{ $item['id'] }}" data-id="{{ $item['nombres'] }}">{{ $item['nombres'] }}</option>
+                                                    <option value="{{ $item['nombres'] }}" data-id="{{ $item['nombres'] }}">{{ $item['nombres'] }}</option>
                                                 @endforeach
                                             @endif
                                             {{--  asistente tipo  --}}
@@ -466,5 +467,7 @@
                 $(element).val('');
         });
     }
+
+
 
 </script>

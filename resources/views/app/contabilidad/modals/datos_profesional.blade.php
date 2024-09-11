@@ -127,10 +127,16 @@
                                     <input class="form-control form-control-sm" name="telefono2_nuevo_profesional" id="telefono2_nuevo_profesional" type="number" >
                                 </div>
                             </div>
-                            <div class="col-sm-12">
+                            <div class="col-sm-8">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Direcci&oacute;n N&deg; / Calle</label>
                                     <input class="form-control form-control-sm" name="direccion_nuevo_profesional" id="direccion_nuevo_profesional" type="text">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">N&deg; Dpto / Casa</label>
+                                    <input class="form-control form-control-sm" name="n_dpto_nuevo_profesional" id="n_dpto_nuevo_profesional" type="text">
                                 </div>
                             </div>
                             <div class="col-sm-6">

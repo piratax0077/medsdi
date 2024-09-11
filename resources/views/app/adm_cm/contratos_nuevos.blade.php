@@ -1,5 +1,10 @@
 @extends('template.adm_cm.template')
 @section('content')
+<style>
+    .select2-container--open{
+        z-index: 9999999 !important;
+    }
+</style>
 <div class="pcoded-main-container">
     <div class="pcoded-content">
         <div class="page-header">
@@ -94,20 +99,24 @@
                                                         <span>{{ $profesional->sub_tipo_especialidad }}</span>
                                                     </td>
                                                     <td class="align-middle text-center">
-                                                        <span>{{ $profesional->tipo_contrato == 1 ? 'INDEFINIDO' : '' }}</span><br>
-                                                        <span>{{ $profesional->fecha_inicio }}</span>
+                                                        @if($profesional->contrato !== null)
+                                                        <span>{{ $profesional->contrato->tipo_contrato == 1 ? 'INDEFINIDO' : '' }}</span><br>
+                                                        <span>{{ $profesional->contrato->fecha_inicio }}</span>
+                                                        @endif
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto({{ $profesional->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-home"></i></button>
                                                         <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datoscuenta();" data-toggle="tooltip" data-placement="top" title="Depositar"><i class="fas fa-hand-holding-usd"></i></button>
                                                     </td>
                                                     <td class="align-middle text-center">
-                                                        <span>{{ $profesional->horas_semanales }} horas semanales <br> ${{ number_format($profesional->monto_imponible, 0, ",", ".") }}</span>
+                                                        @if($profesional->contrato !== null)
+                                                        <span>{{ $profesional->horas_semanales }} horas semanales <br> ${{ number_format($profesional->contrato->monto_imponible, 0, ",", ".") }}</span>
+                                                        @endif
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         <button type="button" class="btn btn-success btn-sm" onclick="editar_datosprofesionalc({{ $profesional->id_profesional }});">
                                                         <i class="feather icon-edit"></i> Editar</button>
-                                                        <button type="button" class="btn btn-danger btn-sm">
+                                                        <button type="button" class="btn btn-danger btn-sm" >
                                                         <i class="feather icon-x-circle"></i> Desasociar</button>
                                                     </td>
                                                 </tr>
@@ -149,6 +158,7 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-center align-middle">Nombre / Rut</th>
+                                                    <th class="text-center align-middle">Cargo</th>
                                                     <th class="text-center align-middle">Dirección</th>
                                                     <th class="text-center align-middle">Contacto</th>
 													<th class="text-center align-middle">Datos</th>
@@ -164,26 +174,27 @@
                                                             <span><strong>{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}</strong></span><br>
                                                             <span>{{ $administrativo->rut }}</span>
                                                         </td>
+                                                        <td class="align-middle text-center">{{ $administrativo->contrato->tipo_empleado }}</td>
                                                         <td class="align-middle text-center">
                                                             {{ $administrativo->direccion()->first()->direccion }} #{{ $administrativo->direccion()->first()->numero_dir }}, {{ $administrativo->direccion()->first()->ciudad()->first()->nombre }}
                                                         </td>
                                                         <td class="align-middle text-center">
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto('asistente publico',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
+                                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_administrador('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
                                                         </td>
                                                         <td class="align-middle text-center">
                                                             <!--Botón Modal-->
                                                             <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('asistente publico',{{ $administrativo->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm('asistente publico',{{ $administrativo->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
+                                                            <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_administrativo_cm('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
                                                         </td>
                                                         <td class="align-middle text-center">
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos('asistente publico',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
+                                                            <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos_admin('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }},'{{ $administrativo->roles }}');" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
                                                         </td>
                                                         <td class="align-middle text-center">
                                                             <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_administrativo({{ $administrativo->id }});"><i class="feather icon-edit"></i> Editar</button>
-                                                            <button type="button" class="btn btn-danger btn-sm"><i class="feather icon-x-circle"></i> Desasociar</button>
+                                                            <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_asistente({{ $administrativo->id}}, {{ $administrativo->contrato->id }}, '{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}');"><i class="feather icon-x-circle"></i> Desasociar</button>
                                                         </td>
                                                     </tr>
                                                     @endforeach
@@ -225,7 +236,9 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-center align-middle">Nombre / Rut</th>
-                                                    <th class="text-center align-middle">Sucursales</th>
+                                                    <th class="text-center align-middle">Cargo</th>
+                                                    <th class="text-center align-middle">Tipo</th>
+                                                    <th class="text-center align-middle">Dirección</th>
                                                     <th class="text-center align-middle">Contacto</th>
 													<th class="text-center align-middle">Datos</th>
                                                     <th class="text-center align-middle">Rol y permisos</th>
@@ -240,26 +253,28 @@
                                                         <span><strong>{{ $administrativo->nombre.' '.$administrativo->apellido_paterno.' '.$administrativo->apellido_materno }}</strong></span><br>
                                                         <span>{{ $administrativo->rut }}</span>
                                                     </td>
+                                                    <td class="align-middle text-center">{{ $administrativo->contrato->tipo_empleado }}</td>
+                                                    <td class="align-middle text-center">@if($administrativo->empresa) Empresa @else Persona @endif</td>
                                                     <td class="align-middle text-center">
                                                         {{ $administrativo->direccion()->first()->direccion }} #{{ $administrativo->direccion()->first()->numero_dir }}, {{ $administrativo->direccion()->first()->ciudad()->first()->nombre }}
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto('asistente publico',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
+                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_mantenedor('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('asistente publico',{{ $administrativo->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
+                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
                                                         <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm('asistente publico',{{ $administrativo->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
+                                                        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_mantencion_cm('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos('asistente publico',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
+                                                        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
                                                     </td>
                                                     <td class="align-middle text-center">
-                                                        <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_asistente('asistente publico',{{ $administrativo->id }});"><i class="feather icon-edit"></i> Editar</button>
-                                                        <button type="button" class="btn btn-danger btn-sm"><i class="feather icon-x-circle"></i> Desasociar</button>
+                                                        <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});"><i class="feather icon-edit"></i> Editar</button>
+                                                        <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_asistente({{ $administrativo->id}}, {{ $administrativo->contrato->id }}, '{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}');"><i class="feather icon-x-circle"></i> Desasociar</button>
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -295,16 +310,19 @@
 
     @include('app.adm_cm.modales.personal.contacto_personal')
     @include('app.adm_cm.modales.personal.datos_banco')
-    @include('app.adm_cm.modales.personal.horario_personal')
-    @include('app.adm_cm.modales.personal.permisos_rol')
+    @include('app.adm_cm.modales.personal.horario_personal_administrativo')
+    @include('app.adm_cm.modales.personal.horario_personal_mantencion')
 
     @include('app.contabilidad.modals.editar_asistentes')
     @include('app.adm_cm.modales.personal.editar_profesional')
     @include('app.adm_cm.modales.personal.editar_administrativos')
+    @include('app.adm_cm.modales.personal.editar_mantencion')
 
     @include('app.adm_cm.modales.personal.finalizar_personal')
 
     @include('app.adm_cm.modales.personal.registrar_personal_limpieza_mantencion')
+
+    @include('app.adm_cm.modales.personal.permisos_rol_admin')
 
 
     {{-- @include('app.adm_cm.modal_adm.asociar_profesional') --}}
@@ -362,6 +380,7 @@
             type: "get",
         })
         .done(async function(data) {
+            console.log(data);
             if (data != null)
             {
                 if(data.estado == 1)
@@ -386,13 +405,16 @@
                     $('#edit_telefono1_nuevo_profesional').val(data.registro.telefono_uno);
                     $('#edit_telefono2_nuevo_profesional').val(data.registro.telefono_dos);
                     $('#edit_direccion_nuevo_profesional').val(data.direccion);
+                    $('#edit_numero_nuevo_profesional').val(data.registro.direccion.numero_dir);
 
                     // data.registro.direccion.id;
-                    $('#edit_region_nuevo_profesional').val(data.registro.direccion.ciudad.id_region);
+                    // $('#edit_region_nuevo_profesional').val(data.registro.direccion.ciudad.id_region);
+                    console.log(data.registro.direccion.ciudad.id_region);
                     $('#edit_fecha_nacimiento').val(data.registro.fecha_nacimiento);
 
                     console.log(data.registro.direccion.ciudad.id_region);
 
+                    $('#edit_region_nuevo_profesional').val(data.registro.direccion.ciudad.id_region);
                     try {
                             await buscar_ciudad_editar_prof(data.registro.direccion.ciudad.id_region);
                             $('#edit_comuna_nuevo_profesional').val(data.registro.direccion.id_ciudad);
@@ -406,13 +428,11 @@
                     $('#edit_sucursal_nuevo_profesional').val(data.registro.contrato.sucursal);
 
                     console.log(data.registro.contrato.dias_laborales);
-
-                    // Seleccionar los días laborales obtenidos
-                    $('#edit_dias_laborales').val(data.registro.contrato.dias_laborales).trigger('change');
-                    $('#edit_prof_hora_entrada').val(data.registro.contrato.hora_ingreso);
-                    $('#edit_prof_hora_salida').val(data.registro.contrato.hora_salida);
-                    $('#edit_prof_hora_entrada_colacion').val(data.registro.contrato.hora_inicio_colacion);
-                    $('#edit_prof_hora_salida_colacion').val(data.registro.contrato.hora_termino_colacion);
+                    $('#edit_dias_laborales').val(data.registro.contrato.dias_laborales.split(",")).select2();
+                    $('#edit_hora_entrada').val(data.registro.contrato.hora_ingreso);
+                    $('#edit_hora_salida').val(data.registro.contrato.hora_salida);
+                    $('#edit_hora_entrada_colacion').val(data.registro.contrato.hora_inicio_colacion);
+                    $('#edit_hora_salida_colacion').val(data.registro.contrato.hora_termino_colacion);
 
                     $('#edit_prof_id_prof').val(data.registro.id);
 
@@ -500,114 +520,6 @@
         });
     }
 
-    function editar_datos_administrativo(id){
-        $('#modal_editar_personal_administrativo').modal('show');
-        let url = "{{ route('adm_cm.administrativo_buscar') }}";
-        $.ajax({
-            url: url,
-            type: "get",
-            data:{
-                id: id
-            },
-        })
-        .done(async function(data) {
-            console.log(data);
-            if (data != null)
-            {
-                if(data.estado == 1)
-                {
-                    $('#id_contrato_edit').val(data.registro.contrato.id);
-                    $('#edit_tipo_contrato_administrativo').val(data.registro.contrato.tipo_contrato);
-                    $('#edit_id_administrativo').val(data.registro.id);
-                    $('#edit_rut_administrativo').val(data.registro.rut);
-                    $('#edit_nombre_administrativo').val(data.registro.nombres);
-                    $('#edit_apellido_uno_administrativo').val(data.registro.apellido_uno);
-                    $('#edit_apellido_dos_administrativo').val(data.registro.apellido_dos);
-                    $('#edit_sexo_administrativo').val(data.registro.sexo);
-                    $('#edit_fecha_nacimiento_administrativo').val(data.registro.fecha_nac);
-                    $('#edit_email_administrativo').val(data.registro.email);
-                    $('#edit_telefono_administrativo').val(data.registro.telefono);
-                    $('#edit_direccion_administrativo').val(data.direccion);
-                    $('#edit_region_administrativo').val(data.registro.direccion.ciudad.id_region);
-                    $('#edit_ciudad_administrativo').val(data.registro.direccion.ciudad.id);
-                    $('#edit_numero_administrativo').val(data.registro.direccion.numero_dir);
-
-
-                    try {
-                        await buscar_ciudad_editar_admin(data.registro.direccion.ciudad.id_region);
-                        $('#edit_ciudad_administrativo').val(data.registro.direccion.id_ciudad);
-                    } catch (error) {
-                        console.error("Error al actualizar la ciudad:", error);
-                    }
-
-                    $('#edit_fecha_inicio_administrativo').val(data.registro.contrato.fecha_inicio);
-                    $('#edit_check_contrato_indef_administrativo').val(data.registro.contrato.tipo_contrato);
-                    if(data.registro.contrato.tipo_contrato == 1)
-                        $('#edit_check_contrato_indef_administrativo').prop('checked', true);
-                    else
-                        $('#edit_check_contrato_indef_administrativo').prop('checked', false);
-                    contrato_indefinido('edit_check_contrato_indef_administrativo', 'edit_prof_cont_indefinido', 'edit_prof_fecha_termino');
-                    $('#edit_monto_imponible_administrativo').val(data.registro.contrato.monto_imponible);
-
-                    if(data.registro.contrato.locomocion == 1)
-                        $('#edit_check_locomocion_administrativo').prop('checked', true);
-                    else
-                        $('#edit_check_locomocion_administrativo').prop('checked', false);
-
-                    activar_check('edit_check_locomocion_administrativo', 'edit_locomocion_administrativo', 'edit_locomocion_porcentaje_administrativo');
-
-                    if(data.registro.contrato.colacion == 1)
-                        $('#edit_check_colacion_administrativo').prop('checked', true);
-                    else
-                        $('#edit_check_colacion_administrativo').prop('checked', false);
-
-                    activar_check('edit_check_colacion_administrativo', 'edit_colacion_administrativo', 'edit_colacion_porcentaje_administrativo');
-
-                    if(data.registro.contrato.asignacion_familiar == 1)
-                        $('#edit_check_asignacion_familiar_administrativo').prop('checked', true);
-                    else
-                        $('#edit_check_asignacion_familiar_administrativo').prop('checked', false);
-
-                    activar_check('edit_check_asignacion_familiar_administrativo', 'edit_asignacion_familiar_administrativo', 'edit_asignacion_familiar_cantidad_administrativo');
-
-                    if(data.registro.contrato.caja_compensacion == 1)
-                        $('#edit_check_caja_compensacion_administrativo').prop('checked', true);
-                    else
-                        $('#edit_check_caja_compensacion_administrativo').prop('checked', false);
-
-                    activar_check('edit_check_caja_compensacion_administrativo', 'edit_caja_compensacion_administrativo', 'edit_caja_compensacion_porcentaje_administrativo');
-
-                    // data.registro.contrato.otro;
-                    $('#edit_dias_laborales_administrativo').val(data.registro.contrato.dias_laborales.split(",")).select2();
-                    $('#edit_hora_entrada_administrativo').val(data.registro.contrato.hora_ingreso);
-                    $('#edit_hora_salida_administrativo').val(data.registro.contrato.hora_salida);
-                    $('#edit_hora_entrada_colacion_administrativo').val(data.registro.contrato.hora_inicio_colacion);
-                    $('#edit_hora_salida_colacion_administrativo').val(data.registro.contrato.hora_termino_colacion);
-                }
-                else
-                {
-                    swal({
-                        title: "Error",
-                        text: "Error al cargar los datos del administrativo",
-                        icon: "error",
-                        buttons: "Aceptar",
-                        DangerMode: true,
-                    });
-                }
-            }
-            else
-            {
-                swal({
-                    title: "Error",
-                    text: "Error al cargar los datos del administrativo",
-                    icon: "error",
-                    buttons: "Aceptar",
-                    DangerMode: true,
-                });
-            }
-        });
-
-    }
 
     function editar_nuevo_empleado_administrativo(){
         let valido = 1;
@@ -650,8 +562,9 @@
         let hora_entrada_colacion = $('#edit_hora_entrada_colacion_administrativo').val();
         let hora_salida_colacion = $('#edit_hora_salida_colacion_administrativo').val();
 
-        let tipo_contrato = $('#edit_tipo_contrato_administrativo').val();
-        let id_contrato = $('#id_contrato_edit').val();
+        let tipo_empleado = $('#edit_tipo_contrato_administrativo').val();
+        let tipo_contrato = $('#edit_check_contrato_indef_administrativo').val();
+        let id_contrato = $('#edit_id_contrato_administrativo').val();
 
         if(rut == ''){
             valido = 0;
@@ -709,10 +622,10 @@
             valido = 0;
             mensaje += '<li>Debe ingresar la fecha de inicio del contrato del administrativo</li>';
         }
-        if(fecha_termino == '' && tipo_contrato != 1){
-            valido = 0;
-            mensaje += '<li>Debe ingresar la fecha de término del contrato del administrativo</li>';
-        }
+        // if(fecha_termino == '' && tipo_contrato != 1){
+        //     valido = 0;
+        //     mensaje += '<li>Debe ingresar la fecha de término del contrato del administrativo</li>';
+        // }
         if(monto_imponible == ''){
             valido = 0;
             mensaje += '<li>Debe ingresar el monto imponible del administrativo</li>';
@@ -805,8 +718,10 @@
                     hora_entrada_colacion: hora_entrada_colacion,
                     hora_salida_colacion: hora_salida_colacion,
                     id_contrato: id_contrato,
+                    tipo_empleado: tipo_empleado,
                     tipo_contrato: tipo_contrato,
                     id_lugar_atencion: "{{ $institucion->id_lugar_atencion }}",
+                    id_institucion:"{{ $institucion->id }}",
                     _token: "{{ csrf_token() }}",
                 },
             })
@@ -1015,6 +930,7 @@
         let telefono1 = $('#telefono1_nuevo_profesional').val();
         let telefono2 = $('#telefono2_nuevo_profesional').val();
         let direccion = $('#direccion_nuevo_profesional').val();
+        let numero = $('#n_dpto_nuevo_profesional').val();
         let region = $('#region_nuevo_profesional').val();
         let comuna = $('#comuna_nuevo_profesional').val();
         let dias_laborales = $('#dias_laborales').val();
@@ -1204,6 +1120,7 @@
             telefono1: telefono1,
             telefono2: telefono2,
             direccion: direccion,
+            numero: numero,
             region: region,
             comuna: comuna,
             dias_laborales: dias_laborales,
@@ -1270,41 +1187,119 @@
 
     /*-Modals personal-*/
     function contacto(id)
-        {
-            let url = "{{ route('adm_cm.profesional_buscar', ['id_profesional' => '__id__']) }}";
-            url = url.replace('__id__', id);
+    {
+        let url = "{{ route('laboratorio.profesional_buscar', ['id_profesional' => '__id__']) }}";
+        url = url.replace('__id__', id);
 
-            $.ajax({
-                url: url,
-                type: "get",
-            })
-            .done(function(data) {
-                console.log(data);
-                if (data.estado == 1)
-                {
-                    /** encontrado */
-                    $('#contacto_prof_rut').html(data.registro.rut);
-                    $('#contacto_prof_email').html(data.registro.email);
-                    $('#contacto_prof_telefono1').html(data.registro.telefono_uno);
-                    $('#contacto_prof_telefono2').html(data.registro.telefono_dos);
-                    $('#contacto_prof_direccion').html(data.direccion);
-                    $('#contacto_usuario').modal('show');
-                }
-                else
-                {
-                    /** no encontrado */
-                    swal({
-                        title: "Problema al cargar informacion del Profesional.",
-                        icon: "error",
-                    });
-                }
+        $.ajax({
+            url: url,
+            type: "get",
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.estado == 1)
+            {
+                /** encontrado */
+                $('#contacto_prof_rut').html(data.registro.rut);
+                $('#contacto_prof_email').html(data.registro.email);
+                $('#contacto_prof_telefono1').html(data.registro.telefono_uno);
+                $('#contacto_prof_telefono2').html(data.registro.telefono_dos);
+                $('#contacto_prof_direccion').html(data.direccion);
+                $('#contacto_usuario').modal('show');
+            }
+            else
+            {
+                /** no encontrado */
+                swal({
+                    title: "Problema al cargar informacion del Profesional.",
+                    icon: "error",
+                });
+            }
 
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
 
-        }
+    }
+
+    function contacto_administrador(tipo,id)
+    {
+        let url = "{{ route('adm_cm.administrativo_buscar') }}";
+
+        $.ajax({
+            url: url,
+            type: "get",
+            data:{
+                id: id,
+                tipo: tipo,
+            },
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.estado == 1)
+            {
+                /** encontrado */
+                $('#contacto_prof_rut').html(data.registro.rut);
+                $('#contacto_prof_email').html(data.registro.email);
+                $('#contacto_prof_telefono1').html(data.registro.telefono_uno);
+                $('#contacto_prof_telefono2').html(data.registro.telefono_dos);
+                $('#contacto_prof_direccion').html(data.direccion);
+                $('#contacto_usuario').modal('show');
+            }
+            else
+            {
+                /** no encontrado */
+                swal({
+                    title: "Problema al cargar informacion del Administrativo.",
+                    icon: "error",
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+
+    }
+
+    function contacto_mantenedor(tipo,id){
+        let url = "{{ route('adm_cm.mantencion_buscar') }}";
+
+        $.ajax({
+            url: url,
+            type: "get",
+            data:{
+                id: id,
+                tipo: tipo,
+            },
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data.estado == 1)
+            {
+                /** encontrado */
+                $('#contacto_prof_rut').html(data.registro.rut);
+                $('#contacto_prof_email').html(data.registro.email);
+                $('#contacto_prof_telefono1').html(data.registro.telefono_uno);
+                $('#contacto_prof_telefono2').html(data.registro.telefono_dos);
+                $('#contacto_prof_direccion').html(data.direccion);
+                $('#contacto_usuario').modal('show');
+            }
+            else
+            {
+                /** no encontrado */
+                swal({
+                    title: "Problema al cargar informacion del Mantenedor.",
+                    icon: "error",
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
 
     function eliminar_mantenedor(id){
         swal({
@@ -1325,6 +1320,7 @@
 
     function activar_check(check, input_base, input_valor)
     {
+        console.log(check, input_base, input_valor);
         if($('#'+check).prop('checked'))
         {
             $('#'+input_base).val(1);
@@ -1337,6 +1333,146 @@
             $('#'+input_valor).val('N/A');
             $('#'+input_valor).attr('disabled', true);
         }
+    }
+
+    function editar_datos_administrativo(id) {
+        $('#modal_editar_personal_administrativo').modal('show');
+        var url = "{{ route('adm_cm.administrativo_buscar') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                id: id,
+            },
+        })
+        .done(async function(data) {
+            console.log(data);
+            if (data != null) {
+                if (data.estado == 1) {
+                    $('#edit_id_administrativo').val(data.registro.id);
+                    $('#edit_id_contrato_administrativo').val(data.registro.contrato.id);
+                    $('#edit_tipo_contrato_administrativo').val(data.registro.contrato.tipo_empleado);
+                    $('#edit_rut_administrativo').val(data.registro.rut);
+                    $('#edit_nombre_administrativo').val(data.registro.nombres);
+                    $('#edit_apellido_uno_administrativo').val(data.registro.apellido_uno);
+                    $('#edit_apellido_dos_administrativo').val(data.registro.apellido_dos);
+                    $('#edit_sexo_administrativo').val(data.registro.sexo);
+                    $('#edit_fecha_nacimiento_administrativo').val(data.registro.fecha_nac);
+                    $('#edit_email_administrativo').val(data.registro.email);
+                    $('#edit_telefono_administrativo').val(data.registro.telefono_uno);
+                    $('#edit_region_administrativo').val(data.registro.direccion.ciudad.id_region);
+                    buscar_ciudad_editar_admin(data.registro.direccion.ciudad.id);
+                    $('#edit_direccion_administrativo').val(data.direccion);
+                    $('#edit_numero_administrativo').val(data.registro.direccion.numero_dir);
+                    $('#edit_fecha_inicio_administrativo').val(data.registro.contrato.fecha_inicio);
+                    $('#edit_check_contrato_indef_administrativo').val(data.registro.contrato.tipo_contrato);
+                    if(data.registro.contrato.tipo_contrato == 1){
+                        $('#edit_check_contrato_indef_administrativo').prop('checked', true);
+                    }else{
+                        $('#edit_check_contrato_indef_administrativo').prop('checked', false);
+                    }
+
+                    $('#edit_monto_imponible_administrativo').val(data.registro.contrato.monto_imponible);
+                    contrato_indefinido('edit_check_contrato_indef_administrativo', 'edit_fecha_termino_administrativo');
+                    $('#edit_fecha_termino_administrativo').val(data.registro.contrato.fecha_termino);
+
+                    if(data.registro.contrato.locomocion == 1){
+                        $('#edit_check_locomocion_administrativo').prop('checked', true);
+                    }else{
+                        $('#edit_check_locomocion_administrativo').prop('checked', false);
+                    }
+                    activar_check('edit_check_locomocion_administrativo', 'edit_locomocion_administrativo', 'edit_porcentaje_locomocion_administrativo');
+                    $('#edit_locomocion_porcentaje_administrativo').val(data.registro.contrato.locomocion_porcentaje);
+
+                    if(data.registro.contrato.colacion == 1){
+                        $('#edit_check_colacion_administrativo').prop('checked', true);
+                    }else{
+                        $('#edit_check_colacion_administrativo').prop('checked', false);
+                    }
+                    activar_check('edit_check_colacion_administrativo', 'edit_colacion_administrativo', 'edit_porcentaje_colacion_administrativo');
+                    $('#edit_colacion_porcentaje_administrativo').val(data.registro.contrato.colacion_porcentaje);
+
+                    if(data.registro.contrato.asignacion_familiar == 1){
+                        $('#edit_check_asignacion_familiar_administrativo').prop('checked', true);
+                    }else{
+                        $('#edit_check_asignacion_familiar_administrativo').prop('checked', false);
+                    }
+                    activar_check('edit_check_asignacion_familiar_administrativo', 'edit_asignacion_familiar_administrativo', 'edit_cantidad_asignacion_familiar_administrativo');
+                    $('#edit_asignacion_familiar_cantidad_administrativo').val(data.registro.contrato.asignacion_familiar_cantidad);
+
+                    if(data.registro.contrato.caja_compensacion == 1){
+                        $('#edit_check_caja_compensacion_administrativo').prop('checked', true);
+                    }else{
+                        $('#edit_check_caja_compensacion_administrativo').prop('checked', false);
+                    }
+                    activar_check('edit_check_caja_compensacion_administrativo', 'edit_caja_compensacion_administrativo', 'edit_porcentaje_caja_compensacion_administrativo');
+                    $('#edit_caja_compensacion_porcentaje_administrativo').val(data.registro.contrato.caja_compensacion_porcentaje);
+
+                    $('#edit_dias_laborales_administrativo').val(data.registro.contrato.dias_laborales.split(",")).select2();
+                    $('#edit_hora_entrada_administrativo').val(data.registro.contrato.hora_ingreso);
+                    $('#edit_hora_salida_administrativo').val(data.registro.contrato.hora_salida);
+                    $('#edit_hora_entrada_colacion_administrativo').val(data.registro.contrato.hora_inicio_colacion);
+                    $('#edit_hora_salida_colacion_administrativo').val(data.registro.contrato.hora_termino_colacion);
+                }
+            } else {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar los datos del administrativo",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                })
+            }
+        })
+
+    }
+
+    function buscar_ciudad_editar_admin(id_ciudad = 0) {
+        return new Promise((resolve, reject) => {
+            let region = $('#edit_region_administrativo').val();
+            console.log(region);
+            let url = "{{ route('adm_cm.buscar_ciudad_region') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    region: region,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    data = JSON.parse(data);
+
+                    let ciudades = $('#edit_ciudad_administrativo');
+
+                    ciudades.find('option').remove();
+                    ciudades.append('<option value="0">Seleccione</option>');
+                    $(data).each(function(i, v) { // indice, valor
+                        ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                    });
+
+                    if (id_ciudad != 0) {
+                        ciudades.val(id_ciudad);
+                    }
+
+                    resolve(); // Resuelve la promesa cuando se hayan cargado las ciudades
+                } else {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar las ciudades",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                    reject("Error al cargar las ciudades"); // Rechaza la promesa en caso de error
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError);
+                reject(thrownError); // Rechaza la promesa en caso de fallo en la solicitud AJAX
+            });
+        });
     }
 
     function confirmar_eliminar_mantenedor(id){
@@ -1503,7 +1639,6 @@ $.ajax({
 });
 }
 
-
 function regresar_a_busqueda()
 {
 $('#agregar_profesional_btn_buscar_rut').removeAttr('disabled');
@@ -1665,103 +1800,7 @@ $.ajax({
 
 }
 
-function cargar_tabla_asistentes()
-{
-$('#asistentes_personal tbody').html('');
-$('#asistentes_personal').DataTable().clear();
-$('#asistentes_personal').DataTable().destroy();
 
-let url = "{{ route('adm_cm.personal.asistente') }}";
-$.ajax({
-    url: url,
-    type: "GET",
-    data: {},
-})
-.done(function(data) {
-    if (data != null) {
-        if(data.estado == 1)
-        {
-            $.each(data.registro, function (indexInArray, valueOfElement) {
-                html = '';
-                html += '<tr>';
-                html += '    <td class="align-middle text-center">';
-                html += '        <span><strong>'+valueOfElement.nombres+' '+valueOfElement.apellido_uno+' '+valueOfElement.apellido_dos+'</strong></span><br>';
-                html += '        <span>'+valueOfElement.rut+'</span>';
-                html += '    </td>';
-                html += '    <td class="align-middle text-center">';
-                html += '        <span><strong>'+valueOfElement.asistente_tipo.nombre+'</strong></span>';
-                html += '    </td>';
-                html += '    <td class="align-middle text-center">';
-                html += '        '+valueOfElement.direccion+' #'+valueOfElement.numero_dir+', '+valueOfElement.ciudad+'';
-                html += '    </td>';
-                html += '    <td class="align-middle text-center">';
-                html += '        <!--Botón Modal-->';
-                html += '        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto(\'asistente publico\','+valueOfElement.id+');" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>';
-                html += '    </td>';
-                html += '    <td class="align-middle text-center">';
-                html += '        <!--Botón Modal-->';
-                html += '        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos(\'asistente publico\', '+valueOfElement.id_usuario+');" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>';
-                html += '        <!--Botón Modal-->';
-                html += '        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm(\''+valueOfElement.asistente_tipo.nombre+'\','+valueOfElement.id+', '+valueOfElement.institucion.id_lugar_atencion+');" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>';
-                html += '    </td>';
-                html += '    <td class="align-middle text-center">';
-                html += '        <!--Botón Modal-->';
-                html += '        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos('+valueOfElement.asistente_tipo.id+', '+valueOfElement.id_usuario+', \''+valueOfElement.roles+'\');" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>';
-                html += '    </td>';
-                html += '    <td class="align-middle text-center">';
-                html += '        <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_asistente('+valueOfElement.id+');"><i class="feather icon-edit"></i> Editar</button>';
-                html += '        <button type="button" class="btn btn-danger btn-sm"><i class="feather icon-x-circle"></i> Desasociar</button>';
-                html += '    </td>';
-                html += '</tr>';
-
-                $('#asistentes_personal tbody').append(html);
-
-            });
-
-            $('#asistentes_personal').DataTable().destroy();
-            $('#asistentes_personal').DataTable({
-                responsive: true,
-            });
-        }
-        else
-        {
-            var mensaje = '';
-            if(data.error)
-            {
-                $.each(data.error, function (indexInArray, valueOfElement)
-                {
-                    mensaje += valueOfElement+'\n';
-                });
-            }
-            else
-            {
-                mensaje += 'Intente nuevamente.';
-            }
-
-            swal({
-                title: "Carga de Personal Asistentes",
-                text: mensaje,
-                icon: "error",
-                buttons: "Aceptar",
-                DangerMode: true,
-            });
-        }
-    }
-    else
-    {
-        swal({
-            title: "Error",
-            text: "Error al cargar ingresar personal",
-            icon: "error",
-            buttons: "Aceptar",
-            DangerMode: true,
-        });
-    }
-})
-.fail(function(jqXHR, ajaxOptions, thrownError) {
-    console.log(jqXHR, ajaxOptions, thrownError)
-});
-}
 
 function registrar_limpieza_mantencion(){
     // abrir modal
@@ -1770,6 +1809,7 @@ function registrar_limpieza_mantencion(){
 }
 
 </script>
+
 
 @endsection
 

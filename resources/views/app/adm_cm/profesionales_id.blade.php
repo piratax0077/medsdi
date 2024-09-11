@@ -1,12 +1,5 @@
 @extends('template.adm_cm.template')
 @section('content')
-
-<!--****Container Completo****-->
-<style>
-    .select2-container--open{
-        z-index: 9999999 !important;
-    }
-</style>
 <div class="pcoded-main-container">
     <div class="pcoded-content">
         <div class="page-header">

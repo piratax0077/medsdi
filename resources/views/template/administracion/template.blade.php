@@ -46,7 +46,7 @@
     </footer>
 
     <script>
-        guardar_permiso(id, nombre) {
+        function guardar_permiso(id, nombre) {
 
             let id_permiso = id;
             if ($('#' + nombre).prop('checked')) {
