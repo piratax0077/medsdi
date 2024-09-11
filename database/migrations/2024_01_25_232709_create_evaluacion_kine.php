@@ -190,7 +190,7 @@ class CreateEvaluacionKine extends Migration
             $table->string('obs_est_emg')->nullable();
             $table->integer('ecn')->nullable();
             $table->string('obs_ecn')->nullable();
-            $table->string('emg_grupo_es')->nullable();
+            // $table->string('emg_grupo_es')->nullable();
             $table->string('eval_est_mmgral')->nullable();
             $table->string('otro')->nullable();
             $table->string('otro1')->nullable();

@@ -74,6 +74,7 @@ use App\Models\FichaPediatriaGeneralTipo;
 use App\Models\Invitacion;
 use App\Models\PacienteHistoricoDatosMedicos;
 use App\Models\PacientesDependientes;
+use App\Models\ProcedimientosCentroLugarAtencionProfesional;
 use App\Models\ProfesionalHorariosBloqueo;
 use App\Models\TipoBono;
 use DateTime;
@@ -1151,6 +1152,12 @@ class EscritorioProfesional extends Controller
             return 'fail';
         }
         //$asistente = $asistenteLugar->Asistentes()->first();
+        if($request->estado == 3)
+        {
+            /** liberar horario */
+            ProfesionalHorario::where('id_profesional', $profesional->id)->where('id_lugar_atencion', $request->id_lugar_atencion )->delete();
+            /** liberar asistente */
+        }
         return 'ok';
     }
 
@@ -1764,7 +1771,11 @@ class EscritorioProfesional extends Controller
         //$lugares = $profesional->LugaresAtencion()->get();
         $region = Region::all();
 
-        return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region]);
+        return view('app.profesional.mis_lugares_atencion')->with([
+            'lugares' => $lugares,
+            'region' => $region,
+            'id_profesional' => $profesional->id,
+        ]);
     }
 
     public function eliminar_valor_lugar_atencion(Request $request)
@@ -1785,7 +1796,11 @@ class EscritorioProfesional extends Controller
     {
 
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        $horario = ProfesionalHorario::where('id_profesional', $profesional->id)->where('id_lugar_atencion', $request->lugares_atencion)->where('tipo_agenda', 1)->get();
+
+        /** tipos de agendas del profesional */
+        $tipo_agendas_temp = ProfesionalHorario::select('tipo_agenda')->where('id_lugar_atencion', $request->lugares_atencion)->where('id_profesional', $profesional->id)->orderBy('tipo_agenda')->groupBy('tipo_agenda')->first();
+
+        $horario = ProfesionalHorario::where('id_profesional', $profesional->id)->where('id_lugar_atencion', $request->lugares_atencion)->where('tipo_agenda', $tipo_agendas_temp->tipo_agenda)->get();
         $horas_medicas = HoraMedica::where('id_profesional', $profesional->id)
                                     ->whereIn('id_estado',[1,2,4,5,6,7,8])
                                     ->with(['Paciente'=> function($query){
@@ -1803,9 +1818,16 @@ class EscritorioProfesional extends Controller
         $lugarAtencion = LugarAtencion::find($request->lugares_atencion);
 
 
-
         if (count($horario) == 0) {
-            return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region, 'mensaje' => 'Para abrir Agenda debe ingresar horario de atención en el botón correspondiente']);
+            return view('app.profesional.mis_lugares_atencion')->with(
+                [
+                    'id_profesional' => $profesional->id,
+                    'profesional' => $profesional,
+                    'lugares' => $lugares,
+                    'region' => $region,
+                    'mensaje' => 'Para abrir Agenda debe ingresar horario de atención en el botón correspondiente'
+                ]
+            );
         }
 
         // dd($horario);
@@ -1844,11 +1866,17 @@ class EscritorioProfesional extends Controller
 
 
         if (!isset($horario)) {
-            return view('app.profesional.mis_lugares_atencion')->with(['lugares' => $lugares, 'region' => $region, 'mensaje' => 'Para abrir Agenda debe ingresar horario de atención en el botón correspondiente']);
+            return view('app.profesional.mis_lugares_atencion')->with([
+                'id_profesional' => $profesional->id,
+                'profesional' => $profesional,
+                'lugares' => $lugares,
+                'region' => $region,
+                'mensaje' => 'Para abrir Agenda debe ingresar horario de atención en el botón correspondiente',
+            ]);
         }
-        $tipo_agendas = ProfesionalHorario::select('tipo_agenda')->where('id_profesional', $profesional->id)->groupBy('tipo_agenda')->pluck('tipo_agenda')->toArray();
+        $tipo_agendas = ProfesionalHorario::select('tipo_agenda')->where('id_lugar_atencion', $request->lugares_atencion)->where('id_profesional', $profesional->id)->groupBy('tipo_agenda')->pluck('tipo_agenda')->toArray();
 
-        $arrayTipoAgenda = array('', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes');
+        $arrayTipoAgenda = array('', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes', 'Laboratorio');
         $listaTipoAgendaProf = array();
         foreach ($tipo_agendas as $keyTA => $valueTA) {
             array_push($listaTipoAgendaProf, array('id' => $valueTA, 'texto' => $arrayTipoAgenda[$valueTA]));
@@ -1875,10 +1903,12 @@ class EscritorioProfesional extends Controller
                 'lugar_atencion_nombre' => $lugarAtencion->nombre,
                 'reg_confirmacion_hora' => $reg_confirmacion_hora,
                 'profesional' => $profesional,
+                'id_profesional ' => $profesional->id,
                 'tipo_agendas' => $tipo_agendas,
                 'listaTipoAgendaProf' => $listaTipoAgendaProf,
                 'bloque_horario' => $bloque_horario,
                 'tipo_bonos' => $tipo_bonos,
+                'tipo_agenda_activa' => $tipo_agendas_temp->tipo_agenda,
             ]
 
         );
@@ -2312,22 +2342,22 @@ class EscritorioProfesional extends Controller
 
         if($request->tipo_hora_medica == 'T')
         {
-            $apertura = new DateTime($hora_medica->hora_inicio);
-            $cierre = new DateTime($hora_medica->hora_termino);
+            // $apertura = new DateTime($hora_medica->hora_inicio);
+            // $cierre = new DateTime($hora_medica->hora_termino);
 
-            $tiempo = $apertura->diff($cierre);
+            // $tiempo = $apertura->diff($cierre);
 
-            $request_meeting = new Request(array(
-                'id_hora_atencion' => $hora_medica->id,
-                'hora_atencion' => $hora_medica->fecha_consulta.'T'.$hora_medica->hora_inicio,
-                'id_profesional' => $profesional->id,
-                // 'profesional_correo' => $profesional->email,
-                'profesional_correo' => 'johan.e.davilap@gmail.com',
-                'id_paciente' => $paciente->id,
-                'paciente_nombre' => $paciente->nombres . " " . $paciente->apellido_uno,
-                'tiempo_consulta' =>$tiempo->format('%i')
-            ));
-            $meeting = ZoomManagerController::crearMeeting($request_meeting);
+            // $request_meeting = new Request(array(
+            //     'id_hora_atencion' => $hora_medica->id,
+            //     'hora_atencion' => $hora_medica->fecha_consulta.'T'.$hora_medica->hora_inicio,
+            //     'id_profesional' => $profesional->id,
+            //     // 'profesional_correo' => $profesional->email,
+            //     'profesional_correo' => 'johan.e.davilap@gmail.com',
+            //     'id_paciente' => $paciente->id,
+            //     'paciente_nombre' => $paciente->nombres . " " . $paciente->apellido_uno,
+            //     'tiempo_consulta' =>$tiempo->format('%i')
+            // ));
+            // $meeting = ZoomManagerController::crearMeeting($request_meeting);
         }
 
         $details = [
@@ -5114,5 +5144,36 @@ class EscritorioProfesional extends Controller
             //throw $th;
             return $e->getMessage();
         }
+     }
+
+     public function mis_procedimientos_lugar_atencion(Request $request)
+     {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+
+        if($valido)
+        {
+            $datos = ProcedimientosCentroLugarAtencionProfesionalController::verRegistros(
+                '',
+                '',
+                $request->id_lugar_atencion,
+                $request->id_profesional,
+                '',
+                '',
+                '',
+                '',
+                '',
+                $request->estado );
+
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
      }
 }

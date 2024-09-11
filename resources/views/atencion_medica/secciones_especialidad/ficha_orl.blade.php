@@ -1,3 +1,18 @@
+{{-- @if ($info_video) --}}
+
+    {{-- <input type="hidden" name="meeting_number" id="meeting_number" value="{{ $info_video->id_call}}"> --}}
+    {{-- <input type="hidden" name="display_name" id="display_name" value="{{ $profesional->nombre.' '.$profesional->apellido_un }}"> --}}
+    {{-- <input type="hidden" name="meeting_pwd" id="meeting_pwd" value="{{ $info_video->pass_call}}"> --}}
+    {{-- <input type="hidden" name="meeting_role" id="meeting_role" value="0"> --}}
+    {{-- <input type="hidden" name="meeting_email" id="meeting_email" value="{{ $profesional->email }}"> --}}
+    {{-- <input type="hidden" name="meeting_lang" id="meeting_lang" value="es-ES"> --}}
+    {{-- <input type="hidden" name="meeting_china" id="meeting_china" value="0"> --}}
+
+    {{-- <button type="button" class="btn btn-success" onclick="abrir_zoom();">Inicio de LLamada</button> --}}
+    {{-- <button type="button" class="btn btn-success" id="startCallButton">Inicio de LLamada</button>
+    <iframe id="zoomFrame" style="    background: #000;height: 200px;"></iframe> --}}
+
+{{-- @endif --}}
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">

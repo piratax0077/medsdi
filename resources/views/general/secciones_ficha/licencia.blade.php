@@ -678,7 +678,11 @@
     function cargar_licencias()
     {
         /** CARGAR ULTIMA LICNCIA */
-        $('#mensaje_licencia').html('La ultima licencia del paciente es del 2023-07-01 al 2023-07-09');
+        @if ( !empty($ultima_licencia) )
+            $('#mensaje_licencia').html('La ultima licencia del paciente es del {{ $ultima_licencia->fecha_inicio }} al {{ $ultima_licencia->fecha_termino }}');
+        @else
+            $('#mensaje_licencia').html('No se presenta Licencia previa.');
+        @endif
         $('#mensaje_licencia').show();
         setTimeout(function(){
             $('#mensaje_licencia').hide();

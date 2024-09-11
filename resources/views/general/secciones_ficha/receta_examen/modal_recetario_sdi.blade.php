@@ -573,19 +573,22 @@
                                         <div class="col-sm-6 col-md-6">
                                             <div class="form-group fill">
                                                 <label class="floating-label">Tipo de control</label>
-                                                <select class="form-control form-control-sm" id="" name="">
-                                                    <option>Seleccione una opción</option>
-                                                    <option value="S" data-select2-id="0">Seleccione una opción</option>
-                                                    <option value="1"> Control Psicotrópicos</option>
-                                                    <option value="2"> Control Estupefacientes</option>
-                                                    <option value="3"> Receta cheque </option>
-                                                    <option value="4"> Receta Retenida Simple</option>
-                                                    <option value="5"> Receta Retenida C/Codeína</option>
+                                                <select class="form-control form-control-sm" id="tipo_control_receta_propia" name="tipo_control_receta_propia" onchange="buscar_cantidad_receta_propia();">
+                                                    <option value="0">Seleccione una opción</option>
+                                                    @foreach ($receta_control as $tipo_receta_control)
+                                                        <option value="{{ $tipo_receta_control->tipo_control }}">{{ $tipo_receta_control->descripcion }}</option>
+                                                    @endforeach
+                                                    {{-- <option value="S" data-select2-id="0">Seleccione una opción</option> --}}
+                                                    {{-- <option value="1"> Control Psicotrópicos</option> --}}
+                                                    {{-- <option value="2"> Control Estupefacientes</option> --}}
+                                                    {{-- <option value="3"> Receta cheque </option> --}}
+                                                    {{-- <option value="4"> Receta Retenida Simple</option> --}}
+                                                    {{-- <option value="5"> Receta Retenida C/Codeína</option> --}}
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-sm-6 col-md-6">
-                                            <input class="form-control form-control-sm" type="text" placeholder="Nº de recetas">
+                                            <input class="form-control form-control-sm" type="text" placeholder="Nº de recetas" name="receta_propia_cantidad" id="receta_propia_cantidad">
                                         </div>
                                         <div class="col-sm-12 col-md-12">
                                             <h6 class="text-c-blue mb-3">Recetas totales</h6>
@@ -593,18 +596,21 @@
                                         <div class="col-sm-6">
                                             <div class="form-group fill">
                                                 <label class="floating-label">Tipo de control</label>
-                                                <select class="form-control form-control-sm" id="" name="">
-                                                    <option value="S" data-select2-id="0">Seleccione una opción</option>
-                                                    <option value="1"> Control Psicotrópicos</option>
-                                                    <option value="2"> Control Estupefacientes</option>
-                                                    <option value="3"> Receta cheque </option>
-                                                    <option value="4"> Receta Retenida Simple</option>
-                                                    <option value="5"> Receta Retenida C/Codeína</option>
+                                                <select class="form-control form-control-sm" id="tipo_control_recetas_totales" name="tipo_control_recetas_totales" onchange="buscar_cantidad_receta_totales();">
+                                                    <option value="0">Seleccione una opción</option>
+                                                    @foreach ($receta_control as $tipo_receta_control)
+                                                        <option value="{{ $tipo_receta_control->tipo_control }}">{{ $tipo_receta_control->descripcion }}</option>
+                                                    @endforeach
+                                                    {{-- <option value="1"> Control Psicotrópicos</option> --}}
+                                                    {{-- <option value="2"> Control Estupefacientes</option> --}}
+                                                    {{-- <option value="3"> Receta cheque </option> --}}
+                                                    {{-- <option value="4"> Receta Retenida Simple</option> --}}
+                                                    {{-- <option value="5"> Receta Retenida C/Codeína</option> --}}
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-sm-6 col-md-6">
-                                            <input class="form-control form-control-sm" type="text" placeholder="Nº de recetas">
+                                            <input class="form-control form-control-sm" type="text" placeholder="Nº de recetas" name="receta_totales_cantidad" id="receta_totales_cantidad">
                                         </div>
                                     </div>
                                 </div>
@@ -2026,6 +2032,81 @@
         var unid = $('#'+unidad).val();
         $('#'+input).val(valor_text+' '+unid);
         $('#'+input+'_label').html(valor_text+' '+unid);
+    }
+
+    function buscar_cantidad_receta_propia()
+    {
+        var id_profesional = $('#id_profesional_fc').val();
+        var id_paciente = $('#id_paciente_fc').val();
+        var id_tipo_control = $('#tipo_control_receta_propia').val();
+
+        $('#receta_propia_cantidad').val(0);
+
+        if(id_tipo_control != 0)
+        {
+            let url = "{{ route('profesional.receta.paciente.cantidad') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    id_profesional: id_profesional,
+                    id_paciente: id_paciente,
+                    control: id_tipo_control,
+                },
+            })
+            .done(function(data) {
+                console.log(data)
+                if(data.estado == 1)
+                {
+                    $('#receta_propia_cantidad').val(data.cantidad);
+                }
+                else
+                {
+                    $('#receta_propia_cantidad').val(0);
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
+    }
+
+    function buscar_cantidad_receta_totales()
+    {
+        var id_paciente = $('#id_paciente_fc').val();
+        var id_tipo_control = $('#tipo_control_recetas_totales').val();
+
+        $('#receta_totales_cantidad').val(0);
+
+        if(id_tipo_control != 0)
+        {
+
+            let url = "{{ route('profesional.receta.paciente.cantidad') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    id_paciente: id_paciente,
+                    control: id_tipo_control,
+                },
+            })
+            .done(function(data) {
+                console.log(data)
+                if(data.estado == 1)
+                {
+                    $('#receta_totales_cantidad').val(data.cantidad);
+                }
+                else
+                {
+                    $('#receta_totales_cantidad').val(0);
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+        }
     }
 
 </script>

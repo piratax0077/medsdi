@@ -13,13 +13,20 @@
             @case(2)
 
                 @break
+
             @case(3)
                 {{-- <button class="btn btn-tipo-agenda btn-agenda-tel btn-agenda-3 shadow-sm"  type="button" onclick="cargarAgendaProfesional(3, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-12"></i> <br>Agenda Telemedicina</button> --}}
                 <button class="btn btn-tipo-agenda btn-agenda-tel btn-agenda-3 shadow-sm"  type="button" onclick="cargarAgendaProfesional(3, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-12"></i> Agenda Telemedicina</button>
                 @break
+
             @case(4)
                 <button class="btn btn-tipo-agenda btn-agenda-exa btn-agenda-4 shadow-sm"  type="button" onclick="cargarAgendaProfesional(4, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-12"></i> Agenda Examenes</button>
                 @break
+
+            @case(5)
+                <button class="btn btn-tipo-agenda btn-agenda-exa btn-agenda-5 shadow-sm"  type="button" onclick="cargarAgendaProfesional(5, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-12"></i> Agenda Modular</button>
+                @break
+
             @default
 
         @endswitch
@@ -36,7 +43,11 @@
         {
             if($('#agenda').length > 0)
             {
-                cargarAgendaProfesional(1, '{{ $lugar_atencion }}', '{{ $profesional->id}}');
+                @if(!empty($tipo_agenda_activa))
+                    cargarAgendaProfesional('{{ $tipo_agenda_activa }}', '{{ $lugar_atencion }}', '{{ $profesional->id}}');
+                @else
+                    cargarAgendaProfesional(1, '{{ $lugar_atencion }}', '{{ $profesional->id}}');
+                @endif
             }
         });
 
@@ -60,6 +71,9 @@
                     break;
                 case 4:
                     $('#titulo_tipo_agenda').html('AGENDA DE EXAMEN');
+                    break;
+                case 5:
+                    $('#titulo_tipo_agenda').html('AGENDA DE MODULAR');
                     break;
                 default:
                     $('#titulo_tipo_agenda').html('AGENDA DE CONSULTA');

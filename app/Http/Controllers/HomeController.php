@@ -62,6 +62,9 @@ class HomeController extends Controller
             case 'AsistenteJefaCaja': // asistente jefe de caja (institucion)
                 return redirect()->route('asistentejcm.home');
                 break;
+            case 'AsistenteLaboratorio': // asistente de laboratorio (institucion)
+                return redirect()->route('asistente.lab.home');
+                break;
             case 'AsistenteCaja': // asistente de caja (institucion)
                 return redirect()->route('asistentecm.home');
                 break;

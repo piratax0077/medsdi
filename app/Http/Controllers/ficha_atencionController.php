@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Funciones;
+
+use App\Models\AntConfidenciales;
+use App\Models\AntecedentesCirugias;
 use App\Models\Antecedente;
 use App\Models\AntecedenteAlergiaPaciente;
 use App\Models\AntecedenteEnferCronica;
@@ -1620,15 +1623,21 @@ class ficha_atencionController extends Controller
 
         $licencia = Licencia::where('id_ficha_atencion', $id_ficha_atencion)->first();
 
+        /** ULTIMA LICENCIA DEL PACIENTE */
+        $filtro_ultima_lic = array();
+        $filtro_ultima_lic[] = array('id_ficha_atencion','<>', $id_ficha_atencion);
+        $filtro_ultima_lic[] = array('id_paciente', $paciente->id);
+        $ultima_licencia = Licencia::where($filtro_ultima_lic)->first();
+
         $info_video = '';
-        if($hora->tipo_hora_medica == 'T')
-        {
-            $filtro_v = array();
-            $filtro_v[] = array('id_hora_atencion', $hora->id);
-            $filtro_v[] = array('id_profesional', $hora->id_profesional);
-            $filtro_v[] = array('id_paciente', $hora->id_paciente);
-            $info_video = VideoConsultaInfo::where($filtro_v)->first();
-        }
+        // if($hora->tipo_hora_medica == 'T')
+        // {
+        //     $filtro_v = array();
+        //     $filtro_v[] = array('id_hora_atencion', $hora->id);
+        //     $filtro_v[] = array('id_profesional', $hora->id_profesional);
+        //     $filtro_v[] = array('id_paciente', $hora->id_paciente);
+        //     $info_video = VideoConsultaInfo::where($filtro_v)->first();
+        // }
 
         /** INFO ACOMPAÑANTE */
         $responsables = '';
@@ -1732,6 +1741,7 @@ class ficha_atencionController extends Controller
                 'contacto_direccion'=> $contacto_direccion,
                 'contacto_ciudad' => $contacto_ciudad,*/
                 'licencia' => $licencia,
+                'ultima_licencia' => $ultima_licencia,
 
                 /** CONSULTA VIDEO LLAMADA */
                 'info_video' => $info_video,
@@ -1744,6 +1754,201 @@ class ficha_atencionController extends Controller
         );
     }
 
+	public function index_sdi(Request $request)
+    {
+        $hora = HoraMedica::where('id', $request->id_hora_realizar)->first();
+        $paciente = Paciente::where('id', $hora->id_paciente)->first();
+		
+		// FICHAS PREVIAS Y FICHA ACTUAL(ACTIVA O NUEVA)
+        $fichas = '';
+        $id_ficha_atencion = '';
+        $fichaAtencion = '';
+        $result_fichas = static::cargarInfoFichaBase($hora);
+
+        if($result_fichas->estado == 1)
+        {
+            // $fichas = (object)$result_fichas->ficha_previas;
+            $id_ficha_atencion = $result_fichas->id_ficha_actual_nueva;
+            $fichaAtencion = (object)$result_fichas->ficha_actual_nueva;
+        }
+
+        $pacienteDpendiente = PacientesDependientes::where('id_paciente', $paciente->id)->get()->first();
+        $responsable = '';
+        if($pacienteDpendiente)
+        {
+            $responsable = Paciente::find($pacienteDpendiente->id_responsable);
+        }
+
+        $direccion_paciente = Direccion::where('id',$paciente->id_direccion)->first();
+        $direccion_id_ciudad_paciente = '';
+        $direccion_txt_ciudad_paciente = '';
+        $direccion_region_paciente = '';
+        $direccion_id_region_paciente = '';
+        $direccion_txt_region_paciente = '';
+        $regiones = Region::all();
+        $ciudades = Ciudad::all();
+
+        if($direccion_paciente)
+        {
+            $direccion_id_ciudad_paciente = $direccion_paciente->id_ciudad;
+            $direccion_region_paciente = Ciudad::select('nombre','id_region')->where('id',$direccion_id_ciudad_paciente)->first();
+            if($direccion_region_paciente)
+            {
+                $direccion_txt_ciudad_paciente = $direccion_region_paciente->nombre;
+
+                $ciudades = Ciudad::where('id_region', $direccion_region_paciente->id_region)->get();
+                $direccion_id_region_paciente = $direccion_region_paciente->id_region;
+
+                $direccion_txt_region_paciente_temp = Region::find($direccion_id_region_paciente);
+                $direccion_txt_region_paciente = $direccion_txt_region_paciente_temp->nombre;
+            }
+        }
+        $user = Auth::user()->id;
+        $profesional = Profesional::where('id_usuario', $user)->first();
+
+        // LUGAR DE ATENCION
+        $lugar_atencion = LugarAtencion::where('id',$request->lugar_atencion_id)->first();
+
+        $prevision = Prevision::all();
+        $medicamento = Producto::all();
+        $tipoExamen = TipoExamen::all();
+        $control_peso = ControlObesidad::where('id_paciente', $paciente->id)->get();
+        $hipertension = Hipertension::where('id_paciente', $paciente->id)->get();
+        $diabetes = Diabete::where('id_paciente', $paciente->id)->get();
+        $direccion = $paciente->Direccion()->first();
+        if (!$direccion == null)
+        {
+            $ciudad = $direccion->Ciudad()->first();
+        }
+        else
+        {
+            $direccion = null;
+            $ciudad = null;
+        }
+
+        $receta_control = RecetaControl::orderBy('Descripcion')->get();
+
+        $grupo_sanguineo = GrupoSanguineo::all();
+
+        $info_video = '';
+        // if($hora->tipo_hora_medica == 'T')
+        // {
+        //     $filtro_v = array();
+        //     $filtro_v[] = array('id_hora_atencion', $hora->id);
+        //     $filtro_v[] = array('id_profesional', $hora->id_profesional);
+        //     $filtro_v[] = array('id_paciente', $hora->id_paciente);
+        //     $info_video = VideoConsultaInfo::where($filtro_v)->first();
+        // }
+
+        /** INFO ACOMPAÑANTE */
+        $responsables = '';
+        $acompanantes = '';
+        if(\Carbon\Carbon::parse($paciente->fecha_nac)->age < 18)
+        {
+            if($hora->acomp_representante == 1)
+            {
+                $filtro_list_PD = array();
+                $filtro_list_PD[] = array('estado', 1);
+                $filtro_list_PD[] = array('id_paciente', $paciente->id);
+                $responsables_relacion = PacientesDependientes::where($filtro_list_PD)->pluck('id_responsable')->toArray();
+                if($responsables_relacion)
+                {
+                    $responsables = Paciente::whereIn('id', $responsables_relacion)->get();
+                }
+            }
+
+            if($hora->acomp_acompanante == 1)
+            {
+                if(!empty($hora->acomp_lista))
+                {
+                    $lista_acompanante = json_decode($hora->acomp_lista);
+                    $acompanantes = Paciente::whereIn('id', $lista_acompanante)->get();
+                }
+            }
+        }
+        /** CIERRE INFO ACOMPAÑANTE */
+
+        // INSTITUCION
+        $institucion = '';
+        $temp_inst = Instituciones::where('id_lugar_atencion', $request->lugar_atencion_id)->first();
+        if($temp_inst)
+        {
+            $institucion = $temp_inst;
+        }
+		
+		$antecedentes = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
+
+        $ant_confidenciales = AntConfidenciales::where('id_paciente', $paciente->id)->first();
+
+        if (isset($antecedentes)) {
+
+            $medicamentos_cronicos = AntecedenteMedicamentoCronico::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+            $alergias = AntecedenteAlergiaPaciente::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+            $antecedentes_quirurgicos = SolicitudPabellonQuirurgico::where('id_paciente', $paciente->id)->get();
+            $antecedentes_cirugias = AntecedentesCirugias::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+            $patoligias_cronicas = AntecedenteEnferCronica::where('id_antecedentes', $paciente->Antecedentes()->first()->id)->get();
+        } else {
+            $medicamentos_cronicos = [];
+            $alergias = [];
+            $antecedentes_quirurgicos = [];
+            $patoligias_cronicas = [];
+            $antecedentes_cirugias = [];
+        }
+		$id_usuario = Auth::user()->id;
+        $userData = Funciones::userData($id_usuario);
+
+        return view('atencion_institucional_sdi.atencion_ant_generales')->with(
+            [
+                'id_ficha_atencion' => $id_ficha_atencion,
+                'fichaAtencion' => $fichaAtencion,
+                'paciente' => $paciente,
+                'direccion_paciente' => $direccion_paciente,
+                'direccion_id_ciudad_paciente' => $direccion_id_ciudad_paciente,
+                'direccion_txt_ciudad_paciente' => $direccion_txt_ciudad_paciente,
+                'direccion_id_region_paciente' => $direccion_id_region_paciente,
+                'direccion_txt_region_paciente' => $direccion_txt_region_paciente,
+                'responsable' => $responsable,
+                'prevision' => $prevision,
+                'profesional' => $profesional,
+                'medicamento' => $medicamento,
+                'hora_medica' => $hora,
+                'ciudades' => $ciudades,
+                'regiones' => $regiones,
+                'tipo_examen' => $tipoExamen,
+                'control_peso' => $control_peso,
+                'hipertension' => $hipertension,
+                'diabetes' => $diabetes,
+                'ciudad' => $ciudad,
+                'id_lugar_atencion' => $request->lugar_atencion_id,
+                'lugar_atencion' => $lugar_atencion,
+                'institucion' => $institucion,
+
+                'receta_control' => $receta_control,
+                'grupo_sanguineo' => $grupo_sanguineo,
+                'token' => $request->token,
+                'direccion' => $direccion,
+
+                /** CONSULTA VIDEO LLAMADA */
+                'info_video' => $info_video,
+
+                /** RESPONSABLES */
+                'responsables'  => $responsables,
+                'acompanantes'  => $acompanantes,
+				
+				'userData' => $userData,
+				'alergias' => $alergias,
+				'antecedentes_quirurgicos' => $antecedentes_quirurgicos,
+				'antecedentes_cirugias' => $antecedentes_cirugias,
+				'ant_confidenciales' => $ant_confidenciales,
+				'patoligias_cronicas' => $patoligias_cronicas,
+				'medicamentos_cronicos' => $medicamentos_cronicos,
+				'grupo_sanguineo' => $grupo_sanguineo,
+
+            ]
+        );
+
+    }
+	
     public function registrar_control_obesidad(Request $request)
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
@@ -3063,6 +3268,70 @@ class ficha_atencionController extends Controller
     public function create()
     {
     }
+	public function storeFichaAntSdi(Request $request)
+	{
+		$hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+
+		$ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
+		$id_profesional = $request->id_profesional_fc;
+		$id_paciente = $request->id_paciente_fc;
+
+		$ficha->motivo = $request->motivo;
+		$ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
+		$ficha->cronico = $request->cronico;
+		$ficha->ges = $request->ges;
+		$ficha->confidencial = $request->confidencial;
+		$ficha->id_paciente = $id_paciente;
+		$ficha->id_profesional = $id_profesional;
+		$ficha->finalizada = 1;
+		if (!$ficha->save()) 
+		{
+			// return 'error';
+			return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
+		}
+		else
+		{
+			$tipo_mensaje = 'success';
+			$mensaje = 'Ficha Clínica guardada de forma correcta';
+
+			//  finalizar hora medica
+			$hora_medica->id_estado = 6;
+			$mensaje_estado_hora_medica = '';
+			if (!$hora_medica->save()) {
+				$mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.';
+			}
+			else
+			{
+				$mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.';
+			}
+			$mensaje .= '\n' . $mensaje_estado_hora_medica;
+
+			if($request->cerrarsession == 0 || $request->cerrarsession =='')
+			{
+				/** redireccion Redirect funciona correcto */
+				return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+			}
+			else if($request->cerrarsession == 1)
+			{
+				// $request->session()->invalidate();
+				// $request->session()->regenerateToken();
+				// return \Redirect::route('home.ingreso');
+				// return redirect()->route('logout')->with('request', $request);
+				// \Redirect::ROUTE('logout');
+
+			   //si funciona
+				$request->session()->invalidate();
+				$request->session()->regenerateToken();
+				return \Redirect::route('home.ingreso');
+
+			}
+			else
+			{
+				/** redireccion Redirect funciona correcto */
+				return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+			}            
+        }
+	}
 
     /** REGISTRO FICHA ATENCION GENERAL */
     public function store(Request $request)
@@ -7245,6 +7514,7 @@ class ficha_atencionController extends Controller
 
     public function pdf_orden_examenes(Request $request)
     {
+
         $datos = array();
         $examenesPPF = ExamenPPF::where('id_ficha_atencion', $request->id_ficha_atencion)->get();
         if($examenesPPF->count()>0)
@@ -7351,7 +7621,7 @@ class ficha_atencionController extends Controller
 
                 $detalle_orden->$nombre_control[] = $array_examenes;
 
-                $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+                $temp_token = CertificadoController::certificadoProfesional($profesional->id, $request->auto, 1,$request->id_ficha_atencion) ;
                 if($temp_token['estado'] == 1)
                 {
                     $token_profesional = $temp_token['certificado'];
@@ -9226,52 +9496,54 @@ class ficha_atencionController extends Controller
 
                     break;
                 case 3: //KINESIOLOGIA
-                    /** FICHAS DE ATENCIONES PREVIAS */
-                    $filtro_previas = array();
-                    $filtro_previas[] = array('id_paciente', $paciente->id);
-                    $filtro_previas[] = array('confidencial', '0');
-                    $filtro_previas[] = array('finalizada', 1);
-                    $filtro_previas[] = array('id_profesional', $profesional->id);
-                    $ficha_previas = FichaAtencion::where($filtro_previas)->get();
-
-                    $datos['ficha_previas'] = $ficha_previas;
-
-
-                    /** FICHA ATENCION ACTUAL */
-                    if(empty($hora->id_ficha_atencion))
-                    {
-                        $nueva_ficha_atencion = new FichaAtencion();
-                        $nueva_ficha_atencion->id_paciente = $paciente->id;
-                        $nueva_ficha_atencion->id_profesional = $profesional->id;
-                        $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
-
-                        if ($nueva_ficha_atencion->save())
-                        {
-                            $hora->id_estado = 5;
-                            $hora->fecha_realizacion_consulta = now();
-                            $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
-                            $hora->save();
-                            $ficha_actual_nueva = $nueva_ficha_atencion;
-                        }
-                        else
-                        {
-                            $nueva_ficha_atencion = '';
-                        }
-                    }
-                    else
-                    {
-                        $filtro_fichaAtencion = array();
-                        $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
-                        $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
-                        $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
-                    }
-
-                    $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
-                    $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
-
 
                     if(!empty($profesional->id_tipo_especialidad))
                     {
+                        /** FICHAS DE ATENCIONES PREVIAS */
+                        $filtro_previas = array();
+                        $filtro_previas[] = array('id_paciente', $paciente->id);
+                        $filtro_previas[] = array('id_profesional', $profesional->id);
+                        $filtro_previas[] = array('finalizada', 1);
+                        $ficha_previas = FichaOtrosProfesionales::where($filtro_previas)->get();
+
+                        $datos['ficha_previas'] = $ficha_previas;
+
+
+                        /** FICHA ATENCION ACTUAL */
+                        if(empty($hora->id_ficha_otros_prof))
+                        {
+                            $nueva_ficha_atencion = new FichaOtrosProfesionales();
+                            $nueva_ficha_atencion->id_paciente = $paciente->id;
+                            $nueva_ficha_atencion->id_profesional = $profesional->id;
+                            $nueva_ficha_atencion->id_especialidad = $profesional->id_especialidad;
+                            $nueva_ficha_atencion->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+                            $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                            if ($nueva_ficha_atencion->save())
+                            {
+                                $hora->id_estado = 5;
+                                $hora->fecha_realizacion_consulta = now();
+                                $hora->id_ficha_atencion = NULL;
+                                $hora->id_ficha_otros_prof = $nueva_ficha_atencion->id;
+                                $hora->save();
+                                $ficha_actual_nueva = $nueva_ficha_atencion;
+                            }
+                            else
+                            {
+                                $nueva_ficha_atencion = '';
+                            }
+                        }
+                        else
+                        {
+                            $filtro_fichaAtencion = array();
+                            $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                            $filtro_fichaAtencion[] = array('id', $hora->id_ficha_otros_prof);
+                            $ficha_actual_nueva = FichaOtrosProfesionales::where($filtro_fichaAtencion)->first();
+                        }
+
+                        $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                        $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
+
                         switch (intval($profesional->id_tipo_especialidad))
                         {
                             case 25:// 25  KINESIOLOGIA GENERAL
@@ -9380,7 +9652,7 @@ class ficha_atencionController extends Controller
                         $datos['ficha_previas'] = $ficha_previas;
 
                         /** FICHA ATENCION ACTUAL */
-                        if(empty($hora->id_ficha_atencion))
+                        if(empty($hora->id_ficha_otros_prof))
                         {
                             $nueva_ficha_atencion = new FichaOtrosProfesionales();
                             $nueva_ficha_atencion->id_paciente = $paciente->id;
@@ -9407,7 +9679,7 @@ class ficha_atencionController extends Controller
                         {
                             $filtro_fichaAtencion = array();
                             $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
-                            $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
+                            $filtro_fichaAtencion[] = array('id', $hora->id_ficha_otros_prof);
                             $ficha_actual_nueva = FichaOtrosProfesionales::where($filtro_fichaAtencion)->first();
                         }
 

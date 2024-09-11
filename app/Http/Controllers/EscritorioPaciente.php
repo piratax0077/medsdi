@@ -525,7 +525,7 @@ class EscritorioPaciente extends Controller
         /** RECETAS */
         $fecha_actual = date("d-m-Y");
         $regisrto_result = array();
-        $lista_recetas = Recomendacion::whereDate('created_at', '>=', date("Y-m-d",strtotime($fecha_actual."- 1 week")) )->pluck('id')->toArray();
+        $lista_recetas = Recomendacion::whereDate('created_at', '>=', date("Y-m-d",strtotime($fecha_actual."- 1 week")) )->where('activo',$paciente->id)->pluck('id')->toArray();
         if($lista_recetas)
         {
             $registros = Recomendacion::whereIn('id', $lista_recetas)->get();

@@ -610,7 +610,7 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <h6 class="text-c-blue d-inline">ANESTESIAS PACIENTE</h6>
                                         @if(Auth::user()->hasRole('Profesional'))
-                                        <button class="btn btn-info btn-xxs feather icon-plus d-inline" onclick="verModalAgregar('show',1,0)"></button>
+                                        <button type="button" class="btn btn-info btn-xxs feather icon-plus d-inline" onclick="verModalAgregar('show',1,0)"></button>
                                         @endif
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
