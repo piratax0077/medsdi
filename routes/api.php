@@ -9,6 +9,7 @@ use App\Http\Controllers\AntecedenteController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfesionalProvisorioController;
 use App\Http\Controllers\DocumentoController;
+use App\Http\Controllers\JitsiController;
 use App\Http\Controllers\VentaManualRecetaController;
 
 
@@ -84,6 +85,12 @@ Route::post('/venta_manual_receta/registrar', [VentaManualRecetaController::clas
 Route::get('/venta_manual_receta/ver_registro', [VentaManualRecetaController::class, 'verRegistro']);
 
 
+/**jwt test */
+Route::get('/jwt/generar', [JitsiController::class, 'generarJWT_r']);
+Route::get('/jwt/generar/meet', [JitsiController::class, 'jitsiRegistroMeet_r']);
+Route::get('/jwt/envio/correo', [JitsiController::class, 'envioNotificacionLlamada']);
+
+
 
 //  Escritorio Paciente
 //Route::get('/paciente/mis_profesionales', [App\Http\Controllers\PacienteController::class, 'getMisProfesionales']);
@@ -121,3 +128,6 @@ Route::get('/venta_manual_receta/ver_registro', [VentaManualRecetaController::cl
 //
 //// Funciones Vistas
 //Route::get('/getMisPacientes', [App\Http\Controllers\UtilsController::class, 'getPacientes']);
+
+
+Route::get('/Ficha_atencion_sub_tipo', [App\Http\Controllers\ficha_atencionController::class, 'get_sub_tipo_examen']);

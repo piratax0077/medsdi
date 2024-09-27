@@ -1629,7 +1629,7 @@ class ficha_atencionController extends Controller
         $filtro_ultima_lic[] = array('id_paciente', $paciente->id);
         $ultima_licencia = Licencia::where($filtro_ultima_lic)->first();
 
-        $info_video = '';
+        // $info_video = '';
         // if($hora->tipo_hora_medica == 'T')
         // {
         //     $filtro_v = array();
@@ -1744,7 +1744,7 @@ class ficha_atencionController extends Controller
                 'ultima_licencia' => $ultima_licencia,
 
                 /** CONSULTA VIDEO LLAMADA */
-                'info_video' => $info_video,
+                // 'info_video' => $info_video,
 
                 /** RESPONSABLES */
                 'responsables'  => $responsables,
@@ -1758,7 +1758,7 @@ class ficha_atencionController extends Controller
     {
         $hora = HoraMedica::where('id', $request->id_hora_realizar)->first();
         $paciente = Paciente::where('id', $hora->id_paciente)->first();
-		
+
 		// FICHAS PREVIAS Y FICHA ACTUAL(ACTIVA O NUEVA)
         $fichas = '';
         $id_ficha_atencion = '';
@@ -1875,7 +1875,7 @@ class ficha_atencionController extends Controller
         {
             $institucion = $temp_inst;
         }
-		
+
 		$antecedentes = AntecedentesPaciente::where('id', $paciente->id_antecedente)->first();
 
         $ant_confidenciales = AntConfidenciales::where('id_paciente', $paciente->id)->first();
@@ -1934,7 +1934,7 @@ class ficha_atencionController extends Controller
                 /** RESPONSABLES */
                 'responsables'  => $responsables,
                 'acompanantes'  => $acompanantes,
-				
+
 				'userData' => $userData,
 				'alergias' => $alergias,
 				'antecedentes_quirurgicos' => $antecedentes_quirurgicos,
@@ -1948,7 +1948,7 @@ class ficha_atencionController extends Controller
         );
 
     }
-	
+
     public function registrar_control_obesidad(Request $request)
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
@@ -3284,7 +3284,7 @@ class ficha_atencionController extends Controller
 		$ficha->id_paciente = $id_paciente;
 		$ficha->id_profesional = $id_profesional;
 		$ficha->finalizada = 1;
-		if (!$ficha->save()) 
+		if (!$ficha->save())
 		{
 			// return 'error';
 			return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
@@ -3329,7 +3329,7 @@ class ficha_atencionController extends Controller
 			{
 				/** redireccion Redirect funciona correcto */
 				return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
-			}            
+			}
         }
 	}
 

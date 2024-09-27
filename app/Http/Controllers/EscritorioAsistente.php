@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Funciones;
 use App\Models\Asistente;
 use App\Models\AsistenteContactoEmergencia;
+use App\Models\AsistenteLugarAtencion;
 use App\Models\AsistenteTipo;
 use App\Models\Bancos;
 use App\Models\Categoria;
@@ -22,6 +23,7 @@ use App\Models\Paciente;
 use App\Models\PacientesDependientes;
 use App\Models\Prevision;
 use App\Models\Profesional;
+use App\Models\ProfesionalAsistente;
 use App\Models\ProfesionalConvenio;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalHorario;
@@ -517,7 +519,26 @@ class EscritorioAsistente extends Controller
     {
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
 
-        return view('app.asistente_on.buscar_paciente', ['asistente' => $asistente]);
+
+        /** cargar lugar atencion por asistentes_lugar_atencion */
+        $lugares_atencion_1 = AsistenteLugarAtencion::where('id_asistente', $asistente->id)->where('estado', 1)->pluck('id_lugar_atencion')->toArray();
+
+        /** cargar lugar atencion por profesionales_asistentes */
+        $lista_profesional = ProfesionalAsistente::where('id_asistente', $asistente->id)->pluck('id_profesional')->toArray();
+        $lugares_atencion_2 = ProfesionalesLugaresAtencion::where('estado', 1)-> whereIn('id_profesional', $lista_profesional)->pluck('id_lugar_atencion')->toArray();
+
+        $lugares_atencion_3 = array_merge($lugares_atencion_1, $lugares_atencion_2);
+
+        $url = 'app.asistente_on.buscar_paciente'; // online
+        $array_data = array(
+            'asistente' => $asistente,
+            'lugares_atencion' => $lugares_atencion_3,
+        );
+
+        return view($url, $array_data);
+
+        // $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+        // return view('app.asistente_on.buscar_paciente', ['asistente' => $asistente]);
     }
 
     public function reservar_horaon()
@@ -527,9 +548,64 @@ class EscritorioAsistente extends Controller
 
     public function mis_profesionaleson()
     {
+        $array_data = array();
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+        $region = Region::all();
+        $prevision = Prevision::all();
 
-        return view('app.asistente_on.mis_profesionales', ['asistente' => $asistente]);
+        if (!isset($asistente))
+            return view('auth.Registros.registro_asistente')->with(['region' => $region, 'prevision' => $prevision]);
+
+        $asistente_tipo = AsistenteTipo::where('id',$asistente->id_asistente_tipo)->first();
+        $profesion_oficio = ProfesionOficio::all();
+
+        /** cargar lugar atencion por asistentes_lugar_atencion */
+        $lugares_atencion_1 = AsistenteLugarAtencion::where('id_asistente', $asistente->id)->where('estado', 1)->pluck('id_lugar_atencion')->toArray();
+
+        /** cargar lugar atencion por profesionales_asistentes */
+        $lista_profesional = ProfesionalAsistente::where('id_asistente', $asistente->id)->pluck('id_profesional')->toArray();
+        $lugares_atencion_2 = ProfesionalesLugaresAtencion::where('estado', 1)-> whereIn('id_profesional', $lista_profesional)->pluck('id_lugar_atencion')->toArray();
+
+        /** array de lugares de atencion */
+        $lugares_atencion_3 = array_merge($lugares_atencion_1, $lugares_atencion_2);
+
+        /** lugares de atencion */
+        $lugares_atencion = LugarAtencion::whereIn('id', $lugares_atencion_3)->get();
+
+
+        $prof_lugar_atencion = ProfesionalesLugaresAtencion::where('estado', 1)-> whereIn('id_profesional', $lista_profesional)->pluck('id_profesional')->toArray();
+
+        $profesionales_temp_array = array_merge($lista_profesional, $prof_lugar_atencion);
+
+        $profesionales = Profesional::whereIn('id', $profesionales_temp_array)->get();
+
+
+        $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
+        $tipo_bonos = TipoBono::where('estado', 1)->get();
+
+        $url = 'app.asistente_cm_publico.escritorio_asistente'; // institucion
+        $array_data = array(
+            'asistente' => $asistente,
+            'prevision' => $prevision,
+            'profesionales' => $profesionales,
+            'lugares_atencion' => $lugares_atencion,
+            // 'reg_confirmacion_hora' => $reg_confirmacion_hora,
+            'region' => $region,
+            'profesion_oficio' => $profesion_oficio,
+            'tipo_bonos' => $tipo_bonos,
+        );
+
+
+        if (isset($asistente)) {
+            if($asistente->bienvenido == 0)
+                return view('bienvenida.inicio_asistente');
+            else
+                return view($url)->with($array_data);
+        }
+
+        return view('auth.Registros.registro_asistente')->with(['region' => $region, 'prevision' => $prevision]);
+
+
     }
 
     public function getEspecialidadon(Request $request)
@@ -1334,21 +1410,8 @@ class EscritorioAsistente extends Controller
 
         if($request->tipo_hora_medica == 'T')
         {
-            $apertura = new DateTime($hora_medica->hora_inicio);
-            $cierre = new DateTime($hora_medica->hora_termino);
-
-            $tiempo = $apertura->diff($cierre);
-
-            $request_meeting = new Request(array(
-                'id_hora_atencion' => $hora_medica->id,
-                'hora_atencion' => $hora_medica->fecha_consulta.'T'.$hora_medica->hora_inicio,
-                'id_profesional' => $profesional->id,
-                'profesional_correo' => $profesional->email,
-                'id_paciente' => $paciente->id,
-                'paciente_nombre' => $paciente->nombres . " " . $paciente->apellido_uno,
-                'tiempo_consulta' =>$tiempo->format('%i')
-            ));
-            $meeting = ZoomManagerController::crearMeeting($request_meeting);
+            $jitsi = JitsiController::jitsiRegistroMeet( $profesional->id, $paciente->id, $hora_medica->id );
+            $hora_medica->video_llamada = $jitsi;
         }
 
         $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);

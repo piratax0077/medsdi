@@ -1838,21 +1838,8 @@ class EscritorioPaciente extends Controller
             {
                 if($request->tipo_hora_medica == 'T')
                 {
-                    $apertura = new DateTime($hora_medica->hora_inicio);
-                    $cierre = new DateTime($hora_medica->hora_termino);
-
-                    $tiempo = $apertura->diff($cierre);
-
-                    $request_meeting = new Request(array(
-                        'id_hora_atencion' => $hora_medica->id,
-                        'hora_atencion' => $hora_medica->fecha_consulta.'T'.$hora_medica->hora_inicio,
-                        'id_profesional' => $profesional->id,
-                        'profesional_correo' => $profesional->email,
-                        'id_paciente' => $paciente->id,
-                        'paciente_nombre' => $paciente->nombres . " " . $paciente->apellido_uno,
-                        'tiempo_consulta' =>$tiempo->format('%i')
-                    ));
-                    $meeting = ZoomManagerController::crearMeeting($request_meeting);
+                    $jitsi = JitsiController::jitsiRegistroMeet( $profesional->id, $paciente->id, $hora_medica->id );
+					$hora_medica->video_llamada = $jitsi;
                 }
 
                 $datos['estado'] = 1;
