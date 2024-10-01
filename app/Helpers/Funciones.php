@@ -201,7 +201,7 @@ class Funciones{
         $log_users_devices->msg = json_encode($msj);
         if($tipo_id != 12)
         {
-            if( ($tipo_id == 13) && ($id_user_recept==83 || $id_user_recept==3 ))
+            if( ($tipo_id == 13  || $tipo_id == 8) && ($id_user_recept==83 || $id_user_recept==3 ))
             {
                 $log_users_devices->estado = 1;
             }
