@@ -3031,4 +3031,44 @@ class EscritorioPaciente extends Controller
         return $datos;
     }
 
+
+    public function buscar_informacion_profesional(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->rut))
+        {
+            $error['rut'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido ==1)
+        {
+            $profesional = Profesional::where('rut', $request->rut)->get()->first();
+            $profesional_cant = Profesional::where('rut', $request->rut)->get()->count();
+
+            if($profesional_cant > 0)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['profesional'] = $profesional;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+        return $datos;
+
+    }
+
 }

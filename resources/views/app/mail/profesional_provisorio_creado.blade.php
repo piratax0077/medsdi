@@ -20,7 +20,7 @@
                             </tr>
                             <tr>
                                 <td style="background-color: #fff; padding: 0px 24px 0px 24px;" align="center">
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 600; color: #0071bc;">Bienvenido/a <br><br>{{ $detalle['body']['nombre'] }} </p>
+                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 28px; font-weight: 600; color: #0071bc;">Bienvenido/a</p>
                                 </td>
                             </tr>
                             <tr>
@@ -30,33 +30,19 @@
                             </tr>
                             <tr>
                                 <td style="background: rgb(51,102,204); background: -moz-linear-gradient(148deg, rgba(51,102,204,1) 0%, rgba(47,177,177,1) 100%); background: -webkit-linear-gradient(148deg, rgba(51,102,204,1) 0%, rgba(47,177,177,1) 100%); background: linear-gradient(148deg, rgba(51,102,204,1) 0%, rgba(47,177,177,1) 100%); padding: 0px 24px 0px 24px;" align="center">
-                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 19px; font-weight: 500; color: #ffffff;">Link: <a href="{{ $detalle['body']['link'] }}" target="_blank">Completa tus datos aquí</a></p>                                    
+                                    {{-- <p style="font-family: Helvetica, Arial, sans-serif; font-size: 19px; font-weight: 500; color: #ffffff;">Link: <a href="{{ $detalle['body']['link'] }}" target="_blank">Completa tus datos aquí</a></p>--}}
+                                    <p style="font-family: Helvetica, Arial, sans-serif; font-size: 19px; font-weight: 500; color: #ffffff;">
+                                        <a target="_blank" href="{{ $detalle['body']['link'] }}" style="color: #ffffff; text-decoration: none; font-size: 18px; background: #00a53a; padding: 13px; border-radius: 13px;">Click para Ingresar y/o completar sus datos</a>
+                                    </p>
                                 </td>
                             </tr>
 
-                            <tr>
+                            {{-- <tr>
                                 <td style="text-align: center;">
                                     <img style="width: auto; margin-bottom: 20px; margin-top: 20px; margin-left: 15px; margin-right: 15px;" src="https://www.med-sdi.cl/images/email/beneficio_profesional.png" alt="Beneficios">
                                 </td>
-                            </tr>
-                            <tr>
-                                <td align="center">
-                                    <table>
-                                        <tbody>
-                                            <td height="30"> </td>
-                                            <tr>
-                                                <td style="background: rgb(0,147,147); background: -moz-linear-gradient(148deg, rgba(0,147,147,1) 0%, rgba(28,190,190,1) 100%); background: -webkit-linear-gradient(148deg, rgba(0,147,147,1) 0%, rgba(28,190,190,1) 100%); background: linear-gradient(148deg, rgba(0,147,147,1) 0%, rgba(28,190,190,1) 100%); padding: 15px 18px; -webkit-border-radius: 30px; font-family: Helvetica, Arial, sans-serif;" align="center" bgcolor="#289CDC">
-                                                <a target="_blank" href="{{ env('APP_URL') }}" style="color: #ffffff; text-decoration: none; font-size: 18px; ">Ingresar a Medichile</a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td height="10"> </td>
-                                            </tr>
+                            </tr> --}}
 
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
                             <tr>
                                 <td height="20"> </td>
                             </tr>

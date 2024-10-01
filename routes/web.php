@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 
+// Route::get('phpmyinfo', function () {
+//     phpinfo();
+// })->name('phpmyinfo');
+
 //PROFESIONAL PROVISORIO
 Route::get('/Acceso_Profesional_NI/{token}', [App\Http\Controllers\EscritorioProfesional::class, 'acceso_pni'])->name('anonymous.acceso_pni');
 Route::get('/Check_sdi_external',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('anonymous.check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
@@ -414,6 +418,8 @@ Route::group([
     /** VER HORAS MEDICAS */
     Route::get('hora/medica/ver', [App\Http\Controllers\EscritorioPaciente::class, 'cargarHorasMedicas'])->name('paciente.hora.medica.ver');
 
+    /** buscar profesional por rut */
+    Route::get('buscar/profesional/rut', [App\Http\Controllers\EscritorioPaciente::class, 'buscar_informacion_profesional'])->name('paciente.buscar.prof.rut');
 
 });
 
@@ -1283,7 +1289,7 @@ Route::group([
     Route::get('/Ficha_medica/registrar_informe_medico', [App\Http\Controllers\ficha_atencionController::class, 'registrar_informe_medico'])->name('ficha_medica.registrar_informe_medico');
 	Route::get('/Ficha_medica/registrar_uso_personal', [App\Http\Controllers\ficha_atencionController::class, 'registrar_uso_personal'])->name('ficha_medica.registrar_uso_personal');
     Route::get('/Registro1', [App\Http\Controllers\ficha_atencionController::class, 'index']);
-    Route::get('/Ficha_medica/profesional_provisorio/{id_paciente}/{lugar_atencion_id}/{id_hora_realizar}', [App\Http\Controllers\ficha_atencionController::class, 'index2'])->name('ficha_medica.profesional_provisorio'); // PROFESIONAL PROVISORIO
+    Route::get('/Ficha_medica/profesional_provisorio/{id_paciente}/{lugar_atencion_id}/{id_hora_realizar}', [App\Http\Controllers\ficha_atencionController::class, 'index'])->name('ficha_medica.profesional_provisorio'); // PROFESIONAL PROVISORIO
     Route::get('/Registro_paciente', [App\Http\Controllers\pacienteController::class, 'buscar_paciente'])->name('buscar_paciente');
 
     //faltantes

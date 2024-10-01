@@ -2342,7 +2342,7 @@ class EscritorioProfesional extends Controller
 
         if($request->tipo_hora_medica == 'T')
         {
-            $jitsi = JitsiController::jitsiRegistroMeet( $profesional->id, $paciente->id, $hora_medica->id );																
+            $jitsi = JitsiController::jitsiRegistroMeet( $profesional->id, $paciente->id, $hora_medica->id );
 			$hora_medica->video_llamada = $jitsi;
         }
 
@@ -4639,6 +4639,9 @@ class EscritorioProfesional extends Controller
      public function acceso_pni(Request $request)
      {
 
+        // echo json_encode($request->all());
+        // die();
+
         $token = $request->token;
 
         $profesional_provisorio = ProfesionalProvisorio::where([['token',$token],['estado_token',0]])->first();
@@ -4646,44 +4649,83 @@ class EscritorioProfesional extends Controller
         if($profesional_provisorio)
         {
 
-           $id_registro = $profesional_provisorio->id;
+            $id_registro = $profesional_provisorio->id;
 
-           if($profesional_provisorio->id_direccion)
-           {
-                $direccion = Direccion::find($profesional_provisorio->id_direccion);
+            $profesional = Profesional::where('rut', $profesional_provisorio->rut)->get()->first();
+            $profesional_cant = Profesional::where('rut', $profesional_provisorio->rut)->get()->count();
+
+            if($profesional_cant > 0)
+            {
+                $direccion = Direccion::find($profesional->id_direccion);
+                $request_temp = new Request(
+                    array(
+                        'id_registro' => $profesional_provisorio->id,
+                        'nombre_profesional' => $profesional->nombre,
+                        'primer_apellido_profesional' => $profesional->apellido_uno,
+                        'segundo_apellido_profesional' => $profesional->apellido_dos,
+                        'lista_profesion' => $profesional->id_especialidad,
+                        'sexo_profesional' => $profesional->sexo,
+                        'rut_profesional' => $profesional->rut,
+                        'email_profesional' => $profesional->email,
+                        'lista_especialidad' => $profesional->id_tipo_especialidad,
+                        'lista_sub_especialidad' => $profesional->id_sub_tipo_especialidad,
+                        'telefono_uno_profesional' => $profesional->telefono_uno,
+                        'telefono_dos_profesional' => $profesional->telefono_dos,
+                        'direccion_consulta_profesional' => $direccion->direccion,
+                        'numero_dir_consulta_profesional' => $direccion->numero_dir,
+                        'lista_ciudades' => $direccion->id_ciudad,
+                        'token_profesional_provisorio' => $token
+                    )
+                );
+                return $this->agregar_profesional_provisorio($request_temp);
+
+                $region_temp = Region::find($direccion->id_ciudad);
+
+                $direccion_nombre = $direccion->direccion;
+                $direccion_numero = $direccion->numero_dir;
+                $id_ciudad = $direccion->id_ciudad;
+                $id_region = $region_temp->id_region;
+            }
+            else
+            {
 
 
-
-                if($direccion)
+                if($profesional_provisorio->id_direccion)
                 {
-                    $direccion_nombre =  $direccion->direccion;
-                    $direccion_numero =  $direccion->numero_dir;
-                    $id_ciudad = $direccion->id_ciudad;
+                        $direccion = Direccion::find($profesional_provisorio->id_direccion);
+						
+                        if($direccion)
+                        {
+                            $direccion_nombre =  $direccion->direccion;
+                            $direccion_numero =  $direccion->numero_dir;
+                            $id_ciudad = $direccion->id_ciudad;
 
-                    $ciudad = Ciudad::find($direccion->id_ciudad);
+                            $ciudad = Ciudad::find($direccion->id_ciudad);
 
-                    if($ciudad)
-                    {
-                    $id_region =  $ciudad->id_region;
-                    }else{
-                        $id_region =  0;
-                    }
+                            if($ciudad)
+                            {
+                            $id_region =  $ciudad->id_region;
+                            }else{
+                                $id_region =  0;
+                            }
+                        }else{
+                            $direccion_nombre =  '';
+                            $direccion_numero =  '';
+                            $id_ciudad = 0;
+                            $id_region =  0;
+                        }
+
                 }else{
-                    $direccion_nombre =  '';
-                    $direccion_numero =  '';
-                    $id_ciudad = 0;
-                    $id_region =  0;
+                            $direccion_nombre =  '';
+                            $direccion_numero =  '';
+                            $id_ciudad = 0;
+                            $id_region =  0;
                 }
-
-           }else{
-                    $direccion_nombre =  '';
-                    $direccion_numero =  '';
-                    $id_ciudad = 0;
-                    $id_region =  0;
-           }
+            }
 
         }else{
-            abort(401);
+            // abort(401);
+            return view('app.profesional.acceso_profesional_no_inscrito_no_valido');
         }
 
 
