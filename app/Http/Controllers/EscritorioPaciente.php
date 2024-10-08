@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use App\Models\AntConfidenciales;
@@ -1500,6 +1501,16 @@ class EscritorioPaciente extends Controller
         $fichas = FichaAtencion::where('id_paciente', $paciente->id)->get();
 
         return view('app.paciente.receta.mis_licencias', ['fichas' => $fichas]);
+    }
+
+    public function receta_misdocumentos()
+    {
+        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+        $fichas = FichaAtencion::where('id_paciente', $paciente->id)->get();
+
+
+
+        return view('app.paciente.receta.mis_documentos', ['fichas' => $fichas]);
     }
 
     /* Perfil */

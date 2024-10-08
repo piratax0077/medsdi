@@ -41,8 +41,8 @@
                     </div>
                     <div class="form-row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-end">
-                            <button type="button" class="btn btn-sm btn-danger mr-2"><i class="feather icon-x"></i> Cancelar</button>
-                            <button type="submit" class="btn btn-sm btn-info"><i class="feather icon-save"></i> Guardar cambios</button>
+                            <button type="button" class="btn btn-sm btn-danger-light-c mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                            <button type="submit" class="btn btn-sm btn-info-light-c"><i class="feather icon-save"></i> Guardar cambios</button>
                         </div>
                     </div>
                 </form>

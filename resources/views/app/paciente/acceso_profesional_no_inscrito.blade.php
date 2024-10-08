@@ -373,7 +373,10 @@
                     {
                         msg('Aviso','Registro ingresado correctamente.','success');
                         resetForm();
-                        window.location.href = "{{ route('paciente.home') }}";
+
+                        setTimeout(function(){
+                            window.location.href = "{{ route('paciente.home') }}";
+                        }, 10000);
                     }
                     else
                     {
