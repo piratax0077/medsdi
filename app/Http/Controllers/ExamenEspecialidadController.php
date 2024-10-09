@@ -218,34 +218,37 @@ class ExamenEspecialidadController extends Controller
                     $cant_img_row = 0;
                     foreach($lista_imagnes as $key => $img)
                     {
-                        if($cant_img_row == 0)
+                        if(file_exists(asset('storage/imagenes/examen/'.$img->nombre)))
                         {
-                            $cuerpo_img .= '<tr>';
-                        }
-                        $cant_img_row++;
-
-                        $cuerpo_img .= '<td style="padding:5px;width:33.33%">';
-                        // var_dump(asset('storage/imagenes/examen/'.$img->nombre));
-                        $img_temp = base64_encode(file_get_contents(asset('storage/imagenes/examen/'.$img->nombre)));
-                        if(isset($img->otro))
-                            $cuerpo_img .= '<img style="width:80%" src="data:image/png;base64,'.$img_temp.'" alt="'.$img->nombre.'"><br/>'.$img->otro.'';
-                        else
-                            $cuerpo_img .= '<img style="width:80%" src="data:image/png;base64,'.$img_temp.'" alt="'.$img->nombre.'">';
-
-                        $cuerpo_img .= '</td>';
-
-                        if($cant_img_total<3 && $cant_img_total == $cant_img_row)
-                        {
-                            for ($i=$cant_img_row; $i < 3; $i++) {
-                                $cuerpo_img .= '<td style="padding:5px;width:33.33%"></td>';
-                                $cant_img_row++;
+                            if($cant_img_row == 0)
+                            {
+                                $cuerpo_img .= '<tr>';
                             }
-                        }
+                            $cant_img_row++;
 
-                        if($cant_img_row == 3)
-                        {
-                            $cuerpo_img .= '</tr>';
-                            $cant_img_row = 0;
+                            $cuerpo_img .= '<td style="padding:5px;width:33.33%">';
+                            // var_dump(asset('storage/imagenes/examen/'.$img->nombre));
+                            $img_temp = base64_encode(file_get_contents(asset('storage/imagenes/examen/'.$img->nombre)));
+                            if(isset($img->otro))
+                                $cuerpo_img .= '<img style="width:80%" src="data:image/png;base64,'.$img_temp.'" alt="'.$img->nombre.'"><br/>'.$img->otro.'';
+                            else
+                                $cuerpo_img .= '<img style="width:80%" src="data:image/png;base64,'.$img_temp.'" alt="'.$img->nombre.'">';
+
+                            $cuerpo_img .= '</td>';
+
+                            if($cant_img_total<3 && $cant_img_total == $cant_img_row)
+                            {
+                                for ($i=$cant_img_row; $i < 3; $i++) {
+                                    $cuerpo_img .= '<td style="padding:5px;width:33.33%"></td>';
+                                    $cant_img_row++;
+                                }
+                            }
+
+                            if($cant_img_row == 3)
+                            {
+                                $cuerpo_img .= '</tr>';
+                                $cant_img_row = 0;
+                            }
                         }
                     }
                 }
