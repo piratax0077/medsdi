@@ -531,7 +531,7 @@
 
     <!--Modal editar horario atencion-->
     <div id="modal_editar_horario_atencion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editar_horario_atencion" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
                     <h5 class="modal-title text-white text-center" id="nuevo_horario_atencion_titulo">Configurar horario de atenci&oacute;n</h5>
@@ -688,6 +688,7 @@
                                 <table id="mi_horario_table" class="table table-sm">
                                     <thead>
                                         <tr>
+                                            <th class="text-center align-middle">T. Agenda</th>
                                             <th class="text-center align-middle">Desde</th>
                                             <th class="text-center align-middle">Hasta</th>
                                             <th class="text-center align-middle">D&iacute;a</th>

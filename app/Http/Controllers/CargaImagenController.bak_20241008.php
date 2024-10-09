@@ -2,40 +2,39 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CargaImagenController extends Controller
 {
     /** IMAGEN */
-    public function cargaImagenTemp(Request $request)
+    public function cargaImagenTemp(Request $req)
     {
-        $datos = array();
+        // Validar la solicitud
+            $req->validate([
+                'archivos.*' => 'required|file|mimes:jpeg,png,jpg,gif,svg,pdf,doc,docx,xls,xlsx,ppt,pptx|max:5120', // 5MB máximo
+            ]);
 
-        $request->validate([
-            'file' => 'required|image|max:4096'
-        ]);
+            $contador = 0;
 
-        $file_extension = $request->file->extension();
-        $file_mime_type = $request->file->getClientMimeType();
-        $original_file_name = $request->file->getClientOriginalName();
+            // Manejar archivos adjuntos
+            if ($req->hasFile('archivos')) {
+                foreach ($req->file('archivos') as $file) {
+                    $contador++;
+                    $filename = time().'_'.$file->getClientOriginalName();
+                    $file->storeAs('uploads/', $filename, 'public');
 
-        // $imagenes = $request->file->store('public/imagenes/temp'); /** ok */
-        $imagenes = $request->file('file')->store('public/imagenes/temp');  /** ok */
+                    // Aquí puedes guardar la información del archivo en la base de datos si es necesario
+                    // Ejemplo:
+                    // $archivo = new Archivo();
+                    // $archivo->mensaje_id = $nuevo_mensaje->id;
+                    // $archivo->ruta = '/storage/uploads/'.$filename;
+                    // $archivo->save();
+                }
+            }
 
-        /** guardar con nombre */
-        // $imagenes = $request->file->storeAs('public/imagenes/temp', $original_file_name);
-
-        $url = Storage::url($imagenes);
-        $nombre_img = str_replace('/storage/imagenes/temp/','',$url);
-        $datos['estado'] = 1;
-        $datos['img']['url'] = $url;
-        $datos['img']['original_file_name'] = $original_file_name;
-        $datos['img']['nombre_img'] = $nombre_img;
-        $datos['img']['file_extension'] = $file_extension;
-        $datos['img']['file_mime_type'] = $file_mime_type;
-
-        return $datos;
+            return response()->json(['success' => true, 'message' => 'Archivos'.$contador.' subidos correctamente']);
     }
     /**
      * mover y renombrar archivo
@@ -104,11 +103,29 @@ class CargaImagenController extends Controller
     {
         $datos = array();
 
-        $request->validate([
-            // 'file' => 'required|mimetypes:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/x-msexcel,application/x-excel|max:4096'
-            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,csv|max:4096',
-            // 'file' => 'required|in:doc,csv,xlsx,xls,docx,pdf|max:4096'
-        ]);
+        // Definir las reglas de validación
+        $rules = [
+            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,csv|max:10240', // 10MB
+        ];
+
+        // Mensajes de error personalizados
+        $messages = [
+            'file.required' => 'El archivo es obligatorio.',
+            'file.file' => 'El campo debe ser un archivo.',
+            'file.mimes' => 'El archivo debe ser de tipo: pdf, doc, docx, xls, xlsx, csv.',
+            'file.max' => 'El archivo no debe ser mayor a 10MB.',
+        ];
+
+        // Validar la solicitud
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
         $file_extension = $request->file->extension();
         $file_mime_type = $request->file->getClientMimeType();
         $original_file_name = $request->file->getClientOriginalName();

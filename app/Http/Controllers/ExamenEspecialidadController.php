@@ -515,7 +515,7 @@ class ExamenEspecialidadController extends Controller
             }
 
             /** TOKEN DE PROFESIONAL */
-            $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+            $temp_token = CertificadoController::certificadoProfesional($profesional->id, $id_ficha, 1, 1);
             if($temp_token['estado'] == 1)
             {
                 $token_profesional = $temp_token['certificado'];
@@ -524,7 +524,7 @@ class ExamenEspecialidadController extends Controller
             }
             else
             {
-                $temp_token = CertificadoController::certificadoProfesional(rand(1114,999));
+                $temp_token = CertificadoController::certificadoProfesional(rand(1114,999), $id_ficha, 1, 1);
                 $token_profesional = $temp_token['certificado'];
                 $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
                 $qr_profesional = GeneradorQrController::generar($url_documento);

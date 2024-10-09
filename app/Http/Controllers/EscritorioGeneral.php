@@ -700,6 +700,8 @@ class EscritorioGeneral extends Controller
             {
                 // $hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))->where('hora_inicio',date('H:i:s',$hora))->first();
                 $hora_medica = HoraMedica::where('fecha_consulta', date('Y-m-d',$hora))
+                                            ->where('id_profesional', $request->id_profesional)
+                                            ->where('id_lugar_atencion', $request->id_lugar_atencion)
                                             ->whereRaw("'".date('H:i:s',strtotime( '+1 second', $hora))."' BETWEEN hora_inicio and hora_termino")
                                             ->first();
 

@@ -151,6 +151,7 @@ class EscritorioPaciente extends Controller
                                                     ->where('parametros.referencia', '=', 'Agenda_Estado');
                                         })
                                         ->where('id_paciente', $paciente->id)
+                                        ->whereRaw("fecha_consulta >= NOW() AND hora_inicio >= NOW()")
                                         ->orderBy('fecha_consulta', 'DESC')
                                         ->orderBy('hora_inicio', 'DESC')
                                         ->get();
@@ -249,7 +250,9 @@ class EscritorioPaciente extends Controller
         // DESVINCULAR profesional
         if($id_usuario_ != 0 && $id_profesional_ != 0)
         {
-            $fichas = FichaAtencion::where('id_paciente', $id_usuario_)
+
+            $paciente = Paciente::where('id_usuario', $id_usuario_)->first();
+            $fichas = FichaAtencion::where('id_paciente', $paciente->id)
                                      ->where('id_profesional', $id_profesional_)
                                      ->first();
 
@@ -1545,6 +1548,13 @@ class EscritorioPaciente extends Controller
         $paciente->id_prevision = $prevision;
         $paciente->save();
 
+        $user = User::find($paciente->id_usuario);
+        if( $user->name != $nombre . ' ' . $apellido_uno )
+        {
+            $user->name = $nombre . ' ' . $apellido_uno;
+            $user->save();
+        }
+
         return json_encode(['success' => true]);
 
         // return redirect()->route('paciente.perfil');
@@ -1564,6 +1574,14 @@ class EscritorioPaciente extends Controller
         $paciente->email = $email;
         $paciente->telefono_uno = $fono;
         $paciente->save();
+
+        $user = User::find($paciente->id_usuario);
+        if( $user->email != $email )
+        {
+            $user->email = $email;
+            $user->save();
+        }
+
         return json_encode(['success' => true]);
 
         // return redirect()->route('paciente.perfil');

@@ -1538,6 +1538,57 @@
             });
         }, 5000);
 
+         /** PERVISUALIZACION DE EXAMEN */
+        function visualizar_pdf_examen(tipo_examen)
+        {
+            if(tipo_examen!='')
+            {
+                var array_datos = {};
+                $('.div_form_examen_'+tipo_examen).find('input,textarea,select').each(function (key, element){
+                    var key_temp = element.id.replace('_'+tipo_examen,'');
+
+                    if(key_temp == 'biopsia')
+                    {
+                        if(element.value == 1)
+                        {
+                            array_datos[key_temp] = 'SI';
+                        }
+                        else
+                        {
+                            array_datos[key_temp] = 'NO';
+                        }
+                    }
+                    else
+                    {
+                        array_datos[key_temp] = element.value;
+                    }
+                });
+
+                var imagenes = $('#input_lista_imagenes').val();
+                if(imagenes != '')
+                {
+                    imagenes = JSON.parse(imagenes);
+                    imagenes = JSON.stringify(JSON.stringify(imagenes[tipo_examen]));
+                    console.log(imagenes );
+                }
+
+                var data ='id_ficha='+$('#id_fc').val()+'&contenido='+JSON.stringify(array_datos)+'&imagenes='+imagenes;
+                Fancybox.show(
+                    [
+                        {
+                        src: '{{ route("pdf.visualizar.examen") }}?'+data,
+                        type: "iframe",
+                        preload: false,
+                        },
+                    ]
+                );
+            }
+            else
+            {
+                console.log('tipo examen no especificado');
+            }
+        }
+
     </script>
 
     {{-- video llamada --}}
