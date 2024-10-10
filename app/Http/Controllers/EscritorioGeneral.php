@@ -8,6 +8,7 @@ use App\Models\Especialidad;
 use App\Models\HoraMedica;
 use App\Models\Instituciones;
 use App\Models\Invitacion;
+use App\Models\LugarAtencion;
 use App\Models\Mensajes;
 use App\Models\Paciente;
 use App\Models\Prevision;
@@ -223,7 +224,9 @@ class EscritorioGeneral extends Controller
             //                                                         $sql .= " )
             //                 )
             //         ";
-            // var_dump($sql);
+            // return var_dump($sql);
+            // return  '**';
+            // die();
             $registros = DB::select($sql);
             $registros_validos = array();
             foreach ($registros as $key_r => $value_r)
@@ -231,6 +234,9 @@ class EscritorioGeneral extends Controller
                 // $profesional_horarios = ProfesionalHorario::where('id_profesional',$value_r->profesionales_id)->get();
                 // $registros[$key_r]->profesional_horarios = $profesional_horarios;
                 $registros[$key_r]->profesional_hora_mas_proxima = $this->cargarFechaMasProxima($value_r->profesionales_id, $request->tipo_agenda);
+                // $registros[$key_r]->profesional_hora_mas_proxima = array();
+
+                // var_dump($registros[$key_r]->profesional_hora_mas_proxima);
 
                 // busqueda de imagen
                 $array_rut = explode('-',$value_r->profesionales_rut);
@@ -306,8 +312,9 @@ class EscritorioGeneral extends Controller
         // var_dump($tipo_agenda);
         $profesional_horarios = ProfesionalHorario::where('id_profesional',$id_profesional)
                                                     ->whereIn('id_lugar_atencion',$lugar_atencion_activo)
-                                                    ->orderBy('id_lugar_atencion', 'ASC')
+                                                    // ->orderBy('id_lugar_atencion', 'ASC')
                                                     ->orderBy('dia', 'ASC')
+                                                    ->orderBy('hora_inicio', 'ASC')
                                                     ->tipoAgenda($tipo_agenda)
                                                     ->get();
 
@@ -354,9 +361,14 @@ class EscritorioGeneral extends Controller
                 if($finalizar == 1) break;
 
                 $dia_termino_for = strtotime('+1 days', strtotime($dia_hoy));
+
+                $paso = 0;
                 for ($dia=strtotime($dia_hoy); $dia <= $dia_termino_for ; $dia = strtotime('+1 days',$dia)) {
-                    if(date('N',$dia) == $value_dia)
+                    $paso++;
+                    if($paso>20)break;
+                    if(date('w',$dia) == $value_dia)
                     {
+                        // echo '*entro';
                         for ($hora=strtotime($hora_inicio_turno); $hora <= strtotime( '+'. $duracion_total.' minute', strtotime($hora_termino_turno) ); $hora = strtotime('+'. $duracion_total.' minute',$hora))
                         {
                             if($finalizar == 1) break;
@@ -364,22 +376,22 @@ class EscritorioGeneral extends Controller
                             $filtro_tipo_hora = 'C';
                             switch ($tipo_agenda) {
                                 // 1 -> Atención General
-                                case 'value':
+                                case '1':
                                     $filtro_tipo_hora = 'C';
                                     break;
 
                                 // 2 -> Atención Dental
-                                case 'value':
+                                case '2':
                                     $filtro_tipo_hora = 'D';
                                     break;
 
                                 // 3 -> Atención Telemedicina
-                                case 'value':
+                                case '3':
                                     $filtro_tipo_hora = 'T';
                                     break;
 
                                 // 4 -> Examene
-                                case 'value':
+                                case '4':
                                     $filtro_tipo_hora = 'E';
                                     break;
 
@@ -387,6 +399,10 @@ class EscritorioGeneral extends Controller
                                     $filtro_tipo_hora = 'C';
                                     break;
                             }
+
+                            // echo '*filtro_tipo_hora hora:'.$filtro_tipo_hora;
+                            // echo '*dia hora:'.date('Y-m-d',$dia);
+                            // echo '*hora hora:'.date('H:i:s',$hora);
                             $hora_medica = HoraMedica::where('id_profesional', $id_profesional)->where('fecha_consulta',date('Y-m-d',$dia))->where('hora_inicio',date('H:i:s',$hora))->where('tipo_hora_medica', $filtro_tipo_hora)->first();
 
                             // var_dump(date('Y-m-d', $dia));
@@ -396,7 +412,8 @@ class EscritorioGeneral extends Controller
                             if($hora_medica)
                             {
                                 $finalizar = 0;
-                                $dia_termino_for = strtotime('+1 days', $dia_termino_for);
+                                // $dia_termino_for = strtotime('+1 days', $dia_termino_for);
+                                $dia_termino_for = $dia_termino_for + 86400;
                             }
                             else
                             {
@@ -473,8 +490,14 @@ class EscritorioGeneral extends Controller
                     }
                     else
                     {
-                        $dia_termino_for = strtotime('+1 days', $dia_termino_for);
+
+
+                        // $dia_termino_for = strtotime('+1 days', $dia_termino_for);
+                        $dia_termino_for = $dia_termino_for + 86400;
                     }
+
+                    // echo '*Paso:';
+                    // echo $paso;
                 }
             }
         }
