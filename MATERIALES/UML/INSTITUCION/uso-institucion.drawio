@@ -1,0 +1,109 @@
+<mxfile host="65bd71144e">
+    <diagram id="Ipz2-4tvlWV69jGE_w5a" name="Página-1">
+        <mxGraphModel dx="2667" dy="1312" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="126" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="2" target="15">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="127" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="2" target="109">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="128" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="2" target="111">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="129" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="2" target="113">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="130" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="2" target="115">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="131" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="2" target="117">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="132" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="2" target="119">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="133" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="2" target="121">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="134" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="2" target="123">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="135" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="2" target="125">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="Paciente" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="-590" y="765" width="130" height="230" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="-460" y="240" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="LOGIN" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" parent="3" vertex="1">
+                    <mxGeometry y="30" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="230" y="150" width="160" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="CONFIGURACION&lt;br&gt;DE INSTITUCION" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" parent="14" vertex="1">
+                    <mxGeometry y="45" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="108" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="230" y="320" width="160" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="109" value="MANEJO DE&lt;br&gt;PROFESIONALES" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" vertex="1" parent="108">
+                    <mxGeometry y="45" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="110" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="230" y="490" width="160" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="111" value="MANEJO&lt;br&gt;COMERCIAL" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" vertex="1" parent="110">
+                    <mxGeometry y="45" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="112" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="230" y="650" width="160" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="113" value="MANEJO&lt;br&gt;DE PACIENTES" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" vertex="1" parent="112">
+                    <mxGeometry y="45" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="114" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="230" y="820" width="160" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="115" value="MANEJO DE&lt;br&gt;PERSONAL" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" vertex="1" parent="114">
+                    <mxGeometry y="45" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="116" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="230" y="980" width="160" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="117" value="MANEJO DE&amp;nbsp;&lt;br&gt;LABORATORIO" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" vertex="1" parent="116">
+                    <mxGeometry y="45" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="118" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="230" y="1150" width="160" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="119" value="MANEJO DE&amp;nbsp;&lt;br&gt;IMAGENOLOGIA" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" vertex="1" parent="118">
+                    <mxGeometry y="45" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="120" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="230" y="1300" width="160" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="121" value="MANEJO DE&amp;nbsp;&lt;br&gt;VACUNATORIO" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" vertex="1" parent="120">
+                    <mxGeometry y="45" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="122" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="230" y="1460" width="160" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="123" value="MANEJO&lt;br&gt;DENTAL" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" vertex="1" parent="122">
+                    <mxGeometry y="45" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="124" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" vertex="1" parent="1">
+                    <mxGeometry x="230" y="1620" width="160" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="125" value="CONTRATACION DE&lt;br&gt;ASISTENTES EN LINEA" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" vertex="1" parent="124">
+                    <mxGeometry y="45" width="160" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
