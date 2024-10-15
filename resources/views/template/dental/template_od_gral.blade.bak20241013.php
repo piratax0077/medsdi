@@ -311,49 +311,6 @@
             });
         }
         /** FIN METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
-
-        function buscar_nombre_profesional(input_rut, input_nombre)
-        {
-            rut = $('#'+input_rut).val();
-
-            if(rut.length>5)
-            {
-                url = "{{ route('profesional.buscar') }}";
-                $.ajax({
-                    url: url,
-                    type: "GET",
-                    data: {
-                        rut : rut,
-                    },
-                })
-                .done(function(data)
-                {
-                    if(data.estado == 1)
-                    {
-                        if(data.registros.length>0)
-                        {
-                            var nombre = 'Dr. '+data.registros[0].apellido_uno;
-                            $('#'+input_nombre).val(nombre);
-                        }
-                        else
-                        {
-                            $('#'+input_nombre).val('');
-                        }
-                    }
-                    else
-                    {
-                        $('#'+input_nombre).val('');
-                    }
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
-            }
-            else if(rut.length==0)
-            {
-                $('#'+input_nombre).val('');
-            }
-        }
     </script>
 
     @yield('js_inferior')

@@ -285,6 +285,25 @@ class ficha_atencionController extends Controller
         $examenMedico = ExamenMedico::where('cod_parent', 0)->where('habilitado', 1)->orderby('nombre_examen', 'ASC')->get();
         $user = Auth::user()->id;
         $profesional = Profesional::where('id_usuario', $user)->first();
+        $profesional_especialidad = '';
+        $prof_especialidad = '';
+        $prof_tipo_especialidad = '';
+        $prof_sub_tipo_especialidad = '';
+
+        if(!empty($profesional->id_especialidad))
+            $prof_especialidad = Especialidad::find($profesional->id_especialidad);
+        if(!empty($profesional->id_tipo_especialidad))
+            $prof_tipo_especialidad = TipoEspecialidad::find($profesional->id_tipo_especialidad);
+        if(!empty($profesional->id_sub_tipo_especialidad))
+            $prof_sub_tipo_especialidad = SubTipoEspecialidad::find($profesional->id_sub_tipo_especialidad);
+
+        // if( !empty($prof_especialidad) )
+        //     $profesional_especialidad .= $prof_especialidad->nombre.' ';
+        if( !empty($prof_tipo_especialidad) )
+            $profesional_especialidad .= $prof_tipo_especialidad->nombre.' ';
+        if( !empty($prof_sub_tipo_especialidad) )
+            $profesional_especialidad .= $prof_sub_tipo_especialidad->nombre.'';
+
 
         // LUGAR DE ATENCION
         $lugar_atencion = LugarAtencion::where('id',$request->lugar_atencion_id)->first();
@@ -1681,6 +1700,7 @@ class ficha_atencionController extends Controller
                 'paciente_alergias' => $paciente_alergias,
                 'prevision' => $prevision,
                 'profesional' => $profesional,
+                'profesional_especialidad' => $profesional_especialidad,
                 'medicamento' => $medicamento,
                 'hora_medica' => $hora,
                 'fichas' => $fichas,
@@ -1779,6 +1799,17 @@ class ficha_atencionController extends Controller
         {
             $responsable = Paciente::find($pacienteDpendiente->id_responsable);
         }
+
+		list($ano,$mes,$dia) = explode("-",$paciente->fecha_nac);
+		$ano_diferencia  = date("Y") - $ano;
+		$mes_diferencia = date("m") - $mes;
+		$dia_diferencia   = date("d") - $dia;
+		if ($dia_diferencia < 0 || $mes_diferencia < 0)
+		$ano_diferencia--;
+
+		$edad = $ano_diferencia;
+		$paciente->fecha_nac = $dia.'-'.$mes.'-'.$ano;
+		$paciente->edad = $edad;
 
         $direccion_paciente = Direccion::where('id',$paciente->id_direccion)->first();
         $direccion_id_ciudad_paciente = '';
@@ -10344,6 +10375,50 @@ class ficha_atencionController extends Controller
                 case 8: //ENFERMERA UNIVERSITARIA
                     if(!empty($profesional->id_tipo_especialidad))
                     {
+						/** FICHAS DE ATENCIONES PREVIAS */
+                        $filtro_previas = array();
+                        $filtro_previas[] = array('id_paciente', $paciente->id);
+                        $filtro_previas[] = array('id_profesional', $profesional->id);
+                        $filtro_previas[] = array('finalizada', 1);
+                        $ficha_previas = FichaOtrosProfesionales::where($filtro_previas)->get();
+
+                        $datos['ficha_previas'] = $ficha_previas;
+
+                        /** FICHA ATENCION ACTUAL */
+                        if(empty($hora->id_ficha_otros_prof))
+                        {
+                            $nueva_ficha_atencion = new FichaOtrosProfesionales();
+                            $nueva_ficha_atencion->id_paciente = $paciente->id;
+                            $nueva_ficha_atencion->id_profesional = $profesional->id;
+                            $nueva_ficha_atencion->id_especialidad = $profesional->id_especialidad;
+                            $nueva_ficha_atencion->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+                            $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                            if ($nueva_ficha_atencion->save())
+                            {
+                                $hora->id_estado = 5;
+                                $hora->fecha_realizacion_consulta = now();
+                                $hora->id_ficha_atencion = NULL;
+                                $hora->id_ficha_otros_prof = $nueva_ficha_atencion->id;
+                                $hora->save();
+                                $ficha_actual_nueva = $nueva_ficha_atencion;
+                            }
+                            else
+                            {
+                                $nueva_ficha_atencion = '';
+                            }
+                        }
+                        else
+                        {
+                            $filtro_fichaAtencion = array();
+                            $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                            $filtro_fichaAtencion[] = array('id', $hora->id_ficha_otros_prof);
+                            $ficha_actual_nueva = FichaOtrosProfesionales::where($filtro_fichaAtencion)->first();
+                        }
+
+                        $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                        $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
+
                         switch (intval($profesional->id_tipo_especialidad))
                         {
                             case 41:// 41	ENFERMERÍA GENERAL

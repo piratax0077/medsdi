@@ -116,8 +116,8 @@
 
         <!--Modals de especialidad -->
         @include("atencion_odontologica.formularios.Antecedentes_dentales.anestesia");
-        @include("atencion_odontologica.formularios.Antecedentes_dentales.hemorragias");
         @include("atencion_odontologica.formularios.Antecedentes_dentales.fracturas");
+        @include("atencion_odontologica.formularios.Antecedentes_dentales.hemorragias");
 
 
 

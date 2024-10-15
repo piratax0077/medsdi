@@ -1327,7 +1327,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row">
-                                            @include('general.secciones_ficha.seccion_receta_examen_comunes')                                                                                                                                                                                                                                                                                                                                                              
+                                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
                                         </div>
                                     </div>
                                 </div>
@@ -1506,26 +1506,16 @@
     }, 5000);
 
     $(document).ready(function() {
+
         $('#tabla_odontologico_tratamiento').DataTable({
-        responsive: true,
-    });
-    });
-
-    $(document).ready(function() {
+            responsive: true,
+        });
         $('#tabla_odontologicos_pieza').DataTable({
-        responsive: true,
-    });
-    });
-
-    $(document).ready(function () {
+            responsive: true,
+        });
         $('#tabla_aranceles').DataTable({
             responsive: true,
         });
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
 
         /* formatear rut */
         $("#solicitado_por_rut_rfl").rut({
@@ -1695,7 +1685,6 @@
             }
         });
 
-
     })
 
     /** MANEJO DE IMAGENES */
@@ -1800,8 +1789,6 @@
         },
     };
 
-
-
     var lista_imagenes = [];
     function cargar_lista_imagenes()
     {
@@ -1829,7 +1816,6 @@
 
 
     }
-
     /** MANEJO DE IMAGENES */
 
     /** REGISTO ANTECEDENTES */
@@ -2411,7 +2397,8 @@
 
     }
 
-    function agregar_examenes_ficha() {
+    function agregar_examenes_ficha()
+    {
         var rows = [];
         $('#tabla_examen_cirugia tr').each(function(i, n) {
             if (i > 0) {
@@ -3557,11 +3544,9 @@
         }
     }
 
-</script>
-
-<script>
     /* Ponemos "agregarPieza" en el ámbito de toda la página */
-    function agregarPieza(){
+    function agregarPieza()
+    {
         var html = '';
         html += '<div id="pieza_dental" class="row">';
         html += '    <div class="form-row">';
@@ -3658,7 +3643,9 @@
             agregarPieza();
         });
     });
-    function agregarPieza1(){
+
+    function agregarPieza1()
+    {
         var html = '';
         html += '<hr>';
         html += '<div id="pieza_dental_dolor" class="row">';
@@ -3790,7 +3777,9 @@
             agregarPieza1();
         });
     });
-    function agregarPieza2(){
+
+    function agregarPieza2()
+    {
         var html = '';
         html += '<hr>';
         html += '<div id="pieza_dental_dolor" class="row">';
@@ -3839,7 +3828,8 @@
             html += '</div>';
 
             $('#contenedor_pieza_plan_endo').append(html);
-        } // agregarPieza
+    } // agregarPieza
+
     $(document).ready(function(){
         /* Sacar la funcion "agregarPieza de este ámbito */
         $('.btn-agregar-pieza2').click(function(){
@@ -3911,7 +3901,8 @@
         html += ' </div>';
 
             $('#contenedor_pieza_dental_endorx').append(html);
-        } // agregarPieza
+    } // agregarPieza
+
     $(document).ready(function(){
         /* Sacar la funcion "agregarPieza de este ámbito */
         $('.btn-agregar-pieza3').click(function(){
