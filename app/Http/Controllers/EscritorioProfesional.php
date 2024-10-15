@@ -5140,8 +5140,13 @@ class EscritorioProfesional extends Controller
         return $mis_mensajes;
      }
 
-     public function mis_documentos(){
-        return view('app.profesional.receta_online.mis_documentos');
+     public function mis_documentos()
+     {
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $fichas = FichaAtencion::where('id_profesional', $profesional->id)->get();
+
+        return view('app.profesional.receta_online.mis_documentos', ['fichas' => $fichas]);
      }
 
      public function ver_mensaje($id){

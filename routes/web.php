@@ -528,6 +528,7 @@ Route::group([
     Route::get('Mis_recetas', [App\Http\Controllers\EscritorioProfesional::class, 'mis_recetas'])->name('profesional.mis_recetas');
     Route::get('Mis_examenes', [App\Http\Controllers\EscritorioProfesional::class, 'mis_examenes'])->name('profesional.mis_examenes');
     Route::get('Mis_certificados', [App\Http\Controllers\EscritorioProfesional::class, 'mis_certificados'])->name('profesional.mis_certificados');
+    Route::get('Mis_documentos', [App\Http\Controllers\EscritorioProfesional::class, 'mis_documentos'])->name('profesional.mis_documentos');
     Route::get('Mis_horas', [App\Http\Controllers\EscritorioProfesional::class, 'mis_horas'])->name('profesional.mis_horas');
     Route::get('Agendar_hora', [App\Http\Controllers\EscritorioProfesional::class, 'agendar_horas'])->name('profesional.agendar_hora');
     Route::get('Agendar_hora_nuevo_paciente', [App\Http\Controllers\EscritorioProfesional::class, 'agendar_hora_nuevo_paciente'])->name('profesional.agendar_hora_nuevo_paciente');
@@ -1484,6 +1485,7 @@ Route::group([
     Route::post('ver_solicitud', [App\Http\Controllers\AdministradorCmController::class, 'ver_solicitud'])->name('adm_cm.ver_solicitud');
     /** CONTROLES DE ALMACENAMIENTO */
     Route::get('controles_almacenamiento', [App\Http\Controllers\AdministradorCmController::class, 'controles_almacenamiento'])->name('adm_cm.controles_almacenamiento');
+	Route::post('agregar_area_cm',[App\Http\Controllers\AdministradorCmController::class, 'agregar_area_cm'])->name('adm_cm.agregar_area_cm');
 
 });
 
@@ -1523,7 +1525,7 @@ Route::group([
 
     Route::get('/historial_mensajes_profesional/{id}', [App\Http\Controllers\LaboratorioController::class, 'historial_mensajes_profesional'])->name('laboratorio.historial_mensajes_profesional');
     Route::get('/Administracion/Comercial', [App\Http\Controllers\LaboratorioController::class, 'areaComercial'])->name('laboratorio.area_comercial');
-    Route::post('dame_profesional_servicio', [App\Http\Controllers\LaboratorioController::class, 'dame_profesional'])->name('laboratorio.dame_profesional_cm');
+    //Route::post('dame_profesional_servicio', [App\Http\Controllers\LaboratorioController::class, 'dame_profesional'])->name('laboratorio.dame_profesional');
 
 
 });

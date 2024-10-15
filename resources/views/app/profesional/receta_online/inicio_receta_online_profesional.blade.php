@@ -67,10 +67,9 @@
                 </div>
                 <div class="col">
                     <div class="card subir">
-                        <a href="#">
+                        <a href="{{ route('profesional.mis_documentos') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-3"
-                                    src="{{ asset('images/iconos/documentos-ro.svg') }}" alt="Mis documentos">
+                                <img class="wid-60 text-center mb-3" src="{{ asset('images/iconos/documentos-ro.svg') }}" alt="Mis documentos">
                                 <h5 class="titulos_tarjetas">
                                     Mis documentos
                                 </h5>
@@ -83,9 +82,9 @@
                         <a href="{{ ROUTE('profesional.historial_mensajes') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center mb-3"
-                                    src="{{ asset('images/iconos/documentos-ro.svg') }}" alt="Mis documentos">
-                                <h5 class="titulos_tarjetas">
-                                    Historial de mensajes
+                                    src="{{ asset('images/iconos/msje.png') }}" alt="Mis documentos">
+                                <h5>
+                                    Mis mensajes
                                 </h5>
                             </div>
                         </a>
