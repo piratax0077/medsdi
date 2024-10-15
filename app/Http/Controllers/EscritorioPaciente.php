@@ -62,6 +62,7 @@ use App\Models\PacientesDependientes;
 use App\Models\Recomendacion;
 use App\Models\RecomendacionDetalle;
 use App\Models\ResultadoExamen;
+use App\Models\TipoExamen;
 use App\Models\UsoPersonal;
 use DateTime;
 
@@ -1392,9 +1393,12 @@ class EscritorioPaciente extends Controller
             }
         }
 
+        $tipo_examen = TipoExamen::all();
+
         return view('app.paciente.receta.mis_examenes')->with([
             'examenes_especialidad_realizados' => $examenes_especialidad_realizados,
             'resultado_examen' => $resultado_examen,
+            'tipo_examen' => $tipo_examen,
         ]);
     }
 

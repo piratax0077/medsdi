@@ -492,7 +492,7 @@ class EscritorioProfesional extends Controller
 
         if (isset($profesional)) {
             $tipo_agendas = ProfesionalHorario::select('tipo_agenda')->where('id_profesional', $profesional->id)->groupBy('tipo_agenda')->pluck('tipo_agenda')->toArray();
-            $horas_dia = HoraMedica::where('id_profesional', $profesional->id)->whereDate('fecha_consulta', \Carbon\Carbon::now()->format('Y-m-d'))->get();
+            $horas_dia = HoraMedica::where('id_profesional', $profesional->id)->where('tipo_hora_medica','!=','B')->whereDate('fecha_consulta', \Carbon\Carbon::now()->format('Y-m-d'))->get();
             foreach ($horas_dia as $h) {
                 $h->paciente = Paciente::where('id', $h->id_paciente)->first();
                 $h->lugar_atencion = LugarAtencion::where('id', $h->id_lugar_atencion)->first();
@@ -517,7 +517,8 @@ class EscritorioProfesional extends Controller
                     'profesional' => $profesional,
                     'hora_dia' => $horas_dia,
                     'tipo_agendas' => $tipo_agendas,
-                    'mensajes' => $mensajes
+                    'mensajes' => $mensajes,
+                    'fecha_carga' => \Carbon\Carbon::now()->format('Y-m-d'),
                 ]);
             }
         }
@@ -821,9 +822,22 @@ class EscritorioProfesional extends Controller
         $region = Region::all();
         $paciente = [];
         foreach ($ficha_atencion as $f) {
-            array_push($paciente, $f->Paciente()->first());
+            $paciente_temp = Paciente::find($f->id_paciente);
+
+            $ficha_atencion_paciente = FichaAtencion::where('id_profesional', $profesional->id)
+            ->where('id_paciente', $f->Paciente()->first()->id)
+            ->distinct()
+            ->get(['id_lugar_atencion']);
+
+            $lugares_atenm = LugarAtencion::whereIn('id', $ficha_atencion_paciente)->pluck('nombre')->toArray();
+
+            $paciente_temp->lugares_atencion = $lugares_atenm;
+
+            array_push($paciente, $paciente_temp);
         }
-        // dd($paciente);
+
+        // echo json_encode($paciente);
+        // exit();
 
         return view('app.profesional.pacientes_profesional')->with(
             [
@@ -2368,10 +2382,13 @@ class EscritorioProfesional extends Controller
         // $horas_medicas = HoraMedica::where('id_profesional', $profesional->id)->where('fecha_consulta', $request->buscar_horas)->get();
         $filtro = array();
         $filtro[] = array('id_profesional', $profesional->id);
-        $filtro[] = array('fecha_consulta', $request->buscar_horas);
+
+        if(!empty($request->buscar_horas))
+            $filtro[] = array('fecha_consulta', $request->buscar_horas);
+
         if(!empty($request->id_lugares_atencion))
             $filtro[] = array('id_lugar_atencion', $request->id_lugares_atencion);
-        $horas_medicas = HoraMedica::where($filtro)->get();
+        $horas_medicas = HoraMedica::where($filtro)->where('tipo_hora_medica','!=','B')->get();
 
         foreach ($horas_medicas as $h) {
             $h->id_paciente = Paciente::where('id', $h->id_paciente)->first();
@@ -4693,7 +4710,7 @@ class EscritorioProfesional extends Controller
                 if($profesional_provisorio->id_direccion)
                 {
                         $direccion = Direccion::find($profesional_provisorio->id_direccion);
-						
+
                         if($direccion)
                         {
                             $direccion_nombre =  $direccion->direccion;

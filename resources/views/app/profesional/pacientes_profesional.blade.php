@@ -31,9 +31,9 @@
                 <div class="card">
                     <div class="card-header text-center bg-info">
                         <div class="row">
-                            <div class="col-md-12 align-botton d-flex justify-content-between">
+                            <div class="col-sm-12 col-md-12 col-lg mb-1 align-botton d-flex justify-content-between">
                                 <h4 class="text-white f-20 d-inline ml-4 mt-1 float-left">Mis pacientes</h4>
-                                <button class="btn btn-primary btn-sm" onclick="enviar_difusion_pacientes()">Mensaje Difusion a mis pacientes</button>
+                                <button class="btn btn-purple btn-sm  d-inline float-md-right" onclick="enviar_difusion_pacientes()"><i class="feather icon-mail"></i>  Enviar mensaje de difusión a mis pacientes</button>
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,8 @@
                                             <th>Contacto</th>
                                             <th>Acción</th>
                                             <th>Mensaje</th>
-                                            <th>Usuario</th>
+                                            {{-- <th>Usuario</th> --}}
+                                            <th>Lugares de Atención</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -92,9 +93,9 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <button class="btn btn-outline-warning btn-icon btn-sm" onclick="enviar_mensaje_paciente({{ $p->id }})"><i class="fas fa-mail"></i></button>
+                                                        <button class="btn btn-icon btn-purple" onclick="enviar_mensaje_paciente({{ $p->id }})" data-toggle="tooltip" data-placement="top" title="Enviar mensaje de difusión"><i class="feather icon-mail"></i></button>
                                                     </td>
-                                                    @if ($p->id_premium == null)
+                                                    {{-- @if ($p->id_premium == null)
                                                         <td><span
                                                                 class="badge badge-primary">Normal</span>
                                                         </td>
@@ -102,7 +103,15 @@
                                                         <td><span
                                                                 class="badge badge-success">Premium</span>
                                                         </td>
-                                                    @endif
+                                                    @endif --}}
+                                                    <td>
+                                                        @if ($p->lugares_atencion)
+                                                            @foreach ( $p->lugares_atencion as $la_temp )
+                                                                {{ $la_temp }}<br/>
+                                                            @endforeach
+
+                                                        @endif
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         @endif

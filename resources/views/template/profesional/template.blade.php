@@ -2939,8 +2939,17 @@
                 });
         };
 
-        function buscar_hora_medica() {
+        function buscar_hora_medica()
+        {
             let buscar_horas = $('#buscar_horas').val();
+            if(buscar_horas == '')
+            {
+                @if (isset($fecha_carga))
+                buscar_horas = '{{ $fecha_carga }}';
+                $('#buscar_horas').val('{{ $fecha_carga }}');
+                @endif
+            }
+
             let id_lugares_atencion = $('#lugares_atencion_agenda').val();
             let url = "{{ route('profesional.buscar_horas_medicas') }}";
             $('#simpletable tbody').empty();
@@ -2961,7 +2970,8 @@
                         for (i = 0; i < data.length; i++) {
 
                             var hora_inicio = data[i].hora_inicio;
-                            //var salida = formato(fecha);
+                            // var salida = formato(fecha);
+                            var fecha_consulta = data[i].fecha_consulta;
                             var paciente = data[i].id_paciente.nombres + ' ' + data[i].id_paciente.apellido_uno + ' ' + data[i].id_paciente.apellido_dos;
 
                             var j = 1; //contador para asignar id al boton que borrara la fila
