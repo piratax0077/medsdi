@@ -2939,8 +2939,17 @@
                 });
         };
 
-        function buscar_hora_medica() {
+        function buscar_hora_medica()
+        {
             let buscar_horas = $('#buscar_horas').val();
+            if(buscar_horas == '')
+            {
+                @if (isset($fecha_carga))
+                buscar_horas = '{{ $fecha_carga }}';
+                $('#buscar_horas').val('{{ $fecha_carga }}');
+                @endif
+            }
+
             let id_lugares_atencion = $('#lugares_atencion_agenda').val();
             let url = "{{ route('profesional.buscar_horas_medicas') }}";
             $('#simpletable tbody').empty();
@@ -2961,7 +2970,8 @@
                         for (i = 0; i < data.length; i++) {
 
                             var hora_inicio = data[i].hora_inicio;
-                            //var salida = formato(fecha);
+                            // var salida = formato(fecha);
+                            var fecha_consulta = data[i].fecha_consulta;
                             var paciente = data[i].id_paciente.nombres + ' ' + data[i].id_paciente.apellido_uno + ' ' + data[i].id_paciente.apellido_dos;
 
                             var j = 1; //contador para asignar id al boton que borrara la fila
@@ -3915,10 +3925,9 @@
 
         };
 
-        function mi_horario_lugar_atencion(id) {
-
-
-
+        function mi_horario_lugar_atencion(id)
+        {
+            let array_tipo_agenda = ['', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes', 'Procedimiento']
             let id_lugar_atencion = id;
             let url = "{{ route('profesional.mi_horario_lugar_atencion') }}";
 
@@ -3956,33 +3965,42 @@
                             let dia = '';
                             dias = data[i].dia.split(',');
                             for (let i = 0; i < dias.length; i++) {
-                                if (dias[i] == 1) {
-
+                                if (dias[i] == 0) {
+                                    dia += 'Domingo '
+                                } else if (dias[i] == 1) {
                                     dia += 'Lunes '
                                 } else if (dias[i] == 2) {
                                     dia += 'Martes '
-
                                 } else if (dias[i] == 3) {
-
                                     dia += 'Miercoles '
                                 } else if (dias[i] == 4) {
                                     dia += 'Jueves '
-
                                 } else if (dias[i] == 5) {
                                     dia += 'Viernes '
-
+                                } else if (dias[i] == 6) {
+                                    dia += 'Sabado '
                                 }
                             }
 
                             let j = 1; //contador para asignar id al boton que borrara la fila
-                            let fila = '<tr class="tr_horario" id="row' + j +
-                                '"><td class="text-center align-middle">' +
-                                hora_inicio + '</td><td class="text-center align-middle">' +
-                                hora_termino + '</td><td class="text-center align-middle">' +
-                                dia + '</td><td class="text-center align-middle">' +
-                                '<input class="btn btn-danger btn-sm btn-icon" title="Eliminar día" type="button" id="btn_eliminar_dia" name="btn_eliminar_dia" onclick="eliminar_dia_horario(' +
-                                id + ',' + id_lugar_atencion + ' );" value="X" > </td>' +
-                                '</tr>'; //esto seria lo que contendria la fila
+                            let fila = '';
+                            fila += '<tr class="tr_horario" id="row' + j + '">';
+                            fila += '   <td class="text-center align-middle">';
+                            fila +=         array_tipo_agenda[data[i].tipo_agenda]
+                            fila += '   </td>';
+                            fila += '   <td class="text-center align-middle">';
+                            fila +=         hora_inicio
+                            fila += '   </td>';
+                            fila += '   <td class="text-center align-middle">';
+                            fila +=         hora_termino;
+                            fila += '   </td>';
+                            fila += '   <td class="text-center align-middle">';
+                            fila +=         dia;
+                            fila += '   </td>';
+                            fila += '   <td class="text-center align-middle">';
+                            fila += '       <input class="btn btn-danger btn-sm btn-icon" title="Eliminar día" type="button" id="btn_eliminar_dia" name="btn_eliminar_dia" onclick="eliminar_dia_horario(' + id + ',' + id_lugar_atencion + ' );" value="X" >';
+                            fila += '   </td>';
+                            fila += '</tr>';
 
                             j++;
 

@@ -149,20 +149,14 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md-4">
-                                                {{--  <div class="form-group">
-                                                    <div class="custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input" id="buscar_especialidad_hora24">
-                                                        <label class="custom-control-label" for="hora24">Buscar horas para las próx. 24 hrs</label>
-                                                    </div>
-                                                </div>  --}}
 
-                                                <div class="form-group">
+                                                {{-- <div class="form-group">
                                                     <div class="switch switch-success d-inline m-r-10">
                                                         <input type="checkbox" id="buscar_especialidad_hora24" value="1">
                                                         <label for="buscar_especialidad_hora24" class="cr"></label>
                                                     </div>
                                                     <label><strong>Buscar horas para las próx. 24 hrs</strong></label>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                             <div class="col-sm-12 col-md-12 text-center">
                                                 <button class="btn btn-info" type="bottom" id="btn_buscar_especialidad" onclick="buscar_profesional_especialidad();"><i class="feather icon-search"></i> Buscar horas</button>
@@ -209,13 +203,15 @@
                                                 </div>
                                             </div>
                                              <div class="col-sm-12 col-md-4">
-                                                <div class="form-group">
+
+                                                {{-- <div class="form-group">
                                                     <div class="switch switch-success d-inline m-r-10">
                                                         <input type="checkbox" id="buscar_profesional_hora24" value="1">
-                                                        <label for="hora24" class="cr"></label>
+                                                        <label for="buscar_profesional_hora24" class="cr"></label>
                                                     </div>
                                                     <label><strong>Buscar horas para las próx. 24 hrs</strong></label>
-                                                </div>
+                                                </div> --}}
+
                                             </div>
                                             <div class="col-sm-12 col-md-12 text-center">
                                                 <button class="btn btn-info" type="button" onclick="buscar_profesional_profesional();"><i class="feather icon-search"></i> Buscar horas</button>
@@ -236,7 +232,7 @@
                                             <div class="col-sm-12 col-md-4">
                                                 <div class="form-group">
                                                     <label class="floating-label-activo-sm">Profesión</label>
-                                                    <select class="form-control form-control-sm" name="buscar_videoconsulta_profesion   " id="buscar_videoconsulta_profesion   " onchange="buscar_tipo_especialidad(this);">
+                                                    <select class="form-control form-control-sm" name="buscar_videoconsulta_profesion" id="buscar_videoconsulta_profesion" onchange="buscar_tipo_especialidad(this);">
                                                         <option value="">Seleccione</option>
 
                                                         @if(isset($profesiones))
@@ -299,13 +295,13 @@
                                             </div> --}}
 
                                             <div class="col-sm-12 col-md-4">
-                                                <div class="form-group">
+                                                {{-- <div class="form-group">
                                                     <div class="switch switch-success d-inline m-r-10">
                                                         <input type="checkbox" id="buscar_videoconsulta_hora24" value="1">
                                                         <label for="buscar_videoconsulta_hora24" class="cr"></label>
                                                     </div>
                                                     <label><strong>Buscar horas para las próx. 24 hrs</strong></label>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                             <div class="col-sm-12 col-md-12 text-center">
                                                 <button class="btn btn-info" type="bottom" id="btn_buscar_especialidad_video_consulta" onclick="buscar_profesional_especialidad_video_consulta();"><i class="feather icon-search"></i> Buscar horas</button>

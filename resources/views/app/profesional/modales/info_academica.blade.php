@@ -10,7 +10,7 @@
 
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label class="floating-label-activo">Tipo antecedente académico</label>
-                        <select class="form-control" name="id_tipo_antecedente_academico" id="id_tipo_antecedente_academico">
+                        <select class="form-control form-control-sm" name="id_tipo_antecedente_academico" id="id_tipo_antecedente_academico">
                             <option value="0">Seleccionar</option>
                             @foreach($tipo_ant_academico as $key_t_ant_acade => $value_t_ant_acade)
                                 <option value="{{ $value_t_ant_acade->id }}">{{ $value_t_ant_acade->nombre }} </option>
@@ -20,38 +20,38 @@
 
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label class="floating-label-activo">Profesión</label>
-                        <input type="text" class="form-control form-control-sm" placeholder="Profesión" id="agregar_ant_academico_profesion" value="">
+                        <input type="text" class="form-control form-control-sm" id="agregar_ant_academico_profesion" value="">
                     </div>
 
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label class="floating-label-activo">Universidad</label>
-                        <input type="text" class="form-control form-control-sm" placeholder="Universidad de Titulo" id="agregar_ant_academico_universidad" value="">
+                        <input type="text" class="form-control form-control-sm" id="agregar_ant_academico_universidad" value="">
                     </div>
 
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label class="floating-label-activo">Año de Titulo</label>
-                        <input type="text" class="form-control form-control-sm" placeholder="Año de Titulo" id="agregar_ant_academico_anio" value="">
+                        <input type="text" class="form-control form-control-sm" id="agregar_ant_academico_anio" value="">
                     </div>
 
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label class="floating-label-activo">Ciudad y País</label>
-                        <input type="text" class="form-control form-control-sm" placeholder="Ciudad y País" id="agregar_ant_academico_ciudad_pais" value="">
+                        <input type="text" class="form-control form-control-sm" id="agregar_ant_academico_ciudad_pais" value="">
                     </div>
 
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label class="floating-label-activo">N° SUPERSALUD</label>
-                        <input type="text" class="form-control form-control-sm" placeholder="N° SUPERSALUD" id="agregar_ant_academico_supersalud" value="">
+                        <input type="text" class="form-control form-control-sm" id="agregar_ant_academico_supersalud" value="">
                     </div>
 
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label class="floating-label-activo">N° Colegio Profesional</label>
-                        <input type="text" class="form-control form-control-sm" placeholder="N° Colegio Profesional" id="agregar_ant_academico_numero_colegio" value="">
+                        <input type="text" class="form-control form-control-sm" id="agregar_ant_academico_numero_colegio" value="">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-end">
-                        <button type="button" class="btn btn-danger-light-c btn-sm mr-2" data-dismiss="modal" onclick="cerrar_info_academica_m();"><i class="feather icon-x"></i> Cancelar</button>
-                        <button type="button" class="btn btn-sm btn-info-light-c" onclick="agregar_registro_academico();"><i class="feather icon-plus"></i> Añadir</button>
+                        <button type="button" class="btn btn-danger btn-sm mr-2" data-dismiss="modal" onclick="cerrar_info_academica_m();"><i class="feather icon-x"></i> Cancelar</button>
+                        <button type="button" class="btn btn-sm btn-info" onclick="agregar_registro_academico();"><i class="feather icon-save"></i> Guardar</button>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use App\Models\AntConfidenciales;
@@ -61,6 +62,7 @@ use App\Models\PacientesDependientes;
 use App\Models\Recomendacion;
 use App\Models\RecomendacionDetalle;
 use App\Models\ResultadoExamen;
+use App\Models\TipoExamen;
 use App\Models\UsoPersonal;
 use DateTime;
 
@@ -150,6 +152,7 @@ class EscritorioPaciente extends Controller
                                                     ->where('parametros.referencia', '=', 'Agenda_Estado');
                                         })
                                         ->where('id_paciente', $paciente->id)
+                                        ->whereRaw("fecha_consulta >= NOW() AND hora_inicio >= NOW()")
                                         ->orderBy('fecha_consulta', 'DESC')
                                         ->orderBy('hora_inicio', 'DESC')
                                         ->get();
@@ -248,7 +251,9 @@ class EscritorioPaciente extends Controller
         // DESVINCULAR profesional
         if($id_usuario_ != 0 && $id_profesional_ != 0)
         {
-            $fichas = FichaAtencion::where('id_paciente', $id_usuario_)
+
+            $paciente = Paciente::where('id_usuario', $id_usuario_)->first();
+            $fichas = FichaAtencion::where('id_paciente', $paciente->id)
                                      ->where('id_profesional', $id_profesional_)
                                      ->first();
 
@@ -1388,9 +1393,12 @@ class EscritorioPaciente extends Controller
             }
         }
 
+        $tipo_examen = TipoExamen::all();
+
         return view('app.paciente.receta.mis_examenes')->with([
             'examenes_especialidad_realizados' => $examenes_especialidad_realizados,
             'resultado_examen' => $resultado_examen,
+            'tipo_examen' => $tipo_examen,
         ]);
     }
 
@@ -1502,6 +1510,16 @@ class EscritorioPaciente extends Controller
         return view('app.paciente.receta.mis_licencias', ['fichas' => $fichas]);
     }
 
+    public function receta_misdocumentos()
+    {
+        $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+        $fichas = FichaAtencion::where('id_paciente', $paciente->id)->get();
+
+
+
+        return view('app.paciente.receta.mis_documentos', ['fichas' => $fichas]);
+    }
+
     /* Perfil */
     public function editInfor(Request $request)
     {
@@ -1534,6 +1552,13 @@ class EscritorioPaciente extends Controller
         $paciente->id_prevision = $prevision;
         $paciente->save();
 
+        $user = User::find($paciente->id_usuario);
+        if( $user->name != $nombre . ' ' . $apellido_uno )
+        {
+            $user->name = $nombre . ' ' . $apellido_uno;
+            $user->save();
+        }
+
         return json_encode(['success' => true]);
 
         // return redirect()->route('paciente.perfil');
@@ -1553,6 +1578,14 @@ class EscritorioPaciente extends Controller
         $paciente->email = $email;
         $paciente->telefono_uno = $fono;
         $paciente->save();
+
+        $user = User::find($paciente->id_usuario);
+        if( $user->email != $email )
+        {
+            $user->email = $email;
+            $user->save();
+        }
+
         return json_encode(['success' => true]);
 
         // return redirect()->route('paciente.perfil');
@@ -1838,21 +1871,8 @@ class EscritorioPaciente extends Controller
             {
                 if($request->tipo_hora_medica == 'T')
                 {
-                    $apertura = new DateTime($hora_medica->hora_inicio);
-                    $cierre = new DateTime($hora_medica->hora_termino);
-
-                    $tiempo = $apertura->diff($cierre);
-
-                    $request_meeting = new Request(array(
-                        'id_hora_atencion' => $hora_medica->id,
-                        'hora_atencion' => $hora_medica->fecha_consulta.'T'.$hora_medica->hora_inicio,
-                        'id_profesional' => $profesional->id,
-                        'profesional_correo' => $profesional->email,
-                        'id_paciente' => $paciente->id,
-                        'paciente_nombre' => $paciente->nombres . " " . $paciente->apellido_uno,
-                        'tiempo_consulta' =>$tiempo->format('%i')
-                    ));
-                    $meeting = ZoomManagerController::crearMeeting($request_meeting);
+                    $jitsi = JitsiController::jitsiRegistroMeet( $profesional->id, $paciente->id, $hora_medica->id );
+					$hora_medica->video_llamada = $jitsi;
                 }
 
                 $datos['estado'] = 1;
@@ -3042,6 +3062,46 @@ class EscritorioPaciente extends Controller
         }
 
         return $datos;
+    }
+
+
+    public function buscar_informacion_profesional(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->rut))
+        {
+            $error['rut'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido ==1)
+        {
+            $profesional = Profesional::where('rut', $request->rut)->get()->first();
+            $profesional_cant = Profesional::where('rut', $request->rut)->get()->count();
+
+            if($profesional_cant > 0)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['profesional'] = $profesional;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+        return $datos;
+
     }
 
 }

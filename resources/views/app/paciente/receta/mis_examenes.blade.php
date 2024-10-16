@@ -26,7 +26,8 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-12">
-                                <h4 class="text-c-blue f-20 d-inline ml-4">Mis exámenes</h4>
+                                <h4 class="text-c-blue f-20 d-inline">Mis exámenes</h4>
+                                <button type="button" class="btn btn-info btn-sm float-right d-inline" onclick="subir_ex_pcte();"><i class="feather icon-plus"></i> Subir examen</button>
                             </div>
                         </div>
                     </div>
@@ -118,10 +119,62 @@
     </div>
 </div>
 
+<!--Modal-->
+<div id="ex-pcte" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="#" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                   <h5 class="modal-title text-white text-center">Subir exámenes</h5>
+                   <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <label class="floating-label-activo-sm">Fecha</label>
+                            <input type="date" class="form-control form-control-sm"name="" id="">
+                        </div>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <label class="floating-label-activo-sm">Nº Órden</label>
+                            <input type="text" class="form-control form-control-sm"name="" id="">
+                        </div>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <label class="floating-label-activo-sm">Profesional</label>
+                            <input type="text" class="form-control form-control-sm"name="" id="">
+                        </div>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <label class="floating-label-activo-sm">Tipo de examen</label>
+                            <input type="text" class="form-control form-control-sm"name="" id="">
+                        </div>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <label class="floating-label-activo-sm">Comentarios</label>
+                            <textarea class="form-control form-control-sm"name="" id=""></textarea>
+                        </div>
+                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <label class="floating-label-activo-sm">Adjuntar exámen</label>
+                            <p class="mt-3">DEJAR UN DROPZONE</p>
+                            <!------ DEJAR UN DROPZONE--->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                   <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                   <button type="submit" class="btn btn-info"><i class="feather icon-upload"></i> Subir exámen</button>
+                </div>
+            </div>
+       </div>
+</div>
+
 <!--Cierre: Container Completo-->
 
 @endsection
 @section('page-script')
+<script type="text/javascript">
+    
+function subir_ex_pcte() {
+        $('#ex-pcte').modal('show');
+    }
+    
+</script>
 <script>
     $(document).ready(function () {
         $('#tabla_examenes_paciente_ro').DataTable({

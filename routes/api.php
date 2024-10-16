@@ -98,6 +98,12 @@ Route::get('/jwt/generar', [JitsiController::class, 'generarJWT_r']);
 Route::get('/jwt/generar/meet', [JitsiController::class, 'jitsiRegistroMeet_r']);
 Route::get('/jwt/envio/correo', [JitsiController::class, 'envioNotificacionLlamada']);
 
+/**jwt test */
+Route::get('/jwt/generar', [JitsiController::class, 'generarJWT_r']);
+Route::get('/jwt/generar/meet', [JitsiController::class, 'jitsiRegistroMeet_r']);
+Route::get('/jwt/envio/correo', [JitsiController::class, 'envioNotificacionLlamada']);
+
+
 
 //  Escritorio Paciente
 //Route::get('/paciente/mis_profesionales', [App\Http\Controllers\PacienteController::class, 'getMisProfesionales']);

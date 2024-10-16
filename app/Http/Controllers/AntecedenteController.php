@@ -39,7 +39,7 @@ class AntecedenteController extends Controller
 
         if($cant_reg >0){
 
-            $registros = Antecedente::where($filtros)->with('users','paciente','tipo_antecendente')->get();
+            $registros = Antecedente::where($filtros)->with('users','paciente','tipo_antecendente')->orderBy('id', 'DESC')->get();
 
             foreach ($registros as $valor) {
                 $valor['antecedente_data'] = json_decode($valor['data'],true);

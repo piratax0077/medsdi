@@ -87,8 +87,7 @@
 									</select>
                                 </div>
                                 <div class="col-sm-4 d-inline text-right mt-1">
-                                    <input type="date" onChange="buscar_hora_medica();" class="form-control form-control-sm"
-                                        id="buscar_horas" name="buscar_horas">
+                                    <input type="date" onChange="buscar_hora_medica();" class="form-control form-control-sm" id="buscar_horas" name="buscar_horas" value="{{ $fecha_carga }}">
                                 </div>
                             </div>
                         </div>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DetalleReceta;
 use App\Models\Especialidad;
 use App\Models\FichaAtencion;
 use App\Models\LugarAtencion;

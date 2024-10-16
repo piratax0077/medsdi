@@ -18,7 +18,7 @@
                                 <li class="breadcrumb-item"><a href="{{ ROUTE('paciente.receta') }}" data-toggle="tooltip"
                                         data-placement="top" title="Volver a inicio de receta online">Receta Online</a></li>
                                 <li class="breadcrumb-item"><a href="#">Mis documentos e indicaciones</a></li>
-                                      
+
                             </ul>
                         </div>
                     </div>
@@ -66,10 +66,7 @@
                                                             </td>
                                                             <td class="align-middle text-center">Enviado</td>
                                                             <td class="text-center align-middle">
-                                                                <button href="#!" class="btn btn-danger-light-c btn-xxs"
-                                                                    data-toggle="modal" data-target="#m_cons_receta"><i
-                                                                        class="feather icon-file-plus"></i> Ver
-                                                                  </button>
+                                                                <button href="#!" class="btn btn-danger-light-c btn-xxs" data-toggle="modal" data-target="#m_cons_receta"><i class="feather icon-file-plus"></i> Ver </button>
                                                             </td>
                                                         </tr>
                                                     @endforeach

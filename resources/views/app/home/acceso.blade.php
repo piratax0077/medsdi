@@ -63,10 +63,12 @@
                 <div class="row">
                     <div class="col-md-12 text-center mb-5">
                         <img class="wid-100" src="{{ asset('images/logo_pais_vertical.png') }}" alt="">
+                        <img class="wid-100" src="{{ asset('images/logo_pais_vertical.png') }}" alt="">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 text-center mb-3">
+                        <h4 class="text-c-blue">Bienvenido/a</h4>
                         <h4 class="text-c-blue">Bienvenido/a</h4>
                     </div>
                 </div>
@@ -103,6 +105,7 @@
                                     <a>
                             </div>
                         </div>{{--
+                        </div>{{--
                         <div class="col-sm-3">
                             <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
                                 <a href="{{ ROUTE('dental.index') }}">
@@ -110,6 +113,7 @@
                                         <img class="wid-40 mt-3" src="{{ asset('images/iconos/cm.svg') }}" alt="">
                                         <h5 class="card-title text-white mt-2">Dental</h5>
                                     </div>
+								<a>
 								<a>
                             </div>
                         </div>
@@ -120,9 +124,11 @@
                                     <div class="card-body pb-0 pt-0">
                                         <img class="wid-40 mt-3" src="{{ asset('images/iconos/cm.svg') }}" alt="">
                                         <h5 class="card-title text-white mt-2">Hospitalización123</h5>
+                                        <h5 class="card-title text-white mt-2">Hospitalización123</h5>
                                     </div>
                                     <a>
                             </div>
+                        </div>--}}
                         </div>--}}
 
                         <div class="col-sm-3">
@@ -148,6 +154,7 @@
                                     <a>
                             </div>
                         </div>
+						{{--
                         <div class="col-sm-3">
                             <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
                                 <a href="https://urgencias.med-sdi.cl">
@@ -170,6 +177,7 @@
                                     </div>
                                     <a>
                             </div>
+                        </div>--}}
                         </div>--}}
                     @endif
 
@@ -227,6 +235,7 @@
                         </div>
                     @endif
 					{{--
+					{{--
                     <div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
 
@@ -238,6 +247,7 @@
                                 </div>
 							<a>
                         </div>
+                    </div>--}}
                     </div>--}}
 					<div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
@@ -273,6 +283,7 @@
                         </div>
                     </div>
 					{{--
+					{{--
                     <div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
                             <a href="#">
@@ -283,6 +294,7 @@
                                 </div>
 							<a>
                         </div>
+                    </div>--}}
                     </div>--}}
                     <div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
@@ -318,7 +330,9 @@
                         </div>
                     </div>
                     {{--<div class="col-sm-3">
+                    {{--<div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
+                            <a href="adm_cm.area_bodega">
                             <a href="adm_cm.area_bodega">
                                 <div class="card-body pb-0 pt-0">
                                     <img class="wid-40 mt-3"
@@ -343,6 +357,7 @@
                         <div class="col-sm-3">
                             <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
                                 <a href="{{ ROUTE('administracion.home') }}">
+                                <a href="{{ ROUTE('administracion.home') }}">
                                     <div class="card-body pb-0 pt-0">
                                         <img class="wid-40 mt-3"
                                             src="{{ asset('images/iconos_ingreso/administrador.svg') }}" alt="">
@@ -351,6 +366,7 @@
                                     <a>
                             </div>
                         </div>
+                    @endif--}}
                     @endif--}}
 
                 </div>

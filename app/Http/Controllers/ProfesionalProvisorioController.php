@@ -316,16 +316,16 @@ class ProfesionalProvisorioController extends Controller
 
 
         /* VALIDACION CAMPOS */
-        if($request->nombre == '')
-        {
-            $error['nombre'] = 'campo requerido';
-            $campos_requeridos = 1;
-        }
-        if($request->apellido_uno == '')
-        {
-            $error['apellido_uno'] = 'campo requerido';
-            $campos_requeridos = 1;
-        }
+        // if($request->nombre == '')
+        // {
+        //     $error['nombre'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
+        // if($request->apellido_uno == '')
+        // {
+        //     $error['apellido_uno'] = 'campo requerido';
+        //     $campos_requeridos = 1;
+        // }
         // if($request->apellido_dos == '')
         // {
         //     $error['apellido_dos'] = 'campo requerido';
@@ -411,20 +411,28 @@ class ProfesionalProvisorioController extends Controller
             //$registro->id_user = 0;
             if(!empty($request->nombre))
             $registro->nombre = $request->nombre;
+
             if(!empty($request->apellido_uno))
             $registro->apellido_uno = $request->apellido_uno;
+
             if(!empty($request->apellido_uno))
             $registro->apellido_dos = $request->apellido_dos;
+
             if(!empty($request->sexo))
             $registro->sexo = $request->sexo;
+
             if(!empty($request->rut))
             $registro->rut = str_replace('.','',$request->rut);
+
             if(!empty($request->email))
             $registro->email = $request->email;
+
             if(!empty($request->telefono_uno))
             $registro->telefono_uno = $request->telefono_uno;
+
             if(!empty($request->telefono_dos))
             $registro->telefono_dos = $request->telefono_dos;
+
             if(!empty($request->direccion))
             {
                 $direcciones = new Direccion();
@@ -436,16 +444,22 @@ class ProfesionalProvisorioController extends Controller
             }
             //if(!empty($request->id_usuario))
             $registro->id_usuario = 0; //sin usuario // no existe aun
+
             if(!empty($request->id_especialidad))
             $registro->id_especialidad = $request->id_especialidad;
+
             if(!empty($request->id_tipo_especialidad))
             $registro->id_tipo_especialidad = $request->id_tipo_especialidad;
+
             if(!empty($request->id_sub_tipo_especialidad))
             $registro->id_sub_tipo_especialidad = $request->id_sub_tipo_especialidad;
+
             if(!empty($request->supersalud))
             $registro->supersalud = $request->supersalud;
+
             if(!empty($request->contactado))
             $registro->contactado = $request->contactado;
+
             if(!empty($request->otro))
             $registro->otro = $request->otro;
 
@@ -469,7 +483,7 @@ class ProfesionalProvisorioController extends Controller
                     );
                 $cc = array();
                 $bcc = array();
-                $asunto = 'MED-SDI - Bienvenido!';
+                $asunto = 'MED-SDI - Invitación a Profesional!';
 
                 //$url_ = 'http://medichile_sistema.test'; // LOCAL
                 $url_ = env('APP_URL'); // PRODUCCION

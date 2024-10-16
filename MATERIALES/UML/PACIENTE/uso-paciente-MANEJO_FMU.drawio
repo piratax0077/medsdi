@@ -1,0 +1,64 @@
+<mxfile host="65bd71144e">
+    <diagram id="Ipz2-4tvlWV69jGE_w5a" name="Página-1">
+        <mxGraphModel dx="938" dy="787" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="101" value="MANEJO DE FMU" style="shape=umlFrame;whiteSpace=wrap;html=1;width=130;height=30;boundedLbl=1;verticalAlign=middle;align=left;spacingLeft=5;" vertex="1" parent="1">
+                    <mxGeometry x="20" y="170" width="830" height="350" as="geometry"/>
+                </mxCell>
+                <mxCell id="48" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;strokeWidth=2;" parent="1" source="2" target="19" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="310" y="331" as="sourcePoint"/>
+                        <mxPoint x="576.72" y="771.72" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="2" value="Paciente" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="291" width="70" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="690" y="200" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="LOGIN" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" parent="3" vertex="1">
+                    <mxGeometry y="30" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="340" y="291" width="170" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="MANEJO &lt;br&gt;DE FMU" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" parent="19" vertex="1">
+                    <mxGeometry x="13.421052631578947" y="45" width="143.1578947368421" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="94" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=open;endFill=0;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="19" target="6" edge="1">
+                    <mxGeometry width="160" relative="1" as="geometry">
+                        <mxPoint x="330" y="481" as="sourcePoint"/>
+                        <mxPoint x="490" y="481" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="95" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="690" y="311" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="96" value="VALIDACION&lt;br&gt;ACCESO" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" parent="95" vertex="1">
+                    <mxGeometry y="30" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="97" value="" style="shape=ellipse;container=1;horizontal=1;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;html=1;dashed=0;collapsible=0;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="690" y="411" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="98" value="CARGA&lt;br&gt;HISTORIAL&lt;br&gt;MEDICO" style="text;html=1;align=center;verticalAlign=middle;rotatable=0;fillColor=none;strokeColor=none;strokeWidth=2;" parent="97" vertex="1">
+                    <mxGeometry y="30" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="99" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=open;endFill=0;dashed=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="19" target="96" edge="1">
+                    <mxGeometry width="160" relative="1" as="geometry">
+                        <mxPoint x="330" y="461" as="sourcePoint"/>
+                        <mxPoint x="490" y="461" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="100" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;labelBackgroundColor=none;endArrow=open;endFill=0;dashed=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="19" target="98" edge="1">
+                    <mxGeometry width="160" relative="1" as="geometry">
+                        <mxPoint x="330" y="461" as="sourcePoint"/>
+                        <mxPoint x="490" y="461" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -58,29 +58,29 @@
                                 <div class="col-sm-12">
                                         <div class="form-row">
                                             <div class="form-group col-md-4">
-                                                <label class="floating-label">Rut</label>
+                                                <label class="floating-label-activo-sm">Rut</label>
                                                 <input type="text" class="form-control form-control-sm" name="rut_profesional" id="rut_profesional" value="{{$registro->rut}}" oninput="formatoRut(this)">
                                             </div>
 
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label class="floating-label">Nombres</label>
+                                                <label class="floating-label-activo-sm">Nombres</label>
                                                 <input type="text" class="form-control form-control-sm" name="nombre_profesional" id="nombre_profesional" value="{{$registro->nombre}}">
                                             </div>
                                             <div class="form-group col-md-3">
-                                                <label class="floating-label">Primer Apellido</label>
+                                                <label class="floating-label-activo-sm">Primer Apellido</label>
                                                 <input type="text" class="form-control form-control-sm" name="primer_apellido_profesional" id="primer_apellido_profesional" value="{{$registro->apellido_uno}}">
                                             </div>
                                             <div class="form-group col-md-3">
-                                                <label class="floating-label">Segundo Apellidos</label>
+                                                <label class="floating-label-activo-sm">Segundo Apellidos</label>
                                                 <input type="text" class="form-control form-control-sm" name="segundo_apellido_profesional" id="segundo_apellido_profesional" value="{{$registro->apellido_dos}}">
                                             </div>
 
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label class="floating-label">Sexo</label>
+                                                <label class="floating-label-activo-sm">Sexo</label>
                                                 <select id="sexo_profesional" name="sexo_profesional" class="form-control form-control-sm">
                                                     <option value="M">Masculino</option>
                                                     <option value="F">Femenino</option>
@@ -89,7 +89,7 @@
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-4">
-                                                <label class="floating-label">Profesi&oacute;n</label>
+                                                <label class="floating-label-activo-sm">Profesi&oacute;n</label>
                                                 <select onchange="cargarListaEspecialidad()"  id="lista_profesion" name="lista_profesion" class="form-control form-control-sm">
                                                         <option value="0">Seleccione una profesión</option>
                                                     @foreach ($profesion as $p)
@@ -98,37 +98,37 @@
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="floating-label">Especialidad</label>
+                                                <label class="floating-label-activo-sm">Especialidad</label>
                                                 <select onchange="cargarListaSubEspecialidad()" id="lista_especialidad" name="lista_especialidad" class="form-control form-control-sm">
                                                     <option value="0">Especialidad</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <label class="floating-label">Sub Especialidad</label>
+                                                <label class="floating-label-activo-sm">Sub Especialidad</label>
                                                 <select id="lista_sub_especialidad" name="lista_sub_especialidad" class="form-control form-control-sm">
                                                     <option value="0">Sub Especialidad</option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label class="floating-label">Correo Electrónico</label>
+                                                <label class="floating-label-activo-sm">Correo Electrónico</label>
                                                 <input type="text" class="form-control form-control-sm" name="email_profesional" id="email_profesional" value="{{$registro->email}}">
                                             </div>
                                             <div class="form-group col-md-3">
-                                                <label class="floating-label">Teléfono Pricipal</label>
+                                                <label class="floating-label-activo-sm">Teléfono Pricipal</label>
                                                 <input type="text" class="form-control form-control-sm" name="telefono_uno_profesional" id="telefono_uno_profesional" value="{{$registro->telefono_uno}}">
                                             </div>
                                             <div class="form-group col-md-3">
-                                                <label class="floating-label">Teléfono Opcional</label>
+                                                <label class="floating-label-activo-sm">Teléfono Opcional</label>
                                                 <input type="text" class="form-control form-control-sm" name="telefono_dos_profesional" id="telefono_dos_profesional" value="{{$registro->telefono_dos}}">
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
-                                                <label class="floating-label">Dirección de consulta</label>
+                                                <label class="floating-label-activo-sm">Dirección de consulta</label>
                                                 <input type="address" value="{{$direccion_nombre}}" class="form-control form-control-sm" name="direccion_consulta_profesional" id="direccion_consulta_profesional" value="">
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label class="floating-label">N&uacute;mero / Oficina</label>
+                                                <label class="floating-label-activo-sm">N&uacute;mero / Oficina</label>
                                                 <input type="address" value="{{$direccion_numero}}" class="form-control form-control-sm" name="numero_dir_consulta_profesional" id="numero_dir_consulta_profesional" value="">
                                             </div>
                                             <div class="form-group col-md-6">
@@ -145,7 +145,7 @@
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label class="floating-label">Ciudad</label>
+                                                <label class="floating-label-activo-sm">Ciudad</label>
                                                 <select id="lista_ciudades" name="lista_ciudades" class="form-control form-control-sm">
                                                     <option value="S">Seleccione una ciudad </option>
                                                 </select>

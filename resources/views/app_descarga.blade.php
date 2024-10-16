@@ -33,11 +33,11 @@
     <div class="auth-wrapper">
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-sm-12 col-md-8 mx-auto py-2">
+				<div class="col-sm-6 col-md-6 mx-auto py-2">
 					<div class="card">
-						
+
 						<div class="card-body text-center p-5">
-                            <h4 class="mb-4 f-20">Descarga nuestra aplicación</h4>
+                            <h4 class="mb-4 f-20">Descarga nuestra aplicación para telefonos Android</h4>
                             <div class="text-center">
                                 <a href="{{ asset('app/download/sdipass.apk') }}">
                                     <img src="{{ asset('images/app_descarga/apk.png') }}" alt="logo_apk" class="img-fluid rounded" style="max-width: 160px;">
@@ -66,6 +66,44 @@
                                     </div>
                                 </div>
                             </div>-->
+                        </div>
+                	</div>
+				</div>
+                <div class="col-sm-6 col-md-6 mx-auto py-2">
+					<div class="card">
+
+						<div class="card-body text-center p-5">
+                            <h4 class="mb-4 f-20">Instrucciones de instalación</h4>
+                            <div>
+                                <ul style="text-align: left">
+                                    <li>Desde el computador:
+                                        <ol>
+                                            <li>Hacer click en "DESCARGAR".</li>
+                                            <li>Espere que se complete la descarga.</li>
+                                            <li>Debe abrir la carpeta donde se descargo el archivo.</li>
+                                            <li>Abra WhatsApp desde el navegador.</li>
+                                            <li>Envíe este archivo de WhatsApp a usted mismo o a otra persona.</li>
+                                            <li>Ya en el celular descargue la aplicación.</li>
+                                            <li>Al hacer click en ella se mostrará un mensaje de advertencia, confirme la apertura de la aplicación.</li>
+                                            <li>Iniciara la instalación, confirme con Instalar.</li>
+                                            <li>Su aplicación se encuentra lista para iniciar sesión.</li>
+                                        </ol>
+
+                                    </li>
+                                    <li>
+                                        Desde el celular:
+                                        <ol>
+                                            <li>Hacer click en "DESCARGAR".</li>
+                                            <li>Espere que se complete la descarga.</li>
+                                            <li>Debe abrir la carpeta donde se descargo el archivo.</li>
+                                            <li>Ya en el celular descargue la aplicación.</li>
+                                            <li>Al hacer click en ella se mostrará un mensaje de advertencia, confirme la apertura de la aplicación.</li>
+                                            <li>Iniciara la instalación, confirme con Instalar.</li>
+                                            <li>Su aplicación se encuentra lista para iniciar sesión.</li>
+                                        </ol>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                 	</div>
 				</div>

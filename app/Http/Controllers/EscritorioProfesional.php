@@ -492,7 +492,7 @@ class EscritorioProfesional extends Controller
 
         if (isset($profesional)) {
             $tipo_agendas = ProfesionalHorario::select('tipo_agenda')->where('id_profesional', $profesional->id)->groupBy('tipo_agenda')->pluck('tipo_agenda')->toArray();
-            $horas_dia = HoraMedica::where('id_profesional', $profesional->id)->whereDate('fecha_consulta', \Carbon\Carbon::now()->format('Y-m-d'))->get();
+            $horas_dia = HoraMedica::where('id_profesional', $profesional->id)->where('tipo_hora_medica','!=','B')->whereDate('fecha_consulta', \Carbon\Carbon::now()->format('Y-m-d'))->get();
             foreach ($horas_dia as $h) {
                 $h->paciente = Paciente::where('id', $h->id_paciente)->first();
                 $h->lugar_atencion = LugarAtencion::where('id', $h->id_lugar_atencion)->first();
@@ -517,7 +517,8 @@ class EscritorioProfesional extends Controller
                     'profesional' => $profesional,
                     'hora_dia' => $horas_dia,
                     'tipo_agendas' => $tipo_agendas,
-                    'mensajes' => $mensajes
+                    'mensajes' => $mensajes,
+                    'fecha_carga' => \Carbon\Carbon::now()->format('Y-m-d'),
                 ]);
             }
         }
@@ -821,9 +822,22 @@ class EscritorioProfesional extends Controller
         $region = Region::all();
         $paciente = [];
         foreach ($ficha_atencion as $f) {
-            array_push($paciente, $f->Paciente()->first());
+            $paciente_temp = Paciente::find($f->id_paciente);
+
+            $ficha_atencion_paciente = FichaAtencion::where('id_profesional', $profesional->id)
+            ->where('id_paciente', $f->Paciente()->first()->id)
+            ->distinct()
+            ->get(['id_lugar_atencion']);
+
+            $lugares_atenm = LugarAtencion::whereIn('id', $ficha_atencion_paciente)->pluck('nombre')->toArray();
+
+            $paciente_temp->lugares_atencion = $lugares_atenm;
+
+            array_push($paciente, $paciente_temp);
         }
-        // dd($paciente);
+
+        // echo json_encode($paciente);
+        // exit();
 
         return view('app.profesional.pacientes_profesional')->with(
             [
@@ -2342,22 +2356,8 @@ class EscritorioProfesional extends Controller
 
         if($request->tipo_hora_medica == 'T')
         {
-            // $apertura = new DateTime($hora_medica->hora_inicio);
-            // $cierre = new DateTime($hora_medica->hora_termino);
-
-            // $tiempo = $apertura->diff($cierre);
-
-            // $request_meeting = new Request(array(
-            //     'id_hora_atencion' => $hora_medica->id,
-            //     'hora_atencion' => $hora_medica->fecha_consulta.'T'.$hora_medica->hora_inicio,
-            //     'id_profesional' => $profesional->id,
-            //     // 'profesional_correo' => $profesional->email,
-            //     'profesional_correo' => 'johan.e.davilap@gmail.com',
-            //     'id_paciente' => $paciente->id,
-            //     'paciente_nombre' => $paciente->nombres . " " . $paciente->apellido_uno,
-            //     'tiempo_consulta' =>$tiempo->format('%i')
-            // ));
-            // $meeting = ZoomManagerController::crearMeeting($request_meeting);
+            $jitsi = JitsiController::jitsiRegistroMeet( $profesional->id, $paciente->id, $hora_medica->id );
+			$hora_medica->video_llamada = $jitsi;
         }
 
         $details = [
@@ -2382,10 +2382,13 @@ class EscritorioProfesional extends Controller
         // $horas_medicas = HoraMedica::where('id_profesional', $profesional->id)->where('fecha_consulta', $request->buscar_horas)->get();
         $filtro = array();
         $filtro[] = array('id_profesional', $profesional->id);
-        $filtro[] = array('fecha_consulta', $request->buscar_horas);
+
+        if(!empty($request->buscar_horas))
+            $filtro[] = array('fecha_consulta', $request->buscar_horas);
+
         if(!empty($request->id_lugares_atencion))
             $filtro[] = array('id_lugar_atencion', $request->id_lugares_atencion);
-        $horas_medicas = HoraMedica::where($filtro)->get();
+        $horas_medicas = HoraMedica::where($filtro)->where('tipo_hora_medica','!=','B')->get();
 
         foreach ($horas_medicas as $h) {
             $h->id_paciente = Paciente::where('id', $h->id_paciente)->first();
@@ -4653,6 +4656,9 @@ class EscritorioProfesional extends Controller
      public function acceso_pni(Request $request)
      {
 
+        // echo json_encode($request->all());
+        // die();
+
         $token = $request->token;
 
         $profesional_provisorio = ProfesionalProvisorio::where([['token',$token],['estado_token',0]])->first();
@@ -4660,44 +4666,83 @@ class EscritorioProfesional extends Controller
         if($profesional_provisorio)
         {
 
-           $id_registro = $profesional_provisorio->id;
+            $id_registro = $profesional_provisorio->id;
 
-           if($profesional_provisorio->id_direccion)
-           {
-                $direccion = Direccion::find($profesional_provisorio->id_direccion);
+            $profesional = Profesional::where('rut', $profesional_provisorio->rut)->get()->first();
+            $profesional_cant = Profesional::where('rut', $profesional_provisorio->rut)->get()->count();
+
+            if($profesional_cant > 0)
+            {
+                $direccion = Direccion::find($profesional->id_direccion);
+                $request_temp = new Request(
+                    array(
+                        'id_registro' => $profesional_provisorio->id,
+                        'nombre_profesional' => $profesional->nombre,
+                        'primer_apellido_profesional' => $profesional->apellido_uno,
+                        'segundo_apellido_profesional' => $profesional->apellido_dos,
+                        'lista_profesion' => $profesional->id_especialidad,
+                        'sexo_profesional' => $profesional->sexo,
+                        'rut_profesional' => $profesional->rut,
+                        'email_profesional' => $profesional->email,
+                        'lista_especialidad' => $profesional->id_tipo_especialidad,
+                        'lista_sub_especialidad' => $profesional->id_sub_tipo_especialidad,
+                        'telefono_uno_profesional' => $profesional->telefono_uno,
+                        'telefono_dos_profesional' => $profesional->telefono_dos,
+                        'direccion_consulta_profesional' => $direccion->direccion,
+                        'numero_dir_consulta_profesional' => $direccion->numero_dir,
+                        'lista_ciudades' => $direccion->id_ciudad,
+                        'token_profesional_provisorio' => $token
+                    )
+                );
+                return $this->agregar_profesional_provisorio($request_temp);
+
+                $region_temp = Region::find($direccion->id_ciudad);
+
+                $direccion_nombre = $direccion->direccion;
+                $direccion_numero = $direccion->numero_dir;
+                $id_ciudad = $direccion->id_ciudad;
+                $id_region = $region_temp->id_region;
+            }
+            else
+            {
 
 
-
-                if($direccion)
+                if($profesional_provisorio->id_direccion)
                 {
-                    $direccion_nombre =  $direccion->direccion;
-                    $direccion_numero =  $direccion->numero_dir;
-                    $id_ciudad = $direccion->id_ciudad;
+                        $direccion = Direccion::find($profesional_provisorio->id_direccion);
 
-                    $ciudad = Ciudad::find($direccion->id_ciudad);
+                        if($direccion)
+                        {
+                            $direccion_nombre =  $direccion->direccion;
+                            $direccion_numero =  $direccion->numero_dir;
+                            $id_ciudad = $direccion->id_ciudad;
 
-                    if($ciudad)
-                    {
-                    $id_region =  $ciudad->id_region;
-                    }else{
-                        $id_region =  0;
-                    }
+                            $ciudad = Ciudad::find($direccion->id_ciudad);
+
+                            if($ciudad)
+                            {
+                            $id_region =  $ciudad->id_region;
+                            }else{
+                                $id_region =  0;
+                            }
+                        }else{
+                            $direccion_nombre =  '';
+                            $direccion_numero =  '';
+                            $id_ciudad = 0;
+                            $id_region =  0;
+                        }
+
                 }else{
-                    $direccion_nombre =  '';
-                    $direccion_numero =  '';
-                    $id_ciudad = 0;
-                    $id_region =  0;
+                            $direccion_nombre =  '';
+                            $direccion_numero =  '';
+                            $id_ciudad = 0;
+                            $id_region =  0;
                 }
-
-           }else{
-                    $direccion_nombre =  '';
-                    $direccion_numero =  '';
-                    $id_ciudad = 0;
-                    $id_region =  0;
-           }
+            }
 
         }else{
-            abort(401);
+            // abort(401);
+            return view('app.profesional.acceso_profesional_no_inscrito_no_valido');
         }
 
 
@@ -5095,8 +5140,13 @@ class EscritorioProfesional extends Controller
         return $mis_mensajes;
      }
 
-     public function mis_documentos(){
-        return view('app.profesional.receta_online.mis_documentos');
+     public function mis_documentos()
+     {
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $fichas = FichaAtencion::where('id_profesional', $profesional->id)->get();
+
+        return view('app.profesional.receta_online.mis_documentos', ['fichas' => $fichas]);
      }
 
      public function ver_mensaje($id){

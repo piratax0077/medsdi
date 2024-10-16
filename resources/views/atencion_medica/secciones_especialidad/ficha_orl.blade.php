@@ -1,18 +1,9 @@
-{{-- @if ($info_video) --}}
+{{-- BOTON DE INICIO DE LLAMADA --}}
+@if ( $hora_medica->tipo_hora_medica == 'T' )
+    <button type="button" style="margin-top: 10px;" class="btn btn-success" id="startCallButton" onclick="iniciar_llamada_j({{ $hora_medica->id_jitsi_video_consulta }});">Inicio de LLamada</button>
+    <div id="jaas-container" style="display: none;"></div>
+@endif
 
-    {{-- <input type="hidden" name="meeting_number" id="meeting_number" value="{{ $info_video->id_call}}"> --}}
-    {{-- <input type="hidden" name="display_name" id="display_name" value="{{ $profesional->nombre.' '.$profesional->apellido_un }}"> --}}
-    {{-- <input type="hidden" name="meeting_pwd" id="meeting_pwd" value="{{ $info_video->pass_call}}"> --}}
-    {{-- <input type="hidden" name="meeting_role" id="meeting_role" value="0"> --}}
-    {{-- <input type="hidden" name="meeting_email" id="meeting_email" value="{{ $profesional->email }}"> --}}
-    {{-- <input type="hidden" name="meeting_lang" id="meeting_lang" value="es-ES"> --}}
-    {{-- <input type="hidden" name="meeting_china" id="meeting_china" value="0"> --}}
-
-    {{-- <button type="button" class="btn btn-success" onclick="abrir_zoom();">Inicio de LLamada</button> --}}
-    {{-- <button type="button" class="btn btn-success" id="startCallButton">Inicio de LLamada</button>
-    <iframe id="zoomFrame" style="    background: #000;height: 200px;"></iframe> --}}
-
-{{-- @endif --}}
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
@@ -1547,5 +1538,156 @@
             });
         }, 5000);
 
+         /** PERVISUALIZACION DE EXAMEN */
+        function visualizar_pdf_examen(tipo_examen)
+        {
+            if(tipo_examen!='')
+            {
+                var array_datos = {};
+                $('.div_form_examen_'+tipo_examen).find('input,textarea,select').each(function (key, element){
+                    var key_temp = element.id.replace('_'+tipo_examen,'');
+
+                    if(key_temp == 'biopsia')
+                    {
+                        if(element.value == 1)
+                        {
+                            array_datos[key_temp] = 'SI';
+                        }
+                        else
+                        {
+                            array_datos[key_temp] = 'NO';
+                        }
+                    }
+                    else
+                    {
+                        array_datos[key_temp] = element.value;
+                    }
+                });
+
+                var imagenes = $('#input_lista_imagenes').val();
+                if(imagenes != '')
+                {
+                    imagenes = JSON.parse(imagenes);
+                    imagenes = JSON.stringify(JSON.stringify(imagenes[tipo_examen]));
+                    console.log(imagenes );
+                }
+
+                var data ='id_ficha='+$('#id_fc').val()+'&contenido='+JSON.stringify(array_datos)+'&imagenes='+imagenes;
+                Fancybox.show(
+                    [
+                        {
+                        src: '{{ route("pdf.visualizar.examen") }}?'+data,
+                        type: "iframe",
+                        preload: false,
+                        },
+                    ]
+                );
+            }
+            else
+            {
+                console.log('tipo examen no especificado');
+            }
+        }
+
     </script>
+
+    {{-- video llamada --}}
+	<script src='https://8x8.vc/{{ env('JITSI_APP_ID') }}/external_api.js' async></script>
+	<style>
+		#jaas-container {
+			height: 50em;
+			width: 50%;
+		}
+	</style>
+	<script type="text/javascript">
+		function inicio_llamada(token, nombre)
+		{
+			const api = new JitsiMeetExternalAPI("8x8.vc", {
+				roomName: "{{ env('JITSI_APP_ID') }}/"+nombre,
+				parentNode: document.querySelector('#jaas-container'),
+				jwt: token,
+				configOverwrite: {
+					startWithAudioMuted: false,
+					enableNoisyMicDetection: true,
+					// toolbarButtons: ['hangup', 'microphone', 'camera','chat'],
+					prejoinPageEnabled: true,
+					// Transcription options.
+					transcription: {
+						enabled: false,
+
+						// ./src/react/features/transcribing/translation-languages.json.
+						translationLanguages: ['en', 'es', 'fr', 'ro'],
+
+						// Important languages to show on the top of the language list.
+						translationLanguagesHead: ['en'],
+
+						// If true transcriber will use the application language.
+						// The application language is either explicitly set by participants in their settings or automatically
+						// detected based on the environment, e.g. if the app is opened in a chrome instance which
+						// is using french as its default language then transcriptions for that participant will be in french.
+						// Defaults to true.
+						useAppLanguage: true,
+
+						// Transcriber language. This settings will only work if "useAppLanguage"
+						// is explicitly set to false.
+						// Available languages can be found in
+						// ./src/react/features/transcribing/transcriber-langs.json.
+						preferredLanguage: 'en-US',
+
+						// Enables automatic turning on transcribing when recording is started
+						autoTranscribeOnRecord: false,
+					},
+				},
+				interfaceConfigOverwrite: {
+					DISABLE_DOMINANT_SPEAKER_INDICATOR: true,
+					AUDIO_LEVEL_PRIMARY_COLOR: 'rgba(255,255,255,0.4)',
+					AUDIO_LEVEL_SECONDARY_COLOR: 'rgba(255,255,255,0.2)',
+				},
+				lang: 'es',
+			});
+		}
+
+		function iniciar_llamada_j(id)
+		{
+			$('#jaas-container-mensaje').hide();
+			$('#jaas-container-mensaje').html('');
+
+			url = "{{ route('jitsi.buscar.meet') }}";
+			$.ajax({
+
+				url: url,
+				type: "GET",
+				data: {
+					id : id,
+				},
+			})
+			.done(function(data)
+			{
+				// console.log('-----------------------');
+				// console.log(data);
+				// console.log('-----------------------');
+				if(data.estado == 1)
+				{
+					inicio_llamada(data.registro.token_moderator, data.registro.nombre_grupo);
+					$('#jaas-container').show();
+				}
+				else
+				{
+					mensaje = 'Se presento un problema al cargar información de la llamada';
+					$('#jaas-container').hide();
+					$('#jaas-container-mensaje').show();
+					$('#jaas-container-mensaje').html(mensaje);
+
+					setTimeout(function(){
+						$('#jaas-container-mensaje').hide();
+						$('#jaas-container-mensaje').html('');
+					}, 2000);
+				}
+			})
+			.fail(function(jqXHR, ajaxOptions, thrownError) {
+				console.log(jqXHR, ajaxOptions, thrownError)
+			});
+		}
+	  </script>
+	{{-- video llamada --}}
 @endsection

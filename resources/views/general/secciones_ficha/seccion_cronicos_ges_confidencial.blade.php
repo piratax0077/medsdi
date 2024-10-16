@@ -1216,6 +1216,7 @@
         </div>
     </div>
 </div>
+
 <!-- MODAL AÑADIR ANTECEDENTE-->
 <div id="m_agregar_antecedente" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="form_enfermedad_cronica" aria-hidden="true">
     <div class="modal-dialog modal-lg  modal-dialog-centered" role="document">
@@ -3261,6 +3262,7 @@
         var data = {};
         var url = '{{Request::root()}}/api/antecedente/ver_registros';
 
+        data.id_paciente = $('#id_paciente_fc').val();
         data.id_tipo_antecedente = tipo;
         data.estado = 1;
 

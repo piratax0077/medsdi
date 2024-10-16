@@ -64,20 +64,6 @@
                                     <a class="nav-link text-reset" id="info-liquidacion-tab" data-toggle="tab" href="#info-liquidacion" role="tab" aria-controls="info-liquidacion" aria-selected="false">Cuentas bancarias (liquidaciones)</a>
                                 </li>
                             </ul>
-                            <!--<ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="btn btn-outline-info btn-sm mb-2 mx-2 active" id="personal-tab" data-toggle="tab" href="#info_personal" role="tab" aria-controls="info_personal" aria-selected="true"><i class="feather icon-user mr-2"></i>Información personal</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="btn btn-outline-info btn-sm mb-2 mx-2" id="emergencia-tab" data-toggle="tab" href="#emergencia" role="tab" aria-controls="emergencia" aria-selected="false"><i class="feather icon-user-plus mr-2"></i>Contactos de emergencia</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="btn btn-outline-info btn-sm mb-2 mx-2" id="datmedicos-tab" data-toggle="tab" href="#datmedicos" role="tab" aria-controls="datmedicos" aria-selected="false"><i class="feather icon-plus-circle mr-2"></i>Datos médicos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="btn btn-outline-info btn-sm mb-2 mx-2" id="pass-tab" data-toggle="tab" href="#pass" role="tab" aria-controls="pass" aria-selected="false"><i class="feather icon-lock mr-2"></i>Contraseñas</a>
-                                </li>
-                            </ul>-->
                         </div>
                     </div>
                 </div>
@@ -299,8 +285,8 @@
                                             <div class="form-row">
                                                 <label class="col-sm-12 col-form-label"></label>
                                                 <div class="col-sm-12 d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-danger-light-c btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
-                                                    <button type="button" onclick="editar_profesional_datos_personales({{ $profesional->id }});" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar cambios </button>
+                                                    <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                    <button type="button" onclick="editar_profesional_datos_personales({{ $profesional->id }});" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios </button>
                                                 </div>
                                             </div>
                                         </form>
@@ -338,19 +324,19 @@
                                     <div class="card-body info_contacto collapse " id="info_contacto_2">
                                         <form>
                                             <div class="form-row">
-                                                <div class="form-group ol-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="floating-label-activo">Correo electrónico</label>
                                                     <input type="text" class="form-control form-control-sm" value="{{ $profesional->email }}" id="editar_email" name="editar_email">
                                                 </div>
-                                                <div class="form-group ol-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                     <label class="floating-label-activo">Teléfono</label>
                                                     <input type="text" class="form-control form-control-sm" value="{{ $profesional->telefono_uno }}" name="editar_telefono_uno" id="editar_telefono_uno">
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-danger-light-c btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
-                                                    <button type="button" onclick="editar_datos_contacto_profesional();" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
+                                                    <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                    <button type="button" onclick="editar_datos_contacto_profesional();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -429,8 +415,8 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-sm btn-danger-light-c mr-2"><i class="feather icon-x"></i> Cancelar</button>
-                                                    <button type="button" class="btn btn-sm btn-info-light-c" onclick="editar_datos_residencia_profesional()"><i class="feather icon-save"></i> Guardar cambios</button>
+                                                    <button type="button" class="btn btn-sm btn-danger mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="editar_datos_residencia_profesional()"><i class="feather icon-save"></i> Guardar cambios</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -451,28 +437,64 @@
                     <div class="tab-pane fade" id="info-academico" role="tabpanel" aria-labelledby="info-academico-tab">
                         {{-- formulario para agregar  --}}
                         <div class="row">
-                            <div class="col-md-12 pb-3">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <h5 class="f-20 text-c-blue d-inline mr-2 pt-1">Antecedentes acedémicos</h5>
-                                <button type="button" class="btn btn-info-light-c btn-xs d-inline" onclick="info_academica_m();"><i class="feather icon-plus"></i> Añadir</button>
+                                <button type="button" class="btn btn-info btn-sm d-inline float-right mb-2" onclick="info_academica_m();"><i class="fas fa-plus"></i> Añadir</button>
                             </div>
-
+                        </div>
                             <div class="row">
                                 @if($perfil_academico != NULL)
                                     @foreach($perfil_academico as $key_academico => $value_academico)
                                         {{-- CAJA DE REGISTRO ACADEMICO  --}}
-                                        <div class="col-md-6">
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                             <!--Card profesion-->
                                             <div class="card">
                                                 <div class="card-header d-flex align-items-center justify-content-between bg-primary">
                                                     <h5 class="mb-0 text-white">{{ $value_academico->TipoAntecedenteAcademico->nombre }}</h5>
-                                                    <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".u_personal_{{ $value_academico->id }}" aria-expanded="false" aria-controls="u_personal_{{ $value_academico->id }}_1 u_personal_{{ $value_academico->id }}_2">
-                                                        <i class="feather icon-edit"></i>
-                                                    </button>
+                                                    <div class="float-md-right d-inline">
+                                                        <button type="button" class="btn btn-light btn-icon " data-toggle="collapse" data-target=".u_personal_{{ $value_academico->id }}" aria-expanded="false" aria-controls="u_personal_{{ $value_academico->id }}_1 u_personal_{{ $value_academico->id }}_2">
+                                                            <i class="feather icon-edit"></i>
+                                                        </button>
+                                                        <!--BOTÓN ELIMINAR PROGRAMAR - BORRAR COMENTARIO CUANDO SE PROGRAME-->
+                                                        <button type="button" class="btn btn-light btn-icon">
+                                                            <i class="feather icon-x"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                                <!--profesion-->
+                                                <!--PROFESIÓN-->
                                                 <div class="card-body  u_personal_{{ $value_academico->id }} collapse show" id="u_personal_{{ $value_academico->id }}_1">
                                                     <form>
-                                                        <div class="form-group row">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                <label class="font-weight-bolder ml-0 mb-0">Profesión</label>
+                                                                <div> {{ $value_academico->nombre }}</div>
+                                                            </div>
+                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                 <label class="font-weight-bolder ml-0 mb-0">Universidad</label>
+                                                                <div> {{ $value_academico->universidad }}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                <label class="font-weight-bolder ml-0 mb-0">Año de Título</label>
+                                                                <div> {{ $value_academico->anio }}</div>
+                                                            </div>
+                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                <label class="font-weight-bolder ml-0 mb-0">Ciudad y País</label>
+                                                                <div> {{ $value_academico->ciudad_pais }}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                <label class="font-weight-bolder ml-0 mb-0">N° SUPERSALUD</label>
+                                                                <div> {{ $value_academico->supersalud }}</div>
+                                                            </div>
+                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                <label class="font-weight-bolder ml-0 mb-0">N° Colegio Profesional</label>
+                                                                <div> {{ $value_academico->numero_colegio }}</div>
+                                                            </div>
+                                                        </div>
+                                                        <!--<div class="form-group row">
                                                             <label class="col-sm-5 col-form-label">Profesion</label>
                                                             <div class="col-sm-6 pt-2 ml-2 font-weight-bolder"> {{ $value_academico->nombre }}</div>
                                                             <label class="col-sm-5 col-form-label">Universidad</label>
@@ -485,53 +507,46 @@
                                                             <div class="col-sm-6 pt-2 ml-2 font-weight-bolder"> {{ $value_academico->supersalud }}</div>
                                                             <label class="col-sm-5 col-form-label">N° Colegio Profesional</label>
                                                             <div class="col-sm-6 pt-2 ml-2 font-weight-bolder"> {{ $value_academico->numero_colegio }}</div>
-                                                        </div>
+                                                        </div>-->
                                                     </form>
                                                 </div>
 
-                                                <!--Cierre: profesion-->                                                                                                                                                                                                                                                            <!--(Editar)profesion-->
+                                                <!--(Editar)profesion-->
                                                 <div class="card-body u_personal_{{ $value_academico->id }} collapse" id="u_personal_{{ $value_academico->id }}_2">
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Profesión</label>
-                                                        <div class="col-sm-7">
-                                                            <input type="text" class="form-control" placeholder="Profesión" id="{{ $value_academico->id }}_profesion" value="{{ $value_academico->nombre }}">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                            <label class="floating-label-activo-sm">Profesión</label>
+                                                            <input type="text" class="form-control form-control-sm" id="{{ $value_academico->id }}_profesion" value="{{ $value_academico->nombre }}">
+                                                        </div>
+                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                            <label class="floating-label-activo-sm">Universidad</label>
+                                                            <input type="text" class="form-control form-control-sm" id="{{ $value_academico->id }}_universidad" value="{{ $value_academico->universidad }}">
                                                         </div>
                                                     </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Universidad</label>
-                                                        <div class="col-sm-7">
-                                                            <input type="text" class="form-control" placeholder="Universidad de Titulo" id="{{ $value_academico->id }}_universidad" value="{{ $value_academico->universidad }}">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                            <label class="floating-label-activo-sm">Año de Título</label>
+                                                            <input type="text" class="form-control form-control-sm" id="{{ $value_academico->id }}_anio" value="{{ $value_academico->anio }}">
+                                                        </div>
+                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                            <label class="floating-label-activo-sm">Ciudad y País</label>
+                                                            <input type="text" class="form-control form-control-sm" id="{{ $value_academico->id }}_ciudad_pais" value="{{ $value_academico->ciudad_pais }}">
                                                         </div>
                                                     </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Año de Titulo</label>
-                                                        <div class="col-sm-7">
-                                                            <input type="text" class="form-control" placeholder="Año de Titulo" id="{{ $value_academico->id }}_anio" value="{{ $value_academico->anio }}">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                            <label class="floating-label-activo-sm">N° SUPERSALUD</label>
+                                                            <input type="text" class="form-control form-control-sm" id="{{ $value_academico->id }}_supersalud" value="{{ $value_academico->supersalud }}">
+                                                        </div>
+                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                            <label class="floating-label-activo-sm">N° Colegio Profesional</label>
+                                                            <input type="text" class="form-control form-control-sm" id="{{ $value_academico->id }}_numero_colegio" value="{{ $value_academico->numero_colegio }}">
                                                         </div>
                                                     </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder">Ciudad y País</label>
-                                                        <div class="col-sm-7">
-                                                            <input type="text" class="form-control" placeholder="Ciudad y País" id="{{ $value_academico->id }}_ciudad_pais" value="{{ $value_academico->ciudad_pais }}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder">N° SUPERSALUD</label>
-                                                        <div class="col-sm-7">
-                                                            <input type="text" class="form-control" placeholder="N° SUPERSALUD" id="{{ $value_academico->id }}_supersalud" value="{{ $value_academico->supersalud }}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-4 col-form-label font-weight-bolder">N° Colegio Profesional</label>
-                                                        <div class="col-sm-7">
-                                                            <input type="text" class="form-control" placeholder="N° Colegio Profesional" id="{{ $value_academico->id }}_numero_colegio" value="{{ $value_academico->numero_colegio }}">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-sm-12 col-form-label"></label>
+                                                    <div class="form-row">
                                                         <div class="col-sm-12 d-flex justify-content-end">
-                                                            <div data-toggle="collapse" data-target=".u_personal_{{ $value_academico->id }}" aria-expanded="false" aria-controls="u_personal_{{ $value_academico->id }}_1 u_personal_{{ $value_academico->id }}_2" class="btn btn-danger mr-2">Cancelar</div>
-                                                            <button class="btn btn-info" onclick="modificar_registro_academico('{{ $value_academico->id }}');">Guardar Cambios</button>
+                                                            <div data-toggle="collapse" data-target=".u_personal_{{ $value_academico->id }}" aria-expanded="false" aria-controls="u_personal_{{ $value_academico->id }}_1 u_personal_{{ $value_academico->id }}_2" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</div>
+                                                            <button class="btn btn-info btn-sm" onclick="modificar_registro_academico('{{ $value_academico->id }}');"><i class="feather icon-save"></i> Guardar cambios</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -543,7 +558,6 @@
                                 @endif
                             </div>
                         </div>
-                    </div>
 
 
                     @include('general.seccion_perfil.seccion_liquidacion')
