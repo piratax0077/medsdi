@@ -44,7 +44,6 @@ class HomeController extends Controller
 
         // }
 
-
         // switch ($usuario->roles()->first()->name) {
         switch ($roles_principal->name) {
             case 'Admin':

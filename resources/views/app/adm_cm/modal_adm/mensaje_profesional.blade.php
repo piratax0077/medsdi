@@ -6,24 +6,24 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			</div>
 			<div class="modal-body">
-                <div class="form-group">
-                    <label for="de">De:</label>
+                <div class="form-group fill">
+                    <label class="floating-label-activo-sm" for="de">De:</label>
                     <input type="text" class="form-control" id="de" name="de" value="{{ Auth::user()->name }}" readonly>
                 </div>
-                <div class="form-group">
-                    <label for="para">Para:</label>
+                <div class="form-group fill">
+                    <label class="floating-label-activo-sm" for="para">Para:</label>
                     <input type="text" name="para_destino" class="form-control" id="para_destino" value="" readonly>
                 </div>
-				<div class="form-group">
-					<label for="titulo">Título:</label>
+				<div class="form-group fill">
+					<label class="floating-label-activo-sm" for="titulo">Título:</label>
 					<input type="text" class="form-control" id="titulo_a_profesional" name="titulo_a_profesional" required>
 				</div>
-				<div class="form-group">
-					<label for="detalle">Asunto:</label>
+				<div class="form-group fill">
+					<label class="floating-label-activo-sm" for="detalle">Asunto:</label>
 					<textarea class="form-control" rows="3" id="detalle_a_profesional" name="detalle_a_profesional" required></textarea>
 				</div>
-				<div class="form-group">
-					<label for="mensaje">Mensaje:</label>
+				<div class="form-group fill">
+					<label class="floating-label-activo-sm" for="mensaje">Mensaje:</label>
 					<textarea class="form-control" rows="5" id="mensaje_a_profesional" name="mensaje_a_profesional" required></textarea>
 				</div>
                 <div class="form-group">
@@ -36,7 +36,7 @@
 
                         <div class="card-body-aten-a">
                             <!-- [ Main Content ] start -->
-                            <div class="dropzone" id="mis-archivos-a-profesional" action="{{ route('profesional.imagen.carga') }}"></div>
+                            <div class="dropzone" id="mis-archivos-a-profesional" action="{{ route('profesional.archivo.carga') }}"></div>
                             <!-- [ file-upload ] end -->
                         </div>
 
@@ -93,15 +93,15 @@
 
         // validar que al menos exista un archivo
         var files = $('#mis-archivos-a-profesional').get(0).dropzone.files;
-        // if(files.length == 0){
-        //     swal({
-        //         title: "Error",
-        //         text: "Debe adjuntar al menos un archivo",
-        //         icon: "error",
-        //     });
-        //     return;
-        // }
 
+        if(files.length == 0){
+            swal({
+                title: "Error",
+                text: "Debe adjuntar al menos un archivo",
+                icon: "error",
+            });
+            return;
+        }
         $.ajax({
             url: "{{ route('mensaje_profesional') }}",
             type: 'POST',

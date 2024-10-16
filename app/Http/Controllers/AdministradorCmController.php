@@ -24,6 +24,7 @@ use App\Models\Direccion;
 use App\Models\Especialidad;
 use App\Models\EspecialidadesCm;
 use App\Models\Instituciones;
+use App\Models\Laboratorio;
 use App\Models\LugarAtencion;
 use App\Models\MensajesDifusion;
 use App\Models\MensajesProfesional;
@@ -34,6 +35,8 @@ use App\Models\PedidoDetalle;
 use App\Models\Profesional;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalInstitucionConvenio;
+use App\Models\ProfesionalHorario;
+use App\Models\ProfesionalConvenio;
 use App\Models\Remuneraciones;
 use App\Models\Roles;
 use App\Models\Servicios;
@@ -44,6 +47,7 @@ use App\Models\TipoConvenioInstitucion;
 use App\Models\TipoEspecialidad;
 use App\Models\TipoInstitucion;
 use App\Models\TipoProductoConvenios;
+use App\Models\TiposLaboratorio;
 use App\Models\SubTipoEspecialidad;
 use App\Models\User;
 
@@ -263,7 +267,7 @@ class AdministradorCmController extends Controller
             ->get();
 
         foreach($profesionales_contratados as $profesional){
-            $contrato = ContratoDependienteProfesional::where('id_profesional',$profesional->id)->first();
+            $contrato = ContratoDependienteProfesional::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$institucion->id_lugar_atencion)->first();
             if($contrato){
                 $profesional->contrato = $contrato;
                 $especialidad_contrato = Especialidad::find($contrato->id_especialidad);
@@ -391,9 +395,77 @@ class AdministradorCmController extends Controller
         );
     }
 
+    public function agregar_area_cm(Request $request){
+        try {
+            $institucion = Instituciones::where('id_usuario', Auth::user()->id)->first();
+
+            $area = new AreasCm();
+            $area->id_institucion = $institucion->id;
+            $area->id_lugar_atencion = $institucion->id_lugar_atencion;
+            $area->id_tipo_area_cm = $request->tipo_area;
+            $area->nombre = $request->area;
+            $area->email = $request->e_cont;
+            $area->telefono = $request->tel_c;
+            $area->numero_personas = $request->n_pers;
+            $area->id_responsable = $request->responsable_cargo;
+            $area->save();
+            $areas_cm = $this->dame_areas_cm($institucion->id_lugar_atencion);
+            $v = view('fragm.areas_cm',[
+                'areas_cm' => $areas_cm,
+                'institucion' => $institucion
+            ])->render();
+            return response()->json(['estado' => 1, 'mensaje' => 'Área agregada correctamente', 'v' => $v]);
+        } catch (\Exception $e) {
+            return response()->json(['estado' => 0, 'mensaje' => $e->getMessage()]);
+        }
+    }
+
+    public function asignar_profesionales_area(Request $request){
+        try {
+            // Buscar el área por ID
+            $area_cm = AreasCm::find($request->id_area);
+
+            // Verificar si el área existe
+            if (!$area_cm) {
+                return response()->json(['mensaje' => 'Área no encontrada'], 404);
+            }
+
+            // Convertir los datos de profesionales a JSON
+            $datos_profesionales_json = json_encode($request->profesionales);
+
+            // Asignar los datos JSON a la propiedad datos_profesionales
+            $area_cm->datos_profesionales = $datos_profesionales_json;
+
+            // Guardar los cambios en la base de datos
+            $area_cm->save();
+
+            $areas_cm = $this->dame_areas_cm($area_cm->id_lugar_atencion);
+
+            $institucion = Instituciones::where('id_usuario', Auth::user()->id)->first();
+
+            $v = view('fragm.areas_cm',[
+                'area' => $area_cm,
+                'areas_cm' => $areas_cm,
+                'institucion' => $institucion
+            ])->render();
+
+            // Devolver el objeto actualizado
+            return response()->json(['mensaje' => 'OK','areas_cm' => $area_cm,'v' => $v], 200);
+        } catch (\Exception $e) {
+            // Manejar la excepción y devolver el mensaje de error
+            return response()->json(['mensaje' => $e->getMessage()], 500);
+        }
+    }
 
     public function centroMedico(){
         return view('app.adm_cm.home');
+    }
+
+    public function mi_horario_lugar_atencion(Request $request)
+    {
+        $profesional = Profesional::where('id', $request->id_profesional)->first();
+        $horario = ProfesionalHorario::where('id_profesional', $profesional->id)->where('id_lugar_atencion', $request->id_lugar_atencion)->get();
+        return $horario;
     }
 
     public function adm_medico(){
@@ -644,6 +716,7 @@ class AdministradorCmController extends Controller
             $director_gestion_cuidado = null;
         }
 
+        $tipos_laboratorio = TiposLaboratorio::all();
 
         return view('app.adm_cm.configuracion')->with([
             'tipo_institucion' => $tipo_institucion,
@@ -665,6 +738,7 @@ class AdministradorCmController extends Controller
             'areas_cm' => $areas_cm,
             'servicios' => $servicios,
             'servicios_internos' => $servicios_internos,
+            'tipos_laboratorio' => $tipos_laboratorio,
         ]);
     }
 
@@ -1347,17 +1421,32 @@ class AdministradorCmController extends Controller
     }
 
     public function dame_areas_cm($id_lugar_atencion){
-        $areas_cm = AreasCm::select('areas_cm.*','tipos_areas_cm.nombre as tipo_area')
+        $areas_cm = AreasCm::select('areas_cm.*','tipos_areas_cm.nombre as tipo_area','profesionales.nombre as nombre_responsable','profesionales.apellido_uno as apellido_uno_responsable','profesionales.apellido_dos as apellido_dos_responsable')
                             ->join('tipos_areas_cm','tipos_areas_cm.id','=','areas_cm.id_tipo_area_cm')
+                            ->leftjoin('profesionales','profesionales.id','=','areas_cm.id_responsable')
                             ->where('areas_cm.id_lugar_atencion',$id_lugar_atencion)
                             ->get();
+
+        foreach ($areas_cm as $key => $area_cm) {
+            if($area_cm->datos_profesionales){
+                $area_cm->datos_profesionales = json_decode($area_cm->datos_profesionales);
+                $profesionales = array();
+                foreach ($area_cm->datos_profesionales as $key => $value) {
+                    $profesional = Profesional::find($value);
+                    array_push($profesionales,$profesional);
+                }
+                $area_cm->profesionales = $profesionales;
+            }else{
+                $area_cm->profesionales = null;
+            }
+        }
 
         return $areas_cm;
     }
 
     public function dame_profesionales($id_lugar_atencion){
         $profesionales = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
-                            ->leftjoin('profesionales','profesionales.id','=','profesionales_lugares_atencion.id_profesional')
+                            ->join('profesionales','profesionales.id','=','profesionales_lugares_atencion.id_profesional')
                             ->where('profesionales_lugares_atencion.id_lugar_atencion',$id_lugar_atencion)
                             ->get();
 
@@ -1367,7 +1456,6 @@ class AdministradorCmController extends Controller
     public function editarDatosPerfil(Request $request)
     {
         $datos = array();
-
 
         $id_institucion = $request->id_institucion;
         $tipo_institucion = $request->tipo_institucion;
@@ -2714,6 +2802,7 @@ class AdministradorCmController extends Controller
 
     public function mensaje_difusion_ministerio(Request $req){
         try {
+            // verificar si viene un archivo de tipo file adjunto
             $destinatarios = $req->receptores;
             // Obtener los roles correspondientes
             $roles = Role::whereIn('id', $destinatarios)->get();
@@ -2764,6 +2853,8 @@ class AdministradorCmController extends Controller
                     // $archivo->ruta = '/storage/uploads/'.$filename;
                     // $archivo->save();
                 }
+            }else{
+                $datos['msj'] = 'mensaje enviado sin archivos';
             }
 
             return $datos;
@@ -3045,8 +3136,6 @@ class AdministradorCmController extends Controller
         }
 
         $lista_tipo_administrativo = TipoAdministrador::where('estado', 1)->get();
-
-
 
         return view('app.adm_cm.personal')->with([
             'responsable' => $responsable,
@@ -3954,7 +4043,6 @@ class AdministradorCmController extends Controller
     public function buscar_profesional(Request $req)
     {
         try {
-            return $req;
             $datos = array();
             $profesional = Profesional::where('id', $req->id_profesional)->first();
 
@@ -5728,8 +5816,13 @@ class AdministradorCmController extends Controller
             $area_cm = AreasCm::where('id', $req->id)->first();
             $lugar_atencion = $area_cm->id_lugar_atencion;
             $area_cm->delete();
+            $institucion = Instituciones::where('id_usuario', Auth::user()->id)->first();
             $areas = $this->dame_areas_cm($lugar_atencion);
-            return ['estado' => 1, 'msj' => 'Area eliminada', 'areas' => $areas];
+            $v = view('fragm.areas_cm',[
+                'areas_cm' => $areas,
+                'institucion' => $institucion
+            ])->render();
+            return ['estado' => 1, 'msj' => 'Area eliminada', 'areas' => $areas, 'v' => $v];
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();
@@ -6344,6 +6437,19 @@ class AdministradorCmController extends Controller
             return $e->getMessage();
         }
 
+    }
+
+    public function dame_convenio_profesional(Request $request){
+
+        $profesional_convenios = ProfesionalConvenio::where('id_profesional', $request->id_profesional)->where('id_lugar_atencion', $request->id_lugar_atencion)->first();
+        if($profesional_convenios)
+        {
+            return ['estado' => 1, 'profesional_convenios' => $profesional_convenios];
+        }
+        else
+        {
+            return ['estado' => 0, 'msj' => 'No se encontraron convenios'];
+        }
     }
 
     public function registrar_convenio(Request $req){

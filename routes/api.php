@@ -9,7 +9,9 @@ use App\Http\Controllers\AntecedenteController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfesionalProvisorioController;
 use App\Http\Controllers\DocumentoController;
+use App\Http\Controllers\JitsiController;
 use App\Http\Controllers\VentaManualRecetaController;
+use App\Http\Controllers\DentalController;
 
 
 /*
@@ -82,7 +84,19 @@ Route::get('/documento/venta_detalle_recetas/{lista_productos}', [DocumentoContr
 //VENTA MANUAL RECETA
 Route::post('/venta_manual_receta/registrar', [VentaManualRecetaController::class, 'registrar']);
 Route::get('/venta_manual_receta/ver_registro', [VentaManualRecetaController::class, 'verRegistro']);
+Route::post('/getArticulo', [DentalController::class, 'getArticulo']);
+Route::get('/getDosis', [DentalController::class, 'getDosis'])->name('dental_.getDosis');
+Route::post('/insertMedicamento', [DentalController::class, 'insertMedicamento'])->name('dental.insertMedicamento');
+Route::post('/eliminarMedicamento', [DentalController::class, 'eliminarMedicamento'])->name('dental.eliminarMedicamento');
+Route::post('/insertPaciente', [DentalController::class, 'insertPaciente'])->name('dental.insertPaciente');
+Route::get('/buscar_ciudad_region', [App\Http\Controllers\DentalController::class, 'buscar_ciudad_region'])->name('api.buscar_ciudad_region');
+Route::get('/dame_regiones', [App\Http\Controllers\DentalController::class, 'dameRegiones'])->name('api.dame_regiones');
+Route::get('/buscar_paciente', [App\Http\Controllers\DentalController::class, 'buscarPaciente'])->name('api.buscar_paciente');
 
+/**jwt test */
+Route::get('/jwt/generar', [JitsiController::class, 'generarJWT_r']);
+Route::get('/jwt/generar/meet', [JitsiController::class, 'jitsiRegistroMeet_r']);
+Route::get('/jwt/envio/correo', [JitsiController::class, 'envioNotificacionLlamada']);
 
 
 //  Escritorio Paciente
@@ -121,3 +135,6 @@ Route::get('/venta_manual_receta/ver_registro', [VentaManualRecetaController::cl
 //
 //// Funciones Vistas
 //Route::get('/getMisPacientes', [App\Http\Controllers\UtilsController::class, 'getPacientes']);
+
+
+Route::get('/Ficha_atencion_sub_tipo', [App\Http\Controllers\ficha_atencionController::class, 'get_sub_tipo_examen']);

@@ -102,22 +102,34 @@
                                                         @if($profesional->contrato !== null)
                                                         <span>{{ $profesional->contrato->tipo_contrato == 1 ? 'INDEFINIDO' : '' }}</span><br>
                                                         <span>{{ $profesional->contrato->fecha_inicio }}</span>
+                                                        @else
+                                                        <span>Contrato no definido</span>
                                                         @endif
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto({{ $profesional->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-home"></i></button>
-                                                        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datoscuenta();" data-toggle="tooltip" data-placement="top" title="Depositar"><i class="fas fa-hand-holding-usd"></i></button>
+                                                        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datoscuenta({{ $profesional->id }});" data-toggle="tooltip" data-placement="top" title="Depositar"><i class="fas fa-hand-holding-usd"></i></button>
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         @if($profesional->contrato !== null)
                                                         <span>{{ $profesional->horas_semanales }} horas semanales <br> ${{ number_format($profesional->contrato->monto_imponible, 0, ",", ".") }}</span>
+                                                        @else
+                                                        <span>Contrato no definido</span>
                                                         @endif
                                                     </td>
                                                     <td class="align-middle text-center">
-                                                        <button type="button" class="btn btn-success btn-sm" onclick="editar_datosprofesionalc({{ $profesional->id_profesional }});">
+                                                        @if($profesional->contrato !== null)
+                                                        <button type="button" class="btn btn-success btn-sm" onclick="editar_datosprofesionalc({{ $profesional->id }});">
                                                         <i class="feather icon-edit"></i> Editar</button>
-                                                        <button type="button" class="btn btn-danger btn-sm" >
+
+                                                        <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_profesional({{ $profesional->id}}, {{ $profesional->contrato->id }}, '{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}');">
                                                         <i class="feather icon-x-circle"></i> Desasociar</button>
+                                                        @else
+                                                        <button type="button" class="btn btn-success btn-sm disabled" onclick="editar_datosprofesionalc({{ $profesional->id }});">
+                                                            <i class="feather icon-edit"></i> Editar</button>
+                                                        <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_profesional({{ $profesional->id}}, 0, '{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}');">
+                                                        <i class="feather icon-x-circle"></i> Desasociar</button>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -194,7 +206,7 @@
                                                         </td>
                                                         <td class="align-middle text-center">
                                                             <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_administrativo({{ $administrativo->id }});"><i class="feather icon-edit"></i> Editar</button>
-                                                            <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_asistente({{ $administrativo->id}}, {{ $administrativo->contrato->id }}, '{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}');"><i class="feather icon-x-circle"></i> Desasociar</button>
+                                                            <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_otros_profesionales('administrativo',{{ $administrativo->id}}, {{ $administrativo->contrato->id }}, '{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}');"><i class="feather icon-x-circle"></i> Desasociar</button>
                                                         </td>
                                                     </tr>
                                                     @endforeach
@@ -274,7 +286,7 @@
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});"><i class="feather icon-edit"></i> Editar</button>
-                                                        <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_asistente({{ $administrativo->id}}, {{ $administrativo->contrato->id }}, '{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}');"><i class="feather icon-x-circle"></i> Desasociar</button>
+                                                        <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_otros_profesionales('mantencion',{{ $administrativo->id}}, {{ $administrativo->contrato->id }}, '{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}');"><i class="feather icon-x-circle"></i> Desasociar</button>
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -318,7 +330,7 @@
     @include('app.adm_cm.modales.personal.editar_administrativos')
     @include('app.adm_cm.modales.personal.editar_mantencion')
 
-    @include('app.adm_cm.modales.personal.finalizar_personal')
+    @include('app.adm_cm.modales.personal.finalizar_contrato')
 
     @include('app.adm_cm.modales.personal.registrar_personal_limpieza_mantencion')
 

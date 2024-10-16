@@ -107,7 +107,9 @@
                                                         </td>
                                                         <td class="align-middle text-center">
                                                             <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_asistente({{ $asistente->id }});"><i class="feather icon-edit"></i> Editar</button>
+                                                            @if($asistente->contrato !== null)
                                                             <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_asistente({{ $asistente->id}}, {{ $asistente->contrato->id }}, '{{ $asistente->nombres.' '.$asistente->apellido_uno.' '.$asistente->apellido_dos }}');"><i class="feather icon-x-circle"></i> Desasociar</button>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                     @endforeach

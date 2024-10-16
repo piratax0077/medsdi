@@ -490,7 +490,7 @@
             uploadMultiple: true,
             parallelUploads: 5,
             maxFiles: 5,
-            maxFilesize: 5,
+            maxFilesize: 10,
             acceptedFiles: 'image/*, .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx',
             dictDefaultMessage: 'Arrastra los archivos aquí para subirlos',
             dictFallbackMessage: 'Su navegador no soporta arrastrar y soltar para subir archivos.',
@@ -512,25 +512,48 @@
                 submitButton.addEventListener("click", function() {
                     myDropzone.processQueue(); // Procesar la cola de archivos
                 });
+                this.on("sendingmultiple", function(file, xhr, formData) {
+                    // Agregar datos adicionales al formulario si es necesario
+                    formData.append("additionalData", "value");
+                });
+
+                this.on("successmultiple", function(files, response) {
+                    // Manejar la respuesta de éxito
+                    console.log("Archivos subidos correctamente:", response);
+                    alert("Archivos subidos correctamente");
+                });
+
+                this.on("errormultiple", function(files, response) {
+                    // Manejar la respuesta de error
+                    console.log("Error al subir los archivos:", response);
+                    alert("Error al subir los archivos");
+                });
+
+                this.on("completemultiple", function(files) {
+                    // Manejar la finalización de la subida
+                    console.log("Subida completada para los archivos:", files);
+                    // Puedes eliminar los archivos de la lista si lo deseas
+                    files.forEach(file => myDropzone.removeFile(file));
+                });
             }
         });
 
         // inicializar dropzone de mensaje a profesional
-        myDropzone_profesional = new Dropzone("#mis-archivos-a-profesional", {
-            url: "{{ route('ministerio.imagen.carga') }}",
+        var myDropzone_profesional = new Dropzone("#mis-archivos-a-profesional", {
+            url: "{{ route('profesional.archivo.carga') }}",
             autoProcessQueue: false,
             addRemoveLinks: true,
-            uploadMultiple: true,
+            uploadMultiple: true, // Permitir múltiples archivos
             parallelUploads: 5,
             maxFiles: 5,
-            maxFilesize: 5,
-            acceptedFiles: 'image/*, .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx',
-            dictDefaultMessage: 'Arrastra los archivos aquí para subirlos',
+            maxFilesize: 10, // Máximo 10MB
+            acceptedFiles: 'application/pdf,.doc,.docx,.xls,.xlsx,.csv',
+            dictDefaultMessage: 'Arrastra los archivos aquí para subirlos!!',
             dictFallbackMessage: 'Su navegador no soporta arrastrar y soltar para subir archivos.',
             dictFallbackText: 'Por favor utilice el fallback formado abajo para subir sus archivos como en los viejos tiempos.',
             dictFileTooBig: 'El archivo es muy grande (MiB). Tamaño máximo: MiB.',
             dictInvalidFileType: 'No puedes subir archivos de este tipo.',
-            dictResponseError: 'Server responded with code.',
+            dictResponseError: 'El servidor respondió con el código .',
             dictCancelUpload: 'Cancelar subida',
             dictUploadCanceled: 'Subida cancelada.',
             dictCancelUploadConfirmation: '¿Estás seguro de que quieres cancelar esta subida?',
@@ -540,10 +563,33 @@
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
             init: function() {
-                console.log('init');
                 var submitButton = document.querySelector("#submit-all-profesional");
                 submitButton.addEventListener("click", function() {
                     myDropzone_profesional.processQueue(); // Procesar la cola de archivos
+                });
+
+                this.on("sendingmultiple", function(file, xhr, formData) {
+                    // Agregar datos adicionales al formulario si es necesario
+                    formData.append("additionalData", "value");
+                });
+
+                this.on("successmultiple", function(files, response) {
+                    // Manejar la respuesta de éxito
+                    console.log("Archivos subidos correctamente:", response);
+                    alert("Archivos subidos correctamente");
+                });
+
+                this.on("errormultiple", function(files, response) {
+                    // Manejar la respuesta de error
+                    console.log("Error al subir los archivos:", response.errors);
+                    alert("Error al subir los archivos");
+                });
+
+                this.on("completemultiple", function(files) {
+                    // Manejar la finalización de la subida
+                    console.log("Subida completada para los archivos:", files);
+                    // Puedes eliminar los archivos de la lista si lo deseas
+                    files.forEach(file => myDropzone_profesional.removeFile(file));
                 });
             }
         });
@@ -551,103 +597,7 @@
         $('#modal_mensaje_difusion').modal('show');
     }
 
-    function enviar_mensaje_difusion_confirmar() {
-        var formData = new FormData(document.getElementById("mensajeForm"));
-        myDropzone.getAcceptedFiles().forEach(function(file) {
-            formData.append('archivos[]', file);
-        });
 
-        let de = document.getElementById('de').value
-        let para = $('#select_receptores').val();
-        let titulo = document.getElementById('titulo').value;
-        let detalle = document.getElementById('detalle').value;
-        let mensaje = document.getElementById('message').value;
-
-        let valido = 0;
-        let msj = '';
-
-        // validar el infreso de al menos una imagen
-        if(myDropzone.files.length == 0){
-            valido = 1;
-            msj += 'Debe ingresar al menos una imagen o archivo <br>';
-        }
-
-        if(de == ''){
-            valido = 1;
-            msj += 'Debe seleccionar un remitente <br>';
-        }
-
-        if(para == null || para.length == 0){
-            valido = 1;
-            msj += 'Debe seleccionar al menos un grupo receptor <br>';
-        }
-
-        if(titulo == ''){
-            valido = 1;
-            msj += 'Debe ingresar un titulo <br>';
-        }
-
-        if(detalle == ''){
-            valido = 1;
-            msj += 'Debe ingresar un detalle <br>';
-        }
-
-        if(mensaje == ''){
-            valido = 1;
-            msj += 'Debe ingresar un mensaje <br>';
-        }
-
-        if(valido == 1){
-            swal({
-                title: "Error",
-                content: {
-                    element: "div",
-                    attributes: {
-                        innerHTML: msj
-                    }
-                },
-                icon: "error",
-                button: "Aceptar",
-            });
-            return;
-        }
-
-        formData.append('_token', '{{ csrf_token() }}');
-        formData.append('de', document.getElementById('de').value);
-        // receptores
-        formData.append('para', JSON.stringify($('#select_receptores').val()));
-        formData.append('message', document.getElementById('message').value);
-        formData.append('titulo', document.getElementById('titulo').value);
-        formData.append('detalle', document.getElementById('detalle').value);
-
-        fetch("{{ route('mensaje_difusion_ministerio') }}", {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            // Manejar la respuesta del servidor
-            if(data.estado == 1){
-                swal({
-                    title: "Mensaje enviado",
-                    text: data.mensaje,
-                    icon: "success",
-                    button: "Aceptar",
-                });
-                $('#modal_mensaje_difusion').modal('hide');
-                $('#select_receptores').val(null).trigger('change');
-                $('#message').val('');
-                myDropzone.removeAllFiles();
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error.responseText);
-        });
-    };
 
     /*-Modals personal-*/
     function contacto(id)
@@ -729,10 +679,10 @@
                     html += '<div class="col-md-12">';
                     html += '<div class="card">';
                     html += '<div class="card-header">';
-                    html += '<h4 class="card-title">'+mensaje.titulo+'</h4>';
+                    html += '<h4 class="card-title">'+mensaje.datos_mensaje.titulo+'</h4>';
                     html += '</div>';
                     html += '<div class="card-body">';
-                    html += '<p>'+mensaje.mensaje+'</p>';
+                    html += '<p>'+mensaje.datos_mensaje.mensaje+'</p>';
                     html += '</div>';
                     html += '</div>';
                     html += '</div>';
@@ -745,6 +695,116 @@
             }
         })
     }
+
+    function datos_depositos(id) {
+
+$('#liquidaciones').html('');
+$('#liquidacion_pills').html('');
+let url = "{{ route('profesional.liquidacion_ver_profesional') }}";
+$.ajax({
+    url: url,
+    type: "get",
+    data: {
+        id_seccion: id
+    },
+})
+.done(function(data) {
+    if (data.estado == 1)
+    {
+        console.log(data.registros);
+        /** encontrado */
+        $('#liquidaciones').html('');
+        $('#liquidacion_pills').html('');
+
+
+        $.each(data.registros, function( index, element ) {
+            /** pills */
+            var html_p = '';
+            html_p += '<li class="nav-item">';
+            if(element.principal == 1)
+                html_p += '    <a class="btn btn-outline-info btn-sm mr-1 my-1 active" id="liquidacion_'+index+'-tab" data-toggle="tab" href="#liquidacion_'+index+'" role="tab" aria-controls="liquidacion_'+index+'" aria-selected="true">'+element.banco.nombre+'</a>';
+            else
+                html_p += '    <a class="btn btn-outline-info btn-sm mr-1 my-1" id="liquidacion_'+index+'-tab" data-toggle="tab" href="#liquidacion_'+index+'" role="tab" aria-controls="liquidacion_'+index+'" aria-selected="false">'+element.banco.nombre+'</a>';
+            html_p += '</li>';
+            $('#liquidacion_pills').append(html_p);
+
+            /** cuerpo */
+            var activo = ' active show ';
+
+            var html = '';
+            html += '<!-- tab '+index+'-->';
+            if(element.principal == 1)
+                html += '<div class="tab-pane fade '+activo+'" id="liquidacion_'+index+'" role="tabpanel" aria-labelledby="liquidacion_'+index+'-tab">';
+            else
+                html += '<div class="tab-pane fade " id="liquidacion_'+index+'" role="tabpanel" aria-labelledby="liquidacion_'+index+'-tab">';
+            html += '<div class="row info-basica" id="info-basica-1">';
+            html += '    <div class="col-md-12">';
+            html += '        <div class="form-group row">';
+            html += '            <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>';
+            html += '            <div class="col-sm-7 my-auto ml-2" id="liquidacion_rut">'+element.serie+'</div>';
+            html += '        </div>';
+            html += '    </div>';
+            html += '    <div class="col-md-12">';
+            html += '        <div class="form-group row">';
+            html += '            <label class="col-sm-4 col-form-label font-weight-bolder">Titular</label>';
+            html += '            <div class="col-sm-7 my-auto ml-2" id="liquidacion_nombre">'+element.autor+'</div>';
+            html += '        </div>';
+            html += '    </div>';
+            html += '    <div class="col-md-12">';
+            html += '        <div class="form-group row">';
+            html += '            <label class="col-sm-4 col-form-label font-weight-bolder">Banco</label>';
+            html += '            <div class="col-sm-7 my-auto ml-2" id="liquidacion_banco">'+element.banco.nombre+'</div>';
+            html += '        </div>';
+            html += '    </div>';
+            html += '    <div class="col-md-12">';
+            html += '        <div class="form-group row">';
+            html += '            <label class="col-sm-4 col-form-label font-weight-bolder">Cuenta</label>';
+            html += '            <div class="col-sm-7 my-auto ml-2" id="liquidacion_cuenta">'+element.numero_control+'</div>';
+            html += '        </div>';
+            html += '    </div>';
+            html += '    <div class="col-md-12">';
+            html += '        <div class="form-group row">';
+            html += '            <label class="col-sm-4 col-form-label font-weight-bolder">Tipo Cuenta</label>';
+            html += '            <div class="col-sm-7 my-auto ml-2" id="liquidacion_tipo_cuenta">'+element.otro+'</div>';
+            html += '        </div>';
+            html += '    </div>';
+            html += '    <div class="col-md-12">';
+            html += '        <div class="form-group row">';
+            html += '            <label class="col-sm-4 col-form-label font-weight-bolder">Correo electrónico</label>';
+            html += '            <div class="col-sm-7 my-auto ml-2" id="liquidacion_email">'+element.email+'</div>';
+            html += '        </div>';
+            html += '    </div>';
+            html += '    <div class="col-md-12">';
+            html += '        <div class="form-group row">';
+            html += '            <label class="col-sm-4 col-form-label font-weight-bolder">Principal</label>';
+            if(element.principal == 1)
+                html += '            <div class="col-sm-7 my-auto ml-2" id="liquidacion_principal">Principal</div>';
+            else
+                html += '            <div class="col-sm-7 my-auto ml-2" id="liquidacion_principal">Opcional</div>';
+            html += '        </div>';
+            html += '    </div>';
+            html += '</div>';
+            html += '</div>';
+            $('#liquidaciones').append(html);
+        });
+
+        $('#dat_bancarios').modal('show');
+    }
+    else
+    {
+        /** no encontrado */
+        swal({
+            title: "El Profesional no posee cuentas registradas.",
+            icon: "error",
+        });
+    }
+
+})
+.fail(function(jqXHR, ajaxOptions, thrownError) {
+    console.log(jqXHR, ajaxOptions, thrownError)
+});
+
+}
 
 </script>
 @endsection

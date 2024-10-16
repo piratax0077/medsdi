@@ -1275,7 +1275,7 @@
 
             {{--  if($.trim(periodo_ficha_dental) == '' || periodo_ficha_dental == 0 || $.trim(periodo_ficha_dental) == 'Seleccione')
             {
-                valido = 1;
+                //valido = 1;
                 mensaje += 'Debe completar el campo Periodo.\n';
             }
             else if($('#periodo_ficha_dental').val() == 11)
@@ -1293,7 +1293,7 @@
 
             if($.trim(cantidad_comprar) == '' || cantidad_comprar == 0 || $.trim(cantidad_comprar) == 'Seleccione')
             {
-                valido = 1;
+                //valido = 1;
                 mensaje += 'Debe completar el campo Cantidad a Comprar.\n';
             }
             else if($('#cantidad_comprar').val() == '999')

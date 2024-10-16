@@ -7,103 +7,57 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Controllers\Controller;
-
 use App\Models\AnestesiaPaciente;
-
 use App\Models\AntecedenteAnestesiaPaciente;
-
 use App\Models\AntecedenteFracturaPaciente;
-
 use App\Models\AntecedenteHemorragiaPaciente;
-
 use App\Models\Articulo;
-
 use App\Models\Biopsia;
-
 use App\Models\CertificadoReposo;
-
 use App\Models\Ciudad;
-
 use App\Models\ConstanciaGes;
-
 use App\Models\ControlBocaCompleta;
-
 use App\Models\ControlEndodonciaPaciente;
-
 use App\Models\ControlEnvioLaboratorio;
-
 use App\Models\ControlMaxilarInferior;
-
 use App\Models\ControlMaxilarSuperior;
-
 use App\Models\ControlObesidad;
-
 use App\Models\DeclaracionEno;
-
 use App\Models\DetalleReceta;
-
 use App\Models\Diabete;
-
 use App\Models\DiagnosticoCie;
-
+use App\Models\Direccion;
 use App\Models\EndodonciaPaciente;
-
 use App\Models\ExamenMedico;
-
 use App\Models\ExamenPPF;
-
 use App\Models\ExamenRadiologico;
-
 use App\Models\ficha_dentalAtencion;
-
 use App\Models\FichaAtencionDental;
-
 use App\Models\GastoMedico;
-
 use App\Models\Hipertension;
-
 use App\Models\HoraMedica;
-
 use App\Models\InformeMedico;
-
 use App\Models\IngresoPacienteCirugia;
-
 use App\Models\Interconsulta;
-
 use App\Models\Laboratorio;
-
 use App\Models\LugarAtencion;
-
 use App\Models\MaterialesInsumosPaciente;
-
+use App\Models\MedicamentoUsoCronicoExterno;
 use App\Models\OdontogramaPaciente;
-
 use App\Models\OrdenTrabajoMayor;
-
 use App\Models\OrdenTrabajoMenor;
-
 use App\Models\Paciente;
-
+use App\Models\PacienteExterno;
 use App\Models\PedidoInsumos;
-
 use App\Models\PedidoMateriales;
-
 use App\Models\Prevision;
-
 use App\Models\Profesional;
-
 use App\Models\ProfesionalHorario;
-
 use App\Models\ProtocoloOperatorioCirugia;
-
 use App\Models\RecetaDosis;
-
 use App\Models\RecetaPresentacion;
-
 use App\Models\Region;
-
 use App\Models\SolicitudPabellonQuirurgico;
-
 use App\Models\User;
 
 use Carbon\Carbon;
@@ -484,25 +438,15 @@ class DentalController extends Controller
 
         $epicrisis_carnet->indicaciones_alta = $request->indicaciones_alta_epicrisis_carnet_cirugia_dental;
 
-
-
         $epicrisis_carnet->id_paciente = $request->paciente_ingreso_epicrisis_carnet_cirugia_dental;
-
         $epicrisis_carnet->id_profesional = $profesional->id;
-
         $epicrisis_carnet->id_lugar_atencion = $request->lugar_atencion_pabellon;
 
-
-
         if (!$epicrisis_carnet->save()) {
-
             return back();
-
         }
 
         $mensaje = 'Se ha agregado ingreso de paciente de forma exitosa';
-
-
 
         return redirect()->back()->with('mensaje', $mensaje);
 
@@ -3747,27 +3691,14 @@ class DentalController extends Controller
 
 
     public function getArticulo(Request $request)
-
     {
-
         $search = $request->search;
-
-
-
         if ($search == '') {
-
             $employees = Articulo::orderby('nombre', 'asc')->select('id', 'nombre', 'droga', 'cant_comp', 'tipo_cont')->limit(15)->get();
-
         } else {
-
            //  $employees = Articulo::orderby('nombre', 'asc')->select('id', 'nombre')->where('nombre', 'like', '%' . $search . '%')->limit(15)->get();
-
             $employees = Articulo::orderby('nombre', 'asc')->select('id', 'nombre','droga', 'cant_comp', 'tipo_cont')->where('nombre', 'like', $search . '%')->limit(15)->get();
-
         }
-
-
-
         $response = array();
 
         foreach ($employees as $employee) {
@@ -3857,43 +3788,35 @@ class DentalController extends Controller
 
 
     public function getTipoExamen(Request $request)
-
     {
-
         $search = $request->search;
 
-
-
         if ($search == '') {
-
             $employees = ExamenMedico::orderby('id', 'asc')->select('id', 'nombre_examen')->limit(15)->get();
-
         } else {
-
             $employees = ExamenMedico::orderby('id', 'asc')->select('id', 'nombre_examen')->where('nombre_examen', 'like', '%' . $search . '%')->limit(15)->get();
-
         }
-
-
 
         $response = array();
-
         foreach ($employees as $employee) {
-
             $response[] = array("value" => $employee->id, "label" => $employee->descripcion);
-
         }
-
-
-
         return response()->json($response);
-
     }
 
+    public function buscar_ciudad_region(Request $request)
+    {
+        $ciudad = Ciudad::where('id_region', $request->region)->orderBy('nombre')->get();
+        return json_encode($ciudad);
+    }
 
+    public function dameRegiones()
+    {
+        $regiones = Region::all();
+        return json_encode($regiones);
+    }
 
     public function getDosis(Request $request)
-
     {
 
 
@@ -3910,44 +3833,161 @@ class DentalController extends Controller
 
     }
 
+    public function insertMedicamento(Request $request){
+        try {
+            $medicamento_cronico_externo = new MedicamentoUsoCronicoExterno();
+            $medicamento_cronico_externo->id_paciente = $request->id_paciente;
+            $medicamento_cronico_externo->id_articulo = $request->id_medicamento;
+            $medicamento_cronico_externo->nombre_medicamento = $request->medicamento;
+            $medicamento_cronico_externo->cantidad = $request->cantidad;
+            $medicamento_cronico_externo->presentacion = $request->dosis;
+            $medicamento_cronico_externo->tipo_enfermedad = "cronico";
+            $medicamento_cronico_externo->estado = 1;
+            if($medicamento_cronico_externo->save()){
+                $medicamentos = $this->dameMedicamentosCronicos($request->id_paciente);
+                return ['estado' => 'ok','mensaje', 'Medicamento guardado de forma correcta','medicamentos' => $medicamentos];
+            }else{
+                return ['estado' => 'error','mensaje', 'Error al guardar el medicamento'];
+            }
+        } catch (\Exception $e) {
+            return ['estado' => 'error','mensaje', $e->getMessage()];
+        }
+    }
 
-
-    public function getCantComp(Request $request)
-
+    public function buscarPaciente(Request $request)
     {
+        try {
+            $paciente = Paciente::where('rut', $request->rut)->first();
+            if($paciente){
+                // buscar la direccion
+                $direccion = Direccion::where('id', $paciente->id_direccion)->first();
+                $paciente->direccion = $direccion;
+                // buscar la ciudad
+                $ciudad = Ciudad::where('id', $direccion->id_ciudad)->first();
+                $paciente->ciudad = $ciudad;
+                $id_paciente_externo = $this->agregar_paciente_externo($paciente->id);
 
+                $paciente->id = $id_paciente_externo;
+                $medicamentos = $this->dameMedicamentosCronicos($id_paciente_externo);
+                return ['estado' => 'ok','mensaje'=> 'Paciente encontrado','paciente' => $paciente, 'medicamentos' => $medicamentos];
+            }else{
+                // buscar en paciente externo
+                $paciente_externo = PacienteExterno::where('rut', $request->rut)->first();
+                if($paciente_externo){
+                    $direccion = Direccion::where('id', $paciente_externo->id_direccion)->first();
+                    $paciente_externo->direccion = $direccion;
+                    $ciudad = Ciudad::where('id', $direccion->id_ciudad)->first();
+                    $paciente_externo->ciudad = $ciudad;
+                    $paciente_externo->apellido_uno = $paciente_externo->apellido_paterno;
+                    $paciente_externo->apellido_dos = $paciente_externo->apellido_materno;
+                    $paciente_externo->telefono_uno = $paciente_externo->telefono;
+                    $medicamentos = $this->dameMedicamentosCronicos($paciente_externo->id);
 
-
-        $cant_comp = RecetaPresentacion::where('tipo_presentacion', $request->cant_comp)->get();
-
-
-
-        return json_encode($cant_comp);
+                    return ['estado' => 'ok','mensaje'=> 'Paciente encontrado','paciente' => $paciente_externo, 'medicamentos' => $medicamentos];
+                }else{
+                    return ['estado' => 'error','mensaje'=> 'Paciente no encontrado'];
+                }
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return ['estado' => 'error','mensaje', $e->getMessage()];
+        }
 
     }
 
+    public function eliminarMedicamento(Request $request){
+        try {
+            $medicamento = MedicamentoUsoCronicoExterno::find($request->id_medicamento);
+            $id_paciente = $medicamento->id_paciente;
+            if($medicamento->delete()){
+                $medicamentos = $this->dameMedicamentosCronicos($id_paciente);
+                return ['estado' => 'ok','mensaje', 'Medicamento eliminado de forma correcta','medicamentos' => $medicamentos];
+            }else{
+                return ['estado' => 'error','mensaje', 'Error al eliminar el medicamento'];
+            }
+        } catch (\Exception $e) {
+            return ['estado' => 'error','mensaje', $e->getMessage()];
+        }
+    }
 
+    private function agregar_paciente_externo($id_paciente){
+        try {
+            $paciente = Paciente::find($id_paciente);
+            $existe = PacienteExterno::where('rut', $paciente->rut)->first();
+            if($existe){
+                return $existe->id;
+            }
+            $paciente_externo = new PacienteExterno();
+            $paciente_externo->rut = $paciente->rut;
+            $paciente_externo->nombres = $paciente->nombres;
+            $paciente_externo->apellido_paterno = $paciente->apellido_uno;
+            $paciente_externo->apellido_materno = $paciente->apellido_dos;
+            $paciente_externo->telefono = $paciente->telefono_uno;
+            $paciente_externo->email = $paciente->email;
+            $paciente_externo->id_direccion = $paciente->id_direccion;
+            $paciente_externo->estado = 1;
+            $paciente_externo->save();
+            return $paciente_externo->id;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    private function dameMedicamentosCronicos($id_paciente = null){
+        $medicamentos = MedicamentoUsoCronicoExterno::where('id_paciente', $id_paciente)->get();
+        return $medicamentos;
+    }
+
+    public function insertPaciente(Request $request){
+        try {
+            // revisar si existe el paciente por el rut
+            $paciente = PacienteExterno::where('rut', $request->rut)->first();
+            if(!$paciente){
+                $paciente = new PacienteExterno();
+            }
+            $paciente->rut = $request->rut;
+            $paciente->nombres = $request->nombre;
+            $paciente->apellido_paterno = $request->apellido_paterno;
+            $paciente->apellido_materno = $request->apellido_materno;
+            $paciente->telefono = $request->telefono;
+            $registro_direccion = new Direccion();
+            $registro_direccion->direccion = $request->direccion;
+            $registro_direccion->numero_dir = $request->numero;
+            $registro_direccion->id_ciudad = $request->comuna;
+            $registro_direccion->save();
+
+            $paciente->email = $request->correo;
+            $paciente->id_direccion = $registro_direccion->id;
+            $paciente->id_region = $request->region;
+            $paciente->id_comuna = $request->comuna;
+            $paciente->estado = 1;
+
+            if($paciente->save()){
+                return ['estado' => 'ok','mensaje', 'Paciente guardado de forma correcta','id_paciente' => $paciente->id];
+            }else{
+                return ['estado' => 'error','mensaje', 'Error al guardar el paciente'];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return ['estado' => 'error','mensaje', $e->getMessage()];
+        }
+
+    }
+
+    public function getCantComp(Request $request)
+    {
+        $cant_comp = RecetaPresentacion::where('tipo_presentacion', $request->cant_comp)->get();
+        return json_encode($cant_comp);
+    }
 
     public function getFrecuencia(Request $request)
-
     {
-
-
-
         //$articulo = Articulo::where('id', $request->id_medicamento)->first()->dosis;
-
-
-
         //$dosis = RecetaDosis::where('id', $request->id_dosis)->get();
-
         $frecuencias = RecetaDosis::where('cod_parent', $request->id_dosis)->get();
-
         //dd($frecuencias);
-
-
-
         return json_encode($frecuencias);
-
     }
 
 

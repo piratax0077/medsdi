@@ -62,12 +62,12 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12 text-center mb-5">
-                        <img class="wid-90" src="{{ asset('images/logo_pais_vertical.svg') }}" alt="">
+                        <img class="wid-100" src="{{ asset('images/logo_pais_vertical.png') }}" alt="">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 text-center mb-3">
-                        <h5 class="text-c-blue f-20">Bienvenido</h5>
+                        <h4 class="text-c-blue">Bienvenido/a</h4>
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
                                     </div>
                                     <a>
                             </div>
-                        </div>
+                        </div>{{--
                         <div class="col-sm-3">
                             <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
                                 <a href="{{ ROUTE('dental.index') }}">
@@ -110,7 +110,7 @@
                                         <img class="wid-40 mt-3" src="{{ asset('images/iconos/cm.svg') }}" alt="">
                                         <h5 class="card-title text-white mt-2">Dental</h5>
                                     </div>
-                                    <a>
+								<a>
                             </div>
                         </div>
 
@@ -119,11 +119,11 @@
                                 <a href="{{ ROUTE('cirugia.index_cirugia_quirurgica') }}">
                                     <div class="card-body pb-0 pt-0">
                                         <img class="wid-40 mt-3" src="{{ asset('images/iconos/cm.svg') }}" alt="">
-                                        <h5 class="card-title text-white mt-2">Hospitalización</h5>
+                                        <h5 class="card-title text-white mt-2">Hospitalización123</h5>
                                     </div>
                                     <a>
                             </div>
-                        </div>
+                        </div>--}}
 
                         <div class="col-sm-3">
                             <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
@@ -148,7 +148,18 @@
                                     <a>
                             </div>
                         </div>
-
+                        <div class="col-sm-3">
+                            <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
+                                <a href="https://urgencias.med-sdi.cl">
+                                    <div class="card-body pb-0 pt-0">
+                                        <img class="wid-40 mt-3"
+                                            src="{{ asset('images/iconos/p_no_inscrito.svg') }}" alt="">
+                                        <h5 class="card-title text-white mt-2">Urgencias</h5>
+                                    </div>
+                                    <a>
+                            </div>
+                        </div>
+						{{--
                         <div class="col-sm-3">
                             <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
                                 <a href="{{ ROUTE('profesional.home') }}">
@@ -159,7 +170,7 @@
                                     </div>
                                     <a>
                             </div>
-                        </div>
+                        </div>--}}
                     @endif
 
                     @if (Auth::user()->hasRole('AsistenteCaja') )
@@ -215,7 +226,7 @@
                             </div>
                         </div>
                     @endif
-
+					{{--
                     <div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
 
@@ -227,7 +238,7 @@
                                 </div>
 							<a>
                         </div>
-                    </div>
+                    </div>--}}
 					<div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
                             <a href="{{ ROUTE('app.laboratorio.adm_general.home') }}">
@@ -261,6 +272,7 @@
 							<a>
                         </div>
                     </div>
+					{{--
                     <div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
                             <a href="#">
@@ -271,7 +283,7 @@
                                 </div>
 							<a>
                         </div>
-                    </div>
+                    </div>--}}
                     <div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
                              <a href="{{ ROUTE('app.enfermeria.enfermera_administrativa') }}">
@@ -305,9 +317,9 @@
 							<a>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    {{--<div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
-                            <a href="#">
+                            <a href="adm_cm.area_bodega">
                                 <div class="card-body pb-0 pt-0">
                                     <img class="wid-40 mt-3"
                                         src="{{ asset('images/iconos_ingreso/laboratorio.svg') }}" alt="">
@@ -330,7 +342,7 @@
                     @if (Auth::user()->hasRole('Admin') )
                         <div class="col-sm-3">
                             <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
-                                <a href="{{ ROUTE('administrador.home') }}">
+                                <a href="{{ ROUTE('administracion.home') }}">
                                     <div class="card-body pb-0 pt-0">
                                         <img class="wid-40 mt-3"
                                             src="{{ asset('images/iconos_ingreso/administrador.svg') }}" alt="">
@@ -339,7 +351,7 @@
                                     <a>
                             </div>
                         </div>
-                    @endif
+                    @endif--}}
 
                 </div>
             </div>

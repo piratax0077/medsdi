@@ -53,3 +53,109 @@
         </div>
     </div>
 </div>
+
+<script>
+     function enviar_mensaje_difusion_confirmar() {
+        var formData = new FormData(document.getElementById("mensajeForm"));
+        var files = $('#mis-archivos-difusion-ministerio').get(0).dropzone.files;
+        if(files.length == 0){
+            swal({
+                title: "Error",
+                text: "Debe adjuntar al menos un archivo",
+                icon: "error",
+            });
+            return;
+        }
+
+        let de = document.getElementById('de').value
+        let para = $('#select_receptores').val();
+        let titulo = document.getElementById('titulo').value;
+        let detalle = document.getElementById('detalle').value;
+        let mensaje = document.getElementById('message').value;
+
+        let valido = 0;
+        let msj = '';
+
+        // validar el infreso de al menos una imagen
+        if(files.length == 0){
+            valido = 1;
+            msj += 'Debe ingresar al menos una imagen o archivo <br>';
+        }
+
+        if(de == ''){
+            valido = 1;
+            msj += 'Debe seleccionar un remitente <br>';
+        }
+
+        if(para == null || para.length == 0){
+            valido = 1;
+            msj += 'Debe seleccionar al menos un grupo receptor <br>';
+        }
+
+        if(titulo == ''){
+            valido = 1;
+            msj += 'Debe ingresar un titulo <br>';
+        }
+
+        if(detalle == ''){
+            valido = 1;
+            msj += 'Debe ingresar un detalle <br>';
+        }
+
+        if(mensaje == ''){
+            valido = 1;
+            msj += 'Debe ingresar un mensaje <br>';
+        }
+
+        if(valido == 1){
+            swal({
+                title: "Error",
+                content: {
+                    element: "div",
+                    attributes: {
+                        innerHTML: msj
+                    }
+                },
+                icon: "error",
+                button: "Aceptar",
+            });
+            return;
+        }
+
+        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('de', document.getElementById('de').value);
+        // receptores
+        formData.append('para', JSON.stringify($('#select_receptores').val()));
+        formData.append('message', document.getElementById('message').value);
+        formData.append('titulo', document.getElementById('titulo').value);
+        formData.append('detalle', document.getElementById('detalle').value);
+
+        fetch("{{ route('mensaje_difusion_ministerio') }}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // Manejar la respuesta del servidor
+            if(data.estado == 1){
+                swal({
+                    title: "Mensaje enviado",
+                    text: data.mensaje,
+                    icon: "success",
+                    button: "Aceptar",
+                });
+                $('#modal_mensaje_difusion').modal('hide');
+                $('#select_receptores').val(null).trigger('change');
+                $('#message').val('');
+                myDropzone.removeAllFiles();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error.responseText);
+        });
+    };
+</script>

@@ -19,6 +19,7 @@ use App\Models\Direccion;
 use App\Models\Especialidad;
 use App\Models\EspecialidadesCm;
 use App\Models\Instituciones;
+use App\Models\Laboratorio;
 use App\Models\LugarAtencion;
 use App\Models\MensajesDifusion;
 use App\Models\MensajesProfesional;
@@ -903,6 +904,7 @@ class LaboratorioController extends Controller
 
             /** CARGA DE ASISTENTES */
             $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+
             $filtro = array();
             $filtro[] = array('id_profesional', $profesional->id);
             // $filtro[] = array('estado', 2);
@@ -931,6 +933,29 @@ class LaboratorioController extends Controller
         }
 
         return $datos;
+    }
+
+    public function agregar_laboratorio(Request $request){
+        try {
+            $laboratorio = new Laboratorio();
+            $laboratorio->nombre = $request->nombre_laboratorio;
+            $laboratorio->rut = $request->rut_laboratorio;
+            $laboratorio->email = $request->email_laboratorio;
+            $laboratorio->telefono = $request->telefono_laboratorio;
+
+            $institucion = Instituciones::find($request->id_institucion);
+            $laboratorio->id_institucion = $institucion->id;
+            $laboratorio->id_lugar_atencion = $institucion->id_lugar_atencion;
+            $laboratorio->id_direccion = 3; // Direccion por defecto
+
+            if($laboratorio->save()){
+                return back()->with('success','Laboratorio agregado correctamente');
+            }else{
+                return back()->with('error','Error al agregar laboratorio');
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function buscar_asistente(Request $request)

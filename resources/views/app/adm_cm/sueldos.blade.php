@@ -76,17 +76,20 @@
                                 @foreach ($registro_personal as $personal)
                                     <tr>
                                         <td class="align-middle text-center">
+                                            @if($personal->persona !== null)
                                             {{ (empty($personal->persona->nombres)?$personal->persona->nombre:$personal->persona->nombres).' '.$personal->persona->apellido_uno.' '.$personal->persona->apellido_dos }}
+                                            @endif
                                         </td>
 
                                         <td class="align-middle text-center">
                                             <!--Botón Modal contacto -->
                                             <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_persona('{{ $personal->tipo_empleado }}', '', '{{ $personal->id_empleado }}');" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
-
+                                            @if($personal->persona !== null)
                                             @if(strpos(strtoupper($personal->tipo_empleado), 'ADMINISTRADOR') !== false)
                                                 <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('{{ $personal->persona->id_admin }}');" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
                                             @else
                                                 <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('{{ $personal->persona->id_usuario }}');" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
+                                            @endif
                                             @endif
                                         </td>
 

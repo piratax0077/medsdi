@@ -175,8 +175,37 @@
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
 
-        function convenio_profesional_cm() {
-            $('#convenio_usuario').modal('show');
+        function convenio_profesional_cm(id_profesional,id_lugar_atencion) {
+            console.log(id_profesional);
+
+            var url = "{{ route('adm_cm.dame_convenio_profesional') }}";
+            $.ajax({
+                url: url,
+                type: "post",
+                data: {
+                    id_profesional: id_profesional,
+                    id_lugar_atencion: id_lugar_atencion,
+                    _token: CSRF_TOKEN,
+                },
+            }).done(function(data) {
+                console.log(data);
+                if (data.estado == 1) {
+                    $('#convenio_usuario').modal('show');
+                    $('#rut').val(data.rut);
+                    $('#cm_prof_cobro').val(data.tipo_cobro);
+                    $('#cm_prof_cobro_valor').val(data.valor);
+                } else {
+                    swal({
+                        title: "Error",
+                        text: data.msj,
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    })
+                    // alert('No se pudo Cargar las ciudades');
+                }
+
+            })
         }
 		function liquidacion_prof_cm() {
             $('#liquidacion').modal('show');
@@ -427,6 +456,62 @@
             if(dvEsperado != dv) { rut.setCustomValidity("RUT Inválido"); return false; }
 
             rut.setCustomValidity('');
+        }
+
+        function info_profesional(id)
+        {
+            let id_profesional = id;
+
+            let url = "{{ route('agenda.buscar_informacion_profesional') }}";
+
+            $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {
+                        id_profesional: id_profesional,
+                    }
+
+                })
+                .done(function(data) {
+                    if (data.estado == 1)
+                    {
+
+                        var rut = '';
+                        var lugares_atencion = '';
+                        var telefono = '';
+                        var email = '';
+
+                        rut = data.profesional.rut;
+                        telefono = data.profesional.telefono_uno;
+                        email = data.profesional.email;
+
+                        $.each(data.lugares_atencion, function( index, lugar_at ) {
+                            lugares_atencion += '<li>';
+                            lugares_atencion += '  <strong>'+lugar_at.nombre+':</strong> ' +lugar_at.direccion_texto +'<br>';
+                            lugares_atencion += '  <strong>Tipo : </strong> ' +lugar_at.tipo_texto +'<br>';
+                            lugares_atencion += '  <strong>Telefono:</strong> ' +lugar_at.telefono +'<br>';
+                            lugares_atencion += '  <strong>Convenios:</strong> ' +lugar_at.convenios +'<br>';
+                            lugares_atencion += '</li><hr>';
+                        });
+
+                        $('#info_profesional_rut').html(rut);
+                        $('#info_profesional_lugares_atencion').html(lugares_atencion);
+                        $('#info_profesional_telefono').html('<li>'+telefono+'</li>');
+                        $('#info_profesional_email').html('<li>'+email+'</li>');
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Informacion del Profesional no encontrada",
+                            icon: "error",
+                            buttons: "Aceptar",
+                        })
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            $('#info_profesional').modal('show');
         }
 
 	</script>

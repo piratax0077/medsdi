@@ -104,10 +104,20 @@
                             </a>
                         </div>
                     </div>
+                    <div class="col mb-3">
+                        <div class="card-a subir mb-2 h-100 pt-0 pb-0">
+                            <a href="#">
+                                <div class="card-body text-center px-2 pt-2 pb-1" style="cursor:pointer">
+                                    <img class="wid-50 text-center" src="{{ asset('images/iconos/certificados-ro.svg') }}">
+                                    <h6 class="mt-1 f-13">Estadisticas medicamentos <br> de uso crónico</h6>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
             <!--Botones-->
-               <div class="row row-cols-1 row-cols-md-1 row-cols-lg-3 row-cols-xl-3">
+               {{-- <div class="row row-cols-1 row-cols-md-1 row-cols-lg-3 row-cols-xl-3">
                  <div class="col mb-1">
                         <div class="card shadow bg-c-info opacidad px-0">
                             <a href="#" class="btn" type="button">
@@ -145,7 +155,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <!--Cierre: Botones-->
 
         </div>

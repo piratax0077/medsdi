@@ -1,5 +1,11 @@
 @extends('template.adm_cm.template')
 @section('content')
+<!--****Container Completo****-->
+<style>
+    .select2-container--open{
+        z-index: 9999999 !important;
+    }
+</style>
 <!--Container Completo-->
 <div class="pcoded-main-container">
     <div class="pcoded-content">
@@ -8,7 +14,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="font-weight-bolder">Configurar Mi Institución</h5>
+                            <h5 class="font-weight-bolder">Configurar mi institución</h5>
                         </div>
                         <ul class="breadcrumb mb-4">
                             <li class="breadcrumb-item">
@@ -27,6 +33,7 @@
 
         <input type="hidden" name="id_institucion" id="id_institucion" value="{{ $institucion->id }}">
         <input type="hidden" name="tipo_institucion" id="tipo_institucion" value="{{ $tipo_institucion }}">
+        <input type="hidden" name="id_area" id="id_area" value="">
 
 
         <div class="user-profile user-card mb-4">
@@ -39,7 +46,7 @@
                                     <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <div class="profile-dp">
                                             <div class="position-relative d-inline-block">
-                                                <img class="img-radius img-fluid wid-100" src="{{ asset('images/iconos/cm-perfiles.png') }}"> alt="User image">
+                                                <img class="img-radius img-fluid wid-100" src="{{ asset('images/iconos/cm-perfiles.png') }}">
                                             </div>
                                             <div class="overlay">
                                                 <span>Actualizar</span>
@@ -53,10 +60,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 mt-4">
+                        <div class="col-md-12 mt-0">
                             <!-- tab general -->
-                            <div class="user-profile user-card pt-0">
-                                <div class="card-body py-0">
+
                                     <div class="user-about-block m-0">
                                         <div class="row">
                                             <div class="col-md-12">
@@ -65,13 +71,16 @@
                                                         <a class="nav-link text-reset active" id="p-cm-tab" data-toggle="tab" href="#p-cm" role="tab" aria-controls="p-cm" aria-selected="false"><i class="feather icon-home mr-2"></i>Perfil de la Institución</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-reset " id="p-adm-tab" data-toggle="tab" href="#p-adm" role="tab" aria-controls="p-adm" aria-selected="true"><i class="feather icon-user mr-2"></i>Perfil administrador general</a>
+                                                        <a class="nav-link text-reset " id="p-adm-tab" data-toggle="tab" href="#p-adm" role="tab" aria-controls="p-adm" aria-selected="true"><i class="feather icon-user mr-2"></i>Perfil administrador de la Institución</a>
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link text-reset" id="rol-permiso-adm-med-tab" data-toggle="tab" href="#rol-permiso-adm-med" role="tab" aria-controls="rol-permiso-adm-med" aria-selected="false"><i class="feather  icon-lock mr-2"></i>Inscripción y manejo de administradores</a>
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link text-reset" id="ar-dep-tab" data-toggle="tab" href="#ar-dep" role="tab" aria-controls="ar-dep" aria-selected="false"><i class="fa-solid fa-stethoscope mr-2"></i>Especialidades y áreas</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-reset" id="ar-dep-tab" data-toggle="tab" href="#ar-dep" role="tab" aria-controls="ar-dep" aria-selected="false"><i class="fa-solid fa-stethoscope mr-2"></i>Bodegas</a>
                                                     </li>
                                                     @if($institucion->sucursales == 1)
                                                         <li class="nav-item">
@@ -82,8 +91,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -119,20 +127,20 @@
                                     <div class="card-body info_basica collapse show" id="info_basica-1">
                                         <form>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
-                                                <div class="col-sm-7 my-auto ml-2" id="ver_rut">{{ $institucion->rut }}</div>
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Rut</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2" id="ver_rut">{{ $institucion->rut }}</div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Razón social</label>
-                                                <div class="col-sm-7 my-auto ml-2" id="ver_razon_social">{{ $institucion->razon_social }}</div>
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Razón social</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2" id="ver_razon_social">{{ $institucion->razon_social }}</div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Nombre Fantasia</label>
-                                                <div class="col-sm-7 my-auto ml-2" id="ver_nombre">{{$institucion->nombre  }}</div>
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nombre Fantasia</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2" id="ver_nombre">{{$institucion->nombre  }}</div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Nº de inscripción SuperSalud</label>
-                                                <div class="col-sm-7 my-auto ml-2" id="ver_certificado_supersalud">{{ $institucion->certificado_supersalud }}</div>
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nº de inscripción SuperSalud</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2" id="ver_certificado_supersalud">{{ $institucion->certificado_supersalud }}</div>
                                             </div>
                                         </form>
                                     </div>
@@ -141,35 +149,35 @@
                                     <div class="card-body info_basica collapse" id="pinfo_basica_2">
                                         <form>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
-                                                <div class="col-sm-7">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Rut</label>
+                                                <div class="col-sm-8 col-xxl-9">
                                                     <input type="text" class="form-control form-control-sm" placeholder="Rut" id="editar_rut" value="{{ $institucion->rut }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Razón Social</label>
-                                                <div class="col-sm-7">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Razón Social</label>
+                                                <div class="col-sm-8 col-xxl-9">
                                                     <input type="text" class="form-control form-control-sm" placeholder="Razón Social" id="editar_razon_social" value="{{ $institucion->razon_social }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Nombre Fantasia</label>
-                                                <div class="col-sm-7">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nombre Fantasia</label>
+                                                <div class="col-sm-8 col-xxl-9">
                                                     <input type="text" class="form-control form-control-sm" placeholder="Nombre" id="editar_nombre" value="{{$institucion->nombre  }}">
                                                 </div>
                                             </div>
 
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Nº de inscripción SuperSalud</label>
-                                                <div class="col-sm-7">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nº de inscripción SuperSalud</label>
+                                                <div class="col-sm-8 col-xxl-9">
                                                     <input type="text" class="form-control form-control-sm" placeholder="Nº de inscripción" id="editar_certificado_supersalud" value="{{ $institucion->certificado_supersalud }}">
                                                 </div>
                                             </div>
 
                                             <div class="form-group row">
                                                 <div class="col-sm-12 d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-sm btn-danger mr-2" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">Cancelar</button>
-                                                    <button type="button" class="btn btn-sm btn-info" onclick="editar_datos_institucion();">Guardar cambios</button>
+                                                    <button type="button" class="btn btn-sm btn-danger mr-2" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2"><i class="feather icon-x"></i>Cancelar</button>
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="editar_datos_institucion();"><i class="feather icon-save"></i> Guardar cambios</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -179,11 +187,10 @@
                                 <!--Cierre: Datos del centro médico-->
                             </div>
                             <div class="col-md-6">
-
                                 <!--Contacto-->
                                 <div class="card">
                                     <div class="card-header d-flex align-items-center justify-content-between bg-info">
-                                        <h5 class="mb-0 text-white">Datos de Contacto</h5>
+                                        <h5 class="mb-0 text-white">Datos de contacto</h5>
                                         <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
                                             <i class="feather icon-edit"></i>
                                         </button>
@@ -192,20 +199,20 @@
                                     <div class="card-body info_contacto collapse show" id="info_contacto_1">
                                         <form>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Correo electrónico</label>
-                                                <div class="col-sm-7 my-auto ml-2" id="ver_email" >{{ $institucion->email }}</div>
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Correo electrónico</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2" id="ver_email" >{{ $institucion->email }}</div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Teléfono</label>
-                                                <div class="col-sm-7 my-auto ml-2" id="ver_telefono" >{{ $institucion->telefono }}</div>
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2" id="ver_telefono" >{{ $institucion->telefono }}</div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Whatsapp</label>
-                                                <div class="col-sm-7 my-auto ml-2" id="ver_whatsapp" >{{ $institucion->whatsapp }}</div>
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Whatsapp</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2" id="ver_whatsapp" >{{ $institucion->whatsapp }}</div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Sitio web</label>
-                                                <div class="col-sm-7 my-auto ml-2" id="ver_sitio_web" >{{ $institucion->sitio_web }}</div>
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Sitio web</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2" id="ver_sitio_web" >{{ $institucion->sitio_web }}</div>
                                             </div>
                                         </form>
                                     </div>
@@ -214,33 +221,33 @@
                                     <div class="card-body info_contacto collapse" id="info_contacto_2">
                                         <form>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label">Correo electrónico</label>
-                                                <div class="col-sm-7 font-weight-bolder">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Correo electrónico</label>
+                                                <div class="col-sm-8 col-xxl-9 font-weight-bolder">
                                                     <input type="text" class="form-control form-control-sm" id="editar_email" placeholder="Correo electrónico" value="{{ $institucion->email }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label">Teléfono</label>
-                                                <div class="col-sm-7 font-weight-bolder">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                <div class="col-sm-8 col-xxl-9 font-weight-bolder">
                                                     <input type="text" class="form-control form-control-sm" id="editar_telefono" placeholder="Teléfono" value="{{ $institucion->telefono }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label">Whatsapp</label>
-                                                <div class="col-sm-7 font-weight-bolder">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Whatsapp</label>
+                                                <div class="col-sm-8 col-xxl-9 font-weight-bolder">
                                                     <input type="text" class="form-control form-control-sm" id="editar_whatsapp" placeholder="Whatsapp" value="{{ $institucion->whatsapp }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label">Sitio web</label>
-                                                <div class="col-sm-7 font-weight-bolder">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Sitio web</label>
+                                                <div class="col-sm-8 col-xxl-9 font-weight-bolder">
                                                     <input type="text" class="form-control form-control-sm" id="editar_sitio_web" placeholder="Sitio web" value="{{ $institucion->sitio_web }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col-sm-12 d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-sm btn-danger mr-2">Cancelar</button>
-                                                    <button type="button" class="btn btn-sm btn-info" onclick="editar_contacto_institucion();">Guardar cambios</button>
+                                                    <button type="button" class="btn btn-sm btn-danger mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="editar_contacto_institucion();"><i class="feather icon-save"></i> Guardar cambios</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -262,26 +269,26 @@
                                     <div class="card-body info_residencial collapse show" id="info_residencial_1">
                                         <form>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
-                                                <div class="col-sm-6 my-auto ml-2">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Región</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                     {{ $institucion->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Comuna</label>
-                                                <div class="col-sm-6 my-auto ml-2">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Comuna</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                     {{ $institucion->Direccion()->first()->Ciudad()->first()->nombre }}
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
-                                                <div class="col-sm-6 my-auto ml-2">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Dirección</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                     {{ $institucion->Direccion()->first()->direccion . ' ' . $institucion->Direccion()->first()->numero_dir }}
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Sucursales</label>
-                                                <div class="col-sm-6 my-auto ml-2">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Sucursales</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                     @if($institucion->sucursales == 1)
                                                         Si Registra Sucursales
                                                     @else
@@ -297,9 +304,9 @@
                                         <form>
 
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control" onchange="buscar_ciudad();" id="editar_region" name="editar_region">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Región</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <select class="form-control form-control-sm" onchange="buscar_ciudad();" id="editar_region" name="editar_region">
                                                         <option value="">Seleccione una Región</option>
                                                         @if (isset($regiones))
                                                             @foreach ($regiones as $region)
@@ -313,9 +320,9 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Comuna</label>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control" id="editar_ciudad" name="editar_ciudad">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Comuna</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <select class="form-control form-control-sm" id="editar_ciudad" name="editar_ciudad">
                                                         <option value="">Seleccione su comuna</option>
                                                         @if (isset($ciudades))
                                                             @foreach ($ciudades as $ciudad)
@@ -333,20 +340,20 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" placeholder="Dirección" name="editar_direccion" id="editar_direccion" value="{{ $institucion->Direccion()->first()->direccion }}">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Dirección</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" placeholder="Dirección" name="editar_direccion" id="editar_direccion" value="{{ $institucion->Direccion()->first()->direccion }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Piso/Oficina</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" placeholder="n&uacute;mero #" name="editar_numero_dir" id="editar_numero_dir" value="{{ $institucion->Direccion()->first()->numero_dir }}">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Piso/Oficina</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" placeholder="n&uacute;mero #" name="editar_numero_dir" id="editar_numero_dir" value="{{ $institucion->Direccion()->first()->numero_dir }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Sucursal</label>
-                                                <div class="col-sm-6">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Sucursal</label>
+                                                <div class="col-sm-8 col-xxl-9">
                                                     <div class="form-group">
                                                         <div class="switch switch-success d-inline m-r-10">
                                                             @if($institucion->sucursales == 1)
@@ -364,8 +371,8 @@
                                             <div class="form-group row">
                                                 <label class="col-sm-12 col-form-label"></label>
                                                 <div class="col-sm-12 d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-sm btn-danger mr-2">Cancelar</button>
-                                                    <button type="button" class="btn btn-sm btn-info" onclick="editar_direccion_institucion();">Guardar cambios</button>
+                                                    <button type="button" class="btn btn-sm btn-danger mr-2"><i class="feather icon-save"></i> Cancelar</button>
+                                                    <button type="button" class="btn btn-sm btn-info" onclick="editar_direccion_institucion();"><i class="feather icon-save"></i> Guardar cambios</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -385,7 +392,6 @@
                                 <div class="card mb-1">
                                     <div class="card-body">
                                         <h4 class="f-18 mb-0 text-info">Perfil administrador de la Institución</h4>
-
                                         <input type="hidden" name="id_responsable" id="id_responsable" value="{{ $responsable->id }}">
                                     </div>
                                 </div>
@@ -395,9 +401,9 @@
                             <div class="col-md-6">
                                 <!--Card Información Básica-->
                                 <div class="card">
-                                    <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                                        <h5 class="mb-0 text-white">Datos Personales</h5>
-                                        <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
+                                    <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                        <h5 class="mb-0 text-white">Datos personales</h5>
+                                        <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
                                             <i class="feather icon-edit"></i>
                                         </button>
                                     </div>
@@ -405,28 +411,28 @@
                                     <div class="card-body border-top info_basica collapse show" id="info_basica-1">
                                         <form>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Rut</label>
-                                                <div class="col-sm-6 my-auto ml-2"> {{ $responsable->rut }} </div>
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Rut</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{ $responsable->rut }} </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Nombre</label>
-                                                <div class="col-sm-6 my-auto ml-2"> {{ $responsable->nombres }} </div>
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Nombre</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{ $responsable->nombres }} </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Primer
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Primer
                                                     Apellido</label>
-                                                <div class="col-sm-6 my-auto ml-2"> {{ $responsable->apellido_uno }}
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{ $responsable->apellido_uno }}
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Segundo
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Segundo
                                                     Apellido</label>
-                                                <div class="col-sm-6 my-auto ml-2"> {{ $responsable->apellido_dos }}
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{ $responsable->apellido_dos }}
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Sexo</label>
-                                                <div class="col-sm-6 my-auto ml-2">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Sexo</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                     @if ($responsable->sexo == 'F')
                                                         Mujer
                                                     @elseif ($responsable->sexo == 'M')
@@ -435,8 +441,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Nacimiento</label>
-                                                <div class="col-sm-6 my-auto ml-2">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Nacimiento</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                     {{ \Carbon\Carbon::parse($responsable->fecha_nac)->format('d-m-Y') }}
                                                 </div>
                                             </div>
@@ -444,35 +450,35 @@
                                     </div>
                                     <!--Cierre: Datos Personales-->
                                     <!--(Editar)Datos Personales-->
-                                    <div class="card-body border-top info_basica collapse" id="pinfo_basica_2">
+                                    <div class="card-body info_basica collapse" id="pinfo_basica_2">
                                         <form>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
-                                                <div class="col-sm-7">
-                                                    <input type="text" class="form-control" placeholder="Rut" id="perfil_rut" name="perfil_rut" value="{{ $responsable->rut }}" disabled>
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Rut</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" placeholder="Rut" id="perfil_rut" name="perfil_rut" value="{{ $responsable->rut }}" disabled>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Nombre</label>
-                                                <div class="col-sm-7">
-                                                    <input type="text" class="form-control" placeholder="Nombre" id="perfil_nombre" name="perfil_nombre" value="{{ $responsable->nombres }}">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Nombre</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" placeholder="Nombre" id="perfil_nombre" name="perfil_nombre" value="{{ $responsable->nombres }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Primer Apellido</label>
-                                                <div class="col-sm-7">
-                                                    <input type="text" class="form-control" id="perfil_apellido_uno" name="perfil_apellido_uno" placeholder="Primer Apellido" value="{{ $responsable->apellido_uno }}">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Primer Apellido</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="perfil_apellido_uno" name="perfil_apellido_uno" placeholder="Primer Apellido" value="{{ $responsable->apellido_uno }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Segundo Apellido</label>
-                                                <div class="col-sm-7">
-                                                    <input type="text" class="form-control" id="perfil_apellido_dos" name="perfil_apellido_dos" placeholder="Segundo Apellido" value="{{ $responsable->apellido_dos }}">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Segundo Apellido</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="perfil_apellido_dos" name="perfil_apellido_dos" placeholder="Segundo Apellido" value="{{ $responsable->apellido_dos }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Sexo</label>
-                                                <div class="col-sm-7 my-auto">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Sexo</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto">
                                                     <div class="form-check form-check-inline">
                                                         <input class="form-check-input" type="radio" id="perfil_sexo" name="perfil_sexo" id="inlineRadio2" value="F" @if ($responsable->sexo == 'F') checked @endif>
                                                         <label class="form-check-label" for="inlineRadio2">Mujer</label>
@@ -485,16 +491,16 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Nacimiento</label>
-                                                <div class="col-sm-7">
-                                                    <input type="date" class="form-control" id="perfil_nac" name="perfil_nac" value="{{ $responsable->fecha_nac }}">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Nacimiento</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="date" class="form-control form-control-sm" id="perfil_nac" name="perfil_nac" value="{{ $responsable->fecha_nac }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-sm-12 col-form-label"></label>
                                                 <div class="col-sm-12 d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                    <button type="button" onclick="editar_responsable_datos_personales();" class="btn btn-info">Guardar Cambios</button>
+                                                    <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                    <button type="button" onclick="editar_responsable_datos_personales();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -507,7 +513,7 @@
                                 <div class="card">
                                     <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                         <h5 class="mb-0 text-white">Cambiar contraseña</h5>
-                                        <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
+                                        <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
                                             <i class="feather icon-edit"></i>
                                         </button>
                                     </div>
@@ -515,8 +521,8 @@
                                     <div class="card-body pass_personal collapse show" id="pass_personal_1">
                                         <form>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label">Contraseña actual</label>
-                                                <div class="col-sm-7 pt-2 ml-2 font-weight-bolder"> •••••••• </div>
+                                                <label class="col-sm-4 col-form-label font-weight-bolder">Contraseña actual</label>
+                                                <div class="col-sm-3 col-xxl-2  pt-2 ml-2 font-weight-bolder"> •••••••• </div>
                                             </div>
                                         </form>
                                     </div>
@@ -527,28 +533,28 @@
                                             <input type="hidden" name="responsable_id" id="responsable_id" value="{{ $responsable->Usuario()->first()->id }}">
                                             @csrf
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Contraseña actual</label>
-                                                <div class="col-sm-7">
-                                                    <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña Actual">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Contraseña actual</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña actual">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Nueva contraseña</label>
-                                                <div class="col-sm-7">
-                                                    <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva Contraseña">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Nueva contraseña</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva contraseña">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-4 col-form-label font-weight-bolder">Repitir contraseña</label>
-                                                <div class="col-sm-7">
-                                                    <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la Contraseña">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Repitir contraseña</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la contraseña">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-sm-12 col-form-label"></label>
                                                 <div class="col-sm-12 d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-sm btn-danger mr-2">Cancelar</button>
-                                                    <button type="submit" class="btn btn-sm btn-info">Guardar cambios</button>
+                                                    <button type="button" class="btn btn-sm btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                    <button type="submit" class="btn btn-sm btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -560,9 +566,9 @@
                             <div class="col-md-6">
                                 <!--Card Contacto-->
                                 <div class="card">
-                                    <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                    <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                         <h5 class="mb-0 text-white">Contacto</h5>
-                                        <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                        <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
                                             <i class="feather icon-edit"></i>
                                         </button>
                                     </div>
@@ -570,17 +576,17 @@
                                     <div class="card-body border-top info_contacto collapse show" id="info_contacto_1">
                                         <form>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Correo
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Correo
                                                     Electrónico</label>
-                                                <div class="col-sm-6 my-auto ml-2"> {{ $responsable->email }} </div>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{ $responsable->email }} </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                <div class="col-sm-6 my-auto ml-2">{{ $responsable->telefono_uno }}</div>
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Teléfono</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2">{{ $responsable->telefono_uno }}</div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                <div class="col-sm-6 my-auto ml-2">{{ $responsable->telefono_dos }}</div>
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Teléfono</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2">{{ $responsable->telefono_dos }}</div>
                                             </div>
                                         </form>
                                     </div>
@@ -589,28 +595,28 @@
                                     <div class="card-body border-top info_contacto collapse " id="info_contacto_2">
                                         <form>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Correo Electrónico</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" id="Perfil_email" name="Perfil_email" placeholder="Correo Electrónico" value="{{ $responsable->email }}">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Correo Electrónico</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" id="Perfil_email" name="Perfil_email" placeholder="Correo Electrónico" value="{{ $responsable->email }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono" name="Perfil_fono" value="{{ $responsable->telefono_uno }}">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" placeholder="Teléfono" id="Perfil_fono" name="Perfil_fono" value="{{ $responsable->telefono_uno }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono_dos" name="Perfil_fono_dos" value="{{ $responsable->telefono_dos }}">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" placeholder="Teléfono" id="Perfil_fono_dos" name="Perfil_fono_dos" value="{{ $responsable->telefono_dos }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-sm-12 col-form-label"></label>
                                                 <div class="col-sm-12 d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                    <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info">Guardar Cambios</button>
+                                                    <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                    <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -620,9 +626,9 @@
                                 <!--Cierre: Card Contacto-->
                                 <!--Card Residencia-->
                                 <div class="card">
-                                    <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                    <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                         <h5 class="mb-0 text-white">Residencia</h5>
-                                        <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                        <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
                                             <i class="feather icon-edit"></i>
                                         </button>
                                     </div>
@@ -630,20 +636,20 @@
                                     <div class="card-body border-top info_residencial collapse show" id="info_residencial_1">
                                         <form>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
-                                                <div class="col-sm-6 my-auto ml-2">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Región</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                     {{ $responsable->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Comuna</label>
-                                                <div class="col-sm-6 my-auto ml-2">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Comuna</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                     {{ $responsable->Direccion()->first()->Ciudad()->first()->nombre }}
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
-                                                <div class="col-sm-6 my-auto ml-2">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Dirección</label>
+                                                <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                     {{ $responsable->Direccion()->first()->direccion . ' ' . $responsable->Direccion()->first()->numero_dir }}
                                                 </div>
                                             </div>
@@ -654,9 +660,9 @@
                                     <div class="card-body border-top info_residencial collapse " id="info_residencial_2">
                                         <form>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control" onchange="buscar_ciudad_responsable();" id="perfil_region" name="perfil_region">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Región</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <select class="form-control form-control-sm" onchange="buscar_ciudad_responsable();" id="perfil_region" name="perfil_region">
                                                         <option value="">Seleccione una Región</option>
                                                         @if (isset($regiones))
                                                             @foreach ($regiones as $region)
@@ -670,9 +676,9 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Ciudad</label>
-                                                <div class="col-sm-6">
-                                                    <select class="form-control" id="perfil_ciudad" name="perfil_ciudad">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Ciudad</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <select class="form-control form-control-sm" id="perfil_ciudad" name="perfil_ciudad">
                                                         <option value="">Seleccione su comuna</option>
                                                         @if (isset($ciudades))
                                                             @foreach ($ciudades as $ciudad)
@@ -685,22 +691,22 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="{{ $responsable->Direccion()->first()->direccion }}">
+                                                <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Dirección</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="{{ $responsable->Direccion()->first()->direccion }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-sm-5 col-form-label font-weight-bolder">Piso/Depto</label>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="{{ $responsable->Direccion()->first()->numero_dir }}">
+                                                <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Piso/Depto</label>
+                                                <div class="col-sm-8 col-xxl-9">
+                                                    <input type="text" class="form-control form-control-sm" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="{{ $responsable->Direccion()->first()->numero_dir }}">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-sm-12 col-form-label"></label>
                                                 <div class="col-sm-12 d-flex justify-content-end">
-                                                    <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                    <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info">Guardar Cambios</button>
+                                                    <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                    <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -712,13 +718,14 @@
                         </div>
                     </div>
 
+                    <!--INSCRIPCION Y MANEJO DE ADM-->
                     <div class="tab-pane fade" id="rol-permiso-adm-med" role="tabpanel" aria-labelledby="rol-permiso-adm-med-tab">
                         <div class="row mb-3 mt-0">
                             <div class="col-sm-12 col-md-12">
                                 <div class="card mb-1">
-                                    <div class="card-body">
-                                        <h4 class="f-18 mb-0 text-info">Perfil administradores medicos de la Institución</h4>
-                                        <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                    <div class="card-body pb-2">
+                                        <h4 class="f-18 mb-0 text-info py-0 d-inline">Perfil administradores médicos de la Institución</h4>
+                                        <div class="d-inline float-md-right">
                                             <button type="button" class="btn btn-sm btn-info" onclick="ag_area();"><i class="feather icon-plus" aria-hidden="true"></i> Administrar</button>
                                         </div>
                                         @if(isset($director_cm) && $director_cm != null)<input type="hidden" name="id_responsable" id="id_director_cm" value="{{$director_cm->id }}"> @endif
@@ -729,42 +736,44 @@
                         <div id="contenedor_administradores_cm">
                             <div class="row">
                                 @if(isset($director_cm) && $director_cm != null)
-                                <div class="col-md-4">
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4">
                                     <!--Card Información Básica-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
-                                            <h5 class="mb-0 text-white">Datos Personales Director Medico</h5>
-                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_admin_cm(1,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
-                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica_director_cm" aria-expanded="false" aria-controls="info_basica-1_ info_basica-2">
-                                                <i class="feather icon-edit"></i>
-                                            </button>
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
+                                            <h5 class="mb-0 text-white">Datos personales Director Médico</h5>
+                                            <div class="float-md-right d-inline">
+                                                <button type="button" class="btn btn-light btn-icon" data-toggle="collapse" data-target=".info_basica_director_cm" aria-expanded="false" aria-controls="info_basica-1_ info_basica-2">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-light btn-icon" onclick="eliminar_admin_cm(1,{{ $institucion->id }})"><i class="feather icon-x"></i></button>
+                                            </div>
                                         </div>
                                         <!--Datos Personales-->
-                                        <div class="card-body border-top info_basica_director_cm collapse show" id="info_basica-1_">
+                                        <div class="card-body info_basica_director_cm collapse show" id="info_basica-1_">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Rut</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_cm->rut }} </div>
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Rut</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$director_cm->rut }} </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Nombre</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_cm->nombre }} </div>
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nombre</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$director_cm->nombre }} </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Primer
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Primer
                                                         Apellido</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_cm->apellido_uno }}
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$director_cm->apellido_uno }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Segundo
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Segundo
                                                         Apellido</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_cm->apellido_dos }}
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$director_cm->apellido_dos }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Sexo</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Sexo</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         @if ($director_cm->sexo == 'F')
                                                             Mujer
                                                         @elseif ($director_cm->sexo == 'M')
@@ -773,8 +782,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Nacimiento</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nacimiento</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         {{ \Carbon\Carbon::parse($director_cm->fecha_nac)->format('d-m-Y') }}
                                                     </div>
                                                 </div>
@@ -782,35 +791,35 @@
                                         </div>
                                         <!--Cierre: Datos Personales-->
                                         <!--(Editar)Datos Personales-->
-                                        <div class="card-body border-top info_basica_director_cm collapse" id="pinfo_basica_2">
+                                        <div class="card-body  info_basica_director_cm collapse" id="pinfo_basica_2">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="text" class="form-control" placeholder="Rut" id="perfil_rut_medico" name="perfil_rut_medico" value="{{$director_cm->rut }}" disabled>
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Rut</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Rut" id="perfil_rut_medico" name="perfil_rut_medico" value="{{$director_cm->rut }}" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nombre</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="text" class="form-control" placeholder="Nombre" id="perfil_nombre_medico" name="perfil_nombre_medico" value="{{$director_cm->nombre }}">
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Nombre</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Nombre" id="perfil_nombre_medico" name="perfil_nombre_medico" value="{{$director_cm->nombre }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Primer Apellido</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="text" class="form-control" id="perfil_apellido_uno_medico" name="perfil_apellido_uno_medico" placeholder="Primer Apellido" value="{{$director_cm->apellido_uno }}">
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Primer Apellido</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" id="perfil_apellido_uno_medico" name="perfil_apellido_uno_medico" placeholder="Primer Apellido" value="{{$director_cm->apellido_uno }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Segundo Apellido</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="text" class="form-control" id="perfil_apellido_dos_medico" name="perfil_apellido_dos_medico" placeholder="Segundo Apellido" value="{{$director_cm->apellido_dos }}">
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Segundo Apellido</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" id="perfil_apellido_dos_medico" name="perfil_apellido_dos_medico" placeholder="Segundo Apellido" value="{{$director_cm->apellido_dos }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Sexo</label>
-                                                    <div class="col-sm-7 my-auto">
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Sexo</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto">
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" id="perfil_sexo_medico" name="perfil_sexo_medico" id="inlineRadio2" value="F" @if ($director_cm->sexo == 'F') checked @endif>
                                                             <label class="form-check-label" for="inlineRadio2">Mujer</label>
@@ -823,16 +832,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nacimiento</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="date" class="form-control" id="perfil_nac_medico" name="perfil_nac_medico" value="{{$director_cm->fecha_nac }}">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nacimiento</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="date" class="form-control form-control-sm" id="perfil_nac_medico" name="perfil_nac_medico" value="{{$director_cm->fecha_nac }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-12 col-form-label"></label>
                                                     <div class="col-sm-12 d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                        <button type="button" onclick="editar_responsable_medico_datos_personales();" class="btn btn-info">Guardar Cambios</button>
+                                                        <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_medico_datos_personales();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -853,8 +862,8 @@
                                         <div class="card-body pass_personal_director_cm collapse show" id="pass_personal_1">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label">Contraseña actual</label>
-                                                    <div class="col-sm-7 pt-2 ml-2 font-weight-bolder"> •••••••• </div>
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Contraseña actual</label>
+                                                    <div class="col-sm-8 col-xxl-9 pt-2 ml-2 font-weight-bolder"> •••••••• </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -865,28 +874,28 @@
                                                 <input type="hidden" name="responsable_id" id="responsable_id" value="{{ $responsable->Usuario()->first()->id }}">
                                                 @csrf
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Contraseña actual</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña Actual">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Contraseña actual</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña actual">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nueva contraseña</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva Contraseña">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nueva contraseña</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva contraseña">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Repitir contraseña</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la Contraseña">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Repitir contraseña</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la contraseña">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-12 col-form-label"></label>
                                                     <div class="col-sm-12 d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-sm btn-danger mr-2">Cancelar</button>
-                                                        <button type="submit" class="btn btn-sm btn-info">Guardar cambios</button>
+                                                        <button type="button" class="btn btn-sm btn-danger mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                        <button type="submit" class="btn btn-sm btn-info"><i class="feather icon-save"></i> Guardar cambios</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -896,57 +905,57 @@
                                     <!--Cierre:Contraseña-->
                                     <!--Card Contacto-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                             <h5 class="mb-0 text-white">Contacto</h5>
-                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto_" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                            <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_contacto_" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
                                                 <i class="feather icon-edit"></i>
                                             </button>
                                         </div>
                                         <!--Contacto-->
-                                        <div class="card-body border-top info_contacto_ collapse show" id="info_contacto_1">
+                                        <div class="card-body info_contacto_ collapse show" id="info_contacto_1">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Correo
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Correo
                                                         Electrónico</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_cm->email }} </div>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$director_cm->email }} </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                    <div class="col-sm-6 my-auto ml-2">{{$director_cm->telefono_uno }}</div>
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">{{$director_cm->telefono_uno }}</div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                    <div class="col-sm-6 my-auto ml-2">{{$director_cm->telefono_dos }}</div>
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">{{$director_cm->telefono_dos }}</div>
                                                 </div>
                                             </form>
                                         </div>
                                         <!--Cierre: Contacto-->
                                         <!--(Editar) Contacto-->
-                                        <div class="card-body border-top info_contacto_ collapse " id="info_contacto_2">
+                                        <div class="card-body info_contacto_ collapse " id="info_contacto_2">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Correo Electrónico</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control" id="Perfil_email" name="Perfil_email" placeholder="Correo Electrónico" value="{{$director_cm->email }}">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Correo electrónico</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" id="Perfil_email" name="Perfil_email" placeholder="Correo Electrónico" value="{{$director_cm->email }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono" name="Perfil_fono" value="{{$director_cm->telefono_uno }}">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Teléfono" id="Perfil_fono" name="Perfil_fono" value="{{$director_cm->telefono_uno }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono_dos" name="Perfil_fono_dos" value="{{$director_cm->telefono_dos }}">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Teléfono" id="Perfil_fono_dos" name="Perfil_fono_dos" value="{{$director_cm->telefono_dos }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-12 col-form-label"></label>
                                                     <div class="col-sm-12 d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                        <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info">Guardar Cambios</button>
+                                                        <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -956,30 +965,30 @@
                                     <!--Cierre: Card Contacto-->
                                     <!--Card Residencia-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                             <h5 class="mb-0 text-white">Residencia</h5>
-                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial_director_cm" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                            <button type="button" class="btn btn-light btn-icon  m-0 float-right" data-toggle="collapse" data-target=".info_residencial_director_cm" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
                                                 <i class="feather icon-edit"></i>
                                             </button>
                                         </div>
                                         <!--Residencia-->
-                                        <div class="card-body border-top info_residencial_director_cm collapse show" id="info_residencial_1">
+                                        <div class="card-body info_residencial_director_cm collapse show" id="info_residencial_1">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         {{$director_cm->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Comuna</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Comuna</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         {{$director_cm->Direccion()->first()->Ciudad()->first()->nombre }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         {{$director_cm->Direccion()->first()->direccion . ' ' . $responsable->Direccion()->first()->numero_dir }}
                                                     </div>
                                                 </div>
@@ -987,12 +996,12 @@
                                         </div>
                                         <!--Cierre: Residencia-->
                                         <!--(Editar) Residencia-->
-                                        <div class="card-body border-top info_residencial_director_cm collapse " id="info_residencial_2">
+                                        <div class="card-body info_residencial_director_cm collapse " id="info_residencial_2">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
-                                                    <div class="col-sm-6">
-                                                        <select class="form-control" onchange="buscar_ciudad_responsable();" id="perfil_region" name="perfil_region">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <select class="form-control form-control-sm" onchange="buscar_ciudad_responsable();" id="perfil_region" name="perfil_region">
                                                             <option value="">Seleccione una Región</option>
                                                             @if (isset($regiones))
                                                                 @foreach ($regiones as $region)
@@ -1006,9 +1015,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Ciudad</label>
-                                                    <div class="col-sm-6">
-                                                        <select class="form-control" id="perfil_ciudad" name="perfil_ciudad">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Ciudad</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <select class="form-control form-control-sm" id="perfil_ciudad" name="perfil_ciudad">
                                                             <option value="">Seleccione su comuna</option>
                                                             @if (isset($ciudades))
                                                                 @foreach ($ciudades as $ciudad)
@@ -1021,22 +1030,22 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="{{$director_cm->Direccion()->first()->direccion }}">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="{{$director_cm->Direccion()->first()->direccion }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Piso/Depto</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="{{$director_cm->Direccion()->first()->numero_dir }}">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Piso/Depto</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="{{$director_cm->Direccion()->first()->numero_dir }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-12 col-form-label"></label>
                                                     <div class="col-sm-12 d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                        <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info">Guardar Cambios</button>
+                                                        <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -1047,42 +1056,44 @@
                                 </div>
                                 @endif
                                 @if(isset($subdirector_cm) && $subdirector_cm != null)
-                                <div class="col-md-4">
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4">
                                     <!--Card Información Básica-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                             <h5 class="mb-0 text-white">Datos Personales Administrador Comercial</h5>
-                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_admin_cm(2,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
-                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica_subdirector_cm" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
-                                                <i class="feather icon-edit"></i>
-                                            </button>
+                                            <div class="float-md-right d-inline">
+                                                <button type="button" class="btn btn-light btn-icon m-0" data-toggle="collapse" data-target=".info_basica_subdirector_cm" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-light btn-icon" onclick="eliminar_admin_cm(2,{{ $institucion->id }})"><i class="feather icon-x"></i></button>
+                                            </div>
                                         </div>
                                         <!--Datos Personales-->
-                                        <div class="card-body border-top info_basica_subdirector_cm collapse show" id="info_basica-1">
+                                        <div class="card-body info_basica_subdirector_cm collapse show" id="info_basica-1">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Rut</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$subdirector_cm->rut }} </div>
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Rut</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$subdirector_cm->rut }} </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Nombre</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$subdirector_cm->nombre }} </div>
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Nombre</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$subdirector_cm->nombre }} </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Primer
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Primer
                                                         Apellido</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$subdirector_cm->apellido_uno }}
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$subdirector_cm->apellido_uno }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Segundo
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Segundo
                                                         Apellido</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$subdirector_cm->apellido_dos }}
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$subdirector_cm->apellido_dos }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Sexo</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Sexo</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         @if ($subdirector_cm->sexo == 'F')
                                                             Mujer
                                                         @elseif ($subdirector_cm->sexo == 'M')
@@ -1091,8 +1102,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Nacimiento</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Nacimiento</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         {{ \Carbon\Carbon::parse($subdirector_cm->fecha_nac)->format('d-m-Y') }}
                                                     </div>
                                                 </div>
@@ -1100,35 +1111,35 @@
                                         </div>
                                         <!--Cierre: Datos Personales-->
                                         <!--(Editar)Datos Personales-->
-                                        <div class="card-body border-top info_basica_subdirector_cm collapse" id="pinfo_basica_2">
+                                        <div class="card-body info_basica_subdirector_cm collapse" id="pinfo_basica_2">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
-                                                    <div class="col-sm-7">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Rut</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="text" class="form-control" placeholder="Rut" id="perfil_rut_medico" name="perfil_rut_medico" value="{{$subdirector_cm->rut }}" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nombre</label>
-                                                    <div class="col-sm-7">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nombre</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="text" class="form-control" placeholder="Nombre" id="perfil_nombre_medico" name="perfil_nombre_medico" value="{{$subdirector_cm->nombre }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Primer Apellido</label>
-                                                    <div class="col-sm-7">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Primer Apellido</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="text" class="form-control" id="perfil_apellido_uno_medico" name="perfil_apellido_uno_medico" placeholder="Primer Apellido" value="{{$subdirector_cm->apellido_uno }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Segundo Apellido</label>
-                                                    <div class="col-sm-7">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Segundo Apellido</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="text" class="form-control" id="perfil_apellido_dos_medico" name="perfil_apellido_dos_medico" placeholder="Segundo Apellido" value="{{$subdirector_cm->apellido_dos }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Sexo</label>
-                                                    <div class="col-sm-7 my-auto">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Sexo</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto">
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" id="perfil_sexo_medico" name="perfil_sexo_medico" id="inlineRadio2" value="F" @if ($subdirector_cm->sexo == 'F') checked @endif>
                                                             <label class="form-check-label" for="inlineRadio2">Mujer</label>
@@ -1141,16 +1152,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nacimiento</label>
-                                                    <div class="col-sm-7">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nacimiento</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="date" class="form-control" id="perfil_nac_medico" name="perfil_nac_medico" value="{{$subdirector_cm->fecha_nac }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-12 col-form-label"></label>
                                                     <div class="col-sm-12 d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                        <button type="button" onclick="editar_responsable_medico_datos_personales();" class="btn btn-info">Guardar Cambios</button>
+                                                        <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_medico_datos_personales();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -1163,7 +1174,7 @@
                                     <div class="card">
                                         <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                             <h5 class="mb-0 text-white">Cambiar contraseña</h5>
-                                            <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal_subdirector_cm" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
+                                            <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal_subdirector_cm" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
                                                 <i class="feather icon-edit"></i>
                                             </button>
                                         </div>
@@ -1171,8 +1182,8 @@
                                         <div class="card-body pass_personal_subdirector_cm collapse show" id="pass_personal_1">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label">Contraseña actual</label>
-                                                    <div class="col-sm-7 pt-2 ml-2 font-weight-bolder"> •••••••• </div>
+                                                    <label class="col-sm-8 col-xxl-9 col-form-label font-weight-bolder">Contraseña actual</label>
+                                                    <div class="col-sm-8 col-xxl-9 pt-2 ml-2 font-weight-bolder"> •••••••• </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -1183,21 +1194,21 @@
                                                 <input type="hidden" name="responsable_id" id="responsable_id" value="{{ $responsable->Usuario()->first()->id }}">
                                                 @csrf
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Contraseña actual</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña Actual">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Contraseña actual</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña actual">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nueva contraseña</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva Contraseña">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nueva contraseña</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva contraseña">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Repitir contraseña</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la Contraseña">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Repitir contraseña</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la contraseña">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -1221,50 +1232,50 @@
                                             </button>
                                         </div>
                                         <!--Contacto-->
-                                        <div class="card-body border-top info_contacto_subdirector_cm collapse show" id="info_contacto_1">
+                                        <div class="card-body info_contacto_subdirector_cm collapse show" id="info_contacto_1">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Correo
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Correo
                                                         Electrónico</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$subdirector_cm->email }} </div>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$subdirector_cm->email }} </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                    <div class="col-sm-6 my-auto ml-2">{{$subdirector_cm->telefono_uno }}</div>
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">{{$subdirector_cm->telefono_uno }}</div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                    <div class="col-sm-6 my-auto ml-2">{{$subdirector_cm->telefono_dos }}</div>
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">{{$subdirector_cm->telefono_dos }}</div>
                                                 </div>
                                             </form>
                                         </div>
                                         <!--Cierre: Contacto-->
                                         <!--(Editar) Contacto-->
-                                        <div class="card-body border-top info_contacto_subdirector_cm collapse " id="info_contacto_2">
+                                        <div class="card-body info_contacto_subdirector_cm collapse " id="info_contacto_2">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Correo Electrónico</label>
-                                                    <div class="col-sm-6">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Correo Electrónico</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="text" class="form-control" id="Perfil_email" name="Perfil_email" placeholder="Correo Electrónico" value="{{$subdirector_cm->email }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                    <div class="col-sm-6">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono" name="Perfil_fono" value="{{$subdirector_cm->telefono_uno }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                    <div class="col-sm-6">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono_dos" name="Perfil_fono_dos" value="{{$subdirector_cm->telefono_dos }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-12 col-form-label"></label>
                                                     <div class="col-sm-12 d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                        <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info">Guardar Cambios</button>
+                                                        <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -1277,28 +1288,28 @@
                                     <div class="card">
                                         <div class="card-body d-flex align-items-center justify-content-between bg-info">
                                             <h5 class="mb-0 text-white">Residencia</h5>
-                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial_subdirector_cm" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                            <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_residencial_subdirector_cm" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
                                                 <i class="feather icon-edit"></i>
                                             </button>
                                         </div>
                                         <!--Residencia-->
-                                        <div class="card-body border-top info_residencial_subdirector_cm collapse show" id="info_residencial_1">
+                                        <div class="card-body info_residencial_subdirector_cm collapse show" id="info_residencial_1">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         {{$subdirector_cm->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Comuna</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Comuna</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         {{$subdirector_cm->Direccion()->first()->Ciudad()->first()->nombre }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         {{$subdirector_cm->Direccion()->first()->direccion . ' ' . $responsable->Direccion()->first()->numero_dir }}
                                                     </div>
                                                 </div>
@@ -1306,11 +1317,11 @@
                                         </div>
                                         <!--Cierre: Residencia-->
                                         <!--(Editar) Residencia-->
-                                        <div class="card-body border-top info_residencial_subdirector_cm collapse " id="info_residencial_2">
+                                        <div class="card-body info_residencial_subdirector_cm collapse " id="info_residencial_2">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
-                                                    <div class="col-sm-6">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <select class="form-control" onchange="buscar_ciudad_responsable();" id="perfil_region" name="perfil_region">
                                                             <option value="">Seleccione una Región</option>
                                                             @if (isset($regiones))
@@ -1325,8 +1336,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Ciudad</label>
-                                                    <div class="col-sm-6">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Ciudad</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <select class="form-control" id="perfil_ciudad" name="perfil_ciudad">
                                                             <option value="">Seleccione su comuna</option>
                                                             @if (isset($ciudades))
@@ -1340,22 +1351,22 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
-                                                    <div class="col-sm-6">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="text" class="form-control" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="{{$subdirector_cm->Direccion()->first()->direccion }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Piso/Depto</label>
-                                                    <div class="col-sm-6">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Piso/Depto</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="text" class="form-control" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="{{$subdirector_cm->Direccion()->first()->numero_dir }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-12 col-form-label"></label>
                                                     <div class="col-sm-12 d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                        <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info">Guardar Cambios</button>
+                                                        <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info btn-sm "><i class="feather icon-save"></i> Guardar cambios</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -1367,42 +1378,45 @@
                                 </div>
                                 @endif
                                 @if(isset($director_gestion_cuidado) && $director_gestion_cuidado != null)
-                                <div class="col-md-4">
+                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-4">
                                     <!--Card Información Básica-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                             <h5 class="mb-0 text-white">Datos Personales Administrador Farmacia</h5>
-                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_admin_cm(3,{{ $institucion->id }})"><i class="fas fa-trash"></i></button>
-                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
-                                                <i class="feather icon-edit"></i>
-                                            </button>
+                                            <div class="float-md-right d-inline">
+                                                <button type="button" class="btn btn-light btn-icon" data-toggle="collapse" data-target=".info_basica" aria-expanded="false" aria-controls="info_basica-1 info_basica-2">
+                                                    <i class="feather icon-edit"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-light btn-icon" onclick="eliminar_admin_cm(3,{{ $institucion->id }})"><i class="feather icon-x"></i></button>
+                                            </div>
+
                                         </div>
                                         <!--Datos Personales-->
-                                        <div class="card-body border-top info_basica collapse show" id="info_basica-1">
+                                        <div class="card-body info_basica collapse show" id="info_basica-1">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Rut</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_gestion_cuidado->rut }} </div>
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Rut</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$director_gestion_cuidado->rut }} </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Nombre</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_gestion_cuidado->nombre }} </div>
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nombre</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$director_gestion_cuidado->nombre }} </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Primer
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Primer
                                                         Apellido</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_gestion_cuidado->apellido_uno }}
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$director_gestion_cuidado->apellido_uno }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Segundo
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Segundo
                                                         Apellido</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_gestion_cuidado->apellido_dos }}
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$director_gestion_cuidado->apellido_dos }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Sexo</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Sexo</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         @if ($director_gestion_cuidado->sexo == 'F')
                                                             Mujer
                                                         @elseif ($director_gestion_cuidado->sexo == 'M')
@@ -1411,8 +1425,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Nacimiento</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nacimiento</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         {{ \Carbon\Carbon::parse($director_gestion_cuidado->fecha_nac)->format('d-m-Y') }}
                                                     </div>
                                                 </div>
@@ -1420,35 +1434,35 @@
                                         </div>
                                         <!--Cierre: Datos Personales-->
                                         <!--(Editar)Datos Personales-->
-                                        <div class="card-body border-top info_basica collapse" id="pinfo_basica_2">
+                                        <div class="card-body info_basica collapse" id="pinfo_basica_2">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
-                                                    <div class="col-sm-7">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Rut</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="text" class="form-control" placeholder="Rut" id="perfil_rut_medico" name="perfil_rut_medico" value="{{$director_gestion_cuidado->rut }}" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nombre</label>
-                                                    <div class="col-sm-7">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nombre</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="text" class="form-control" placeholder="Nombre" id="perfil_nombre_medico" name="perfil_nombre_medico" value="{{$director_gestion_cuidado->nombre }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Primer Apellido</label>
-                                                    <div class="col-sm-7">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Primer Apellido</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="text" class="form-control" id="perfil_apellido_uno_medico" name="perfil_apellido_uno_medico" placeholder="Primer Apellido" value="{{$director_gestion_cuidado->apellido_uno }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Segundo Apellido</label>
-                                                    <div class="col-sm-7">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Segundo Apellido</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="text" class="form-control" id="perfil_apellido_dos_medico" name="perfil_apellido_dos_medico" placeholder="Segundo Apellido" value="{{$director_gestion_cuidado->apellido_dos }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Sexo</label>
-                                                    <div class="col-sm-7 my-auto">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Sexo</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto">
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" id="perfil_sexo_medico" name="perfil_sexo_medico" id="inlineRadio2" value="F" @if ($director_gestion_cuidado->sexo == 'F') checked @endif>
                                                             <label class="form-check-label" for="inlineRadio2">Mujer</label>
@@ -1461,16 +1475,16 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nacimiento</label>
-                                                    <div class="col-sm-7">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nacimiento</label>
+                                                    <div class="col-sm-8 col-xxl-9">
                                                         <input type="date" class="form-control" id="perfil_nac_medico" name="perfil_nac_medico" value="{{$director_gestion_cuidado->fecha_nac }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-12 col-form-label"></label>
                                                     <div class="col-sm-12 d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                        <button type="button" onclick="editar_responsable_medico_datos_personales();" class="btn btn-info">Guardar Cambios</button>
+                                                        <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_medico_datos_personales();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -1483,7 +1497,7 @@
                                     <div class="card">
                                         <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                             <h5 class="mb-0 text-white">Cambiar contraseña</h5>
-                                            <button type="button" class="btn btn-light btn-sm btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
+                                            <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".pass_personal" aria-expanded="false" aria-controls="pass_personal_1 pass_personal_2">
                                                 <i class="feather icon-edit"></i>
                                             </button>
                                         </div>
@@ -1491,8 +1505,8 @@
                                         <div class="card-body pass_personal collapse show" id="pass_personal_1">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label">Contraseña actual</label>
-                                                    <div class="col-sm-7 pt-2 ml-2 font-weight-bolder"> •••••••• </div>
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Contraseña actual</label>
+                                                    <div class="col-sm-8 col-xxl-9 pt-2 ml-2 font-weight-bolder"> •••••••• </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -1503,28 +1517,28 @@
                                                 <input type="hidden" name="responsable_id" id="responsable_id" value="{{ $responsable->Usuario()->first()->id }}">
                                                 @csrf
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Contraseña actual</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña Actual">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Contraseña actual</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_actual" id="responsable_actual" placeholder="Contraseña actual">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Nueva contraseña</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva Contraseña">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Nueva contraseña</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_nueva" id="responsable_nueva" placeholder="Nueva contraseña">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-4 col-form-label font-weight-bolder">Repitir contraseña</label>
-                                                    <div class="col-sm-7">
-                                                        <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la Contraseña">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Repitir contraseña</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="password" class="form-control form-control-sm" name="responsable_validacion" id="responsable_validacion" placeholder="Repita la contraseña">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-12 col-form-label"></label>
                                                     <div class="col-sm-12 d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-sm btn-danger mr-2">Cancelar</button>
-                                                        <button type="submit" class="btn btn-sm btn-info">Guardar cambios</button>
+                                                        <button type="button" class="btn btn-sm btn-danger mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                        <button type="submit" class="btn btn-sm btn-info"><i class="feather icon-save"></i> Guardar cambios</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -1534,57 +1548,57 @@
                                     <!--Cierre:Contraseña-->
                                     <!--Card Contacto-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                             <h5 class="mb-0 text-white">Contacto</h5>
-                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
+                                            <button type="button" class="btn btn-light btn-icon m-0 float-right" data-toggle="collapse" data-target=".info_contacto" aria-expanded="false" aria-controls="info_contacto_1 info_contacto_2">
                                                 <i class="feather icon-edit"></i>
                                             </button>
                                         </div>
                                         <!--Contacto-->
-                                        <div class="card-body border-top info_contacto collapse show" id="info_contacto_1">
+                                        <div class="card-body  info_contacto collapse show" id="info_contacto_1">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Correo
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Correo
                                                         Electrónico</label>
-                                                    <div class="col-sm-6 my-auto ml-2"> {{$director_gestion_cuidado->email }} </div>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2"> {{$director_gestion_cuidado->email }} </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                    <div class="col-sm-6 my-auto ml-2">{{$director_gestion_cuidado->telefono_uno }}</div>
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">{{$director_gestion_cuidado->telefono_uno }}</div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                    <div class="col-sm-6 my-auto ml-2">{{$director_gestion_cuidado->telefono_dos }}</div>
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">{{$director_gestion_cuidado->telefono_dos }}</div>
                                                 </div>
                                             </form>
                                         </div>
                                         <!--Cierre: Contacto-->
                                         <!--(Editar) Contacto-->
-                                        <div class="card-body border-top info_contacto collapse " id="info_contacto_2">
+                                        <div class="card-body info_contacto collapse " id="info_contacto_2">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Correo Electrónico</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control" id="Perfil_email" name="Perfil_email" placeholder="Correo Electrónico" value="{{$director_gestion_cuidado->email }}">
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Correo Electrónico</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" id="Perfil_email" name="Perfil_email" placeholder="Correo Electrónico" value="{{$director_gestion_cuidado->email }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono" name="Perfil_fono" value="{{$director_gestion_cuidado->telefono_uno }}">
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Teléfono" id="Perfil_fono" name="Perfil_fono" value="{{$director_gestion_cuidado->telefono_uno }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Teléfono</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control" placeholder="Teléfono" id="Perfil_fono_dos" name="Perfil_fono_dos" value="{{$director_gestion_cuidado->telefono_dos }}">
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Teléfono</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Teléfono" id="Perfil_fono_dos" name="Perfil_fono_dos" value="{{$director_gestion_cuidado->telefono_dos }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-12 col-form-label"></label>
                                                     <div class="col-sm-12 d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                        <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info">Guardar Cambios</button>
+                                                        <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_contacto()" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -1594,30 +1608,30 @@
                                     <!--Cierre: Card Contacto-->
                                     <!--Card Residencia-->
                                     <div class="card">
-                                        <div class="card-body d-flex align-items-center justify-content-between bg-info">
+                                        <div class="card-header d-flex align-items-center justify-content-between bg-info">
                                             <h5 class="mb-0 text-white">Residencia</h5>
-                                            <button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
+                                            <button type="button" class="btn btn-light btn-icon float-md-right" data-toggle="collapse" data-target=".info_residencial" aria-expanded="false" aria-controls="info_residencial_1 info_residencial_2">
                                                 <i class="feather icon-edit"></i>
                                             </button>
                                         </div>
                                         <!--Residencia-->
-                                        <div class="card-body border-top info_residencial collapse show" id="info_residencial_1">
+                                        <div class="card-body info_residencial collapse show" id="info_residencial_1">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         {{$director_gestion_cuidado->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Comuna</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Comuna</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         {{$director_gestion_cuidado->Direccion()->first()->Ciudad()->first()->nombre }}
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
-                                                    <div class="col-sm-6 my-auto ml-2">
+                                                    <label class="col-sm-3 col-xxl-2  col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-8 col-xxl-9 my-auto ml-2">
                                                         {{$director_gestion_cuidado->Direccion()->first()->direccion . ' ' . $responsable->Direccion()->first()->numero_dir }}
                                                     </div>
                                                 </div>
@@ -1625,12 +1639,12 @@
                                         </div>
                                         <!--Cierre: Residencia-->
                                         <!--(Editar) Residencia-->
-                                        <div class="card-body border-top info_residencial collapse " id="info_residencial_2">
+                                        <div class="card-body info_residencial collapse " id="info_residencial_2">
                                             <form>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Región</label>
-                                                    <div class="col-sm-6">
-                                                        <select class="form-control" onchange="buscar_ciudad_responsable();" id="perfil_region" name="perfil_region">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Región</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <select class="form-control form-control-sm" onchange="buscar_ciudad_responsable();" id="perfil_region" name="perfil_region">
                                                             <option value="">Seleccione una Región</option>
                                                             @if (isset($regiones))
                                                                 @foreach ($regiones as $region)
@@ -1644,9 +1658,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Ciudad</label>
-                                                    <div class="col-sm-6">
-                                                        <select class="form-control" id="perfil_ciudad" name="perfil_ciudad">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Ciudad</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <select class="form-control form-control-sm" id="perfil_ciudad" name="perfil_ciudad">
                                                             <option value="">Seleccione su comuna</option>
                                                             @if (isset($ciudades))
                                                                 @foreach ($ciudades as $ciudad)
@@ -1659,22 +1673,22 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Dirección</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="{{$director_gestion_cuidado->Direccion()->first()->direccion }}">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Dirección</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Dirección" name="perfil_dire" id="perfil_dire" value="{{$director_gestion_cuidado->Direccion()->first()->direccion }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label class="col-sm-5 col-form-label font-weight-bolder">Piso/Depto</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" class="form-control" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="{{$director_gestion_cuidado->Direccion()->first()->numero_dir }}">
+                                                    <label class="col-sm-3 col-xxl-2 col-form-label font-weight-bolder">Piso/Depto</label>
+                                                    <div class="col-sm-8 col-xxl-9">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="n&uacute;mero #" name="perfil_numero_dir" id="perfil_numero_dir" value="{{$director_gestion_cuidado->Direccion()->first()->numero_dir }}">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-12 col-form-label"></label>
                                                     <div class="col-sm-12 d-flex justify-content-end">
-                                                        <button type="button" class="btn btn-danger mr-2">Cancelar</button>
-                                                        <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info">Guardar Cambios</button>
+                                                        <button type="button" class="btn btn-danger btn-sm mr-2"><i class="feather icon-x"></i> Cancelar</button>
+                                                        <button type="button" onclick="editar_responsable_datos_residencia();" class="btn btn-info btn-sm "><i class="feather icon-save"></i> Guardar cambios</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -1754,138 +1768,396 @@
 
                     <!--ESPECIALIDADES Y ÁREAS-->
                     <div class="tab-pane fade" id="ar-dep" role="tabpanel" aria-labelledby="ar-dep-tab">
+                        <div class="row mt-0">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="card mb-1">
+                                    <div class="card-body">
+                                        <h4 class="f-18 mb-0 text-info">Especialidades y áreas</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
-                            <div class="col-md-4">
-                                <!--Especialidades-->
-                                <div class="card">
-                                    <div class="card-header pt-3 pb-2 bg-light">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <h6 class="f-18 d-inline mt-3 text-info">Especialidades Médicas</h6>
-                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
-                                                    <button type="button" class="btn btn-sm btn-info" onclick="ag_especialidad();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-6 col-md-12">
-                                                <table id="especialidades_cm" class="display table table-striped table-xs dt-responsive nowrap" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="text-wrap text-center align-middle">Tipo Especialidad</th>
-                                                            <th class="text-wrap text-center align-middle">SubTipo Especialidad</th>
-                                                            <th class="text-wrap text-center align-middle">N° Profesionales</th>
-                                                            <th class="text-wrap text-center align-middle">Acción</th>
-                                                            <th></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @if(isset($especialidades_cm))
-                                                        @foreach($especialidades_cm as $especialidad)
-                                                        <tr>
-                                                            <td class="align-middle text-center">{{ $especialidad->nombre }}</td>
-                                                            <td class="align-middle text-center">{{ $especialidad->sub_tipo }}</td>
-                                                            <td class="align-middle text-center">{{ $especialidad->num_profesionales }}</td>
-                                                            <td class="align-middle text-center">
-                                                                <div class="custom-control custom-switch">
-                                                                    <input type="checkbox" class="custom-control-input" id="esp-{{ $especialidad->id }}" onchange="cambiarEstadoEspecialidad({{ $especialidad->id }})" @if($especialidad->estado == 1) checked @endif>
-                                                                    <label class="custom-control-label" for="esp-{{ $especialidad->id }}"></label>
-                                                                </div>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <button type="button" class="btn btn-outline-warning btn-sn btn-icon" onclick="dame_especialidad_cm({{ $especialidad->id }})"><i class="fas fa-edit"></i></button>
-                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm({{ $especialidad->id }});"><i class="feather icon-trash"></i></button>
-                                                            </td>
-                                                        </tr>
-                                                        @endforeach
-                                                        @endif
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <ul class="nav nav-tabs-secciones-info" id="cm" role="tablist">
+									<li class="nav-item-secciones-info">
+                                        <a class="nav-secciones-info active  text-uppercase" id="box-tab" data-toggle="tab" href="#box" role="tab" aria-controls="box" aria-selected="false">Boxes y equipos</a>
+                                    </li>
+									<li class="nav-item-secciones-info">
+                                        <a class="nav-secciones-info  text-uppercase" id="area-i-tab" data-toggle="tab" href="#area-i" role="tab" aria-controls="area-i" aria-selected="false">Áreas del Centro</a>
+                                    </li>
+                                    <li class="nav-item-secciones-info">
+                                        <a class="nav-secciones-info  text-uppercase" id="esp-med-tab" data-toggle="tab" href="#esp-med" role="tab" aria-controls="esp-med" aria-selected="true">Especialidades médicas</a>
+                                    </li>
+                                    <li class="nav-item-secciones-info">
+                                        <a class="nav-secciones-info text-uppercase" id="laboratorio-i-tab" data-toggle="tab" href="#laboratorio-i" role="tab" aria-controls="laboratorio-i" aria-selected="false">Laboratorios</a>
+                                    </li>
+                                </ul>
                             </div>
-                            <div class="col-md-4">
-                                <!--Área-->
-                                <div class="card">
-                                    <div class="card-header pt-3 pb-2 bg-light">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <h6 class="f-18 d-inline mt-3 text-info">Áreas</h6>
-                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
-                                                    <button type="button" class="btn btn-sm btn-info" onclick="ag_area();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="tab-content" id="agregar_inf_cm">
+									<div class="tab-pane fade show active" id="box" role="tabpanel" aria-labelledby="box-tab">
+                                        <!--Especialidades-->
+										<div class="card">
+                                            <div class="card-header bg-info">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <h6 class="f-18 d-inline mt-3 text-white">Agregar Boxes</h6>
+                                                        <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                            <button type="button" class="btn btn-sm btn-light" onclick="ag_box_cm();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir Box</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12">
+                                                        <div style="overflow-x:auto;">
+                                                            <div class="table-responsive">
+                                                                 <table id="boxes_cm" class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center align-middle">Nº Box</th>
+                                                                <th class="text-center align-middle">Fecha de Habilitación</th>
+                                                                <th class="text-center align-middle">Destino</th>
+																<th class="text-center align-middle">Equipamiento</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="align-middle text-center">
+                                                                    <span>box 1</span>
+                                                                </td>
+                                                                <td class="align-middle text-center">
+                                                                    <span>02/02/2022</span>
+                                                                </td>
+																 <td class="align-middle text-center">
+                                                                    <span>carro paro <br> electrobisturí</span>
+                                                                </td>
+                                                                <td class="align-middle text-center">
+                                                                    <span>Vacunas Infantiles</span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="align-middle text-center">
+                                                                    <span>box 2</span>
+                                                                </td>
+                                                                <td class="align-middle text-center">
+                                                                    <span>13/02/2022</span>
+                                                                </td>
+																<td class="align-middle text-center">
+                                                                    <span>camilla  <br> escritorio<br> carro curaciones</span>
+                                                                </td>
+                                                                <td class="align-middle text-center">
+                                                                    <span>Box cirugía Adultos</span>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header bg-info">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <h6 class="f-18 d-inline mt-3 text-white">Agregar Equipos</h6>
+                                                        <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                            <button type="button" class="btn btn-sm btn-light" onclick="ag_box_cm();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir Equipamiento</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12">
+                                                        <div style="overflow-x:auto;">
+															<table id="equipos_vacunas" class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%">
+																<thead>
+																	<tr>
+																		<th class="text-center align-middle">Nombre Equipo</th>
+																		<th class="text-center align-middle">Fecha Incorporación</th>
+																		<th class="text-center align-middle">Uso</th>
+																		<th class="text-center align-middle">Proveedor</th>
+																		<th class="text-center align-middle">Sucursal/Servicio</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td class="align-middle text-center">
+																			<span>Carro de Paro</span>
+																		</td>
+																		<td class="align-middle text-center">
+																			<span>02/02/2022</span>
+																		</td>
+																		<td class="align-middle text-center">
+																			<span>Urgencias</span>
+																		</td>
+																		<td class="align-middle text-center">
+																			<span>Equipos medicos ltda.</span>
+																		</td>
+																		<td class="align-middle text-center">
+																			<span>Nombre servicio</span>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td class="align-middle text-center">
+																			<span>Desfibrilador</span>
+																		</td>
+																		<td class="align-middle text-center">
+																			<span>02/02/2022</span>
+																		</td>
+																		<td class="align-middle text-center">
+																			<span>Urgencias</span>
+																		</td>
+																		<td class="align-middle text-center">
+																			<span>Equipos medicos ltda.</span>
+																		</td>
+																		<td class="align-middle text-center">
+																			<span>Nombre servicio</span>
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="tab-pane fade" id="esp-med" role="tabpanel" aria-labelledby="esp-med-tab">
+                                        <!--Especialidades-->
+                                        <div class="card">
+                                            <div class="card-header bg-info">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <h6 class="f-18 d-inline mt-3 text-white">Especialidades Médicas</h6>
+                                                        <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                            <button type="button" class="btn btn-sm btn-light" onclick="ag_especialidad();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12">
+                                                        <div style="overflow-x:auto;">
+                                                            <div class="table-responsive">
+                                                                <table id="especialidades_cm" class="display table table-striped table-xs dt-responsive nowrap" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="text-wrap align-middle">Tipo Especialidad</th>
+                                                                            <th class="text-wrap align-middle">SubTipo Especialidad</th>
+                                                                            <th class="text-wrap align-middle">N° Profesionales</th>
+                                                                            <th class="text-wrap align-right">Acción</th>
+                                                                            {{-- <th></th> --}}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @if(isset($especialidades_cm))
+                                                                        @foreach($especialidades_cm as $especialidad)
+                                                                        <tr>
+                                                                            <td class="align-middle">{{ $especialidad->nombre }}</td>
+                                                                            <td class="align-middle">{{ $especialidad->sub_tipo }}</td>
+                                                                            <td class="align-middle">{{ $especialidad->num_profesionales }}</td>
+                                                                            {{-- <td class="align-middle">
+                                                                                <div class="custom-control custom-switch">
+                                                                                    <input type="checkbox" class="custom-control-input" id="esp-{{ $especialidad->id }}" onchange="cambiarEstadoEspecialidad({{ $especialidad->id }})" @if($especialidad->estado == 1) checked @endif>
+                                                                                    <label class="custom-control-label" for="esp-{{ $especialidad->id }}"></label>
+                                                                                </div>
+                                                                            </td> --}}
+                                                                            <td class="align-middle">
+                                                                                <button type="button" class="btn btn-warning btn-icon" onclick="dame_especialidad_cm({{ $especialidad->id }})"><i class="feather icon-edit"></i></button>
+                                                                                <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_especialidad_cm({{ $especialidad->id }});"><i class="feather icon-x"></i></button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        @endforeach
+                                                                        @endif
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-6 col-md-12">
-                                                <table id="area_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="text-wrap text-left align-middle">Área</th>
-                                                            <th class="text-wrap text-left align-middle">Responsable</th>
-                                                            <th class="text-wrap text-left align-middle">Acción</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach($areas_cm as $area)
-                                                        <tr>
-                                                            <td class="align-middle text-left">{{ $area->tipo_area }}</td>
-                                                            <td class="align-middle text-left">{{ $area->nombre . ' ' . $area->apellido_uno . ' ' . $area->apellido_dos }}</td>
-                                                            <td class="align-middle text-left">
-                                                                <button type="button" class="btn btn-outline-warning btn-sn btn-icon" data-toggle="tooltip" data-placement="top" title="Editar responsable {{ $area->tipo_area }}" onclick="dame_area_cm({{ $area->id_responsable }},{{ $institucion->id_lugar_atencion }})"><i class="fas fa-edit"></i></button>
-                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar area {{ $area->tipo_area }}" onclick="eliminar_area_cm({{ $area->id }});"><i class="feather icon-trash"></i></button>
-                                                            </td>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
+                                    <div class="tab-pane fade" id="area-i" role="tabpanel" aria-labelledby="area-i-tab">
+                                        <!--Área-->
+                                        <div class="card">
+                                            <div class="card-header bg-info">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <h6 class="f-18 d-inline mt-3 text-white">Áreas</h6>
+                                                        <div class="btn-group mr-2 d-inline float-md-right  ml-4">
+                                                            <button type="button" class="btn btn-sm btn-light" onclick="ag_area_cm();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <!--Área-->
-                                <div class="card">
-                                    <div class="card-header pt-3 pb-2 bg-light">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <h6 class="f-18 d-inline mt-3 text-info">Servicios</h6>
-                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
-                                                    <button type="button" class="btn btn-sm btn-info" onclick="ag_servicio();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                            <div class="card-body"id="contenedor_areas_cm">
+                                                <div class="row" >
+                                                    <div class="col-sm-12 col-md-12">
+                                                        <div style="overflow-x:auto;">
+                                                            <div class="table-responsive">
+                                                                <table id="area_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="text-wrap text-left align-middle">Área</th>
+                                                                            <th class="text-wrap text-left align-middle">Tipo</th>
+                                                                            <th class="text-wrap text-left align-middle">Responsable</th>
+																			<th class="text-wrap text-left align-middle">Contacto</th>
+																			<th class="text-wrap text-left align-middle">N° personal</th>
+																			<th class="text-wrap text-left align-middle">Integrantes</th>
+                                                                            <th class="text-wrap text-left align-middle">Acción</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach($areas_cm as $area)
+                                                                        <tr>
+                                                                            <td class="align-middle text-left">{{ $area->nombre }}</td>
+                                                                            <td class="align-middle text-left">{{ $area->tipo_area }}</td>
+                                                                            <td class="align-middle text-left">{{ $area->nombre . ' ' . $area->apellido_uno . ' ' . $area->apellido_dos }}</td>
+                                                                            <td class="align-middle text-left">{{ $area->email }}</td>
+																			<td class="align-middle text-left">{{ $area->numero_personas }}</td>
+																			<td class="align-middle text-left">
+                                                                                @if($area->profesionales)
+                                                                                @foreach ($area->profesionales as $profesional)
+                                                                                <span>{{ $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos }}</span><br>
+                                                                                @endforeach
+                                                                                @endif
+                                                                            </td>
+																			<td class="align-middle text-left">
+                                                                                <button type="button" class="btn btn-outline-secondary btn-icon" data-toggle="tooltip" data-placement="top" title="Editar responsable {{ $area->tipo_area }}" onclick="asignar_profesionales_area({{ $area->id }})"><i class="feather icon-edit"></i></button>
+                                                                                <button type="button" class="btn btn-warning btn-icon" data-toggle="tooltip" data-placement="top" title="Editar responsable {{ $area->tipo_area }}" onclick="dame_area_cm({{ $area->id_responsable }},{{ $institucion->id_lugar_atencion }})"><i class="feather icon-edit"></i></button>
+                                                                                <button type="button" class="btn btn-danger btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar area {{ $area->tipo_area }}" onclick="eliminar_area_cm({{ $area->id }});"><i class="feather icon-x"></i></button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-6 col-md-12">
-                                                <table id="servicios_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="text-wrap text-left align-middle">Servicio</th>
-                                                            <th class="text-wrap text-left align-middle">Responsable</th>
-                                                            <th class="text-wrap text-left align-middle">Acción</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach($servicios_internos as $servicio)
-                                                        <tr>
-                                                            <td class="align-middle text-left">{{ $servicio->nombre }}</td>
-                                                            <td class="align-middle text-left">{{ $servicio->nombre_responsable . ' ' . $servicio->apellido_uno_responsable . ' ' . $servicio->apellido_dos_responsable }}</td>
-                                                            <td class="align-middle text-left">
-                                                                <button type="button" class="btn btn-outline-warning btn-sn btn-icon" onclick="dame_servicio_cm({{ $servicio->id }})"><i class="fas fa-edit"></i></button>
-                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_servicio_cm({{ $servicio->id }});"><i class="feather icon-trash"></i></button>
-                                                            </td>
-                                                        </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
+                                    <!-- ASIGNACION DE PROFESIONALES POR AREA -->
+                                    <div class="tab-pane fade" id="asignacion-prof" role="tabpanel" aria-labelledby="asignacion-prof-tab">
+                                        <!--Área-->
+                                        <div class="card">
+                                            <div class="card-header bg-info">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <h6 class="f-18 d-inline mt-3 text-white">Asignacion de Profesionales</h6>
+                                                        <div class="btn-group mr-2 d-inline float-md-right  ml-4">
+                                                            <button type="button" class="btn btn-sm btn-light" onclick="ag_area_cm();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body" id="contenedor_areas_cm_profesionales">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12">
+                                                        <div style="overflow-x:auto;">
+                                                            <div class="table-responsive">
+                                                                <table id="area_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="text-wrap text-left align-middle">Área</th>
+                                                                            <th class="text-wrap text-left align-middle">Tipo</th>
+                                                                            <th class="text-wrap text-left align-middle">Responsable</th>
+																			<th class="text-wrap text-left align-middle">Contacto</th>
+																			<th class="text-wrap text-left align-middle">N° personal</th>
+																			<th class="text-wrap text-left align-middle">Integrantes</th>
+                                                                            <th class="text-wrap text-left align-middle">Acción</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach($areas_cm as $area)
+                                                                        <tr>
+                                                                            <td class="align-middle text-left">{{ $area->nombre }}</td>
+                                                                            <td class="align-middle text-left">{{ $area->tipo_area }}</td>
+                                                                            <td class="align-middle text-left">{{ $area->nombre . ' ' . $area->apellido_uno . ' ' . $area->apellido_dos }}</td>
+                                                                            <td class="align-middle text-left">{{ $area->email }}</td>
+																			<td class="align-middle text-left">{{ $area->numero_personas }}</td>
+																			<td class="align-middle text-left">
+                                                                                @if($area->profesionales)
+                                                                                @foreach ($area->profesionales as $profesional)
+                                                                                <span>{{ $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos }}</span><br>
+                                                                                @endforeach
+                                                                                @endif
+                                                                            </td>
+																			<td class="align-middle text-left">
+                                                                                <button type="button" class="btn btn-outline-secondary btn-icon" data-toggle="tooltip" data-placement="top" title="Editar responsable {{ $area->tipo_area }}" onclick="asignar_profesionales_area({{ $area->id }})"><i class="feather icon-edit"></i></button>
+
+                                                                            </td>
+                                                                        </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- LABORATORIOS -->
+                                    <div class="tab-pane fade" id="laboratorio-i" role="tabpanel" aria-labelledby="laboratorio-i">
+                                        <!--Laboratorios-->
+                                        <div class="card">
+                                            <div class="card-header bg-info">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <h6 class="f-18 d-inline mt-3 text-white">Laboratorio</h6>
+                                                        <div class="btn-group mr-2 d-inline float-md-right ml-4">
+                                                            <button type="button" class="btn btn-sm btn-light" onclick="ag_laboratorio();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12">
+                                                        <div style="overflow-x:auto;">
+                                                        <div class="table-responsive">
+                                                            <table id="servicios_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-wrap text-left align-middle">Servicio</th>
+                                                                        <th class="text-wrap text-left align-middle">Responsable</th>
+                                                                        <th class="text-wrap text-left align-middle">Acción</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @if(isset($laboratorios))
+                                                                    @foreach($laboratorios as $laboratorio)
+                                                                    <tr>
+                                                                        <td class="align-middle text-left">{{ $laboratorio->nombre }}</td>
+                                                                        <td class="align-middle text-left">{{ $laboratorio->nombre_responsable . ' ' . $laboratorio->apellido_uno_responsable . ' ' . $laboratorio->apellido_dos_responsable }}</td>
+                                                                        <td class="align-middle text-left">
+                                                                            <button type="button" class="btn btn-warning btn-icon" onclick="dame_laboratorio_cm({{ $laboratorio->id }})"><i class="feather icon-edit"></i></button>
+                                                                            <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_laboratorio_cm({{ $laboratorio->id }});"><i class="feather icon-x"></i></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                                    @endif
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -2257,7 +2529,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Añadir o editar direccion medica</h5>
+                    <h5 class="modal-title text-white text-center">Añadir o editar Administradores del centro</h5>
                     <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
@@ -2283,7 +2555,7 @@
                                         <option value="0">Seleccione</option>
                                         @if(isset($profesionales))
                                         @foreach($profesionales as $profesional)
-                                            <option value="{{ $profesional->id }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
+                                            <option value="{{ $profesional->id_profesional }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
                                         @endforeach
                                         @endif
                                     </select>
@@ -2294,11 +2566,11 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_direccion_medica({{ $institucion->id }})">Editar direccion medica</button>
+                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_direccion_medica({{ $institucion->id }})">Guardar Cambios Administración</button>
                 </div>
             </div>
         </div>
-    </div>
+    </div>s
 
     {{--  MODAL AREA  --}}
     <div id="a_servicio" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_servicio" aria-hidden="true">
@@ -2311,6 +2583,9 @@
                 <div class="modal-body">
                     <form>
                         <div class="row">
+							<div class="col-sm-12 py-2 w-100">
+							 <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_div_servicio()"><i class="fas fa-plus"></i> Crear nuevo servicio</button>
+							</div>
                             <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <!--Cargar áreas-->
@@ -2324,7 +2599,7 @@
                                             @endforeach
                                             @endif
                                         </select>
-                                        <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_div_servicio()"><i class="fas fa-plus"></i> </button>
+
                                     </div>
 
                                 </div>
@@ -2339,7 +2614,7 @@
                                         <option value="0">Seleccione</option>
                                         @if(isset($profesionales))
                                         @foreach($profesionales as $profesional)
-                                            <option value="{{ $profesional->id }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
+                                            <option value="{{ $profesional->id_profesional }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
                                         @endforeach
                                         @endif
                                     </select>
@@ -2348,11 +2623,12 @@
                             <div id="div_form_servicio" class="d-none w-100">
                                 <div class="col-sm-12">
                                     <div class="form-group fill">
-                                        <label class="floating-label-activo-sm" for="nombre_servicio_">Nombre</label>
+                                        <label class="floating-label-activo-sm" for="nombre_servicio_">Nombre del servicio</label>
                                         <input type="text" class="form-control form-control-sm" name="nombre_servicio_" id="nombre_servicio_">
                                     </div>
                                 </div>
-                                <div class="col-sm-12">
+
+                                <div class="col-sm-12 d-none">
                                     <div class="form-group fill">
                                         <label class="floating-label-activo-sm" for="rut_servicio">RUT</label>
                                         <input type="text" class="form-control form-control-sm" name="rut_servicio" id="rut_servicio">
@@ -2360,14 +2636,20 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="form-group fill">
-                                        <label class="floating-label-activo-sm">Dirección</label>
-                                        <input type="address" class="form-control form-control-sm" name="direccion_servicio" id="direccion_servicio">
+                                        <label class="floating-label-activo-sm">Institución</label>
+                                        <input type="address" class="form-control form-control-sm" name="institucion_servicio" id="institucion_servicio" value="{{$institucion->nombre}}">
                                     </div>
                                 </div>
-                                <div class="col-sm-12">
+                                <div class="col-sm-6">
                                     <div class="form-group fill">
                                         <label class="floating-label-activo-sm" for="telefono_servicio">Telefono</label>
                                         <input type="text" class="form-control form-control-sm" name="telefono_servicio" id="telefono_servicio">
+                                    </div>
+                                </div>
+								<div class="col-sm-6">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm" for="anexo_servicio">Anexo</label>
+                                        <input type="text" class="form-control form-control-sm" name="anexo_servicio" id="anexo_servicio">
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
@@ -2376,6 +2658,7 @@
                                         <input type="text" class="form-control form-control-sm" name="email_servicio" id="email_servicio">
                                     </div>
                                 </div>
+
                                 <div class="col-sm-12">
                                     <button type="button" class="btn btn-outline-success btn-sm my-3 float-right" onclick="guardar_nuevo_servicio()"><i class="fas fa-save"></i> Guardar</button>
                                 </div>
@@ -2505,9 +2788,11 @@
                                     <label class="floating-label-activo-sm">Responsable</label>
                                     <select class="form-control form-control-sm" id="editar_responsable" name="editar_responsable">
                                         <option>Seleccione</option>
+                                        @if(isset($profesionales))
                                         @foreach($profesionales as $p)
-                                            <option value="{{ $p->id }}">{{ $p->nombre }} {{ $p->apellido_uno }} {{ $p->apellido_dos }}</option>
+                                            <option value="{{ $p->id_profesional }}">{{ $p->nombre }} {{ $p->apellido_uno }} {{ $p->apellido_dos }}</option>
                                         @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -2555,9 +2840,150 @@
         </div>
     </div>
 </div>
+
+{{-- MODAL ASOCIAR PROFESIONALES AREA --}}
+<div id="asociar_profesionales_area" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="asociar_profesionales_area" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Asociar profesionales a área</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <!--Cargar áreas-->
+                                <label class="floating-label">Profesionales</label>
+                                <select class="form-control form-control-sm js-example-basic-multiple" id="profesionales_area" name="profesionales_area" multiple>
+                                    <option>Seleccione</option>
+                                    @if(isset($profesionales))
+                                        @foreach ($profesionales as $profesional)
+                                            <option value="{{ $profesional->id_profesional }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_profesionales_area()">Añadir</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{{-- MODAL LABORATORIOS --}}
+<div id="a_laboratorio" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_laboratorio" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Laboratorios</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label">Nombre</label>
+                                <input type="text" name="nombre_laboratorio" id="nombre_laboratorio" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label">Rut</label>
+                                <input type="text" name="rut_laboratorio" id="rut_laboratorio" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <!-- radio button -->
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check form-check-input" type="radio" name="tipo_lab" id="tipo_lab" value="1">
+                                    <label class="form-check form-check-label" for="tipo_lab">Laboratorio Físico</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check form-check-input" type="radio" name="tipo_lab" id="tipo_lab" value="2">
+                                    <label class="form-check form-check-label" for="tipo_lab">Solo toma de muestra</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <label class="floating-label">Tipo Laboratorio</label>
+                                <select name="tipo_laboratorio" id="tipo_laboratorio" class="form-control form-control-sm">
+                                    <option value="0">Seleccione</option>
+                                    @if(isset($tipos_laboratorio))
+                                        @foreach ($tipos_laboratorio as $tipo)
+                                            <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label">Email</label>
+                                <input type="email" name="email_laboratorio" id="email_laboratorio" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label">Telefono</label>
+                                <input type="text" name="telefono_laboratorio" id="telefono_laboratorio" class="form-control form-control-sm">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label">Region</label>
+                                <select name="region_laboratorio" id="region_laboratorio" class="form-control form-control-sm" onchange="buscar_ciudad_laboratorio();">
+                                    <option value="0">Seleccione</option>
+                                    @if($regiones)
+                                        @foreach ($regiones as $reg )
+                                            <option value="{{ $reg->id }}">{{ $reg->nombre }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label">Ciudad</label>
+                                <select name="ciudad_laboratorio" id="ciudad_laboratorio" class="form-control form-control-sm">
+                                    <option value="0">Seleccione</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <label class="floating-label">Dirección</label>
+                                <input type="text" name="direccion_laboratorio" id="direccion_laboratorio" class="form-control form-control-sm">
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="agregar_laboratorio()">Añadir</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 <input type="hidden" id="id_especialidad_cm" name="id_especialidad_cm" value="">
 <input type="hidden" id="id_institucion" name="id_institucion" value="">
 <input type="hidden" id="id_lugar_atencion" name="id_lugar_atencion" value="">
+@include('app.adm_cm.modales.anadir_area')
+@include('app.adm_cm.modales.anadir_box')
 <!--Cierre: Container Completo-->
 @endsection
 
@@ -2571,6 +2997,7 @@
             $('#adm_roles').DataTable({
                 responsive: true
             });
+
         });  --}}
         /*-Área_cm-*/
         $(document).ready(function() {
@@ -2611,10 +3038,10 @@
             $('#a_otra_especialidad').modal('show');
         }
 
-        /*-Añadir área-*/
-        function ag_area() {
-            $('#a_area').modal('show');
-        }
+        /*-Añadir área
+        function ag_area_cm() {
+            $('#a_area_cm').modal('show');
+        }-*/
 
         function ag_servicio(){
             $('#a_servicio').modal('show');
@@ -2625,6 +3052,10 @@
             $('#a_rol').modal('show');
 
 
+        }
+
+        function ag_laboratorio(){
+            $('#a_laboratorio').modal('show');
         }
 
         /*-Permisos-*/
@@ -3513,19 +3944,15 @@
                                     <td class="align-items-center text-center">
                                         ${v.num_profesionales}
                                     </td>
-                                    <td class="align-items-center text-center">
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="esp-${v.id}" onchange="cambiarEstadoEspecialidad(${v.id})" ${v.estado == 1 ? 'checked' : ''}>
-                                            <label class="custom-control-label" for="esp-${v.id}"></label>
-                                        </div>
-                                    </td>
-                                    <td class="align-items-center text-center">
-                                        <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="editar_especialidad_cm(${v.id})"><i class="fas fa-edit"></i></button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
+
+                                   <td class="align-middle">
+                                        <button type="button" class="btn btn-warning btn-icon" onclick="dame_especialidad_cm(${v.id})"><i class="feather icon-edit"></i></button>
+                                        <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_especialidad_cm(${v.id});"><i class="feather icon-x"></i></button>
                                     </td>
                                 </tr>
                                 `);
                             });
+
                             $(otras_especialidades).each(function(i, v) { // indice, valor
                                 $('#otras_especialidades_cm tbody').append(`
                                 <tr>
@@ -3538,7 +3965,7 @@
                                         </div>
                                     </td>
                                     <td class="align-items-center text-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_otra_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                        <button type="button" class="btn btn-warning btn-icon" onclick="eliminar_otra_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
                                     </td>
                                 </tr>
                                 `);
@@ -3765,20 +4192,15 @@
                         $(especialidades).each(function(i, v) { // indice, valor
                             $('#especialidades_cm tbody').append(`
                             <tr>
-                                <td class="align-items-center text-center">${v.nombre}</td>
-                                <td class="align-items-center text-center">${v.sub_tipo}</td>
-                                    <td class="align-items-center text-center">
+                                <td class="align-items-left">${v.nombre}</td>
+                                <td class="align-items-left">${v.sub_tipo}</td>
+                                    <td class="align-items-left">
                                         ${v.num_profesionales}
                                     </td>
-                                <td class="align-items-center text-center">
-                                    <div class="custom-control custom-switch">
-                                        <input type="checkbox" class="custom-control-input" id="esp-${v.id}" onchange="cambiarEstadoEspecialidad(${v.id})" ${v.estado == 1 ? 'checked' : ''}>
-                                        <label class="custom-control-label" for="esp-${v.id}"></label>
-                                    </div>
-                                </td>
-                                <td class="align-items-center text-center">
-                                    <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="editar_especialidad_cm(${v.id})"><i class="fas fa-edit"></i></button>
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
+
+                                <td class="align-middle">
+                                    <button type="button" class="btn btn-warning btn-icon" onclick="dame_especialidad_cm(${v.id})"><i class="feather icon-edit"></i></button>
+                                    <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_especialidad_cm(${v.id});"><i class="feather icon-x"></i></button>
                                 </td>
                             </tr>
                             `);
@@ -3959,7 +4381,7 @@
 
 
                 } else {
-                    alert('No se pudo Cargar los tipos de especialidad');
+                    alert('No se pudo cargar los tipos de especialidad');
                 }
 
             })
@@ -4214,20 +4636,8 @@
             if (data != null) {
                 if(data.estado == 1)
                 {
-                    let areas = data.areas;
-                    $('#area_cm tbody').empty();
-                    $(areas).each(function(i, v) { // indice, valor
-                        $('#area_cm tbody').append(`
-                        <tr>
-                            <td class="align-items-left text-left">${v.tipo_area}</td>
-                            <td class="align-items-left text-left">${v.nombre} ${v.apellido_uno} ${v.apellido_dos}</td>
-                            <td class="align-items-left text-left">
-                                <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="dame_area_profesionale(${v.id})"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_area_cm(${v.id})"><i class="feather icon-trash"></i></button>
-                            </td>
-                        </tr>
-                        `);
-                    });
+                    $('#contenedor_areas_cm').empty();
+                    $('#contenedor_areas_cm').append(data.v);
                 }
                 else
                 {
@@ -4341,7 +4751,8 @@
         let rut_servicio = $('#rut_servicio').val();
         let telefono_servicio = $('#telefono_servicio').val();
         let email_servicio = $('#email_servicio').val();
-        let direccion_servicio = $('#direccion_servicio').val();
+		let anexo_servicio = $('#anexo_servicio').val();
+        let institucion_servicio = $('#institucion_servicio').val();
         let id_responsable_servicio = $('#responsable_servicio').val();
 
         let valido = 1;
@@ -4353,11 +4764,6 @@
             valido = 0;
             mensaje += 'Campo requerido Nombre\n';
         }
-        if(rut_servicio == '')
-        {
-            valido = 0;
-            mensaje += 'Campo requerido Rut\n';
-        }
         if(telefono_servicio == '')
         {
             valido = 0;
@@ -4368,10 +4774,10 @@
             valido = 0;
             mensaje += 'Campo requerido Email\n';
         }
-        if(direccion_servicio == '')
+		if(anexo_servicio == '')
         {
             valido = 0;
-            mensaje += 'Campo requerido Dirección\n';
+            mensaje += 'Campo requerido Anexo\n';
         }
         if(id_responsable_servicio == '' || id_responsable_servicio == 0)
         {
@@ -4386,10 +4792,12 @@
                 rut_servicio : rut_servicio,
                 telefono_servicio : telefono_servicio,
                 email_servicio : email_servicio,
-                direccion_servicio : direccion_servicio,
+                institucion_servicio : institucion_servicio,
+				anexo_servicio: anexo_servicio,
                 id_responsable_servicio : id_responsable_servicio,
                 _token: CSRF_TOKEN,
             }
+
 
             let url = "{{ route('adm_cm.registrar_servicio') }}";
 
@@ -4731,6 +5139,282 @@
         });
     }
 
+    function asignar_profesionales_area(id_area){
+       // abrir modal
+         $('#asociar_profesionales_area').modal('show');
+         $('#id_area').val(id_area);
+    }
 
+    function guardar_profesionales_area(){
+        swal({
+            title: "Asignar Profesionales",
+            text: "¿Está seguro que desea asignar los profesionales al área?",
+            icon: "warning",
+            buttons: ["Cancelar", "Aceptar"],
+            DangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                confirmar_guardar_profesionales_area();
+            }
+        });
+    }
+
+    function confirmar_guardar_profesionales_area(){
+        let id_responsable = $('#id_responsable').val();
+        let id_lugar_atencion = $('#add_empleado_id_lugar_atencion').val();
+        let profesionales = [];
+        $('#profesionales_area option:selected').each(function(i, v) {
+            profesionales.push($(this).val());
+        });
+
+        let data = {
+            id_responsable : id_responsable,
+            id_lugar_atencion : id_lugar_atencion,
+            profesionales : profesionales,
+            id_area : $('#id_area').val(),
+            _token: CSRF_TOKEN,
+        }
+
+        let url = "{{ route('adm_cm.asignar_profesionales_area') }}";
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: data,
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data != null) {
+                if(data.mensaje == 'OK')
+                {
+                    // cerrar modal
+                    $('#asociar_profesionales_area').modal('hide');
+                    swal({
+                        title: "Profesionales",
+                        text: "Profesionales Asignados Correctamente",
+                        icon: "success",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                    $('#contenedor_areas_cm').empty();
+                    $('#contenedor_areas_cm').html(data.v);
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: data.mensaje,
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar ingresar profesionales",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+    }
+
+    function agregar_laboratorio(){
+        let nombre_laboratorio = $('#nombre_laboratorio').val();
+        let rut_laboratorio = $('#rut_laboratorio').val();
+        let email_laboratorio = $('#email_laboratorio').val();
+        let telefono_laboratorio = $('#telefono_laboratorio').val();
+        let tipo_laboratorio = $('#tipo_laboratorio').val();
+        let direccion_laboratorio = $('#direccion_laboratorio').val();
+        let region = $('#region_laboratorio').val();
+        let ciudad = $('#ciudad_laboratorio').val();
+        // obtenemos el valor del radio button con id tipo_lab
+        let ubicacion = $("input[name='tipo_lab']:checked").val();
+        let id_institucion = $('#id_institucion').val();
+        let id_responsable = $('#responsable_laboratorio').val();
+        let id_lugar_atencion = $('#add_empleado_id_lugar_atencion').val();
+
+        let valido = 1;
+        let mensaje = '';
+        // validar campos
+        if(nombre_laboratorio == '')
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Nombre</li>';
+        }
+        if(rut_laboratorio == '')
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Rut</li>';
+        }
+        if(email_laboratorio == '')
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Email</li>';
+        }
+        if(telefono_laboratorio == '')
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Teléfono</li>';
+        }
+        if(tipo_laboratorio == '' || tipo_laboratorio == 0)
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Tipo</li>';
+        }
+        if(direccion_laboratorio == '')
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Dirección</li>';
+        }
+        if(ubicacion == '' || ubicacion == 0)
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Ubicación</li>';
+        }
+        if(id_responsable == '' || id_responsable == 0)
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Responsable</li>';
+        }
+
+        if(valido == 1)
+        {
+            let data = {
+                nombre_laboratorio : nombre_laboratorio,
+                rut_laboratorio : rut_laboratorio,
+                email_laboratorio : email_laboratorio,
+                telefono_laboratorio : telefono_laboratorio,
+                tipo_laboratorio : tipo_laboratorio,
+                direccion_laboratorio : direccion_laboratorio,
+                region_laboratorio: region,
+                ciudad_laboratorio: ciudad,
+                ubicacion : ubicacion,
+                id_institucion : id_institucion,
+                id_responsable : id_responsable,
+                id_lugar_atencion : id_lugar_atencion,
+                _token: CSRF_TOKEN,
+            }
+
+            let url = "{{ route('laboratorio.agregar_laboratorio') }}";
+
+            $.ajax({
+                url: url,
+                type: "post",
+                data: data,
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    if(data.estado == 1)
+                    {
+                        // cerrar modal
+                        $('#a_laboratorio').modal('hide');
+                        let laboratorios = data.laboratorios;
+                        $('#laboratorios_cm tbody').empty();
+                        $(laboratorios).each(function(i, v) { // indice, valor
+                            $('#laboratorios_cm tbody').append(`
+                            <tr>
+                                <td class="align-items-left text-left">${v.nombre}</td>
+                                <td class="align-items-left text-left">${v.nombre_responsable} ${v.apellido_uno_responsable} ${v.apellido_dos_responsable}</td>
+                                <td class="align-items-left text-left">
+                                    <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="dame_laboratorio(${v.id})"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_laboratorio_cm(${v.id})"><i class="feather icon-trash"></i></button>
+                                </td>
+                            </tr>
+                            `);
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar laboratorio",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar laboratorio",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+        }else{
+            swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+        }
+
+    }
+
+    function buscar_ciudad_laboratorio(id_ciudad=0) {
+
+        let region = $('#region_laboratorio').val();
+        let url = "{{ route('adm_cm.buscar_ciudad_region') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+                //_token: _token,
+                region: region,
+            },
+        }).done(function(data) {
+            console.log(data);
+            if (data != null) {
+                data = JSON.parse(data);
+
+                let ciudades = $('#ciudad_laboratorio');
+
+                ciudades.find('option').remove();
+                ciudades.append('<option value="0">seleccione</option>');
+                $(data).each(function(i, v) { // indice, valor
+                    ciudades.append('<option value="' + v.id + '">' + v.nombre +
+                        '</option>');
+                })
+
+                if(id_ciudad != 0)
+                    ciudades.val(id_ciudad);
+
+            } else {
+
+                swal({
+                    title: "Error",
+                    text: "Error al cargar las ciudades",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                })
+                // alert('No se pudo Cargar las ciudades');
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+
+
+        };
     </script>
 @endsection

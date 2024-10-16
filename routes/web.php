@@ -442,7 +442,7 @@ Route::group(
 );
 
 Route::group([
-    'middleware' => ['role:Profesional|Admin'],
+    'middleware' => ['role:Profesional|Admin|Ministerio'],
     'prefix' => 'Profesional',
 ], function () {
     /*  Escritorio Profesional */
@@ -1378,6 +1378,8 @@ Route::group([
 
 	Route::get('/liquidacion_profesionales', [App\Http\Controllers\AdministradorCmController::class, 'liquidacion_profesionales'])->name('app.adm_cm.liquidacion_profesionales');
 	Route::post('/Personal/finalizar', [App\Http\Controllers\ManejoContratoController::class, 'desasociarPersonalAsistente'])->name('adm_cm.personal.finalizar');
+	Route::post('/Profesional/finalizar', [App\Http\Controllers\ManejoContratoController::class, 'desasociarPersonalProfesional'])->name('adm_cm.personal.finalizar_profesional');
+    Route::post('/OtrosProfesional/finalizar', [App\Http\Controllers\ManejoContratoController::class, 'desasociarPersonalOtrosProfesionales'])->name('adm_cm.personal.finalizar_otros_profesionales');
 
 	Route::get('/liquidacion_profesionales', [App\Http\Controllers\AdministradorCmController::class, 'liquidacion_profesionales'])->name('app.adm_cm.liquidacion_profesionales');
 
@@ -1466,6 +1468,7 @@ Route::group([
     Route::post('eliminar_personal_mantencion', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_personal_mantencion'])->name('adm_cm.eliminar_personal_mantencion');
     /** CONVENIOS */
     Route::post('dame_convenio', [App\Http\Controllers\AdministradorCmController::class, 'dame_convenio'])->name('adm_cm.dame_convenio');
+    Route::post('dame_convenio_profesional', [App\Http\Controllers\AdministradorCmController::class, 'dame_convenio_profesional'])->name('adm_cm.dame_convenio_profesional');
     Route::post('registrar_convenio', [App\Http\Controllers\AdministradorCmController::class, 'registrar_convenio'])->name('adm_cm.convenio_nuevo');
     Route::post('eliminar_convenio', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_convenio'])->name('adm_cm.eliminar_convenio');
     Route::post('editar_convenio', [App\Http\Controllers\AdministradorCmController::class, 'editar_convenio'])->name('adm_cm.editar_convenio');
@@ -1474,6 +1477,8 @@ Route::group([
     Route::post('ver_solicitud', [App\Http\Controllers\AdministradorCmController::class, 'ver_solicitud'])->name('adm_cm.ver_solicitud');
     /** CONTROLES DE ALMACENAMIENTO */
     Route::get('controles_almacenamiento', [App\Http\Controllers\AdministradorCmController::class, 'controles_almacenamiento'])->name('adm_cm.controles_almacenamiento');
+    Route::post('agregar_area_cm',[App\Http\Controllers\AdministradorCmController::class, 'agregar_area_cm'])->name('adm_cm.agregar_area_cm');
+    Route::post('asignar_profesionales_area',[App\Http\Controllers\AdministradorCmController::class, 'asignar_profesionales_area'])->name('adm_cm.asignar_profesionales_area');
 
 });
 
@@ -1513,7 +1518,8 @@ Route::group([
 
     Route::get('/historial_mensajes_profesional/{id}', [App\Http\Controllers\LaboratorioController::class, 'historial_mensajes_profesional'])->name('laboratorio.historial_mensajes_profesional');
     Route::get('/Administracion/Comercial', [App\Http\Controllers\LaboratorioController::class, 'areaComercial'])->name('laboratorio.area_comercial');
-    Route::post('dame_profesional_servicio', [App\Http\Controllers\LaboratorioController::class, 'dame_profesional'])->name('laboratorio.dame_profesional_cm');
+    // Route::post('dame_profesional_servicio', [App\Http\Controllers\LaboratorioController::class, 'dame_profesional'])->name('laboratorio.dame_profesional_cm');
+    Route::post('agregar_laboratorio',[App\Http\Controllers\LaboratorioController::class, 'agregar_laboratorio'])->name('laboratorio.agregar_laboratorio');
 
 
 });
@@ -1882,7 +1888,7 @@ Route::group([
 
 /** VER LIQUIDACIONES - DATOS DE DEPOSITO */
 Route::group([
-    'middleware' => ['role:Profesional|Contador|Asistente|AsistenteCaja|AsistenteJefaCaja|AsistenteOnline|AsistenteManejoAgenda|admin|Adm_Institucion|Institucion|AsistenteLaboratorio'],
+    'middleware' => ['role:Profesional|Contador|Asistente|AsistenteCaja|AsistenteJefaCaja|AsistenteOnline|AsistenteManejoAgenda|admin|Adm_Institucion|Institucion|AsistenteLaboratorio|Ministerio'],
     'prefix' => 'liquidacion_recibo',
 ], function () {
     Route::get('/profesional/ver_registro', [App\Http\Controllers\LiquidacionReciboController::class, 'ver_registro_r'])->name('profesional.liquidacion_ver');
