@@ -6528,49 +6528,49 @@
 
             $.ajax({
 
-                    url: url,
-                    type: "POST",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        id: id,
-                        nombre: profesion,
-                        universidad: universidad,
-                        anio: anio,
-                        ciudad_pais: ciudad_pais,
-                        supersalud: supersalud,
-                        numero_colegio: numero_colegio,
-                    },
-                })
-                .done(function(data) {
+                url: url,
+                type: "POST",
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id,
+                    nombre: profesion,
+                    universidad: universidad,
+                    anio: anio,
+                    ciudad_pais: ciudad_pais,
+                    supersalud: supersalud,
+                    numero_colegio: numero_colegio,
+                },
+            })
+            .done(function(data) {
 
-                    if (data.estado == 1) {
+                if (data.estado == 1) {
 
-                        swal({
-                            title: "se modifico antecedentes académicos",
-                            icon: "success",
-                            buttons: "Aceptar",
-                            //SuccessMode: true,
-                        })
-                        setTimeout(function() {
-                            location.reload()
-                        }, 100);
-                        // alert('se modifico antecedentes del paciente');
-                        // location.reload();
+                    swal({
+                        title: "se modifico antecedentes académicos",
+                        icon: "success",
+                        buttons: "Aceptar",
+                        //SuccessMode: true,
+                    })
+                    setTimeout(function() {
+                        location.reload()
+                    }, 100);
+                    // alert('se modifico antecedentes del paciente');
+                    // location.reload();
 
-                    } else {
-                        swal({
-                            title: "Error al modificar los antecedentes académicos",
-                            icon: "error",
-                            buttons: "Aceptar",
-                            DangerMode: true,
-                        })
-                        // alert('Error al modificar los antecedentes');
-                    }
+                } else {
+                    swal({
+                        title: "Error al modificar los antecedentes académicos",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    })
+                    // alert('Error al modificar los antecedentes');
+                }
 
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
         }
 
         function carga_tipo_especialidad(input_origen, input_destino, id)

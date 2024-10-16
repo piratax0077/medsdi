@@ -3824,6 +3824,43 @@ class EscritorioProfesional extends Controller
         return $datos;
     }
 
+    public function eliminarAntecedenteAcademico(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id))
+        {
+            $error['id'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = ProfesionalAntecedenteAcademico::find($request->id);
+            if($registro)
+            {
+                $registro->delete();
+
+                $datos['estado'] = 1;
+                $datos['msj'] = 'Registro eliminado';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'registro no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
     public function agregarFichaTipoOtorrino(Request $request)
     {
         $datos = array();

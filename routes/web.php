@@ -576,6 +576,7 @@ Route::group([
 	/** ANTECEDENTE ACADEMICO */
     Route::post('/profesional/modificar_antecedente_academico', [App\Http\Controllers\EscritorioProfesional::class, 'modificarAntecedenteAademico'])->name('profesional.editar_antecedente_academico');
 	Route::post('/profesional/agregar_antecedente_academico', [App\Http\Controllers\EscritorioProfesional::class, 'agregarAntecedenteAademico'])->name('profesional.agregar_antecedente_academico');
+	Route::post('/profesional/eliminar_antecedente_academico', [App\Http\Controllers\EscritorioProfesional::class, 'eliminarAntecedenteAcademico'])->name('profesional.eliminar_antecedente_academico');
 
 	/** REGISTRO DE FICHA TIPO  */
     Route::post('/profesional/agregar_ficha_tipo_otorrino', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoOtorrino'])->name('profesional.ficha_tipo_otorrino');
@@ -1908,6 +1909,7 @@ Route::group([
 ], function () {
     Route::post('/liquidacion/agregar', [App\Http\Controllers\LiquidacionReciboController::class, 'agregarLiquidacion'])->name('liquidacion.agregar');
     Route::post('/liquidacion/modificar', [App\Http\Controllers\LiquidacionReciboController::class, 'modificarLiquidacion'])->name('liquidacion.modificar');
+    Route::post('/liquidacion/eliminar', [App\Http\Controllers\LiquidacionReciboController::class, 'eliminarLiquidacion'])->name('liquidacion.eliminar');
 });
 
 /** PRODUCTO BODEGA */
