@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Mis lugares de atención</h5>
+                                <h5 class="m-b-10 font-weight-bold">Mis Lugares de Atención</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -19,7 +19,7 @@
                                     <a href="{{ route('profesional.configuracion') }}" data-toggle="tooltip" data-placement="top" title="Volver a panel de configuración">Panel de Configuración</a>
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="#">Mis lugares de atención</a>
+                                    <a href="#">Mis Lugares de Atención</a>
                                 </li>
                             </ul>
                         </div>
@@ -27,17 +27,23 @@
                 </div>
             </div>
             <!--Cierre: Header-->
-            <div class="row">
+            <div class="card-body">
                 <div class="col-sm-12">
                     <div class="card">
                         <div class="card-header bg-info">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h4 class="text-white f-20 d-inline">Mis lugares de atención</h4>
-                                        <button type="button" class="btn btn-light btn-xs float-md-right d-inline" data-toggle="modal" data-target="#nuevo_lugar_atencion">
-                                            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Agregar nuevo lugar de atención
-                                        </button>
+                                    <div class="col-md-6 pt-2">
+                                        <h4 class="text-white f-20">Mis Lugares de Atención</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="float-right">
+                                            <div class="btn-group mb-2 mr-2">
+                                                <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#nuevo_lugar_atencion">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Agregar nuevo lugar de atención
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -50,20 +56,20 @@
                                 @endif
                             </div>
                             <table id="tabla_lugares_atencion"
-                                class="display table table-striped dt-responsive nowrap" style="width:100%">
+                                class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th class="align-middle">Nombre</th>
-                                        <th class="align-middle">Dirección</th>
-                                        <th class="align-middle">Tipo</th>
-                                        <th class="align-middle">Contacto</th>
-                                        <th class="align-middle">Editar</th>
-                                        <th class="align-middle">Asistentes</th>
-                                        <th class="align-middle">Horarios</th>
-                                        <th class="align-middle">Procedimientos</th>
-                                        <th class="align-middle">Convenios y Valores</th>
-                                        <th class="align-middle">Deshabilitar</th>
-                                        <th class="align-middle">Eliminar</th>
+                                        <th class="text-center align-middle">Nombre</th>
+                                        <th class="text-center align-middle">Dirección</th>
+                                        <th class="text-center align-middle">Tipo</th>
+                                        <th class="text-center align-middle">Contacto</th>
+                                        <th class="text-center align-middle">Editar</th>
+                                        <th class="text-center align-middle">Asistentes</th>
+                                        <th class="text-center align-middle">Horarios</th>
+                                        <th class="text-center align-middle">Procedimientos</th>
+                                        <th class="text-center align-middle">Convenios y Valores</th>
+                                        <th class="text-center align-middle">Deshabilitar</th>
+                                        <th class="text-center align-middle">Eliminar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -73,26 +79,26 @@
                                         @foreach ($lugares as $l)
                                             @if ($l->pivot->estado !== 3)
                                                 <tr>
-                                                    <td class="align-middle">{{ $l->nombre }}</td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle text-center">{{ $l->nombre }}</td>
+                                                    <td class="align-middle text-center">
                                                         <span>{{ $l->Direccion()->first()->direccion . ' ' . $l->Direccion()->first()->numero_dir }}</span><br>
                                                         <span>{{ $l->Direccion()->first()->Ciudad()->first()->nombre }}</span>
                                                     </td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle text-center">
                                                         @if ($l->tipo == 1)
                                                             Centro Medico
                                                         @else
                                                             Particular
                                                         @endif
                                                     </td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle text-center">
                                                         <span>{{ $l->email }}</span><br>
                                                         <span>{{ $l->telefono }}</span>
                                                     </td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle text-center">
                                                         {{-- editar lugar atencion --}}
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon  accion_editar_lugar_atencion" data-toggle="modal" onclick="ver_lugar_atencion({{ $l->id }});" data-target="#editar_lugar_atencion" title="Editar lugar de atención">
-                                                            <i class="feather icon-edit"></i>
+                                                        <button type="button" class="btn btn-info btn-sm btn-icon  accion_editar_lugar_atencion" data-toggle="modal" onclick="ver_lugar_atencion({{ $l->id }});" data-target="#editar_lugar_atencion" title="Editar Lugar Atención">
+                                                            <i class="feather icon-home"></i>
                                                         </button>
                                                     </td>
                                                     <td class="align-middle text-center">
@@ -101,21 +107,21 @@
                                                             <i class="feather icon-user"></i>
                                                         </button>
                                                     </td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle text-center">
                                                         {{-- horario --}}
                                                         <button type="button" class="btn btn-info btn-sm btn-icon  accion_editar_horarios" data-toggle="modal" onclick="mi_horario_lugar_atencion({{ $l->id }})">
                                                             <i class="fas fa-clock"></i>
                                                         </button>
 
                                                     </td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle text-center">
                                                         {{-- procedimientos --}}
                                                         <button type="button" class="btn btn-info btn-sm btn-icon  accion_editar_horarios" data-toggle="modal" onclick="mi_procedimiento_lugar_atencion({{ $l->id }}, {{ $id_profesional }});">
                                                             <i class="fas fa-procedures"></i>
                                                         </button>
 
                                                     </td>
-                                                    <td class="align-middle">
+                                                    <td class="align-middle text-center">
                                                         {{-- valores de lugar de atencion --}}
                                                         <button type="button" class="btn btn-success btn-sm btn-icon accion_editar_valores" data-toggle="modal" onclick="mis_valores_lugar_atencion({{ $l->id }})" title="Configurar">
                                                             <i class="fas fa-dollar-sign"></i>
@@ -125,14 +131,14 @@
                                                     <td>
                                                         {{-- estado de lugar de atencion --}}
                                                         @if ($l->pivot->estado == '1')
-                                                            <div class="align-middle">
+                                                            <div class="align-middle text-center">
                                                                 <div class="switch switch-success d-inline m-r-10">
                                                                     <input type="checkbox" onclick="cambio_estado_lugar_atencion({{ $l->id }})" id="estado_lugar_atencion_{{ $l->id }}" checked="true">
                                                                     <label for="estado_lugar_atencion_{{ $l->id }}" class="cr"></label>
                                                                 </div>
                                                             </div>
                                                         @else
-                                                            <div class="align-middle">
+                                                            <div class="align-middle text-center">
                                                                 <div class="switch switch-success d-inline m-r-10">
                                                                     <input type="checkbox" onclick="cambio_estado_lugar_atencion({{ $l->id }})" id="estado_lugar_atencion_{{ $l->id }}">
                                                                     <label for="estado_lugar_atencion_{{ $l->id }}" class="cr"></label>
@@ -145,7 +151,7 @@
                                                     <td>
                                                         {{-- eliminar de lugar de atencion --}}
 
-                                                        <div class="align-middle">
+                                                        <div class="align-middle text-center">
                                                             <button type="button" class="btn btn-danger btn-sm btn-icon accion_editar_valores" data-toggle="modal" onclick="eliminar_lugar_atencion({{ $l->id }})" title="Eliminar">
                                                                 <i class="feather icon-x"></i>
                                                             </button>
@@ -181,36 +187,38 @@
                 <form action="{{ route('profesional.agregar_centro') }}" method="POST">
                     @csrf
                     <div class="modal-body">
-                        <div class="form-row">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                        <div class="row">
+                            <div class="col-sm-12">
                                 <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Nombre</label>
-                                    <input class="form-control form-control-sm" name="nombre_lugar_atencion" id="nombre_lugar_atencion" type="text">
+                                    <label class="floating-label">Nombre</label>
+                                    <input class="form-control" name="nombre_lugar_atencion" id="nombre_lugar_atencion" type="text">
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="col-sm-12">
                                 <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Rut</label>
-                                    <input class="form-control form-control-sm" name="rut_lugar_atencion" id="rut_lugar_atencion" type="text" onkeyup="formatoRut(this);">
+                                    <label class="floating-label">Rut</label>
+                                    <input class="form-control" name="rut_lugar_atencion" id="rut_lugar_atencion" type="text" onkeyup="formatoRut(this);">
                                 </div>
                             </div>
-                            <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                            <div class="col-sm-8">
                                 <div class="form-group">
-                                    <label class="floating-label-activo-sm">Direcci&oacute;n</label>
-                                    <input class="form-control form-control-sm" name="direccion_lugar_atencion" id="direccion_lugar_atencion" type="text">
+                                    <label class="floating-label">Direcci&oacute;n</label>
+                                    <input class="form-control" name="direccion_lugar_atencion" id="direccion_lugar_atencion" type="text">
                                 </div>
                             </div>
-                            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label class="floating-label-activo-sm">Nº</label>
-                                    <input class="form-control form-control-sm" name="numero_lugar_atencion" id="numero_lugar_atencion" type="text">
+                                    <label class="floating-label">Depto. | Ofic.</label>
+                                    <input class="form-control" name="numero_lugar_atencion" id="numero_lugar_atencion" type="text">
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                            <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Regi&oacute;n</label>
-                                    <select id="region_agregar" onchange="buscar_ciudad();" name="region_agregar" class="form-control form-control-sm" required>
-                                        <option value="">Seleccione</option>
+                                    <select id="region_agregar" onchange="buscar_ciudad();" name="region_agregar" class="form-control" required>
+                                        <option value="">Seleccione una Regi&oacute;n</option>
                                         @foreach ($region as $reg)
                                             @if (isset($region))
                                                 <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
@@ -219,37 +227,40 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                            <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Ciudad</label>
-                                    <select id="ciudad_agregar" name="ciudad_agregar" class="form-control form-control-sm" required>
-                                        <option value="">Seleccione</option>
+                                    <select id="ciudad_agregar" name="ciudad_agregar" class="form-control" required>
+                                        <option value=""></option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                            <div class="col-sm-12">
                                 <div class="form-group ">
                                     <label class="floating-label-activo-sm">Tipo</label>
-                                    <select id="tipo_agregar_lugar_atencion" name="tipo_agregar_lugar_atencion" class="js-example-basic-single form-control form-control-sm">
+                                    <select id="tipo_agregar_lugar_atencion" name="tipo_agregar_lugar_atencion" class="js-example-basic-single form-control">
                                         <option value="0">Seleccione</option>
                                         <option value="1">Centro Médico</option>
                                         <option value="2">Consulta Particular</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                            <div class="col-sm-12">
                                 <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
-                                    <input class="form-control form-control-sm" name="email_lugar_atencion" id="email_lugar_atencion" type="email">
+                                    <label class="floating-label">Correo Electr&oacute;nico</label>
+                                    <input class="form-control" name="email_lugar_atencion" id="email_lugar_atencion" type="email">
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="col-sm-12">
                                 <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                    <input class="form-control form-control-sm" name="telefono_lugar_atencion" id="telefono_lugar_atencion_1" type="text">
+                                    <label class="floating-label">Tel&eacute;fono</label>
+                                    <input class="form-control" name="telefono_lugar_atencion" id="telefono_lugar_atencion_1" type="text">
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="switch switch-success d-inline m-r-10">
                                         <input type="checkbox" id="notificar_pacientes" name="notificar_pacientes">
@@ -259,10 +270,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
-                        <button type="submit" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-info">Guardar Cambios</button>
+                        </div>
+
                     </div>
                 </form>
             </div>
@@ -282,80 +294,81 @@
                 </div>
                 <div class="modal-body">
                     <form id="form_editar_lugar_atencion">
-                    <input type="hidden" name="id_lugar_atencion_modificar" id="id_lugar_atencion_modificar">
-                    <div class="form-row">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Nombre</label>
-                                <input name="editar_nombre_lugar_atencion" id="editar_nombre_lugar_atencion" type="text" val="" class="form-control form-control-sm">
+                        <input type="hidden" name="id_lugar_atencion_modificar" id="id_lugar_atencion_modificar">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label">Nombre</label>
+                                    <input name="editar_nombre_lugar_atencion" placeholder="Ingrese Nombre" id="editar_nombre_lugar_atencion" type="text" val="" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                       <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Direcci&oacute;n&nbsp;/&nbsp;Calle</label>
-                                <input name="editar_direccion_lugar_atencion" id="editar_direccion_lugar_atencion" type="text" class="form-control form-control-sm">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <label class="floating-label">Direcci&oacute;n&nbsp;/&nbsp;Calle</label>
+                                    <input name="editar_direccion_lugar_atencion" placeholder="Ingrese Direcci&oacute;n" id="editar_direccion_lugar_atencion" type="text" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Nº</label>
-                                <input name="editar_numero_lugar_atencion" id="editar_numero_lugar_atencion" type="text" class="form-control form-control-sm">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="floating-label">Depto. | Ofic.</label>
+                                    <input name="editar_numero_lugar_atencion" placeholder="Ingrese n&uacute;mero"id="editar_numero_lugar_atencion" type="text" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Regi&oacute;n</label>
-                                <select id="region_lugar_atencion_modificar" onchange="buscar_ciudades();" name="region_lugar_atencion_modificar" class="form-control form-control-sm" required>
-                                    <option value="0">Seleccione</option>
-                                </select>
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Regi&oacute;n</label>
+                                    <select id="region_lugar_atencion_modificar" onchange="buscar_ciudades();" name="region_lugar_atencion_modificar" class="form-control" required>
+                                        <option value="0">Seleccione</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Ciudad</label>
-                                <select id="ciudad_lugar_atencion_modificar" name="ciudad_lugar_atencion_modificar" class="form-control form-control-sm" required>
-                                    <option value="0">Seleccione</option>
-                                </select>
+
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Ciudad</label>
+                                    <select id="ciudad_lugar_atencion_modificar" name="ciudad_lugar_atencion_modificar" class="form-control" required>
+                                        <option value="0">Seleccione</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Tipo</label>
-                                <select id="tipo_editar_lugar_atencion" name="tipo_editar_lugar_atencion" class="js-example-basic-single form-control form-control-sm">
-                                    <option value="0">Seleccione</option>
-                                    <option value="1">Centro Médico</option>
-                                    <option value="2">Consulta Particular</option>
-                                </select>
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Tipo</label>
+                                    <select id="tipo_editar_lugar_atencion" name="tipo_editar_lugar_atencion" class="js-example-basic-single form-control">
+                                        <option value="0">Seleccione</option>
+                                        <option value="1">Centro Médico</option>
+                                        <option value="2">Consulta Particular</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
-                                <input name="editar_email_lugar_atencion" id="editar_email_lugar_atencion" type="text" class="form-control form-control-sm">
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
+                                    <input name="editar_email_lugar_atencion" placeholder="Ingrese Email" id="editar_email_lugar_atencion" type="text" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                <input name="editar_telefono_lugar_atencion"  id="editar_telefono_lugar_atencion" type="text" class="form-control form-control-sm">
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Tel&eacute;fono</label>
+                                    <input name="editar_telefono_lugar_atencion" placeholder="Ingrese Tel&eacute;fono" id="editar_telefono_lugar_atencion" type="text" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="form-group">
-                                <div class="switch switch-success d-inline m-r-10">
-                                    <input type="checkbox" id="notificar_pacientes_modificar" name="notificar_pacientes_modificar">
-                                    <label for="notificar_pacientes_modificar" class="cr"></label>
-                                    <label>Notificar a pacientes modificación</label>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <div class="switch switch-success d-inline m-r-10">
+                                        <input type="checkbox" id="notificar_pacientes_modificar" name="notificar_pacientes_modificar">
+                                        <label for="notificar_pacientes_modificar" class="cr"></label>
+                                        <label>Notificar a pacientes modificación</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                            <button type="button" onclick="editar_lugar_atencion();" class="btn btn-info">Guardar Cambios</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="modal-footer">
-                        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
-                        <button type="button" onclick="editar_lugar_atencion();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -436,7 +449,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center" id="nuevo_horario_atencion_titulo">Configurar asistentes</h5>
+                    <h5 class="modal-title text-white text-center" id="nuevo_horario_atencion_titulo">Configurar Asistentes</h5>
                     <button type="button" id="cerrar_editar_asistentes" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
@@ -447,56 +460,52 @@
                     <form id="">
                         <input type="hidden" name="mi_asistente_id_lugar_atencion" id="mi_asistente_id_lugar_atencion">
                         <div class="row">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                            <div class="col-sm-12 mb-2">
                                 <h6 class="text-c-blue">Escriba rut de el o la asistente que desea asociar a su lugar de atención</h6>
                             </div>
                             <div id="buscar_datos_asistente" class="col-sm-6 col-md-6 mb-3">
                                 <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control" placeholder="Rut de asistente" name="rut_asistente" id="rut_asistente" aria-label="Rut" aria-describedby="button-addon2" onkeyup="formatoRut(this);">
+                                    <input type="text" class="form-control" placeholder="Rut" name="rut_asistente" id="rut_asistente" aria-label="Rut" aria-describedby="button-addon2" onkeyup="formatoRut(this);">
                                     <div class="input-group-append">
-                                        <button class="btn btn-info" onclick="buscar_asistente($('#mi_asistente_id_lugar_atencion').val());" type="button" id="button-addon2">Asociar</button>
+                                        <button class="btn btn-success" onclick="buscar_asistente($('#mi_asistente_id_lugar_atencion').val());" type="button" id="button-addon2">Asociar</button>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" id="datos_asistente" style="display: none">
-                                <div class="card-informacion">
-                                    <div class="card-body pb-0">
-                                        <table class="table table-borderless table-xs">
-                                            <tbody>
-                                                <tr>
-                                                    <td><strong>Rut:</strong></td>
-                                                    <td><span id="datos_rut_asistente"></span>
-                                                        <input type="hidden" id="id_asistente_lugar_atencion" name="id_asistente_lugar_atencion">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Nombre:</strong></td>
-                                                    <td><span id="datos_nombre_asistente"></span></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><strong>Correo Electr&oacute;nico:</strong></td>
-                                                    <td id="datos_email_asistente"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td> <strong>Tel&eacute;fono:</strong></td>
-                                                    <td><span id="datos_telefono_asistente"></span></td>
-                                                </tr>
-                                                <tr>
-                                                    <td scope="row" colspan="2">
-                                                        <button id="confirmar_datos_asistente" name="confirmar_datos_asistente" onclick="datos_confirmar_asistente($('#mi_asistente_id_lugar_atencion').val());" class="btn btn-info-light-c btn-xxs"><i class="feather icon-check"></i> Confirmar datos</button>
-                                                        <button id="confirmar_datos_asistente_examen" name="confirmar_datos_asistente_examen" onclick="datos_confirmar_asistente_examen($('#mi_asistente_id_lugar_atencion').val());" class="btn btn-success-light-c btn-xxs"><i class="feather icon-check"></i> Confirmar y dar permiso de carga de examen</button>
-                                                        <button id="limpiar_datos_asistente" name="limpiar_datos_asistente" onclick="datos_limpiar_asistente();" class="btn btn-danger-light-c btn-xxs"><i class="feather icon-x"></i> Limpiar datos</button>
-                                                    <td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                            <div>
+                                <table class="table table-borderless table-xs" id="datos_asistente" style="display: none">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Rut:</strong></td>
+                                            <td><span id="datos_rut_asistente"></span>
+                                                <input type="hidden" id="id_asistente_lugar_atencion" name="id_asistente_lugar_atencion">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Nombre:</strong></td>
+                                            <td><span id="datos_nombre_asistente"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Correo Electr&oacute;nico:</strong></td>
+                                            <td id="datos_email_asistente"></td>
+                                        </tr>
+                                        <tr>
+                                            <td> <strong>Tel&eacute;fono:</strong></td>
+                                            <td><span id="datos_telefono_asistente"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td scope="row" colspan="2">
+                                                <button id="confirmar_datos_asistente" name="confirmar_datos_asistente" onclick="datos_confirmar_asistente($('#mi_asistente_id_lugar_atencion').val());" class="btn btn-success btn-sm">Confirmar Datos</button>
+                                                <button id="confirmar_datos_asistente_examen" name="confirmar_datos_asistente_examen" onclick="datos_confirmar_asistente_examen($('#mi_asistente_id_lugar_atencion').val());" class="btn btn-success btn-sm">Confirmar y Dar Permiso de carga de Examen</button>
+                                                <button id="limpiar_datos_asistente" name="limpiar_datos_asistente" onclick="datos_limpiar_asistente();" class="btn btn-info btn-sm">Limpiar Datos</button>
+                                            <td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
 
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
-                                <table id="mi_asistente_table" class="display table table-striped dt-responsive nowrap" style="width:100%">
+                            <div class="col-md-12 mb-3">
+                                <table id="mi_asistente_table" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Habilitar / Deshabilitar</th>
@@ -513,8 +522,8 @@
                     </form>
                 </div>
                 <div class="modal-footer pt-2">
-                    <button type="button" class="btn btn-danger btn-sm" id="cerrar_editar_asistentes1"><i class="feather icon-x"></i> Cancelar</button>
-                    <button type="button" id="cerrar_editar_asistentes2" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar cambios</button>
+                    <button type="button" class="btn btn-danger" id="cerrar_editar_asistentes1">Cancelar</button>
+                    <button type="button" id="cerrar_editar_asistentes2" class="btn btn-info">Guardar Cambios</button>
                 </div>
             </div>
         </div>
@@ -531,15 +540,15 @@
                 <div class="modal-body">
                     <form id="">
                         <input type="hidden" name="mi_horario_id_lugar_atencion" id="mi_horario_id_lugar_atencion">
-                        <div class="form-row">
-                            <div class="col-sm-12 mb-1">
-                                <h6 class="t-aten">Tipo de agenda</h6>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h6 class="text-c-blue mb-3">Tipo Agenda</h6>
                             </div>
                             <div class="col-sm-12 mb-2">
                                 <div class="form-group fill">
-                                    <!--<label class="floating-label-activo-sm">Tipo de agenda </label>-->
-                                    <select name="tipo_agenda_medica" id="tipo_agenda_medica" class="form-control form-control-sm" onclick="validar_tipo_agenda();">
-                                        <option value="0">Seleccione</option>
+                                    {{-- <label class="floating-label-activo-sm">Tipo Agenda </label> --}}
+                                    <select name="tipo_agenda_medica" id="tipo_agenda_medica" class=" form-control" onclick="validar_tipo_agenda();">
+                                        <option value="0">Seleccione Tipo Agenda</option>
                                         <option value="1">Atención General</option>
                                         <option value="2">Atención Dental</option>
                                         <option value="3">Atención Telemedicina</option>
@@ -552,8 +561,8 @@
                                 <h6 class="text-c-blue mb-3">Duraci&oacute;n</h6>
                             </div> --}}
 
-                            <div class="col-sm-12 mb-2">
-                                <h6 class="t-aten">Horario de Atenci&oacute;n</h6>
+                            <div class="col-sm-12">
+                                <h6 class="text-c-blue mb-3">Horario de Atenci&oacute;n</h6>
                             </div>
                             {{-- <div class="col-sm-6 mb-2">
                                 <div class="form-group fill">
@@ -570,9 +579,9 @@
                             </div> --}}
                             <div class="col-sm-6 mb-2">
                                 <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Duraci&oacute;n de Consultas M&eacute;dicas </label>
-                                    <select name="duracion_horario" id="duracion_horario" class=" form-control form-control-sm">
-                                        <option value="0">Seleccione</option>
+                                    <label class="floating-label">Duraci&oacute;n de Consultas M&eacute;dicas </label>
+                                    <select name="duracion_horario" id="duracion_horario" class=" form-control">
+                                        <option value="0">Seleccione Tiempo</option>
                                         <option value="00:15:00">15 minutos</option>
                                         <option value="00:30:00">30 minutos</option>
                                         <option value="00:45:00">45 minutos</option>
@@ -582,9 +591,9 @@
                             </div>
                             <div class="col-sm-6 mb-2">
                                 <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Día de atención</label>
-                                    <select name="dia_horario" id="dia_horario" class=" form-control form-control-sm">
-                                        <option value="" selected>Seleccione</option>
+                                    <label class="floating-label-activo-sm">Día </label>
+                                    <select name="dia_horario" id="dia_horario" class=" form-control">
+                                        <option value="" selected>Seleccione d&iacute;a de atenci&oacute;n</option>
                                         <option value="1">Lunes</option>
                                         <option value="2">Martes</option>
                                         <option value="3">Mi&eacute;rcoles</option>
@@ -597,8 +606,8 @@
                             </div>
                             <div class="col-sm-6 mb-2">
                                 <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Desde </label>
-                                    <select name="hora_inicio_horario" id="hora_inicio_horario" class=" form-control form-control-sm">
+                                    <label class="floating-label">Desde </label>
+                                    <select name="hora_inicio_horario" id="hora_inicio_horario" class=" form-control">
                                         <option value="0">Seleccione horario</option>
                                         <option value="08:00">08:00</option>
                                         <option value="08:30">08:30</option>
@@ -634,8 +643,8 @@
                             </div>
                             <div class="col-sm-6 mb-2">
                                 <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Hasta </label>
-                                    <select name="hora_termino_horario" id="hora_termino_horario" class=" form-control form-control-sm">
+                                    <label class="floating-label">Hasta </label>
+                                    <select name="hora_termino_horario" id="hora_termino_horario" class=" form-control">
                                         <option value="0">Seleccione horario</option>
                                         <option value="08:00">08:00</option>
                                         <option value="08:30">08:30</option>
@@ -672,14 +681,14 @@
                             </div>
 
                             <div class="col-sm-12 mb-2 text-center">
-                                <button type="button" onclick="mi_horario_agregar();" class="btn btn-info btn-sm" data-dismiss="modal"><i class="fa fa-plus"></i> Agregar horario de atención</button>
+                                <button type="button" onclick="mi_horario_agregar();" class="btn btn-info btn-sm" data-dismiss="modal">Agregar horario de atención</button>
                                 {{-- <button type="button" id="cerrar_modal_horario2" class="btn btn-danger btn-sm">Cancelar</button> --}}
                             </div>
                             <div class="col-sm-12 mt-2 mb-2">
                                 <table id="mi_horario_table" class="table table-sm">
                                     <thead>
                                         <tr>
-											<th class="text-center align-middle">T. Agenda</th>
+                                            <th class="text-center align-middle">T. Agenda</th>
                                             <th class="text-center align-middle">Desde</th>
                                             <th class="text-center align-middle">Hasta</th>
                                             <th class="text-center align-middle">D&iacute;a</th>
@@ -694,10 +703,10 @@
                         </div>
                     </form>
                 </div>
-                <!--<div class="modal-footer">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-danger" id="cerrar_modal_horario">Cancelar</button>
                     <button type="button" class="btn btn-info" id="cerrar_modal_horario1">Cerrar</button>
-                </div>-->
+                </div>
             </div>
         </div>
     </div>
@@ -707,34 +716,34 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center" id="nuevo_horario_atencion_titulo">Convenios y valores de atención médica</h5>
+                    <h5 class="modal-title text-white text-center" id="nuevo_horario_atencion_titulo">Convenios y Valores de atención médica</h5>
                     <button type="button" id="cerrar_modal_editar_valor_atencion" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="id_lugar_atencion_valor" id="id_lugar_atencion_valor">
-                    <div class="form-row">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                            <h6 class="t-aten">Valores de atención médica</h6>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h6 class="text-c-blue mb-3">Valores de atención médica</h6>
                         </div>
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-8 mb-2">
+                        <div class="col-sm-8 mb-2">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Tipo de atención médica</label>
-                                <select name="lugar_atencion_convenio" id="lugar_atencion_convenio" class=" form-control form-control-sm">
+                                <select name="lugar_atencion_convenio" id="lugar_atencion_convenio" class=" form-control">
                                     <option value="">Seleccione una opción</option>
                                     <option value="En consulta médica">En consulta médica</option>
                                     <option value="Domicilio">Domicilio</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4 mb-2">
+                        <div class="col-sm-4 mb-2">
                             <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Valor</label>
-                                <input name="valor_convenio" id="valor_convenio" type="number" class="form-control form-control-sm">
+                                <label class="floating-label">Valor</label>
+                                <input name="valor_convenio" id="valor_convenio" type="number" class="form-control">
                             </div>
                         </div>
 
                         <div class="col-sm-12">
-                            <h6 class="t-aten mb-2">Convenios</h6>
+                            <h6 class="text-c-blue mb-2">Convenios</h6>
                         </div>
                         <div class="col-sm-4 mb-3">
                             <div class="custom-control custom-switch">
@@ -791,31 +800,31 @@
                             </div>
                         </div>
                         <div class="col-sm-12 mb-3 mt-2 text-center">
-                            <button type="button" onclick="guardar_valores_lugar_atencion()" class="btn btn-info btn-sm" data-dismiss="modal"><i class="fa fa-plus"></i> Agregar convenio y valor</button>
-                            <!--<button type="button" id="cerrar_convenio1" class="btn btn-danger btn-sm">Cancelar</button>-->
+                            <button type="button" onclick="guardar_valores_lugar_atencion()" class="btn btn-info btn-sm" data-dismiss="modal">Agregar convenio y valor</button>
+                            <button type="button" id="cerrar_convenio1" class="btn btn-danger btn-sm">Cancelar</button>
                         </div>
                         <div class="col-sm-12 mt-3 mb-3">
                             {{--  <table id="" class="table table-sm table-responsive">  --}}
-                            <table id="tabla_valores" class="display table table-striped dt-responsive nowrap table-sm" style="100%">
+                            <table id="tabla_valores" class="display table table-striped table-hover dt-responsive nowrap" style="100%">
                                 <thead>
                                     <tr>
-                                        <th class="align-middle">Atención Médica</th>
-                                        <th class="align-middle">Valor</th>
-                                        <th class="align-middle">Convenios</th>
-                                        <th class="align-middle">Acción</th>
+                                        <th class="text-center align-middle">Atención Médica</th>
+                                        <th class="text-center align-middle">Valor</th>
+                                        <th class="text-center align-middle">Convenios</th>
+                                        <th class="text-center align-middle">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!--AÑADIR AL TD DE CONVENIOS LA CLASE "text-wrap"-->
+
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-                <!--<div class="modal-footer">
+                <div class="modal-footer">
                     <button type="button" id="cerrar_convenio" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                     <button type="button" id="cerrar_convenio2" class="btn btn-info">Guardar Cambios</button>
-                </div>-->
+                </div>
             </div>
         </div>
     </div>
@@ -832,43 +841,45 @@
                 <div class="modal-body">
                     <input type="hidden" name="modal_agrear_editar_procedimientos_id_lugar_atencion" id="modal_agrear_editar_procedimientos_id_lugar_atencion">
                     <input type="hidden" name="modal_agrear_editar_procedimientos_id_profesional" id="modal_agrear_editar_procedimientos_id_profesional">
-                    <div class="form-row">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-8">
+                    <div class="row">
+                        <div class="col-sm-8 mb-2">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Procedimientos</label>
-                                <select name="agrear_editar_procedimientos_id_procedimiento" id="agrear_editar_procedimientos_id_procedimiento" class=" form-control form-control-sm">
+                                <select name="agrear_editar_procedimientos_id_procedimiento" id="agrear_editar_procedimientos_id_procedimiento" class=" form-control">
                                     <option value="0">Seleccione</option>
                                     {{--  --}}
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-2">
+                        <div class="col-sm-4 mb-2">
                             <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Minutos por bloque</label>
-                                <input name="agrear_editar_procedimientos_minutos_bloque" id="agrear_editar_procedimientos_minutos_bloque" type="number" class="form-control form-control-sm" value="15" readonly>
+                                <label class="floating-label">Minutos * bloque</label>
+                                <input name="agrear_editar_procedimientos_minutos_bloque" id="agrear_editar_procedimientos_minutos_bloque" type="number" class="form-control" value="15" readonly>
                             </div>
                         </div>
 
-                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-2">
+                        <div class="col-sm-4 mb-2">
                             <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Cantidad Bloques</label>
-                                <input name="agrear_editar_procedimientos_cantidad_bloques" id="agrear_editar_procedimientos_cantidad_bloques" type="number" class="form-control form-control-sm" value="0" min="1" step="1">
+                                <label class="floating-label">Cantidad Bloques</label>
+                                <input name="agrear_editar_procedimientos_cantidad_bloques" id="agrear_editar_procedimientos_cantidad_bloques" type="number" class="form-control" value="0" min="1" step="1">
                             </div>
                         </div>
+
+
 
                         <div class="col-sm-12 mb-3 mt-2 text-center">
-                            <button type="button" onclick="registrar_mi_procedimiento_lugar_atencion()" class="btn btn-info btn-sm"><i class="fa fa-plus"></i> Agregar convenio y valor</button>
-                            <!--<button type="button" id="cancelar_modal_agrear_editar_procedimientos" class="btn btn-danger btn-sm" onclick="cancelar_modal_agrear_editar_procedimientos();">Cancelar</button>-->
+                            <button type="button" onclick="registrar_mi_procedimiento_lugar_atencion()" class="btn btn-info btn-sm">Agregar convenio y valor</button>
+                            <button type="button" id="cancelar_modal_agrear_editar_procedimientos" class="btn btn-danger btn-sm" onclick="cancelar_modal_agrear_editar_procedimientos();">Cancelar</button>
                         </div>
                         <div class="col-sm-12 mt-3 mb-3">
                             {{--  <table id="" class="table table-sm table-responsive">  --}}
-                            <table id="tabla_valores_proce_prof_lug_atencion" class="display table table-striped dt-responsive nowrap table-sm" style="100%">
+                            <table id="tabla_valores_proce_prof_lug_atencion" class="display table table-striped table-hover dt-responsive nowrap" style="100%">
                                 <thead>
                                     <tr>
-                                        <th class="align-middle">Procedimiento</th>
-                                        <th class="align-middle">Min/Bloque</th>
-                                        <th class="align-middle">Cant. Bloque</th>
-                                        <th class="align-middle">Acción</th>
+                                        <th class="text-center align-middle">Procedimiento</th>
+                                        <th class="text-center align-middle">MIN/Bloque</th>
+                                        <th class="text-center align-middle">Cant. Bloque</th>
+                                        <th class="text-center align-middle">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -878,9 +889,9 @@
                         </div>
                     </div>
                 </div>
-                <!--<div class="modal-footer">
+                <div class="modal-footer">
                     <button type="button" id="cerrar_modal_agregar_editar_procedimiento" class="btn btn-danger" data-dismiss="modal" onclick="cerrar_modal_agrear_editar_procedimientos();">Cerrar</button>
-                </div>-->
+                </div>
             </div>
         </div>
     </div>

@@ -40,9 +40,14 @@
                         <div class="card-header bg-info">
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-1">
-                                    <h4 class="text-white f-20 d-inline ">Mis asistentes</h4>
-                                     <a class="btn d-inline btn-xs btn-light float-md-right" href="busq_secretaria.php" role="button"><i class="feather icon-user"></i> Contratar asistente</a>
+                                <div class="col-sm-12 col-md-6 pt-1">
+                                    <h4 class="text-white f-20">Mis asistentes</h4>
+                                </div>
+                                {{-- <div class="col-sm-12 col-md-3">
+                                    <button type="button" class="btn btn-block btn-xxs btn-light my-1" data-toggle="modal" data-target="#nuevo_asistente" aria-hidden="true"><i class="feather icon-plus"></i> Registrar asistente</button>
+                                </div> --}}
+                                <div class="col-sm-12 col-md-3">
+                                    <a class="btn btn-block btn-xxs btn-light my-1" href="busq_secretaria.php" role="button"><i class="feather icon-user"></i> Contratar asistente</a>
                                 </div>
                             </div>
                         </div>
@@ -54,7 +59,7 @@
                                         style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>Lugar Atención</th>
+                                                <th>Lugar Atencion</th>
                                                 <th>Rut</th>
                                                 <th>Nombre</th>
                                                 <th>Contacto</th>
