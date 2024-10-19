@@ -5,19 +5,19 @@
 
 <!-- Modal busqueda por rut -->
 <div class="modal fade" id="modal_agregar_dep_buscar" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                        <h6 class="modal-title text-c-blue mt-1 mb-b" id="modal_indicar_examen">Ingrese Rut de dependiente</h6>
+                        <h6 class="modal-title text-primary mt-1" id="modal_indicar_examen">Buscar Rut de Dependiente</h6>
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <input type="text" class="form-control form-control-sm" name="modal_agregar_dep_input_rut" id="modal_agregar_dep_input_rut" value="">
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mt-2">
-                        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close"><i class="feather icon-x"></i> Cancelar</button>
-                        <button type="button" class="btn btn-info btn-sm" onclick="buscar_rut_dep();"><i class="feather icon-search"></i> Buscar</button>
+                        <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal" aria-label="Close"><i class="feather icon-x"></i> Cancelar</button>
+                        <button type="button" class="btn btn-info-light-c btn-sm" onclick="buscar_rut_dep();"><i class="feather icon-search"></i> Buscar</button>
                     </div>
 
                 </div>
@@ -107,15 +107,15 @@
 
 <!-- Modal agregar paciente nuevo -->
 <div class="modal fade" id="modal_agregar_dep_nuevo" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header bg-info">
-            <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Agregar dependiente no registrado</h5>
+            <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Agregar Dependiente No registrado</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
 
-            <div class="form-row">
+            <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group">
                         <label class="floating-label-activo-sm"><span class="requerido" style="color: red;" id="requerido_modal_agregar_dep_nuevo_rut">*</span>Rut</label>
@@ -123,7 +123,10 @@
                     </div>
                 </div>
             </div>
-            <div class="form-row">
+
+            <hr>
+
+            <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group">
                         <label class="floating-label-activo-sm"><span class="requerido" style="color: red;" id="requerido_modal_agregar_dep_nuevo_nombres_paciente">*</span>Nombres</label>
@@ -180,16 +183,16 @@
 
                 <div class="col-sm-4 col-md-4">
                     <div class="form-group">
-                        <label class="floating-label-activo-sm">Nº</label>
+                        <label class="floating-label-activo-sm">Depto. | Ofic.</label>
                         <input type="address" class="form-control form-control-sm" name="modal_agregar_dep_nuevo_numero_dir" id="modal_agregar_dep_nuevo_numero_dir">
                     </div>
                 </div>
 
                 <div class="col-sm-6 col-md-6">
                     <div class="form-group">
-                        <label class="floating-label-activo-sm"><span class="requerido" style="color: red;" id="requerido_sm">*</span>Región</label>
+                        <label class="floating-label-activo-sm"><span class="requerido" style="color: red;" id="requerido_sm">*</span>Region</label>
                         <select onchange="buscar_ciudad('modal_agregar_dep_nuevo_region', 'modal_agregar_dep_nuevo_ciudad',$('#modal_agregar_dep_nuevo_region').val());" name="modal_agregar_dep_nuevo_region" id="modal_agregar_dep_nuevo_region"  class="form-control form-control-sm" required>
-                            <option value="0">Seleccione</option>
+                            <option value="0">Seleccione Regio&oacute;n</option>
                             @if (isset($region))
                                 @foreach ($region as $reg)
                                     <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
@@ -203,7 +206,7 @@
                     <div class="form-group">
                         <label class="floating-label-activo-sm"><span class="requerido" style="color: red;" id="requerido_sm">*</span>Ciudad</label>
                         <select id="modal_agregar_dep_nuevo_ciudad" name="modal_agregar_dep_nuevo_ciudad" class="form-control form-control-sm" required>
-                            <option value="1">Seleccione</option>
+                            <option value="0">Seleccione Ciudad</option>
                         </select>
                     </div>
                 </div>
@@ -235,7 +238,7 @@
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label class="floating-label-activo-sm"><span class="requerido" style="color: red;" id="requerido_3">*</span>Tipo de dependencia</label>
+                        <label class="floating-label-activo-sm"><span class="requerido" style="color: red;" id="requerido_3">*</span>Tipo Dependencia</label>
                         <select class="form-control form-control-sm" name="modal_agregar_dep_nuevo_tipo_dependencia" id="modal_agregar_dep_nuevo_tipo_dependencia" onchange="evaluar_tipodependencia('modal_agregar_dep_nuevo_tipo_dependencia', 'modal_agregar_dep_nuevo_fechas', '2,4');">
                             <option value="">Seleccione</option>
                         </select>
@@ -266,15 +269,15 @@
                 </div>
             </div>
 
-            <!--<div class="row">
+            <div class="row">
                 <div class="col-md-12"><span style="color: red;" >*</span>Campos requeridos</div>
-            </div>-->
+            </div>
 
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
-            <button type="button" class="btn btn-info btn-sm" id="btn_registrar" onclick="registrar_dep_nuevo();"><i class="feather icon-check"></i> Registrar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="btn_registrar" onclick="registrar_dep_nuevo();">Registrar</button>
         </div>
 
     </div>

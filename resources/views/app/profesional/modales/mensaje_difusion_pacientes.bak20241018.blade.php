@@ -1,26 +1,26 @@
 
   <!-- Modal -->
   <div class="modal fade" id="modalMensajeDifusionPacientes" tabindex="-1" aria-labelledby="modalMensajeDifusionPacientesLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modalMensajeDifusionPacientesLabel">Mensaje difusion a mis paciente</h5>
-          <button type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <div class="form-row">
-                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <label class="floating-label-activo-sm" for="exampleFormControlInput1_difusion">Asunto</label>
-                    <input type="text" class="form-control form-control-sm" id="exampleFormControlInput1_difusion">
-                </div>
-                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <label class="floating-label-activo-sm" for="exampleFormControlTextarea1">Mensaje</label>
-                    <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1_difusion" rows="3"></textarea>
-                </div>
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                    <button type="button" class="btn btn-info" onclick="enviar_mensaje_difusion_paciente_confirmar()"><i class="feather icon-mail"></i> Enviar mensaje</button>
-                </div>
+            <div class="form-group">
+                <label for="exampleFormControlInput1_difusion">Asunto</label>
+                <input type="text" class="form-control" id="exampleFormControlInput1_difusion" placeholder="Asunto">
             </div>
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Mensaje</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1_difusion" rows="3"></textarea>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" onclick="enviar_mensaje_difusion_paciente_confirmar()">Enviar</button>
         </div>
       </div>
     </div>

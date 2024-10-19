@@ -26,14 +26,6 @@
             height: auto !important;
         }
 
-        .fc-timegrid-event .fc-event-time{
-            font-size: 1rem!important;
-        }
-
-        .fc-v-event .fc-event-title{
-            font-size: 0.9rem!important;
-        }
-
         /* kill the horizontal border/padding used to compensate for scrollbars */
         .fc-row {
             border: 0 !important;
@@ -41,20 +33,12 @@
         }
 
         .fc .fc-timegrid-slot {
-            height: 5em!important;
+            height: 3.5em;
         }
-
-        .fc-timegrid-event-harness > .fc-timegrid-event {
-          height:6em;
-          }
 
         .fc .fc-toolbar-title {
-            font-size: 1.4em;
+            font-size: 1.3em;
             margin: 0;
-        }
-
-        .fc .fc-toolbar.fc-header-toolbar {
-            margin-bottom: 0px!important;
         }
 
         .btn-group>.btn,
@@ -73,7 +57,7 @@
          .btn.btn-agenda {
             width: 38px !important;
             height: 38px !important;
-            font-size: 22px !important;
+            font-size: 17px !important;
             padding: 0px;
             border-radius: 50%!important;
         }
@@ -97,7 +81,7 @@
             }
 
             .fc .fc-toolbar-title {
-            font-size: 1rem!important;
+            font-size: 0.7rem!important;
             margin: 0;
             }
 
@@ -507,7 +491,7 @@
 
                                 <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Nº</label>
+                                        <label class="floating-label-activo-sm">Depto. | Ofic.</label>
                                         <input type="address" class="form-control form-control-sm"
                                             name="reserva_hora_numero_dir" id="reserva_hora_numero_dir">
                                     </div>
@@ -690,7 +674,7 @@
                                         </div>
                                         <div class="col-sm-12 col-md-4 col-lg-4 col-xl-2">
                                             <div class="form-group">
-                                                <label class="floating-label-activo-sm">Nº.</label>
+                                                <label class="floating-label-activo-sm">Depto. | Ofic.</label>
                                                 <input type="address" class="form-control form-control-sm"
                                                     name="reserva_hora_representante_numero_dir"
                                                     id="reserva_hora_representante_numero_dir">
@@ -748,7 +732,7 @@
                                             </button>
 
                                             <div class="form-group" style="display:none" name="div_representante_codigo_validador" id="div_representante_codigo_validador">
-                                                <label class="floating-label-activo-sm">Código Validador</label>
+                                                <label class="floating-label-activo-sm">Codigo Validador</label>
                                                 <input type="tel" class="form-control form-control-sm"
                                                     name="reserva_hora_representante_telefono_uno_codigo_validador" id="reserva_hora_representante_telefono_uno_codigo_validador" onkeyup="validar_codigo_telefono_representante();">
                                             </div>
@@ -792,7 +776,7 @@
                                             </tr>
                                             <tr>
                                                 <th scope="row">
-                                                    <strong>Correo electrónico</strong>
+                                                    <strong>Correo Electrónico</strong>
                                                 </th>
                                                 <td><span id="reserva_representante_email"></span></td>
                                             </tr>
@@ -857,17 +841,15 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="modal_pago_consulta_title">Recepción de pago atención</h5>
+                    <h5 class="modal-title text-white" id="modal_pago_consulta_title">Recepción de Pago Atención</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"
                         onclick="$('#modal_recepcion_bonos_api').modal('hide');"><span
                             aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body pb-0">
                     <div class="form-row mb-2">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="alert alert-danger">
-                                <h6 class="text-danger p-16">Recuerde que siempre se debe validar datos del paciente, profesional y convenio con los datos del bono físico</h6>
-                            </div>
+                        <div class="col-sm-12">
+                            <p style="color: #f00; font-size: 10px;">Recuerde que siempre se debe validar <span style="font-weight: 800;"> Datos del Paciente, Profesional y Convenio con los datos del Bono Fisico</span></p>
                         </div>
                     </div>
                     <div class="form-row">
@@ -939,6 +921,15 @@
                                     <button class="btn btn-outline-primary btn-sm" type="button" onclick="$('#bono_prevision_txt').hide();$('#bono_prevision').show();"><i class="feather icon-edit"></i></button>
                                 </div>
                             </div>
+                            <!--<div class="form-group fill">
+                                <label class="floating-label-activo-sm">Convenio</label>
+                                <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm">
+                                    <option value="0">Selecione una opción</option>
+                                    @foreach ($prevision as $prev)
+                                        <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>-->
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
@@ -960,7 +951,7 @@
                             <div class="row" id="sesiones_programa" style="display: none;">
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Tipo Bono</label>
+                                        <label class="floating-label-active">Tipo Bono</label>
                                         <select  id="bono_id_tipo_bono" name="bono_id_tipo_bono"class="form-control form-control-sm">
                                             {{-- <option value="0">Seleccione</option> --}}
                                             @foreach ($tipo_bonos as $t_bono)
@@ -972,7 +963,7 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Nº de Sesiones</label>
+                                        <label class="floating-label-active">Nº de Sesiones</label>
                                         <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number"
                                             class="form-control form-control-sm">
                                     </div>
@@ -981,7 +972,7 @@
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group text-center my-2 pb-2">
-                                <div onclick="recepcion_pago();" class="btn btn-info"><i class="feather icon-check"></i> Recepcionar</div>
+                                <div onclick="recepcion_pago();" class="btn btn-success">Recepcionar</div>
                             </div>
                         </div>
                     </div>

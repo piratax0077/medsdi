@@ -68,6 +68,7 @@
                 <form id="confirmacion_hora_medica">
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
+
                             <div class="form-group ">
                                 <label class="floating-label-activo-sm">Vía de Confirmación</label>
                                 {{--  <input type="text" class="form-control" id="confirmar_hora_comentario" name="confirmar_hora_comentario">  --}}
@@ -93,17 +94,20 @@
 
                 <div>
                     <button type="button" onclick="opcion_cancelar_hora();" id="hm_anular_hora"
-                        class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i>  Anular
+                        class="btn btn-danger btn-sm" data-dismiss="modal">Anular
                         Hora
                     </button>
                 </div>
+
                 <div>
-                    <button type="submit" onclick="opcion_confirmar_hora()" id="hm_confirmar_hora" class="btn btn-success btn-sm"><i class="feather icon-check"></i> Confirmar
+                    <button type="submit" onclick="opcion_confirmar_hora()" id="hm_confirmar_hora" class="btn btn-success btn-sm">Confirmar
                         Hora
                     </button>
                 </div>
+
+
                 <div>
-                    <button type="submit" id="hm_ver_hora" class="btn btn-info btn-sm"><i class="feather icon-file"></i> Ver Atención</button>
+                    <button type="submit" id="hm_ver_hora" class="btn btn-info btn-sm">Ver Atención</button>
                 </div>
 
                 <div>
@@ -112,7 +116,7 @@
                         <input type="hidden" name="id_hora_realizar" id="id_hora_realizar" val="">
                         <input type="hidden" name="lugar_atencion_id" id="lugar_atencion_id" value="{{ $lugar_atencion }}">
 
-                        <button type="submit" id="hm_atender_hora" class="btn btn-info btn-sm"><i class="feather icon-check"></i> Atender</button>
+                        <button type="submit" id="hm_atender_hora" class="btn btn-info btn-sm">Atender</button>
                     </form>
                 </div>
 
@@ -127,21 +131,22 @@
                 </div>
 
                 <div>
-                    <button type="button" id="cerrarModal" class="btn btn-secondary btn-sm" data-dismiss="modal"> <i class="feather icon-x"></i> Cerrar
+                    <button type="button" id="cerrarModal" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar
                     </button>
                 </div>
                 <div>
                     <button type="button" id="confirmar_anulacion_hora" onclick="cancelar_hora();"
-                        class="btn btn-danger btn-sm"><i class="feather icon-x"></i> Anular
+                        class="btn btn-danger btn-sm">Anular
                         Hora
                     </button>
                 </div>
                 <div>
                     <button type="button" id="confirmacion_hora" onclick="confirmar_hora();"
-                        class="btn btn-success btn-sm"><i class="feather icon-check"></i> Confirmar
+                        class="btn btn-success btn-sm">Confirmar
                         Hora
                     </button>
                 </div>
+
             </div>
         </div>
     </div>

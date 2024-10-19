@@ -3,7 +3,7 @@
     aria-labelledby="editar_contacto_emergencia" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-info">
+            <div class="modal-header bg-danger">
                 <h5 class="modal-title text-white text-center">Editar contacto de emergencia</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">×</span></button>
@@ -11,53 +11,53 @@
             <div class="modal-body">
                 <form>
                     <input type="hidden" name="id_contacto" id="id_contacto" value="">
-                    <div class="form-row">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label id="label_rut_contacto" class="floating-label-activo">Rut</label>
-                                <input type="text" class="form-control form-control-sm" name="rut_contacto" id="rut_contacto"
+                                <input type="text" class="form-control" name="rut_contacto" id="rut_contacto"
                                     value="">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label id="label_nombres_contacto" class="floating-label-activo">Nombres</label>
-                                <input type="text" class="form-control form-control-sm" name="nombres_contacto" id="nombres_contacto"
+                                <input type="text" class="form-control" name="nombres_contacto" id="nombres_contacto"
                                     value="">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label id="label_apellido_uno_contacto" class="floating-label-activo">Primer Apellido</label>
-                                <input type="text" class="form-control form-control-sm" name="apellido_uno_contacto"
+                                <input type="text" class="form-control" name="apellido_uno_contacto"
                                     id="apellido_uno_contacto" value="">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label id="label_apellido_dos_contacto" class="floating-label-activo">Segundo Apellido</label>
-                                <input type="text" class="form-control form-control-sm" name="apellido_dos_contacto"
+                                <input type="text" class="form-control" name="apellido_dos_contacto"
                                     id="apellido_dos_contacto" value="">
                             </div>
                         </div>
-                        <div class="col-sm-9 col-md-9 col-lg-9 col-xl-9">
+                        <div class="col-sm-9 col-md-9">
                             <div class="form-group">
                                 <label id="label_direccion_contacto" class="floating-label-activo">Dirección</label>
-                                <input type="address" class="form-control form-control-sm" name="direccion_contacto"
+                                <input type="address" class="form-control" name="direccion_contacto"
                                     id="direccion_contacto" value="">
                             </div>
                         </div>
-                        <div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                        <div class="col-sm-3 col-md-3">
                             <div class="form-group">
-                                <label id="label_numero_dir_contacto" class="floating-label-activo">Nº</label>
-                                <input type="address" class="form-control form-control-sm" name="numero_dir_contacto"
+                                <label id="label_numero_dir_contacto" class="floating-label-activo">Dirección</label>
+                                <input type="address" class="form-control" name="numero_dir_contacto"
                                     id="numero_dir_contacto" value="">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label class="floating-label-activo">Regi&oacute;n</label>
-                                <select id="region_contacto_modificar" onchange="buscar_ciudades_mod();" name="region_contacto_modificar" class="form-control form-control-sm" required>
+                                <select id="region_contacto_modificar" onchange="buscar_ciudades_mod();" name="region_contacto_modificar" class="form-control" required>
                                     <option value="0">Seleccione</option>
 
                                     @if (isset($regiones))
@@ -71,33 +71,33 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label class="floating-label-activo">Comuna</label>
-                                <select id="ciudad_contacto_modificar" name="ciudad_contacto_modificar" class="form-control form-control-sm">
+                                <select id="ciudad_contacto_modificar" name="ciudad_contacto_modificar" class="form-control">
                                     <option value="">Seleccione</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label id="label_email_contacto" class="floating-label-activo">Correo Electrónico</label>
-                                <input type="email" class="form-control form-control-sm" name="email_contacto" id="email_contacto"
+                                <input type="email" class="form-control" name="email_contacto" id="email_contacto"
                                     value="">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label id="label_telefono_contacto" class="floating-label-activo">Tel&eacute;fono</label>
-                                <input type="tel" class="form-control form-control-sm" name="telefono_contacto"
+                                <input type="tel" class="form-control" name="telefono_contacto"
                                     id="telefono_contacto" value="">
                             </div>
                         </div>
 
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label id="label_parentesco_contacto" class="floating-label-activo">Parentezco</label>
-                                <select id="parentezco_contacto" name="parentezco_contacto" class="form-control form-control-sm">
+                                <select id="parentezco_contacto" name="parentezco_contacto" class="form-control">
                                     <option>Seleccione una opción</option>
                                     <option>Pareja</option>
                                     <option>Padre</option>
@@ -112,10 +112,10 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label id="label_prioridad_contacto" class="floating-label-activo">Prioridad</label>
-                                <select id="prioridad_contacto" name="prioridad_contacto" class="form-control form-control-sm">
+                                <select id="prioridad_contacto" name="prioridad_contacto" class="form-control">
                                     <option value="0">Seleccione una opción</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -134,9 +134,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
-                <button type="button" onclick="editar_contacto_emergencia();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar
-                    cambios</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                <button type="button" onclick="editar_contacto_emergencia();" class="btn btn-info">Guardar
+                    Cambios</button>
             </div>
         </div>
     </div>
