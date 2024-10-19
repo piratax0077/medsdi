@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 class ResultadoExamenController extends Controller
 {
 
-    static public function registrar($id_lugar_atencion,$id_institucion,$tipo_examen,$id_paciente,$rut,$nombre,$apellido_paterno,$apellido_materno,$email,$observacion, $lista_archivo)
+    static public function registrar($id_lugar_atencion,$id_institucion,$tipo_examen,$id_paciente,$rut,$nombre,$apellido_paterno,$apellido_materno,$email,$observacion, $fecha_regsitro, $lista_archivo, $id_profesional, $profesional_rut, $profesional_nombre)
     {
         $datos = array();
         $error = array();
@@ -60,9 +60,14 @@ class ResultadoExamenController extends Controller
             $id_user = Auth::user()->id;
 
             $registro = new ResultadoExamen();
-            $registro->id_lugar_atencion = $id_lugar_atencion;
-            $registro->id_institucion = $id_institucion;
+            if(!empty($id_lugar_atencion))
+                $registro->id_lugar_atencion = $id_lugar_atencion;
+
+            if(!empty($id_institucion))
+                $registro->id_institucion = $id_institucion;
+
             $registro->id_user = $id_user;
+
             $registro->tipo_examen = $tipo_examen;
             $registro->id_paciente = $id_paciente;
             $registro->rut = $rut;
@@ -70,8 +75,22 @@ class ResultadoExamenController extends Controller
             $registro->apellido_paterno = $apellido_paterno;
             $registro->apellido_materno = $apellido_materno;
             $registro->email = $email;
+
+            if(!empty($id_profesional))
+                $registro->id_profesional = $id_profesional;
+
+            if(!empty($profesional_rut))
+                $registro->profesional_rut = $profesional_rut;
+
+            if(!empty($profesional_nombre))
+                $registro->profesional_nombre = $profesional_nombre;
+
             $registro->observacion = $observacion;
-            $registro->fecha_registro = date('Y-m-d');
+
+            if(!empty($fecha_regsitro))
+                $registro->fecha_registro = $fecha_regsitro;
+            else
+                $registro->fecha_registro = date('Y-m-d');
 
             if($registro->save())
             {

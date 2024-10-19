@@ -72,6 +72,7 @@ use App\Helpers\Funciones;
 use App\Models\AcompananteDependiente;
 use App\Models\FichaPediatriaGeneralTipo;
 use App\Models\Invitacion;
+use App\Models\Licencia;
 use App\Models\PacienteHistoricoDatosMedicos;
 use App\Models\PacientesDependientes;
 use App\Models\ProcedimientosCentroLugarAtencionProfesional;
@@ -5185,6 +5186,21 @@ class EscritorioProfesional extends Controller
 
         return view('app.profesional.receta_online.mis_documentos', ['fichas' => $fichas]);
      }
+
+     public function mis_licencias()
+     {
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $licencias = Licencia::where('id_profesional', $profesional->id)
+                            ->with('Paciente')
+                            ->with('Profesional')
+                            ->with('LugarAtencion')
+                            ->get();
+
+
+        return view('app.profesional.receta_online.mis_licencias', ['licencias' => $licencias]);
+     }
+
 
      public function ver_mensaje($id){
         try {

@@ -3104,4 +3104,90 @@ class EscritorioPaciente extends Controller
 
     }
 
+    public function cargaExamenPorPaciente(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_tipo_examen))
+        {
+            $error['id_tipo_examen'] = 'campo requerido';
+            $valido = 0;
+        }
+        // if(empty($request->id_paciente))
+        // {
+        //     $error['id_paciente'] = 'campo requerido';
+        //     $valido = 0;
+        // }
+        if(empty($request->comentario))
+        {
+            $error['comentario'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->profesional_rut))
+        {
+            $error['profesional_ru'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $paciente = Paciente::where('id_usuario', Auth::user()->id)->first();
+
+            $id_lugar_atencion = '';
+            $id_institucion = '';
+            $fecha_registro = $request->fecha_registro;
+            $tipo_examen = $request->id_tipo_examen;
+            $id_paciente = $paciente->id;
+
+            $rut = $paciente->rut;
+            $nombre = $paciente->nombres;
+            $apellido_paterno = $paciente->apellido_uno;
+            $apellido_materno = $paciente->apellido_dos;
+            $email = $paciente->email;
+            $observacion = $request->comentario;
+            $lista_temp = '';
+            $lista_archivo = '';
+            if(isset($request->list_archivos)  && !empty($request->list_archivos))
+            {
+                $lista_temp = json_decode($request->list_archivos);
+                // $lista_temp = $lista_temp['ex'];
+                $lista_temp = $lista_temp->ex;
+                if(!empty($lista_temp))
+                    $lista_archivo = json_encode( $lista_temp );
+            }
+
+            $id_profesional = '';
+            $profesional_rut = '';
+            $profesional_nombre = '';
+            if(isset($request->profesional_rut) && !empty($request->profesional_rut))
+            {
+                $rut_temp = str_replace('.', '', $request->profesional_rut);
+                $profesional = Profesional::where('rut', $rut_temp)->first();
+                if($profesional)
+                {
+                    $id_profesional = $profesional->id;
+
+                    $profesional_rut = $request->profesional_rut;
+
+                    if(!empty($request->profesional_nombre))
+                        $profesional_nombre = $request->profesional_nombre;
+                    else
+                        $profesional_nombre = $profesional->apellido_uno;
+                }
+            }
+
+            $datos = ResultadoExamenController::registrar($id_lugar_atencion,$id_institucion,$tipo_examen,$id_paciente,$rut,$nombre,$apellido_paterno,$apellido_materno,$email,$observacion,$fecha_registro, $lista_archivo, $id_profesional, $profesional_rut, $profesional_nombre);
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
 }

@@ -30,7 +30,7 @@
                     <div class="card">
                         <div class="card-header bg-light d-flex justify-content-between">
                             <h4 class="text-c-blue f-22">Mis mensajes</h4>
-                            <button class="btn btn-primary btn-sm float-right"><i class="feather icon-mail"></i> Enviar mensaje</button>
+                            {{-- <button class="btn btn-primary btn-sm float-right"><i class="feather icon-mail"></i> Enviar mensaje</button> --}}
                         </div>
                         <div class="card-body">
                             <table id="historial_mensajes"
