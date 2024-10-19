@@ -1173,65 +1173,65 @@
             let url = "{{ route('profesional.lugares_atencion_profesional_agenda') }}";
 
             $.ajax({
-                    url: url,
-                    type: "get",
-                    data: {}
-                })
-                .done(function(data) {
+                url: url,
+                type: "get",
+                data: {}
+            })
+            .done(function(data) {
 
-                    if (data == 'fail') {
-                        console.log('fail');
-                        swal("Advertencia",
-                            "Bienvenido!!\n Debe ingresar en la pestaña Panel de Configuración, Mis Lugares de Atención y registrar por lo menos un lugar de atención.",
-                            "warning");
-                        //  alert('No tiene lugares de atención asignados, favor registrar uno');
-                    } else {
+                if (data == 'fail') {
+                    console.log('fail');
+                    swal("Advertencia",
+                        "Bienvenido!!\n Debe ingresar en la pestaña Panel de Configuración, Mis Lugares de Atención y registrar por lo menos un lugar de atención.",
+                        "warning");
+                    //  alert('No tiene lugares de atención asignados, favor registrar uno');
+                } else {
 
-                        let lugares_atencion = $('#lugares_atencion');
+                    let lugares_atencion = $('#lugares_atencion');
 
-                        data = JSON.parse(data);
+                    data = JSON.parse(data);
 
-                        lugares_atencion.find('option').remove();
-                        lugares_atencion.append('<option value="0">Seleccione</option>');
-                        let contador = 0;
-                        console.log(data.length);
-                        for (let i = 0; i < data.length; i++)
+                    lugares_atencion.find('option').remove();
+                    lugares_atencion.append('<option value="0">Seleccione</option>');
+                    let contador = 0;
+                    console.log(data.length);
+                    for (let i = 0; i < data.length; i++)
+                    {
+                        if (data[i].pivot.estado == '1')
                         {
-                            if (data[i].pivot.estado == '1')
-                            {
-                                lugares_atencion.append('<option value="' + data[i].id + '">' + data[i].nombre + '</option>');
-                                contador++;
-                            }
+                            lugares_atencion.append('<option value="' + data[i].id + '">' + data[i].nombre + '</option>');
+                            contador++;
                         }
+                    }
 
-                        if (contador == 0) {
-                            swal("Oops", "No tiene lugares de atención asignados, favor registrar uno", "error")
-                            //  alert('No tiene lugares de atención asignados, favor registrar uno');
+                    if (contador == 0) {
+                        swal("Oops", "No tiene lugares de atención asignados, favor registrar uno", "error")
+                        //  alert('No tiene lugares de atención asignados, favor registrar uno');
+                    }
+                    else
+                    {
+                        if(contador == 1)
+                        {
+                            lugares_atencion.val(data[0].id);
+                            window.location.href = "{{ route('profesional.mi_agenda') }}?lugares_atencion="+data[0].id;
                         }
                         else
                         {
-                            if(contador == 1)
-                            {
-                                lugares_atencion.val(data[0].id);
-                                window.location.href = "{{ route('profesional.mi_agenda') }}?lugares_atencion="+data[0].id;
-                            }
-                            else
-                            {
-                                $('#modal_seleccionar_lugar_atencion').modal('show');
-                                validar_seleccionar_lugar_atencion();
-                            }
+                            $('#modal_seleccionar_lugar_atencion').modal('show');
+                            validar_seleccionar_lugar_atencion();
                         }
                     }
-                    // $(data).each(function(i, v) { // indice, valor
+                }
+                // $(data).each(function(i, v) { // indice, valor
 
-                    //     lugares_atencion.append('<option value="' + v.id + '">' + v.nombre +
-                    //         '</option>');
-                    // })
+                //     lugares_atencion.append('<option value="' + v.id + '">' + v.nombre +
+                //         '</option>');
+                // })
 
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
         }
 
         function validar_seleccionar_lugar_atencion() {
