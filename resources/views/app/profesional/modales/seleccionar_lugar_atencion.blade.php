@@ -4,8 +4,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Seleccione lugar de atención</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">×</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_modal();"><span aria-hidden="true">×</span>
                 </button>
             </div>
             <form method="GET" action="{{ route('profesional.mi_agenda') }}">
