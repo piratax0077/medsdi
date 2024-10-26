@@ -45,6 +45,7 @@ class HomeController extends Controller
         // }
 
         // switch ($usuario->roles()->first()->name) {
+
         switch ($roles_principal->name) {
             case 'Admin':
                 return redirect('/Acceso');
@@ -109,6 +110,9 @@ class HomeController extends Controller
 			case 'Administrador-SDI':
 				return redirect()->route('administracion.home');
 				break;
+            case 'Contador':
+                return redirect()->route('contabilidad.home');
+                break;
             default:
                 return redirect('/Acceso');
                 break;
@@ -122,6 +126,8 @@ class HomeController extends Controller
         // if (count($roles) > 1) {
         //     return redirect('/Acceso');
         // }
+
+        return $roles;
 
         switch ($roles[0]->name) {
             case 'Admin':

@@ -15,6 +15,7 @@ use App\Models\Region;
 use App\Models\Ciudad;
 use App\Models\ContratoDependiente;
 use App\Models\ContratoDependienteProfesional;
+use App\Models\ContratoConvenioProfesional;
 use App\Models\Direccion;
 use App\Models\Especialidad;
 use App\Models\EspecialidadesCm;
@@ -26,6 +27,7 @@ use App\Models\MensajesProfesional;
 use App\Models\Mensajes;
 use App\Models\Paciente;
 use App\Models\Profesional;
+use App\Models\ProfesionalConvenio;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalInstitucionConvenio;
 use App\Models\Remuneraciones;
@@ -815,7 +817,11 @@ class LaboratorioController extends Controller
                 //var_dump($registro->UsuarioAdministrador()->first()->id);
                 /** INSTITUCION */
                 $institucion = $registro;
-                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                if($registro->UsuarioAdministrador()->first())
+                    $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                else
+                    $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
                 $tipo_institucion = 'institucion';
 
             }
@@ -903,6 +909,7 @@ class LaboratorioController extends Controller
             /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
 
             /** CARGA DE ASISTENTES */
+
             $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
 
             $filtro = array();
@@ -919,12 +926,23 @@ class LaboratorioController extends Controller
                 $profesional->especialidad = Especialidad::where('id',$profesional['contrato']['id_especialidad'])->first();
                 $profesional->tipo_especialidad = TipoEspecialidad::where('id',$profesional['contrato']['id_tipo_especialidad'])->first();
                 $profesional->sub_tipo_especialidad = SubTipoEspecialidad::where('id',$profesional['contrato']['id_subtipo_especialidad'])->first();
+            }else{
+                $convenio = ContratoConvenioProfesional::where($filtro)->first();
+                $profesional->contrato = $convenio;
+                if($convenio){
+                    $profesional->especialidad = Especialidad::where('id',$profesional['contrato']['id_especialidad'])->first();
+                    $profesional->tipo_especialidad = TipoEspecialidad::where('id',$profesional['contrato']['id_tipo_especialidad'])->first();
+                    $profesional->sub_tipo_especialidad = SubTipoEspecialidad::where('id',$profesional['contrato']['id_subtipo_especialidad'])->first();
+                }
             }
+
+            $convenios = ProfesionalConvenio::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$LugarAtencion->id)->get();
 
             $datos['estado'] = 1;
             $datos['msj'] = 'registro';
             $datos['registro'] = $profesional;
             $datos['direccion'] = $direccion_text;
+            $datos['convenios'] = $convenios;
         }
         else
         {
@@ -937,7 +955,12 @@ class LaboratorioController extends Controller
 
     public function agregar_laboratorio(Request $request){
         try {
-            $laboratorio = new Laboratorio();
+            // verificar si existe por el rut
+            $laboratorio = Laboratorio::where('rut', $request->rut_laboratorio)->first();
+            if(!$laboratorio){
+                $laboratorio = new Laboratorio();
+            }
+
             $laboratorio->nombre = $request->nombre_laboratorio;
             $laboratorio->rut = $request->rut_laboratorio;
             $laboratorio->email = $request->email_laboratorio;
@@ -946,16 +969,120 @@ class LaboratorioController extends Controller
             $institucion = Instituciones::find($request->id_institucion);
             $laboratorio->id_institucion = $institucion->id;
             $laboratorio->id_lugar_atencion = $institucion->id_lugar_atencion;
-            $laboratorio->id_direccion = 3; // Direccion por defecto
 
-            if($laboratorio->save()){
-                return back()->with('success','Laboratorio agregado correctamente');
+            /* DIRECCION */
+            $existe_direccion = Direccion::where('direccion',$request->direccion_laboratorio)->where('numero_dir',$request->numero_laboratorio)->where('id_ciudad',$request->ciudad_laboratorio)->first();
+            if($existe_direccion){
+                $nueva_direccion = $existe_direccion;
+                $laboratorio->id_direccion = $existe_direccion->id;
             }else{
-                return back()->with('error','Error al agregar laboratorio');
+                $nueva_direccion = new Direccion();
+                $nueva_direccion->direccion = $request->direccion_laboratorio;
+                $nueva_direccion->numero_dir = $request->numero_laboratorio;
+                $nueva_direccion->id_ciudad = $request->ciudad_laboratorio;
+                $nueva_direccion->save();
+
+                $laboratorio->id_direccion = $nueva_direccion->id;
+            }
+            $laboratorio->id_tipo_laboratorio = $request->tipo_laboratorio;
+            $laboratorio->ubicacion = $request->ubicacion;
+            if($laboratorio->save()){
+                $laboratorios = $this->dame_laboratorios($institucion->id);
+                $v = view('fragm.laboratorios',[
+                    'laboratorios' => $laboratorios
+                ])->render();
+                return ['estado' => 1, 'msj' => 'Laboratorio agregado correctamente', 'v' => $v];
+            }else{
+                return ['estado' => 0, 'msj' => 'Error al agregar laboratorio'];
             }
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    public function dame_laboratorio($id){
+        try {
+            $laboratorio = Laboratorio::select('laboratorios.*','tipos_laboratorio.nombre as tipo_laboratorio','direcciones.direccion','direcciones.numero_dir','direcciones.id_ciudad')
+                ->leftjoin('tipos_laboratorio','laboratorios.id_tipo_laboratorio','=','tipos_laboratorio.id')
+                ->join('direcciones','laboratorios.id_direccion','=','direcciones.id')
+                ->where('laboratorios.id',$id)
+                ->first();
+
+                $direccion = Direccion::where('id',$laboratorio->id_direccion)->first();
+                $laboratorio->direccion = $direccion->direccion;
+                $laboratorio->numero_dir = $direccion->numero_dir;
+                $laboratorio->id_region = $direccion->ciudad->id_region;
+
+            // buscar la ciudad de cada laboratorio por la direccion
+            $ciudad = Ciudad::where('id',$laboratorio->id_ciudad)->first();
+            $laboratorio->ciudad = $ciudad->nombre;
+            return $laboratorio;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function editar_laboratorio(Request $request){
+        try {
+            $laboratorio = Laboratorio::find($request->id_laboratorio);
+            $laboratorio->nombre = $request->nombre_laboratorio;
+            $laboratorio->rut = $request->rut_laboratorio;
+            $laboratorio->email = $request->email_laboratorio;
+            $laboratorio->telefono = $request->telefono_laboratorio;
+            $laboratorio->id_tipo_laboratorio = $request->tipo_laboratorio;
+            $laboratorio->ubicacion = $request->ubicacion;
+            $direccion = Direccion::where('id',$laboratorio->id_direccion)->first();
+            $direccion->direccion = $request->direccion_laboratorio;
+            $direccion->numero_dir = $request->numero_laboratorio;
+            $direccion->id_ciudad = $request->ciudad_laboratorio;
+            $direccion->save();
+            $laboratorio->id_direccion = $direccion->id;
+            if($laboratorio->save()){
+                $laboratorios = $this->dame_laboratorios($request->id_institucion);
+                $v = view('fragm.laboratorios',[
+                    'laboratorios' => $laboratorios
+                ])->render();
+                return ['estado' => 1, 'msj' => 'Laboratorio editado correctamente', 'v' => $v];
+            }else{
+                return ['estado' => 0, 'msj' => 'Error al editar laboratorio'];
+            }
+        } catch (\Exception $e) {
+            return ['estado' => 0, 'msj' => $e->getMessage()];
+        }
+    }
+
+    public function eliminar_laboratorio(Request $request){
+        try {
+            $laboratorio = Laboratorio::find($request->id);
+            $institucion = Instituciones::find($laboratorio->id_institucion);
+            if($laboratorio->delete()){
+                $laboratorios = $this->dame_laboratorios($institucion->id);
+                $v = view('fragm.laboratorios',[
+                    'laboratorios' => $laboratorios
+                ])->render();
+                return ['estado' => 1, 'msj' => 'Laboratorio eliminado correctamente', 'v' => $v];
+            }else{
+                return ['estado' => 0, 'msj' => 'Error al eliminar laboratorio'];
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function dame_laboratorios($id_institucion){
+        $laboratorios = Laboratorio::select('laboratorios.*','tipos_laboratorio.nombre as tipo_laboratorio','direcciones.direccion','direcciones.numero_dir','direcciones.id_ciudad')
+            ->leftjoin('tipos_laboratorio','laboratorios.id_tipo_laboratorio','=','tipos_laboratorio.id')
+            ->join('direcciones','laboratorios.id_direccion','=','direcciones.id')
+            ->where('laboratorios.id_institucion',$id_institucion)
+            ->get();
+
+        // buscar la ciudad de cada laboratorio por la direccion
+        foreach($laboratorios as $laboratorio){
+            $ciudad = Ciudad::where('id',$laboratorio->id_ciudad)->first();
+            $laboratorio->ciudad = $ciudad->nombre;
+        }
+        return $laboratorios;
     }
 
     public function buscar_asistente(Request $request)

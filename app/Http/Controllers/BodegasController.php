@@ -23,6 +23,7 @@ use App\Models\Instituciones;
 use App\Models\Servicios;
 use App\Models\AdminInstServ;
 use App\Models\ContratoDependiente;
+use App\Models\ResponsableBodega;
 use App\Models\Temperatura;
 use Illuminate\Support\Facades\Auth;
 
@@ -111,6 +112,15 @@ class BodegasController extends Controller
     public function edit($id)
     {
         //
+        $institucion = Instituciones::where('id_usuario',Auth::user()->id)->first();
+
+        $bodega = $this->dameBodega($id,$institucion->id);
+
+        $bodega->tipo_productos_autorizacion = json_decode($bodega->tipos_productos_autorizacion);
+        $bodega->tipos_productos = json_decode($bodega->tipos_productos);
+        $responsables = Responsable::all();
+
+        return ['bodega' => $bodega, 'responsables' => $responsables];
     }
 
     /**
@@ -123,6 +133,7 @@ class BodegasController extends Controller
     public function update(Request $request, $id)
     {
         //
+        return $request;
     }
 
     /**
@@ -194,6 +205,79 @@ class BodegasController extends Controller
             $producto->stock_actual -= $req->cantidad;
             $producto->save();
             return 'OK';
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function editar_registro_bodega(Request $request){
+        try {
+            $bodega = Bodega::find($request->idbodega);
+
+            $bodega->nombre = $request->nombre_bodega;
+            $bodega->descripcion = $request->descripcion_bodega;
+            $bodega->direccion = $request->direcccion_bodega;
+            $bodega->telefono = $request->telefono_bodega;
+            $bodega->email = $request->email_bodega;
+            $bodega->tipos_productos = json_encode($request->tpo_prod);
+            $bodega->tipos_productos_autorizacion = json_encode($request->cont_ca);
+
+            if($bodega->save()){
+                $bodegas = $this->dameBodegas($request->id_institucion);
+                foreach($bodegas as $bodega){
+                    $bodega->tipo_productos_autorizacion = json_decode($bodega->tipos_productos_autorizacion);
+                    $bodega->tipos_productos = json_decode($bodega->tipos_productos);
+                    $responsables = ResponsableBodega::select('responsable_bodega.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
+                        ->join('profesionales','responsable_bodega.id_responsable','=','profesionales.id')
+                        ->where('responsable_bodega.id_bodega',$bodega->id)
+                        ->get();
+                    $bodega->responsables = $responsables;
+                }
+                $v = view('fragm.bodegas_cm',[
+                    'bodegas' => $bodegas
+                ])->render();
+                return ['mensaje' => 'OK', 'msj' => 'Bodega editada correctamente', 'v' => $v];
+            }else{
+                return ['mensaje' => 'error', 'msj' => 'Error al editar bodega'];
+            }
+        } catch (\Exception $e) {
+            return ['mensaje' => 'error', 'msj' => $e->getMessage()];
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function guardar_responsable_bodega(Request $req){
+        try {
+            // preguntar si el responsable ya tiene una bodega asignada
+            $responsable = ResponsableBodega::where('id_responsable',$req->id_responsable)->first();
+            if($responsable){
+                return ['mensaje' => 'El responsable ya tiene una bodega asignada'];
+            }
+            $responsable = new ResponsableBodega();
+            $responsable->id_responsable = $req->id_responsable;
+            $responsable->fecha_inicio = Carbon::now()->format('Y-m-d');
+            $responsable->numero_turno = $req->numero_turno;
+            $responsable->id_bodega = $req->bodega_para_responsable;
+            $responsable->save();
+
+            $bodegas = $this->dameBodegas($req->id_institucion);
+
+            foreach($bodegas as $bodega){
+                $bodega->tipo_productos_autorizacion = json_decode($bodega->tipos_productos_autorizacion);
+                $bodega->tipos_productos = json_decode($bodega->tipos_productos);
+                $responsables = ResponsableBodega::select('responsable_bodega.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
+                    ->join('profesionales','responsable_bodega.id_responsable','=','profesionales.id')
+                    ->where('responsable_bodega.id_bodega',$bodega->id)
+                    ->get();
+                $bodega->responsables = $responsables;
+            }
+
+            $v = view('fragm.bodegas_cm',[
+                'bodegas' => $bodegas
+            ])->render();
+            return ['mensaje' => 'OK','v' => $v];
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();
@@ -884,6 +968,86 @@ class BodegasController extends Controller
             }
         } catch (\Exception $e) {
             //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
+    public function guardar_registro_bodega(Request $req){
+        try {
+            $bodega = new bodega();
+            $bodega->id_institucion = $req->id_institucion;
+            $bodega->nombre = $req->nombre;
+            $bodega->descripcion = $req->descripcion;
+            $bodega->direccion = $req->ubicacion;
+            $bodega->telefono = $req->telefono;
+            $bodega->email = $req->email;
+            $bodega->tipos_productos = json_encode($req->tpos_productos);
+            $bodega->tipos_productos_autorizacion = json_encode($req->cont_ca);
+            if($bodega->save()){
+                $bodegas = $this->dameBodegas($req->id_institucion);
+                foreach($bodegas as $bodega){
+                    $bodega->tipo_productos_autorizacion = json_decode($bodega->tipos_productos_autorizacion);
+                    $bodega->tipos_productos = json_decode($bodega->tipos_productos);
+                    $responsables = ResponsableBodega::select('responsable_bodega.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
+                        ->join('profesionales','responsable_bodega.id_responsable','=','profesionales.id')
+                        ->where('responsable_bodega.id_bodega',$bodega->id)
+                        ->get();
+                    $bodega->responsables = $responsables;
+                }
+                $v = view('fragm.bodegas_cm',['bodegas'=>$bodegas])->render();
+                return ['mensaje'=>'OK','v' => $v];
+            }else{
+                return ['mensaje'=>'Error al guardar el registro'];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function eliminar_registro_bodega(Request $req){
+        try {
+            $bodega = Bodega::find($req->id);
+
+            $bodega->delete();
+
+            $bodegas = $this->dameBodegas($req->id_institucion);
+
+            foreach($bodegas as $bodega){
+                $bodega->tipo_productos_autorizacion = json_decode($bodega->tipos_productos_autorizacion);
+                $bodega->tipos_productos = json_decode($bodega->tipos_productos);
+                $responsables = ResponsableBodega::select('responsable_bodega.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
+                    ->join('profesionales','responsable_bodega.id_responsable','=','profesionales.id')
+                    ->where('responsable_bodega.id_bodega',$bodega->id)
+                    ->get();
+                $bodega->responsables = $responsables;
+            }
+
+            $v = view('fragm.bodegas_cm',['bodegas'=>$bodegas])->render();
+            return ['estado'=>'ok','msj' => 'Exito','v' => $v];
+        } catch (\Exception $e) {
+            //throw $th;
+            return ['msj' => $e->getMessage()];
+        }
+    }
+
+    private function dameBodega($id, $idInstitucion){
+        try{
+            $bodega = Bodega::where('id',$id)->where('id_institucion',$idInstitucion)->first();
+            return $bodega;
+            if($bodega){
+                $bodega->tipos_productos = json_decode($bodega->tipos_productos);
+                $bodega->tipo_productos_autorizacion = json_decode($bodega->tipos_productos_autorizacion);
+            }
+
+            $responsable = ResponsableBodega::select('responsable_bodega.*','profesionales.nombre as nombre_responsable','profesionales.apellido_uno')
+                                            ->join('profesionales', 'responsable_bodega.id_responsable', '=', 'profesionales.id')
+                                            ->where('responsable_bodega.id_bodega',$bodega->id)
+                                            ->first();
+            $bodega->responsable = $responsable->nombre_responsable." ".$responsable->apellido_uno;
+            return $bodega;
+        }catch(\Exception $e){
             return $e->getMessage();
         }
 

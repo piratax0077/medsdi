@@ -34,7 +34,8 @@
         <input type="hidden" name="id_institucion" id="id_institucion" value="{{ $institucion->id }}">
         <input type="hidden" name="tipo_institucion" id="tipo_institucion" value="{{ $tipo_institucion }}">
         <input type="hidden" name="id_area" id="id_area" value="">
-
+        <input type="hidden" name="id_laboratorio" id="id_laboratorio" value="">
+        <input type="hidden" name="id_box" id="id_box" value="">
 
         <div class="user-profile user-card mb-4">
             <div class="card-body py-0">
@@ -80,7 +81,7 @@
                                                         <a class="nav-link text-reset" id="ar-dep-tab" data-toggle="tab" href="#ar-dep" role="tab" aria-controls="ar-dep" aria-selected="false"><i class="fa-solid fa-stethoscope mr-2"></i>Especialidades y áreas</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-reset" id="ar-dep-tab" data-toggle="tab" href="#ar-dep" role="tab" aria-controls="ar-dep" aria-selected="false"><i class="fa-solid fa-stethoscope mr-2"></i>Bodegas</a>
+                                                        <a class="nav-link text-reset" id="bodegas_serv-tab" data-toggle="tab" href="#bodegas_serv" role="tab" aria-controls="bodegas_serv" aria-selected="false"><i class="feather icon-home mr-2"></i>Bodegas</a>
                                                     </li>
                                                     @if($institucion->sucursales == 1)
                                                         <li class="nav-item">
@@ -1781,7 +1782,7 @@
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <ul class="nav nav-tabs-secciones-info" id="cm" role="tablist">
 									<li class="nav-item-secciones-info">
-                                        <a class="nav-secciones-info active  text-uppercase" id="box-tab" data-toggle="tab" href="#box" role="tab" aria-controls="box" aria-selected="false">Boxes y equipos</a>
+                                        <a class="nav-secciones-info active  text-uppercase" id="box-tab" data-toggle="tab" href="#box" role="tab" aria-controls="box" aria-selected="false">Boxes de atención</a>
                                     </li>
 									<li class="nav-item-secciones-info">
                                         <a class="nav-secciones-info  text-uppercase" id="area-i-tab" data-toggle="tab" href="#area-i" role="tab" aria-controls="area-i" aria-selected="false">Áreas del Centro</a>
@@ -1800,7 +1801,7 @@
                                 <div class="tab-content" id="agregar_inf_cm">
 									<div class="tab-pane fade show active" id="box" role="tabpanel" aria-labelledby="box-tab">
                                         <!--Especialidades-->
-										<div class="card">
+										{{-- <div class="card">
                                             <div class="card-header bg-info">
                                                 <div class="row">
                                                     <div class="col-md-12">
@@ -1928,8 +1929,222 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <!--Especialidades-->
+                                                <div class="card">
+                                                    <div class="card-header pt-3 pb-2 bg-light">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <h6 class="f-18 d-inline mt-3 text-info ">Boxes de Atención</h6>
+                                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                                    <button type="button" class="btn btn-sm btn-info" onclick="agregar_box();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                                    {{-- <button type="button" class="btn btn-sm btn-primary" onclick="agregar_ambulancia()">Ambulancias</button> --}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-12 col-md-12">
+                                                                <table id="tabla_boxes_atencion" class="display table table-striped table-xs dt-responsive nowrap" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="text-wrap text-center align-middle">N° Asig.</th>
+                                                                            <th class="text-wrap text-center align-middle">Tipo</th>
+                                                                            <th class="text-wrap text-center align-middle">Especialización</th>
+                                                                            <th class="text-wrap text-center align-middle">Ubicación</th>
+                                                                            <th class="text-wrap text-center align-middle">Seccion</th>
+                                                                            <th class="text-wrap text-center align-middle">Activo</th>
+                                                                            <th class="text-wrap text-center align-middle">Editar</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @if(isset($boxes_servicio) && ($boxes_servicio->count()) > 0)
+                                                                            @foreach($boxes_servicio as $box)
+                                                                                <tr>
+                                                                                    <td class="align-middle text-center">{{ $box->numero_box }}</td>
+                                                                                    <td class="align-middle text-center">{{ $box->tipo_box }}</td>
+                                                                                    <td class="align-middle text-center">{{ $box->tipo_especializacion }}</td>
+                                                                                    <td class="align-middle text-center">Piso {{ $box->ubicacion }}</td>
+                                                                                    <td class="align-middle text-center">{{ $box->seccion }}</td>
+                                                                                    <td class="align-middle text-center">
+                                                                                        <div class="custom-control custom-switch">
+                                                                                            <input type="checkbox" class="custom-control-input" id="esp-{{ $box->id }}" onchange="checkboxChanged(this)" {{ $box->estado == 1 ? 'checked' : ''}}>
+                                                                                            <label class="custom-control-label" for="esp-{{ $box->id }}"></label>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td class="align-middle text-center">
+                                                                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="dame_box({{ $box->id }});"><i class="fas fa-edit"></i></button>
+                                                                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_box({{ $box->id }})"><i class="fas fa-trash"></i></button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @endforeach
+                                                                        @endif
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{-- <div class="col-md-6">
+                                                <!--Especialidades-->
+                                                <div class="card">
+                                                    <div class="card-header pt-3 pb-2 bg-light">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <h6 class="f-18 d-inline mt-3 text-info text-center">Ambulancias  Equipos Servicios Apoyo</h6>
+                                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                                    <button type="button" class="btn btn-sm btn-info" onclick="agregar_serv_apoyo();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-6 col-md-12">
+                                                                <table id="especialidades_cm" class="display table table-striped table-xs dt-responsive nowrap" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="text-wrap text-left align-middle">Tipo</th>
 
+                                                                            <th class="text-wrap text-left align-middle">Observaciones</th>
+                                                                            <th class="text-wrap text-left align-middle">Activo</th>
+                                                                            <th class="text-wrap text-center align-middle">Editar</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td class="align-middle text-left">Ambulancias</td>
+                                                                            <td class="align-middle text-text-left"><span>falta equipo</span></td>
+                                                                            <td class="align-middle text-left">
+                                                                                <div class="custom-control custom-switch">
+                                                                                    <input type="checkbox" class="custom-control-input" id="esp-1">
+                                                                                    <label class="custom-control-label" for="esp-1"></label>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                                                    <button type="button" class="btn sm btn-outline-primary" onclick="editar_serv_apoyo();"></i> Editar</button>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="align-middle text-left">Sala de Procedimiento</td>
+                                                                            <td class="align-middle text-text-left"><span>falta equipo</span></td>
+                                                                            <td class="align-middle text-left">
+                                                                                <div class="custom-control custom-switch">
+                                                                                    <input type="checkbox" class="custom-control-input" id="esp-1">
+                                                                                    <label class="custom-control-label" for="esp-1"></label>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                                                    <button type="button" class="btn sm btn-outline-primary" onclick="editar_serv_apoyo();"></i> Editar</button>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="align-middle text-left">Laboratorio Clínico</td>
+                                                                            <td class="align-middle text-text-left"><span>falta equipo</span></td>
+                                                                            <td class="align-middle text-left">
+                                                                                <div class="custom-control custom-switch">
+                                                                                    <input type="checkbox" class="custom-control-input" id="esp-1">
+                                                                                    <label class="custom-control-label" for="esp-1"></label>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                                                    <button type="button" class="btn sm btn-outline-primary" onclick="editar_serv_apoyo();"></i> Editar</button>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="align-middle text-left">Laboratorio Radiológico</td>
+                                                                            <td class="align-middle text-text-left"><span>falta equipo</span></td>
+                                                                            <td class="align-middle text-left">
+                                                                                <div class="custom-control custom-switch">
+                                                                                    <input type="checkbox" class="custom-control-input" id="esp-1">
+                                                                                    <label class="custom-control-label" for="esp-1"></label>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                                                    <button type="button" class="btn sm btn-outline-primary" onclick="editar_serv_apoyo();"></i> Editar</button>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> --}}
+                                            {{--  <div class="col-md-6">
+                                                <!--Área-->
+                                                <div class="card">
+                                                    <div class="card-header pt-3 pb-2 bg-light">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <h6 class="f-18 d-inline mt-3 text-info">Servicios de Apoyo y Derivación</h6>
+                                                                <div class="btn-group mr-2 d-inline float-md-right float-md-right ml-4">
+                                                                    <button type="button" class="btn btn-sm btn-info" onclick="ag_area();"><i class="feather icon-plus" aria-hidden="true"></i> Añadir</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-6 col-md-12">
+                                                                <table id="area_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="text-wrap text-left align-middle">Área</th>
+                                                                            <th class="text-wrap text-left align-middle">Activo</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td class="align-middle text-left">Laboratorio Clínico</td>
+                                                                            <td class="align-middle text-left">
+                                                                                <div class="custom-control custom-switch">
+                                                                                    <input type="checkbox" class="custom-control-input" id="area-1">
+                                                                                    <label class="custom-control-label" for="area-1"></label>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="align-middle text-left">Laboratorio Radiológico</td>
+                                                                            <td class="align-middle text-left">
+                                                                                <div class="custom-control custom-switch">
+                                                                                    <input type="checkbox" class="custom-control-input" id="area-2">
+                                                                                    <label class="custom-control-label" for="area-2"></label>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="align-middle text-left">Etc</td>
+                                                                            <td class="align-middle text-left">
+                                                                                <div class="custom-control custom-switch">
+                                                                                    <input type="checkbox" class="custom-control-input" id="area-3">
+                                                                                    <label class="custom-control-label" for="area-3"></label>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>  --}}
+                                        </div>
                                     </div>
 
                                     <div class="tab-pane fade" id="esp-med" role="tabpanel" aria-labelledby="esp-med-tab">
@@ -1945,7 +2160,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="card-body">
+                                            <div class="card-body" id="contenedor_especialidades_cm">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12">
                                                         <div style="overflow-x:auto;">
@@ -2010,7 +2225,6 @@
                                                                 <table id="area_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th class="text-wrap text-left align-middle">Área</th>
                                                                             <th class="text-wrap text-left align-middle">Tipo</th>
                                                                             <th class="text-wrap text-left align-middle">Responsable</th>
 																			<th class="text-wrap text-left align-middle">Contacto</th>
@@ -2022,7 +2236,6 @@
                                                                     <tbody>
                                                                         @foreach($areas_cm as $area)
                                                                         <tr>
-                                                                            <td class="align-middle text-left">{{ $area->nombre }}</td>
                                                                             <td class="align-middle text-left">{{ $area->tipo_area }}</td>
                                                                             <td class="align-middle text-left">{{ $area->nombre . ' ' . $area->apellido_uno . ' ' . $area->apellido_dos }}</td>
                                                                             <td class="align-middle text-left">{{ $area->email }}</td>
@@ -2036,7 +2249,7 @@
                                                                             </td>
 																			<td class="align-middle text-left">
                                                                                 <button type="button" class="btn btn-outline-secondary btn-icon" data-toggle="tooltip" data-placement="top" title="Editar responsable {{ $area->tipo_area }}" onclick="asignar_profesionales_area({{ $area->id }})"><i class="feather icon-edit"></i></button>
-                                                                                <button type="button" class="btn btn-warning btn-icon" data-toggle="tooltip" data-placement="top" title="Editar responsable {{ $area->tipo_area }}" onclick="dame_area_cm({{ $area->id_responsable }},{{ $institucion->id_lugar_atencion }})"><i class="feather icon-edit"></i></button>
+                                                                                <button type="button" class="btn btn-warning btn-icon" data-toggle="tooltip" data-placement="top" title="Editar responsable {{ $area->tipo_area }}" onclick="dame_area_cm({{ $area->id }},{{ $institucion->id_lugar_atencion }})"><i class="feather icon-edit"></i></button>
                                                                                 <button type="button" class="btn btn-danger btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar area {{ $area->tipo_area }}" onclick="eliminar_area_cm({{ $area->id }});"><i class="feather icon-x"></i></button>
                                                                             </td>
                                                                         </tr>
@@ -2130,12 +2343,16 @@
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12">
                                                         <div style="overflow-x:auto;">
-                                                        <div class="table-responsive">
+                                                        <div class="table-responsive" id="tabla_laboratorios">
                                                             <table id="servicios_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th class="text-wrap text-left align-middle">Servicio</th>
-                                                                        <th class="text-wrap text-left align-middle">Responsable</th>
+                                                                        <th class="text-wrap text-left align-middle">Rut</th>
+                                                                        <th class="text-wrap text-left align-middle">Laboratorio</th>
+                                                                        <th class="text-wrap text-left align-middle">Ubicación</th>
+                                                                        <th class="text-wrap text-left align-middle">Tipo Laboratorio</th>
+                                                                        <th class="text-wrap text-left align-middle">Ciudad</th>
+                                                                        <th class="text-wrap text-left align-middle">Dirección</th>
                                                                         <th class="text-wrap text-left align-middle">Acción</th>
                                                                     </tr>
                                                                 </thead>
@@ -2143,8 +2360,12 @@
                                                                     @if(isset($laboratorios))
                                                                     @foreach($laboratorios as $laboratorio)
                                                                     <tr>
+                                                                        <td class="align-middle text-left">{{ $laboratorio->rut }}</td>
                                                                         <td class="align-middle text-left">{{ $laboratorio->nombre }}</td>
-                                                                        <td class="align-middle text-left">{{ $laboratorio->nombre_responsable . ' ' . $laboratorio->apellido_uno_responsable . ' ' . $laboratorio->apellido_dos_responsable }}</td>
+                                                                        <td class="align-middle text-left">{{ $laboratorio->ubicacion == 1 ? 'Laboratorio Físico' : 'Solo toma de muestra'}}</td>
+                                                                        <td class="align-middle text-left">{{ $laboratorio->tipo_laboratorio }}</td>
+                                                                        <td class="align-middle text-left">{{ $laboratorio->ciudad }}</td>
+                                                                        <td class="align-middle text-left">{{ $laboratorio->direccion }} {{ $laboratorio->numero_dir }}</td>
                                                                         <td class="align-middle text-left">
                                                                             <button type="button" class="btn btn-warning btn-icon" onclick="dame_laboratorio_cm({{ $laboratorio->id }})"><i class="feather icon-edit"></i></button>
                                                                             <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_laboratorio_cm({{ $laboratorio->id }});"><i class="feather icon-x"></i></button>
@@ -2160,6 +2381,63 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--SUCURSALES-->
+                    <div class="tab-pane fade" id="bodegas_serv" role="tabpanel" aria-labelledby="bodegas_serv-tab">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header pt-3 pb-2 bg-light">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h6 class="f-18 d-inline mt-3 text-info">Bodegas</h6>
+                                                <div class="btn-group mb-2 mr-2 float-right">
+                                                    <button type="button" class="btn btn-info btn-sm mx-2" onclick="añadir_bodega_nueva();"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Añadir bodega</button>
+                                                    <button type="button" class="btn btn-info btn-sm" onclick="añadir_bodega();"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Añadir nuevo responsable</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body" id="contenedor_bodegas">
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                            </div>
+                                        </div>
+                                        <table id="bodegas_tabla" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center align-middle">Nombre</th>
+                                                        <th class="text-center align-middle">Ubicacion</th>
+                                                        <th class="text-center align-middle">Productos</th>
+                                                        <th class="text-center align-middle">Productos C/Autorizacion</th>
+                                                        <th class="text-center align-middle">Responsable</th>
+                                                        <th class="text-center align-middle">acción</th>
+                                                    </tr>
+                                                </thead>
+                                            <tbody>
+                                                @if(isset($bodegas))
+                                                @foreach($bodegas as $bodega)
+                                                <tr>
+                                                    <td class="align-middle text-center">{{ $bodega->nombre }} {{ $bodega->apellido_uno_responsable }}</td>
+                                                    <td class="align-middle text-center">{{ $bodega->direccion }}</td>
+                                                    <td class="align-middle text-center"><ul>@foreach($bodega->tipos_productos as $tp) <li>{{ $tp }}</li> @endforeach </ul></td>
+                                                    <td class="align-middle text-center"><ul>@foreach($bodega->tipo_productos_autorizacion as $tp) <li>{{ $tp }}</li> @endforeach </ul></td>
+                                                    <td class="align-middle text-center"><ul>@foreach($bodega->responsables as $res) <li>{{ $res->nombre }} {{ $res->apellido_uno }} {{ $res->apellido_dos }}</li> @endforeach</ul></td>
+                                                    <td class="align-middle text-center">
+                                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="editar_bodega({{ $bodega->id }});"><i class="fas fa-edit"></i></button>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_bodega({{ $bodega->id }})"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -2233,579 +2511,613 @@
     </div>
 </div>
 
-    <div id="permisos_rol" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="permisos_rol" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Desasociar Funcionario</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <ul class="nav nav-pills mb-3" id="tablas_examenes" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link-modal active" id="uno_tab" data-toggle="pill" href="#uno" role="tab" aria-controls="uno" aria-selected="true">Datos del Funcionario</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link-modal" id="dos_tab" data-toggle="pill" href="#dos" role="tab" aria-controls="pills-home" aria-selected="true">Desasociar y cambiar clave</a>
-                            </li>
 
-                        </ul>
+@section('modales')
+@include('app.adm_cm.modales.agregar_bodega')
+@include('app.adm_cm.modales.agregar_bodega_editar')
+<div id="permisos_rol" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="permisos_rol" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Desasociar Funcionario</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-pills mb-3" id="tablas_examenes" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link-modal active" id="uno_tab" data-toggle="pill" href="#uno" role="tab" aria-controls="uno" aria-selected="true">Datos del Funcionario</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link-modal" id="dos_tab" data-toggle="pill" href="#dos" role="tab" aria-controls="pills-home" aria-selected="true">Desasociar y cambiar clave</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tab-content" id="pills-tablas-remuneraciones">
+                        <!--INFORMACION DE ACCESO-->
+                        <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="uno_tab">
+                            <div class="row haberes collapse show" id="info_funcionario-1">
+                                <div class="col-sm-12 col-md-12 text-center">
+                                    <h5 class="text-info">DATOS DEL FUNCIONARIO</h5>
+                                    <hr class="mt-1">
+                                </div>
+
+                                <div class="col-sm-12 col-md-12 mb-3">
+                                    <div class="table-responsive">
+                                        <table id="info_funcionario" class="display table-bordered table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                            <tbody>
+                                                <tr>
+                                                    <th class="align-middle">Rut</th>
+                                                    <th class="align-middle" id="personal_desha_rut"></th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="align-middle">Nombre</th>
+                                                    <th class="align-middle" id="personal_desha_nombre"></th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="align-middle">Rol</th>
+                                                    <th class="align-middle" id="personal_desha_rol"></th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="align-middle">Usuario</th>
+                                                    <th class="align-middle" id="personal_desha_correo"></th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="align-middle">Clave</th>
+                                                    <th class="align-middle" id="personal_desha_clave"></th>
+                                                    <input type="hidden" name="personal_desha_clave_id" id="personal_desha_clave_id" value="">
+                                                </tr>
+                                            </tbody>
+                                            <tfoot class="bg-tfoot-info-claro">
+                                                <tr>
+                                                    <th class="align-middle">La Contrataria Nuevamente?</th>
+                                                    <th class="align-middle">NO</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--DEBERES-->
+                        <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="dos_tab">
+                            <div class="row deberes collapse show" id="deberes-1">
+                                <div class="col-sm-12 col-md-12 text-center">
+                                    <h5 class="text-info">DESASOCIAR</h5>
+                                    <hr class="mt-0">
+                                </div>
+                                <div class="col-sm-12 col-md-12">
+                                    <h6 class="text-info d-inline">CAMBIAR CREDENCIALES</h6>
+                                </div>
+                                <div class="col-sm-12 col-md-12">
+                                    <div class="table-responsive">
+                                        <table id="rend-caja-dental"
+                                            class="display table-bordered table table-striped dt-responsive nowrap table-xs"
+                                            style="width:100%">
+                                            <tbody>
+                                                <tr>
+                                                    <th class="align-middle">CLAVE</th>
+                                                    <th class="align-middle">
+                                                        <input type="text" class="form-control form-control-sm" id="personal_desha_clave_edit" placeholder="Clave de Acceso">
+                                                        <input type="hidden" name="personal_desha_clave_id" id="personal_desha_clave_id_edit" value="">
+                                                        <input type="hidden" name="personal_desha_clave_id" id="personal_id_persona" value="">
+                                                        <input type="hidden" name="personal_desha_clave_id" id="personal_id_personal" value="">
+                                                        <input type="hidden" name="personal_desha_clave_id" id="personal_id_lugar_atencion" value="">
+                                                        <input type="hidden" name="personal_desha_clave_id" id="personal_tipo_personal_edit" value="">
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="align-middle">MOTIVO TÉRMINO RELACIÓN</th>
+                                                    <th class="align-middle"><input type="text" class="form-control form-control-sm" id="personal_desha_motivo_temrino" placeholder="Motivo Término Relación"></th>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th class="align-middle bg-tfoot-info-claro">LA VOLVERIA A CONTRATAR ?</th>
+                                                    <th class="align-middle"><input type="text" class="form-control form-control-sm" id="personal_desha_volver_contratar" placeholder="La volvería a contratar"></th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row-">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-info btn-sm mx-auto" onclick="cambiarContrasenalugarAtencion()">Guardar cambios</button>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="tab-content" id="pills-tablas-remuneraciones">
-                            <!--INFORMACION DE ACCESO-->
-                            <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="uno_tab">
-                                <div class="row haberes collapse show" id="info_funcionario-1">
-                                    <div class="col-sm-12 col-md-12 text-center">
-                                        <h5 class="text-info">DATOS DEL FUNCIONARIO</h5>
-                                        <hr class="mt-1">
-                                    </div>
+            </div>
+        </div>
+            <!-- <div class="modal-footer">
+                <button type="submit" class="btn btn-info btn-sm mx-auto">Guardar cambios</button>
+            </div> -->
 
-                                    <div class="col-sm-12 col-md-12 mb-3">
-                                        <div class="table-responsive">
-                                            <table id="info_funcionario" class="display table-bordered table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                                <tbody>
-                                                    <tr>
-                                                        <th class="align-middle">Rut</th>
-                                                        <th class="align-middle" id="personal_desha_rut"></th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="align-middle">Nombre</th>
-                                                        <th class="align-middle" id="personal_desha_nombre"></th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="align-middle">Rol</th>
-                                                        <th class="align-middle" id="personal_desha_rol"></th>
-                                                    </tr>
-													<tr>
-                                                        <th class="align-middle">Usuario</th>
-                                                        <th class="align-middle" id="personal_desha_correo"></th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="align-middle">Clave</th>
-                                                        <th class="align-middle" id="personal_desha_clave"></th>
-                                                        <input type="hidden" name="personal_desha_clave_id" id="personal_desha_clave_id" value="">
-                                                    </tr>
-                                                </tbody>
-                                                <tfoot class="bg-tfoot-info-claro">
-                                                    <tr>
-                                                        <th class="align-middle">La Contrataria Nuevamente?</th>
-                                                        <th class="align-middle">NO</th>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
+        </div>
+    </div>
+</div>
+
+{{--  MODAL AGREGAR RESUMEN CONTRATO, ROLES, ACCESO --}}
+<div id="a_rol" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_rol" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Agregar Empleado Nuevo</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="add_empleado_id_institucion" id="add_empleado_id_institucion" value="{{ $institucion->id }}">
+                <input type="hidden" name="add_empleado_id_lugar_atencion" id="add_empleado_id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
+                <input type="hidden" name="add_empleado_id_admin_creador" id="add_empleado_id_admin_creador" value="{{ Auth::user()->id }}">
+                <input type="hidden" name="add_empleado_id_tipo_admin_creador" id="add_empleado_id_tipo_admin_creador" value="{{ Auth::user()->Roles()->first()->id }}">
+                <input type="hidden" name="" id="">
+                <table id="rend-caja-dental" class="display table-bordered table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                    <tbody>
+                        <tr>
+                            <th class="align-middle" colspan="2">Tipo Contrato</th>
+                            <th class="align-middle" colspan="2">
+                                <select class="form-control form-control-sm" name="add_empleado_tipo_contrato" id="add_empleado_tipo_contrato">
+                                    <option value="">Seleccione</option>
+                                    @if ($lista_tipo_contrato)
+
+                                        @foreach ($lista_tipo_contrato as $item)
+                                            <option value="{{ $item['nombre'] }}" data-id="{{ $item['id'] }}">{{ $item['nombre'] }}</option>
+                                        @endforeach
+                                    @endif
+                                    {{--  asistente tipo  --}}
+                                    {{--  tipo institucion  --}}
+                                    {{--  tipo administrador  --}}
+                                </select>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="4"><h5>Información Personal</h5></th>
+                        </tr>
+                        <tr>
+                            <th class="align-middle">Rut</th>
+                            <th class="align-middle">
+                                <input type="text" class="form-control form-control-sm" name="add_empleado_rut" id="add_empleado_rut">
+                            </th>
+                            <th class="align-middle">Nombres</th>
+                            <th class="align-middle">
+                                <input type="text" class="form-control form-control-sm" name="add_empleado_nombre" id="add_empleado_nombre">
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <th class="align-middle">Apellido Paterno</th>
+                            <th class="align-middle">
+                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_uno" id="add_empleado_apellido_uno">
+                            </th>
+                            <th class="align-middle">Apellido Materno</th>
+                            <th class="align-middle">
+                                <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_dos" id="add_empleado_apellido_dos">
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="align-middle">Email</th>
+                            <th class="align-middle">
+                                <input type="text" class="form-control form-control-sm" name="add_empleado_email" id="add_empleado_email">
+                            </th>
+                            <th class="align-middle">Telefono</th>
+                            <th class="align-middle">
+                                <input type="text" class="form-control form-control-sm" name="add_empleado_telefono" id="add_empleado_telefono">
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <th colspan="4"><h5>Dirección</h5></th>
+                        </tr>
+                        <tr>
+                            <th class="align-middle">Región</th>
+                            <th class="align-middle">
+                                <select class="form-control form-control-sm" name="add_empleado_region" id="add_empleado_region" onchange="buscar_ciudad_nuevo_empleado();">
+                                    <option value="">Seleccione</option>
+                                    @if($regiones)
+                                        @foreach ($regiones as $reg )
+                                            <option value="{{ $reg->id }}">{{ $reg->nombre }}</option>
+                                        @endforeach
+
+                                    @endif
+                                </select>
+                            </th>
+                            <th class="align-middle">Ciudad</th>
+                            <th class="align-middle">
+                                <select class="form-control form-control-sm" name="add_empleado_ciudad" id="add_empleado_ciudad">
+                                    <option value="">Seleccione</option>
+                                </select>
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <th class="align-middle">Dirección</th>
+                            <th class="align-middle">
+                                <input type="text" class="form-control form-control-sm" name="add_empleado_direccion" id="add_empleado_direccion">
+                            </th>
+                            <th class="align-middle">Número</th>
+                            <th class="align-middle">
+                                <input type="text" class="form-control form-control-sm" name="add_empleado_numero" id="add_empleado_numero">
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="4"><h5>Horario</h5></th>
+                        </tr>
+                        <tr>
+                            <th class="align-middle">Dias Laborales</th>
+                            <th class="align-middle" colspan="3">
+                                <select class="js-example-basic-multiple" name="add_empleado_dias_laborales" id="add_empleado_dias_laborales" multiple="multiple">
+                                    <option value="">Seleccione</option>
+                                    <option value="1">Lunes</option>
+                                    <option value="2">Martes</option>
+                                    <option value="3">Miercoles</option>
+                                    <option value="4">Jueves</option>
+                                    <option value="5">Viernes</option>
+                                    <option value="6">Sabado</option>
+                                    <option value="7">Domingo</option>
+                                </select>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="align-middle">Hora entrada</th>
+                            <th class="align-middle">
+                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada" name="add_empleado_hora_entrada" value="08:00">
+                            </th>
+                            <th class="align-middle">Hora salida</th>
+                            <th class="align-middle">
+                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida" name="add_empleado_hora_salida" value="19:00">
+                            </th>
+
+                        </tr>
+                        <tr>
+                            <th class="align-middle">Hora inicio colación</th>
+                            <th class="align-middle">
+                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_colacion" name="add_empleado_hora_entrada_colacion" value="12:00">
+                            </th>
+                            <th class="align-middle">Hora término colación</th>
+                            <th class="align-middle">
+                                <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_colacion" name="add_empleado_hora_salida_colacion" value="13:00">
+                            </th>
+                        </tr>
+                        <tr>
+                            <th colspan="4"><h5>Identificador a Institución</h5></th>
+                        </tr>
+                        <tr>
+                            <th class="align-middle">Clave de Ingreso</th>
+                            <th class="align-middle">
+                                <input type="text" class="form-control form-control-sm" id="add_empleado_clave_ingreso" name="add_empleado_clave_ingreso" placeholder="Clave ingreso Institución" value="">
+                            </th>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="registrar_nuevo_empleado();">Añadir al Equipo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{--  MODAL AREA  --}}
+<div id="a_area" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_area" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Añadir o editar Administradores del centro</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <!--Cargar áreas-->
+                                <label class="floating-label">Cargo</label>
+                                <select class="form-control form-control-sm" id="cargo">
+                                    <option value="0">Seleccione</option>
+                                    @foreach($cargos as $cargo)
+                                        <option value="{{ $cargo->id }}">{{ $cargo->nombres }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                            <!--DEBERES-->
-                            <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="dos_tab">
-                                <div class="row deberes collapse show" id="deberes-1">
-                                    <div class="col-sm-12 col-md-12 text-center">
-                                        <h5 class="text-info">DESASOCIAR</h5>
-                                        <hr class="mt-0">
-                                    </div>
-                                    <div class="col-sm-12 col-md-12">
-                                        <h6 class="text-info d-inline">CAMBIAR CREDENCIALES</h6>
-                                    </div>
-                                    <div class="col-sm-12 col-md-12">
-                                        <div class="table-responsive">
-                                            <table id="rend-caja-dental"
-                                                class="display table-bordered table table-striped dt-responsive nowrap table-xs"
-                                                style="width:100%">
-                                                <tbody>
-                                                    <tr>
-                                                        <th class="align-middle">CLAVE</th>
-                                                        <th class="align-middle">
-                                                            <input type="text" class="form-control form-control-sm" id="personal_desha_clave_edit" placeholder="Clave de Acceso">
-                                                            <input type="hidden" name="personal_desha_clave_id" id="personal_desha_clave_id_edit" value="">
-                                                            <input type="hidden" name="personal_desha_clave_id" id="personal_id_persona" value="">
-                                                            <input type="hidden" name="personal_desha_clave_id" id="personal_id_personal" value="">
-                                                            <input type="hidden" name="personal_desha_clave_id" id="personal_id_lugar_atencion" value="">
-                                                            <input type="hidden" name="personal_desha_clave_id" id="personal_tipo_personal_edit" value="">
-                                                        </th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th class="align-middle">MOTIVO TÉRMINO RELACIÓN</th>
-                                                        <th class="align-middle"><input type="text" class="form-control form-control-sm" id="personal_desha_motivo_temrino" placeholder="Motivo Término Relación"></th>
-                                                    </tr>
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <th class="align-middle bg-tfoot-info-claro">LA VOLVERIA A CONTRATAR ?</th>
-                                                        <th class="align-middle"><input type="text" class="form-control form-control-sm" id="personal_desha_volver_contratar" placeholder="La volvería a contratar"></th>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    </div>
-								</div>
-                                <div class="row-">
-                                    <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-info btn-sm mx-auto" onclick="cambiarContrasenalugarAtencion()">Guardar cambios</button>
-                                    </div>
-                                </div>
-
-							</div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <!--Cargar áreas-->
+                                <label class="floating-label">Responsable</label>
+                                <select class="form-control form-control-sm" id="responsable_cargo">
+                                    <option value="0">Seleccione</option>
+                                    @if(isset($profesionales))
+                                    @foreach($profesionales as $profesional)
+                                        <option value="{{ $profesional->id_profesional }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
-                <!-- <div class="modal-footer">
-                    <button type="submit" class="btn btn-info btn-sm mx-auto">Guardar cambios</button>
-                </div> -->
 
-            </div>
-        </div>
-    </div>
-
-    {{--  MODAL AGREGAR RESUMEN CONTRATO, ROLES, ACCESO --}}
-    <div id="a_rol" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_rol" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Agregar Empleado Nuevo</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="add_empleado_id_institucion" id="add_empleado_id_institucion" value="{{ $institucion->id }}">
-                    <input type="hidden" name="add_empleado_id_lugar_atencion" id="add_empleado_id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
-                    <input type="hidden" name="add_empleado_id_admin_creador" id="add_empleado_id_admin_creador" value="{{ Auth::user()->id }}">
-                    <input type="hidden" name="add_empleado_id_tipo_admin_creador" id="add_empleado_id_tipo_admin_creador" value="{{ Auth::user()->Roles()->first()->id }}">
-                    <input type="hidden" name="" id="">
-                    <table id="rend-caja-dental" class="display table-bordered table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                        <tbody>
-                            <tr>
-                                <th class="align-middle" colspan="2">Tipo Contrato</th>
-                                <th class="align-middle" colspan="2">
-                                    <select class="form-control form-control-sm" name="add_empleado_tipo_contrato" id="add_empleado_tipo_contrato">
-                                        <option value="">Seleccione</option>
-                                        @if ($lista_tipo_contrato)
-
-                                            @foreach ($lista_tipo_contrato as $item)
-                                                <option value="{{ $item['nombre'] }}" data-id="{{ $item['id'] }}">{{ $item['nombre'] }}</option>
-                                            @endforeach
-                                        @endif
-                                        {{--  asistente tipo  --}}
-                                        {{--  tipo institucion  --}}
-                                        {{--  tipo administrador  --}}
-                                    </select>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th colspan="4"><h5>Información Personal</h5></th>
-                            </tr>
-                            <tr>
-                                <th class="align-middle">Rut</th>
-                                <th class="align-middle">
-                                    <input type="text" class="form-control form-control-sm" name="add_empleado_rut" id="add_empleado_rut">
-                                </th>
-                                <th class="align-middle">Nombres</th>
-                                <th class="align-middle">
-                                    <input type="text" class="form-control form-control-sm" name="add_empleado_nombre" id="add_empleado_nombre">
-                                </th>
-                            </tr>
-
-                            <tr>
-                                <th class="align-middle">Apellido Paterno</th>
-                                <th class="align-middle">
-                                    <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_uno" id="add_empleado_apellido_uno">
-                                </th>
-                                <th class="align-middle">Apellido Materno</th>
-                                <th class="align-middle">
-                                    <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_dos" id="add_empleado_apellido_dos">
-                                </th>
-                            </tr>
-                            <tr>
-                                <th class="align-middle">Email</th>
-                                <th class="align-middle">
-                                    <input type="text" class="form-control form-control-sm" name="add_empleado_email" id="add_empleado_email">
-                                </th>
-                                <th class="align-middle">Telefono</th>
-                                <th class="align-middle">
-                                    <input type="text" class="form-control form-control-sm" name="add_empleado_telefono" id="add_empleado_telefono">
-                                </th>
-                            </tr>
-
-                            <tr>
-                                <th colspan="4"><h5>Dirección</h5></th>
-                            </tr>
-                            <tr>
-                                <th class="align-middle">Región</th>
-                                <th class="align-middle">
-                                    <select class="form-control form-control-sm" name="add_empleado_region" id="add_empleado_region" onchange="buscar_ciudad_nuevo_empleado();">
-                                        <option value="">Seleccione</option>
-                                        @if($regiones)
-                                            @foreach ($regiones as $reg )
-                                                <option value="{{ $reg->id }}">{{ $reg->nombre }}</option>
-                                            @endforeach
-
-                                        @endif
-                                    </select>
-                                </th>
-                                <th class="align-middle">Ciudad</th>
-                                <th class="align-middle">
-                                    <select class="form-control form-control-sm" name="add_empleado_ciudad" id="add_empleado_ciudad">
-                                        <option value="">Seleccione</option>
-                                    </select>
-                                </th>
-                            </tr>
-
-                            <tr>
-                                <th class="align-middle">Dirección</th>
-                                <th class="align-middle">
-                                    <input type="text" class="form-control form-control-sm" name="add_empleado_direccion" id="add_empleado_direccion">
-                                </th>
-                                <th class="align-middle">Número</th>
-                                <th class="align-middle">
-                                    <input type="text" class="form-control form-control-sm" name="add_empleado_numero" id="add_empleado_numero">
-                                </th>
-                            </tr>
-                            <tr>
-                                <th colspan="4"><h5>Horario</h5></th>
-                            </tr>
-                            <tr>
-                                <th class="align-middle">Dias Laborales</th>
-                                <th class="align-middle" colspan="3">
-                                    <select class="js-example-basic-multiple" name="add_empleado_dias_laborales" id="add_empleado_dias_laborales" multiple="multiple">
-                                        <option value="">Seleccione</option>
-                                        <option value="1">Lunes</option>
-                                        <option value="2">Martes</option>
-                                        <option value="3">Miercoles</option>
-                                        <option value="4">Jueves</option>
-                                        <option value="5">Viernes</option>
-                                        <option value="6">Sabado</option>
-                                        <option value="7">Domingo</option>
-                                    </select>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th class="align-middle">Hora entrada</th>
-                                <th class="align-middle">
-                                    <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada" name="add_empleado_hora_entrada" value="08:00">
-                                </th>
-                                <th class="align-middle">Hora salida</th>
-                                <th class="align-middle">
-                                    <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida" name="add_empleado_hora_salida" value="19:00">
-                                </th>
-
-                            </tr>
-                            <tr>
-                                <th class="align-middle">Hora inicio colación</th>
-                                <th class="align-middle">
-                                    <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_colacion" name="add_empleado_hora_entrada_colacion" value="12:00">
-                                </th>
-                                <th class="align-middle">Hora término colación</th>
-                                <th class="align-middle">
-                                    <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_colacion" name="add_empleado_hora_salida_colacion" value="13:00">
-                                </th>
-                            </tr>
-                            <tr>
-                                <th colspan="4"><h5>Identificador a Institución</h5></th>
-                            </tr>
-                            <tr>
-                                <th class="align-middle">Clave de Ingreso</th>
-                                <th class="align-middle">
-                                    <input type="text" class="form-control form-control-sm" id="add_empleado_clave_ingreso" name="add_empleado_clave_ingreso" placeholder="Clave ingreso Institución" value="">
-                                </th>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="registrar_nuevo_empleado();">Añadir al Equipo</button>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_direccion_medica({{ $institucion->id }})">Guardar Cambios Administración</button>
             </div>
         </div>
     </div>
+</div>
 
-    {{--  MODAL AREA  --}}
-    <div id="a_area" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_area" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Añadir o editar Administradores del centro</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <!--Cargar áreas-->
-                                    <label class="floating-label">Cargo</label>
-                                    <select class="form-control form-control-sm" id="cargo">
+{{--  MODAL AREA  --}}
+<div id="a_servicio" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_servicio" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Añadir servicio</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-12 py-2 w-100">
+                         <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_div_servicio()"><i class="fas fa-plus"></i> Crear nuevo servicio</button>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <!--Cargar áreas-->
+                                <label class="floating-label">Servicio</label>
+                                <div class="d-flex justify-content-between">
+                                    <select class="form-control form-control-sm" id="servicio" >
                                         <option value="0">Seleccione</option>
-                                        @foreach($cargos as $cargo)
-                                            <option value="{{ $cargo->id }}">{{ $cargo->nombres }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <!--Cargar áreas-->
-                                    <label class="floating-label">Responsable</label>
-                                    <select class="form-control form-control-sm" id="responsable_cargo">
-                                        <option value="0">Seleccione</option>
-                                        @if(isset($profesionales))
-                                        @foreach($profesionales as $profesional)
-                                            <option value="{{ $profesional->id_profesional }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
+                                        @if(isset($servicios))
+                                        @foreach($servicios as $servicio)
+                                            <option value="{{ $servicio->id }}">{{ $servicio->nombre }}</option>
                                         @endforeach
                                         @endif
                                     </select>
+
                                 </div>
+
                             </div>
                         </div>
-                    </form>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_direccion_medica({{ $institucion->id }})">Guardar Cambios Administración</button>
-                </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <!--Cargar áreas-->
+                                <label class="floating-label">Responsable</label>
+                                <select class="form-control form-control-sm" id="responsable_servicio">
+                                    <option value="0">Seleccione</option>
+                                    @if(isset($profesionales))
+                                    @foreach($profesionales as $profesional)
+                                        <option value="{{ $profesional->id_profesional }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div id="div_form_servicio" class="d-none w-100">
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm" for="nombre_servicio_">Nombre del servicio</label>
+                                    <input type="text" class="form-control form-control-sm" name="nombre_servicio_" id="nombre_servicio_">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 d-none">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm" for="rut_servicio">RUT</label>
+                                    <input type="text" class="form-control form-control-sm" name="rut_servicio" id="rut_servicio">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Institución</label>
+                                    <input type="address" class="form-control form-control-sm" name="institucion_servicio" id="institucion_servicio" value="{{$institucion->nombre}}">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm" for="telefono_servicio">Telefono</label>
+                                    <input type="text" class="form-control form-control-sm" name="telefono_servicio" id="telefono_servicio">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm" for="anexo_servicio">Anexo</label>
+                                    <input type="text" class="form-control form-control-sm" name="anexo_servicio" id="anexo_servicio">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm" for="email_servicio">Email</label>
+                                    <input type="text" class="form-control form-control-sm" name="email_servicio" id="email_servicio">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <button type="button" class="btn btn-outline-success btn-sm my-3 float-right" onclick="guardar_nuevo_servicio()"><i class="fas fa-save"></i> Guardar</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_servicio()">Añadir</button>
             </div>
         </div>
-    </div>s
+    </div>
+</div>
 
-    {{--  MODAL AREA  --}}
-    <div id="a_servicio" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_servicio" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Añadir servicio</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row">
-							<div class="col-sm-12 py-2 w-100">
-							 <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_div_servicio()"><i class="fas fa-plus"></i> Crear nuevo servicio</button>
+{{--  MODAL ESPECIALIDADES  --}}
+<div id="a_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_especialidad" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Añadir especialidad</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <!--Cargar especialidades-->
+                                <label class="floating-label-activo-sm">Tipo Especialidad</label>
+                                <select class="form-control form-control-sm" id="especialidad_cm" name="especialidad_cm" onchange="buscar_sub_tipo_especialidad(this);">
+                                    <option>Seleccione</option>
+                                    @if(isset($especialidades))
+                                        @foreach ($especialidades as $especialidad)
+                                            <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Sub Tipo Especialidad</label>
+                                <select class="form-control form-control-sm" name="sub_tipo_especialidad_cm" id="sub_tipo_especialidad_cm">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">N° Profesionales</label>
+                                <input type="number" name="num_profesionales" id="num_profesionales" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_especialidad_cm()">Añadir</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{-- MODAL EDITAR ESPECIALIDAD --}}
+<div id="editar_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editar_especialidad" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Editar especialidad</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <!--Cargar especialidades-->
+                                <label class="floating-label-activo-sm">Tipo Especialidad</label>
+                                <select class="form-control form-control-sm" id="editar_especialidad_nombre" name="editar_especialidad_nombre" onchange="editar_buscar_sub_tipo_especialidad(this);">
+                                    <option>Seleccione</option>
+                                    @if(isset($especialidades))
+                                        @foreach ($especialidades as $especialidad)
+                                            <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Sub Tipo Especialidad</label>
+                                <select class="form-control form-control-sm" name="editar_especialidad_sub_tipo" id="editar_especialidad_sub_tipo">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">N° Profesionales</label>
+                                <input type="number" name="editar_especialidad_num_profesionales" id="editar_especialidad_num_profesionales" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_especialidad_cm()">Editar</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="editar_area" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editar_area" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Editar area</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group fill">
+								<!--Cargar áreas-->
+								<label class="floating-label">Área</label>
+								<select class="form-control form-control-sm" id="editar_tipo_area">
+									<option value="0">Seleccione</option>
+									@foreach ($tipos_areas_cm as $tipo_area_cm)
+                                        <option value="{{ $tipo_area_cm->id }}">{{ $tipo_area_cm->nombre }}</option>
+                                    @endforeach
+								</select>
 							</div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <!--Cargar áreas-->
-                                    <label class="floating-label">Servicio</label>
-                                    <div class="d-flex justify-content-between">
-                                        <select class="form-control form-control-sm" id="servicio" >
-                                            <option value="0">Seleccione</option>
-                                            @if(isset($servicios))
-                                            @foreach($servicios as $servicio)
-                                                <option value="{{ $servicio->id }}">{{ $servicio->nombre }}</option>
-                                            @endforeach
-                                            @endif
-                                        </select>
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <!--Cargar áreas-->
-                                    <label class="floating-label">Responsable</label>
-                                    <select class="form-control form-control-sm" id="responsable_servicio">
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group fill">
+								<label class="floating-label">Responsable</label>
+								<select class="form-control form-control-sm" id="editar_responsable_cargo_area">
                                         <option value="0">Seleccione</option>
-                                        @if(isset($profesionales))
-                                        @foreach($profesionales as $profesional)
+										@foreach ($profesionales as $profesional)
                                             <option value="{{ $profesional->id_profesional }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
                                         @endforeach
-                                        @endif
-                                    </select>
-                                </div>
-                            </div>
-                            <div id="div_form_servicio" class="d-none w-100">
-                                <div class="col-sm-12">
-                                    <div class="form-group fill">
-                                        <label class="floating-label-activo-sm" for="nombre_servicio_">Nombre del servicio</label>
-                                        <input type="text" class="form-control form-control-sm" name="nombre_servicio_" id="nombre_servicio_">
-                                    </div>
-                                </div>
+								</select>
+							</div>
+						</div>
 
-                                <div class="col-sm-12 d-none">
-                                    <div class="form-group fill">
-                                        <label class="floating-label-activo-sm" for="rut_servicio">RUT</label>
-                                        <input type="text" class="form-control form-control-sm" name="rut_servicio" id="rut_servicio">
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="form-group fill">
-                                        <label class="floating-label-activo-sm">Institución</label>
-                                        <input type="address" class="form-control form-control-sm" name="institucion_servicio" id="institucion_servicio" value="{{$institucion->nombre}}">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group fill">
-                                        <label class="floating-label-activo-sm" for="telefono_servicio">Telefono</label>
-                                        <input type="text" class="form-control form-control-sm" name="telefono_servicio" id="telefono_servicio">
-                                    </div>
-                                </div>
-								<div class="col-sm-6">
-                                    <div class="form-group fill">
-                                        <label class="floating-label-activo-sm" for="anexo_servicio">Anexo</label>
-                                        <input type="text" class="form-control form-control-sm" name="anexo_servicio" id="anexo_servicio">
-                                    </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="form-group fill">
-                                        <label class="floating-label-activo-sm" for="email_servicio">Email</label>
-                                        <input type="text" class="form-control form-control-sm" name="email_servicio" id="email_servicio">
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-12">
-                                    <button type="button" class="btn btn-outline-success btn-sm my-3 float-right" onclick="guardar_nuevo_servicio()"><i class="fas fa-save"></i> Guardar</button>
-                                </div>
-
+					</div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo">Contacto (email)</label>
+                                <input type="text" class="form-control form-control-sm" name="editar_e_cont" id="editar_e_cont">
                             </div>
                         </div>
-                    </form>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_servicio()">Añadir</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{--  MODAL ESPECIALIDADES  --}}
-    <div id="a_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_especialidad" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Añadir especialidad</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <!--Cargar especialidades-->
-                                    <label class="floating-label-activo-sm">Tipo Especialidad</label>
-                                    <select class="form-control form-control-sm" id="especialidad_cm" name="especialidad_cm" onchange="buscar_sub_tipo_especialidad(this);">
-                                        <option>Seleccione</option>
-                                        @if(isset($especialidades))
-                                            @foreach ($especialidades as $especialidad)
-                                                <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Sub Tipo Especialidad</label>
-                                    <select class="form-control form-control-sm" name="sub_tipo_especialidad_cm" id="sub_tipo_especialidad_cm">
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">N° Profesionales</label>
-                                    <input type="number" name="num_profesionales" id="num_profesionales" class="form-control form-control-sm">
-                                </div>
+                        <div class="col-sm-4">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo">Teléfono</label>
+                                <input type="number" class="form-control form-control-sm" name="editar_tel_c" id="editar_tel_c">
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_especialidad_cm()">Añadir</button>
-                </div>
+                        <div class="col-sm-4">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo">N°/pers a cargo</label>
+                                <input type="number" class="form-control form-control-sm" name="editar_n_pers" id="editar_n_pers">
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
-        </div>
-    </div>
-    {{-- MODAL EDITAR ESPECIALIDAD --}}
-    <div id="editar_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editar_especialidad" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Editar especialidad</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <!--Cargar especialidades-->
-                                    <label class="floating-label-activo-sm">Tipo Especialidad</label>
-                                    <select class="form-control form-control-sm" id="editar_especialidad_nombre" name="editar_especialidad_nombre" onchange="buscar_sub_tipo_especialidad(this);">
-                                        <option>Seleccione</option>
-                                        @if(isset($especialidades))
-                                            @foreach ($especialidades as $especialidad)
-                                                <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Sub Tipo Especialidad</label>
-                                    <select class="form-control form-control-sm" name="editar_especialidad_sub_tipo" id="editar_especialidad_sub_tipo">
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">N° Profesionales</label>
-                                    <input type="number" name="editar_especialidad_num_profesionales" id="editar_especialidad_num_profesionales" class="form-control form-control-sm">
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_especialidad_cm()">Editar</button>
-                </div>
-                </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_area_cm({{ $institucion->id_lugar_atencion }})">Editar</button>
             </div>
+            </form>
         </div>
     </div>
-
-    <div id="editar_area" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editar_area" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white text-center">Editar area</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group fill">
-                                    <!--Cargar áreas-->
-                                    <label class="floating-label-activo-sm">Responsable</label>
-                                    <select class="form-control form-control-sm" id="editar_responsable" name="editar_responsable">
-                                        <option>Seleccione</option>
-                                        @if(isset($profesionales))
-                                        @foreach($profesionales as $p)
-                                            <option value="{{ $p->id_profesional }}">{{ $p->nombre }} {{ $p->apellido_uno }} {{ $p->apellido_dos }}</option>
-                                        @endforeach
-                                        @endif
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_area_cm({{ $institucion->id_lugar_atencion }})">Editar</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
+</div>
 {{--  MODAL ESPECIALIDADES  --}}
 <div id="a_otra_especialidad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_otra_especialidad" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -2897,7 +3209,7 @@
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label">Rut</label>
-                                <input type="text" name="rut_laboratorio" id="rut_laboratorio" class="form-control form-control-sm">
+                                <input type="text" name="rut_laboratorio" id="rut_laboratorio" oninput="formatoRut(this)" class="form-control form-control-sm">
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -2961,13 +3273,18 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12">
+                        <div class="col-sm-10">
                             <div class="form-group fill">
                                 <label class="floating-label">Dirección</label>
                                 <input type="text" name="direccion_laboratorio" id="direccion_laboratorio" class="form-control form-control-sm">
                             </div>
                         </div>
-
+                        <div class="col-sm-2">
+                            <div class="form-group fill">
+                                <label class="floating-label">N°</label>
+                                <input type="text" name="numero_laboratorio" id="numero_laboratorio" class="form-control form-control-sm">
+                            </div>
+                        </div>
 
                     </div>
                 </form>
@@ -2979,6 +3296,233 @@
         </div>
     </div>
 </div>
+
+{{-- MODAL EDITAR LABORATORIO --}}
+<div id="editar_laboratorio" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editar_laboratorio" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Editar laboratorio</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label">Nombre</label>
+                                <input type="text" name="editar_nombre_laboratorio" id="editar_nombre_laboratorio" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label">Rut</label>
+                                <input type="text" name="editar_rut_laboratorio" id="editar_rut_laboratorio" oninput="formatoRut(this)" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <!-- radio button -->
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check form-check-input" type="radio" name="editar_tipo_lab" id="editar_tipo_lab" value="1">
+                                    <label class="form-check form-check-label" for="editar_tipo_lab">Laboratorio Físico</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check form-check-input" type="radio" name="editar_tipo_lab" id="editar_tipo_lab" value="2">
+                                    <label class="form-check form-check-label" for="editar_tipo_lab">Solo toma de muestra</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <label class="floating-label">Tipo Laboratorio</label>
+                                <select name="editar_tipo_laboratorio" id="editar_tipo_laboratorio" class="form-control form-control-sm">
+                                    <option value="0">Seleccione</option>
+                                    @if(isset($tipos_laboratorio))
+                                        @foreach ($tipos_laboratorio as $tipo)
+                                            <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label">Email</label>
+                                <input type="email" name="editar_email_laboratorio" id="editar_email_laboratorio" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label">Telefono</label>
+                                <input type="text" name="editar_telefono_laboratorio" id="editar_telefono_laboratorio" class="form-control form-control-sm">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label">Region</label>
+                                <select name="editar_region_laboratorio" id="editar_region_laboratorio" class="form-control form-control-sm" onchange="buscar_ciudad_laboratorio_editar();">
+                                    <option value="0">Seleccione</option>
+                                    @if($regiones)
+                                        @foreach ($regiones as $reg )
+                                            <option value="{{ $reg->id }}">{{ $reg->nombre }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label">Ciudad</label>
+                                <select name="editar_ciudad_laboratorio" id="editar_ciudad_laboratorio" class="form-control form-control-sm">
+                                    <option value="0">Seleccione</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-10">
+                            <div class="form-group fill">
+                                <label class="floating-label">Dirección</label>
+                                <input type="text" name="editar_direccion_laboratorio" id="editar_direccion_laboratorio" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group fill">
+                                <label class="floating-label">N°</label>
+                                <input type="text" name="editar_numero_laboratorio" id="editar_numero_laboratorio" class="form-control form-control-sm">
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_laboratorio()">Editar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{{-- MODAL EDITAR BOX --}}
+<div id="editar_box" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editar_box" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Editar Box</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Asignar N° al box</label>
+                                <input type="text" name="editar_numero_box" id="editar_numero_box" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Tipo Box</label>
+                                <select class="form-control form-control-sm" name="editar_tpo_box_servicio" id="editar_tpo_box_servicio" onchange="editar_dame_especializacion_box()">
+                                    <option value="0">Seleccione</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Especializado">Especializado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 d-none" id="editar_contenedor_tpo_especializacion">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Tipo de especialización</label>
+                                <select class="form-control form-control-sm" name="editar_tpo_especializacion" id="editar_tpo_especializacion">
+                                    <option value="0">Seleccione</option>
+                                    <option value="Oftalmologia">Oftalmología</option>
+                                    <option value="Otorrino">Otorrino</option>
+                                    <option value="Odontologia general">Odontologia general</option>
+                                    <option value="Sala de procedimientos">Sala de procedimientos</option>
+                                    <option value="Vacunatorio">Vacunatorio</option>
+                                    <option value="Kinesiologia y rehabilitacion">Kinesiologia y rehabilitacion</option>
+                                    <option value="Etc">Etc</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 d-none">
+
+                            <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Equipamiento</label>
+                                    <select class="form-control form-control-sm" name="editar_equip_ad" id="editar_equip_ad" multiple="multiple">
+                                        <option value="Carro paro">Carro paro</option>
+                                        <option value="Oxigenoterápia">Oxigenoterápia</option>
+                                        <option value="Pabellon de yeso">Pabellon de yeso</option>
+                                    </select>
+                            </div>
+
+
+                        </div>
+                        <div class="col-sm-6 d-none">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Cantidad de camillas</label>
+                                <input type="number" class="form-control form-control-sm" name="editar_n_camillas_box_servicio" id="editar_n_camillas_box_servicio">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Ubicación</label>
+                                <select class="form-control form-control-sm" name="editar_tpo_equip_servicio" id="editar_tpo_equip_servicio">
+                                    <option value="0">Seleccione</option>
+                                    <option value="1">Piso 1</option>
+                                    <option value="2">Piso 2</option>
+                                    <option value="3">Piso 3</option>
+                                    <option value="4">Piso 4</option>
+                                    <option value="5">Piso 5</option>
+                                    <option value="6">Piso 6</option>
+                                    <option value="7">Piso 7</option>
+                                    <option value="8">Piso 8</option>
+                                    <option value="9">Piso 9</option>
+                                    <option value="10">Piso 10</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Sección</label>
+                                <select class="form-control form-control-sm" name="editar_seccion_box" id="editar_seccion_box">
+                                    <option value="0">Seleccione</option>
+                                    <option value="1">Pediatría</option>
+                                    <option value="2">General</option>
+                                    <option value="3">Ginecobstetricia</option>
+                                    <option value="4">Rehabilitación</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+
+
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Observaciones</label>
+                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="editar_ot_pat_act_" id="editar_ot_pat_act_"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_box()">Editar</button>
+            </div>
+        </div>
+    </div>
+</div>
+@include('app.adm_cm.modales.agregar_box')
+@endsection
 <input type="hidden" id="id_especialidad_cm" name="id_especialidad_cm" value="">
 <input type="hidden" id="id_institucion" name="id_institucion" value="">
 <input type="hidden" id="id_lugar_atencion" name="id_lugar_atencion" value="">
@@ -2997,7 +3541,12 @@
             $('#adm_roles').DataTable({
                 responsive: true
             });
-
+            $("#rut_laboratorio").rut({
+            formatOn: 'keyup',
+            minimumLength: 2,
+            validateOn: 'change',
+            useThousandsSeparator : false
+        });
         });  --}}
         /*-Área_cm-*/
         $(document).ready(function() {
@@ -3019,6 +3568,7 @@
                 responsive: true
             });
             $(".js-example-basic-multiple").select2();
+
         });
 
         /*-Horarios_cm-*/
@@ -4114,7 +4664,7 @@
             }
         }
 
-        function dame_especialidad_cm(id){
+        async function dame_especialidad_cm(id){
             console.log(id);
             $('#id_especialidad_cm').val(id);
             // Construye la URL con la id adjunta
@@ -4123,7 +4673,7 @@
                 url: url,
                 type: "get",
             })
-            .done(function(data) {
+            .done(async function(data) {
                 // abrir modal
             $('#editar_especialidad').modal('show');
                 console.log(data);
@@ -4132,8 +4682,13 @@
                     $('#id_institucion').val(data.id_institucion);
                     $('#editar_especialidad_id').val(data.id);
                     $('#editar_especialidad_nombre').val(data.id_tipo_especialidad);
-                    $('#editar_especialidad_sub_tipo').val(data.sub_tipo);
+
                     $('#editar_especialidad_num_profesionales').val(data.num_profesionales);
+                    // Esperar a que se complete la función editar_buscar_sub_tipo_especialidad
+                    await editar_buscar_sub_tipo_especialidad();
+
+                    // Cargar el valor del ID en editar_especialidad_sub_tipo
+                    $('#editar_especialidad_sub_tipo').val(data.id_sub_tipo);
                 }
                 else
                 {
@@ -4440,6 +4995,55 @@
         });
     }
 
+    function editar_buscar_sub_tipo_especialidad(id='') {
+        return new Promise((resolve, reject) => {
+            let sub_tipo_especialidad_registro = $('#agregar_profesional_nuevo_sub_tipo_especialidad');
+            sub_tipo_especialidad_registro.find('option').remove();
+
+            let especialidad = $('#editar_especialidad_nombre').val();
+            console.log(especialidad);
+            let url = "{{ route('home.buscar_sub_tipo_especialidad') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    //_token: _token,
+                    especialidad: especialidad,
+                },
+            })
+            .done(function(data) {
+                if (data != null) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    console.log(data.length);
+                    let sub_especialidades = $('#editar_especialidad_sub_tipo');
+
+                    sub_especialidades.find('option').remove();
+                    sub_especialidades.append('<option value="">Seleccione</option>');
+                    if(data.length > 0) {
+                        $(data).each(function(i, v) { // indice, valor
+                            sub_especialidades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                        });
+                    } else {
+                        sub_especialidades.append('<option value="0">No Aplica</option>');
+                        sub_especialidades.val(0);
+                    }
+                    if(id != '')
+                        sub_especialidades.val(id);
+
+                    resolve(); // Resuelve la promesa cuando se complete la operación
+                } else {
+                    alert('No se pudo Cargar los tipos de especialidad');
+                    reject('No se pudo Cargar los tipos de especialidad'); // Rechaza la promesa en caso de error
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError);
+                reject(thrownError); // Rechaza la promesa en caso de fallo en la solicitud AJAX
+            });
+        });
+    }
+
     function cambiarEstadoEspecialidad(id){
         let estado = $('#esp-'+id).prop('checked');
         if(estado)
@@ -4671,6 +5275,7 @@
         var id_especialidad_cm = $('#id_especialidad_cm').val();
         var id_lugar_atencion = $('#id_lugar_atencion').val();
         var id_institucion = $('#id_institucion').val();
+        var id_sub_tipo_especialidad = $('#editar_especialidad_sub_tipo').val();
 
         var url = "{{ route('adm_cm.editar_especialidad') }}";
         $.ajax({
@@ -4678,6 +5283,7 @@
             type: "post",
             data: {
                 id_especialidad_cm : id_especialidad_cm,
+                id_tipo_especialidad : id_sub_tipo_especialidad,
                 numero_profesionales : numero_profesionales,
                 id_lugar_atencion : id_lugar_atencion,
                 id_institucion : id_institucion,
@@ -4690,29 +5296,15 @@
                 {
                     // cerrar modal
                     $('#editar_especialidad').modal('hide');
-                    let especialidades = data.especialidades;
-                    $('#especialidades_cm tbody').empty();
-                    $(especialidades).each(function(i, v) { // indice, valor
-                                $('#especialidades_cm tbody').append(`
-                                <tr>
-                                    <td class="align-items-center text-center">${v.nombre}</td>
-                                    <td class="align-items-center text-center">${v.sub_tipo}</td>
-                                    <td class="align-items-center text-center">
-                                        ${v.num_profesionales}
-                                    </td>
-                                    <td class="align-items-center text-center">
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="esp-${v.id}" onchange="cambiarEstadoEspecialidad(${v.id})" ${v.estado == 1 ? 'checked' : ''}>
-                                            <label class="custom-control-label" for="esp-${v.id}"></label>
-                                        </div>
-                                    </td>
-                                    <td class="align-items-center text-center">
-                                        <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="dame_especialidad_cm(${v.id})"><i class="fas fa-edit"></i></button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_especialidad_cm(${v.id})"><i class="feather icon-trash"></i></button>
-                                    </td>
-                                </tr>
-                                `);
-                            });
+                    $('#contenedor_especialidades_cm').empty();
+                    $('#contenedor_especialidades_cm').append(data.v);
+                    swal({
+                        title: "Especialidad",
+                        text: "Especialidad Actualizada Correctamente",
+                        icon: "success",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
                 }
                 else
                 {
@@ -5044,9 +5636,13 @@
             $('#editar_area').modal('show');
             console.log(data);
             if (data != null) {
+                $('#editar_tipo_area').val(data.id_tipo_area_cm);
+                $('#editar_responsable_cargo_area').val(data.id_responsable);
+                $('#editar_e_cont').val(data.email);
+                $('#editar_tel_c').val(data.telefono);
+                $('#editar_n_pers').val(data.numero_personas);
 
-                $('#editar_responsable option:selected').removeAttr('selected');
-                $('#editar_responsable option[value="'+data+'"]').attr('selected', 'selected');
+                $('#id_area').val(data.id);
             }
             else
             {
@@ -5066,8 +5662,112 @@
     }
 
     function editar_area_cm(id_lugar_atencion){
-        let id_responsable = $('#editar_responsable').val();
-        let id_area = $('#id_area').val();
+        let tipo_area = $('#editar_tipo_area').val();
+        let responsable = $('#editar_responsable_cargo_area').val();
+        let email = $('#editar_e_cont').val();
+        let telefono = $('#editar_tel_c').val();
+        let n_persons = $('#editar_n_pers').val();
+
+        let valido = 1;
+        let mensaje = '';
+
+        // validar campos
+        if(tipo_area == '' || tipo_area == 0)
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Tipo de Área</li>';
+        }
+        if(responsable == '' || responsable == 0)
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Responsable</li>';
+        }
+        if(email == '')
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Email</li>';
+        }
+        if(telefono == '')
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Teléfono</li>';
+        }
+        if(n_persons == '')
+        {
+            valido = 0;
+            mensaje += 'Campo requerido Número de Personas</li>';
+        }
+
+        if(valido == 1)
+        {
+            let data = {
+                tipo_area : tipo_area,
+                responsable : responsable,
+                email : email,
+                telefono : telefono,
+                n_persons : n_persons,
+                id_lugar_atencion : id_lugar_atencion,
+                id_area : $('#id_area').val(),
+                _token: CSRF_TOKEN,
+            }
+
+            let url = "{{ route('adm_cm.editar_area_cm') }}";
+
+            $.ajax({
+                url: url,
+                type: "post",
+                data: data,
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    if(data.estado == 1)
+                    {
+                        // cerrar modal
+                        $('#editar_area').modal('hide');
+                        let areas = data.areas;
+                        $('#contenedor_areas_cm').empty();
+                        $('#contenedor_areas_cm').append(data.v);
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar área profesional",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar área profesional",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+
+        }
+        else
+        {
+            swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+        }
     }
 
     function eliminar_admin_cm(tipo_admin, id_institucion){
@@ -5231,6 +5931,7 @@
         let telefono_laboratorio = $('#telefono_laboratorio').val();
         let tipo_laboratorio = $('#tipo_laboratorio').val();
         let direccion_laboratorio = $('#direccion_laboratorio').val();
+        let numero_laboratorio = $('#numero_laboratorio').val();
         let region = $('#region_laboratorio').val();
         let ciudad = $('#ciudad_laboratorio').val();
         // obtenemos el valor del radio button con id tipo_lab
@@ -5272,6 +5973,21 @@
             valido = 0;
             mensaje += '<li>Campo requerido Dirección</li>';
         }
+        if(region == '' || region == 0)
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Región</li>';
+        }
+        if(ciudad == '' || ciudad == 0)
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Ciudad</li>';
+        }
+        if(numero_laboratorio == '')
+        {
+            valido = 0;
+            mensaje += '<li>Campo requerido Número</li>';
+        }
         if(ubicacion == '' || ubicacion == 0)
         {
             valido = 0;
@@ -5292,6 +6008,7 @@
                 telefono_laboratorio : telefono_laboratorio,
                 tipo_laboratorio : tipo_laboratorio,
                 direccion_laboratorio : direccion_laboratorio,
+                numero_laboratorio : numero_laboratorio,
                 region_laboratorio: region,
                 ciudad_laboratorio: ciudad,
                 ubicacion : ubicacion,
@@ -5313,22 +6030,18 @@
                 if (data != null) {
                     if(data.estado == 1)
                     {
+                        swal({
+                            title: "Laboratorio",
+                            text: "Laboratorio Ingresado Correctamente",
+                            icon: "success",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                        $('#tabla_laboratorios').empty();
+                        $('#tabla_laboratorios').append(data.v);
                         // cerrar modal
                         $('#a_laboratorio').modal('hide');
-                        let laboratorios = data.laboratorios;
-                        $('#laboratorios_cm tbody').empty();
-                        $(laboratorios).each(function(i, v) { // indice, valor
-                            $('#laboratorios_cm tbody').append(`
-                            <tr>
-                                <td class="align-items-left text-left">${v.nombre}</td>
-                                <td class="align-items-left text-left">${v.nombre_responsable} ${v.apellido_uno_responsable} ${v.apellido_dos_responsable}</td>
-                                <td class="align-items-left text-left">
-                                    <button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="dame_laboratorio(${v.id})"><i class="fas fa-edit"></i></button>
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_laboratorio_cm(${v.id})"><i class="feather icon-trash"></i></button>
-                                </td>
-                            </tr>
-                            `);
-                        });
+                        limpiar_formulario_laboratorio();
                     }
                     else
                     {
@@ -5367,6 +6080,34 @@
             });
         }
 
+    }
+
+    function limpiar_formulario_laboratorio(){
+        $('#nombre_laboratorio').val('');
+        $('#rut_laboratorio').val('');
+        $('#email_laboratorio').val('');
+        $('#telefono_laboratorio').val('');
+        $('#tipo_laboratorio').val('');
+        $('#direccion_laboratorio').val('');
+        $('#numero_laboratorio').val('');
+        $('#region_laboratorio').val('');
+        $('#ciudad_laboratorio').val('');
+        $('#ubicacion').val('');
+        $('#responsable_laboratorio').val('');
+    }
+
+    function limpiar_formulario_laboratorio_editar(){
+        $('#editar_nombre_laboratorio').val('');
+        $('#editar_rut_laboratorio').val('');
+        $('#editar_email_laboratorio').val('');
+        $('#editar_telefono_laboratorio').val('');
+        $('#editar_tipo_laboratorio').val('');
+        $('#editar_direccion_laboratorio').val('');
+        $('#editar_numero_laboratorio').val('');
+        $('#editar_region_laboratorio').val('');
+        $('#editar_ciudad_laboratorio').val('');
+        $('#editar_ubicacion').val('');
+        $('#editar_responsable_laboratorio').val('');
     }
 
     function buscar_ciudad_laboratorio(id_ciudad=0) {
@@ -5416,5 +6157,621 @@
 
 
         };
+
+        function buscar_ciudad_laboratorio_editar(id_ciudad=0) {
+
+            let region = $('#editar_region_laboratorio').val();
+            let url = "{{ route('adm_cm.buscar_ciudad_region') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    //_token: _token,
+                    region: region,
+                },
+            }).done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    data = JSON.parse(data);
+
+                    let ciudades = $('#editar_ciudad_laboratorio');
+
+                    ciudades.find('option').remove();
+                    ciudades.append('<option value="0">seleccione</option>');
+                    $(data).each(function(i, v) { // indice, valor
+                        ciudades.append('<option value="' + v.id + '">' + v.nombre +
+                            '</option>');
+                    })
+
+                    if(id_ciudad != 0)
+                        ciudades.val(id_ciudad);
+
+                } else {
+
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar las ciudades",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    })
+                    // alert('No se pudo Cargar las ciudades');
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+
+            };
+
+        function eliminar_laboratorio_cm(id){
+            swal({
+                title: "Eliminar Laboratorio",
+                text: "¿Está seguro que desea eliminar el laboratorio?",
+                icon: "warning",
+                buttons: ["Cancelar", "Aceptar"],
+                DangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    confirmar_eliminar_laboratorio_cm(id);
+                }
+            });
+        }
+
+        function confirmar_eliminar_laboratorio_cm(id){
+            let data = {
+                id : id,
+                id_institucion : $('#id_institucion').val(),
+                _token: CSRF_TOKEN,
+            };
+            let url = "{{ route('laboratorio.eliminar_laboratorio_cm') }}";
+            $.ajax({
+                url: url,
+                type: "post",
+                data: data,
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    if(data.estado == 1)
+                    {
+                        $('#tabla_laboratorios').empty();
+                        $('#tabla_laboratorios').append(data.v);
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar laboratorio",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar laboratorio",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function dame_laboratorio_cm(id_laboratorio){
+            // Construye la URL con la id adjunta
+            var url = "{{ url('Laboratorio/dame_laboratorio') }}/" + id_laboratorio;
+            $.ajax({
+                url: url,
+                type: "get",
+            })
+            .done(function(data) {
+                // abrir modal
+                $('#editar_laboratorio').modal('show');
+                console.log(data);
+                if (data != null) {
+                    $('#editar_nombre_laboratorio').val(data.nombre);
+                    $('#editar_rut_laboratorio').val(data.rut);
+                    $('#editar_email_laboratorio').val(data.email);
+                    $('#editar_telefono_laboratorio').val(data.telefono);
+                    $('#editar_tipo_laboratorio').val(data.id_tipo_laboratorio);
+                    // checkear radio button
+                    $("input[name='editar_tipo_lab']:checked").prop('checked', false);
+                    $("input[name='editar_tipo_lab'][value='"+data.ubicacion+"']").prop('checked', true);
+                    $('#editar_direccion_laboratorio').val(data.direccion);
+                    $('#editar_numero_laboratorio').val(data.numero_dir);
+                    $('#editar_region_laboratorio').val(data.id_region);
+                    buscar_ciudad_laboratorio_editar(data.id_ciudad);
+                    $('#editar_ubicacion').val(data.ubicacion);
+                    $('#editar_responsable_laboratorio option:selected').removeAttr('selected');
+                    $('#editar_responsable_laboratorio option[value="'+data.id_responsable+'"]').attr('selected', 'selected');
+                    $('#id_laboratorio').val(data.id);
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar laboratorio",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function editar_laboratorio(){
+            let nombre_laboratorio = $('#editar_nombre_laboratorio').val();
+            let rut_laboratorio = $('#editar_rut_laboratorio').val();
+            let email_laboratorio = $('#editar_email_laboratorio').val();
+            let telefono_laboratorio = $('#editar_telefono_laboratorio').val();
+            let tipo_laboratorio = $('#editar_tipo_laboratorio').val();
+            let direccion_laboratorio = $('#editar_direccion_laboratorio').val();
+            let numero_laboratorio = $('#editar_numero_laboratorio').val();
+            let region = $('#editar_region_laboratorio').val();
+            let ciudad = $('#editar_ciudad_laboratorio').val();
+            // obtenemos el valor del radio button con id tipo_lab
+            let ubicacion = $("input[name='editar_tipo_lab']:checked").val();
+            let id_institucion = $('#id_institucion').val();
+            let id_responsable = $('#editar_responsable_laboratorio').val();
+            let id_lugar_atencion = $('#add_empleado_id_lugar_atencion').val();
+            let id_laboratorio = $('#id_laboratorio').val();
+
+            let valido = 1;
+            let mensaje = '';
+            // validar campos
+            if(nombre_laboratorio == '')
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Nombre</li>';
+            }
+            if(rut_laboratorio == '')
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Rut</li>';
+            }
+            if(email_laboratorio == '')
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Email</li>';
+            }
+            if(telefono_laboratorio == '')
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Teléfono</li>';
+            }
+            if(tipo_laboratorio == '' || tipo_laboratorio == 0)
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Tipo</li>';
+            }
+            if(direccion_laboratorio == '')
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Dirección</li>';
+            }
+            if(region == '' || region == 0)
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Región</li>';
+            }
+            if(ciudad == '' || ciudad == 0 || ciudad == null)
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Ciudad</li>';
+            }
+            if(numero_laboratorio == '')
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Número</li>';
+            }
+            if(ubicacion == '' || ubicacion == 0 || ubicacion == null)
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Ubicación</li>';
+            }
+            if(id_responsable == '' || id_responsable == 0)
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Responsable</li>';
+            }
+
+            if(valido == 1)
+            {
+                let data = {
+                    nombre_laboratorio : nombre_laboratorio,
+                    rut_laboratorio : rut_laboratorio,
+                    email_laboratorio : email_laboratorio,
+                    telefono_laboratorio : telefono_laboratorio,
+                    tipo_laboratorio : tipo_laboratorio,
+                    direccion_laboratorio : direccion_laboratorio,
+                    numero_laboratorio : numero_laboratorio,
+                    region_laboratorio: region,
+                    ciudad_laboratorio: ciudad,
+                    ubicacion : ubicacion,
+                    id_institucion : id_institucion,
+                    id_responsable : id_responsable,
+                    id_lugar_atencion : id_lugar_atencion,
+                    id_laboratorio : id_laboratorio,
+                    _token: CSRF_TOKEN,
+                }
+
+                let url = "{{ route('laboratorio.editar_laboratorio') }}";
+
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    data: data,
+                })
+                .done(function(data) {
+                    console.log(data);
+                    if (data != null) {
+                        if(data.estado == 1)
+                        {
+                            swal({
+                                title: "Laboratorio",
+                                text: "Laboratorio Actualizado Correctamente",
+                                icon: "success",
+                                buttons: "Aceptar",
+                                DangerMode: true,
+                            });
+                            $('#tabla_laboratorios').empty();
+                            $('#tabla_laboratorios').append(data.v);
+                            // cerrar modal
+                            $('#editar_laboratorio').modal('hide');
+                            $('#tabla_laboratorios').empty();
+                            $('#tabla_laboratorios').append(data.v);
+                            limpiar_formulario_laboratorio_editar();
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Error",
+                                text: "Error al cargar ingresar laboratorio",
+                                icon: "error",
+                                buttons: "Aceptar",
+                                DangerMode: true,
+                            });
+                        }
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar laboratorio",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                })
+            }else{
+                swal({
+                    title: "Campos requeridos",
+                    content:{
+                        element: "div",
+                        attributes:{
+                            innerHTML: mensaje,
+                        },
+                    },
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+
+        }
+
+        function dame_box(id_box){
+            // Construye la URL con la id adjunta
+            var url = "{{ url('dame_box') }}/" + id_box;
+            $('#id_box').val(id_box);
+            $.ajax({
+                url: url,
+                type: "get",
+            })
+            .done(function(data) {
+                // abrir modal
+                $('#editar_box').modal('show');
+                console.log(data);
+                if (data != null) {
+                    $('#editar_numero_box').val(data.box.numero_box);
+                    $('#editar_tpo_box_servicio').val(data.box.tipo_box);
+                    if(data.box.tipo_box == 'Especializado'){
+                        $('#editar_contenedor_tpo_especializacion').removeClass('d-none');
+                    }else{
+                        $('#editar_contenedor_tpo_especializacion').addClass('d-none');
+                    }
+                    $('#editar_tpo_especializacion').val(data.box.tipo_especializacion);
+                    $('#editar_tpo_equip_servicio').val(data.box.ubicacion);
+                    $('#editar_seccion_box').val(data.box.seccion);
+                    $('#editar_ot_pat_act_').val(data.box.observaciones);
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar box",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function editar_box(){
+            var id_box = $('#id_box').val();
+            var numero_box = $('#editar_numero_box').val();
+            var tpo_box_servicio = $('#editar_tpo_box_servicio').val();
+            var tpo_especializacion = $('#editar_tpo_especializacion').val();
+            var tpo_equip_servicio = $('#editar_tpo_equip_servicio').val();
+            var seccion_box = $('#editar_seccion_box').val();
+            var ot_pat_act_ = $('#editar_ot_pat_act_').val();
+            var id_institucion = $('#id_institucion').val();
+            var id_lugar_atencion = $('#add_empleado_id_lugar_atencion').val();
+
+            let valido = 1;
+            let mensaje = '';
+            // validar campos
+            if(numero_box == '')
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Número</li>';
+            }
+            if(tpo_box_servicio == '' || tpo_box_servicio == 0)
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Tipo</li>';
+            }
+            if(tpo_equip_servicio == '' || tpo_equip_servicio == 0)
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Ubicación</li>';
+            }
+            if(seccion_box == '' || seccion_box == 0)
+            {
+                valido = 0;
+                mensaje += '<li>Campo requerido Sección</li>';
+            }
+
+            if(valido == 1)
+            {
+                let data = {
+                    id_box : id_box,
+                    numero_box : numero_box,
+                    tpo_box_servicio : tpo_box_servicio,
+                    tpo_especializacion : tpo_especializacion,
+                    tpo_equip_servicio : tpo_equip_servicio,
+                    seccion_box : seccion_box,
+                    ot_pat_act_ : ot_pat_act_,
+                    id_institucion : id_institucion,
+                    id_lugar_atencion : id_lugar_atencion,
+                    _token: CSRF_TOKEN,
+                }
+
+                let url = "{{ route('adm_cm.editar_box_servicio') }}";
+
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    data: data,
+                })
+                .done(function(data) {
+                    console.log(data);
+                    if (data != null) {
+                        if(data.estado == 1)
+                        {
+                            swal({
+                                title: "Box",
+                                text: "Box Actualizado Correctamente",
+                                icon: "success",
+                                buttons: "Aceptar",
+                                DangerMode: true,
+                            });
+                            $('#tabla_boxes_atencion').empty();
+                            $('#tabla_boxes_atencion').append(data.v);
+                            // cerrar modal
+                            $('#editar_box').modal('hide');
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Error",
+                                text: "Error al cargar ingresar box",
+                                icon: "error",
+                                buttons: "Aceptar",
+                                DangerMode: true,
+                            });
+                        }
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar box",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                });
+            }else{
+                swal({
+                    title: "Campos requeridos",
+                    content:{
+                        element: "div",
+                        attributes:{
+                            innerHTML: mensaje,
+                        },
+                    },
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        }
+
+        function eliminar_box(id){
+            swal({
+                title: "Eliminar Box",
+                text: "¿Está seguro que desea eliminar el box?",
+                icon: "warning",
+                buttons: ["Cancelar", "Aceptar"],
+                DangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    confirmar_eliminar_box(id);
+                }
+            });
+        }
+
+        function confirmar_eliminar_box(id){
+            let data = {
+                id : id,
+                id_institucion : $('#id_institucion').val(),
+                id_lugar_atencion : $('#add_empleado_id_lugar_atencion').val(),
+                _token: CSRF_TOKEN,
+            };
+            let url = "{{ route('adm_cm.eliminar_box_servicio') }}";
+            $.ajax({
+                url: url,
+                type: "post",
+                data: data,
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    if(data.estado == 1)
+                    {
+                        $('#tabla_boxes_atencion').empty();
+                        $('#tabla_boxes_atencion').append(data.v);
+                        swal({
+                            title: "Box",
+                            text: "Box Eliminado Correctamente",
+                            icon: "success",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                        // cerrar modal
+                        $('#editar_box').modal('hide');
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar box",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar box",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+
+        function añadir_bodega_nueva(){
+            console.log('añadiendo bodega');
+            $('#agregar_bodega').modal('show');
+        }
+
+        function eliminar_bodega(id){
+            swal({
+                title: "Eliminar Bodega",
+                text: "¿Está seguro que desea eliminar la bodega?",
+                icon: "warning",
+                buttons: ["Cancelar", "Aceptar"],
+                DangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    confirmar_eliminar_bodega(id);
+                }
+            });
+        }
+
+        function confirmar_eliminar_bodega(id){
+            let data = {
+                id : id,
+                id_institucion : $('#id_institucion').val(),
+                _token: CSRF_TOKEN,
+            };
+            let url = "{{ route('bodega.eliminar_bodega') }}";
+            $.ajax({
+                url: url,
+                type: "post",
+                data: data,
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    if(data.estado == 'ok')
+                    {
+                        $('#contenedor_bodegas').empty();
+                        $('#contenedor_bodegas').append(data.v);
+                        swal({
+                            title: "Bodega",
+                            text: "Bodega Eliminada Correctamente",
+                            icon: "success",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar ingresar bodega",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar ingresar bodega",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
     </script>
 @endsection

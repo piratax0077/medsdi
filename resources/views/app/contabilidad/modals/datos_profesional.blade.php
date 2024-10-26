@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Registrar Datos profesional</h5>
+                <h5 class="modal-title text-white text-center">Registrar Contrato profesional funcionario</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#88;</span></button>
             </div>
             <div class="modal-body">
@@ -15,13 +15,16 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link-aten text-reset active" id="info-tipo_contrato-tab" data-toggle="tab" href="#info-tipo_contrato" role="tab" aria-controls="info-tipo_contrato" aria-selected="true">Tipo Contrato</a>
+                            <a class="nav-link-aten text-reset active" id="info-profesion-tab" data-toggle="tab" href="#info-profesion" role="tab" aria-controls="info-profesion" aria-selected="true">Profesión</a>
                         </li>
+                        {{-- <li class="nav-item">
+                            <a class="nav-link-aten text-reset" id="info-tipo_contrato-tab" data-toggle="tab" href="#info-tipo_contrato" role="tab" aria-controls="info-tipo_contrato" aria-selected="true">Tipo Contrato</a>
+                        </li> --}}
                         <li class="nav-item">
                             <a class="nav-link-aten text-reset" id="info_personal_cont-tab" data-toggle="tab" href="#info_personal_cont" role="tab" aria-controls="info_personal_cont" aria-selected="false">Información Personal</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link-aten text-reset" id="info_contrato_pers-tab" data-toggle="tab" href="#info_contrato_pers" role="tab" aria-controls="info_contrato_pers" aria-selected="false">Información de Contrato</a>
+                            <a class="nav-link-aten text-reset" id="info_contrato_pers-tab" data-toggle="tab" href="#info_contrato_pers" role="tab" aria-controls="info_contrato_pers" aria-selected="false">Información Bancaria</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link-aten text-reset" id="leyes_sociales-tab" data-toggle="tab" href="#leyes_sociales" role="tab" aria-controls="leyes_sociales" aria-selected="false">Leyes Sociales</a>
@@ -33,37 +36,54 @@
                     </ul>
                 </div>
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="info-tipo_contrato" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Profesi&oacute;n</label>
-                                <select name="profesion_nuevo_profesional" id="profesion_nuevo_profesional" class="form-control" onchange="dame_tipo_especialidad()">
-                                    <option value="0">Seleccione opci&oacute;n</option>
-                                    @foreach($especialidades as $especialidad)
-                                        <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
-                                    @endforeach
-                                </select>
+                    <div class="tab-pane fade show active" id="info-profesion" role="tabpanel" aria-labelledby="info-profesion-tab">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Profesi&oacute;n</label>
+                                    <select name="profesion_nuevo_profesional" id="profesion_nuevo_profesional" class="form-control" onchange="dame_tipo_especialidad()">
+                                        <option value="0">Seleccione opci&oacute;n</option>
+                                        @foreach($especialidades as $especialidad)
+                                            <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Especialidad</label>
-                                <select name="especialidad_nuevo_profesional" id="especialidad_nuevo_profesional" class="form-control" onchange="dame_subtipo_especialidad()">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Especialidad</label>
+                                    <select name="especialidad_nuevo_profesional" id="especialidad_nuevo_profesional" class="form-control" onchange="dame_subtipo_especialidad()">
 
-                                </select>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="floating-label-activo-sm">Sub-especialidad</label>
-                                <select name="sub_especialidad_nuevo_profesional" id="sub_especialidad_nuevo_profesional" class="form-control">
-                                    <option value="0">Seleccione opci&oacute;n</option>
-                                </select>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Sub-especialidad</label>
+                                    <select name="sub_especialidad_nuevo_profesional" id="sub_especialidad_nuevo_profesional" class="form-control">
+                                        <option value="0">Seleccione opci&oacute;n</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="tab-pane fade" id="info-tipo_contrato" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Tipo de contrato</label>
+                                        <select class="form-control form-control-sm" name="tipo_contrato" id="tipo_contrato">
+                                            <option value="0">Seleccione opci&oacute;n</option>
+                                            <option value="1">Fijo</option>
+                                            <option value="2">Porcentaje de atención</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
 
                     <div class="tab-pane fade" id="info_personal_cont" role="tabpanel" aria-labelledby="info_personal_cont-tab">
                         <div class="row">
@@ -344,6 +364,7 @@
 
     $(document).ready(function() {
         $('#dias_laborales').select2();
+        $('#dias_laborales_convenio').select2();
     });
 
     /** buscar ciudad */
@@ -395,6 +416,7 @@
 
 
     };
+
 
     function formatoRut(rut)
     {

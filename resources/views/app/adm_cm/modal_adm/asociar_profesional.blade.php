@@ -91,7 +91,7 @@
                             <div class="col-sm-6">
                                 <select class="form-control form-control-sm" name="agregar_profesional_id_tipo_convenio_institucion" id="agregar_profesional_id_tipo_convenio_institucion" onchange="mostar_div_montos_tipo_convenio('agregar_profesional_id_tipo_convenio_institucion');">
                                     <option value="">Seleccione</option>
-                                    @if($tipo_convenio)
+                                    @if(isset($tipo_convenio))
                                         @foreach ($tipo_convenio as $tc )
                                             <option value="{{ $tc->id }}">{{ $tc->nombre }}</option>
                                         @endforeach
@@ -231,7 +231,7 @@
                             <div class="col-sm-6">
                                 <select class="form-control form-control-sm" name="agregar_profesional_nuevo_id_tipo_convenio_institucion" id="agregar_profesional_nuevo_id_tipo_convenio_institucion" onchange="mostar_div_montos_tipo_convenio('agregar_profesional_nuevo_id_tipo_convenio_institucion');">
                                     <option value="">Seleccione</option>
-                                    @if($tipo_convenio)
+                                    @if(isset($tipo_convenio))
                                         @foreach ($tipo_convenio as $tc )
                                             <option value="{{ $tc->id }}">{{ $tc->nombre }}</option>
                                         @endforeach

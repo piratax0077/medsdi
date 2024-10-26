@@ -11,9 +11,11 @@ use App\Models\AdminLugarAtencion;
 use App\Models\AsistenteTipo;
 use App\Models\ContratoDependiente;
 use App\Models\ContratoDependienteProfesional;
+use App\Models\ContratoConvenioProfesional;
 use App\Models\ContratoHistorico;
 use App\Models\Direccion;
 use App\Models\Instituciones;
+use App\Models\LiquidacionesProfesional;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\Profesional;
@@ -3721,7 +3723,6 @@ class ManejoContratoController extends Controller
         {
             $result_registro_perfil = static::registroPerfilProfesional($request);
 
-
             if($result_registro_perfil['estado'] == 1){
 
                 $id_profesional = $result_registro_perfil['result']->id_profesional;
@@ -4034,5 +4035,32 @@ class ManejoContratoController extends Controller
             $datos['error'] = $error;
         }
         return (object)$datos;
+    }
+
+    public function registrarProfesionalConvenio(Request $request){
+        try {
+            // nueva liquidacion
+            $profesional = Profesional::find($request->id_profesional);
+            $institucion = Instituciones::find($request->id_institucion);
+
+            $liquidacion_profesional = new LiquidacionesProfesional;
+            $liquidacion_profesional->id_profesional = $profesional->id;
+            $liquidacion_profesional->id_institucion = $institucion->id;
+            $liquidacion_profesional->id_lugar_atencion = $institucion->id_lugar_atencion;
+            $liquidacion_profesional->numero_atenciones = intval($request->n_atenciones);
+            $liquidacion_profesional->descuentos = $request->descuentos;
+            $liquidacion_profesional->monto_imponible = 500000; // por defecto, revisar el monto desde la vista
+            $liquidacion_profesional->total = 500000; // por defecto
+            $liquidacion_profesional->id_usuario = Auth::user()->id;
+            $liquidacion_profesional->fecha = Carbon::now();
+            $liquidacion_profesional->porcentaje = 10; // por defecto
+            if($liquidacion_profesional->save()){
+                return ['estado' => 'OK','msj' => 'Se ha registrado la liquidacion correctamente.'];
+            }else{
+                return ['estado' => 'error','msj' => 'Ha ocurrido algun error.'];
+            }
+        } catch (\Exception $e) {
+            return ['estado' => 'error','msj' => $e->getMessage()];
+        }
     }
 }

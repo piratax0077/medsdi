@@ -11,8 +11,12 @@ use App\Models\Asistente;
 use App\Models\AsistenteLugarAtencion;
 use App\Models\AsistenteTipo;
 use App\Models\Bancos;
+use App\Models\Bodega;
+use App\Models\BoxCm;
 use App\Models\ConvenioInstitucion;
 use App\Models\ContratoDependienteProfesional;
+use App\Models\ContratoProfesionalInstitucion;
+use App\Models\ContratoConvenioProfesional;
 use App\Models\CuentaBancariaInst;
 use App\Models\TipoAreasCm;
 use App\Models\TipoProducto;
@@ -25,6 +29,7 @@ use App\Models\Especialidad;
 use App\Models\EspecialidadesCm;
 use App\Models\Instituciones;
 use App\Models\Laboratorio;
+use App\Models\LiquidacionesProfesional;
 use App\Models\LugarAtencion;
 use App\Models\MensajesDifusion;
 use App\Models\MensajesProfesional;
@@ -38,6 +43,8 @@ use App\Models\ProfesionalInstitucionConvenio;
 use App\Models\ProfesionalHorario;
 use App\Models\ProfesionalConvenio;
 use App\Models\Remuneraciones;
+use App\Models\Responsable;
+use App\Models\ResponsableBodega;
 use App\Models\Roles;
 use App\Models\Servicios;
 use App\Models\ServiciosInternos;
@@ -51,6 +58,7 @@ use App\Models\TiposLaboratorio;
 use App\Models\SubTipoEspecialidad;
 use App\Models\User;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Spatie\Permission\Models\Role;
 
 use Illuminate\Support\Facades\Auth;
@@ -266,10 +274,13 @@ class AdministradorCmController extends Controller
             ->where('profesionales_lugares_atencion.id_lugar_atencion',$institucion->id_lugar_atencion)
             ->get();
 
+
+
         foreach($profesionales_contratados as $profesional){
             $contrato = ContratoDependienteProfesional::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$institucion->id_lugar_atencion)->first();
             if($contrato){
                 $profesional->contrato = $contrato;
+                $profesional->es_convenio = false;
                 $especialidad_contrato = Especialidad::find($contrato->id_especialidad);
                 $profesional->especialidad_contrato = $especialidad_contrato;
                 $tipo_especialidad = TipoEspecialidad::find($contrato->id_tipo_especialidad);
@@ -379,6 +390,7 @@ class AdministradorCmController extends Controller
         /** FIN LISTA CONTRATO */
 
         $lista_tipo_administrativo = TipoAdministrador::where('estado', 1)->get();
+        $tipo_convenio = TipoConvenioInstitucion::where('estado', 1)->get();
 
         return view('app.adm_cm.contratos_nuevos',
             [
@@ -391,6 +403,7 @@ class AdministradorCmController extends Controller
                 'lista_tipo_contrato' => (object)$lista_tipo_contrato,
                 'lista_tipo_administrativo' => $lista_tipo_administrativo,
                 'lista_mantencion' => $lista_mantencion,
+                'tipo_convenio' => $tipo_convenio
             ]
         );
     }
@@ -398,12 +411,14 @@ class AdministradorCmController extends Controller
     public function agregar_area_cm(Request $request){
         try {
             $institucion = Instituciones::where('id_usuario', Auth::user()->id)->first();
-
+            $profesional_responsable = Profesional::find($request->responsable_cargo);
             $area = new AreasCm();
             $area->id_institucion = $institucion->id;
             $area->id_lugar_atencion = $institucion->id_lugar_atencion;
             $area->id_tipo_area_cm = $request->tipo_area;
-            $area->nombre = $request->area;
+            $area->nombre = $profesional_responsable->nombre;
+            $area->apellido_uno = $profesional_responsable->apellido_uno;
+            $area->apellido_dos = $profesional_responsable->apellido_dos;
             $area->email = $request->e_cont;
             $area->telefono = $request->tel_c;
             $area->numero_personas = $request->n_pers;
@@ -417,6 +432,31 @@ class AdministradorCmController extends Controller
             return response()->json(['estado' => 1, 'mensaje' => 'Área agregada correctamente', 'v' => $v]);
         } catch (\Exception $e) {
             return response()->json(['estado' => 0, 'mensaje' => $e->getMessage()]);
+        }
+    }
+
+    public function editar_area_cm(Request $request){
+        try {
+            $area = AreasCm::find($request->id_area);
+            $profesional_responsable = Profesional::find($request->responsable);
+            $area->nombre = $profesional_responsable->nombre;
+            $area->apellido_uno = $profesional_responsable->apellido_uno;
+            $area->apellido_dos = $profesional_responsable->apellido_dos;
+            $area->email = $request->email;
+            $area->telefono = $request->telefono;
+            $area->numero_personas = $request->n_persons;
+            if($area->save()){
+                $areas = $this->dame_areas_cm($area->id_lugar_atencion);
+                $v = view('fragm.areas_cm',[
+                    'areas_cm' => $areas,
+                    'institucion' => Instituciones::where('id_usuario', Auth::user()->id)->first()
+                ])->render();
+                return ['estado' => 1, 'mensaje' => 'Área actualizada correctamente', 'v' => $v];
+            }else{
+                return response()->json(['estado' => 0, 'mensaje' => 'Error al actualizar el área']);
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 
@@ -717,6 +757,23 @@ class AdministradorCmController extends Controller
         }
 
         $tipos_laboratorio = TiposLaboratorio::all();
+        $laboratorios = $this->dame_laboratorios($institucion->id);
+
+        $boxes_cm = $this->dame_boxes_cm($institucion->id_lugar_atencion);
+
+        $tipos_productos = TipoProducto::all();
+
+        $bodegas = Bodega::where('id_institucion',$institucion->id)->get();
+
+        foreach($bodegas as $bodega){
+            $bodega->tipo_productos_autorizacion = json_decode($bodega->tipos_productos_autorizacion);
+            $bodega->tipos_productos = json_decode($bodega->tipos_productos);
+            $responsables = ResponsableBodega::select('responsable_bodega.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
+                ->join('profesionales','responsable_bodega.id_responsable','=','profesionales.id')
+                ->where('responsable_bodega.id_bodega',$bodega->id)
+                ->get();
+            $bodega->responsables = $responsables;
+        }
 
         return view('app.adm_cm.configuracion')->with([
             'tipo_institucion' => $tipo_institucion,
@@ -739,13 +796,43 @@ class AdministradorCmController extends Controller
             'servicios' => $servicios,
             'servicios_internos' => $servicios_internos,
             'tipos_laboratorio' => $tipos_laboratorio,
+            'laboratorios' => $laboratorios,
+            'boxes_servicio' => $boxes_cm,
+            'tipos_productos' => $tipos_productos,
+            'bodegas' => $bodegas
         ]);
+    }
+
+    public function dame_boxes_cm($id_lugar_atencion){
+        $boxes = BoxCm::where('id_lugar_atencion',$id_lugar_atencion)->get();
+        foreach($boxes as $box){
+            if($box->seccion == '1') $box->seccion = 'Pediatría';
+            if($box->seccion == '2') $box->seccion = 'General';
+            if($box->seccion == '3') $box->seccion = 'Gineco-Obstetricia';
+            if($box->seccion == '4') $box->seccion = 'Rehabilitación';
+        }
+        return $boxes;
+    }
+
+    public function dame_laboratorios($id_institucion){
+        $laboratorios = Laboratorio::select('laboratorios.*','tipos_laboratorio.nombre as tipo_laboratorio','direcciones.direccion','direcciones.numero_dir','direcciones.id_ciudad')
+            ->leftjoin('tipos_laboratorio','laboratorios.id_tipo_laboratorio','=','tipos_laboratorio.id')
+            ->join('direcciones','laboratorios.id_direccion','=','direcciones.id')
+            ->where('laboratorios.id_institucion',$id_institucion)
+            ->get();
+
+        // buscar la ciudad de cada laboratorio por la direccion
+        foreach($laboratorios as $laboratorio){
+            $ciudad = Ciudad::where('id',$laboratorio->id_ciudad)->first();
+            $laboratorio->ciudad = $ciudad->nombre;
+        }
+        return $laboratorios;
     }
 
     public function dame_area($id, $id_lugar_atencion){
 
-        $profesional = ProfesionalesLugaresAtencion::where('id_profesional',$id)->where('id_lugar_atencion',$id_lugar_atencion)->first();
-        return $profesional->id;
+        $area = AreasCm::where('id',$id)->where('id_lugar_atencion',$id_lugar_atencion)->first();
+        return $area;
 
     }
 
@@ -1445,8 +1532,10 @@ class AdministradorCmController extends Controller
     }
 
     public function dame_profesionales($id_lugar_atencion){
-        $profesionales = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
+        $profesionales = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad','profesionales.rut')
                             ->join('profesionales','profesionales.id','=','profesionales_lugares_atencion.id_profesional')
+                            ->join('especialidades','profesionales.id_especialidad','especialidades.id')
+                            ->leftjoin('tipos_especialidad','profesionales.id_tipo_especialidad','tipos_especialidad.id')
                             ->where('profesionales_lugares_atencion.id_lugar_atencion',$id_lugar_atencion)
                             ->get();
 
@@ -5115,7 +5204,6 @@ class AdministradorCmController extends Controller
         {
             $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
         }
-
         if($registro)
         {
             // var_dump($registro);
@@ -5123,13 +5211,17 @@ class AdministradorCmController extends Controller
             //var_dump($registro->UsuarioAdministrador()->first()->id);
             /** INSTITUCION */
             $institucion = $registro;
-            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+
+            // $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();;
+
             $tipo_institucion = 'institucion';
 
         }
         else
         {
             $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+
             if($registro)
             {
                 /** SERVICIOS */
@@ -5144,6 +5236,7 @@ class AdministradorCmController extends Controller
                 if($responsable)
                 {
                     $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+
                     if($registro)
                     {
                         // var_dump($registro);
@@ -5178,27 +5271,356 @@ class AdministradorCmController extends Controller
         $regiones = Region::all();
         $bancos = Bancos::all();
         $especialidades = Especialidad::all();
-        $profesionales_contratados = ContratoProfesionalInstitucion::select('contrato_profesional_institucion.*','especialidades.nombre as especialidad')
-            ->join('especialidades','especialidades.id','contrato_profesional_institucion.id_especialidad')
-            ->where('contrato_profesional_institucion.id_institucion',$institucion->id)
+        $profesionales_contratados = ProfesionalesLugaresAtencion::select('profesionales.*','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad','sub_tipo_especialidad.nombre as sub_tipo_especialidad')
+            ->join('profesionales','profesionales_lugares_atencion.id_profesional','=','profesionales.id')
+            ->join('especialidades','profesionales.id_especialidad','=','especialidades.id')
+            ->leftjoin('tipos_especialidad','profesionales.id_tipo_especialidad','=','tipos_especialidad.id')
+            ->leftjoin('sub_tipo_especialidad','profesionales.id_sub_tipo_especialidad','=','sub_tipo_especialidad.id')
+            ->where('profesionales_lugares_atencion.id_lugar_atencion',$institucion->id_lugar_atencion)
             ->get();
+
+        foreach($profesionales_contratados as $profesional){
+            $contrato = ContratoDependienteProfesional::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$institucion->id_lugar_atencion)->first();
+            if($contrato){
+                $profesional->contrato = $contrato;
+                $especialidad_contrato = Especialidad::find($contrato->id_especialidad);
+                $profesional->especialidad_contrato = $especialidad_contrato;
+                $tipo_especialidad = TipoEspecialidad::find($contrato->id_tipo_especialidad);
+                if($tipo_especialidad) $profesional->tipo_especialidad_contrato = $tipo_especialidad->nombre;
+                $sub_tipo_especialidad = SubTipoEspecialidad::find($contrato->id_sub_tipo_especialidad);
+                if($sub_tipo_especialidad) $profesional->sub_tipo_especialidad_contrato = $sub_tipo_especialidad->nombre;
+
+            }else{
+                $profesional->contrato = null;
+            }
+            $profesional->horas_semanales = 45;
+        }
+
         return view('app.contabilidad.secciones_contabilidad.rrhh',
             [
                 'regiones' => $regiones,
                 'bancos' => $bancos,
                 'especialidades' => $especialidades,
                 'profesionales_contratados' => $profesionales_contratados,
+                'institucion' => $institucion
             ]
         );
     }
     public function ContadorSueldos(Request $request)
     {
-        return view('app.contabilidad.secciones_contabilidad.remuneraciones');
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+
+            // $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();;
+
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+        $profesionales_contratados = ProfesionalesLugaresAtencion::select('profesionales.*','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad','sub_tipo_especialidad.nombre as sub_tipo_especialidad')
+            ->join('profesionales','profesionales_lugares_atencion.id_profesional','=','profesionales.id')
+            ->join('especialidades','profesionales.id_especialidad','=','especialidades.id')
+            ->leftjoin('tipos_especialidad','profesionales.id_tipo_especialidad','=','tipos_especialidad.id')
+            ->leftjoin('sub_tipo_especialidad','profesionales.id_sub_tipo_especialidad','=','sub_tipo_especialidad.id')
+            ->where('profesionales_lugares_atencion.id_lugar_atencion',$institucion->id_lugar_atencion)
+            ->get();
+
+        foreach($profesionales_contratados as $profesional){
+            $contrato = ContratoDependienteProfesional::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$institucion->id_lugar_atencion)->first();
+            if($contrato){
+                $profesional->contrato = $contrato;
+                $especialidad_contrato = Especialidad::find($contrato->id_especialidad);
+                $profesional->especialidad_contrato = $especialidad_contrato;
+                $tipo_especialidad = TipoEspecialidad::find($contrato->id_tipo_especialidad);
+                if($tipo_especialidad) $profesional->tipo_especialidad_contrato = $tipo_especialidad->nombre;
+                $sub_tipo_especialidad = SubTipoEspecialidad::find($contrato->id_sub_tipo_especialidad);
+                if($sub_tipo_especialidad) $profesional->sub_tipo_especialidad_contrato = $sub_tipo_especialidad->nombre;
+
+            }else{
+                $profesional->contrato = null;
+            }
+            $profesional->horas_semanales = 45;
+        }
+
+        return view('app.contabilidad.secciones_contabilidad.remuneraciones',[
+            'profesionales_contratados' => $profesionales_contratados
+        ]);
     }
+
+    public function adm_liquidacion_profesional(Request $request){
+        try{
+            $profesional = Profesional::find($request->id);
+            $liquidaciones = LiquidacionesProfesional::where('id_profesional',$profesional->id)->get();
+            return ['profesional' => $profesional, 'liquidaciones' => $liquidaciones];
+        }catch(Exception $e){
+            return $e->getMessage();
+        }
+    }
+
+    public function finalizar_contrato(Request $request){
+        try {
+            $profesional = Profesional::find($request->id);
+            $anio = 2024;
+            // Renderizar la vista del reporte anual
+            $pdf = Pdf::loadView('app.contabilidad.secciones_contabilidad.finalizar_contrato', compact('profesional'));
+            // Guardar el PDF en la carpeta public
+            $fileName = 'termino_contrato_' . $anio . '.pdf';
+            $filePath = public_path('reportes/' . $fileName);
+            file_put_contents($filePath, $pdf->output());
+
+            // Devolver la ruta accesible del archivo PDF
+            return response()->json(['ruta' => asset('reportes/' . $fileName)]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    public function generar_liquidacion_profesional(Request $request){
+        try{
+            $profesional = Profesional::find($request->id_profesional);
+            $liquidacion = new LiquidacionesProfesional();
+            $liquidacion->id_profesional = $profesional->id;
+            $liquidacion->id_institucion = $request->id_institucion;
+            $liquidacion->id_lugar_atencion = $request->id_lugar_atencion;
+            $contrato = ContratoDependienteProfesional::find($request->id_contrato);
+            $liquidacion->monto_imponible = $contrato->monto_imponible;
+            $liquidacion->id_contrato = $contrato->id;
+            $liquidacion->fecha = Carbon::now();
+            $liquidacion->numero_atenciones = $request->numero_atenciones;
+            $liquidacion->descuentos = $request->descuentos;
+            $liquidacion->porcentaje = $request->porcentaje;
+            $liquidacion->total = $request->total_pago;
+            $liquidacion->id_usuario = Auth::user()->id;
+
+            if($liquidacion->save()){
+                return ['estado' => 'OK','mensaje' => 'Exito'];
+            }else{
+                return ['estado' => 'error','mensaje' => 'Error'];
+            }
+        }catch(Exception $e){
+            return ['estado' => 'error','mensaje' => $e->getMessage()];
+        }
+    }
+
+    public function eliminar_liquidacion_profesional(Request $request){
+        try {
+            $liquidacion = LiquidacionesProfesional::find($request->id);
+            $id_profesional = $liquidacion->id_profesional;
+            if($liquidacion->delete()){
+                $liquidaciones = LiquidacionesProfesional::where('id_profesional',$id_profesional)->get();
+                return ['estado' => 'OK','mensaje' => 'Liquidacion eliminada con éxito.', 'liquidaciones' => $liquidaciones];
+            }else{
+                return ['estado' => 'error', 'mensaje' => 'ha ocurrido un problema'];
+            }
+        } catch (\Exception $e) {
+            return ['estado' => 'error', 'mensaje' => $e->getMessage()];
+        }
+    }
+
     public function ContadorLiquidaciones(Request $request)
     {
-        return view('app.contabilidad.secciones_contabilidad.liquidaciones');
+        $institucion = '';
+        $tipo_institucion = '1';
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+
+            // $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();;
+
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+        $profesionales_contratados = ProfesionalesLugaresAtencion::select('profesionales.*','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad','sub_tipo_especialidad.nombre as sub_tipo_especialidad')
+            ->join('profesionales','profesionales_lugares_atencion.id_profesional','=','profesionales.id')
+            ->join('especialidades','profesionales.id_especialidad','=','especialidades.id')
+            ->leftjoin('tipos_especialidad','profesionales.id_tipo_especialidad','=','tipos_especialidad.id')
+            ->leftjoin('sub_tipo_especialidad','profesionales.id_sub_tipo_especialidad','=','sub_tipo_especialidad.id')
+            ->where('profesionales_lugares_atencion.id_lugar_atencion',$institucion->id_lugar_atencion)
+            ->get();
+
+        foreach($profesionales_contratados as $profesional){
+            $contrato = ContratoDependienteProfesional::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$institucion->id_lugar_atencion)->first();
+            if($contrato){
+                $profesional->contrato = $contrato;
+                $especialidad_contrato = Especialidad::find($contrato->id_especialidad);
+                $profesional->especialidad_contrato = $especialidad_contrato;
+                $tipo_especialidad = TipoEspecialidad::find($contrato->id_tipo_especialidad);
+                if($tipo_especialidad) $profesional->tipo_especialidad_contrato = $tipo_especialidad->nombre;
+                $sub_tipo_especialidad = SubTipoEspecialidad::find($contrato->id_sub_tipo_especialidad);
+                if($sub_tipo_especialidad) $profesional->sub_tipo_especialidad_contrato = $sub_tipo_especialidad->nombre;
+
+            }else{
+                $profesional->contrato = null;
+            }
+            $profesional->horas_semanales = 45;
+        }
+        $profesionales = $this->dame_profesionales($institucion->id_lugar_atencion);
+        $bancos = Bancos::all();
+        $liquidaciones_institucion = $this->dame_liquidaciones_institucion($institucion->id);
+
+        return view('app.contabilidad.secciones_contabilidad.liquidaciones',[
+            'profesionales_contratados' => $profesionales_contratados,
+            'profesionales' => $profesionales,
+            'institucion' => $institucion,
+            'bancos' => $bancos,
+            'liquidaciones' => $liquidaciones_institucion
+        ]);
     }
+
+    public function dame_liquidaciones_institucion($id_institucion){
+        try {
+            $institucion = Instituciones::find($id_institucion);
+            $liquidaciones = LiquidacionesProfesional::select('liquidaciones_profesional.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos','profesionales.rut','profesionales.id_especialidad','profesionales.id_tipo_especialidad')
+                                                        ->join('profesionales','liquidaciones_profesional.id_profesional','profesionales.id')
+                                                        ->where('liquidaciones_profesional.id_institucion', $institucion->id)
+                                                        ->where('liquidaciones_profesional.id_lugar_atencion',$institucion->id_lugar_atencion)
+                                                        ->get();
+            foreach($liquidaciones as $l){
+                $especialidad = Especialidad::find($l->id_especialidad);
+                $tipo_especialidad = TipoEspecialidad::find($l->id_tipo_especialidad);
+                $l->especialidad = $especialidad->nombre;
+                $l->tipo_especialidad = $tipo_especialidad->nombre;
+            }
+
+            return $liquidaciones;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
     public function ContadorRemuneraciones(Request $request)
     {
         $ano_toma = date('Y');
@@ -5571,7 +5993,7 @@ class AdministradorCmController extends Controller
     }
 
     public function dame_especialidad($id){
-        $especialidad = EspecialidadesCm::select('especialidades_cm.id', 'especialidades_cm.id_tipo_especialidad', 'especialidades_cm.id_lugar_atencion', 'especialidades_cm.id_institucion', 'especialidades_cm.id_admin', 'especialidades_cm.estado','especialidades_cm.num_profesionales','tipos_especialidad.nombre','sub_tipo_especialidad.nombre as sub_tipo')
+        $especialidad = EspecialidadesCm::select('especialidades_cm.id', 'especialidades_cm.id_tipo_especialidad', 'especialidades_cm.id_lugar_atencion', 'especialidades_cm.id_institucion', 'especialidades_cm.id_admin', 'especialidades_cm.estado','especialidades_cm.num_profesionales','tipos_especialidad.nombre','sub_tipo_especialidad.nombre as sub_tipo','sub_tipo_especialidad.id as id_sub_tipo')
                                         ->join('tipos_especialidad', 'tipos_especialidad.id', '=', 'especialidades_cm.id_tipo_especialidad')
                                         ->join('sub_tipo_especialidad', 'sub_tipo_especialidad.id', '=', 'especialidades_cm.id_sub_tipo_especialidad')
                                         ->where('especialidades_cm.id', $id)
@@ -5763,7 +6185,7 @@ class AdministradorCmController extends Controller
 
             if($cargo->id == 4){
                 $institucion->id_director_comercial = intval($user->id);
-                $user->assignRole(3); // Profesional
+                $user->assignRole(9); // Profesional CONTABILIDAD
             }
 
 
@@ -5834,9 +6256,13 @@ class AdministradorCmController extends Controller
             //code...
             $especialidadesCm = EspecialidadesCm::where('id', $req->id_especialidad_cm)->first();
             $especialidadesCm->num_profesionales = intval($req->numero_profesionales);
+            $especialidadesCm->id_sub_tipo_especialidad = $req->id_tipo_especialidad;
             $especialidadesCm->save();
             $especialidades = $this->dame_especialidades_cm($req->id_institucion);
-            return ['estado' => 1, 'msj' => 'Especialidad actualizada', 'especialidades' => $especialidades];
+            $v = view('fragm.especialidades_cm',[
+                'especialidades_cm' => $especialidades
+            ])->render();
+            return ['estado' => 1, 'msj' => 'Especialidad actualizada', 'v' => $v];
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();
@@ -6291,11 +6717,30 @@ class AdministradorCmController extends Controller
 
             $nuevo_contrato->save();
 
-            $profesionales_contratados = ContratoProfesionalInstitucion::select('contrato_profesional_institucion.*','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad')
-            ->join('especialidades','especialidades.id','contrato_profesional_institucion.id_profesion')
-            ->join('tipos_especialidad','tipos_especialidad.id','contrato_profesional_institucion.id_especialidad')
-            ->where('contrato_profesional_institucion.id_institucion',$institucion->id)
+            $profesionales_contratados = ProfesionalesLugaresAtencion::select('profesionales.*','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad','sub_tipo_especialidad.nombre as sub_tipo_especialidad')
+            ->join('profesionales','profesionales_lugares_atencion.id_profesional','=','profesionales.id')
+            ->join('especialidades','profesionales.id_especialidad','=','especialidades.id')
+            ->leftjoin('tipos_especialidad','profesionales.id_tipo_especialidad','=','tipos_especialidad.id')
+            ->leftjoin('sub_tipo_especialidad','profesionales.id_sub_tipo_especialidad','=','sub_tipo_especialidad.id')
+            ->where('profesionales_lugares_atencion.id_lugar_atencion',$institucion->id_lugar_atencion)
             ->get();
+
+            foreach($profesionales_contratados as $profesional){
+                $contrato = ContratoDependienteProfesional::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$institucion->id_lugar_atencion)->first();
+                if($contrato){
+                    $profesional->contrato = $contrato;
+                    $especialidad_contrato = Especialidad::find($contrato->id_especialidad);
+                    $profesional->especialidad_contrato = $especialidad_contrato;
+                    $tipo_especialidad = TipoEspecialidad::find($contrato->id_tipo_especialidad);
+                    if($tipo_especialidad) $profesional->tipo_especialidad_contrato = $tipo_especialidad->nombre;
+                    $sub_tipo_especialidad = SubTipoEspecialidad::find($contrato->id_sub_tipo_especialidad);
+                    if($sub_tipo_especialidad) $profesional->sub_tipo_especialidad_contrato = $sub_tipo_especialidad->nombre;
+
+                }else{
+                    $profesional->contrato = null;
+                }
+                $profesional->horas_semanales = 45;
+            }
 
             $v = view('fragm.profesionales_contratados',[
                 'profesionales_contratados' => $profesionales_contratados,

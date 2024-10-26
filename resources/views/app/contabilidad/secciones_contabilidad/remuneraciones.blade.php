@@ -73,7 +73,7 @@
                                                 </div>
                                             </div>
                                             <div style="overflow-x:auto;">
-                                                <table id="#" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
+                                                <table id="tabla_remuneraciones_contabilidad" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
                                                     <thead>
                                                         <tr>
                                                             <th class="text-center align-middle">Mes</th>
@@ -93,6 +93,36 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        @foreach($profesionales_contratados as $profesional)
+                                                        <tr>
+                                                            <td class="align-middle text-center">
+                                                                <span><strong><?php echo date('m') ?></strong></span>
+                                                            </td>
+                                                            <td class="align-middle text-center">
+                                                                {{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}
+                                                            </td>
+                                                            <td class="align-middle text-center">
+                                                                {{ number_format($profesional->monto_imponible,0,',','.') }}
+                                                            </td>
+                                                            <td class="align-middle text-center"></td>
+                                                            <td class="align-middle text-center"></td>
+                                                            <td class="align-middle text-center"></td>
+                                                            <td class="align-middle text-center"></td>
+                                                            <td class="align-middle text-center"></td>
+                                                            <td class="align-middle text-center"></td>
+                                                            <td class="align-middle text-center"></td>
+                                                            <td class="align-middle text-center"></td>
+                                                            <td class="align-middle text-center"></td>
+                                                            <td class="align-middle text-center"></td>
+                                                            <td class="align-middle text-center">
+                                                                <button type="button" class="btn btn-success btn-sm" onclick="editar_remuneracionc();">
+                                                                    <i class="feather icon-edit"></i> Editar</button>
+                                                                    <button type="button" class="btn btn-danger btn-sm">
+                                                                    <i class="feather icon-x-circle"></i>E</button>
+                                                            </td>
+                                                        </tr>
+
+                                                        @endforeach
                                                         <tr>
                                                             <td class="align-middle text-center">
                                                                 <span><strong>m12</strong></span>
@@ -247,7 +277,7 @@
                                                 </div>
                                             </div>
                                             <div style="overflow-x:auto;">
-                                                <table id="#" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
+                                                <table id="tabla_leyes_sociales" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
                                                     <thead>
                                                         <tr>
                                                             <th class="text-center align-middle">Nombre / Rut</th>
@@ -301,7 +331,7 @@
 
                                                 </div>
                                         </div>
-                                                <table id="#" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
+                                                <table id="tabla_totales_leyes_sociales" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
                                                 <h5>TOTALES</h5>
                                                     <thead>
                                                         <tr>
@@ -371,7 +401,7 @@
                                                 </div>
                                             </div>
                                             <div style="overflow-x:auto;">
-                                                <table id="#" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
+                                                <table id="tabla_mutuales_cajas_compensacion" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
                                                     <thead>
                                                         <tr>
                                                             <th class="text-center align-middle">Nombre / Rut</th>
@@ -425,7 +455,7 @@
 
                                                 </div>
                                         </div>
-                                            <table id="#" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
+                                            <table id="tabla_totales_mut_cajas" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
                                             <h5>TOTALES</h5>
                                                 <thead>
                                                     <tr>

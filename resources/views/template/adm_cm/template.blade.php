@@ -368,6 +368,72 @@
                 responsive: true,
             });
 
+            $('#tabla_laboratorios table').DataTable({
+                responsive: true,
+            });
+
+            $('#especialidades_cm').DataTable({
+                responsive: true,
+            });
+
+            $('#area_cm').DataTable({
+                responsive: true,
+            });
+
+            $('#tabla_boxes_atencion').DataTable({
+                responsive: true,
+            });
+
+            $('#bodegas_tabla').DataTable({
+                responsive: true,
+            });
+
+            $('#tabla_remuneraciones_contabilidad').DataTable({
+                responsive: true,
+            });
+
+            $('#tabla_leyes_sociales').DataTable({
+                responsive: true
+            });
+
+            $('#tabla_totales_leyes_sociales').DataTable({
+                responsive: true
+            });
+
+            $('#tabla_mutuales_cajas_compensacion').DataTable({
+                responsive: true
+            });
+
+            $('#tabla_totales_mut_cajas').DataTable({
+                responsive: true
+            });
+
+            $('#tab_finiquitos').DataTable({
+                responsive: true
+            });
+
+            $('#tab_vacaciones').DataTable({
+                responsive: true
+            });
+
+            $('#tabla_licencias').DataTable({
+                responsive: true
+            });
+
+            $('#tabla_pago_prof_centro').DataTable({
+                responsive: true
+            });
+
+            $('#tabla_pago_otprof_centro').DataTable({
+                responsive: true
+            });
+            $('#tabla_liquidaciones_profesional').DataTable({
+                responsive: true
+            });
+            $('#tabla_prof_liquidaciones').DataTable({
+                responsive: true
+            });
+
             {{--  mensaje de al registrar ficha clinica  --}}
             @if(session('mensaje'))
                 swal({

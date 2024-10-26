@@ -64,17 +64,7 @@
                             <input class="form-control form-control-sm" name="cm_prof_cobro_extras" id="cm_prof_cobro_extras" type="text">
                         </div>
                     </div>
-					<div class="col-sm-4">
-                       <div class="form-group fill">
-                            <label class="floating-label">Código</label>
-                            <input class="form-control form-control-sm" name="cm_prof_aceptacion" id="cm_prof_aceptacion" type="text">
-                        </div>
-                    </div>
-					<div class="col-sm-4">
-                       <div class="form-group fill">
-                            <button type="button" class="btn btn-success btn-sm" >Solicitar  Código </button>
-                        </div>
-                    </div>
+
 					<div class="col-sm-12">
                         <button type="button" class="btn btn-info btn-sm float-right" data-toggle="collapse" data-target=".info-basica" aria-expanded="false" aria-controls="info-basica-1 info-basica-2">
                             <i class="feather icon-check-square"></i> Guardar cambios

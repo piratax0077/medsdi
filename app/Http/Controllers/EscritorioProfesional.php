@@ -5117,6 +5117,11 @@ class EscritorioProfesional extends Controller
         return view('app.profesional.receta_online.historial_mensajes',['mis_mensajes' => $mis_mensajes]);
      }
 
+     public function buscar_rut_profesional_bodega(Request $request){
+        $responsables = Profesional::where('rut','like',$request->rut.'%')->get();
+        return json_encode($responsables);
+    }
+
      public function dame_historial_mensajes_json(){
         $mis_mensajes = Mensajes::where('id_receptor', Auth::user()->id)->get();
 

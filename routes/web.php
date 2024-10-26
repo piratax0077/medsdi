@@ -555,6 +555,7 @@ Route::group([
     Route::get('cambio_estado_lugar_atencion', [App\Http\Controllers\EscritorioProfesional::class, 'cambio_estado_lugar_atencion'])->name('profesional.cambio_estado_lugar_atencion');
 
     Route::get('/buscar_rut', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_rut_paciente'])->name('profesional.buscar_rut_paciente');
+
     Route::get('buscar_hora_medica', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_hora_medica'])->name('profesional.buscar_hora_medica');
     Route::get('buscar_asistente', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_asistente'])->name('profesional.buscar_asistente');
     Route::get('buscar_asistente_profesional', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_asistente_profesional'])->name('profesional.buscar_asistente_profesional');
@@ -721,6 +722,9 @@ Route::group([
 
 
 });
+
+Route::post('/buscar_rut_profesional_bodega', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_rut_profesional_bodega'])->name('profesional.buscar_rut_profesional_bodega');
+Route::post('/guardar_responsable_bodega', [App\Http\Controllers\BodegasController::class,'guardar_responsable_bodega'])->name('bodega.guardar_responsable_bodega');
 
 Route::group([
     // 'middleware' => ['guest', 'role:Profesional|Paciente|Admin'],
@@ -1174,7 +1178,7 @@ Route::group([
 
 /** LABORATORIO  */
 Route::group([
-    'middleware' => ['role:Laboratorio|Admin'],
+    'middleware' => ['role:Laboratorio|Admin|Institucion'],
     'prefix' => 'Laboratorio',
 ], function () {
     Route::get('/Laboratorio/home', [App\Http\Controllers\LaboratorioController::class, 'home'])->name('app.laboratorio.adm_general.home');
@@ -1209,6 +1213,8 @@ Route::group([
 	Route::get('/Laboratorio/proveedores_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'proveedores_laboratorio'])->name('app.laboratorio.lab_profesional.proveedores_laboratorio');
 	Route::get('/Laboratorio/recepcion_muestras', [App\Http\Controllers\LaboratorioController::class, 'recepcion_muestras'])->name('app.laboratorio.lab_profesional.recepcion_muestras');
 	Route::get('/Laboratorio/solicitud_exam_laboratorio_profesional', [App\Http\Controllers\LaboratorioController::class, 'solicitud_exam_laboratorio_profesional'])->name('app.laboratorio.lab_profesional.solicitud_exam_laboratorio_profesional');
+    Route::get('/dame_laboratorio/{id}', [App\Http\Controllers\LaboratorioController::class, 'dame_laboratorio'])->name('app.laboratorio.lab_profesional.dame_laboratorio');
+    Route::post('editar_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'editar_laboratorio'])->name('laboratorio.editar_laboratorio');
 });
 
 
@@ -1384,6 +1390,7 @@ Route::group([
     Route::post('/Mantencion/editar', [App\Http\Controllers\ManejoContratoController::class, 'editarMantencion'])->name('adm_cm.editar_mantencion');
 	Route::post('/Personal/horario/editar', [App\Http\Controllers\ManejoContratoController::class, 'modificarHorario'])->name('adm_cm.personal.horario.editar');
 	Route::get('/profesionales/liquidacion', [App\Http\Controllers\AdministradorCmController::class, 'adm_liquidacion_profesionales'])->name('adm_cm.liquidacion_profesionales');
+    Route::post('/profesional/liquidacion',[App\Http\Controllers\AdministradorCmController::class,'adm_liquidacion_profesional'])->name('adm_cm.liquidacion_profesional');
 
 	Route::get('/liquidacion_profesionales', [App\Http\Controllers\AdministradorCmController::class, 'liquidacion_profesionales'])->name('app.adm_cm.liquidacion_profesionales');
 	Route::post('/Personal/finalizar', [App\Http\Controllers\ManejoContratoController::class, 'desasociarPersonalAsistente'])->name('adm_cm.personal.finalizar');
@@ -1431,6 +1438,7 @@ Route::group([
     Route::post('/Administracion/Comercial/remuneracion/registrar', [App\Http\Controllers\RemuneracionesController::class, 'registrar'])->name('adm_cm.remuneracion.registrar');
     Route::post('/Administracion/Comercial/remuneracion/pagada', [App\Http\Controllers\RemuneracionesController::class, 'pagada'])->name('adm_cm.remuneracion.pagada');
 	/** CONTABILIDAD */
+    Route::get('/Contabilidad',[App\Http\Controllers\ContabilidadController::class, 'index'])->name('contabilidad.home');
     Route::get('/Contabilidad/LibroContable', [App\Http\Controllers\AdministradorCmController::class, 'ContadorLibroContable'])->name('contabilidad.secciones_contabilidad.contable');
     Route::get('/Contabilidad/Liquidaciones', [App\Http\Controllers\AdministradorCmController::class, 'ContadorLiquidaciones'])->name('contabilidad.secciones_contabilidad.liquidaciones');
     Route::get('/Contabilidad/Remuneraciones', [App\Http\Controllers\AdministradorCmController::class, 'ContadorRemuneraciones'])->name('contabilidad.secciones_contabilidad.remuneraciones');
@@ -1473,6 +1481,7 @@ Route::group([
     Route::post('eliminar_cuenta_bancaria_institucion',[App\Http\Controllers\AdministradorCmController::class, 'eliminar_cuenta_bancaria_institucion'])->name('adm_cm.eliminar_cuenta_bancaria_institucion');
 
     Route::post('registrar_profesional', [App\Http\Controllers\ManejoContratoController::class, 'registrarProfesional'])->name('adm_cm.registrar_profesional');
+    Route::post('registrar_profesional_convenio', [App\Http\Controllers\ManejoContratoController::class, 'registrarProfesionalConvenio'])->name('adm_cm.liquidacion_profesional');
     Route::post('registrar_asistente', [App\Http\Controllers\AdministradorCmController::class, 'registrar_asistente'])->name('adm_cm.registrar_asistente');
     Route::post('eliminar_asistente', [App\Http\Controllers\AdministradorCmController::class, 'eliminar_asistente'])->name('adm_cm.eliminar_asistente');
     Route::post('registrar_personal_mantencion', [App\Http\Controllers\AdministradorCmController::class, 'registrar_personal_mantencion'])->name('adm_cm.registrar_personal_mantencion');
@@ -1490,7 +1499,7 @@ Route::group([
     /** CONTROLES DE ALMACENAMIENTO */
     Route::get('controles_almacenamiento', [App\Http\Controllers\AdministradorCmController::class, 'controles_almacenamiento'])->name('adm_cm.controles_almacenamiento');
 	Route::post('agregar_area_cm',[App\Http\Controllers\AdministradorCmController::class, 'agregar_area_cm'])->name('adm_cm.agregar_area_cm');
-    Route::post('agregar_area_cm',[App\Http\Controllers\AdministradorCmController::class, 'agregar_area_cm'])->name('adm_cm.agregar_area_cm');
+    Route::post('editar_area_cm',[App\Http\Controllers\AdministradorCmController::class, 'editar_area_cm'])->name('adm_cm.editar_area_cm');
     Route::post('asignar_profesionales_area',[App\Http\Controllers\AdministradorCmController::class, 'asignar_profesionales_area'])->name('adm_cm.asignar_profesionales_area');
 
 });
@@ -1534,9 +1543,18 @@ Route::group([
     //Route::post('dame_profesional_servicio', [App\Http\Controllers\LaboratorioController::class, 'dame_profesional'])->name('laboratorio.dame_profesional');
     // Route::post('dame_profesional_servicio', [App\Http\Controllers\LaboratorioController::class, 'dame_profesional'])->name('laboratorio.dame_profesional_cm');
     Route::post('agregar_laboratorio',[App\Http\Controllers\LaboratorioController::class, 'agregar_laboratorio'])->name('laboratorio.agregar_laboratorio');
-
+    Route::post('eliminar_laboratorio',[App\Http\Controllers\LaboratorioController::class, 'eliminar_laboratorio'])->name('laboratorio.eliminar_laboratorio_cm');
 
 });
+
+Route::post('guardar_box_atencion', [App\Http\Controllers\BoxController::class, 'guardarBoxAtencion'])->name('guardar_box_atencion');
+Route::post('guardar_box_servicio', [App\Http\Controllers\BoxController::class, 'guardarBoxServicio'])->name('adm_cm.guardar_box_servicio');
+Route::get('dame_box/{id}', [App\Http\Controllers\BoxController::class, 'dameBox'])->name('dame_box');
+Route::post('editar_box_servicio', [App\Http\Controllers\BoxController::class, 'editarBoxServicio'])->name('adm_cm.editar_box_servicio');
+Route::post('eliminar_box_servicio', [App\Http\Controllers\BoxController::class, 'eliminarBoxServicio'])->name('adm_cm.eliminar_box_servicio');
+Route::post('finalizar_contrato',[App\Http\Controllers\AdministradorCmController::class,'finalizar_contrato'])->name('adm_cm.finalizar_contrato');
+Route::post('generar_liquidacion_profesional',[App\Http\Controllers\AdministradorCmController::class,'generar_liquidacion_profesional'])->name('adm_cm.generar_liquidacion_profesional');
+Route::post('eliminar_liquidacion_profesional',[App\Http\Controllers\AdministradorCmController::class,'eliminar_liquidacion_profesional'])->name('adm_cm.eliminar_liquidacion_profesional');
 
 Route::group([
 	'middleware' => ['role:Admin|Institucion|AsistenteAdm|Adm_Comercial|Adm_Institucion'],
@@ -2080,6 +2098,10 @@ Route::post('reporte_anual', [App\Http\Controllers\BodegasController::class,'rep
 Route::post('generar_reporte', [App\Http\Controllers\BodegasController::class,'generarReporte'])->name('bodegas.generar_reporte');
 Route::post('eliminar_registro_temperatura', [App\Http\Controllers\BodegasController::class,'eliminarRegistroTemperatura'])->name('bodegas.eliminar_registro_temperatura');
 Route::post('eliminar_producto', [App\Http\Controllers\BodegasController::class,'eliminarProductoBodega'])->name('bodegas.eliminar_producto');
+Route::post('editar_bodega', [App\Http\Controllers\BodegasController::class,'editarBodega'])->name('bodegas.editar_bodega');
+Route::post('/guardar_bodega', [App\Http\Controllers\BodegasController::class,'guardar_registro_bodega'])->name('bodega.guardar_bodega');
+Route::post('/eliminar_bodega', [App\Http\Controllers\BodegasController::class,'eliminar_registro_bodega'])->name('bodega.eliminar_bodega');
+Route::post('/editar_registro_bodega', [App\Http\Controllers\BodegasController::class,'editar_registro_bodega'])->name('bodega.editar_registro_bodega');
 // Convenios con controlador del tipo resource
 Route::resource('convenios', App\Http\Controllers\ConveniosController::class);
 Route::get('/dameInfoConvenio/{id}', [App\Http\Controllers\ConveniosController::class,'dameInfoConvenio'])->name('convenios.dameInfoConvenio');

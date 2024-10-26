@@ -73,7 +73,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if ($registro_personal)
+                            @if (isset($registro_personal))
                                 @foreach ($registro_personal as $personal)
                                     <tr>
                                         <td class="align-middle text-center">

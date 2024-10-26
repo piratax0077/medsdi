@@ -67,7 +67,10 @@
                                                 <div class="btn-group mr-2 float-right mt- mb-">
                                                     <div class="btn-group mr-2 float-right mt- mb-">
                                                         <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_contratoprofesional">
-                                                        <i class="feather icon-plus"></i> Registrar Contrato Profesional
+                                                        <i class="feather icon-plus"></i> Registrar Contrato Profesional </button>
+                                                        {{-- <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#liq_prof_institucion">
+                                                            <i class="feather icon-plus"></i> Registrar Convenio Profesional </button> --}}
+                                                            <button type="button" class="btn btn-sm btn-outline-light" onclick="asociar_profesional();">Asociar Otros profesionales</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -100,10 +103,10 @@
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         @if($profesional->contrato !== null)
-                                                        <span>{{ $profesional->contrato->tipo_contrato == 1 ? 'INDEFINIDO' : '' }}</span><br>
-                                                        <span>{{ $profesional->contrato->fecha_inicio }}</span>
+                                                            <span>{{ $profesional->contrato->tipo_contrato == 1 ? 'INDEFINIDO' : '' }}</span><br>
+                                                            <span>{{ $profesional->contrato->fecha_inicio }}</span>
                                                         @else
-                                                        <span>Contrato no definido</span>
+                                                            <span>Convenio</span>
                                                         @endif
                                                     </td>
                                                     <td class="align-middle text-center">
@@ -112,18 +115,30 @@
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         @if($profesional->contrato !== null)
-                                                        <span>{{ $profesional->horas_semanales }} horas semanales <br> ${{ number_format($profesional->contrato->monto_imponible, 0, ",", ".") }}</span>
+                                                            @if(!$profesional->es_convenio)
+                                                                <span>{{ $profesional->horas_semanales }} horas semanales <br> ${{ number_format($profesional->contrato->monto_imponible, 0, ",", ".") }}</span>
+                                                            @else
+                                                            <span> ${{ number_format($profesional->contrato->valor_fijo, 0, ",", ".") }}</span>
+                                                            @endif
                                                         @else
                                                         <span>Contrato no definido</span>
                                                         @endif
                                                     </td>
                                                     <td class="align-middle text-center">
                                                         @if($profesional->contrato !== null)
-                                                        <button type="button" class="btn btn-success btn-sm" onclick="editar_datosprofesionalc({{ $profesional->id }});">
-                                                        <i class="feather icon-edit"></i> Editar</button>
+                                                            @if(!$profesional->es_convenio)
+                                                                <button type="button" class="btn btn-success btn-sm" onclick="editar_datosprofesionalc({{ $profesional->id }});">
+                                                                <i class="feather icon-edit"></i> Editar</button>
 
-                                                        <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_profesional({{ $profesional->id}}, {{ $profesional->contrato->id }}, '{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}');">
-                                                        <i class="feather icon-x-circle"></i> Desasociar</button>
+                                                                <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_profesional({{ $profesional->id}}, {{ $profesional->contrato->id }}, '{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}');">
+                                                                <i class="feather icon-x-circle"></i> Desasociar</button>
+                                                            @else
+                                                                <button type="button" class="btn btn-success btn-sm" onclick="editar_datosprofesionalc_convenio({{ $profesional->id }});">
+                                                                <i class="feather icon-edit"></i> Editar</button>
+
+                                                                <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_profesional_convenio({{ $profesional->id}}, {{ $profesional->contrato->id }}, '{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}');">
+                                                                <i class="feather icon-x-circle"></i> Desasociar</button>
+                                                            @endif
                                                         @else
                                                         <button type="button" class="btn btn-success btn-sm disabled" onclick="editar_datosprofesionalc({{ $profesional->id }});">
                                                             <i class="feather icon-edit"></i> Editar</button>
@@ -327,6 +342,7 @@
 
     @include('app.contabilidad.modals.editar_asistentes')
     @include('app.adm_cm.modales.personal.editar_profesional')
+    @include('app.adm_cm.modales.personal.editar_profesional_convenio')
     @include('app.adm_cm.modales.personal.editar_administrativos')
     @include('app.adm_cm.modales.personal.editar_mantencion')
 
@@ -335,10 +351,10 @@
     @include('app.adm_cm.modales.personal.registrar_personal_limpieza_mantencion')
 
     @include('app.adm_cm.modales.personal.permisos_rol_admin')
+    @include('app.adm_cm.modal_adm.asociar_profesional')
 
-
-    {{-- @include('app.adm_cm.modal_adm.asociar_profesional') --}}
     @include('app.adm_cm.modales.personal.asociar_personal')
+    @include('app.adm_cm.amodales_nuevos.liquidacion_profesionales')
 @endsection
 
 @section('page-script')
@@ -532,6 +548,60 @@
         });
     }
 
+    function editar_datosprofesionalc_convenio(id){
+        $('#editar_profesional_cm_convenio').modal('show');
+        let url = "{{ url('Laboratorio/Profesionales/buscar') }}"+"/"+id;
+        $.ajax({
+            url: url,
+            type: "get",
+        })
+        .done(async function(data) {
+            console.log(data);
+            if (data != null)
+            {
+                if(data.estado == 1)
+                {
+                    console.log(data.registro.contrato);
+                    $('#editar_profesion_nuevo_profesional_convenio').val(data.registro.contrato.id_especialidad);
+                    cargar_tipos_especialidad_convenio(data.registro.contrato.id_especialidad, data.registro.contrato.id_tipo_especialidad);
+                    // data.direccion;
+                    cargar_subtipo_especialidad_convenio(data.registro.contrato.id_tipo_especialidad, data.registro.contrato.id_subtipo_especialidad);
+                    $('#editar_rut_nuevo_profesional_convenio').val(data.registro.contrato.rut);
+                    $('#editar_nombre_nuevo_profesional_convenio').val(data.registro.contrato.nombres);
+                    $('#editar_apellido1_nuevo_profesional_convenio').val(data.registro.contrato.apellido_uno);
+                    $('#editar_apellido2_nuevo_profesional_convenio').val(data.registro.contrato.apellido_dos);
+                    $('#editar_empleado_sexo_convenio').val(data.registro.sexo);
+                    $('#editar_fecha_nacimiento_convenio').val(data.registro.fecha_nacimiento);
+                    $('#editar_email_nuevo_profesional_convenio').val(data.registro.email);
+                    $('#editar_telefono1_nuevo_profesional_convenio').val(data.registro.telefono_uno);
+                    $('#editar_telefono2_nuevo_profesional_convenio').val(data.registro.telefono_dos);
+                    $('#editar_direccion_nuevo_profesional_convenio').val(data.registro.direccion.direccion);
+                    $('#editar_n_dpto_nuevo_profesional_convenio').val(data.registro.direccion.numero_dir);
+                    $('#editar_region_nuevo_profesional_convenio').val(data.registro.direccion.ciudad.id_region);
+                    try {
+                        await buscar_ciudad_editar_prof_convenio(data.registro.direccion.ciudad.id_region);
+                        $('#editar_comuna_nuevo_profesional_convenio').val(data.registro.direccion.id_ciudad);
+                    } catch (error) {
+                        console.error("Error al actualizar la ciudad:", error);
+                    }
+                    $('#editar_banco_nuevo_profesional_convenio').val(data.registro.contrato.id_banco);
+                    $('#editar_n_cta_nuevo_profesional_convenio').val(data.registro.contrato.numero_cuenta);
+                    $('#editar_sucursal_nuevo_profesional_convenio').val(data.registro.contrato.sucursal);
+                    // dias laborales
+                    $('#editar_dias_laborales_convenio').val(data.registro.contrato.dias_laborales.split(",")).select2();
+                    $('#editar_hora_entrada_convenio').val(data.registro.contrato.hora_ingreso);
+                    $('#editar_hora_salida_convenio').val(data.registro.contrato.hora_salida);
+                    $('#editar_hora_entrada_colacion_convenio').val(data.registro.contrato.hora_inicio_colacion);
+                    $('#editar_hora_salida_colacion_convenio').val(data.registro.contrato.hora_termino_colacion);
+                }
+            }else{
+
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
 
     function editar_nuevo_empleado_administrativo(){
         let valido = 1;
@@ -852,6 +922,108 @@
 
                     if(id_subtipo_especialidad != null)
                         $('#edit_sub_especialidad_nuevo_profesional').val(id_subtipo_especialidad);
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar los subtipos de especialidad",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar los subtipos de especialidad",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function cargar_tipos_especialidad_convenio(id_especialidad, id_tipo_especialidad = null){
+        let url = "{{ route('web.profesional.buscar_tipo_especialidad') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data:{
+                id_especialidad: id_especialidad
+            },
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data != null)
+            {
+                if(data.estado == 1)
+                {
+                    $('#editar_especialidad_nuevo_profesional_convenio').empty();
+                    $('#editar_especialidad_nuevo_profesional_convenio').append('<option value="">Seleccione el tipo de especialidad</option>');
+                    data.registros.forEach(tipo => {
+                        $('#editar_especialidad_nuevo_profesional_convenio').append('<option value="'+tipo.id+'">'+tipo.nombre+'</option>');
+                    });
+
+                    if(id_tipo_especialidad != null)
+                        $('#editar_especialidad_nuevo_profesional_convenio').val(id_tipo_especialidad);
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar los tipos de especialidad",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+            }
+            else
+            {
+                swal({
+                    title: "Error",
+                    text: "Error al cargar los tipos de especialidad",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function cargar_subtipo_especialidad_convenio(id_tipo_especialidad, id_subtipo_especialidad = null){
+        let url = "{{ route('web.profesional.buscar_sub_tipo_especialidad') }}";
+        $.ajax({
+            url: url,
+            type: "get",
+            data:{
+                id_tipo_especialidad: id_tipo_especialidad
+            },
+        })
+        .done(function(data) {
+            console.log(data);
+            if (data != null)
+            {
+                if(data.estado == 1)
+                {
+                    $('#editar_sub_especialidad_nuevo_profesional_convenio').empty();
+                    $('#editar_sub_especialidad_nuevo_profesional_convenio').append('<option value="">Seleccione el subtipo de especialidad</option>');
+                    data.registros.forEach(subtipo => {
+                        $('#editar_sub_especialidad_nuevo_profesional_convenio').append('<option value="'+subtipo.id+'">'+subtipo.nombre+'</option>');
+                    });
+
+                    if(id_subtipo_especialidad != null)
+                        $('#editar_sub_especialidad_nuevo_profesional_convenio').val(id_subtipo_especialidad);
                 }
                 else
                 {
@@ -1587,7 +1759,9 @@ $.ajax({
 .done(function(data) {
     if (data.estado == 1)
     {
+        console.log(data);
         /** encontrado */
+        $('#agregar_profesional_id_profesional').val(data.registros[0].profesionales_id);
         $('#agregar_profesional_texto_ver_nombre_profesional').html(data.registros[0].profesionales_nombre+' '+data.registros[0].profesionales_apellido_uno+' '+data.registros[0].profesionales_apellido_dos);
         $('#agregar_profesional_texto_ver_telefono').html(data.registros[0].profesional_telefono_uno);
         $('#agregar_profesional_texto_ver_email').html(data.registros[0].profesional_email);

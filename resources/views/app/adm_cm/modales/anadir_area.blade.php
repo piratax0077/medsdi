@@ -8,7 +8,7 @@
             <div class="modal-body">
 				<form>
 					<div class="row">
-						<div class="col-sm-4">
+						<div class="col-sm-6">
 							<div class="form-group fill">
 								<!--Cargar áreas-->
 								<label class="floating-label">Área</label>
@@ -20,7 +20,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-6">
 							<div class="form-group fill">
 								<label class="floating-label">Responsable</label>
 								<select class="form-control form-control-sm" id="responsable_cargo_area">
@@ -31,33 +31,29 @@
 								</select>
 							</div>
 						</div>
+
+					</div>
+                    <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group fill">
-                                <label class="floating-label">Área</label>
-                                <input type="text" class="form-control form-control-sm" name="area" id="area">
+                                <label class="floating-label-activo">Contacto (email)</label>
+                                <input type="text" class="form-control form-control-sm" name="e_cont" id="e_cont">
                             </div>
                         </div>
-					</div>
-				<div class="row">
-					<div class="col-sm-4">
-						<div class="form-group fill">
-							<label class="floating-label-activo">Contacto (email)</label>
-							<input type="text" class="form-control form-control-sm" name="e_cont" id="e_cont">
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<div class="form-group fill">
-							<label class="floating-label-activo">Teléfono</label>
-							<input type="number" class="form-control form-control-sm" name="tel_c" id="tel_c">
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<div class="form-group fill">
-							<label class="floating-label-activo">N°/pers a cargo</label>
-							<input type="number" class="form-control form-control-sm" name="n_pers" id="n_pers">
-						</div>
-					</div>
-				</div>
+                        <div class="col-sm-4">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo">Teléfono</label>
+                                <input type="number" class="form-control form-control-sm" name="tel_c" id="tel_c">
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo">N°/pers a cargo</label>
+                                <input type="number" class="form-control form-control-sm" name="n_pers" id="n_pers">
+                            </div>
+                        </div>
+                    </div>
+                </form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_area_cm();">Agregar</button>
@@ -75,7 +71,7 @@
 
 function guardar_area_cm(){
     var tipo_area = $('#tipo_area').val();
-    var area = $('#area').val();
+    // var area = $('#area').val();
     var responsable_cargo = $('#responsable_cargo_area').val();
     var e_cont = $('#e_cont').val();
     var tel_c = $('#tel_c').val();
@@ -90,10 +86,10 @@ function guardar_area_cm(){
         mensaje += '<li>Debe seleccionar un tipo de área</li>';
     }
 
-    if (area == '') {
-        valido = 0;
-        mensaje += '<li>Debe seleccionar un área</li>';
-    }
+    // if (area == '') {
+    //     valido = 0;
+    //     mensaje += '<li>Debe seleccionar un área</li>';
+    // }
 
     if (responsable_cargo == 0) {
         valido = 0;
@@ -134,7 +130,7 @@ function guardar_area_cm(){
         url: '{{ ROUTE("adm_cm.agregar_area_cm") }}',
         type: 'POST',
         data: {
-            area: area,
+            // area: area,
             responsable_cargo: responsable_cargo,
             e_cont: e_cont,
             tel_c: tel_c,
