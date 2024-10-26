@@ -32,6 +32,9 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
 
+    <!-- fileupload-custom css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
+
     <!--Accordion-->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
 
@@ -105,10 +108,6 @@
 
     <!--Check-->
     <script src="{{ asset('js/check_atencion_medica.js') }}"></script>
-
-    <!-- file-upload Js -->
-    <script src="{{ asset('js/plugins/dropzone-amd-module.min.js') }}"></script>
-
     <!-- mensajes -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
@@ -133,18 +132,21 @@
 {{-- autocomplete
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
-
-
-    @yield('page-script')
-
-    <!-- flatpickr -->
+	<!-- flatpickr -->
     <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
+
+    <!-- file-upload Js -->
+    <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        var myDropzone_ges ;
 
         $(document).ready(function () {
             $('.loader-bg').hide();
+
+
+
         });
 
         function buscar_especialidad() {
@@ -247,8 +249,14 @@
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
         }
+
     </script>
 
+    @yield('page-script')
+
+    <script>
+
+    </script>
 </body>
 
 </html>

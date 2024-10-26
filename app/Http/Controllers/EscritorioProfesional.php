@@ -72,6 +72,7 @@ use App\Helpers\Funciones;
 use App\Models\AcompananteDependiente;
 use App\Models\FichaPediatriaGeneralTipo;
 use App\Models\Invitacion;
+use App\Models\Licencia;
 use App\Models\PacienteHistoricoDatosMedicos;
 use App\Models\PacientesDependientes;
 use App\Models\ProcedimientosCentroLugarAtencionProfesional;
@@ -3824,6 +3825,43 @@ class EscritorioProfesional extends Controller
         return $datos;
     }
 
+    public function eliminarAntecedenteAcademico(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id))
+        {
+            $error['id'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registro = ProfesionalAntecedenteAcademico::find($request->id);
+            if($registro)
+            {
+                $registro->delete();
+
+                $datos['estado'] = 1;
+                $datos['msj'] = 'Registro eliminado';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'registro no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+        return $datos;
+    }
+
     public function agregarFichaTipoOtorrino(Request $request)
     {
         $datos = array();
@@ -5153,6 +5191,21 @@ class EscritorioProfesional extends Controller
 
         return view('app.profesional.receta_online.mis_documentos', ['fichas' => $fichas]);
      }
+
+     public function mis_licencias()
+     {
+
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $licencias = Licencia::where('id_profesional', $profesional->id)
+                            ->with('Paciente')
+                            ->with('Profesional')
+                            ->with('LugarAtencion')
+                            ->get();
+
+
+        return view('app.profesional.receta_online.mis_licencias', ['licencias' => $licencias]);
+     }
+
 
      public function ver_mensaje($id){
         try {

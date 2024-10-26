@@ -14,22 +14,17 @@ class Licencia extends Model
 
     public function Paciente()
     {
-        return $this->hasOne(Paciente::class, 'id', 'id_paciente');
+        return $this->belongsToMany(Paciente::class, 'licencias', 'id_licencia', 'id_paciente');
     }
 
     public function FichaAtencion()
     {
-        return $this->hasOne(FichaAtencion::class, 'id', 'id_ficha_atencion');
+        return $this->belongsToMany(FichaAtencion::class, 'licencias', 'id_licencia', 'id_ficha_atencion');
     }
 
     public function Profesional()
     {
-        return $this->hasOne(Profesional::class, 'id', 'id_profesional');
-    }
-
-    public function LugarAtencion()
-    {
-        return $this->hasOne(LugarAtencion::class, 'id', 'id_lugar_atencion');
+        return $this->belongsToMany(Profesional::class, 'licencias', 'id_licencia', 'id_profesional');
     }
 }
 

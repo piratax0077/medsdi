@@ -213,10 +213,10 @@
                         html_Lugares_atencion += '<tr>';
                         html_Lugares_atencion += '    <td><span><strong>'+value.nombre+':</strong></span><br> '+value.direccion.direccion+' #'+value.direccion.numero_dir+', '+value.direccion.ciudad.nombre+'</td>';
                         if(value.convenio == '')
-                            html_Lugares_atencion += '    <td style="color:#666666;text-align:center">No informado</td>';
+                            html_Lugares_atencion += '    <td style="color:#666666;text-align:left">No informado</td>';
                         else
-                            html_Lugares_atencion += '    <td style="color:#666666;text-align:center">'+value.convenio.convenios+'</td>';
-                        html_Lugares_atencion += '    <td style="text-align:center"><img src="{{ asset('images/iconos/iphone.svg') }}" style="width: 10%;">'+value.telefono+'</td>';
+                            html_Lugares_atencion += '    <td style="color:#666666;text-align:left">'+value.convenio.convenios+'</td>';
+                        html_Lugares_atencion += '    <td style="text-align:left">'+value.telefono+'</td>';
                         html_Lugares_atencion += '</tr>';
 
 

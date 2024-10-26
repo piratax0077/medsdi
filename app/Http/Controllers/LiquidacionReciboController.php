@@ -275,4 +275,37 @@ class LiquidacionReciboController extends Controller
         return $datos;
 
     }
+
+    public function eliminarLiquidacion(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+
+        if($valido)
+        {
+            $registro = LiquidacionRecibo::find($request->id);
+
+            if($registro)
+            {
+                $registro->delete();
+                $datos['estado'] = 1;
+                $datos['msj'] = 'Registro eliminado';
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'registro no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campo requerido';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
 }

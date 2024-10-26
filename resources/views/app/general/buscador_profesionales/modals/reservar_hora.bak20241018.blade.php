@@ -2,8 +2,8 @@
 <div class="modal fade" id="reservar_hora" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="reservar_hora" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h6 class="modal-title text-white f-18">Reservar hora médica</h6>
+            <div class="modal-header bg-light">
+                <h6 class="modal-title text-primary f-18">Reservar hora médica</h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#reservar_hora').modal('hide');">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -15,7 +15,7 @@
                     <div class="col-md-6">
                         <div class="form-row">
                             <div class="form-group col-md-12 mb-2 mt-0">
-                                <label class="floating-label-activo-sm mb-0">Lugar de atención</label>
+                                <label class="floating-label-active-sm mb-0">Lugar de atención</label>
                                 <select class="form-control form-control-sm" id="modal_reserva_hora_lugar_atencion" name="modal_reserva_hora_lugar_atencion" onchange="carga_calendario_profesional();">
                                     <option value="">Seleccione</option>
                                 </select>
@@ -24,13 +24,13 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="mt-4">El Profesional atiende los días <span id="modal_reserva_dias_atencion" class="hljs-strong"></span></label>
+                        <label class="mt-4">El Profesional atiende los dias <span id="modal_reserva_dias_atencion" class="hljs-strong"></span></label>
                     </div>
 
                     <div class="col-md-12">
                         <div class="form-row">
                             <div class="form-group col-md-12 mb-2 mt-0">
-                                <label class="floating-label-activo-sm mb-0">Seleccione una fecha</label>
+                                <label class="floating-label-active-sm mb-0">Seleccione una fecha</label>
                                 <input class="form-control form-control-sm" type="date" name="modal_reserva_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_reserva_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  />
                             </div>
                         </div>
@@ -40,8 +40,8 @@
                             <div class="col-md-12 text-center">
                                 <h6 class="text-petroleo" id="modal_reserva_fecha_seleccionada"></h6>
                             </div>
-                            <div class="col-md-12">
-                                <div class="row mx-1 mx-auto" id="modal_reserva_hora_lista_horas">
+                            <div class="col-md-12 mx-auto" >
+                                <div class="row" id="modal_reserva_hora_lista_horas">
                                 </div>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <label class="label">Seleccione  lugar de Atención y día en el calendario. Luego haga clic en la hora disponible.</label>
+                        <label class="label">Seleccione  Lugar de Atención, Día en el calendario y haga click en la Hora Disponible.</label>
                     </div>
                 </div>
             </div>
@@ -65,9 +65,10 @@
         <div class="modal-content">
             <div class="modal-header bg-info pt-3 pb-2">
                 <h5 class="modal-title text-white text-center">Tomar hora</h5>
-                <button id="cerrar_tomar_hora" type="button" class="close close_agenda_agregar_paciente" onclick="$('#agenda_agregar_paciente').modal('hide');" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button id="cerrar_tomar_hora" type="button" class="close text-white close_agenda_agregar_paciente" onclick="$('#agenda_agregar_paciente').modal('hide');" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
+
                 {{--  BUSCADOR DE RUT  --}}
                 <div class="row div_rut_buscar">
                     <div class="col-sm-12 col-md-12">
@@ -84,10 +85,12 @@
                     </div>
                     <div class="col-sm-4 col-md-4 mb-3">
                         <button class="btn btn-info" onclick="buscar_paciente();" type="button" id="button-addon2">
-                            <i class="feather icon-search"></i> Buscar
+                            Buscar
                         </button>
                     </div>
                 </div>
+
+
                 <form id="form_reseva_de_horas">
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" id="reserva_hora_id_profesional" name="reserva_hora_id_profesional" value="">
@@ -193,7 +196,7 @@
 
                         <div class="col-sm-12 col-md-12 mt-1">
                             <div class="form-group">
-                                <label class="floating-label-activo-sm">Descripción reserva</label>
+                                <label class="floating-label">Descripción Reserva</label>
                                 <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion" id="reserva_hora_descripcion">
                             </div>
                         </div>
@@ -218,8 +221,8 @@
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-danger-light-c close_agenda_agregar_paciente" onclick="$('#agenda_agregar_paciente').modal('hide');" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
-                            <button type="button" onclick="agendar_hora();" class="btn btn-sm btn-info-light-c"><i class="feather icon-calendar"></i> Agendar Hora</button>
+                            <button type="button" class="btn btn-danger close_agenda_agregar_paciente" onclick="$('#agenda_agregar_paciente').modal('hide');" data-dismiss="modal">Cancelar</button>
+                            <button type="button" onclick="agendar_hora();" class="btn btn-info">Agendar Hora</button>
                         </div>
                     </div>
 
@@ -343,6 +346,7 @@
                                     <input type="tel" class="form-control form-control-sm" name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno">
                                 </div>
                             </div>
+
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Descrici&oacute;n Reserva</label>
@@ -376,14 +380,15 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger close_agenda_agregar_paciente"  onclick="$('#agenda_agregar_paciente').modal('hide');"><i class="feather icon-x"></i> Cancelar</button>
+                            <button type="button" class="btn btn-danger close_agenda_agregar_paciente"  onclick="$('#agenda_agregar_paciente').modal('hide');">Cancelar</button>
                             <button type="button" id="guardar_reserva_paciente" onclick="agendar_hora_paciente_nuevo();" class="btn btn-info">
-                                <i class="feather icon-check"></i> Tomar hora
+                                Tomar Hora
                             </button>
                         </div>
                     </div>
                 </form>
             </div>
+
         </div>
     </div>
 </div>

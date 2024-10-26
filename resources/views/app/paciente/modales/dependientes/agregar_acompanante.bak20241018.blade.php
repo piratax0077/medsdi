@@ -1,9 +1,9 @@
 <!-- Modal agregar acompanante -->
 <div class="modal fade" id="modal_agregar_acompanante" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Agregar acompañante de dependiente</h5>
+                <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Agregar Acompañante de Dependiente</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
@@ -11,7 +11,7 @@
                 <input type="hidden" name="modal_agregar_acompanante_id_paciente" id="modal_agregar_acompanante_id_paciente" value="">
                 <input type="hidden" name="modal_agregar_acompanante_id_paciente_dependiente" id="modal_agregar_acompanante_id_paciente_dependiente" value="">
 
-                <div class="form-row">
+                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group fill">
                             <label class="floating-label-activo-sm"><span style="color: red;">*</span>Rut:</label>
@@ -45,7 +45,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group fill">
                             <label class="floating-label-activo-sm"><span style="color: red;">*</span>Email:</label>
                             <input type="email" class="form-control form-control-sm" name="modal_agregar_acompanante_email" id="modal_agregar_acompanante_email" value=""/>
@@ -59,21 +59,21 @@
                         <div class="form-group fill">
                             <label class="floating-label-activo-sm">Tipo: <span style="color: red;">*</span></label>
                             <select class="form-control form-control-sm" name="modal_agregar_acompanante_tipo" id="modal_agregar_acompanante_tipo">
-                                <option value="1">Solo para este paciente dependiente</option>
-                                <option value="2">Para Todos mis pacientes dependientes</option>
+                                <option value="1">Solo para este Paciente Dependiente</option>
+                                <option value="2">Para Todos mis Pacientes Dependientes</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-               <!-- <hr>
+                <hr>
                 <div class="row">
                     <div class="col-md-12"><span style="color: red;">*</span>Campos requeridos</div>
-                </div>-->
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cerrar</button>
-                <button type="button" class="btn btn-info btn-sm" onclick="registrar_acompanante();"><i class="feather icon-check"></i> Registrar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" onclick="registrar_acompanante();">Registrar</button>
             </div>
         </div>
     </div>

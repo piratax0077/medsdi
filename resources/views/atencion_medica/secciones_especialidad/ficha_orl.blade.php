@@ -1,8 +1,32 @@
-{{-- BOTON DE INICIO DE LLAMADA --}}
-@if ( $hora_medica->tipo_hora_medica == 'T' )
-    <button type="button" style="margin-top: 10px;" class="btn btn-success" id="startCallButton" onclick="iniciar_llamada_j({{ $hora_medica->id_jitsi_video_consulta }});">Inicio de LLamada</button>
-    <div id="jaas-container" style="display: none;"></div>
-@endif
+<style type="text/css">
+    .ng_esp {
+        /* Common */
+    font : 13px 'Wingdings 3';
+        color : #0000ff;
+        width: 60px; background-color: #f6faf9; color: #FF0000;text-align:center; font-weight: bold; font-size: x-large;
+        background-color: #f6faf9;
+        text-align:center;
+        font-weight: bold;
+        display: block;
+        width: 100%;
+        padding: 0.4rem 0.5rem 0.3rem 0.5rem!important;
+        font-size: 1.0rem;
+        font-weight: 400;
+        line-height: 1.5;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 3px;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    @font-face {
+        font-family: 'Wingdings 3';
+
+    }
+</style>
+
+@include('general.secciones_ficha.video_llamada.seccion_jaas_container')
 
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2">
@@ -1590,104 +1614,4 @@
         }
 
     </script>
-
-    {{-- video llamada --}}
-	<script src='https://8x8.vc/{{ env('JITSI_APP_ID') }}/external_api.js' async></script>
-	<style>
-		#jaas-container {
-			height: 50em;
-			width: 50%;
-		}
-	</style>
-	<script type="text/javascript">
-		function inicio_llamada(token, nombre)
-		{
-			const api = new JitsiMeetExternalAPI("8x8.vc", {
-				roomName: "{{ env('JITSI_APP_ID') }}/"+nombre,
-				parentNode: document.querySelector('#jaas-container'),
-				jwt: token,
-				configOverwrite: {
-					startWithAudioMuted: false,
-					enableNoisyMicDetection: true,
-					// toolbarButtons: ['hangup', 'microphone', 'camera','chat'],
-					prejoinPageEnabled: true,
-					// Transcription options.
-					transcription: {
-						enabled: false,
-
-						// ./src/react/features/transcribing/translation-languages.json.
-						translationLanguages: ['en', 'es', 'fr', 'ro'],
-
-						// Important languages to show on the top of the language list.
-						translationLanguagesHead: ['en'],
-
-						// If true transcriber will use the application language.
-						// The application language is either explicitly set by participants in their settings or automatically
-						// detected based on the environment, e.g. if the app is opened in a chrome instance which
-						// is using french as its default language then transcriptions for that participant will be in french.
-						// Defaults to true.
-						useAppLanguage: true,
-
-						// Transcriber language. This settings will only work if "useAppLanguage"
-						// is explicitly set to false.
-						// Available languages can be found in
-						// ./src/react/features/transcribing/transcriber-langs.json.
-						preferredLanguage: 'en-US',
-
-						// Enables automatic turning on transcribing when recording is started
-						autoTranscribeOnRecord: false,
-					},
-				},
-				interfaceConfigOverwrite: {
-					DISABLE_DOMINANT_SPEAKER_INDICATOR: true,
-					AUDIO_LEVEL_PRIMARY_COLOR: 'rgba(255,255,255,0.4)',
-					AUDIO_LEVEL_SECONDARY_COLOR: 'rgba(255,255,255,0.2)',
-				},
-				lang: 'es',
-			});
-		}
-
-		function iniciar_llamada_j(id)
-		{
-			$('#jaas-container-mensaje').hide();
-			$('#jaas-container-mensaje').html('');
-
-			url = "{{ route('jitsi.buscar.meet') }}";
-			$.ajax({
-
-				url: url,
-				type: "GET",
-				data: {
-					id : id,
-				},
-			})
-			.done(function(data)
-			{
-				// console.log('-----------------------');
-				// console.log(data);
-				// console.log('-----------------------');
-				if(data.estado == 1)
-				{
-					inicio_llamada(data.registro.token_moderator, data.registro.nombre_grupo);
-					$('#jaas-container').show();
-				}
-				else
-				{
-					mensaje = 'Se presento un problema al cargar información de la llamada';
-					$('#jaas-container').hide();
-					$('#jaas-container-mensaje').show();
-					$('#jaas-container-mensaje').html(mensaje);
-
-					setTimeout(function(){
-						$('#jaas-container-mensaje').hide();
-						$('#jaas-container-mensaje').html('');
-					}, 2000);
-				}
-			})
-			.fail(function(jqXHR, ajaxOptions, thrownError) {
-				console.log(jqXHR, ajaxOptions, thrownError)
-			});
-		}
-	  </script>
-	{{-- video llamada --}}
 @endsection

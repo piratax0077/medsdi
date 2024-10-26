@@ -32,7 +32,7 @@
                                     <h5 class="text-white f-20 d-inline">Mis Dependientes {{ $titulo }}</h5>
 
                                     {{-- @if ( $tipo_dependencias != '4' ) --}}
-                                        <button type="button" class="btn btn-light btn-sm d-inline float-md-right" id="btn-agregar-dep" name="btn-agregar-dep"><i class="fas fa-plus"></i> Agregar dependiente</button>
+                                        <button type="button" class="btn btn-purple-light-c btn-sm d-inline" id="btn-agregar-dep" name="btn-agregar-dep"><i class="feather icon-plus"></i> Agregar</button>
                                     {{-- @endif --}}
                                     <input type="hidden" name="dependencia" id="dependencia" value="{{ $dependencia }}">
                                     <input type="hidden" name="tipo_dependencias" id="tipo_dependencias" value="{{ $tipo_dependencias }}">
@@ -49,7 +49,7 @@
                     @if ($registros->count() >0 )
                         @foreach ($registros as $registro)
                             @if ($registro->paciente)
-                                <div class="col">
+                                <div class="col mb-4">
                                     <div class="card">
                                         @if ($dependencia == 1)
                                             <a href="{{ ROUTE('paciente.dependiente.home',['id_dependiente_activo'=>$registro->paciente->id]) }}">
@@ -70,7 +70,7 @@
                                         </a>
                                         <div class="pb-3 px-2 pt-0 mt-0 text-center">
                                             <div type="button" class="btn btn-sm btn-purple" onclick="ver_acomp_dep('{{ $paciente->id }}', '{{ $registro->paciente->id }}')"><i class="feather icon-user"></i> Ver acompañantes</div>
-                                            <div type="button" class="btn btn-sm btn-info" onclick="abrir_agregar_acompanante('{{ $registro->paciente->id }}', '{{ $paciente->id }}');"><i class="feather icon-plus"></i> Añadir acompañante</div>
+                                            <div type="button" class="btn btn-sm btn-success-light-c" onclick="abrir_agregar_acompanante('{{ $registro->paciente->id }}', '{{ $paciente->id }}');"><i class="feather icon-plus"></i> Añadir acompañante</div>
                                         </div>
                                     </div>
                                 </div>

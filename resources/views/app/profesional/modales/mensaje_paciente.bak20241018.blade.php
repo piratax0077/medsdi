@@ -1,33 +1,31 @@
-<!-- Modal -->
+
+  <!-- Modal -->
   <div class="modal fade" id="modalMensajePaciente" tabindex="-1" aria-labelledby="modalMensajePacienteLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modalMensajePacienteLabel">Mensaje a paciente</h5>
-          <button type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <div class="form-row">
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="form-group">
-                        <label class="floating-label-activo-sm" for="exampleFormControlInput1">Asunto</label>
-                        <input type="text" class="form-control form-control-sm" id="exampleFormControlInput1">
-                    </div>
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Asunto</label>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Asunto">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Mensaje</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <!-- [ Main Content ] start -->
+                <div class="dropzone" id="mis-archivos-paciente" action="{{ route('profesional.imagen.carga') }}">
                 </div>
-                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <label class="floating-label-activo-sm" for="exampleFormControlTextarea1">Mensaje</label>
-                    <textarea class="form-control form-control-sm" id="exampleFormControlTextarea1" rows="3"></textarea>
-                </div>
-                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <!-- [ Main Content ] start -->
-                    <div class="dropzone" id="mis-archivos-paciente" action="{{ route('profesional.imagen.carga') }}">
-                    </div>
-                    <!-- [ file-upload ] end -->
-                </div>
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                    <button type="button" class="btn btn-info" onclick="enviar_mensaje_paciente_confirmar()"><i class="feather icon-mail"></i> Enviar mensaje</button>
-                </div>
+                <!-- [ file-upload ] end -->
+            </div>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="enviar_mensaje_paciente_confirmar()">Enviar</button>
         </div>
       </div>
     </div>
@@ -35,6 +33,7 @@
   <input type="hidden" id="id_paciente_mensaje" name="id_paciente_mensaje" value="">
   <script>
     document.addEventListener('DOMContentLoaded', function(){
+
         // Dropzone
         Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone(".dropzone", {

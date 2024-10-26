@@ -421,6 +421,12 @@ Route::group([
     /** buscar profesional por rut */
     Route::get('buscar/profesional/rut', [App\Http\Controllers\EscritorioPaciente::class, 'buscar_informacion_profesional'])->name('paciente.buscar.prof.rut');
 
+    // carga imagen
+    Route::post('/archivo/carga', [App\Http\Controllers\CargaImagenController::class, 'cargaArchivoTemp'])->name('paciente.archivo.carga');
+
+    /** registro de examen por paciente */
+    Route::post('/examen/registro', [App\Http\Controllers\EscritorioPaciente::class, 'cargaExamenPorPaciente'])->name('paciente.examen.registro');
+
 });
 
 /** INICIO DE LICENCIA */
@@ -530,6 +536,7 @@ Route::group([
     Route::get('Mis_examenes', [App\Http\Controllers\EscritorioProfesional::class, 'mis_examenes'])->name('profesional.mis_examenes');
     Route::get('Mis_certificados', [App\Http\Controllers\EscritorioProfesional::class, 'mis_certificados'])->name('profesional.mis_certificados');
     Route::get('Mis_documentos', [App\Http\Controllers\EscritorioProfesional::class, 'mis_documentos'])->name('profesional.mis_documentos');
+    Route::get('Mis_licencias', [App\Http\Controllers\EscritorioProfesional::class, 'mis_licencias'])->name('profesional.mis_licencias');
     Route::get('Mis_horas', [App\Http\Controllers\EscritorioProfesional::class, 'mis_horas'])->name('profesional.mis_horas');
     Route::get('Agendar_hora', [App\Http\Controllers\EscritorioProfesional::class, 'agendar_horas'])->name('profesional.agendar_hora');
     Route::get('Agendar_hora_nuevo_paciente', [App\Http\Controllers\EscritorioProfesional::class, 'agendar_hora_nuevo_paciente'])->name('profesional.agendar_hora_nuevo_paciente');
@@ -578,6 +585,7 @@ Route::group([
 	/** ANTECEDENTE ACADEMICO */
     Route::post('/profesional/modificar_antecedente_academico', [App\Http\Controllers\EscritorioProfesional::class, 'modificarAntecedenteAademico'])->name('profesional.editar_antecedente_academico');
 	Route::post('/profesional/agregar_antecedente_academico', [App\Http\Controllers\EscritorioProfesional::class, 'agregarAntecedenteAademico'])->name('profesional.agregar_antecedente_academico');
+	Route::post('/profesional/eliminar_antecedente_academico', [App\Http\Controllers\EscritorioProfesional::class, 'eliminarAntecedenteAcademico'])->name('profesional.eliminar_antecedente_academico');
 
 	/** REGISTRO DE FICHA TIPO  */
     Route::post('/profesional/agregar_ficha_tipo_otorrino', [App\Http\Controllers\EscritorioProfesional::class, 'agregarFichaTipoOtorrino'])->name('profesional.ficha_tipo_otorrino');
@@ -720,6 +728,7 @@ Route::group([
     Route::get('centro/procedimientos', [App\Http\Controllers\ProcedimientosCentroController::class, 'verRegistros_r'])->name('centro.procedimientos');
     Route::get('centro/procedimientos/eliminar', [App\Http\Controllers\ProcedimientosCentroLugarAtencionProfesionalController::class, 'modificar_r'])->name('centro.procedimientos.eliminar');
 
+    Route::get('Receta_Online/licencia/pdf', [App\Http\Controllers\LicenciaAprobacionController::class, 'pdfLicenciaPaciente'])->name('profesional.licencia.pdf');
 
 });
 
@@ -1935,6 +1944,7 @@ Route::group([
 ], function () {
     Route::post('/liquidacion/agregar', [App\Http\Controllers\LiquidacionReciboController::class, 'agregarLiquidacion'])->name('liquidacion.agregar');
     Route::post('/liquidacion/modificar', [App\Http\Controllers\LiquidacionReciboController::class, 'modificarLiquidacion'])->name('liquidacion.modificar');
+    Route::post('/liquidacion/eliminar', [App\Http\Controllers\LiquidacionReciboController::class, 'eliminarLiquidacion'])->name('liquidacion.eliminar');
 });
 
 /** PRODUCTO BODEGA */

@@ -30,7 +30,11 @@
                     <div class="card">
                         <div class="card-header bg-light d-flex justify-content-between">
                             <h4 class="text-c-blue f-22">Mis mensajes</h4>
+<<<<<<< HEAD
                             <button class="btn btn-primary btn-sm float-right" onclick="enviar_mensaje_a_profesional()"><i class="feather icon-mail"></i> Enviar mensaje</button>
+=======
+                            {{-- <button class="btn btn-primary btn-sm float-right"><i class="feather icon-mail"></i> Enviar mensaje</button> --}}
+>>>>>>> 305924c57b1c90640769a9424bfeb3825e657e3b
                         </div>
                         <div class="card-body">
                             <table id="historial_mensajes"

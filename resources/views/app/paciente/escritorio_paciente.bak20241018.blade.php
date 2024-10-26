@@ -24,34 +24,52 @@
 
         <div class="row row-cols-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4">
             <div class="col mb-3">
-                <div class="card subir mb-2 h-100 text-center pt-2" style="cursor:pointer">
+                <div class="card subir mb-2 h-100">
                     <a href="{{ ROUTE('paciente.agendar_hora') }}">
-                            <img class="wid-40 text-center mt-1" src="{{ asset('images/iconos/agenda.svg') }}">
+                        <div class="card-body text-center" style="cursor:pointer">
+                            <img class="wid-50 text-center mt-1" src="{{ asset('images/iconos/agenda.svg') }}">
                             <h5 class="mt-2"> Reservar hora médica </h5>
+                        </div>
                     </a>
                 </div>
             </div>
             <div class="col mb-3">
-                <div class="card subir mb-2 h-100 text-center pt-2" style="cursor:pointer">
+                <div class="card subir mb-3 h-100">
                     <a href="{{ ROUTE('paciente.mis_profesionales') }}">
-                            <img class="wid-50 text-center" src="{{ asset('images/iconos/profesionales.svg') }}">
+                        <div class="card-body text-center" style="cursor:pointer">
+                            <img class="wid-60 text-center" src="{{ asset('images/iconos/profesionales.svg') }}">
                             <h5 class="mt-2"> Mis profesionales </h5>
+                        </div>
                     </a>
                 </div>
             </div>
+                <!--
+                <div class="card subir">
+                    <a href="{{ ROUTE('paciente.mi_ficha') }}">
+                        <div class="card-body text-center" style="cursor:pointer">
+                            <img class="wid-60 text-center" src="{{ asset('images/iconos/ficha_1.svg') }}">
+                            <h5 class="mt-2"> Mi Ficha Médica Única </h5>
+                        </div>
+                    </a>
+                </div>
+                -->
             <div class="col mb-3">
-                <div class="card subir mb-2 h-100 text-center pt-2" style="cursor:pointer">
+                <div class="card subir mb-2 h-100">
                     <a href="{{ ROUTE('check_sdi') }}?urla=Inicio&urln=Mi_Ficha_Medica">
-                            <img class="wid-50 text-center" src="{{ asset('images/iconos/fmu.svg') }}">
+                        <div class="card-body text-center" style="cursor:pointer">
+                            <img class="wid-60 text-center" src="{{ asset('images/iconos/fmu.svg') }}">
                             <h5 class="mt-1"> Mi Ficha Médica Única </h5>
+                        </div>
                     </a>
                 </div>
             </div>
             <div class="col mb-3">
-                <div class="card subir mb-2 h-100 text-center pt-2" style="cursor:pointer">
+                <div class="card subir mb-2 h-100">
                     <a href="{{ ROUTE('paciente.receta') }}">
-                        <img class="wid-50" src="{{ asset('images/iconos/receta_online.svg') }}">
-                        <h5 class="mt-2">Receta Online </h5>
+                        <div class="card-body text-center" style="cursor:pointer">
+                            <img class="wid-60 text-center" src="{{ asset('images/iconos/receta_online.svg') }}">
+                            <h5 class="mt-2">Receta Online </h5>
+                        </div>
                     </a>
                 </div>
             </div>
@@ -133,7 +151,7 @@
                                                         <span style="font-weight:bold;">{{ date('d-m-Y', strtotime($hora->fecha_consulta)) }} {{ date('H:i', strtotime($hora->hora_inicio)) }} hrs</span>
                                                     </td>
                                                     <td class="align-middle">
-                                                        <span style="background-color: {{ $hora->color_estado }}; padding: 5px; border-radius: 12%; color: #fff; font-weight: 600;">{{ $hora->texto_estado }}</span>
+                                                        <span style="background-color: {{ $hora->color_estado }}; padding: 5px; border-radius: 12%;">{{ $hora->texto_estado }}</span>
 
                                                         {{-- <span class="badge badge-danger">Hora rechazada</span> --}}
                                                     </td>
@@ -203,14 +221,14 @@
                             </div>
                         </a>
                     </div>
-					<div class="card social-widget-card bg-c-info opacidad px-0">
-						<a href="{{ route('app.descarga') }}" class="btn" type="button" target="_blank">
-							<div class="card-body">
-								<img class="wid-30 mb-3" src="{{ asset('images/iconos/lock.svg') }}">
-								<h5 class="my-auto text-white">SDIPASS</h5>
-							</div>
-						</a>
-					</div>
+                    <div class="card social-widget-card bg-c-info opacidad px-0">
+                        <a href="{{ route('app.descarga') }}" class="btn" type="button" target="_blank">
+                            <div class="card-body">
+                                <img class="wid-30 mb-3" src="{{ asset('images/iconos/lock.svg') }}">
+                                <h5 class="my-auto text-white">SDIPASS</h5>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

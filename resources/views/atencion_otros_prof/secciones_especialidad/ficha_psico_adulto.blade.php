@@ -1,18 +1,6 @@
-{{-- @if ($info_video) --}}
 
-    {{-- <input type="hidden" name="meeting_number" id="meeting_number" value="{{ $info_video->id_call}}"> --}}
-    {{-- <input type="hidden" name="display_name" id="display_name" value="{{ $profesional->nombre.' '.$profesional->apellido_un }}"> --}}
-    {{-- <input type="hidden" name="meeting_pwd" id="meeting_pwd" value="{{ $info_video->pass_call}}"> --}}
-    {{-- <input type="hidden" name="meeting_role" id="meeting_role" value="0"> --}}
-    {{-- <input type="hidden" name="meeting_email" id="meeting_email" value="{{ $profesional->email }}"> --}}
-    {{-- <input type="hidden" name="meeting_lang" id="meeting_lang" value="es-ES"> --}}
-    {{-- <input type="hidden" name="meeting_china" id="meeting_china" value="0"> --}}
+@include('general.secciones_ficha.video_llamada.seccion_jaas_container')
 
-    {{-- <button type="button" class="btn btn-success" onclick="abrir_zoom();">Inicio de LLamada</button> --}}
-    <button type="button" class="btn btn-success" id="startCallButton">Inicio de LLamada</button>
-    <iframe id="zoomFrame" style="    background: #000;height: 200px;"></iframe>
-
-{{-- @endif --}}
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-2">
         <div class="row mx-0">
@@ -787,6 +775,63 @@
 @include('atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.modal_indicar_terapia')
 @include('atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.m_interconsulta_psi')
 @include('atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.informe_psico')
+
+{{-- video llamada --}}
+<script src='https://8x8.vc/vpaas-magic-cookie-f5b9f550ffbf44928ff69685ab1a3eb1/external_api.js' async></script>
+<style>html, body, #jaas-container { height: 100%; }</style>
+<script type="text/javascript">
+    window.onload = () => {
+      const api = new JitsiMeetExternalAPI("8x8.vc", {
+        roomName: "vpaas-magic-cookie-f5b9f550ffbf44928ff69685ab1a3eb1/MED-SDI",
+        parentNode: document.querySelector('#jaas-container'),
+                      // Make sure to include a JWT if you intend to record,
+                      // make outbound calls or use any other premium features!
+          jwt: "eyJraWQiOiJ2cGFhcy1tYWdpYy1jb29raWUtZjViOWY1NTBmZmJmNDQ5MjhmZjY5Njg1YWIxYTNlYjEvOWNkMTFkLVNBTVBMRV9BUFAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJqaXRzaSIsImlzcyI6ImNoYXQiLCJpYXQiOjE3MjYyODA0NTUsImV4cCI6MTcyNjI4NzY1NSwibmJmIjoxNzI2MjgwNDUwLCJzdWIiOiJ2cGFhcy1tYWdpYy1jb29raWUtZjViOWY1NTBmZmJmNDQ5MjhmZjY5Njg1YWIxYTNlYjEiLCJjb250ZXh0Ijp7ImZlYXR1cmVzIjp7ImxpdmVzdHJlYW1pbmciOnRydWUsIm91dGJvdW5kLWNhbGwiOnRydWUsInNpcC1vdXRib3VuZC1jYWxsIjpmYWxzZSwidHJhbnNjcmlwdGlvbiI6dHJ1ZSwicmVjb3JkaW5nIjp0cnVlfSwidXNlciI6eyJoaWRkZW4tZnJvbS1yZWNvcmRlciI6ZmFsc2UsIm1vZGVyYXRvciI6dHJ1ZSwibmFtZSI6ImZyYW5jaXNjby5yb2pvLmdhbGxhcmRvIiwiaWQiOiJnb29nbGUtb2F1dGgyfDEwMTc5MTk3NjczOTY3NTQxNTQyNCIsImF2YXRhciI6Imh0dHBzOi8vaS5waW5pbWcuY29tLzU2NHgvYmQvNDAvYjAvYmQ0MGIwOGE2ZWNhMGRlYjE1ODlkZjE1ZDM2NDYzZmEuanBnIiwiZW1haWwiOiJmcmFuY2lzY28ucm9qby5nYWxsYXJkb0BnbWFpbC5jb20ifX0sInJvb20iOiIqIn0.GOrBfM3GmZHJgQpbWFVtwk1e1m0UF13dvhUwkrlqg9G6py9OgpL6I1TGf6qnOqcF5PWyitsQpWduiLnpU-VCC61u_YtXOCZN_eyQpxfxnXZaOWuT9aWi7vmnYoWQnFvmRC_BTMky1W3Lr-PaKWzxpZmaW8AwQgwTFs7ZTdMctUp-9nkKwf4u38T_kifB54OS_ZMzWJ_n2l6ZCId9U4OZSyeaaWQgxIkLd1fTOnLMmMtxViIYsUoK-r9DvjFp7pjbVPTTrAip3nHU0yuOPOJSAsa8OVpVPLA_bOr7WBF1nU3IQQH0jcZwjCrk9NP1Gwpr1AhtARLknwWFUOIeHqaufg",
+          configOverwrite: {
+              startWithAudioMuted: false,
+              enableNoisyMicDetection: true,
+              // toolbarButtons: ['hangup', 'microphone', 'camera','chat'],
+              prejoinPageEnabled: true,
+              // Transcription options.
+              transcription: {
+                  // Whether the feature should be enabled or not.
+                  enabled: false,
+
+                  // Translation languages.
+                  // Available languages can be found in
+                  // ./src/react/features/transcribing/translation-languages.json.
+                  translationLanguages: ['en', 'es', 'fr', 'ro'],
+
+                  // Important languages to show on the top of the language list.
+                  translationLanguagesHead: ['en'],
+
+                  // If true transcriber will use the application language.
+                  // The application language is either explicitly set by participants in their settings or automatically
+                  // detected based on the environment, e.g. if the app is opened in a chrome instance which
+                  // is using french as its default language then transcriptions for that participant will be in french.
+                  // Defaults to true.
+                  useAppLanguage: true,
+
+                  // Transcriber language. This settings will only work if "useAppLanguage"
+                  // is explicitly set to false.
+                  // Available languages can be found in
+                  // ./src/react/features/transcribing/transcriber-langs.json.
+                  preferredLanguage: 'en-US',
+
+                  // Enables automatic turning on transcribing when recording is started
+                  autoTranscribeOnRecord: false,
+              },
+           },
+          interfaceConfigOverwrite: {
+              DISABLE_DOMINANT_SPEAKER_INDICATOR: true,
+              AUDIO_LEVEL_PRIMARY_COLOR: 'rgba(255,255,255,0.4)',
+              AUDIO_LEVEL_SECONDARY_COLOR: 'rgba(255,255,255,0.2)',
+          },
+          lang: 'es',
+      });
+    }
+  </script>
+{{-- video llamada --}}
 
 <script>
     function cargarIgual(input)
