@@ -19,7 +19,30 @@
             </div>
         </div>
         <!--Cierre: Header-->
-
+        <div class="col-md-12">
+            <!--Card Nav Pills-->
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-pills bg-white" id="rrhh_cm" role="tablist">
+                        <li class="nav-item">
+                            <a class="btn btn-outline-info btn-sm mr-1 my-1 active" id="pills-prof_salud-tab" data-toggle="tab" href="#pills-prof-salud" role="tab" aria-controls="pills-prof_salud" aria-selected="false">Profesionales de la salud</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="administrativos-tab" data-toggle="tab" href="#administrativos" role="tab" aria-controls="administrativos" aria-selected="false">Personal administrativo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="limpieza-mantencion-tab" data-toggle="tab" href="#limpieza-mantencion" role="tab" aria-controls="limpieza-mantencion" aria-selected="false">Limpieza y Mantención</a>
+                        </li>
+                        {{-- <li class="nav-item">
+                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="pills-asistentes-tab" data-toggle="tab" href="#pills-asistentes" role="tab" aria-controls="pills-asistentes" aria-selected="false">Asistentes/Personal</a>
+                        </li> --}}
+                        {{-- <li class="nav-item">
+                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="pills-limpieza-mantencion-tab" data-toggle="tab" href="#pills-limpieza-mantencion" role="tab" aria-controls="pills-limpieza-mantencion" aria-selected="false">Limpieza y Mantención</a>
+                        </li> --}}
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class="col-md-12">
             <!--Cierre: Card Nav Pills-->
             <div class="tab-content" id="rrhh_cm">
@@ -95,7 +118,7 @@
                 </div>
                 <!--Cierre: Tab Profesionales de la salud-->
                 <!--Tab asistentes-->
-                <div class="tab-pane fade" id="pills-asistentes" role="tabpanel" aria-labelledby="pills-asistentes-tab">
+                <div class="tab-pane fade" id="administrativos" role="tabpanel" aria-labelledby="administrativos-tab">
                     <div class="row mb-n10">
                         <div class="col-sm-12">
                             <div class="card">
@@ -107,7 +130,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="btn-group mr-2 float-right mt- mb-">
-                                                     <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_contratoasistentes"><i class="fa fa-plus" aria-hidden="true"></i> Registrar Contrato nuevo/a asistente</button>
+                                                     {{-- <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_contratoasistentes"><i class="fa fa-plus" aria-hidden="true"></i> Registrar Contrato nuevo/a asistente</button> --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -119,40 +142,41 @@
                                             <tr>
                                                 <th class="text-center align-middle">Nombre / Rut</th>
                                                 <th class="text-center align-middle">Cargo</th>
-                                                <th class="text-center align-middle">Tipo de Contrato/Fecha contrato</th>
+                                                <th class="text-center align-middle">Dirección</th>
                                                 <th class="text-center align-middle">Contacto</th>
-                                                <th class="text-center align-middle">Remuneración Mes</th>
-                                                <th class="text-center align-middle">Acción</th>
+                                                <th class="text-center align-middle">Datos</th>
+                                                <th class="text-center align-middle">Rol y permisos</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td class="align-middle text-center">
-                                                    <span><strong>Jaime Kriman</strong></span><br>
-                                                    <span>4.345.466-2</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>Asistente atención público</span><br>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>Contrato indefinido</span><br>
-                                                    <span>20/01/2015</span
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <!--Botón Modal-->
-                                                    <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto();" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-home"></i></button>
-                                                    <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datoscuenta();" data-toggle="tooltip" data-placement="top" title="Depositar"><i class="fas fa-hand-holding-usd"></i></button>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                     <span>44 horas semanales <br> 500.000</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <button type="button" class="btn btn-success btn-sm" onclick="editar_datosasistentec();">
-                                                    <i class="feather icon-edit"></i> Editar</button>
-                                                    <button type="button" class="btn btn-danger btn-sm">
-                                                    <i class="feather icon-x-circle"></i> Desasociar</button>
-                                                </td>
-                                            </tr>
+                                            @if($lista_administrativo)
+                                                @foreach ( $lista_administrativo as $administrativo)
+                                                <tr>
+                                                    <td class="align-middle text-center">
+                                                        <span><strong>{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}</strong></span><br>
+                                                        <span>{{ $administrativo->rut }}</span>
+                                                    </td>
+                                                    <td class="align-middle text-center">{{ $administrativo->contrato->tipo_empleado }}</td>
+                                                    <td class="align-middle text-center">
+                                                        {{ $administrativo->direccion()->first()->direccion }} #{{ $administrativo->direccion()->first()->numero_dir }}, {{ $administrativo->direccion()->first()->ciudad()->first()->nombre }}
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <!--Botón Modal-->
+                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_administrador('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <!--Botón Modal-->
+                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('asistente publico',{{ $administrativo->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
+                                                        <!--Botón Modal-->
+                                                        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_administrativo_cm('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
+                                                    </td>
+                                                    <td class="align-middle text-center">
+                                                        <!--Botón Modal-->
+                                                        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos_admin('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }},'{{ $administrativo->roles }}');" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>
@@ -163,7 +187,7 @@
                 <!--Cierre: Tab asistentes-->
 
                 <!--Tab personal limpieza y mantencion-->
-                <div class="tab-pane fade" id="pills-limpieza-mantencion" role="tabpanel" aria-labelledby="pills-limpieza-mantencion-tab">
+                <div class="tab-pane fade" id="limpieza-mantencion" role="tabpanel" aria-labelledby="limpieza-mantencion-tab">
                     <div class="row mb-n10">
                         <div class="col-sm-12">
                             <div class="card">
@@ -175,7 +199,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="btn-group mr-2 float-right mt- mb-">
-                                                    <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_personalaseoymantencion"><i class="fa fa-plus" aria-hidden="true"></i> Registrar Personal mantención</button>
+                                                    {{-- <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_personalaseoymantencion"><i class="fa fa-plus" aria-hidden="true"></i> Registrar Personal mantención</button> --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -187,40 +211,43 @@
                                             <tr>
                                                 <th class="text-center align-middle">Nombre / Rut</th>
                                                 <th class="text-center align-middle">Cargo</th>
-                                                <th class="text-center align-middle">Tipo de Contrato/Fecha contrato</th>
+                                                <th class="text-center align-middle">Tipo</th>
+                                                <th class="text-center align-middle">Dirección</th>
                                                 <th class="text-center align-middle">Contacto</th>
-                                                <th class="text-center align-middle">Remuneración Mes</th>
-                                                <th class="text-center align-middle">Acción</th>
+                                                <th class="text-center align-middle">Datos</th>
+                                                <th class="text-center align-middle">Rol y permisos</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @if($lista_mantencion)
+                                            @foreach ( $lista_mantencion as $administrativo)
                                             <tr>
                                                 <td class="align-middle text-center">
-                                                    <span><strong>Jaime Kriman</strong></span><br>
-                                                    <span>4.345.466-2</span>
+                                                    <span><strong>{{ $administrativo->nombre.' '.$administrativo->apellido_paterno.' '.$administrativo->apellido_materno }}</strong></span><br>
+                                                    <span>{{ $administrativo->rut }}</span>
                                                 </td>
+                                                <td class="align-middle text-center">{{ $administrativo->contrato->tipo_empleado }}</td>
+                                                <td class="align-middle text-center">@if($administrativo->empresa) Empresa @else Persona @endif</td>
                                                 <td class="align-middle text-center">
-                                                    <span>Asistente atención público</span><br>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span>Contrato indefinido</span><br>
-                                                    <span>20/01/2015</span
+                                                    {{ $administrativo->direccion()->first()->direccion }} #{{ $administrativo->direccion()->first()->numero_dir }}, {{ $administrativo->direccion()->first()->ciudad()->first()->nombre }}
                                                 </td>
                                                 <td class="align-middle text-center">
                                                     <!--Botón Modal-->
-                                                    <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contactoc();" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-home"></i></button>
-                                                    <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datoscuenta();" data-toggle="tooltip" data-placement="top" title="Depositar"><i class="fas fa-hand-holding-usd"></i></button>
+                                                    <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_mantenedor('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                     <span>44 horas semanales <br> 500.000</span>
+                                                    <!--Botón Modal-->
+                                                    <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
+                                                    <!--Botón Modal-->
+                                                    <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_mantencion_cm('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                    <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_empresac();">
-                                                    <i class="feather icon-edit"></i> Editar</button>
-                                                    <button type="button" class="btn btn-danger btn-sm">
-                                                    <i class="feather icon-x-circle"></i> Desasociar</button>
+                                                    <!--Botón Modal-->
+                                                    <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
                                                 </td>
                                             </tr>
+                                            @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>

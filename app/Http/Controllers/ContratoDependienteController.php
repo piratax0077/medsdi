@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ContratoDependiente;
+use App\Models\ContratoDependienteProfesional;
 use Illuminate\Http\Request;
 
 class ContratoDependienteController extends Controller
@@ -21,18 +22,25 @@ class ContratoDependienteController extends Controller
 
         if($valido)
         {
-            $registro = ContratoDependiente::find($request->id);
-            if($registro)
-            {
-                $datos['estado'] = 1;
-                $datos['msj'] = 'registro';
-                $datos['registro'] = $registro;
+            if($request->tipo_empleado == "PROFESIONAL"){
+                $registro = ContratoDependienteProfesional::find($request->id);
+            }else{
+                $registro = ContratoDependiente::find($request->id);
             }
-            else
-            {
-                $datos['estado'] = 0;
-                $datos['msj'] = 'contrato no encontrado';
-            }
+
+                if($registro)
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'registro';
+                    $datos['registro'] = $registro;
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'contrato no encontrado';
+                }
+
+
         }
         else
         {

@@ -59,87 +59,210 @@
                             </select>
                         </div>
                     </div>
-                    <table id="liquidaciones de Sueldos" class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th class="text-center align-middle">Nombre</th>
-                                <th class="text-center align-middle">Info-empleado</th>
-                                <th class="text-center align-middle">Sucursal</th>
-                                <th class="text-center align-middle">S. Base</th>
-                                <th class="text-center align-middle">Mes de Pago</th>
-                                <th class="text-center align-middle">Estado</th>
-                                <th class="text-center align-middle">Pagar</th>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!--Card Nav Pills-->
+                            <div class="card">
+                                <div class="card-body">
+                                    <ul class="nav nav-pills bg-white" id="rrhh_cm" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="btn btn-outline-info btn-sm mr-1 my-1 active" id="pills-prof_salud-tab" data-toggle="tab" href="#pills-prof-salud" role="tab" aria-controls="pills-prof_salud" aria-selected="false">Profesionales de la salud</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="administrativos-tab" data-toggle="tab" href="#administrativos" role="tab" aria-controls="administrativos" aria-selected="false">Personal administrativo</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="limpieza-mantencion-tab" data-toggle="tab" href="#limpieza-mantencion" role="tab" aria-controls="limpieza-mantencion" aria-selected="false">Limpieza y Mantención</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="tab-content" id="rrhh_cm">
+                                <div class="tab-pane fade show active"id="pills-prof-salud" role="tabpanel" aria-labelledby="pills-prof-salud-tab">
+                                    <table id="liquidaciones_de_sueldos" class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center align-middle">Nombre</th>
+                                                <th class="text-center align-middle">Info-empleado</th>
+                                                <th class="text-center align-middle">Sucursal</th>
+                                                <th class="text-center align-middle">S. Base</th>
+                                                <th class="text-center align-middle">Mes de Pago</th>
+                                                <th class="text-center align-middle">Estado</th>
+                                                <th class="text-center align-middle">Pagar</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (isset($registro_personal))
-                                @foreach ($registro_personal as $personal)
-                                    <tr>
-                                        <td class="align-middle text-center">
-                                            {{ (empty($personal->persona->nombres)?$personal->persona->nombre:$personal->persona->nombres).' '.$personal->persona->apellido_uno.' '.$personal->persona->apellido_dos }}
-                                        </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (isset($registro_profesional))
+                                                @foreach ($registro_profesional as $personal)
+                                                @if($personal->persona !== null)
+                                                    <tr>
+                                                        <td class="align-middle text-center">
+                                                            {{ (empty($personal->persona->nombres)?$personal->persona->nombre:$personal->persona->nombres).' '.$personal->persona->apellido_uno.' '.$personal->persona->apellido_dos }}
+                                                        </td>
 
-                                        <td class="align-middle text-center">
-                                            <!--Botón Modal contacto -->
-                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_persona('{{ $personal->tipo_empleado }}', '', '{{ $personal->id_empleado }}');" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
+                                                        <td class="align-middle text-center">
+                                                            <!--Botón Modal contacto -->
+                                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_persona('{{ $personal->tipo_empleado }}', '', '{{ $personal->id_empleado }}');" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
 
-                                            @if(strpos(strtoupper($personal->tipo_empleado), 'ADMINISTRADOR') !== false)
-                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('{{ $personal->persona->id_admin }}');" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
-                                            @else
-                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('{{ $personal->persona->id_usuario }}');" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
+                                                            @if(strpos(strtoupper($personal->tipo_empleado), 'ADMINISTRADOR') !== false)
+                                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('{{ $personal->persona->id_admin }}');" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
+                                                            @else
+                                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('{{ $personal->persona->id_usuario }}');" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
+                                                            @endif
+                                                        </td>
+
+                                                        <td class="align-middle text-center">
+                                                            {{ $personal->Institucion->nombre }}
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                              <span class="#">800.000</span>
+                                                        </td>
+                                                        @if ($personal->remuneracion)
+                                                            {{-- remuneracion existente --}}
+                                                            <td class="align-middle text-center">{{ $array_mes[$personal->remuneracion->r_mes_liq].'-'.$personal->remuneracion->r_ano_liq }}</td>
+
+                                                            @if($personal->remuneracion->estado == 1)
+                                                                <td class="align-middle text-center">
+                                                                    <span class="badge badge-info">Generada</span>
+                                                                </td>
+                                                                <td class="align-middle text-center">
+                                                                    <!--Botón pago-->
+                                                                    {{-- <button type="button" class="btn btn-secondary btn-sm" onclick="mostrar_pasar_pagado('{{ $personal->remuneracion->id }}', $('#filtro_anio').val(), $('#filtro_mes').val());"><i class="feather icon-edit"></i>Pagar</button> --}}
+                                                                    <button type="button" class="btn btn-secondary btn-sm" onclick="mostrar_pasar_pagado('{{ $personal->id }}', '{{ $personal->id_empleado }}', '{{ $personal->remuneracion->id }}');"><i class="feather icon-edit"></i>Pagar</button>
+                                                                </td>
+                                                            @elseif($personal->remuneracion->estado == 2)
+                                                                <td class="align-middle text-center">
+                                                                    <span class="badge badge-success">Pagado</span>
+                                                                </td>
+                                                                <td class="align-middle text-center">
+                                                                    <!--Botón pago-->
+                                                                    {{-- <button type="button" class="btn btn-secondary btn-sm" onclick=""><i class="feather icon-edit"></i>Pagar</button> --}}
+                                                                </td>
+                                                            @endif
+
+                                                        @else
+                                                            {{-- sin remuneracion --}}
+                                                            <td class="align-middle text-center">-</td>
+
+                                                            <td class="align-middle text-center">
+                                                                <span class="badge badge-danger">Pendiente</span>
+                                                            </td>
+                                                            <td class="align-middle text-center">
+                                                                <!--Botón pago-->
+                                                                <button type="button" class="btn btn-secondary btn-sm" onclick="generar_pago('PROFESIONAL', '{{ $personal->id_profesional }}', '{{ $personal->id }}', $('#filtro_anio').val(), $('#filtro_mes').val());"><i class="feather icon-edit"></i>Generar</button>
+                                                            </td>
+                                                        @endif
+
+
+
+                                                    </tr>
+                                                @endif
+                                                @endforeach
                                             @endif
-                                        </td>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                 <!--Tab asistentes-->
+                                <div class="tab-pane fade" id="administrativos" role="tabpanel" aria-labelledby="administrativos-tab">
+                                    <table id="liquidaciones_de_sueldos" class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center align-middle">Nombre</th>
+                                                <th class="text-center align-middle">Info-empleado</th>
+                                                <th class="text-center align-middle">Sucursal</th>
+                                                <th class="text-center align-middle">S. Base</th>
+                                                <th class="text-center align-middle">Mes de Pago</th>
+                                                <th class="text-center align-middle">Estado</th>
+                                                <th class="text-center align-middle">Pagar</th>
 
-                                        <td class="align-middle text-center">
-                                            {{ $personal->Institucion->nombre }}
-                                        </td>
-                                        <td class="align-middle text-center">
-                                              <span class="#">800.000</span>
-                                        </td>
-                                        @if ($personal->remuneracion)
-                                            {{-- remuneracion existente --}}
-                                            <td class="align-middle text-center">{{ $array_mes[$personal->remuneracion->r_mes_liq].'-'.$personal->remuneracion->r_ano_liq }}</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (isset($registro_personal))
+                                                @foreach ($registro_personal as $personal)
+                                                @if($personal->persona !== null)
+                                                    <tr>
+                                                        <td class="align-middle text-center">
+                                                            {{ (empty($personal->persona->nombres)?$personal->persona->nombre:$personal->persona->nombres).' '.$personal->persona->apellido_uno.' '.$personal->persona->apellido_dos }}
+                                                        </td>
 
-                                            @if($personal->remuneracion->estado == 1)
-                                                <td class="align-middle text-center">
-                                                    <span class="badge badge-info">Generada</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <!--Botón pago-->
-                                                    {{-- <button type="button" class="btn btn-secondary btn-sm" onclick="mostrar_pasar_pagado('{{ $personal->remuneracion->id }}', $('#filtro_anio').val(), $('#filtro_mes').val());"><i class="feather icon-edit"></i>Pagar</button> --}}
-                                                    <button type="button" class="btn btn-secondary btn-sm" onclick="mostrar_pasar_pagado('{{ $personal->id }}', '{{ $personal->id_empleado }}', '{{ $personal->remuneracion->id }}');"><i class="feather icon-edit"></i>Pagar</button>
-                                                </td>
-                                            @elseif($personal->remuneracion->estado == 2)
-                                                <td class="align-middle text-center">
-                                                    <span class="badge badge-success">Pagado</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <!--Botón pago-->
-                                                    {{-- <button type="button" class="btn btn-secondary btn-sm" onclick=""><i class="feather icon-edit"></i>Pagar</button> --}}
-                                                </td>
+                                                        <td class="align-middle text-center">
+                                                            <!--Botón Modal contacto -->
+                                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_persona('{{ $personal->tipo_empleado }}', '', '{{ $personal->id_empleado }}');" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
+
+                                                            @if(strpos(strtoupper($personal->tipo_empleado), 'ADMINISTRADOR') !== false)
+                                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('{{ $personal->persona->id_admin }}');" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
+                                                            @else
+                                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('{{ $personal->persona->id_usuario }}');" data-toggle="tooltip" data-placement="top" title="Dato Deposito"><i class="fab fa-creative-commons-nc"></i></button>
+                                                            @endif
+                                                        </td>
+
+                                                        <td class="align-middle text-center">
+                                                            {{ $personal->Institucion->nombre }}
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                              <span class="#">800.000</span>
+                                                        </td>
+                                                        @if ($personal->remuneracion)
+                                                            {{-- remuneracion existente --}}
+                                                            <td class="align-middle text-center">{{ $array_mes[$personal->remuneracion->r_mes_liq].'-'.$personal->remuneracion->r_ano_liq }}</td>
+
+                                                            @if($personal->remuneracion->estado == 1)
+                                                                <td class="align-middle text-center">
+                                                                    <span class="badge badge-info">Generada</span>
+                                                                </td>
+                                                                <td class="align-middle text-center">
+                                                                    <!--Botón pago-->
+                                                                    {{-- <button type="button" class="btn btn-secondary btn-sm" onclick="mostrar_pasar_pagado('{{ $personal->remuneracion->id }}', $('#filtro_anio').val(), $('#filtro_mes').val());"><i class="feather icon-edit"></i>Pagar</button> --}}
+                                                                    <button type="button" class="btn btn-secondary btn-sm" onclick="mostrar_pasar_pagado('{{ $personal->id }}', '{{ $personal->id_empleado }}', '{{ $personal->remuneracion->id }}');"><i class="feather icon-edit"></i>Pagar</button>
+                                                                </td>
+                                                            @elseif($personal->remuneracion->estado == 2)
+                                                                <td class="align-middle text-center">
+                                                                    <span class="badge badge-success">Pagado</span>
+                                                                </td>
+                                                                <td class="align-middle text-center">
+                                                                    <!--Botón pago-->
+                                                                    {{-- <button type="button" class="btn btn-secondary btn-sm" onclick=""><i class="feather icon-edit"></i>Pagar</button> --}}
+                                                                </td>
+                                                            @endif
+
+                                                        @else
+                                                            {{-- sin remuneracion --}}
+                                                            <td class="align-middle text-center">-</td>
+
+                                                            <td class="align-middle text-center">
+                                                                <span class="badge badge-danger">Pendiente</span>
+                                                            </td>
+                                                            <td class="align-middle text-center">
+                                                                <!--Botón pago-->
+                                                                <button type="button" class="btn btn-secondary btn-sm" onclick="generar_pago('{{ $personal->tipo_empleado }}', '{{ $personal->id_empleado }}', '{{ $personal->id }}', $('#filtro_anio').val(), $('#filtro_mes').val());"><i class="feather icon-edit"></i>Generar</button>
+                                                            </td>
+                                                        @endif
+
+
+
+                                                    </tr>
+                                                @endif
+                                                @endforeach
                                             @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!--Tab aseo y mantencion-->
+                                <div class="tab-pane fade" id="limpieza-mantencion" role="tabpanel" aria-labelledby="limpieza-mantencion-tab">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h3>mantención y aseo</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                        @else
-                                            {{-- sin remuneracion --}}
-                                            <td class="align-middle text-center">-</td>
-
-                                            <td class="align-middle text-center">
-                                                <span class="badge badge-danger">Pendiente</span>
-                                            </td>
-                                            <td class="align-middle text-center">
-                                                <!--Botón pago-->
-                                                <button type="button" class="btn btn-secondary btn-sm" onclick="generar_pago('{{ $personal->tipo_empleado }}', '{{ $personal->id_empleado }}', '{{ $personal->id }}', $('#filtro_anio').val(), $('#filtro_mes').val());"><i class="feather icon-edit"></i>Generar</button>
-                                            </td>
-                                        @endif
-
-
-
-                                    </tr>
-                                @endforeach
-                            @endif
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>

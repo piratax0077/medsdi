@@ -102,12 +102,32 @@
                                                                 {{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}
                                                             </td>
                                                             <td class="align-middle text-center">
-                                                                {{ number_format($profesional->monto_imponible,0,',','.') }}
+                                                                @if($profesional->contrato)
+                                                                {{ number_format($profesional->contrato->monto_imponible,0,',','.') }}
+                                                                @else
+                                                                CONVENIO
+                                                                @endif
                                                             </td>
                                                             <td class="align-middle text-center"></td>
-                                                            <td class="align-middle text-center"></td>
-                                                            <td class="align-middle text-center"></td>
-                                                            <td class="align-middle text-center"></td>
+                                                            <td class="align-middle text-center">
+
+                                                            </td>
+                                                            <td class="align-middle text-center">
+                                                                @if($profesional->contrato)
+                                                                    @php $colacion = ($profesional->contrato->colacion_porcentaje / 100) * $profesional->contrato->monto_imponible; @endphp
+                                                                    {{ number_format($colacion,0,',','.') }}
+                                                                @else
+                                                                    CONVENIO
+                                                                @endif
+                                                            </td>
+                                                            <td class="align-middle text-center">
+                                                                @if($profesional->contrato)
+                                                                @php $locomocion = ($profesional->contrato->locomocion_porcentaje / 100) * $profesional->contrato->monto_imponible; @endphp
+                                                                    {{ number_format($locomocion,0,',','.') }}
+                                                                @else
+                                                                    CONVENIO
+                                                                @endif
+                                                            </td>
                                                             <td class="align-middle text-center"></td>
                                                             <td class="align-middle text-center"></td>
                                                             <td class="align-middle text-center"></td>
@@ -123,54 +143,7 @@
                                                         </tr>
 
                                                         @endforeach
-                                                        <tr>
-                                                            <td class="align-middle text-center">
-                                                                <span><strong>m12</strong></span>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <span><strong>Noa Sanchez</strong></span><br>
-                                                                <span>7.345.466-2</span>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <span><strong>500.000</strong></span>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <span><strong>50.000</strong></span>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <span>550.000</span><br>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <span>25000</span>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <span>35000</span>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <span>610.000</span>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <span><strong>75240</strong></span>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <span>43112</span><br>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <span>4251</span>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <span>0</span>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <span>410.000</span>
-                                                            </td>
-                                                            <td class="align-middle text-center">
-                                                                <button type="button" class="btn btn-success btn-sm" onclick="editar_remuneracionc();">
-                                                                <i class="feather icon-edit"></i> Editar</button>
-                                                                <button type="button" class="btn btn-danger btn-sm">
-                                                                <i class="feather icon-x-circle"></i>E</button>
-                                                            </td>
-                                                        </tr>
+
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -178,8 +151,8 @@
                                         <div class="row">
                                                 <div class="col-md-12 mb-3">
 
-                                                {{--  include("modals_contador/registrar_remuneracion");
-                                                include("modals_contador/registrar_remuneracion_editar");  --}}
+                                                @include("app.adm_cm.contabilidad.modals_contador.registrar_remuneracion")
+                                                {{-- @include("modals_contador/registrar_remuneracion_editar"); --}}
 
                                                 </div>
                                         </div>

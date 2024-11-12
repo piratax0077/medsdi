@@ -305,7 +305,7 @@
                                                     </td>
                                                 </tr>
                                                 @endforeach
-                                            @endif
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -1853,6 +1853,7 @@ function asociar_profesional_existente()
 {
 let id_lugar_atencion = $('#agregar_profesional_int_id_lugar_atencion').val();
 let id_profesional = $('#agregar_profesional_id_profesional').val();
+let id_tipo_convenio_institucion = $('#agregar_profesional_id_tipo_convenio_institucion').val();
 let url = "{{ route('adm_cm.asociar_profesional_existente')}}";
 
 $.ajax({
@@ -1862,6 +1863,7 @@ $.ajax({
         _token: CSRF_TOKEN,
         id_lugar_atencion: id_lugar_atencion,
         id_profesional: id_profesional,
+        id_tipo_convenio_institucion: id_tipo_convenio_institucion
     },
 })
 .done(function(data) {

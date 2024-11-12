@@ -70,7 +70,7 @@
 
     <!--Bs-Canvas-->
     <link rel="stylesheet" href='{{ asset('css/bs_canvas.css') }}'/>
-
+    @yield('style')
 </head>
 
 <body>
@@ -384,6 +384,10 @@
                 responsive: true,
             });
 
+            $('#tabla_salas_servicio').DataTable({
+                responsive: true,
+            });
+
             $('#bodegas_tabla').DataTable({
                 responsive: true,
             });
@@ -431,6 +435,18 @@
                 responsive: true
             });
             $('#tabla_prof_liquidaciones').DataTable({
+                responsive: true
+            });
+
+            $('#tabla_servicios_internos').DataTable({
+                responsive: true
+            });
+
+            $('#liquidaciones_de_sueldos').DataTable({
+                responsive: true
+            });
+
+            $('#tabla_egresos_cm').DataTable({
                 responsive: true
             });
 

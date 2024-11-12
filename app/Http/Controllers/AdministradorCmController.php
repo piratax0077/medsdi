@@ -1023,158 +1023,167 @@ class AdministradorCmController extends Controller
     }
 
     public function registrar_servicio_cm(Request $req){
-        $institucion = '';
-        $tipo_institucion = '1';
-        $id_busqueda = Auth::user()->id;
-        if(Auth::user()->id == 3)
-        {
-            $id_busqueda = 5;
-            $registro = Instituciones::where('id', $id_busqueda)->first();
-        }
-        else
-        {
-            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
-        }
+        try {
 
-        if($registro)
-        {
-            // var_dump($registro);
-            // var_dump($registro->UsuarioAdministrador()->first());
-            //var_dump($registro->UsuarioAdministrador()->first()->id);
-            /** INSTITUCION */
-            $institucion = $registro;
-            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
-            $tipo_institucion = 'institucion';
-
-        }
-        else
-        {
-            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
-            if($registro)
+            $institucion = '';
+            $tipo_institucion = '1';
+            $id_busqueda = Auth::user()->id;
+            if(Auth::user()->id == 3)
             {
-                /** SERVICIOS */
-                $institucion = $registro;
-                $tipo_institucion = 'servicio';
+                $id_busqueda = 5;
+                $registro = Instituciones::where('id', $id_busqueda)->first();
             }
             else
             {
-                /** busqueda por responsable */
-                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+                $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            }
 
-                if($responsable)
+            if($registro)
+            {
+                // var_dump($registro);
+                // var_dump($registro->UsuarioAdministrador()->first());
+                //var_dump($registro->UsuarioAdministrador()->first()->id);
+                /** INSTITUCION */
+                $institucion = $registro;
+                $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+                $tipo_institucion = 'institucion';
+
+            }
+            else
+            {
+                $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+                if($registro)
                 {
-                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
-                    if($registro)
-                    {
-                        // var_dump($registro);
-                        // var_dump($registro->UsuarioAdministrador()->first());
-                        /** INSTITUCION */
-                        $institucion = $registro;
-                        $tipo_institucion = 'institucion';
-
-                    }
-                    else
-                    {
-                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
-                        if($registro)
-                        {
-                            /** SERVICIOS */
-                            $institucion = $registro;
-                            $tipo_institucion = 'servicio';
-                        }
-                        else
-                        {
-                            return back()->with('error','Institución no encontrada');
-                        }
-                    }
+                    /** SERVICIOS */
+                    $institucion = $registro;
+                    $tipo_institucion = 'servicio';
                 }
                 else
                 {
-                    return back()->with('error','Institución no encontrada');
+                    /** busqueda por responsable */
+                    $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                    if($responsable)
+                    {
+                        $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            // var_dump($registro);
+                            // var_dump($registro->UsuarioAdministrador()->first());
+                            /** INSTITUCION */
+                            $institucion = $registro;
+                            $tipo_institucion = 'institucion';
+
+                        }
+                        else
+                        {
+                            $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                            if($registro)
+                            {
+                                /** SERVICIOS */
+                                $institucion = $registro;
+                                $tipo_institucion = 'servicio';
+                            }
+                            else
+                            {
+                                return back()->with('error','Institución no encontrada');
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return back()->with('error','Institución no encontrada');
+                    }
                 }
             }
-        }
 
-        $regiones = Region::all();
-        $ciudades = Ciudad::where('id_region', $institucion->direccion()->first()->ciudad()->first()->Region()->first()->id)->orderBy('nombre')->get();
+            $regiones = Region::all();
+            $ciudades = Ciudad::where('id_region', $institucion->direccion()->first()->ciudad()->first()->Region()->first()->id)->orderBy('nombre')->get();
 
-        /** CARGA DE PERSONAL */
-        /** EMPLEADOS */
-        $contratos = ContratoDependiente::select('id', 'id_institucion', 'id_lugar_atencion', 'tipo_empleado', 'id_empleado')
-                                        ->where('id_institucion',$institucion->id)
-                                        ->where('id_lugar_atencion', $institucion->id_lugar_atencion)
-                                        ->get();
-        // var_dump($contratos);
+            /** CARGA DE PERSONAL */
+            /** EMPLEADOS */
+            $contratos = ContratoDependiente::select('id', 'id_institucion', 'id_lugar_atencion', 'tipo_empleado', 'id_empleado')
+                                            ->where('id_institucion',$institucion->id)
+                                            ->where('id_lugar_atencion', $institucion->id_lugar_atencion)
+                                            ->get();
+            // var_dump($contratos);
 
-        $personal = array();
-        if($contratos)
-        {
-            // var_dump($contratos->count());
-            if($contratos->count()>0)
+            $personal = array();
+            if($contratos)
             {
-                foreach ($contratos as $key_contratos => $value_contratos)
+                // var_dump($contratos->count());
+                if($contratos->count()>0)
                 {
-                    // Asistente Publico
-                    // Asistente Jefa Caja
-                    // Asistente Adm
-                    // Asistente Online
-                    if(strstr(strtoupper($value_contratos->tipo_empleado), 'ASISTENTE') !== FALSE)
+                    foreach ($contratos as $key_contratos => $value_contratos)
                     {
-                        $asistente = Asistente::select('id', 'id_asistente_tipo', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_direccion', 'id_usuario', 'id_modalidad')
-                                                ->with(['AsistenteTipo' => function($query){
-                                                    $query->select('id', 'nombre', 'descripcion');
-                                                }])
-                                                ->where('id', $value_contratos->id_empleado)
-                                                ->first();
-                        if($asistente)
-                            array_push($personal, $asistente);
-                    }
-                    // adm_insitucion
-                    else if(strpos(strtoupper($value_contratos->tipo_empleado), 'ADMINISTRADOR') >= 0)
-                    {
-                        $administrador = AdminInstServ::select('id', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_tipo_administrador', 'id_direccion', 'id_admin')
-                                                ->with(['TipoAdministrador' => function($query){
-                                                    $query->select('id', 'nombres as nombre','descripcion');
-                                                }])
-                                                ->where('id', $value_contratos->id_empleado)
-                                                ->first();
-                        // var_dump($administrador);
-                        if($administrador)
-                            array_push($personal, $administrador);
-                    }
-                    // contador
-                    else if(strpos(strtoupper($value_contratos->tipo_empleado), 'CONTADOR') >= 0)
-                    {
+                        // Asistente Publico
+                        // Asistente Jefa Caja
+                        // Asistente Adm
+                        // Asistente Online
+                        if(strstr(strtoupper($value_contratos->tipo_empleado), 'ASISTENTE') !== FALSE)
+                        {
+                            $asistente = Asistente::select('id', 'id_asistente_tipo', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_direccion', 'id_usuario', 'id_modalidad')
+                                                    ->with(['AsistenteTipo' => function($query){
+                                                        $query->select('id', 'nombre', 'descripcion');
+                                                    }])
+                                                    ->where('id', $value_contratos->id_empleado)
+                                                    ->first();
+                            if($asistente)
+                                array_push($personal, $asistente);
+                        }
+                        // adm_insitucion
+                        else if(strpos(strtoupper($value_contratos->tipo_empleado), 'ADMINISTRADOR') >= 0)
+                        {
+                            $administrador = AdminInstServ::select('id', 'rut', 'nombres', 'apellido_uno', 'apellido_dos', 'telefono_uno', 'email', 'id_tipo_administrador', 'id_direccion', 'id_admin')
+                                                    ->with(['TipoAdministrador' => function($query){
+                                                        $query->select('id', 'nombres as nombre','descripcion');
+                                                    }])
+                                                    ->where('id', $value_contratos->id_empleado)
+                                                    ->first();
+                            // var_dump($administrador);
+                            if($administrador)
+                                array_push($personal, $administrador);
+                        }
+                        // contador
+                        else if(strpos(strtoupper($value_contratos->tipo_empleado), 'CONTADOR') >= 0)
+                        {
+
+                        }
+                        // profesional (dependiente-> ej: admin medico)
+                        else if(strpos(strtoupper($value_contratos->tipo_empleado), 'PROFESIONAL') >= 0)
+                        {
+
+                        }
 
                     }
-                    // profesional (dependiente-> ej: admin medico)
-                    else if(strpos(strtoupper($value_contratos->tipo_empleado), 'PROFESIONAL') >= 0)
-                    {
-
-                    }
-
                 }
             }
+            $servicio = Servicios::find($req->id_servicio);
+            $nuevo_servicio = new ServiciosInternos();
+
+            // $responsable = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
+            // ->leftjoin('profesionales','profesionales.id','=','profesionales_lugares_atencion.id_profesional')
+            // ->where('profesionales_lugares_atencion.id',$req->id_responsable)
+            // ->first();
+            $profesional = Profesional::find($req->id_responsable);
+
+            $nuevo_servicio->id_institucion = $institucion->id;
+            $nuevo_servicio->id_lugar_atencion = $institucion->id_lugar_atencion;
+            $nuevo_servicio->id_servicio = $req->id_servicio;
+            $nuevo_servicio->nombre = $servicio->nombre;
+            $nuevo_servicio->id_responsable = $profesional->id;
+            $nuevo_servicio->numero_salas = $req->numero_salas;
+            $nuevo_servicio->numero_camas = $req->numero_camas;
+            $nuevo_servicio->camas_disponibles = $req->numero_camas;
+            $nuevo_servicio->save();
+
+            $servicios_internos = $this->dame_servicios_internos($institucion->id);
+
+            return ['estado' => 1, 'mensaje' => 'Servicio registrado', 'servicios_internos' => $servicios_internos];
+        } catch (\Exception $e) {
+            //throw $th;
+            return ['estado' =>'error','mensaje' => $e->getMessage()];
         }
-        $servicio = Servicios::find($req->id_servicio);
-        $nuevo_servicio = new ServiciosInternos();
-        $responsable = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos')
-        ->leftjoin('profesionales','profesionales.id','=','profesionales_lugares_atencion.id_profesional')
-        ->where('profesionales_lugares_atencion.id',$req->id_responsable)
-        ->first();
-        $profesional = Profesional::find($responsable->id_profesional);
-
-        $nuevo_servicio->id_institucion = $institucion->id;
-        $nuevo_servicio->id_lugar_atencion = $institucion->id_lugar_atencion;
-        $nuevo_servicio->id_servicio = $req->id_servicio;
-        $nuevo_servicio->nombre = $servicio->nombre;
-        $nuevo_servicio->id_responsable = $responsable->id_profesional;
-
-        $nuevo_servicio->save();
-
-        $servicios_internos = $this->dame_servicios_internos($institucion->id);
-
-        return ['estado' => 1, 'mensaje' => 'Servicio registrado', 'servicios_internos' => $servicios_internos];
     }
 
     public function dame_servicios_internos($id_institucion){
@@ -5204,6 +5213,7 @@ class AdministradorCmController extends Controller
         {
             $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
         }
+
         if($registro)
         {
             // var_dump($registro);
@@ -5211,17 +5221,13 @@ class AdministradorCmController extends Controller
             //var_dump($registro->UsuarioAdministrador()->first()->id);
             /** INSTITUCION */
             $institucion = $registro;
-
-            // $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
-            $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();;
-
+            $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
             $tipo_institucion = 'institucion';
 
         }
         else
         {
             $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
-
             if($registro)
             {
                 /** SERVICIOS */
@@ -5236,7 +5242,6 @@ class AdministradorCmController extends Controller
                 if($responsable)
                 {
                     $registro = Instituciones::where('id_responsable',$responsable->id)->first();
-
                     if($registro)
                     {
                         // var_dump($registro);
@@ -5279,10 +5284,13 @@ class AdministradorCmController extends Controller
             ->where('profesionales_lugares_atencion.id_lugar_atencion',$institucion->id_lugar_atencion)
             ->get();
 
+
+
         foreach($profesionales_contratados as $profesional){
             $contrato = ContratoDependienteProfesional::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$institucion->id_lugar_atencion)->first();
             if($contrato){
                 $profesional->contrato = $contrato;
+                $profesional->es_convenio = false;
                 $especialidad_contrato = Especialidad::find($contrato->id_especialidad);
                 $profesional->especialidad_contrato = $especialidad_contrato;
                 $tipo_especialidad = TipoEspecialidad::find($contrato->id_tipo_especialidad);
@@ -5296,13 +5304,116 @@ class AdministradorCmController extends Controller
             $profesional->horas_semanales = 45;
         }
 
+        $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+        $lista_administrativo = array();
+        if($LugarAtencion)
+        {
+            $lista_administrativo = $LugarAtencion->AdministrativoInstitucion()->get();
+
+            if($lista_administrativo)
+            {
+                foreach ($lista_administrativo as $key => $value)
+                {
+
+                    /** roles */
+                    $usuario = User::where('id', $value->id_admin)->first();
+                    $roles = $usuario->roles()->get();
+                    $array_roles = array();
+                    foreach ($roles as $key_2 => $value_2) {
+                        array_push($array_roles, $value_2->name);
+                    }
+
+                    if(!empty($array_roles))
+                        $lista_administrativo[$key]->roles = implode(",",$array_roles);
+                    else
+                        $lista_administrativo[$key]->roles = '';
+
+                    /** tipo administrativo */
+                    $lista_administrativo[$key]->tipo_administrativo = TipoAdministrador::find($value->id_tipo_administrador);
+
+                    /** info contrato */
+                    $filtro_cont = array();
+                    $filtro_cont[] = array('id_lugar_atencion', $institucion->id_lugar_atencion);
+                    $filtro_cont[] = array('id_empleado', $value->id);
+                    $lista_administrativo[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion','tipo_empleado')->where($filtro_cont)->first();
+                }
+            }
+        }
+
+        $LugarAtencion = LugarAtencion::where('id',$institucion->id_lugar_atencion)->first();
+        $lista_mantencion = array();
+        if($LugarAtencion)
+        {
+            $lista_mantencion = $LugarAtencion->MantencionInstitucion()->get();
+
+            if($lista_mantencion)
+            {
+                foreach ($lista_mantencion as $key => $value)
+                {
+                    /** roles */
+                    $usuario = User::where('id', $value->id_admin)->first();
+                    if($usuario){
+                        $roles = $usuario->roles()->get();
+                        $array_roles = array();
+                        foreach ($roles as $key_2 => $value_2) {
+                            array_push($array_roles, $value_2->name);
+                        }
+
+                        if(!empty($array_roles))
+                            $lista_mantencion[$key]->roles = implode(",",$array_roles);
+                        else
+                            $lista_mantencion[$key]->roles = '';
+                    }
+
+                    if($value->empresa == 1){
+                        $lista_mantencion[$key]->empresa = true;
+                    }else{
+                        $lista_mantencion[$key]->empresa = false;
+                    }
+
+                    /** info contrato */
+                    $filtro_cont = array();
+                    $filtro_cont[] = array('id_lugar_atencion', $institucion->id_lugar_atencion);
+                    $filtro_cont[] = array('id_empleado', $value->id);
+                    $lista_mantencion[$key]->contrato = ContratoDependiente::select('id', 'id_empleado', 'id_lugar_atencion','tipo_empleado')->where($filtro_cont)->first();
+                }
+            }
+        }
+
+        /** LISTA CONTRATO */
+        $lista_tipo_asistente = AsistenteTipo::select('id', 'nombre')->where('estado',1)->get();
+        $lista_tipo_administrador = TipoAdministrador::select('id', 'nombres')->where('estado',1)->get();
+
+        $lista_tipo_contrato = array();
+        foreach ($lista_tipo_asistente as $key => $value) {
+            array_push($lista_tipo_contrato,array(
+                'id' => $value->id,
+                'nombre' => strtoupper($value->nombre),
+            ));
+        }
+        foreach ($lista_tipo_administrador as $key => $value) {
+            array_push($lista_tipo_contrato,array(
+                'id' => $value->id,
+                'nombre' => strtoupper($value->nombres),
+            ));
+        }
+        /** FIN LISTA CONTRATO */
+
+        $lista_tipo_administrativo = TipoAdministrador::where('estado', 1)->get();
+        $tipo_convenio = TipoConvenioInstitucion::where('estado', 1)->get();
+
         return view('app.contabilidad.secciones_contabilidad.rrhh',
             [
                 'regiones' => $regiones,
                 'bancos' => $bancos,
                 'especialidades' => $especialidades,
                 'profesionales_contratados' => $profesionales_contratados,
-                'institucion' => $institucion
+                'institucion' => $institucion,
+                'lista_administrativo' => $lista_administrativo,
+                'lista_tipo_contrato' => (object)$lista_tipo_contrato,
+                'lista_tipo_administrativo' => $lista_tipo_administrativo,
+                'lista_mantencion' => $lista_mantencion,
+                'tipo_convenio' => $tipo_convenio
             ]
         );
     }
@@ -5623,35 +5734,123 @@ class AdministradorCmController extends Controller
 
     public function ContadorRemuneraciones(Request $request)
     {
+        $id_busqueda = Auth::user()->id;
+        if(Auth::user()->id == 3)
+        {
+            $id_busqueda = 5;
+            $registro = Instituciones::where('id', $id_busqueda)->first();
+        }
+        else
+        {
+            $registro = Instituciones::where('id_usuario',Auth::user()->id)->first();
+        }
+        if($registro)
+        {
+            // var_dump($registro);
+            // var_dump($registro->UsuarioAdministrador()->first());
+            //var_dump($registro->UsuarioAdministrador()->first()->id);
+            /** INSTITUCION */
+            $institucion = $registro;
+
+            // $responsable = AdminInstServ::where('id',$registro->UsuarioAdministrador()->first()->id)->first();
+            $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();;
+
+            $tipo_institucion = 'institucion';
+
+        }
+        else
+        {
+            $registro = Servicios::where('id_usuario',Auth::user()->id)->first();
+
+            if($registro)
+            {
+                /** SERVICIOS */
+                $institucion = $registro;
+                $tipo_institucion = 'servicio';
+            }
+            else
+            {
+                /** busqueda por responsable */
+                $responsable = AdminInstServ::where('id_admin',Auth::user()->id)->first();
+
+                if($responsable)
+                {
+                    $registro = Instituciones::where('id_responsable',$responsable->id)->first();
+
+                    if($registro)
+                    {
+                        // var_dump($registro);
+                        // var_dump($registro->UsuarioAdministrador()->first());
+                        /** INSTITUCION */
+                        $institucion = $registro;
+                        $tipo_institucion = 'institucion';
+
+                    }
+                    else
+                    {
+                        $registro = Servicios::where('id_responsable',$responsable->id)->first();
+                        if($registro)
+                        {
+                            /** SERVICIOS */
+                            $institucion = $registro;
+                            $tipo_institucion = 'servicio';
+                        }
+                        else
+                        {
+                            return back()->with('error','Institución no encontrada');
+                        }
+                    }
+                }
+                else
+                {
+                    return back()->with('error','Institución no encontrada');
+                }
+            }
+        }
+
+
         $ano_toma = date('Y');
         $mes_toma = date('m');
         $registro_personal = ContratoDependiente::with('Persona')
                                                     ->with('Institucion')
                                                     ->with('LugarAtencion')
                                                     ->whereIn('estado', [2,3])
-                                                    ->filtroFechaContratoActivo($ano_toma, $mes_toma)
+                                                    ->filtroFechaContratoActivo($ano_toma, $mes_toma,$registro->id_lugar_atencion)
                                                     ->get();
 
-        foreach ($registro_personal as $key => $value)
-        {
-            $filtro_remu = array();
-            $filtro_remu[] = array('r_ano_liq', $ano_toma);
-            $filtro_remu[] = array('r_mes_liq', $mes_toma);
-            $filtro_remu[] = array('id_contrato_dependiente', $value->id);
-            $filtro_remu[] = array('id_empleado', $value->id_empleado);
+        $registro_profesional = ContratoDependienteProfesional::with('Persona')
+                                                ->with('Institucion')
+                                                ->with('LugarAtencion')
+                                                ->whereIn('estado', [2,3])
+                                                ->filtroFechaContratoActivo($ano_toma, $mes_toma,$registro->id_lugar_atencion)
+                                                ->get();
+
+
+        // Junta los dos conjuntos en una sola colección
+        $registros = $registro_personal;
+
+        // Recorre todos los registros combinados
+        foreach ($registros as $key => $value) {
+            $filtro_remu = [
+                ['r_ano_liq', $ano_toma],
+                ['r_mes_liq', $mes_toma],
+                ['id_contrato_dependiente', $value->id],
+                ['id_empleado', $value->id_empleado]
+            ];
+
             $remuneracion_result = Remuneraciones::where($filtro_remu)->whereIn('estado', [1,2])->first();
-            if($remuneracion_result)
-            {
-                $registro_personal[$key]->remuneracion = $remuneracion_result;
-            }
-            else
-            {
-                $registro_personal[$key]->remuneracion = array();
-            }
+
+            // Asigna el resultado de remuneración
+            $value->remuneracion = $remuneracion_result ? $remuneracion_result : [];
         }
+
+        // Depuración final para confirmar el resultado de remuneraciones
+        // dd('Registros combinados con remuneraciones:', $registros);
+
         return view('app.contabilidad.secciones_contabilidad.info-pago_sueldos',[
             'mes_toma' => $mes_toma,
-            'registro_personal' => $registro_personal
+            'registro_personal' => $registros,
+            'registro_profesional' => $registro_profesional
         ]);
     }
     public function ContadorLibroContable(Request $request)
@@ -7443,7 +7642,7 @@ class AdministradorCmController extends Controller
             $nuevo_contrato_mantencion->sucursal = $req->sucursal;
             $nuevo_contrato_mantencion->id_institucion = $institucion->id;
             $nuevo_contrato_mantencion->id_tipo_contrato = 1; // contrato indefinido (por defecto)
-
+            $nuevo_contrato->estado = 2;
             if($nuevo_contrato_mantencion->save()){
                 $mantenedores_contratados = ContratoMantencionInstitucion::where('id_institucion',$institucion->id)->get();
                 $v = view('fragm.mantenedores_contratados',[
@@ -7602,5 +7801,50 @@ class AdministradorCmController extends Controller
             return $e->getMessage();
         }
 
+    }
+
+    public function generarPdfLiquidacion(Request $request){
+        try {
+
+            //code...
+            $liquidacion = LiquidacionesProfesional::select('liquidaciones_profesional.*','profesionales.nombre','profesionales.apellido_uno','profesionales.apellido_dos','instituciones.nombre as nombre_institucion','instituciones.rut as rut_institucion','instituciones.id as id_institucion','instituciones.telefono as telefono_institucion','profesionales.id_direccion as id_direccion_profesional','profesionales.telefono_uno')
+            ->where('liquidaciones_profesional.id_institucion',$request->id_institucion)
+            ->join('profesionales','liquidaciones_profesional.id_profesional','profesionales.id')
+            ->leftjoin('instituciones','liquidaciones_profesional.id_institucion','instituciones.id')
+            ->where('liquidaciones_profesional.id_lugar_atencion',$request->id_lugar_atencion)
+            ->where('liquidaciones_profesional.id_profesional',$request->id_profesional)
+            ->where('liquidaciones_profesional.estado',1)
+            ->first();
+            if(!$liquidacion){
+                return 'error';
+            }
+            $institucion = Instituciones::find($liquidacion->id_institucion);
+            $direccion = $institucion->Direccion()->first();
+            $ciudad = $direccion->Ciudad()->first();
+            $liquidacion->direccion_institucion =$direccion->direccion;
+            $liquidacion->ciudad_institucion = $ciudad->nombre;
+
+            $direccion_profesional = Direccion::find($liquidacion->id_direccion_profesional);
+            $ciudad_profesional = $direccion_profesional->Ciudad()->first();
+            $liquidacion->direccion_profesional = $direccion_profesional->direccion.' #'.$direccion_profesional->numero_dir;
+            $liquidacion->ciudad_profesional = $ciudad_profesional->nombre;
+
+            // Renderizar la vista del reporte diario
+            $pdf = Pdf::loadView('app.adm_cm.liquidacion_pdf', compact('liquidacion'));
+            // Guardar el PDF en la carpeta public
+            $fileName = 'liquidacion_prof_' . $request->id_profesional . '.pdf';
+            $filePath = public_path('reportes/' . $fileName);
+            file_put_contents($filePath, $pdf->output());
+
+            // desasociar el profesional del lugar de atencion
+            // $profesional_lugar_atencion = ProfesionalesLugaresAtencion::where('id_lugar_atencion',$request->id_lugar_atencion)->where('id_profesional',$request->id_profesional)->first();
+            // if($profesional_lugar_atencion) $profesional_lugar_atencion->delete();
+
+            // Devolver la ruta accesible del archivo PDF
+            return response()->json(['ruta' => asset('reportes/' . $fileName)]);
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
     }
 }

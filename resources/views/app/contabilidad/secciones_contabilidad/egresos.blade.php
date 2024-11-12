@@ -19,21 +19,15 @@
             </div>
         </div>
         <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header bg-info">
-                    <div class="row">
-                        <div class="col-md-12 align-botton">
-                            <h4 class="text-white f-20 d-inline ml-4 mt-3">Egresos y gastos en general</h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
+
+
+                <div class="">
                     <div class="row mb-n10">
                         <div class="col-sm-12">
                             <div class="card">
                                 <div class="card-header bg-info">
                                     <div class="col-md-12 align-botton">
-                                        <h4 class="text-white f-20 d-inline ml-4 mt-3">Libro Gastos</h4>
+                                        <h4 class="text-white f-20 d-inline ml-4 mt-3">Egresos y gastos en general</h4>
                                         <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_gasto">
                                             <i class="feather icon-plus"></i> Registrar Nuevo Gasto
                                         </button>
@@ -45,7 +39,7 @@
                                         </div>
                                     </div>
                                     <div style="overflow-x:auto;">
-                                        <table id="#" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
+                                        <table id="tabla_egresos_cm" class="display table table-striped table-hover dt-responsive nowrap" style="width:99%">
                                             <thead>
                                                 <tr>
                                                     <th class="text-center align-middle">N° fact/boleta</th>
@@ -113,7 +107,7 @@
                                                     </td>
                                                 </tr>
                                             </tbody>
-                                            @include('app.contabilidad.modals.registrar_gasto')
+                                            {{-- @include('app.contabilidad.modals.registrar_gasto') --}}
                                         </table>
                                     </div>
                                 </div>
@@ -121,7 +115,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+
         </div>
     </div>
 </div>

@@ -914,7 +914,7 @@ class ManejoContratoController extends Controller
         if($valido)
         {
             $lista_tipo_asitente = array('ASISTENTE PUBLICO', 'ASISTENTE JEFA CAJA', 'ASISTENTE ADMINISTRATIVO', 'ASISTENTE ONLINE', 'ASISTENTE CONSULTA', 'ASISTENTE MANEJO DE AGENDA', 'ASISTENTE LABORATORIO');
-            $lista_tipo_admi_inst_serv = array('ADMINISTRADOR DE CM', 'ADMINISTRADOR COMERCIAL','ADMINISTRADOR FARMACIA','ADMINISTRADOR MINISTERIO');
+            $lista_tipo_admi_inst_serv = array('ADMINISTRADOR DE CM', 'ADMINISTRADOR COMERCIAL','ADMINISTRADOR FARMACIA','ADMINISTRADOR MINISTERIO','CONTADOR','ENCARGADO DE BODEGA');
             $lista_tipo_mantencion = array('GASFITERÍA', 'ELECTRICIDAD', 'CARPINTERÍA', 'PINTURA', 'JARDINERÍA', 'LIMPIEZA', 'MANTENCIÓN');
 
             /** registro asistente */
@@ -3982,7 +3982,7 @@ class ManejoContratoController extends Controller
             $contrato->hora_inicio_colacion = $hora_inicio_colacion;
             $contrato->hora_termino_colacion = $hora_termino_colacion;
             $contrato->fecha_creacion = $fecha_creacion;
-
+            $contrato->estado = 2;
             if($contrato->save())
             {
                 $datos['estado'] = 1;
@@ -4052,8 +4052,11 @@ class ManejoContratoController extends Controller
             $liquidacion_profesional->monto_imponible = 500000; // por defecto, revisar el monto desde la vista
             $liquidacion_profesional->total = 500000; // por defecto
             $liquidacion_profesional->id_usuario = Auth::user()->id;
-            $liquidacion_profesional->fecha = Carbon::now();
+            $liquidacion_profesional->fecha_emision = Carbon::now();
+            $liquidacion_profesional->fecha_inicio = $request->fecha_inicio;
+            $liquidacion_profesional->fecha_termino = $request->fecha_termino;
             $liquidacion_profesional->porcentaje = 10; // por defecto
+            $liquidacion_profesional->estado = 1;
             if($liquidacion_profesional->save()){
                 return ['estado' => 'OK','msj' => 'Se ha registrado la liquidacion correctamente.'];
             }else{

@@ -17,4 +17,9 @@ class Remuneraciones extends Model
         return $this->hasOne(ContratoDependiente::class, 'id', 'id_contrato_dependiente');
     }
 
+    public function ContratoDependienteProfesional()
+    {
+        return $this->hasOne(ContratoDependienteProfesional::class, 'id', 'id_contrato_dependiente');
+    }
+
 }

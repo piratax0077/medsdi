@@ -33,7 +33,9 @@ class EscritorioInstitucion extends Controller
             else{
                 if($adminLab)
                     return view('app.laboratorio.adm_general.home',['institucion' => $servicio]);
-                elseif($servicio->tipo_institucion == 4)
+                elseif($servicio->id_tipo_institucion == 2)
+                    return view('app.adm_hospital.home',['institucion' => $servicio])->render();
+                elseif($servicio->id_tipo_institucion == 4)
                     return view('app.institucion.adm_general.home')->with(['region' => $region, 'tipo_servicio' => $tipo_servicio, 'tipo_institucion' => $tipo_institucion,'institucion' => $servicio]);
                 else
                     return view('app.adm_cm.home')->with(['region' => $region, 'tipo_servicio' => $tipo_servicio, 'tipo_institucion' => $tipo_institucion,'institucion' => $servicio]);

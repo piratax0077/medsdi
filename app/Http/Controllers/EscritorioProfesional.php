@@ -36,6 +36,7 @@ use App\Models\Hipertension;
 use App\Models\HoraMedica;
 use App\Models\InformeMedico;
 use App\Models\Interconsulta;
+use App\Models\Instituciones;
 use App\Models\LugarAtencion;
 use App\Models\LiquidacionRecibo;
 use App\Models\LogUsersDevices;
@@ -55,8 +56,11 @@ use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalHorario;
 use App\Models\RecetaAudifono;
 use App\Models\ProfesionalProvisorio;
+use App\Models\ProfesionalServicioClinico;
 use App\Models\Region;
 use App\Models\RegistroConfirmacionHoraAgenda;
+use App\Models\ServiciosInternos;
+use App\Models\ServiciosInternosSalas;
 use App\Models\SolicitudPabellonQuirurgico;
 use App\Models\TipoAntecedenteAcademico;
 use App\Models\TipoEspecialidad;
@@ -454,7 +458,9 @@ class EscritorioProfesional extends Controller
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         // $lugares_atencion_profesional = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->where('estado', 1)->get();
         // dd($lugares_atencion_profesional);
+
         $lugares_atencion_profesional = $profesional->LugaresAtencion()->get();
+
         // dd($lugares_atencion_profesional);
         //$lugares_atencion_profesional = null;
         //dd($lugares_atencion_profesional);
@@ -513,6 +519,8 @@ class EscritorioProfesional extends Controller
             }
             else
             {
+                // preguntamos si esta asociada a algun servicio de hospital
+
                 return view('app.profesional.escritorio_profesional')->with([
                     'region' => $region,
                     'profesional' => $profesional,
@@ -1809,8 +1817,41 @@ class EscritorioProfesional extends Controller
 
     public function mi_agenda(Request $request)
     {
-
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $institucion = Instituciones::where('id_lugar_atencion',$request->lugares_atencion)->first();
+
+        if($institucion && $institucion->id_tipo_institucion == 2){
+            try {
+                // buscamos los servicios internos
+            $servicios_internos = $this->dame_servicios_internos($institucion->id, $institucion->id_lugar_atencion);
+
+            foreach($servicios_internos as $servicio_interno){
+                // preguntamos si es profesional es jefe de algun servicio
+                if($servicio_interno->jefe_servicio && $servicio_interno->jefe_servicio->id == $profesional->id){
+                    return view('app.adm_hospital.servicios.jefe_servicio.escritorio_adm',['servicio' => $servicio_interno])->render();
+                }
+            }
+
+            foreach($servicios_internos as $servicio_interno){
+                // preguntamos si el profesional pertenece al grupo de profesionales del hospital de algun servicio
+                foreach($servicio_interno->profesionales as $profesional_servicio){
+                    if($profesional_servicio->id == $profesional->id && $profesional->id_especialidad == 8){
+
+                        return view('app.adm_hospital.servicios.profesionales.escritorio_enfermera',['servicio' => $servicio_interno,'institucion' => $institucion])->render();
+                    }
+                    if($profesional_servicio->id == $profesional->id){
+                        return view('app.adm_hospital.servicios.profesionales.escritorio',['servicio' => $servicio_interno])->render();
+                    }
+                }
+            }
+
+            return $servicios_internos;
+            } catch (\Exception $e) {
+                //throw $th;
+                return $e->getMessage();
+            }
+
+        }
 
         /** tipos de agendas del profesional */
         $tipo_agendas_temp = ProfesionalHorario::select('tipo_agenda')->where('id_lugar_atencion', $request->lugares_atencion)->where('id_profesional', $profesional->id)->orderBy('tipo_agenda')->groupBy('tipo_agenda')->first();
@@ -1927,6 +1968,43 @@ class EscritorioProfesional extends Controller
             ]
 
         );
+    }
+
+    public function dame_servicios_internos($id_institucion, $id_lugar_atencion){
+        $servicios_internos = ServiciosInternos::select('servicio_interno.*','servicios.nombre as nombre_servicio','profesionales.nombre as nombre_responsable','profesionales.apellido_uno as apellido_uno_responsable','profesionales.apellido_dos as apellido_dos_responsable')
+                            ->join('servicios','servicios.id','=','servicio_interno.id_servicio')
+                            ->leftjoin('profesionales','profesionales.id','=','servicio_interno.id_responsable')
+                            // ->where('servicio_interno.id_institucion',$id_institucion)
+                            ->where('servicio_interno.id_lugar_atencion',$id_lugar_atencion)
+                            ->get();
+
+        foreach($servicios_internos as $servicio_interno){
+            $salas_servicio = ServiciosInternosSalas::where('id_servicio_interno',$servicio_interno->id)->get();
+            $servicio_interno->salas = $salas_servicio;
+
+            $profesionales = ProfesionalServicioClinico::select('profesionales.*','profesionales_servicios_clinicos.id_servicio_interno','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad')
+                                ->join('profesionales','profesionales_servicios_clinicos.id_profesional','profesionales.id')
+                                ->join('especialidades','profesionales.id_especialidad','especialidades.id')
+                                ->leftjoin('tipos_especialidad','profesionales.id_tipo_especialidad','tipos_especialidad.id')
+                                ->where('profesionales_servicios_clinicos.id_cargo',1)
+                                ->where('profesionales_servicios_clinicos.id_servicio_interno',$servicio_interno->id)
+                                ->get();
+            $servicio_interno->profesionales = $profesionales;
+
+            $tens = ProfesionalServicioClinico::select('profesionales.*','profesionales_servicios_clinicos.id_servicio_interno','especialidades.nombre as especialidad','tipos_especialidad.nombre as tipo_especialidad')
+                                ->join('profesionales','profesionales_servicios_clinicos.id_profesional','profesionales.id')
+                                ->join('especialidades','profesionales.id_especialidad','especialidades.id')
+                                ->leftjoin('tipos_especialidad','profesionales.id_tipo_especialidad','tipos_especialidad.id')
+                                ->where('profesionales_servicios_clinicos.id_cargo',5)
+                                ->where('profesionales_servicios_clinicos.id_servicio_interno',$servicio_interno->id)
+                                ->get();
+
+            $servicio_interno->tens = $tens;
+
+            $servicio_interno->jefe_servicio = Profesional::find($servicio_interno->id_responsable);
+        }
+
+        return $servicios_internos;
     }
 
     public function atenciones_previas_paciente($id)

@@ -2348,6 +2348,7 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div id="div_form_servicio" class="d-none w-100">
                                 <div class="col-sm-12">
                                     <div class="form-group fill">
@@ -4545,6 +4546,8 @@
     function guardar_servicio(){
         let id_servicio = $('#servicio').val();
         let id_responsable = $('#responsable_servicio').val();
+        let n_salas_servicio = $('#n_salas_servicio').val();
+        let total_camas_servicio = $('#total_camas_servicio').val();
         id_servicio = parseInt(id_servicio);
         id_responsable = parseInt(id_responsable);
         let valido = 1;
@@ -4560,6 +4563,14 @@
             valido = 0;
             mensaje += 'Campo requerido Responsable\n';
         }
+        if(n_salas_servicio == ''){
+            valido = 0;
+            mensaje += 'Campo requerido N° Salas\n';
+        }
+        if(total_camas_servicio == ''){
+            valido = 0;
+            mensaje += 'Campo requerido Total Camas Servicio\n';
+        }
 
 
         if(valido == 1)
@@ -4567,6 +4578,8 @@
             let data = {
                 id_servicio : id_servicio,
                 id_responsable : id_responsable,
+                n_salas_servicio: n_salas_servicio,
+                total_camas_servicio: total_camas_servicio,
                 _token: CSRF_TOKEN,
             }
 

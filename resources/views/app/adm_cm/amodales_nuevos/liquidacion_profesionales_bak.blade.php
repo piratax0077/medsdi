@@ -312,6 +312,9 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row" id="contenedor_cuentas_bancarias_profesional">
+
+                                    </div>
                                 </div>
                                 <!--INFO LIQUIDACION-->
                                 <div class="tab-pane fade show" id="a_pagar_prof" role="tabpanel" aria-labelledby="a_pagar_prof-tab">
@@ -347,9 +350,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-3 col-md-3">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm mt-3">$:.......</label>
-                                                </div>
+
                                             </div>
                                         </div>
 
@@ -387,14 +388,10 @@
                                                 <input type="number" class="form-control form-control-sm" name="dcto_valores_recibidos_convenio" id="dcto_valores_recibidos_convenio" value="N/A">
                                             </div>
                                             <div class="col-sm-3 col-md-3">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm mt-3"><strong>Valor Total a Pagar</strong></label>
-                                                </div>
+
                                             </div>
                                             <div class="col-sm-3 col-md-3">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm mt-3">$:.......</label>
-                                                </div>
+
                                             </div>
                                         </div>
                                     </form>
@@ -565,7 +562,6 @@
             fecha_inicio: fecha_inicio,
             fecha_termino: fecha_termino
         }
-
 
         $.ajax({
             type:'post',

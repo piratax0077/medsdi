@@ -91,6 +91,7 @@
                                                         </thead>
                                                         <tbody>
                                                             @foreach ($profesionales_contratados as $profesional)
+                                                            @if(!$profesional->contrato)
                                                                 <tr>
                                                                     <td class="align-middle text-center">
                                                                         <span><strong>{{ $profesional->nombre }}
@@ -149,6 +150,7 @@
                                                                             Liquidar</button>
                                                                     </td>
                                                                 </tr>
+                                                                @endif
                                                             @endforeach
                                                         </tbody>
                                                     </table>
@@ -370,29 +372,35 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-2 mb-3">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm" for="mes_reporte">Mes</label>
-                                                            <select name="mes_reporte" id="mes_reporte" class="form-control form-control-sm">
-                                                                <option value="0">Seleccione</option>
-                                                                <option value="1">Enero</option>
-                                                                <option value="2">Febrero</option>
-                                                                <option value="3">Marzo</option>
-                                                                <option value="4">Abril</option>
-                                                                <option value="5">Mayo</option>
-                                                                <option value="6">Junio</option>
-                                                                <option value="7">Julio</option>
-                                                                <option value="8">Agosto</option>
-                                                                <option value="9">Septiembre</option>
-                                                                <option value="10">Octubre</option>
-                                                                <option value="11">Noviembre</option>
-                                                                <option value="12">Diciembre</option>
-                                                            </select>
+                                                        <div class="d-flex justify-content-between align-items-start">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm" for="mes_reporte">Mes</label>
+                                                                <select name="mes_reporte" id="mes_reporte" class="form-control form-control-sm w-100">
+                                                                    <option value="0">Seleccione</option>
+                                                                    <option value="1">Enero</option>
+                                                                    <option value="2">Febrero</option>
+                                                                    <option value="3">Marzo</option>
+                                                                    <option value="4">Abril</option>
+                                                                    <option value="5">Mayo</option>
+                                                                    <option value="6">Junio</option>
+                                                                    <option value="7">Julio</option>
+                                                                    <option value="8">Agosto</option>
+                                                                    <option value="9">Septiembre</option>
+                                                                    <option value="10">Octubre</option>
+                                                                    <option value="11">Noviembre</option>
+                                                                    <option value="12">Diciembre</option>
+                                                                </select>
+                                                            </div>
+                                                            <button class="btn btn-success btn-sm float-right"><i class="fas fa-search"></i></button>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm" for="fecha_reporte">Fecha</label>
-                                                            <input type="date" name="fecha_reporte" id="fecha_reporte" class="form-control form-control-sm">
+                                                        <div class="d-flex justify-content-between align-items-start">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm" for="fecha_reporte">Fecha</label>
+                                                                <input type="date" name="fecha_reporte" id="fecha_reporte" class="form-control form-control-sm w-100">
+                                                            </div>
+                                                            <button class="btn btn-success btn-sm float-right" onclick="buscar_liquidaciones()"><i class="fas fa-search"></i></button>
                                                         </div>
-                                                        <button class="btn btn-success btn-sm float-right" onclick="buscar_liquidaciones()"><i class="fas fa-search"></i> Buscar</button>
+
                                                     </div>
                                                     <div class="col-md-10">
                                                         <div style="overflow-x:auto;">
@@ -417,10 +425,10 @@
                                                                             <span>{{ $liquidacion->rut }}</span>
                                                                         </td>
                                                                         <td class="align-middle text-center">
-                                                                            <span><strong>{{ $liquidacion->fecha }}</strong></span>
+                                                                            <span><strong>{{ $liquidacion->fecha_inicio }}</strong></span>
                                                                         </td>
                                                                         <td class="align-middle text-center">
-                                                                            <span><strong>{{ $liquidacion->fecha }}</strong></span>
+                                                                            <span><strong>{{ $liquidacion->fecha_termino }}</strong></span>
                                                                         </td>
                                                                         <td class="align-middle text-center">
                                                                             <!--Botón Modal-->
@@ -436,7 +444,7 @@
 
                                                                         <td class="align-middle text-center">
                                                                             <button type="button" class="btn btn-outline-success btn-sm"
-                                                                                onclick="editar_datosprofesional();">
+                                                                                onclick="generar_pdf_liquidacion_reporte({{ $liquidacion->id_profesional }});">
                                                                                 <i class="fas fa-eye"></i> Ver</button>
                                                                         </td>
                                                                     </tr>
@@ -543,14 +551,34 @@
                     $('#nombre_profesional_liquidacion').html(data.registro.nombre + ' ' + data.registro
                         .apellido_uno + ' ' + data.registro.apellido_dos);
                     let convenios = data.convenios;
-                    console.log(convenios);
+                    let cuentas = data.cuentas;
+                    console.log(cuentas);
                     $('#convenios_profesional_liquidacion').empty();
                     $('#valor_profesional_liquidacion').empty();
                     $('#tipo_atencion_liquidacion').empty();
+                    $('#contenedor_cuentas_bancarias_profesional').empty();
                     convenios.forEach((c) => {
                         $('#convenios_profesional_liquidacion').append(c.convenios);
                         $('#valor_profesional_liquidacion').append(numberFormat1.format(c.valor));
                         $('#tipo_atencion_liquidacion').append(c.tipo_atencion);
+                    });
+                    cuentas.forEach((cuenta) => {
+                        $('#contenedor_cuentas_bancarias_profesional').append(
+                            `<div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5 class="card-title">`+cuenta.banco.nombre+`</h5>
+                                            <p class="card-text">`+cuenta.numero_control+`</p>
+                                            <p class="card-text">`+cuenta.otro+`</p>
+                                        </div>
+
+                                        <a href="#" class="btn btn-primary" onclick="seleccionar_cuenta(`+cuenta.banco.id+`,`+cuenta.numero_control+`)">Seleccionar</a>
+                                    </div>
+                                </div>
+                            </div>
+                            `
+                        );
                     });
 
                 } else {
@@ -566,6 +594,11 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
 
+    }
+
+    function seleccionar_cuenta(id_banco, numero_cuenta){
+        $('#banco_nuevo_profesional_convenio').val(id_banco);
+        $('#n_cta_nuevo_profesional_convenio').val(numero_cuenta);
     }
 
     function datoscuentaot() {
@@ -613,7 +646,7 @@
 
     }
 
-    function generar_pdf_liquidacion(id) {
+    function generar_pdf_liquidacion_reporte(id_profesional){
         swal({
                 title: 'Generar PDF de liquidación',
                 text: '¿Está seguro que desea generar la liquidación',
@@ -623,16 +656,139 @@
             })
             .then((willDelete) => {
                 if (willDelete) {
-                    confirmar_generar_pdf_liquidacion(id);
+                    confirmar_generar_pdf_liquidacion_reporte(id_profesional);
                 }
             })
     }
 
-    function confirmar_generar_pdf_liquidacion(id) {
+    function confirmar_generar_pdf_liquidacion_reporte(id_profesional) {
+
+        let id_institucion = $('#id_institucion').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+        let url = "{{ route('adm_cm.generar_pdf_liquidacion') }}";
+
+        let data = {
+            id_profesional: id_profesional,
+            id_institucion: id_institucion,
+            id_lugar_atencion: id_lugar_atencion,
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url:url,
+            data: data,
+            success: function(data){
+                console.log(data);
+                if(data == 'error'){
+                    swal({
+                        title:'Error',
+                        text:'Primero debe generar la liquidación.',
+                        icon:'error',
+                        button:"Aceptar"
+                    });
+                    return false;
+                }
+                if(data.ruta){
+                    swal({
+                        title: "Reporte generado",
+                        text: "El reporte se ha generado correctamente",
+                        icon: "success",
+                        button: "Aceptar"
+                    }).then(() => {
+                        // Abrir el PDF en una ventana emergente
+                        var width = 800;
+                        var height = 600;
+                        var left = (screen.width - width) / 2;
+                        var top = (screen.height - height) / 2;
+                        window.open(data.ruta, 'Reporte Diario', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                    });
+                }else{
+                    swal({
+                        title: "Error",
+                        text: "Ha ocurrido un error al generar el reporte",
+                        icon: "error",
+                        button: "Aceptar"
+                    });
+                }
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        })
+    }
+
+    function generar_pdf_liquidacion() {
         swal({
-            text: 'EN CONSTRUCCION',
-            icon: 'info'
-        });
+                title: 'Generar PDF de liquidación',
+                text: '¿Está seguro que desea generar la liquidación',
+                icon: 'warning',
+                buttons: ['Cancelar', 'Aceptar'],
+                DangerMode: true
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    confirmar_generar_pdf_liquidacion();
+                }
+            })
+    }
+
+    function confirmar_generar_pdf_liquidacion() {
+
+        let id_profesional = $('#id_profesional').val();
+        let id_institucion = $('#id_institucion').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+        let url = "{{ route('adm_cm.generar_pdf_liquidacion') }}";
+
+        let data = {
+            id_profesional: id_profesional,
+            id_institucion: id_institucion,
+            id_lugar_atencion: id_lugar_atencion,
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url:url,
+            data: data,
+            success: function(data){
+                console.log(data);
+                if(data == 'error'){
+                    swal({
+                        title:'Error',
+                        text:'Primero debe generar la liquidación.',
+                        icon:'error',
+                        button:"Aceptar"
+                    });
+                    return false;
+                }
+                if(data.ruta){
+                    swal({
+                        title: "Reporte generado",
+                        text: "El reporte se ha generado correctamente",
+                        icon: "success",
+                        button: "Aceptar"
+                    }).then(() => {
+                        // Abrir el PDF en una ventana emergente
+                        var width = 800;
+                        var height = 600;
+                        var left = (screen.width - width) / 2;
+                        var top = (screen.height - height) / 2;
+                        window.open(data.ruta, 'Reporte Diario', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                    });
+                }else{
+                    swal({
+                        title: "Error",
+                        text: "Ha ocurrido un error al generar el reporte",
+                        icon: "error",
+                        button: "Aceptar"
+                    });
+                }
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        })
     }
 
     function eliminar_liquidacion(id) {

@@ -9,6 +9,7 @@ use App\Models\AreasCm;
 use App\Models\Asistente;
 use App\Models\AsistenteLugarAtencion;
 use App\Models\AsistenteTipo;
+use App\Models\Bancos;
 use App\Models\TipoAreasCm;
 use Illuminate\Http\Request;
 use App\Models\Region;
@@ -21,6 +22,7 @@ use App\Models\Especialidad;
 use App\Models\EspecialidadesCm;
 use App\Models\Instituciones;
 use App\Models\Laboratorio;
+use App\Models\LiquidacionRecibo;
 use App\Models\LugarAtencion;
 use App\Models\MensajesDifusion;
 use App\Models\MensajesProfesional;
@@ -927,14 +929,34 @@ class LaboratorioController extends Controller
                 $profesional->tipo_especialidad = TipoEspecialidad::where('id',$profesional['contrato']['id_tipo_especialidad'])->first();
                 $profesional->sub_tipo_especialidad = SubTipoEspecialidad::where('id',$profesional['contrato']['id_subtipo_especialidad'])->first();
             }else{
-                $convenio = ContratoConvenioProfesional::where($filtro)->first();
-                $profesional->contrato = $convenio;
-                if($convenio){
-                    $profesional->especialidad = Especialidad::where('id',$profesional['contrato']['id_especialidad'])->first();
-                    $profesional->tipo_especialidad = TipoEspecialidad::where('id',$profesional['contrato']['id_tipo_especialidad'])->first();
-                    $profesional->sub_tipo_especialidad = SubTipoEspecialidad::where('id',$profesional['contrato']['id_subtipo_especialidad'])->first();
-                }
+                $profesional->contrato = null;
             }
+
+            $liquidacion = LiquidacionRecibo::where('id_seccion',$profesional->id)->get();
+
+        $liqui_principal = 0;
+
+        if($liquidacion)
+        foreach ($liquidacion as $key => $value)
+        {
+            $id_banco = decrypt($value->casa);
+            $banco = Bancos::select('id', 'nombre')->where('id',$id_banco)->first();
+            $liquidacion[$key]->banco = $banco;
+            if($value->serie!='')
+                $liquidacion[$key]->serie  = decrypt($value->serie);
+            if($value->autor!='')
+                $liquidacion[$key]->autor = decrypt($value->autor);
+            if($value->casa!='')
+                $liquidacion[$key]->casa = decrypt($value->casa);
+            if($value->numero_control!='')
+                $liquidacion[$key]->numero_control = decrypt($value->numero_control);
+            if($value->email!='')
+                $liquidacion[$key]->email = decrypt($value->email);
+            if($value->otro!='')
+                $liquidacion[$key]->otro = decrypt($value->otro);
+            if($liqui_principal == 0 && $value->principal == 1)
+                $liqui_principal = 1;
+        }
 
             $convenios = ProfesionalConvenio::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$LugarAtencion->id)->get();
 
@@ -943,6 +965,7 @@ class LaboratorioController extends Controller
             $datos['registro'] = $profesional;
             $datos['direccion'] = $direccion_text;
             $datos['convenios'] = $convenios;
+            $datos['cuentas'] = $liquidacion;
         }
         else
         {

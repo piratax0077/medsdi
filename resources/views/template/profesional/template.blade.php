@@ -1190,7 +1190,7 @@
                     let lugares_atencion = $('#lugares_atencion');
 
                     data = JSON.parse(data);
-
+                    console.log(data);
                     lugares_atencion.find('option').remove();
                     lugares_atencion.append('<option value="0">Seleccione</option>');
                     let contador = 0;

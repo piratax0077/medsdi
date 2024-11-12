@@ -59,7 +59,7 @@ class ContratoDependiente extends Model
         return $this->hasOne(LugarAtencion::class, 'id', 'id_lugar_atencion');
     }
 
-    public function scopeFiltroFechaContratoActivo($query, $ano, $mes)
+    public function scopeFiltroFechaContratoActivo($query, $ano, $mes, $id_lugar_atencion)
     {
         if(!empty($ano) && !empty($mes))
         {
@@ -85,14 +85,15 @@ class ContratoDependiente extends Model
             //     $query->whereYear('fecha_inicio', '<=', intval($ano))->whereMonth('fecha_inicio', '<=', intval($mes));
             // });
 
-            $query->where(function($query) use ($ano, $mes){
+            $query->where(function($query) use ($ano, $mes, $id_lugar_atencion){
                 $query->where(function($query) use ($ano, $mes){
                     // $query->whereYear('fecha_inicio', '>=', intval($ano))->whereMonth('fecha_inicio', '<=', intval($mes));
                     $query->whereMonth('fecha_inicio', '<=', intval($mes));
                 })
                 ->whereOr(function($query) use ($ano, $mes){
                     $query->whereYear('fecha_inicio', '<=', intval($ano))->whereMonth('fecha_inicio', '<=', intval($mes));
-                });
+                })
+                ->where('id_lugar_atencion', $id_lugar_atencion); // Añadimos el filtro de id_lugar_atencion aquí
             });
         }
     }

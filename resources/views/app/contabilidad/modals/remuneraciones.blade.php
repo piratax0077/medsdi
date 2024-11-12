@@ -11,6 +11,7 @@
                 <input type="hidden" name="m_remuneraciones_r_ano_liq" id="m_remuneraciones_r_ano_liq" value="">
                 <input type="hidden" name="m_remuneraciones_id_contrato_dependiente" id="m_remuneraciones_id_contrato_dependiente" value="">
                 <input type="hidden" name="m_remuneraciones_id_empleado" id="m_remuneraciones_id_empleado" value="">
+                <input type="hidden" name="m_remuneraciones_tipo_empleado" id="m_remuneraciones_tipo_empleado" value="">
 
                 <div class="row">
                     <div class="col-md-12">
@@ -227,17 +228,22 @@
 <script>
     function generar_pago(tipo_empleado, id_empleado, id_contrato_dependiente, ano, mes) {
 
+
         $('#m_remuneraciones_id_contrato_dependiente').val(id_contrato_dependiente);
         $('#m_remuneraciones_id_empleado').val(id_empleado);
+        $('#m_remuneraciones_tipo_empleado').val(tipo_empleado);
         $('#m_remuneraciones_r_mes_liq').val(mes);
         $('#m_remuneraciones_r_ano_liq').val(ano);
+
+        console.log(id_contrato_dependiente);
 
         let url = "{{  route('adm_cm.contrato.dependiente.ver') }}";
         $.ajax({
             url: url,
             type: "get",
             data: {
-                id : id_contrato_dependiente
+                id : id_contrato_dependiente,
+                tipo_empleado: tipo_empleado
             },
         })
         .done(function(resp) {
@@ -336,6 +342,7 @@
     {
         var id_contrato_dependiente = $('#m_remuneraciones_id_contrato_dependiente').val();
         var id_empleado = $('#m_remuneraciones_id_empleado').val();
+        var tipo_empleado = $('#m_remuneraciones_tipo_empleado').val();
         var r_mes_liq = $('#m_remuneraciones_r_mes_liq').val();
         var r_ano_liq = $('#m_remuneraciones_r_ano_liq').val();
         var r_sueldo_base = $('#m_remuneraciones_r_sueldo_base').val();
@@ -364,7 +371,12 @@
         var r_a_pagar = $('#m_remuneraciones_r_a_pagar').val();
         var _token = CSRF_TOKEN;
 
-        let url = "{{ route('adm_cm.remuneracion.registrar') }}";
+        if(tipo_empleado == "PROFESIONAL"){
+            var url = "{{ route('adm_cm.remuneracion.registrar_profesional') }}";
+        }else{
+            var url = "{{ route('adm_cm.remuneracion.registrar') }}";
+        }
+
 
         $.ajax({
             url: url,
