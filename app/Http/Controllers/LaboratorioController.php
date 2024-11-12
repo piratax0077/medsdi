@@ -24,6 +24,7 @@ use App\Models\MensajesDifusion;
 use App\Models\MensajesProfesional;
 use App\Models\Mensajes;
 use App\Models\Paciente;
+use App\Models\ProcedimientosCentro;
 use App\Models\Profesional;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalInstitucionConvenio;
@@ -202,7 +203,7 @@ class LaboratorioController extends Controller
 
     public function registrar_resultados_examenes_laboratorio_subir_examan(Request $request)
     {
-        return ResultadoExamenController::registrar($request->id_lugar_atencion, $request->id_institucion, $request->tipo_examen, $request->id_paciente, $request->rut, $request->nombre, $request->apellido_paterno, $request->apellido_materno, $request->email, $request->observacion, $request->lista_examen);
+        return ResultadoExamenController::registrar($request->id_lugar_atencion, $request->id_institucion, $request->tipo_examen, $request->id_paciente, $request->rut, $request->nombre, $request->apellido_paterno, $request->apellido_materno, $request->email, $request->observacion, '', $request->lista_examen,  '', '', '');
     }
 
     public function resultados_lab_subir_examan(){
@@ -1554,6 +1555,10 @@ class LaboratorioController extends Controller
 
         $director_gestion_cuidado = Profesional::find($institucion->id_director_gestion_cuidado);
 
+        $filtro_prodce  = array();
+        $filtro_prodce[]  = array('id_lugar_atencion', $institucion->id_lugar_atencion);
+        $filtro_prodce[]  = array('estado', 1);
+        $procedimeintos = ProcedimientosCentro::where($filtro_prodce)->get();
 
         return view('app.laboratorio.configuracion')->with([
             'tipo_institucion' => $tipo_institucion,
@@ -1575,6 +1580,7 @@ class LaboratorioController extends Controller
             'areas_cm' => $areas_cm,
             'servicios' => $servicios,
             'servicios_internos' => $servicios_internos,
+            'procedimeintos' => $procedimeintos,
         ]);
     }
 

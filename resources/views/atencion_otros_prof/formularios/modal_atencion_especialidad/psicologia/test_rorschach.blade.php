@@ -1,46 +1,46 @@
 <div id="test_rorsch" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="test_rorsch" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-		<div class="modal-content" >
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+		<div class="modal-content">
 			<div class="modal-header bg-info">
-				<h5 class="modal-title text-white mt-1">TEST DE RORSCHACH</h5>
+				<h5 class="modal-title text-white mt-1">Test de Rorschach</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
 			<div class="modal-body">
 					<div class="row">
 					    <div class="col-md-12">
-					        <ul class="nav nav-pills mb-3" id="tablas_examenes" role="tablist">
+					        <ul class="nav nav-tabs-aten nav-fill mb-3" id="tablas_examenes" role="tablist">
 					            <li class="nav-item">
-					                <a class="nav-link-wizard active" id="uno_tab" data-toggle="pill" href="#uno" role="tab" aria-controls="uno" aria-selected="true">LAM-1</a>
+					                <a class="nav-link-aten active" id="uno_tab" data-toggle="pill" href="#uno" role="tab" aria-controls="uno" aria-selected="true">LAM-1</a>
 					            </li>
 					            <li class="nav-item">
-					                <a class="nav-link-wizard" id="dos_tab" data-toggle="pill" href="#dos" role="tab" aria-controls="pills-home" aria-selected="true">LAM-2</a>
+					                <a class="nav-link-aten" id="dos_tab" data-toggle="pill" href="#dos" role="tab" aria-controls="pills-home" aria-selected="true">LAM-2</a>
 					            </li>
 					            <li class="nav-item">
-					                <a class="nav-link-wizard" id="tres_tab" data-toggle="pill" href="#tres" role="tab" aria-controls="pills-home" aria-selected="true">LAM-3</a>
+					                <a class="nav-link-aten" id="tres_tab" data-toggle="pill" href="#tres" role="tab" aria-controls="pills-home" aria-selected="true">LAM-3</a>
 					            </li>
 								 <li class="nav-item">
-					                <a class="nav-link-wizard " id="cuatro_tab" data-toggle="pill" href="#cuatro" role="tab" aria-controls="pills-home" aria-selected="true">LAM-4</a>
+					                <a class="nav-link-aten" id="cuatro_tab" data-toggle="pill" href="#cuatro" role="tab" aria-controls="pills-home" aria-selected="true">LAM-4</a>
 					            </li>
 					            <li class="nav-item">
-					                <a class="nav-link-wizard" id="cinco_tab" data-toggle="pill" href="#cinco" role="tab" aria-controls="pills-home" aria-selected="true">LAM-5</a>
+					                <a class="nav-link-aten" id="cinco_tab" data-toggle="pill" href="#cinco" role="tab" aria-controls="pills-home" aria-selected="true">LAM-5</a>
 					            </li>
 					            <li class="nav-item">
-					                <a class="nav-link-wizard" id="seis_tab" data-toggle="pill" href="#seis" role="tab" aria-controls="pills-home" aria-selected="true">LAM-6</a>
+					                <a class="nav-link-aten" id="seis_tab" data-toggle="pill" href="#seis" role="tab" aria-controls="pills-home" aria-selected="true">LAM-6</a>
 					            </li>
 								 <li class="nav-item">
-					                <a class="nav-link-wizard " id="siete_tab" data-toggle="pill" href="#siete" role="tab" aria-controls="pills-home" aria-selected="true">LAM-7</a>
+					                <a class="nav-link-aten" id="siete_tab" data-toggle="pill" href="#siete" role="tab" aria-controls="pills-home" aria-selected="true">LAM-7</a>
 					            </li>
 					            <li class="nav-item">
-					                <a class="nav-link-wizard" id="ocho_tab" data-toggle="pill" href="#ocho" role="tab" aria-controls="pills-home" aria-selected="true">LAM-8</a>
+					                <a class="nav-link-aten" id="ocho_tab" data-toggle="pill" href="#ocho" role="tab" aria-controls="pills-home" aria-selected="true">LAM-8</a>
 					            </li>
 					            <li class="nav-item">
-					                <a class="nav-link-wizard" id="nueve_tab" data-toggle="pill" href="#nueve" role="tab" aria-controls="pills-home" aria-selected="true">LAM-9</a>
+					                <a class="nav-link-aten" id="nueve_tab" data-toggle="pill" href="#nueve" role="tab" aria-controls="pills-home" aria-selected="true">LAM-9</a>
 					            </li>
 								<li class="nav-item">
-					                <a class="nav-link-wizard" id="diez_tab" data-toggle="pill" href="#diez" role="tab" aria-controls="pills-home" aria-selected="true">LAM-10</a>
+					                <a class="nav-link-aten" id="diez_tab" data-toggle="pill" href="#diez" role="tab" aria-controls="pills-home" aria-selected="true">LAM-10</a>
 					            </li>
                                 <li class="nav-item">
-					                <a class="nav-link-wizard" id="c_gen_tab" data-toggle="pill" href="#c_gen" role="tab" aria-controls="pills-home" aria-selected="true">COMENTARIOS</a>
+					                <a class="nav-link-aten" id="c_gen_tab" data-toggle="pill" href="#c_gen" role="tab" aria-controls="pills-home" aria-selected="true">Comentarios</a>
 					            </li>
 					        </ul>
 					    </div>
@@ -263,22 +263,18 @@
 									<div class="form-row">
                                         <div class="col-sm-12 mt-2">
                                             <label id="" name="" class="floating-label-activo-sm" for="comentarios_gen" >Comentarios Generales del test</label>
-                                            <textarea class="form-control form-control-sm" rows="20" onfocus="this.rows=20" onblur="this.rows=20;" name="comentarios_gen" id="comentarios_gen"></textarea>
+                                            <textarea class="form-control form-control-sm" rows="10" onfocus="this.rows=10" onblur="this.rows=10;" name="comentarios_gen" id="comentarios_gen"></textarea>
                                         </div>
                                         <br>
                                     </div>
 					            </div>
 					        </div>
 					    </div>
-                        <div class="col-md-12 col-sm-12 text-center">
-                            <hr>
-                            <button type="button" class="btn btn-danger">Cancelar</button>
-                            <button type="submit" class="btn btn-info">Guardar</button>
-                        </div>
 					</div>
 				</div>
 				<div class="modal-footer">
-
+					<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close"><i class="feather icon-x"></i> Cancelar</button>
+                    <button type="submit" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar</button>
 				</div>
 			</div>
 		</div>

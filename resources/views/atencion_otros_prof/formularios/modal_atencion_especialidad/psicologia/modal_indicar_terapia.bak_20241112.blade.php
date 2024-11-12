@@ -1,23 +1,25 @@
 <div id="indicar_terapia" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="indicar_terapia"aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1">Plan de tratamiento terapia sicológica</h5>
+                <h5 class="modal-title text-white mt-1">Plan de Tratamiento Terápia sicológica</h5>
                 <input type="hidden" id="id_profesional" value="{{ @Auth::user()->id }}">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span  aria-hidden="true">×</span> </button>
+
+
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <ul class="nav nav-tabs-aten nav-fill mb-3" id="tablas_examenes" role="tablist">
+                        <ul class="nav nav-pills mb-3" id="tablas_examenes" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link-aten active " id="rec_auto_tab" data-toggle="pill" href="#rec_auto" role="tab" aria-controls="rec_auto" aria-selected="true">Terapia 1</a>
+                                <a class="nav-link-wizard active " id="rec_auto_tab" data-toggle="pill" href="#rec_auto" role="tab" aria-controls="rec_auto" aria-selected="true">Terapia 1</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-aten" id="rec_auto_tab" data-toggle="pill" href="#rec_auto" role="tab" aria-controls="rec_auto" aria-selected="true">Terapia 2</a>
+                                <a class="nav-link-wizard  " id="rec_auto_tab" data-toggle="pill" href="#rec_auto" role="tab" aria-controls="rec_auto" aria-selected="true">Terapia 2</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link-aten" id="rec_auto_tab" data-toggle="pill" href="#rec_auto" role="tab" aria-controls="rec_auto" aria-selected="true">Terapia 3</a>
+                                <a class="nav-link-wizard " id="rec_auto_tab" data-toggle="pill" href="#rec_auto" role="tab" aria-controls="rec_auto" aria-selected="true">Terapia 3</a>
                             </li>
                         </ul>
                     </div>
@@ -34,7 +36,7 @@
                                                 <!--SINTOMAS GENERALES-->
                                                 <div class="tab-pane fade show active" id="uro_ven_sint" role="tabpanel" aria-labelledby="uro_ven_sint_tab">
                                                     <div class="form-row">
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                        <div class="form-group col-md-3">
                                                             <label class="floating-label-activo-sm">Vida diaria</label>
                                                             <select class="form-control form-control-sm" name="select_1_psi_vidadiaria" id="select_1_psi_vidadiaria" multiple="multiple">
                                                                 <option value="1">Control de temperamento</option>
@@ -43,7 +45,7 @@
                                                                 <option value="4">Otro</option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                        <div class="form-group col-md-3">
                                                             <label class="floating-label-activo-sm">Conducta y hábitos sexuales</label>
                                                             <select class="form-control form-control-sm" name="select_2_psi_ant_cond" id="select_2_psi_ant_cond" multiple="multiple">
                                                                 <option value="1">Pareja única</option>
@@ -52,7 +54,7 @@
                                                                 <option value="4">Conversar con la pareja</option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                        <div class="form-group col-md-3">
                                                             <label class="floating-label-activo-sm">Vida Laboral</label>
                                                             <select class="form-control form-control-sm" name="select_3_psi_laboral" id="select_3_psi_laboral" multiple="multiple">
                                                                 <option value="HP">Llegar temprano</option>
@@ -60,7 +62,7 @@
                                                                 <option value="DI">Compartir en las comidas</option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                        <div class="form-group col-md-3">
                                                             <label class="floating-label-activo-sm">Autoestima</label>
                                                             <select class="form-control form-control-sm" name="select_4_psi_autoestima" id="select_4_psi_autoestima" multiple="multiple">
                                                                 <option value="HP">Reconocer logros personales</option>
@@ -70,8 +72,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-row">
-                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <label class="floating-label-activo-sm">Obs. al plan de trabajo</label>
+                                                        <div class="form-group col-md-12">
+                                                            <label class="floating-label-activo-sm">Observaciones al plan de trabajo</label>
                                                             <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="obs_ind_terapia_psi" id="obs_ind_terapia_psi"></textarea>
                                                         </div>
                                                     </div>

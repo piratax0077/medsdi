@@ -1,75 +1,130 @@
 <style>
     #jaas-container {
-        height: 50em;
-        width: 50%;
-
-        /* position: fixed; */
-        top: 10px;
-        left: 10px;
-        /* width: 400px; Ajusta según tu diseño */
-        /* height: 300px; */
-        z-index: 1000; /* Para asegurarse de que esté sobre otros elementos */
-        cursor: move;
+        width: 100%;
+        min-width: 28em;
+        z-index: 2000 !important;
         border: 2px solid #ccc;
         background-color: white;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
-        border: solid orange 13px;
+        margin-right: 9px;
+        margin-left: -17px;
     }
+	
+
+    /**BOTÓN DE INICIO LLAMADA**/
+        .btn-llamada {
+          display:block;
+          width:200px;
+          font-weight: 600;
+          height:auto;
+          font-size: 1rem;
+          color:#fff;
+          background-color:#f4962a;
+          border-radius: 10px;
+          position:fixed;
+          right:92px;
+          bottom:37px;
+          padding:7px;
+          text-align:center;
+          z-index:100000;
+          transition: 0.3s;
+          cursor: pointer;
+
+        }
+
+        .btn-llamada:hover {
+          display:block;
+          width:200px;
+          font-weight: 600;
+          height:auto;
+          font-size: 1rem;
+          color:#fff!important;
+          background-color:#31BEBE;
+          border-radius: 10px;
+          position:fixed;
+          right:92px;
+          bottom:37px;
+          padding:7px;
+          transition: 0.3s;
+          text-align:center;
+          z-index:1000000000;
+          cursor: pointer;
+          text-decoration: none;
+        }
+
+		iframe#jitsiConferenceFrame0{
+			height: 100vh !important;
+		}
 </style>
 
 {{-- video llamada --}}
 <script src='https://8x8.vc/{{ env('JITSI_APP_ID') }}/external_api.js' async></script>
 
 <script type="text/javascript">
-
     $(document).ready(function () {
-        const videoCallContainer = document.getElementById("jaas-container");
-        let isDragging = false, initialX, initialY, offsetX = 0, offsetY = 0;
+		
+		document.addEventListener('scroll', function() {
+			var jaasContainer = document.getElementById('jaas-container');
+			var iframe = jaasContainer.querySelector('iframe');
+			
+			var offsetTop = jaasContainer.offsetTop;
 
-        // Función para activar la visibilidad del div cuando se hace scroll
-        function checkVisibility() {
-            const rect = videoCallContainer.getBoundingClientRect();
-            if (rect.top < 0 || rect.bottom > window.innerHeight) {
-                // Si el div queda fuera de la vista, lo reposicionamos en la esquina superior izquierda
-                videoCallContainer.style.position = 'fixed';
-                videoCallContainer.style.top = '10px';
-                // videoCallContainer.style.left = '10px';
-                videoCallContainer.style.right = '10px';
-            }
-            // else
-            // {
-            //     videoCallContainer.style.position = '';
-            //     videoCallContainer.style.top = '10px';
-            //     // videoCallContainer.style.left = '10px';
-            //     videoCallContainer.style.right = '10px';
-            // }
-        }
+			if (window.scrollY > offsetTop) {
+				// Fijar el iframe dentro del contenedor si el scroll ha pasado su posición
+				iframe.style.position = 'sticky';
+				iframe.style.top = '10px'; // Distancia desde la parte superior del contenedor
+			} else {
+				// Restablecer la posición normal del iframe
+				iframe.style.position = 'static';
+			}
+		});
 
-        // Evento que se dispara al hacer scroll
-        window.addEventListener('scroll', checkVisibility);
+        // const videoCallContainer = document.getElementById("jaas-container");
+        // let isDragging = false, initialX, initialY, offsetX = 0, offsetY = 0;
 
-        // Hacer el div arrastrable
-        videoCallContainer.addEventListener('mousedown', function(e) {
-            isDragging = true;
-            initialX = e.clientX - offsetX;
-            initialY = e.clientY - offsetY;
-            videoCallContainer.style.cursor = 'grabbing'; // Cambiar el cursor al arrastrar
-        });
+        // // Función para activar la visibilidad del div cuando se hace scroll
+        // function checkVisibility() {
+        //     const rect = videoCallContainer.getBoundingClientRect();
+        //     if (rect.top < 0 || rect.bottom > window.innerHeight) {
+        //         // Si el div queda fuera de la vista, lo reposicionamos en la esquina superior izquierda
+        //         videoCallContainer.style.position = 'fixed';
+        //         videoCallContainer.style.top = '10px';
+        //         // videoCallContainer.style.left = '10px';
+        //         videoCallContainer.style.right = '10px';
+        //     }
+        //     // else
+        //     // {
+        //     //     videoCallContainer.style.position = '';
+        //     //     videoCallContainer.style.top = '10px';
+        //     //     // videoCallContainer.style.left = '10px';
+        //     //     videoCallContainer.style.right = '10px';
+        //     // }
+        // }
 
-        document.addEventListener('mousemove', function(e) {
-            if (isDragging) {
-                offsetX = e.clientX - initialX;
-                offsetY = e.clientY - initialY;
-                videoCallContainer.style.left = `${offsetX}px`;
-                videoCallContainer.style.top = `${offsetY}px`;
-            }
-        });
+        // // Evento que se dispara al hacer scroll
+        // window.addEventListener('scroll', checkVisibility);
 
-        document.addEventListener('mouseup', function() {
-            isDragging = false;
-            videoCallContainer.style.cursor = 'move'; // Restaurar el cursor al soltar
-        });
+        // // Hacer el div arrastrable
+        // videoCallContainer.addEventListener('mousedown', function(e) {
+        //     isDragging = true;
+        //     initialX = e.clientX - offsetX;
+        //     initialY = e.clientY - offsetY;
+        //     videoCallContainer.style.cursor = 'grabbing'; // Cambiar el cursor al arrastrar
+        // });
+
+        // document.addEventListener('mousemove', function(e) {
+        //     if (isDragging) {
+        //         offsetX = e.clientX - initialX;
+        //         offsetY = e.clientY - initialY;
+        //         videoCallContainer.style.left = `${offsetX}px`;
+        //         videoCallContainer.style.top = `${offsetY}px`;
+        //     }
+        // });
+
+        // document.addEventListener('mouseup', function() {
+        //     isDragging = false;
+        //     videoCallContainer.style.cursor = 'move'; // Restaurar el cursor al soltar
+        // });
     });
 
     function inicio_llamada(token, nombre)
@@ -165,6 +220,6 @@
 
 {{-- BOTON DE INICIO DE LLAMADA --}}
 @if ( $hora_medica->tipo_hora_medica == 'T' )
-    <button type="button" style="margin-top: 10px;" class="btn btn-success" id="startCallButton" onclick="iniciar_llamada_j({{ $hora_medica->id_jitsi_video_consulta }});">Inicio de LLamada</button>
-    <div id="jaas-container" style="display: none;"></div>
+    <button type="button" class="btn btn-llamada shadow heartbeat" role="button" id="startCallButton" onclick="iniciar_llamada_j({{ $hora_medica->id_jitsi_video_consulta }});"><i class="fas fa-video"></i> Iniciar videollamada</button>
+    <div id="jaas-container" style="display:none ;"></div>
 @endif

@@ -49,6 +49,7 @@ class FichaFonoaudiologia extends Migration
             $table->integer('estado')->default(1);
             $table->timestamps();
         });
+
         Schema::create('informe_fonoaudiologia', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_ficha_otros_prof');

@@ -15,9 +15,10 @@ class FichaFonoHablaLenguaje extends Migration
     {
         Schema::create('ficha_fono_habla_lenguaje', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('id_ficha_atencion_otros');
-            $table->bigInteger('id_profesional');
+            $table->bigInteger('id_ficha_otros_prof');
+            $table->bigInteger('id_ficha_fono');
             $table->bigInteger('id_paciente');
+            $table->bigInteger('id_profesional');
             $table->integer('ex_resp')->nullable();
             $table->string('ex_resp_obs')->nullable();
             $table->integer('ex_fonac')->nullable();

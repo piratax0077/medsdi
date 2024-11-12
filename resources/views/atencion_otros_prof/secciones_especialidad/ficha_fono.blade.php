@@ -3,9 +3,6 @@
         <div class="row mx-0">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <ul class="nav nav-tabs-secciones mb-3 mt-3" id="oft" role="tablist">
-                    {{--  <li class="nav-item-secciones">
-                        <a class="nav-secciones active text-uppercase" id="atencion-tab" data-toggle="tab" href="#atencion" role="tab" aria-controls="atencion" aria-selected="true">Atención General</a>
-                    </li>  --}}
                     <li class="nav-item-secciones">
                         <a class="nav-secciones  text-uppercase" id="atencion_fono-tab" data-toggle="tab" href="#atencion_fono" role="tab" aria-controls="atencion_fono" aria-selected="true">Atención Fonoaudiológica</a>
                     </li>
@@ -20,63 +17,82 @@
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
             </div>
+
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="tab-content" id="fono-contenido">
-                    <!--ATENCIÓN ESPECIALIDAD FONO-->
-                    <div class="tab-pane fade show active" id="atencion_fono" role="tabpanel" aria-labelledby="atencion_fono-tab">
-                        <div class="row">
-                            <!--RESPONSABLE-->
-                            <!--Formulario / Menor de edad-->
-                            @include('general.secciones_ficha.seccion_menor')
-                            <!--Cierre: Formulario / Menor de edad-->
-                            <!--INFORMACIÓN-->
-                            @include('atencion_otros_prof.secciones_especialidad.includes.generales.motivo_cons')
-                            <!--ANTECEDENTES FAMILIARES-->
-                            @include('atencion_otros_prof.secciones_especialidad.includes.generales.antecedentes')
-                            <!--EVALUACIÓN COMUNICACIÓN-->
-                            <!--HABLA  Y LENGUAJE-->
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card-a">
-                                    <div class="card-header-a" id="eval_habla_leng">
-                                        <button class="accor-open btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#eval_habla_leng_c" aria-expanded="false" aria-controls="eval_habla_leng_c">
-                                            Evaluación Habla y Lenguaje
-                                        </button>
-                                    </div>
-                                    <div id="eval_habla_leng_c" class="collapse" aria-labelledby="eval_habla_leng" data-parent="#eval_habla_leng">
-                                        <div class="card-body-aten-a">
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                    <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-fono_habla" role="tablist">
-                                                        <li class="nav-item">
-                                                            <a class="nav-link-aten text-reset active" id="ev-general-tab" data-toggle="tab" href="#ev-general" role="tab" aria-controls="ev-general" aria-selected="false">Evaluación General</a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a class="nav-link-aten text-reset" id="lev-lenguaje-tab" data-toggle="tab" href="#ev-lenguaje" role="tab" aria-controls="ev-lenguaje" aria-selected="true">Habla y Lenguaje</a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a class="nav-link-aten text-reset" id="ev-coment-tab" data-toggle="tab" href="#ev-coment" role="tab" aria-controls="ev-coment" aria-selected="false">Comentarios</a>
-                                                        </li>
-                                                    </ul>
+                <form action="{{ route('ficha.otro.prof.registrar_ficha_fono') }}" method="POST">
+                    <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
+                    {{--  <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
+                    <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">  --}}
+                    <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
+                    <input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">
+                    <input type="hidden" name="id_paciente_fc" value="{{ $paciente->id }}" id="id_paciente_fc">
+                    <input type="hidden" name="prevision_paciente_fc" value="{{ $paciente->prevision->id }}" id="prevision_paciente_fc">
+                    <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
+                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
+                    <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
+                    <input type="hidden" name="mostrarpdf" id="mostrarpdf" value="0">
+                    <input type="hidden" name="tipopdf" id="tipopdf" value="0">
+                    {{--  <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">  --}}
+                    @csrf
+                    <div class="tab-content" id="fono-contenido">
+                        <!--ATENCIÓN ESPECIALIDAD FONO-->
+                        <div class="tab-pane fade show active" id="atencion_fono" role="tabpanel" aria-labelledby="atencion_fono-tab">
+                            <div class="row">
+                                <!--RESPONSABLE-->
+                                <!--Formulario / Menor de edad-->
+                                @include('general.secciones_ficha.seccion_menor')
+                                <!--Cierre: Formulario / Menor de edad-->
+
+                                <!--INFORMACIÓN-->
+                                @include('atencion_otros_prof.secciones_especialidad.includes.generales.motivo_cons')
+
+                                <!--ANTECEDENTES FAMILIARES-->
+                                @include('atencion_otros_prof.secciones_especialidad.includes.generales.antecedentes')
+
+                                <!--EVALUACIÓN COMUNICACIÓN-->
+                                <!--HABLA  Y LENGUAJE-->
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-a">
+                                        <div class="card-header-a" id="eval_habla_leng">
+                                            <button class="accor-open btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#eval_habla_leng_c" aria-expanded="false" aria-controls="eval_habla_leng_c">
+                                                Evaluación Habla y Lenguaje
+                                            </button>
+                                        </div>
+                                        <div id="eval_habla_leng_c" class="collapse" aria-labelledby="eval_habla_leng" data-parent="#eval_habla_leng">
+                                            <div class="card-body-aten-a">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-fono_habla" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link-aten text-reset active" id="ev-general-tab" data-toggle="tab" href="#ev-general" role="tab" aria-controls="ev-general" aria-selected="false">Evaluación General</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link-aten text-reset" id="lev-lenguaje-tab" data-toggle="tab" href="#ev-lenguaje" role="tab" aria-controls="ev-lenguaje" aria-selected="true">Habla y Lenguaje</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link-aten text-reset" id="ev-coment-tab" data-toggle="tab" href="#ev-coment" role="tab" aria-controls="ev-coment" aria-selected="false">Comentarios</a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                    <div class="tab-content" id="ev-fono">
-                                                        <!--EVALUACIÓN GENERAL-->
-                                                        <div class="tab-pane fade show active" id="ev-general" role="tabpanel" aria-labelledby="ev-general-tab">
-                                                            <div class="form-row">
-                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                    <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                                                        <a class="nav-link-aten text-reset active " id="lenguaje_gen-tab" data-toggle="tab" href="#lenguaje_gen" role="tab" aria-controls="lenguaje_gen" aria-selected="false">Evaluación General</a>
-                                                                        <a class="nav-link-aten text-reset" id="gen-ofa-tab" data-toggle="tab" href="#gen_ofa" role="tab" aria-controls="gen_ofa" aria-selected="true">Eval. Audición-OFA</a>
-                                                                        <a class="nav-link-aten text-reset" id="voz_gen-tab" data-toggle="tab" href="#voz_gen" role="tab" aria-controls="voz_gen" aria-selected="false">Examen de la Voz</a>
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <div class="tab-content" id="ev-fono">
+                                                            <!--EVALUACIÓN GENERAL-->
+                                                            <div class="tab-pane fade show active" id="ev-general" role="tabpanel" aria-labelledby="ev-general-tab">
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                        <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                                            <a class="nav-link-aten text-reset active " id="lenguaje_gen-tab" data-toggle="tab" href="#lenguaje_gen" role="tab" aria-controls="lenguaje_gen" aria-selected="false">Evaluación General</a>
+                                                                            <a class="nav-link-aten text-reset" id="gen-ofa-tab" data-toggle="tab" href="#gen_ofa" role="tab" aria-controls="gen_ofa" aria-selected="true">Eval. Audición-OFA</a>
+                                                                            <a class="nav-link-aten text-reset" id="voz_gen-tab" data-toggle="tab" href="#voz_gen" role="tab" aria-controls="voz_gen" aria-selected="false">Examen de la Voz</a>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
-                                                                    <div class="tab-content" id="v-pills-tabContent">
-                                                                        <!--EV.GENERAL-->
-                                                                        <div class="tab-pane fade show active" id="lenguaje_gen" role="tabpanel" aria-labelledby="lenguaje_gen-tab">
-                                                                            <form>
+                                                                    <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
+                                                                        <div class="tab-content" id="v-pills-tabContent">
+                                                                            <!--EV.GENERAL-->
+                                                                            <div class="tab-pane fade show active" id="lenguaje_gen" role="tabpanel" aria-labelledby="lenguaje_gen-tab">
+
                                                                                 <div class="form-row">
                                                                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                         <div class="form-group">
@@ -152,11 +168,11 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </form>
-                                                                        </div>
-                                                                        <!--AUD-OFA-->
-                                                                        <div class="tab-pane fade show" id="gen_ofa" role="tabpanel" aria-labelledby="gen-ofa-tab">
-                                                                            <form>
+
+                                                                            </div>
+                                                                            <!--AUD-OFA-->
+                                                                            <div class="tab-pane fade show" id="gen_ofa" role="tabpanel" aria-labelledby="gen-ofa-tab">
+
                                                                                 <div class="form-row">
                                                                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                         <div class="form-group">
@@ -198,11 +214,11 @@
                                                                                         <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones al Examen OFA" data-seccion="Eval OFA" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_ofa" id="obs_ex_ofa"></textarea>
                                                                                     </div>
                                                                                 </div>
-                                                                            </form>
-                                                                        </div>
-                                                                        <!--EX.VOZ-->
-                                                                        <div class="tab-pane fade show" id="voz_gen" role="tabpanel" aria-labelledby="voz_gen-tab">
-                                                                            <form>
+
+                                                                            </div>
+                                                                            <!--EX.VOZ-->
+                                                                            <div class="tab-pane fade show" id="voz_gen" role="tabpanel" aria-labelledby="voz_gen-tab">
+
                                                                                 <div class="form-row">
                                                                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                         <div class="form-group">
@@ -276,29 +292,29 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </form>
+
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <!--EVALUACIÓN LENGUAJE-->
-                                                        <div class="tab-pane fade show" id="ev-lenguaje" role="tabpanel" aria-labelledby="ev-lenguaje-tab">
-                                                            <div class="form-row">
-                                                                <div class="col-sm-2">
-                                                                    <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                                                        {{--  <a class="nav-link-aten text-reset active " id="lenguaje_gen-tab" data-toggle="tab" href="#lenguaje_gen" role="tab" aria-controls="lenguaje_gen" aria-selected="false">Evaluación General</a>  --}}
-                                                                        <a class="nav-link-aten text-reset" id="ev-habla-tab" data-toggle="tab" href="#ev-habla" role="tab" aria-controls="ev-habla" aria-selected="true">Habla y Lenguaje</a>
-                                                                        <a class="nav-link-aten text-reset" id="resp-eval-tab" data-toggle="tab" href="#resp_eval" role="tab" aria-controls="resp_eval" aria-selected="true">Respiración </a>
-                                                                        <a class="nav-link-aten text-reset" id="eval_lenguaje_esp-tab" data-toggle="tab" href="#eval_lenguaje_esp" role="tab" aria-controls="eval_lenguaje_esp" aria-selected="false">Alteraciones Lenguaje</a>
-                                                                        {{--  <a class="nav-link-aten text-reset" id="ex_vestibular-tab" data-toggle="tab" href="#ex_vestibular" role="tab" aria-controls="ex_vestibular" aria-selected="false">Examen Vestibular</a>  --}}
+                                                            <!--EVALUACIÓN LENGUAJE-->
+                                                            <div class="tab-pane fade show" id="ev-lenguaje" role="tabpanel" aria-labelledby="ev-lenguaje-tab">
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-2">
+                                                                        <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                                            {{--  <a class="nav-link-aten text-reset active " id="lenguaje_gen-tab" data-toggle="tab" href="#lenguaje_gen" role="tab" aria-controls="lenguaje_gen" aria-selected="false">Evaluación General</a>  --}}
+                                                                            <a class="nav-link-aten text-reset" id="ev-habla-tab" data-toggle="tab" href="#ev-habla" role="tab" aria-controls="ev-habla" aria-selected="true">Habla y Lenguaje</a>
+                                                                            <a class="nav-link-aten text-reset" id="resp-eval-tab" data-toggle="tab" href="#resp_eval" role="tab" aria-controls="resp_eval" aria-selected="true">Respiración </a>
+                                                                            <a class="nav-link-aten text-reset" id="eval_lenguaje_esp-tab" data-toggle="tab" href="#eval_lenguaje_esp" role="tab" aria-controls="eval_lenguaje_esp" aria-selected="false">Alteraciones Lenguaje</a>
+                                                                            {{--  <a class="nav-link-aten text-reset" id="ex_vestibular-tab" data-toggle="tab" href="#ex_vestibular" role="tab" aria-controls="ex_vestibular" aria-selected="false">Examen Vestibular</a>  --}}
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="col-sm-10">
-                                                                    <div class="tab-content" id="v-pills-tabContent">
+                                                                    <div class="col-sm-10">
+                                                                        <div class="tab-content" id="v-pills-tabContent">
 
-                                                                        <div class="tab-pane fade show active" id="ev-habla" role="tabpanel" aria-labelledby="ev-habla-tab">
-                                                                            <form>
+                                                                            <div class="tab-pane fade show active" id="ev-habla" role="tabpanel" aria-labelledby="ev-habla-tab">
+
                                                                                 <div class="form-row">
                                                                                     <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                         <div class="form-group">
@@ -373,127 +389,127 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </form>
-                                                                        </div>
-                                                                        <div class="tab-pane fade show" id="resp_eval" role="tabpanel" aria-labelledby="resp-eval-tab">
-                                                                            <div class="col-sm-12 col-md-12">
-                                                                                <div class="form-row">
-                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                        <div class="form-group">
-                                                                                            <label id="" name="" class="floating-label-activo-sm" for="res_tp">Tipo Respiración</label>
-                                                                                            <select name="res_tp" id="res_tp" data-titulo="Tipo Respiración" data-seccion="Evaluación Respiración" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('res_tp','div_res_tp','res_tp_obs',7);">
-                                                                                                <option value="0">Seleccione</option>
-                                                                                                <option selected value="1">Normal</option>
-                                                                                                <option value="2"> No Examinada</option>
-                                                                                                <option value="3"> Normal</option>
-                                                                                                <option value="4">Costal Superior</option>
-                                                                                                <option value="5">Costo-Diafragmática</option>
-                                                                                                <option value="6">Abdominal</option>
-                                                                                                <option value="7">Otra (<i>describir)</i></option>
-                                                                                            </select>
-                                                                                        </div>
-                                                                                        <div class="form-group" id="div_res_tp" style="display:none">
-                                                                                            <label class="floating-label-activo-sm" for="res_tp_obs">Detalle Alteración<i>(describir)</i></label>
-                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Detalle Alteración" data-seccion="Evaluación Respiración" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="res_tp_obs" id="res_tp_obs"></textarea>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                        <div class="form-group">
-                                                                                            <label id="" name="" class="floating-label-activo-sm" for="res_mod">Modo Respiración</label>
-                                                                                            <select name="res_mod" id="res_mod" data-titulo="Modo Respiración" data-seccion="Evaluación Respiración" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('res_mod','div_res_mod','res_mod_obs',5);">
+
+                                                                            </div>
+                                                                            <div class="tab-pane fade show" id="resp_eval" role="tabpanel" aria-labelledby="resp-eval-tab">
+                                                                                <div class="col-sm-12 col-md-12">
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                            <div class="form-group">
+                                                                                                <label id="" name="" class="floating-label-activo-sm" for="res_tp">Tipo Respiración</label>
+                                                                                                <select name="res_tp" id="res_tp" data-titulo="Tipo Respiración" data-seccion="Evaluación Respiración" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('res_tp','div_res_tp','res_tp_obs',7);">
                                                                                                     <option value="0">Seleccione</option>
-                                                                                                    <option value="1"> Normal</option>
-                                                                                                    <option value="2"> Nasal</option>
-                                                                                                    <option value="3">Bucal</option>
-                                                                                                    <option value="4">Mixta</option>
-                                                                                                    <option value="5">Otra (<i>describir)</i></option>
+                                                                                                    <option selected value="1">Normal</option>
+                                                                                                    <option value="2"> No Examinada</option>
+                                                                                                    <option value="3"> Normal</option>
+                                                                                                    <option value="4">Costal Superior</option>
+                                                                                                    <option value="5">Costo-Diafragmática</option>
+                                                                                                    <option value="6">Abdominal</option>
+                                                                                                    <option value="7">Otra (<i>describir)</i></option>
                                                                                                 </select>
-                                                                                            </select>
+                                                                                            </div>
+                                                                                            <div class="form-group" id="div_res_tp" style="display:none">
+                                                                                                <label class="floating-label-activo-sm" for="res_tp_obs">Detalle Alteración<i>(describir)</i></label>
+                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Detalle Alteración" data-seccion="Evaluación Respiración" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="res_tp_obs" id="res_tp_obs"></textarea>
+                                                                                            </div>
                                                                                         </div>
-                                                                                        <div class="form-group"  id="div_res_mod" style="display:none">
-                                                                                            <label class="floating-label-activo-sm t-red" for="res_mod_obs">Otra <i>(describir)</i></label>
-                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Otra" data-seccion="Evaluación Respiración" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="res_mod_obs" id="res_mod_obs"></textarea>
+                                                                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                            <div class="form-group">
+                                                                                                <label id="" name="" class="floating-label-activo-sm" for="res_mod">Modo Respiración</label>
+                                                                                                <select name="res_mod" id="res_mod" data-titulo="Modo Respiración" data-seccion="Evaluación Respiración" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('res_mod','div_res_mod','res_mod_obs',5);">
+                                                                                                        <option value="0">Seleccione</option>
+                                                                                                        <option value="1"> Normal</option>
+                                                                                                        <option value="2"> Nasal</option>
+                                                                                                        <option value="3">Bucal</option>
+                                                                                                        <option value="4">Mixta</option>
+                                                                                                        <option value="5">Otra (<i>describir)</i></option>
+                                                                                                    </select>
+                                                                                                </select>
+                                                                                            </div>
+                                                                                            <div class="form-group"  id="div_res_mod" style="display:none">
+                                                                                                <label class="floating-label-activo-sm t-red" for="res_mod_obs">Otra <i>(describir)</i></label>
+                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Otra" data-seccion="Evaluación Respiración" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="res_mod_obs" id="res_mod_obs"></textarea>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                            <div class="form-group">
+                                                                                                <label id="" name="" class="floating-label-activo-sm" for="res_cfr">Coordinación Fono-Respiratoria</label>
+                                                                                                <select name="res_cfr" id="res_cfr" data-titulo="Coordinación Fono-Respiratoria" data-seccion="Evaluación Respiración" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('res_cfr','div_res_cfr','res_cfr_obs',2);">
+                                                                                                        <option value="0">Seleccione</option>
+                                                                                                        <option value="1"> Normal</option>
+                                                                                                        <option value="2"> Alterada  (<i>describir)</i></option>
+                                                                                                    </select>
+                                                                                                </select>
+                                                                                            </div>
+                                                                                            <div class="form-group"  id="div_res_cfr" style="display:none">
+                                                                                                <label class="floating-label-activo-sm t-red" for="res_cfr_obs">Otra <i>(describir)</i></label>
+                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Otra Discoordinación" data-seccion="Evaluación Respiración" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="res_cfr_obs" id="res_cfr_obs"></textarea>
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                        <div class="form-group">
-                                                                                            <label id="" name="" class="floating-label-activo-sm" for="res_cfr">Coordinación Fono-Respiratoria</label>
-                                                                                            <select name="res_cfr" id="res_cfr" data-titulo="Coordinación Fono-Respiratoria" data-seccion="Evaluación Respiración" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('res_cfr','div_res_cfr','res_cfr_obs',2);">
-                                                                                                    <option value="0">Seleccione</option>
-                                                                                                    <option value="1"> Normal</option>
-                                                                                                    <option value="2"> Alterada  (<i>describir)</i></option>
-                                                                                                </select>
-                                                                                            </select>
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <label class="floating-label-activo-sm" for="g_resp_obs">Observaciones Respiración</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Respiración" data-seccion="Evaluación Respiración" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="g_resp_obs" id="g_resp_obs"></textarea>
                                                                                         </div>
-                                                                                        <div class="form-group"  id="div_res_cfr" style="display:none">
-                                                                                            <label class="floating-label-activo-sm t-red" for="res_cfr_obs">Otra <i>(describir)</i></label>
-                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Otra Discoordinación" data-seccion="Evaluación Respiración" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="res_cfr_obs" id="res_cfr_obs"></textarea>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="form-row">
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                        <label class="floating-label-activo-sm" for="g_resp_obs">Observaciones Respiración</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Respiración" data-seccion="Evaluación Respiración" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="g_resp_obs" id="g_resp_obs"></textarea>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                        <div class="tab-pane fade show" id="eval_lenguaje_esp" role="tabpanel" aria-labelledby="eval_lenguaje_esp-tab">
-                                                                            <div class="col-sm-12 col-md-12">
-                                                                                <div class="form-row">
-                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                        <div class="form-group">
-                                                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="fon_p();"><i class="feather icon-plus"></i> Fonema P</button>
+                                                                            <div class="tab-pane fade show" id="eval_lenguaje_esp" role="tabpanel" aria-labelledby="eval_lenguaje_esp-tab">
+                                                                                <div class="col-sm-12 col-md-12">
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                            <div class="form-group">
+                                                                                                <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="fon_p();"><i class="feather icon-plus"></i> Fonema P</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                            <div class="form-group">
+                                                                                                <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="fon_r();"><i class="feather icon-plus"></i> Fonema R</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                            <div class="form-group">
+                                                                                                <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="habla();"><i class="feather icon-plus"></i> Eval Habla y lenguaje</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                            <div class="form-group">
+                                                                                                <label id="" name="" class="floating-label-activo-sm" for="alt_esp_leng">Alteración específica</label>
+                                                                                                <select name="alt_esp_leng" id="alt_esp_leng" data-titulo="Alteración específica" data-seccion=" Eval Habla y lenguaje" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('alt_esp_leng','div_alt_esp_leng','alt_esp_leng_obs',7);">
+                                                                                                    <option value="0">Seleccione</option>
+                                                                                                    <option selected value="1">No Tiene</option>
+                                                                                                    <option value="2"> Sustitución de un fonema por otro.</option>
+                                                                                                    <option value="3"> Omisión de fonemas.</option>
+                                                                                                    <option value="4"> Distorsión fonética.</option>
+                                                                                                    <option value="5"> Inversión del orden de los fonemas.</option>
+                                                                                                    <option value="6"> Adición de fonemas.</option>
+                                                                                                    <option value="7"> Otra (<i>describir)</i></option>
+                                                                                                </select>
+                                                                                            </div>
+                                                                                            <div class="form-group" id="div_alt_esp_leng" style="display:none">
+                                                                                                <label class="floating-label-activo-sm" for="alt_esp_leng_obs">Detalle Alteración<i>(describir)</i></label>
+                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Detalle Alteración" data-seccion=" Eval Habla y lenguajen" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="alt_esp_leng_obs" id="alt_esp_leng_obs"></textarea>
+                                                                                            </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                        <div class="form-group">
-                                                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="fon_r();"><i class="feather icon-plus"></i> Fonema R</button>
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                            <label class="floating-label-activo-sm" for="g_leng_obs">Observaciones Eval. Alteración de lenguaje</label>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Eval. Alteración de lenguaje" data-seccion=" Eval Habla y lenguaje" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="g_leng_obs" id="g_leng_obs"></textarea>
                                                                                         </div>
-                                                                                    </div>
-                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                        <div class="form-group">
-                                                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="habla();"><i class="feather icon-plus"></i> Eval Habla y lenguaje</button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                        <div class="form-group">
-                                                                                            <label id="" name="" class="floating-label-activo-sm" for="alt_esp_leng">Alteración específica</label>
-                                                                                            <select name="alt_esp_leng" id="alt_esp_leng" data-titulo="Alteración específica" data-seccion=" Eval Habla y lenguaje" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('alt_esp_leng','div_alt_esp_leng','alt_esp_leng_obs',7);">
-                                                                                                <option value="0">Seleccione</option>
-                                                                                                <option selected value="1">No Tiene</option>
-                                                                                                <option value="2"> Sustitución de un fonema por otro.</option>
-                                                                                                <option value="3"> Omisión de fonemas.</option>
-                                                                                                <option value="4"> Distorsión fonética.</option>
-                                                                                                <option value="5"> Inversión del orden de los fonemas.</option>
-                                                                                                <option value="6"> Adición de fonemas.</option>
-                                                                                                <option value="7"> Otra (<i>describir)</i></option>
-                                                                                            </select>
-                                                                                        </div>
-                                                                                        <div class="form-group" id="div_alt_esp_leng" style="display:none">
-                                                                                            <label class="floating-label-activo-sm" for="alt_esp_leng_obs">Detalle Alteración<i>(describir)</i></label>
-                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Detalle Alteración" data-seccion=" Eval Habla y lenguajen" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="alt_esp_leng_obs" id="alt_esp_leng_obs"></textarea>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="form-row">
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                        <label class="floating-label-activo-sm" for="g_leng_obs">Observaciones Eval. Alteración de lenguaje</label>
-                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Observaciones Eval. Alteración de lenguaje" data-seccion=" Eval Habla y lenguaje" data-tipo="general" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="g_leng_obs" id="g_leng_obs"></textarea>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <br>
                                                             </div>
-                                                            <br>
-                                                        </div>
-                                                        <!--COMENTARIOS-->
-                                                        <div class="tab-pane fade show" id="ev-coment" role="tabpanel" aria-labelledby="ev-coment-tab">
-                                                            <!--ejemplo -->
-                                                            <form>
+                                                            <!--COMENTARIOS-->
+                                                            <div class="tab-pane fade show" id="ev-coment" role="tabpanel" aria-labelledby="ev-coment-tab">
+                                                                <!--ejemplo -->
+
                                                                 <div class="form-row">
                                                                     <div class="form-group col-md-3">
                                                                         <label class="floating-label-activo-sm">Nombre del Modal</label>
@@ -515,7 +531,8 @@
                                                                         <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                     </div>
                                                                 </div>
-                                                            </form>
+
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -523,138 +540,56 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!--COMUNICACIÓN-->
+                                @include('atencion_otros_prof.secciones_especialidad.includes.generales.eval_psiconeuro')
+
+                                <!--DIAGNÓSTICO Y PLAN DE TRATAMIENTO-->
+                                @include('atencion_otros_prof.secciones_especialidad.includes.generales.dg_plan')
                             </div>
 
-                            <!--COMUNICACIÓN-->
-                            @include('atencion_otros_prof.secciones_especialidad.includes.generales.eval_psiconeuro')
-                            {{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card-a">
-                                    <div class="card-header-a" id="eval_comunicacion">
-                                        <button class="accor-open btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#eval_comunicacion_c" aria-expanded="false" aria-controls="eval_comunicacion_c">
-                                            Evaluación Psiconeurológica
-                                        </button>
-                                    </div>
-                                    <div id="eval_comunicacion_c" class="collapse" aria-labelledby="eval_comunicacion" data-parent="#eval_comunicacion">
-                                        <div class="card-body-aten-a shadow-none">
-                                            <form>
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Evalución Conciencia</label>
-                                                            <select name="fo_eval_pn_co" id="fo_eval_pn_co" data-titulo="Evalución Conciencia" data-seccion="Evaluación Psiconeurológica" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('fo_eval_pn_co','div_fo_eval_pn_co','fo_eval_pn_co_obs',4);">
-                                                                <option value="0">Seleccione</option>
-                                                                <option selected value="1">Lúcido</option>
-                                                                <option value="2">Obnubilado</option>
-                                                                <option value="3">Desorientado</option>
-                                                                <option value="4"> Observaciones (describir)</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_fo_eval_pn_co" style="display:none">
-                                                            <label class="floating-label-activo-sm">Detalle Conciencia</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Detalle Conciencia" data-seccion="Evaluación Psiconeurológica"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="fo_eval_pn_co_obs" id="fo_eval_pn_co_obs"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Orientación</label>
-                                                            <select name="fo_eval_pn_o" id="fo_eval_pn_o" data-titulo="Orientación" data-seccion="Evaluación Psiconeurológica" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('fo_eval_pn_o','div_fo_eval_pn_o','fo_eval_pn_o_obs',4);">
-                                                                <option value="0">Seleccione</option>
-                                                                <option selected value="1">Orientado en Tpo y Espacio</option>
-                                                                <option value="2">Perdido</option>
-                                                                <option value="3">Dudosa</option>
-                                                                <option value="4"> Observaciones (describir)</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_fo_eval_pn_o" style="display:none">
-                                                            <label class="floating-label-activo-sm">Detalle Orientación</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Detalle Orientación" data-seccion="Evaluación Psiconeurológica"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="fo_eval_pn_o_obs" id="fo_eval_pn_o_obs"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Comportamiento</label>
-                                                            <select name="fo_eval_pn_com" id="fo_eval_pn_com" data-titulo="Comportamiento" data-seccion="Evaluación Psiconeurológica" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('fo_eval_pn_com','div_fo_eval_pn_com','fo_eval_pn_com_obs',3);">
-                                                                <option value="0">Seleccione</option>
-                                                                <option selected value="1">Coherente</option>
-                                                                <option value="2">Incoherente</option>
-                                                                <option value="3"> Observaciones (describir)</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_fo_eval_pn_com" style="display:none">
-                                                            <label class="floating-label-activo-sm">Detalle Comportamiento</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Detalle Comportamiento" data-seccion="Evaluación Psiconeurológica"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="fo_eval_pn_com_obs" id="fo_eval_pn_com_obs"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Colaboración</label>
-                                                            <select name="fo_eval_pn_cola" id="fo_eval_pn_cola" data-titulo="Colaboración" data-seccion="Evaluación Psiconeurológica" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('fo_eval_pn_cola','div_fo_eval_pn_cola','fo_eval_pn_cola_obs',3);">
-                                                                <option value="0">Seleccione</option>
-                                                                <option selected value="1">Si</option>
-                                                                <option value="2">No</option>
-                                                                <option value="3"> Observaciones (describir)</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group" id="div_fo_eval_pn_cola" style="display:none">
-                                                            <label class="floating-label-activo-sm">Colaboración</label>
-                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Detalle Colaboración" data-seccion="Evaluación Psiconeurológica"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="fo_eval_pn_cola_obs" id="fo_eval_pn_cola_obs"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-12">
-                                                        <label class="floating-label">Comentario de la Evaluación</label>
-                                                        <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>  --}}
-                            <!--DIAGNÓSTICO Y PLAN DE TRATAMIENTO-->
-                            @include('atencion_otros_prof.secciones_especialidad.includes.generales.dg_plan')
-                        </div>
-                        <!--INDICACIONES-->
-                        <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="form-row">
-                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                            <button type="button" class="btn btn-primary-light btn-block btn-sm mt-1" onclick="interfono();"><i class="feather icon-plus"></i> Indicar interconsulta</button>
-                                        </div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                            <button type="button" class="btn btn-primary-light btn-block btn-sm mt-1" onclick="examenes_fono();"><i class="feather icon-plus"></i> Indicar examen especialidad</button>
-                                        </div>
-                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                            <button type="button" class="btn btn-primary-light btn-block btn-sm mt-1" onclick="informefono();"><i class="feather icon-plus"></i> Enviar informe</button>
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--GUARDAR O IMPRIMIR FICHA-->
-                        <div class="row mb-3">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                                <button type="button" class="btn btn-info"><i class="feather icon-save"></i> Guardar</button>
-                                <button type="button" class="btn btn-success"><i class="feather icon-printer"></i> Imprimir</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--CONTROLES ATENCIÓN -->
-                    <div class="tab-pane fade" id="control" role="tabpanel" aria-labelledby="control-tab">
-                        <div class="row">
-                            @include('atencion_otros_prof.secciones_especialidad.includes.generales.controles')
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-
+                            <!--INDICACIONES-->
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card">
                                         <div class="card-body">
-                                            <form>
+                                            <div class="form-row">
+                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                <button type="button" class="btn btn-primary-light btn-block btn-sm mt-1" onclick="interfono();"><i class="feather icon-plus"></i> Indicar interconsulta</button>
+                                            </div>
+                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                <button type="button" class="btn btn-primary-light btn-block btn-sm mt-1" onclick="examenes_fono();"><i class="feather icon-plus"></i> Indicar examen especialidad</button>
+                                            </div>
+                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                <button type="button" class="btn btn-primary-light btn-block btn-sm mt-1" onclick="informefono();"><i class="feather icon-plus"></i> Enviar informe</button>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+								<!--GUARDAR O IMPRIMIR FICHA-->
+								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+									<div class="row mb-3">
+										<div class="col-md-12 text-center">
+											<input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+											<input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+										</div>
+									</div>
+								</div>
+							</div>
+                        </div>
+
+                        <!--CONTROLES ATENCIÓN -->
+                        <div class="tab-pane fade" id="control" role="tabpanel" aria-labelledby="control-tab">
+                            <div class="row">
+                                @include('atencion_otros_prof.secciones_especialidad.includes.generales.controles')
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card">
+                                            <div class="card-body">
                                                 <div class="form-row">
                                                     <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
                                                         <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="est_ofa();"><i class="feather icon-plus"></i> Eval OFA</button>
@@ -675,71 +610,10 @@
                                                         <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="l_ling() ;"><i class="feather icon-plus"></i> Test de Ling</button>
                                                     </div>
                                                     <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="tede_l();"><i class="feather icon-plus"></i> Test TEDE Simple</button>
+                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="tede_l();"><i class="feather icon-plus"></i> Test TEDE Complejo</button>
                                                     </div>
                                                     <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="tede();"><i class="feather icon-plus"></i> Test TEDE Complejo</button>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="sopa_l();"><i class="feather icon-plus"></i> Sopa de letras</button>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="fon_r();"><i class="feather icon-plus"></i> FONEMA R</button>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="fon_p();"><i class="feather icon-plus"></i> FONEMA P</button>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="informefono();"><i class="feather icon-plus"></i> Informe Fonoaudiología</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--MATERIAL DE APOYO-->
-                    <div class="tab-pane fade" id="apoyo" role="tabpanel" aria-labelledby="apoyo-tab">
-                        <div class="row bg-white shadow-none rounded mx-1">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <!--FORMULARIOS-->
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h6 class="tit-gen">Material de apoyo</h6>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <form>
-                                                <div class="form-row">
-                                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="est_ofa();"><i class="feather icon-plus"></i> Eval OFA</button>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="habla();"><i class="feather icon-plus"></i> Habla y Lenguaje
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="e_voz();"><i class="feather icon-plus"></i> VOZ</button>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="e_espasmo();"><i class="feather icon-plus"></i> Espasmofémia</button>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="l_praxias() ;"><i class="feather icon-plus"></i> Laminas Praxias</button>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="l_ling() ;"><i class="feather icon-plus"></i> Test de Ling</button>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="tede_l();"><i class="feather icon-plus"></i> Test TEDE Simple</button>
-                                                    </div>
-                                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="tede();"><i class="feather icon-plus"></i> Test TEDE Complejo</button>
+                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="tede();"><i class="feather icon-plus"></i> Test TEDE  Simple</button>
                                                     </div>
                                                     <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
                                                         <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="sopa_l();"><i class="feather icon-plus"></i> Sopa de letras</button>
@@ -754,83 +628,128 @@
                                                         <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="informefono();"><i class="feather icon-plus"></i> Informe Fonoaudiología</button>
                                                     </div>
                                                 </div>
-                                            </form>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--MATERIAL DE APOYO-->
+                        <div class="tab-pane fade" id="apoyo" role="tabpanel" aria-labelledby="apoyo-tab">
+                            <div class="row bg-white shadow-none rounded mx-1">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <!--FORMULARIOS-->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h6 class="tit-gen">Material de apoyo</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="card">
+                                            <div class="card-body">
+
+                                                    <div class="form-row">
+                                                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="est_ofa();"><i class="feather icon-plus"></i> Eval OFA</button>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="habla();"><i class="feather icon-plus"></i> Habla y Lenguaje
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="e_voz();"><i class="feather icon-plus"></i> VOZ</button>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="e_espasmo();"><i class="feather icon-plus"></i> Espasmofémia</button>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="l_praxias() ;"><i class="feather icon-plus"></i> Laminas Praxias</button>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="l_ling() ;"><i class="feather icon-plus"></i> Test de Ling</button>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="tede_l();"><i class="feather icon-plus"></i> Test TEDE Complejo</button>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="tede();"><i class="feather icon-plus"></i> Test TEDE Simple </button>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="sopa_l();"><i class="feather icon-plus"></i> Sopa de letras</button>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="fon_r();"><i class="feather icon-plus"></i> FONEMA R</button>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="fon_p();"><i class="feather icon-plus"></i> FONEMA P</button>
+                                                        </div>
+                                                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                                                            <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2" onclick="informefono();"><i class="feather icon-plus"></i> Informe Fonoaudiología</button>
+                                                        </div>
+                                                    </div>
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 <!--Modals de especialidad -->
-@include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.informe_fono")
-@include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.interconsulta_fono')
-@include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.praxias')
-@include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.indicar_examen_esp')
-@include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.sopaletras')
 @include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.ofa')
 @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.evaluacion_voz")
-@include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.fonema_p')
-@include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.fonema_r')
-@include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.praxias_lam')
-@include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.test_ling")
-@include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.tede_1")
-@include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.tede")
+@include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.evaluacion_espasmofemia")
+@include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.praxias')
+{{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.informe_fono") --}}
+{{-- @include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.interconsulta_fono') --}}
+{{-- @include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.indicar_examen_esp') --}}
+{{-- @include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.sopaletras') --}}
+{{-- @include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.fonema_p') --}}
+{{-- @include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.fonema_r') --}}
+{{-- @include('atencion_otros_prof.formularios.modal_atencion_especialidad.fono.praxias_lam') --}}
+{{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.test_ling") --}}
+{{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.tede_1") --}}
+{{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.tede") --}}
 
 @section('page-script-ficha-atencion')
-<script>
-    /** MENSAJE*/
-    /** CARGAR mensaje */
-    $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-    $('#mensaje_ficha').show();
-    setTimeout(function(){
-        $('#mensaje_ficha').hide();
-    }, 5000);
-        /** cronico */
-    $(document).ready(function() {
-        $('#select_1').select2();
-        $('#select_2').select2();
-        $('#select_3').select2();
-        $('#select_4').select2();
-        $('#select_5').select2();
-        $('#select_6').select2();
-        $('#select_7').select2();
-        $('#select_8').select2();
-        $('#select_9').select2();
-        $('#select_10').select2();
-        $('#select_11').select2();
-        $('#select_12').select2();
-        $('#select_13').select2();
-        $('#select_14').select2();
-        $('#select_15').select2();
-    });
+    <script>
+        /** MENSAJE*/
+        /** CARGAR mensaje */
+        $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
+        $('#mensaje_ficha').show();
+        setTimeout(function(){
+            $('#mensaje_ficha').hide();
+        }, 5000);
 
 
-    function cargarIgual(input)
-    {
+        $(document).ready(function() {
 
-        let actual = $('#'+input);
-        let equivalentes = $('#'+input).attr('data-input_igual').split(',');
-        $.each(equivalentes, function( index, value ) {
-            var equivalente = $('#'+value);
-            equivalente.val(actual.val());
         });
 
-    }
-    function evaluar_para_carga_detalle(select, div, input, valor)
-    {
-        var valor_select = $('#'+select+'').val();
-        if(valor_select == valor) $('#'+div+'').show();
-        else {
-            $('#'+div+'').hide();
-            $('#'+input+'').val('');
+
+        function cargarIgual(input)
+        {
+            let actual = $('#'+input);
+            let equivalentes = $('#'+input).attr('data-input_igual').split(',');
+            $.each(equivalentes, function( index, value ) {
+                var equivalente = $('#'+value);
+                equivalente.val(actual.val());
+            });
         }
-    }
-</script>
+
+        function evaluar_para_carga_detalle(select, div, input, valor)
+        {
+            var valor_select = $('#'+select+'').val();
+            if(valor_select == valor) $('#'+div+'').show();
+            else {
+                $('#'+div+'').hide();
+                $('#'+input+'').val('');
+            }
+        }
+    </script>
 @endsection
 
 

@@ -1,5 +1,5 @@
 <div id="modal_interconsulta_psi" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_interconsulta_psi" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Interconsulta Siquiatría</h5>
@@ -7,17 +7,17 @@
             </div>
             <div class="modal-body mb-0">
                 <div class="form-row">
-                    <div class="form-group col-sm-12 col-md-12 col-lg-7 col-xl-7">
+                    <div class="form-group col-sm-12 col-md-12">
                         <label class="floating-label-activo-sm">Nombre</label>
-                        <input  class="form-control form-control-sm" name="nombre_paciente_interconsulta_sq" id="nombre_paciente_interconsulta_sq" value="{{ $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos }}">
+                        <label class="form-control form-control-sm" name="nombre_paciente_interconsulta_sq" id="nombre_paciente_interconsulta_sq">{{ $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos }}</label>
                     </div>
-                    <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                    <div class="form-group col-sm-12 col-md-12">
                         <label class="floating-label-activo-sm">Rut</label>
-                        <input class="form-control form-control-sm"  name="rut_paciente_interconsulta_sq" id="rut_paciente_interconsulta_sq" value="{{ $paciente->rut }}">
+                        <label class="form-control form-control-sm"  name="rut_paciente_interconsulta_sq" id="rut_paciente_interconsulta_sq">{{ $paciente->rut }}</label>
                     </div>
-                    <div class="form-group col-sm-12 col-md-12 col-lg-2 col-xl-2">
+                    <div class="form-group col-sm-12 col-md-12">
                         <label class="floating-label-activo-sm">Edad</label>
-                        <input class="form-control form-control-sm" name="edad_paciente_interconsulta_sq" id="edad_paciente_interconsulta_sq">
+                        <label class="form-control form-control-sm" name="edad_paciente_interconsulta_sq" id="edad_paciente_interconsulta_sq" >{{ \Carbon\Carbon::parse($paciente->fecha_nac)->diff(\Carbon\Carbon::now())->format('%y') }}</label>
                     </div>
                 </div>
                 {{--  PESTAÑA DE SOLICITUD  --}}
@@ -26,7 +26,7 @@
                         <div class="form-row">
                             {{--  CARGA DE INTERCONSULT  --}}
                             <div class="form-group col-sm-12 col-md-12">
-                                <label class="floating-label-activo-sm">Profesión</label>
+                                <label class="floating-label-activo-sm">Profesion</label>
                                 <select class="form-control form-control-sm" id="profesion_sq" name="profesion_sq" onchange="buscar_tipo_especialidad_sq();buscar_profesional_sq();">
                                     <option selected value="0">Seleccione</option>
                                     @if (isset($especialidad))
@@ -39,46 +39,46 @@
                                 </select>
                             </div>
 
-                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                                <label class="floating-label-activo-sm">Especialidad</label>
+                            <div class="form-group col-sm-12 col-md-6">
+                                <label class="floating-label">Especialidad</label>
                                 <select class="form-control form-control-sm" id="especialidad_sq" name="especialidad_sq" onchange="buscar_sub_tipo_especialidad_sq();buscar_profesional_sq();">
                                     <option selected value="0">Seleccione</option>
                                     <option>-</option>
                                 </select>
                             </div>
 
-                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
-                                <label class="floating-label-activo-sm">Tipo Especialidad</label>
+                            <div class="form-group col-sm-12 col-md-6">
+                                <label class="floating-label">Tipo Especialidad</label>
                                 <select class="form-control form-control-sm" id="sub_tipo_especialidad_sq" name="sub_tipo_especialidad_sq" onchange="buscar_profesional_sq();">
                                     <option selected value="0">Seleccione</option>
                                     <option>-</option>
                                 </select>
                             </div>
 
-                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <label class="floating-label-activo-sm">Profesional</label>
+                            <div class="form-group col-sm-12 col-md-6">
+                                <label class="floating-label">Profesional</label>
                                 <select class="form-control form-control-sm" id="profesional_inter_sq" name="profesional_inter_sq">
                                     <option selected value="0">Seleccione</option>
                                     <option>-</option>
                                 </select>
                             </div>
-                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6 nombre_profesional_inter_sq" style="display: none;">
+                            <div class="form-group col-sm-12 col-md-6 nombre_profesional_inter_sq" style="display: none;">
                                 <label class="floating-label-activo-sm">Profesional Nombre</label>
                                 <input type="text" class="form-control form-control-sm" name="nombre_profesional_inter_sq" id="nombre_profesional_inter_sq">
                             </div>
 
-                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="form-group col-sm-12 col-md-12">
                                 <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
                                 <input type="text" class="form-control form-control-sm" name="hipotesis_interconsulta_sq" id="hipotesis_interconsulta_sq">
                             </div>
-                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="form-group col-sm-12 col-md-12">
                                 <label class="floating-label-activo-sm">Se desea saber</label>
                                 <textarea type="text" class="form-control form-control-sm" rows="2" name="comentarios_interconsulta_sq" id="comentarios_interconsulta_sq"></textarea>
                             </div>
                         </div>
                         <div class="modal-footer pt-2 pb-0">
-                            <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
-                            <button type="button" onclick="registrar_interconsulta_sq();" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                            <button type="button" onclick="registrar_interconsulta_sq();" class="btn btn-info">Guardar</button>
                         </div>
                     </form>
                 </div>

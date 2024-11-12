@@ -420,99 +420,99 @@
 
         /************** EXAMEN **************/
         Dropzone.options.misArchivosExamen = {
-                init:function()
-                {
-                    myDropzone_ex = this;
-                },
-                url: "{{ route('paciente.archivo.carga') }}",
-                method: 'post',
-                createImageThumbnails: true,
-                addRemoveLinks: true,
-                headers:{
-                    'X-CSRF-TOKEN' : CSRF_TOKEN,
-                },
+            init:function()
+            {
+                myDropzone_ex = this;
+            },
+            url: "{{ route('paciente.archivo.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+            },
 
-                acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
-                maxFilesize: 4,
-                maxFiles: 4,
-                /** El texto utilizado antes de que se eliminen los archivos. */
-                dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
+            acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
+            maxFilesize: 4,
+            maxFiles: 4,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
 
-                /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
-                dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
 
-                /**
-                 * El texto que se agregará antes del formulario alternativo.
-                 * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
-                 * ser ignorado.
-                 */
-                dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
 
-                /**
-                 * Si el tamaño del archivo es demasiado grande.
-                 * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
-                 */
-                dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+            dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
 
-                /** Si el archivo no coincide con el tipo de archivo. */
-                dictInvalidFileType: "No puedes subir archivos de este tipo.",
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
 
-                /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
-                dictCancelUpload: "Cancelar carga",
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
 
-                /** El texto que se muestra si una carga se canceló manualmente */
-                dictUploadCanceled: "Subida cancelada.",
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
 
-                /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
-                dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
 
-                /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
-                dictRemoveFile: "Eliminar archivo",
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
 
-                /**
-                 * Se muestra si `maxFiles` es st y se excede.
-                 */
-                dictMaxFilesExceeded: "No puede cargar más archivos.",
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
 
-                success: function(file, response){
-                    // console.log('-------------success-----------------------');
-                    cargar_lista_archivo(myDropzone_ex,'ex');
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_archivo(myDropzone_ex,'ex');
 
-                    if (file.previewElement) {
-                        return file.previewElement.classList.add("dz-success");
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
                     }
-                },
-                error(file, message) {
-                    // console.log('-------------error-----------------------');
-                    if (file.previewElement) {
-                        file.previewElement.classList.add("dz-error");
-                        if (typeof message !== "string" && message.error)
-                        {
-                            message = message.error;
-                        }
-                        else
-                        {
-                            message = message.message;
-                        }
-                        for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
-                            node.textContent = message;
-                        }
+                    else
+                    {
+                        message = message.message;
                     }
-                },
-                removedfile(file) {
-                    // console.log('-------------removedfile-----------------------');
-                    cargar_lista_archivo(myDropzone_ex,'ex');
-                    if (file.previewElement != null && file.previewElement.parentNode != null) {
-                        file.previewElement.parentNode.removeChild(file.previewElement);
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
                     }
-                    return this._updateMaxFilesReachedClass();
-                },
-                canceled: function canceled(file) {
-                    cargar_lista_archivo(myDropzone_ex,'ex');
-                    return this.emit("error", file, this.options.dictUploadCanceled);
-                },
-            };
-            /************** EXAMEN **************/
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_archivo(myDropzone_ex,'ex');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_archivo(myDropzone_ex,'ex');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+        /************** EXAMEN **************/
 
 
 

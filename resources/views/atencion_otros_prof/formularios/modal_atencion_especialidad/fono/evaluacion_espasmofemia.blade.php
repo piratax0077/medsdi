@@ -365,7 +365,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
-                <button type="submit" class="btn btn-info-light-c btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                <button type="button" class="btn btn-info-light-c btn-sm" onclick="registrar_ev_espasmofemia();"><i class="feather icon-save"></i> Guardar</button>
             </div>
         </div>
     </div>
@@ -374,6 +374,199 @@
 <script>
     function e_espasmo() {
         $('#m_eval_espasmof').modal('show');
+    }
+
+    function registrar_ev_espasmofemia()
+    {
+        var id_ficha_otros_prof = $('#id_fc').val();
+        var id_ficha_fono = '';
+        var id_paciente = $('#id_paciente_fc').val();
+        var id_profesional = $('#id_profesional_fc').val();
+
+        var modo_resp = $('#modo_resp').val(); // - select-one
+        var cond_aparicion = $('#cond_aparicion').val(); // - textarea
+        var evol = $('#evol').val(); // - textarea
+        var trat_ant = $('#trat_ant').val(); // - textarea
+        var perso = $('#perso').val(); // - textarea
+        var con_prob = $('#con_prob').val(); // - textarea
+        var fen_em = $('#fen_em').val(); // - textarea
+        var fact_her = $('#fact_her').val(); // - textarea
+        var rel_fam = $('#rel_fam').val(); // - textarea
+        var obs_coment_ag = $('#obs_coment_ag').val(); // - textarea
+        var ev_ofa = $('#ev_ofa').val(); // - select-one
+        var obs_ofa = $('#obs_ofa').val(); // - textarea
+        var praxias = $('#praxias').val(); // - select-one
+        var obs_praxias = $('#obs_praxias').val(); // - textarea
+        var resp = $('#resp').val(); // - select-one
+        var obs_resp = $('#obs_resp').val(); // - textarea
+        var musc = $('#musc').val(); // - textarea
+        var obs_coment_eval = $('#obs_coment_eval').val(); // - textarea
+        var fluidez = $('#fluidez').val(); // - textarea
+        var ritmo = $('#ritmo').val(); // - textarea
+        var prosodia = $('#prosodia').val(); // - textarea
+        var cond_verb = $('#cond_verb').val(); // - textarea
+        var condmot = $('#condmot').val(); // - textarea
+        var enunc = $('#enunc').val(); // - textarea
+        var emocional = $('#emocional').val(); // - textarea
+        var obs_coment_hab = $('#obs_coment_hab').val(); // - textarea
+        var lectsin_verb = $('#lectsin_verb').val(); // - textarea
+        var lectsin_mot = $('#lectsin_mot').val(); // - textarea
+        var lectsin_enun = $('#lectsin_enun').val(); // - textarea
+        var lectsin_emoc = $('#lectsin_emoc').val(); // - textarea
+        var lectcon_verb = $('#lectcon_verb').val(); // - textarea
+        var lectcon_mot = $('#lectcon_mot').val(); // - textarea
+        var lectcon_enun = $('#lectcon_enun').val(); // - textarea
+        var lectcon_emoc = $('#lectcon_emoc').val(); // - textarea
+        var obs_coment_lect = $('#obs_coment_lect').val(); // - textarea
+        var con_verb_pal_or = $('#con_verb_pal_or').val(); // - textarea
+        var con_mot_pal_or = $('#con_mot_pal_or').val(); // - textarea
+        var caract_enunc_pal_or = $('#caract_enunc_pal_or').val(); // - textarea
+        var fen_asoc_pal_or = $('#fen_asoc_pal_or').val(); // - textarea
+        var con_verb_pal_ser = $('#con_verb_pal_ser').val(); // - textarea
+        var con_mot_pal_ser = $('#con_mot_pal_ser').val(); // - textarea
+        var caract_enunc_pal_ser = $('#caract_enunc_pal_ser').val(); // - textarea
+        var fen_asoc_pal_ser = $('#fen_asoc_pal_ser').val(); // - textarea
+        var obs_coment_rep = $('#obs_coment_rep').val(); // - textarea
+        var dg_espasm = $('#dg_espasm').val(); // - select-one
+        var grav_espasm = $('#grav_espasm').val(); // - select-one
+        var plan = $('#plan').val(); // - textarea
+
+        var url = "{{ route('ficha.otro.prof.registro.eval.espasmofemia') }}";
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                    _token: CSRF_TOKEN,
+                    id_ficha_otros_prof:id_ficha_otros_prof,
+                    id_ficha_fono:id_ficha_fono,
+                    id_paciente:id_paciente,
+                    id_profesional:id_profesional,
+                    modo_resp:modo_resp,
+                    cond_aparicion:cond_aparicion,
+                    evol:evol,
+                    trat_ant:trat_ant,
+                    perso:perso,
+                    con_prob:con_prob,
+                    fen_em:fen_em,
+                    fact_her:fact_her,
+                    rel_fam:rel_fam,
+                    obs_coment_ag:obs_coment_ag,
+                    ev_ofa:ev_ofa,
+                    obs_ofa:obs_ofa,
+                    praxias:praxias,
+                    obs_praxias:obs_praxias,
+                    resp:resp,
+                    obs_resp:obs_resp,
+                    musc:musc,
+                    obs_coment_eval:obs_coment_eval,
+                    fluidez:fluidez,
+                    ritmo:ritmo,
+                    prosodia:prosodia,
+                    cond_verb:cond_verb,
+                    condmot:condmot,
+                    enunc:enunc,
+                    emocional:emocional,
+                    obs_coment_hab:obs_coment_hab,
+                    lectsin_verb:lectsin_verb,
+                    lectsin_mot:lectsin_mot,
+                    lectsin_enun:lectsin_enun,
+                    lectsin_emoc:lectsin_emoc,
+                    lectcon_verb:lectcon_verb,
+                    lectcon_mot:lectcon_mot,
+                    lectcon_enun:lectcon_enun,
+                    lectcon_emoc:lectcon_emoc,
+                    obs_coment_lect:obs_coment_lect,
+                    con_verb_pal_or:con_verb_pal_or,
+                    con_mot_pal_or:con_mot_pal_or,
+                    caract_enunc_pal_or:caract_enunc_pal_or,
+                    fen_asoc_pal_or:fen_asoc_pal_or,
+                    con_verb_pal_ser:con_verb_pal_ser,
+                    con_mot_pal_ser:con_mot_pal_ser,
+                    caract_enunc_pal_ser:caract_enunc_pal_ser,
+                    fen_asoc_pal_ser:fen_asoc_pal_ser,
+                    obs_coment_rep:obs_coment_rep,
+                    dg_espasm:dg_espasm,
+                    grav_espasm:grav_espasm,
+                    plan:plan,
+                },
+            })
+        .done(function(data) {
+            if (data.estado == 1)
+            {
+
+                $('#m_eval_espasmof').modal('hide');
+                limpiar_e_espasmogemia();
+                swal({
+                    title: "Registro de Evaluacion de la Espasmofemia",
+                    text: "Carga Exitosa.",
+                    icon: "success"
+                });
+            }
+            else
+            {
+                swal({
+                    title: "Registro de Evaluacion de la Espasmofemia",
+                    text: "Error al registrar",
+                    icon: "error"
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function limpiar_e_espasmogemia()
+    {
+        $('#modo_resp').val('1'); // - select-one
+        $('#cond_aparicion').val(); // - textarea
+        $('#evol').val(''); // - textarea
+        $('#trat_ant').val(''); // - textarea
+        $('#perso').val(''); // - textarea
+        $('#con_prob').val(''); // - textarea
+        $('#fen_em').val(''); // - textarea
+        $('#fact_her').val(''); // - textarea
+        $('#rel_fam').val(''); // - textarea
+        $('#obs_coment_ag').val(''); // - textarea
+        $('#ev_ofa').val('NO'); // - select-one
+        $('#obs_ofa').val(''); // - textarea
+        $('#praxias').val('NO'); // - select-one
+        $('#obs_praxias').val(''); // - textarea
+        $('#resp').val('NO'); // - select-one
+        $('#obs_resp').val(''); // - textarea
+        $('#musc').val(''); // - textarea
+        $('#obs_coment_eval').val(''); // - textarea
+        $('#fluidez').val(''); // - textarea
+        $('#ritmo').val(''); // - textarea
+        $('#prosodia').val(''); // - textarea
+        $('#cond_verb').val(''); // - textarea
+        $('#condmot').val(''); // - textarea
+        $('#enunc').val(''); // - textarea
+        $('#emocional').val(''); // - textarea
+        $('#obs_coment_hab').val(''); // - textarea
+        $('#lectsin_verb').val(''); // - textarea
+        $('#lectsin_mot').val(''); // - textarea
+        $('#lectsin_enun').val(''); // - textarea
+        $('#lectsin_emoc').val(''); // - textarea
+        $('#lectcon_verb').val(''); // - textarea
+        $('#lectcon_mot').val(''); // - textarea
+        $('#lectcon_enun').val(''); // - textarea
+        $('#lectcon_emoc').val(''); // - textarea
+        $('#obs_coment_lect').val(''); // - textarea
+        $('#con_verb_pal_or').val(''); // - textarea
+        $('#con_mot_pal_or').val(''); // - textarea
+        $('#caract_enunc_pal_or').val(''); // - textarea
+        $('#fen_asoc_pal_or').val(''); // - textarea
+        $('#con_verb_pal_ser').val(''); // - textarea
+        $('#con_mot_pal_ser').val(''); // - textarea
+        $('#caract_enunc_pal_ser').val(''); // - textarea
+        $('#fen_asoc_pal_ser').val(''); // - textarea
+        $('#obs_coment_rep').val(''); // - textarea
+        $('#dg_espasm').val('NO'); // - select-one
+        $('#grav_espasm').val('NO'); // - select-one
+        $('#plan').val(''); // - textarea
     }
 </script>
 

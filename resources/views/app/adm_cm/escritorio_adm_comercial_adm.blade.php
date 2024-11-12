@@ -73,7 +73,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card">
-                        <a href="{{ ROUTE('adm_cm.flujo.caja.index') }}">
+                        <a href="#">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/caja.png') }}">
                                 <h5 class="mt-1 mb-0"> Recepción de Cajas</h5>

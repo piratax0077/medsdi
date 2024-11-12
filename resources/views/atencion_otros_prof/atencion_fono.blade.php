@@ -20,9 +20,7 @@
                                     @endphp
                                     {{ $fecha }}
                                 </p>
-                                <p class="font-italic mt-0 mb-0 text-white">
-                                    <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
-                                </p>
+
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -75,11 +73,11 @@
                         </div>
                         <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
-                           @include('general.secciones_ficha.atenciones_previas_form')
+                            @include('general.secciones_ficha.atenciones_previas_form')
                         </div>
                         <!--Exámenes-->
                         <div class="tab-pane fade show" id="examenes" role="tabpanel" aria-labelledby="examenes-tab">
-                           @include('general.secciones_ficha.bandeja_examenes')
+                            @include('general.secciones_ficha.bandeja_examenes')
                         </div>
                         <!--Hospitalización-->
                         <div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">

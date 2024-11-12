@@ -18,16 +18,16 @@
                     </div>
                     <div class="form-row">
                         <div class="col-sm-3 mt-2">
-                            <label class="floating-label-activo-sm" for='fec_inicio_tto'>Fecha Inicio Tratamiento</label>
-                            <input type="date" class="form-control form-control-sm" name="fec_inicio_tto" id="fec_inicio_tto">
+                            <label class="floating-label-activo-sm" for='plan_fec_inicio_tto'>Fecha Inicio Tratamiento</label>
+                            <input type="date" class="form-control form-control-sm" name="plan_fec_inicio_tto" id="plan_fec_inicio_tto">
                         </div>
                         <div class="col-sm-6 mt-2">
-                            <label class="floating-label-activo-sm" for='dg_ingreso'>Diagnósticos</label>
-                            <input type="text" class="form-control form-control-sm" name="dg_ingreso" id="dg_ingreso">
+                            <label class="floating-label-activo-sm" for='plan_dg_ingreso'>Diagnósticos</label>
+                            <input type="text" class="form-control form-control-sm" name="plan_dg_ingreso" id="plan_dg_ingreso">
                         </div>
                         <div class="col-sm-3 mt-2">
-                            <label  class="floating-label-activo-sm" for='n_sesiones'>Número de Sesiones</label>
-                            <input type="text" class="form-control form-control-sm" name="n_sesiones" id="n_sesiones">
+                            <label  class="floating-label-activo-sm" for='plan_n_sesiones'>Número de Sesiones</label>
+                            <input type="text" class="form-control form-control-sm" name="plan_n_sesiones" id="plan_n_sesiones">
                         </div>
                     </div>
 

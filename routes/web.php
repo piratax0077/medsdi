@@ -1337,6 +1337,14 @@ Route::group([
     /** KINESIOLOGIA */
     Route::post('Ficha_Atencion/crear/kine', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_kine'])->name('ficha.otro.prof.registrar_ficha_kine');
 
+    /** FONOAUDIOLOGIA */
+    Route::post('Ficha_Atencion/crear/fonoaudiologia', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_fono'])->name('ficha.otro.prof.registrar_ficha_fono');
+    Route::post('fonoaudiologia/evaluacion/ofa/registro', [App\Http\Controllers\EvaluacionOfaController::class, 'Registrar_r'])->name('ficha.otro.prof.registro.eval.ofa');
+    Route::post('fonoaudiologia/evaluacion/voz/registro', [App\Http\Controllers\EvaluacionVozController::class, 'Registrar_r'])->name('ficha.otro.prof.registro.eval.voz');
+    Route::post('fonoaudiologia/evaluacion/espasmofemia/registro', [App\Http\Controllers\EvaluacionEspasmofemiaController::class, 'Registrar_r'])->name('ficha.otro.prof.registro.eval.espasmofemia');
+    Route::post('fonoaudiologia/habilida/pragmatica/registro', [App\Http\Controllers\HabilidadPragmaticaController::class, 'Registrar_r'])->name('ficha.otro.prof.registro.habilidad.pragmatica');
+    Route::post('fonoaudiologia/examen/praxias/registro', [App\Http\Controllers\ExamenPraxiasController::class, 'Registrar_r'])->name('ficha.otro.prof.registro.examen.praxias');
+
 });
 
 /**--CENTRO MEDICO--**/
