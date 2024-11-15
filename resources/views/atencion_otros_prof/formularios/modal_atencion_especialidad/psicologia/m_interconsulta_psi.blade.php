@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Interconsulta Siquiatría</h5>
+                <h5 class="modal-title text-white text-center">Interconsulta Siquiatríafff</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body mb-0">
@@ -17,7 +17,7 @@
                     </div>
                     <div class="form-group col-sm-12 col-md-12 col-lg-2 col-xl-2">
                         <label class="floating-label-activo-sm">Edad</label>
-                        <input class="form-control form-control-sm" name="edad_paciente_interconsulta_sq" id="edad_paciente_interconsulta_sq">
+                        <input class="form-control form-control-sm" name="edad_paciente_interconsulta_sq" id="edad_paciente_interconsulta_sq" value="">
                     </div>
                 </div>
                 {{--  PESTAÑA DE SOLICITUD  --}}
@@ -283,103 +283,103 @@
     }
 
     function registrar_interconsulta_sq()
+    {
+        var  mensaje = '';
+        var valido = 1;
+
+        let profesion = $('#profesion_sq').val();
+        let especialidad = $('#especialidad_sq').val();
+        let sub_tipo_especialidad = $('#sub_tipo_especialidad_sq').val();
+        let profesional_inter = $('#profesional_inter_sq').val();
+        let nombre_profesional_inter = $('#nombre_profesional_inter_sq').val();
+        let hipotesis_interconsulta = $('#hipotesis_interconsulta_sq').val();
+        let comentarios_interconsulta = $('#comentarios_interconsulta_sq').val();
+        let id_fc = $('#id_fc').val();
+        let url = "{{ route('ficha_medica.registrar_interconsulta') }}";
+        let hora_medica = $('#hora_medica').val();
+
+        if(profesion == '') {
+            mensaje += 'Debe ingresar Profesión\n';
+            valido = 0;
+        }
+
+        if(especialidad == '') {
+            mensaje += 'Debe ingresar Especialidad\n';
+            valido = 0;
+        }
+
+        // if(sub_tipo_especialidad == '') {
+        //     mensaje += 'Debe ingresar Sub Tipo Especialidad\n';
+        //     valido = 0;
+        // }
+        // if(profesional_inter == '') {
+        //     mensaje += 'Debe ingresar profesional_inter\n';
+        //     valido = 0;
+        // }
+        // if(nombre_profesional_inter == '') {
+        //     mensaje += 'Debe ingresar nombre_profesional_inter\n';
+        //     valido = 0;
+        // }
+
+        if(hipotesis_interconsulta == '') {
+            mensaje += 'Debe ingresar Hipótesis diagnóstica\n';
+            valido = 0;
+        }
+        if(comentarios_interconsulta == '') {
+            mensaje += 'Debe ingresar que desea saber\n';
+            valido = 0;
+        }
+
+        if(valido == 1)
         {
-            var  mensaje = '';
-            var valido = 1;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    profesion: profesion,
+                    especialidad: especialidad,
+                    sub_tipo_especialidad: sub_tipo_especialidad,
+                    profesional_inter: profesional_inter,
+                    nombre_profesional_inter: nombre_profesional_inter,
+                    hipotesis_interconsulta: hipotesis_interconsulta,
+                    comentarios_interconsulta: comentarios_interconsulta,
+                    id_fc_op: id_fc,
+                },
+            })
+            .done(function(response) {
 
-            let profesion = $('#profesion_sq').val();
-            let especialidad = $('#especialidad_sq').val();
-            let sub_tipo_especialidad = $('#sub_tipo_especialidad_sq').val();
-            let profesional_inter = $('#profesional_inter_sq').val();
-            let nombre_profesional_inter = $('#nombre_profesional_inter_sq').val();
-            let hipotesis_interconsulta = $('#hipotesis_interconsulta_sq').val();
-            let comentarios_interconsulta = $('#comentarios_interconsulta_sq').val();
-            let id_fc = $('#id_fc').val();
-            let url = "{{ route('ficha_medica.registrar_interconsulta') }}";
-            let hora_medica = $('#hora_medica').val();
-
-            if(profesion == '') {
-                mensaje += 'Debe ingresar Profesión\n';
-                valido = 0;
-            }
-
-            if(especialidad == '') {
-                mensaje += 'Debe ingresar Especialidad\n';
-                valido = 0;
-            }
-
-            // if(sub_tipo_especialidad == '') {
-            //     mensaje += 'Debe ingresar Sub Tipo Especialidad\n';
-            //     valido = 0;
-            // }
-            // if(profesional_inter == '') {
-            //     mensaje += 'Debe ingresar profesional_inter\n';
-            //     valido = 0;
-            // }
-            // if(nombre_profesional_inter == '') {
-            //     mensaje += 'Debe ingresar nombre_profesional_inter\n';
-            //     valido = 0;
-            // }
-
-            if(hipotesis_interconsulta == '') {
-                mensaje += 'Debe ingresar Hipótesis diagnóstica\n';
-                valido = 0;
-            }
-            if(comentarios_interconsulta == '') {
-                mensaje += 'Debe ingresar que desea saber\n';
-                valido = 0;
-            }
-
-            if(valido == 1)
-            {
-                $.ajax({
-                        url: url,
-                        type: 'GET',
-                        data: {
-                            profesion: profesion,
-                            especialidad: especialidad,
-                            sub_tipo_especialidad: sub_tipo_especialidad,
-                            profesional_inter: profesional_inter,
-                            nombre_profesional_inter: nombre_profesional_inter,
-                            hipotesis_interconsulta: hipotesis_interconsulta,
-                            comentarios_interconsulta: comentarios_interconsulta,
-                            id_fc_op: id_fc,
-                        },
+                if (response.estado == 1) {
+                    console.log(response);
+                    //$('#form_control_obesidad').trigger("reset");
+                    $('#mensaje').text('Se ha creado la interconsulta de forma correcta');
+                    $('#mensaje').show();
+                    $('#modal_interconsulta_psi').modal('hide');
+                    ver_pdf_interconsulta(response.id_last);
+                }
+                else
+                {
+                    swal({
+                        title: "Se ha presentado un problema al registrar." ,
+                        icon: "error",
                     })
-                    .done(function(response) {
+                }
+            })
+            .fail(function(e) {
+                console.log("error");
+                console.log(e);
 
-                        if (response.estado == 1) {
-                            console.log(response);
-                            //$('#form_control_obesidad').trigger("reset");
-                            $('#mensaje').text('Se ha creado la interconsulta de forma correcta');
-                            $('#mensaje').show();
-                            $('#modal_interconsulta').modal('hide');
-                            ver_pdf_interconsulta(response.id_last);
-                        }
-                        else
-                        {
-                            swal({
-                                title: "Se ha presentado un problema al registrar." ,
-                                icon: "error",
-                            })
-                        }
-                    })
-                    .fail(function(e) {
-                        console.log("error");
-                        console.log(e);
+            });
 
-                    })
-
-            }
-            else
-            {
-                swal({
-                    title: "Complete los datos." ,
-                    text: mensaje,
-                    icon: "error",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                })
-            }
-        };
+        }
+        else
+        {
+            swal({
+                title: "Complete los datos." ,
+                text: mensaje,
+                icon: "error",
+                // buttons: "Aceptar",
+                //SuccessMode: true,
+            })
+        }
+    };
 </script>

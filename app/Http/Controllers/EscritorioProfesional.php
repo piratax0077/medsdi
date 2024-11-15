@@ -1814,23 +1814,29 @@ class EscritorioProfesional extends Controller
 
         /** tipos de agendas del profesional */
         $tipo_agendas_temp = ProfesionalHorario::select('tipo_agenda')->where('id_lugar_atencion', $request->lugares_atencion)->where('id_profesional', $profesional->id)->orderBy('tipo_agenda')->groupBy('tipo_agenda')->first();
-
-        $horario = ProfesionalHorario::where('id_profesional', $profesional->id)->where('id_lugar_atencion', $request->lugares_atencion)->where('tipo_agenda', $tipo_agendas_temp->tipo_agenda)->get();
-        $horas_medicas = HoraMedica::where('id_profesional', $profesional->id)
-                                    ->whereIn('id_estado',[1,2,4,5,6,7,8])
-                                    ->with(['Paciente'=> function($query){
-                                                $query->select('id','id_prevision','rut')
-                                                        ->with(['Prevision'=>function($query2){
-                                                                    $query2->select('id','nombre');
-                                                }]);
-                                            }])
-                                    ->get();
+        $horario = array();
         $lugares = $profesional->LugaresAtencion()->get();
-        //$horario = ProfesionalHorario::where('id_profesional', $profesional->id)->get();
         $prevision = Prevision::all();
         $region = Region::all();
-        $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
-        $lugarAtencion = LugarAtencion::find($request->lugares_atencion);
+
+        if($tipo_agendas_temp)
+        {
+            $horario = ProfesionalHorario::where('id_profesional', $profesional->id)->where('id_lugar_atencion', $request->lugares_atencion)->where('tipo_agenda', $tipo_agendas_temp->tipo_agenda)->get();
+            $horas_medicas = HoraMedica::where('id_profesional', $profesional->id)
+                                        ->whereIn('id_estado',[1,2,4,5,6,7,8])
+                                        ->with(['Paciente'=> function($query){
+                                                    $query->select('id','id_prevision','rut')
+                                                            ->with(['Prevision'=>function($query2){
+                                                                        $query2->select('id','nombre');
+                                                    }]);
+                                                }])
+                                        ->get();
+
+            //$horario = ProfesionalHorario::where('id_profesional', $profesional->id)->get();
+
+            $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
+            $lugarAtencion = LugarAtencion::find($request->lugares_atencion);
+        }
 
 
         if (count($horario) == 0) {

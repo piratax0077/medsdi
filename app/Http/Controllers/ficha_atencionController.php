@@ -3393,6 +3393,74 @@ class ficha_atencionController extends Controller
             $nombre_especialidad = TipoEspecialidad::find($request->especialidad)->nombre ;
         else if(!empty($request->tipo_especialidad))
             $nombre_especialidad = Especialidad::find($request->profesion)->nombre ;
+        $lic_token = '';
+
+        if( !empty(session('lic_token')) && $profesional->id_espacialidad == 1)
+        {
+            $lic_token = session('lic_token');
+            $lic_log_id = session('lic_log_id');
+        }
+        else
+        {
+            /** calculo de periodo de vigencia para aprobacion */
+            $fecha = date('Y-m-d');
+            $hora =  date('H:i:s');
+            $fecha_actual  = date('Y-m-d H:i:s', strtotime($fecha.' '.$hora));
+            $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.(int)env('TIEMPO_ESPERA_CONFIRMACION').' hours' , strtotime ($fecha_actual) ) );
+            $fecha_expira = date ('Y-m-d H:i:s' ,strtotime ( '+'.((int)env('TIEMPO_ESPERA_CONFIRMACION')+(int)env('TIEMPO_EXP_PERMISO')).' hours' , strtotime ($fecha_actual) ) );
+
+            $id = LogUsersDevices::latest()->first();
+            if(is_object($id)==false)
+            $id=0;
+            else
+            $id = LogUsersDevices::latest()->first()->id;
+
+            $msj = array(
+                'id' => ($id+1),
+                'nombre' => mb_strtoupper($profesional->nombre.' '.$profesional->apellido_p.' '.$profesional->apellido_m),
+                'evento' => 'Interconsulta Siquiatría',
+                'fecha' => $fecha,
+                'hora' => $hora,
+                'nombre_especialidad' => $nombre_especialidad,
+                'nombre_profesional_inter' => $request->nombre_profesional_inter_sq,
+                'tipo' => 'interconsulta'
+            );
+
+            $log_users_devices = new LogUsersDevices();
+            $log_users_devices->id_user_create = $profesional->id_usuario;
+            $log_users_devices->id_user_recept = $profesional->id_usuario;
+            $log_users_devices->msg = json_encode($msj);
+            $log_users_devices->estado = 1;
+
+            $log_users_devices->fecha_ingreso = $fecha_actual;
+            $log_users_devices->fecha_termino = $fecha_vencimiento;
+            $log_users_devices->tipo = 16; // check sdi // ESTRUCTURA DE TEXTO
+            $token_temp = md5(uniqid());
+            $log_users_devices->token = $token_temp;
+            $log_users_devices->fecha_exp = $fecha_expira;
+
+            if($log_users_devices->save())
+            {
+                $datos['app']['estado'] = 1;
+                $datos['app']['msj'] = $msj;
+                $datos['app']['fecha_inicio'] = $fecha_actual;
+                $datos['app']['fecha_termino'] = $fecha_vencimiento;
+                $datos['app']['fecha_exp'] = $fecha_expira;
+                $datos['app']['tiempo'] = env('TIEMPO_ESPERA');
+                $datos['app']['last_id'] = $log_users_devices->id;
+                $datos['app']['token'] = $log_users_devices->token;
+            }
+            else
+            {
+                $datos['app']['estado'] = 0;
+                $datos['app']['msj'] = 'Solicitud de aprobacion con falla';
+            }
+
+            $lic_token = $token_temp;
+            $lic_log_id = $log_users_devices->id;
+        }
+
+
 
         $interconsulta = new Interconsulta();
         $interconsulta->id_especialidad = $request->profesion;
@@ -3402,7 +3470,7 @@ class ficha_atencionController extends Controller
         $interconsulta->fecha_solicitud = Carbon::now();
         $interconsulta->id_paciente = $ficha_atencion->id_paciente;
         $interconsulta->id_profesional_soli = $profesional->id;
-        $interconsulta->cod_auto_soli = session('lic_token');
+        $interconsulta->cod_auto_soli = $lic_token;
         if($request->id_fc)
         {
             $interconsulta->id_ficha_atencion_soli = $ficha_atencion->id;
@@ -3426,8 +3494,8 @@ class ficha_atencionController extends Controller
         if ($interconsulta->save())
         {
             /** REGISTRAR FIRMA PROFESIONAL */
-            $papeleria_token = session('lic_token');
-            $papeleria_log_id = session('lic_log_id');
+            $papeleria_token = $lic_token;
+            $papeleria_log_id = $lic_log_id;
             $prof_firma_registro = (object)CertificadoController::registroProfesionalFirma((int)$profesional->id, $papeleria_token, $papeleria_log_id, "8", $interconsulta->id);
 
             $datos['estado'] = 1;
@@ -3499,15 +3567,21 @@ class ficha_atencionController extends Controller
     public function pdf_interconsulta(Request $request)
     {
         $datos = array();
-        $interconsulta = Interconsulta::where('id', $request->id_interconsulta)
-                                        ->first();
+        $interconsulta = Interconsulta::where('id', $request->id_interconsulta)->first();
         if($interconsulta->count()>0)
         {
 
             $paciente = Paciente::find($interconsulta->id_paciente);
 
             // info solicitud
-            $ficha_atencion_soli = FichaAtencion::find($interconsulta->id_ficha_atencion_soli);
+            if(!empty($interconsulta->id_ficha_otro_prof_soli))
+            {
+                $ficha_atencion_soli = FichaOtrosProfesionales::find($interconsulta->id_ficha_otro_prof_soli);
+            }
+            else
+            {
+                $ficha_atencion_soli = FichaAtencion::find($interconsulta->id_ficha_atencion_soli);
+            }
             $lugar_atencion_soli = LugarAtencion::find($interconsulta->id_lugar_atencion_soli);
             $profesional_soli = Profesional::find($interconsulta->id_profesional_soli);
             // $token_firma_soli = encrypt( $profesional_soli->rut.'_'.$profesional_soli->email.'_'.$lugar_atencion_soli->id );
@@ -3577,7 +3651,7 @@ class ficha_atencionController extends Controller
                 'id' => $profesional_soli->id,
                 'nombre' => $profesional_soli->nombre.' '.$profesional_soli->apellido_uno.' '.$profesional_soli->apellido_dos,
                 'rut' => $profesional_soli->rut,
-                'especialidad' => ($profesional_soli->SubTipoEspecialidad()->first()?$profesional_soli->SubTipoEspecialidad()->first()->nombre:$profesional->TipoEspecialidad()->first()->nombre),
+                'especialidad' => ($profesional_soli->SubTipoEspecialidad()->first()?$profesional_soli->SubTipoEspecialidad()->first()->nombre:$profesional_soli->TipoEspecialidad()->first()->nombre),
                 'token' =>  $token_profesional_soli,
                 'url' =>  $url_profesional_soli,
                 'qr' =>  $qr_profesional_soli,

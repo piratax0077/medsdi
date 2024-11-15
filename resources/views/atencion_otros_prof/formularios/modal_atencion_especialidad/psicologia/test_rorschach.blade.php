@@ -274,7 +274,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close"><i class="feather icon-x"></i> Cancelar</button>
-                    <button type="submit" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                    <button type="button" class="btn btn-info btn-sm" onclick="registrar_psi_rorsc();"><i class="feather icon-save"></i> Guardar</button>
 				</div>
 			</div>
 		</div>
@@ -283,5 +283,117 @@
 <script>
     function psi_rorsch() {
         $('#test_rorsch').modal('show');
+    }
+
+    function registrar_psi_rorsc()
+    {
+        var mensaje = '';
+        var valido = 1;
+
+        let id_ficha_otros_prof = $('#id_fc').val();
+        let id_profesional = $('#profesion_sq').val();
+        let id_especialidad = '{{ $profesional->id_especialidad }}';
+        let id_tipo_especialidad = '{{ $profesional->id_tipo_especialidad }}';
+        let id_paciente = $('#id_paciente_fc').val();
+
+        var lam_uno_resp = $('#lam_uno_resp').val();
+        var lam_uno_com = $('#lam_uno_com').val();
+        var lam_dos_resp = $('#lam_dos_resp').val();
+        var lam_dos_com = $('#lam_dos_com').val();
+        var lam_tres_resp = $('#lam_tres_resp').val();
+        var lam_tres_com = $('#lam_tres_com').val();
+        var lam_cuatro_resp = $('#lam_cuatro_resp').val();
+        var lam_cuatro_com = $('#lam_cuatro_com').val();
+        var lam_cinco_resp = $('#lam_cinco_resp').val();
+        var lam_cinco_com = $('#lam_cinco_com').val();
+        var lam_seis_resp = $('#lam_seis_resp').val();
+        var lam_seis_com = $('#lam_seis_com').val();
+        var lam_siete_resp = $('#lam_siete_resp').val();
+        var lam_siete_com = $('#lam_siete_com').val();
+        var lam_ocho_resp = $('#lam_ocho_resp').val();
+        var lam_ocho_com = $('#lam_ocho_com').val();
+        var lam_nueve_resp = $('#lam_nueve_resp').val();
+        var lam_nueve_com = $('#lam_nueve_com').val();
+        var lam_diez_resp = $('#lam_diez_resp').val();
+        var lam_diez_com = $('#lam_diez_com').val();
+        var comentarios_gen = $('#comentarios_gen').val();
+
+        let url = "{{ route('ficha.otro.prof.test_rorshchach.registro') }}";
+
+        // if(profesion == '') {
+        //     mensaje += 'Debe ingresar Profesión\n';
+        //     valido = 0;
+        // }
+
+        var token = CSRF_TOKEN;
+
+        if(valido == 1)
+        {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    _token:token,
+                    id_ficha_atencion:id_ficha_otros_prof,
+                    id_profesional:id_profesional,
+                    id_especialidad:id_especialidad,
+                    id_tipo_especialidad:id_tipo_especialidad,
+                    id_paciente:id_paciente,
+                    lam_uno_resp:lam_uno_resp,
+                    lam_uno_com:lam_uno_com,
+                    lam_dos_resp:lam_dos_resp,
+                    lam_dos_com:lam_dos_com,
+                    lam_tres_resp:lam_tres_resp,
+                    lam_tres_com:lam_tres_com,
+                    lam_cuatro_resp:lam_cuatro_resp,
+                    lam_cuatro_com:lam_cuatro_com,
+                    lam_cinco_resp:lam_cinco_resp,
+                    lam_cinco_com:lam_cinco_com,
+                    lam_seis_resp:lam_seis_resp,
+                    lam_seis_com:lam_seis_com,
+                    lam_siete_resp:lam_siete_resp,
+                    lam_siete_com:lam_siete_com,
+                    lam_ocho_resp:lam_ocho_resp,
+                    lam_ocho_com:lam_ocho_com,
+                    lam_nueve_resp:lam_nueve_resp,
+                    lam_nueve_com:lam_nueve_com,
+                    lam_diez_resp:lam_diez_resp,
+                    lam_diez_com:lam_diez_com,
+                    comentarios_gen:comentarios_gen,
+                },
+            })
+            .done(function(response) {
+                if (response.estado == 1) {
+                    swal({
+                        title: "Test de Rorschachdd" ,
+                        text: "Registro exitoso",
+                        icon: "success",
+                    })
+                    $('#test_rorsch').modal('hide');
+                }
+                else
+                {
+                    swal({
+                        title: "Test de Rorschachdd" ,
+                        text: "Falla en registro",
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(e) {
+                console.log("error");
+                console.log(e);
+
+            });
+
+        }
+        else
+        {
+            swal({
+                title: "Test de Rorschachdd, campos requeridos" ,
+                text: mensaje,
+                icon: "error",
+            })
+        }
     }
 </script>

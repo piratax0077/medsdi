@@ -59,20 +59,24 @@
 
 <!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION LICENCIA) -->
 
-    @if(!empty(session('lic_token')) && session('lic_estado') == 1)
-        <button class="btn btn-agenda-autorizacion btn-info btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ABRIR TALONARIOS</button>
-    @else
-        <button class="btn btn-agenda-autorizacion btn-danger btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ABRIR TALONARIOS</button>
-    @endif
-
+   @if ($profesional->id_especialidad == 1)
+		@if(!empty(session('lic_token')) && session('lic_estado') == 1)
+			<button class="btn btn-agenda-autorizacion btn-info btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ABRIR TALONARIOS</button>
+		@else
+			<button class="btn btn-agenda-autorizacion btn-danger btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ABRIR TALONARIOS</button>
+		@endif
+	@else
+		{{-- no mostrar nada  --}}
+	@endif
 
 <!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION FMU) -->
 
-    @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
-        <button class="btn btn-agenda-autorizacion-fmu btn-info btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-file f-12"></i> FMU</button>
-    @else
-        <button class="btn btn-agenda-autorizacion-fmu btn-danger btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-file f-12"></i> FMU</button>
-    @endif
+    
+        @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
+            <button class="btn btn-agenda-autorizacion-fmu btn-info btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-file f-12"></i> FMU</button>
+        @else
+            <button class="btn btn-agenda-autorizacion-fmu btn-danger btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-file f-12"></i> FMU</button>
+        @endif
 
 
 

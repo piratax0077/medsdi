@@ -10,9 +10,9 @@
     			    <div class="col-md-12">
     			        <ul class="nav nav-tabs-aten nav-fill mb-3" id="tablas_examenes" role="tablist">
     			            <li class="nav-item">
-    			                <a class="nav-link-aten active" id="test_uno_tab" data-toggle="pill" href="#test_uno" role="tab" aria-controls="test_uno" aria-selected="true">Test uno</a>
+    			                <a class="nav-link-aten active" id="test_uno_tab" data-toggle="pill" href="#test_uno" role="tab" aria-controls="test_uno" aria-selected="true">Test</a>
     			            </li>
-    			            <li class="nav-item">
+    			            {{-- <li class="nav-item">
     			                <a class="nav-link-aten" id="test_dos_tab" data-toggle="pill" href="#test_dos" role="tab" aria-controls="test_dos" aria-selected="true">Test Dos</a>
     			            </li>
     			            <li class="nav-item">
@@ -23,7 +23,7 @@
     			            </li>
                             <li class="nav-item">
     			                <a class="nav-link-aten" id="test_cinco_tab" data-toggle="pill" href="#test_cinco" role="tab" aria-controls="test_cinco" aria-selected="true">Test Cuatro</a>
-    			            </li>
+    			            </li> --}}
                             <li class="nav-item">
     			                <a class="nav-link-aten" id="c-gen-tab" data-toggle="pill" href="#c-gen" role="tab" aria-controls="c-gen" aria-selected="true">Comentarios generales</a>
     			            </li>
@@ -56,7 +56,7 @@
                                     </div>
                                 </div>
     			            </div>
-    			            <!--TAB 2-->
+    			            {{-- <!--TAB 2-->
     			            <div class="tab-pane fade show" id="test_dos" role="tabpanel" aria-labelledby="test_dos_tab">
                                 <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
@@ -148,7 +148,7 @@
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="test_cinco_ind" id="test_cinco_ind"></textarea>
                                     </div>
                                 </div>
-    			            </div>
+    			            </div> --}}
                             <!--TAB 10-->
     			            <div class="tab-pane fade show" id="c-gen" role="tabpanel" aria-labelledby="c-gen-tab">
     							<div class="form-row">
@@ -165,7 +165,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close"><i class="feather icon-x"></i> Cancelar</button>
-                <button type="submit" class="btn btn-info btn-sm"><i class="feather icon-save"></i> Guardar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="registrar_psi_ot_test();"><i class="feather icon-save"></i> Guardar</button>
             </div>
 		</div>
 	</div>
@@ -173,5 +173,86 @@
 <script>
     function psi_ot_test() {
         $('#test_otros').modal('show');
+    }
+
+    function registrar_psi_ot_test()
+    {
+        var mensaje = '';
+        var valido = 1;
+
+        let id_ficha_otros_prof = $('#id_fc').val();
+        let id_profesional = $('#profesion_sq').val();
+        let id_especialidad = '{{ $profesional->id_especialidad }}';
+        let id_tipo_especialidad = '{{ $profesional->id_tipo_especialidad }}';
+        let id_paciente = $('#id_paciente_fc').val();
+
+        var nomb_test = $('#nomb_test_uno').val();
+        var resp = $('#test_uno_resp').val();
+        var com = $('#test_uno_com').val();
+        var ind = $('#test_uno_ind').val();
+        var comentarios_gen = $('#comentarios_gen').val();
+
+
+        let url = "{{ route('ficha.otro.prof.plan_tratamiento.registro') }}";
+
+        if(nomb_test == '') {
+            mensaje += 'Debe ingresar Nombre\n';
+            valido = 0;
+        }
+
+        var token = CSRF_TOKEN;
+
+        if(valido == 1)
+        {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    _token:token,
+                    id_ficha_atencion:id_ficha_otros_prof,
+                    id_profesional:id_profesional,
+                    id_especialidad:id_especialidad,
+                    id_tipo_especialidad:id_tipo_especialidad,
+                    id_paciente:id_paciente,
+                    nomb_test:nomb_test,
+                    resp:resp,
+                    com:com,
+                    ind:ind,
+                    comentarios_gen:comentarios_gen,
+                },
+            })
+            .done(function(response) {
+                if (response.estado == 1) {
+                    swal({
+                        title: "Otros test practicados" ,
+                        text: "Registro exitoso",
+                        icon: "success",
+                    })
+                    $('#test_otros').modal('hide');
+                }
+                else
+                {
+                    swal({
+                        title: "Otros test practicados" ,
+                        text: "Falla en registro",
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(e) {
+                console.log("error");
+                console.log(e);
+
+            });
+
+        }
+        else
+        {
+            swal({
+                title: "Otros test practicados, campos requeridos" ,
+                text: mensaje,
+                icon: "error",
+            })
+        }
     }
 </script>

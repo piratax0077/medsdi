@@ -1333,6 +1333,9 @@ Route::group([
 	/** OTROS PROFESIONALES */
     /** PSICOLOGIA */
     Route::post('Ficha_Atencion/crear/sico', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_sico'])->name('ficha.otro.prof.registrar_ficha_sico');
+    Route::post('sicologia/plan_tratamiento/registro', [App\Http\Controllers\PlanTratamientoTerapiaSicologicaController::class, 'registrar_r'])->name('ficha.otro.prof.plan_tratamiento.registro');
+    Route::post('sicologia/test_rorshchach/registro', [App\Http\Controllers\PsicoPsiquiatriaController::class, 'TestRorshchachRegistro'])->name('ficha.otro.prof.test_rorshchach.registro');
+    Route::post('sicologia/otros_test/registro', [App\Http\Controllers\PsicoPsiquiatriaController::class, 'OtrosTestPsicoPsiquiatrico'])->name('ficha.otro.prof.plan_tratamiento.registro');
 
     /** KINESIOLOGIA */
     Route::post('Ficha_Atencion/crear/kine', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_kine'])->name('ficha.otro.prof.registrar_ficha_kine');

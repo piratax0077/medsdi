@@ -55,16 +55,12 @@
         <link rel="stylesheet"  href="{{ asset('css/plugins/select2.min.css') }}">
 
         @yield('css-btn-autorizacion')
-
         {{--  /** agregar css */  --}}
         <style>
             .ui-front {
                 position: absolute;
                 z-index: 2006;
                 overflow: auto;
-            }
-            .select2-container {
-                z-index: 3001 !important;
             }
         </style>
     </head>
@@ -182,7 +178,6 @@
 
 
         @yield('page-script-btn-autorizacion')
-
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
