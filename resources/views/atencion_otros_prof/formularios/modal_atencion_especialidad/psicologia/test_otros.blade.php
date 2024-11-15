@@ -193,7 +193,7 @@
         var comentarios_gen = $('#comentarios_gen').val();
 
 
-        let url = "{{ route('ficha.otro.prof.plan_tratamiento.registro') }}";
+        let url = "{{ route('ficha.otro.prof.otros_test.registro') }}";
 
         if(nomb_test == '') {
             mensaje += 'Debe ingresar Nombre\n';
