@@ -1090,6 +1090,8 @@ Route::group([
     /** modificar paciente */
     Route::get('paciente/modificar', [App\Http\Controllers\EscritorioPaciente::class, 'modificarPaciente'])->name('asistente.paciente.modificar');
 
+    Route::post('carga/archivo', [App\Http\Controllers\CargaArchivoController::class, 'cargaArchivoTemp'])->name('asistente.archivo.carga');
+
 });
 
 /* ASISTENTE Online*/

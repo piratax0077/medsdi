@@ -3196,7 +3196,8 @@
             let buscador = $('input:radio[name=buscador]:checked').val();
             let modalidad = $('#modalidad').val();
             let text_modalidad = $('#modalidad option:selected').text();
-            let cv = $('#cv').val();
+            // let cv = $('#cv').val();
+            let archivo = $('#input_lista_archivo').val();
 
             if(buscador == 1)
             {
@@ -3219,7 +3220,7 @@
                 data: {
                     buscador: buscador,
                     modalidad: modalidad,
-                    cv: cv,
+                    archivo: lista_archivo[0],
                 }
 
             })
@@ -3247,6 +3248,18 @@
                     $('#buscadores_1').addClass('show');
                     $('#buscadores_2').removeClass('show');
 
+                    console.log(data.archivo.estado);
+                    console.log(data.archivo.proceso.url);
+                    if(data.archivo.estado == 1)
+                    {
+                        $('#btn_descarga_cv').attr('disabled', false);
+                        $('#btn_descarga_cv').attr('onclick', 'abrirCV(\''+data.archivo.proceso.url+'\');');
+                    }
+                    else
+                    {
+                        $('#btn_descarga_cv').attr('disabled', true);
+                        $('#btn_descarga_cv').attr('onclick', '');
+                    }
                 }
                 else
                 {

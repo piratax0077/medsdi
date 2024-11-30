@@ -283,20 +283,24 @@ class EscritorioAsistente extends Controller
 
         $profesional = Profesional::where($filtro)->first();
 
-        $filtro = array();
-        if(!empty($request->id_profesional))
-            $filtro[] = array('id_profesional',$request->id_profesional);
-        if(!empty($request->id_lugar_atencion))
-            $filtro[] = array('id_lugar_atencion',$request->id_lugar_atencion);
-        if(!empty($request->tipo_agenda))
-            $filtro[] = array('tipo_agenda',$request->tipo_agenda);
-        else
-            $filtro[] = array('tipo_agenda',1);
-
-        $horario = ProfesionalHorario::where($filtro)->get();
-
         if($profesional)
         {
+            $filtro = array();
+            if(!empty($request->id_profesional))
+                $filtro[] = array('id_profesional',$request->id_profesional);
+            if(!empty($request->id_lugar_atencion))
+                $filtro[] = array('id_lugar_atencion',$request->id_lugar_atencion);
+            if(!empty($request->tipo_agenda))
+                $filtro[] = array('tipo_agenda',$request->tipo_agenda);
+            else
+                $filtro[] = array('tipo_agenda',1);
+
+            $horario = ProfesionalHorario::where($filtro)->get();
+
+            // var_dump($filtro);
+            // var_dump($horario);
+            // die();
+
 			// busqueda de imagen
             $array_rut = explode('-',$profesional->rut);
             $nombre_imagen = asset('images/iconos/usuario_profesional.svg');
@@ -1864,14 +1868,41 @@ class EscritorioAsistente extends Controller
     public function editar_configuracion_busqueda(Request $request)
     {
         $datos = array();
-
+        $resulto_img = '';
 
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
 
+        // echo $request->archivo[0];//url temp
+        // echo $request->archivo[1];//nombre original
+        // echo $request->archivo[2];//nombre temp
+        // echo $request->archivo[3];//tipo archivo
+
+        $info_archivos = '';
+        if($request->archivo)
+        {
+            // [0] = url
+            // [1] = nombre_original
+            // [2] = nombre_archivo
+            // [3] = file_extension
+            $nombre_temp = $request->archivo[2];
+            $file_extension = $request->archivo[3];
+            $rut = str_replace('-', '', $asistente->rut);
+            $rut = str_replace('.', '', $rut);
+
+
+            $nombre_final = 'CV_'.$rut.'_'.uniqid().'.'.$file_extension;
+            $resulto_img = (object)CargaArchivoController::moverArchivo($nombre_temp, 'archivo_archivo', $nombre_final);
+
+            $datos['archivo'] = $resulto_img;
+
+            if( $resulto_img->estado == 1 )
+            {
+                $asistente->curriculum = $nombre_final;
+            }
+        }
+
         $asistente->buscador = $request->buscador;
         $asistente->id_modalidad = $request->modalidad;
-        if(!empty($request->cv))
-            $asistente->curriculum = $request->cv;
 
         if($asistente->save())
         {

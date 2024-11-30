@@ -1566,9 +1566,9 @@
             $('#reserva_agregar_paciente_hora').hide();
             $('#reserva_datos_paciente').hide();
             let url = "{{ route('agenda.buscar_rut_paciente') }}";
-
-            $.ajax({
-
+            if(rut != '')
+            {
+                $.ajax({
                     url: url,
                     type: "get",
                     data: {
@@ -1708,6 +1708,15 @@
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
+            }
+            else
+            {
+                swal({
+                    title: "Buscar Paciente",
+                    text: 'Debe ingresar RUT para buscar.',
+                    icon: "error",
+                });
+            }
         };
 
         function formatDateDB(dateStr) {

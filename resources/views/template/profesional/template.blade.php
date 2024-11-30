@@ -2409,11 +2409,14 @@
             validar_campo_telefono_representante();
 
             let rut = $('#rut_paciente_reserva').val();
-            $('#reserva_agregar_paciente_hora').hide();
-            $('#reserva_datos_paciente').hide();
-            let url = "{{ route('profesional.buscar_rut_paciente') }}";
 
-            $.ajax({
+            if(rut != '')
+            {
+                $('#reserva_agregar_paciente_hora').hide();
+                $('#reserva_datos_paciente').hide();
+                let url = "{{ route('profesional.buscar_rut_paciente') }}";
+
+                $.ajax({
 
                     url: url,
                     type: "get",
@@ -2549,6 +2552,15 @@
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
+            }
+            else
+            {
+                swal({
+                    title: "Buscar Paciente",
+                    text: 'Debe ingresar RUT para buscar.',
+                    icon: "error",
+                });
+            }
         };
 
         function desasociar_asistente(id_asistente) {

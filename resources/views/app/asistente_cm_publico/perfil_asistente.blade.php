@@ -134,7 +134,8 @@
 												<div class="form-group row">
 													<label class="col-sm-4 col-form-label font-weight-bolder">Rut</label>
 													<div class="col-sm-7">
-														<input type="text" class="form-control form-control-sm" placeholder="Rut" id="editar_rut" name="editar_rut"value="{{ $asistente->rut }} ">
+														<!-- <input type="text" class="form-control form-control-sm" placeholder="Rut" id="editar_rut" name="editar_rut"value="{{ $asistente->rut }} ">-->
+														<input type="text" class="form-control form-control-sm" placeholder="Rut" id="editar_rut" name="editar_rut"value="{{ $asistente->rut }}" disabled="disabled">
 													</div>
 												</div>
 												<div class="form-group row">
@@ -538,7 +539,11 @@
                                                 <div class="form-group row">
 													<label class="col-sm-4 col-form-label font-weight-bolder font-weight-bolder">Curriculum</label>
                                                     <div class="col-sm-7 my-auto ml-2">
-                                                        <button type="bottom" class="btn btn-sm btn-success">Descarga</button>
+                                                        @if (!empty($asistente->curriculum) && Storage::disk('archivo_archivo')->exists($asistente->curriculum) )
+                                                            <button type="bottom" class="btn btn-sm btn-success" id="btn_descarga_cv" onclick="abrirCV('{{ Storage::disk('archivo_archivo')->url($asistente->curriculum) }}');">Descarga</button>
+                                                        @else
+                                                            <button type="bottom" class="btn btn-sm btn-success" id="btn_descarga_cv" disabled="disabled">Descarga</button>
+                                                        @endif
                                                     </div>
                                                 </div>
 											</form>
@@ -585,9 +590,26 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-7 col-form-label font-weight-bolder"><h6>Curriculum</h6></label>
+
+                                                    <input type="hidden" name="input_lista_archivo" id="input_lista_archivo" value="{{ $asistente->curriculum }}">
+
+                                                    {{-- <div class="col-sm-4 my-auto">
+                                                        <label class="col-sm-7 col-form-label font-weight-bolder"><h6>Actual</h6></label>
+                                                        @if (!empty($asistente->curriculum) && Storage::disk('archivo_archivo')->exists($asistente->curriculum) )
+                                                            <button type="bottom" class="btn btn-sm btn-success" onclick="abrirCV('{{ Storage::disk('archivo_archivo')->url($asistente->curriculum) }}');">Descarga</button>
+                                                        @else
+                                                            <button type="bottom" class="btn btn-sm btn-success" disabled="disabled">Descarga</button>
+                                                        @endif
+                                                    </div> --}}
                                                     <div class="col-sm-12 my-auto">
-                                                        <input type="file" name="cv" id="cv" placeholder="Seleccione archivo" onchange="cargar_archivo_asistente();">
+                                                        <label class="col-sm-7 col-form-label font-weight-bolder"><h6>Carga nuevo archivo</h6></label>
+                                                        <!-- [ Main Content ] start -->
+                                                        <div class="dropzone" id="mis-asistente-archivo" action="{{ route('asistente.archivo.carga') }}">
+                                                        </div>
+                                                        <!-- [ file-upload ] end -->
+                                                        {{-- <input type="file" name="cv" id="cv" placeholder="Seleccione archivo" onchange="cargar_archivo_asistente();"> --}}
                                                     </div>
+
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-12 col-form-label"></label>
@@ -1297,7 +1319,8 @@
             let buscador = $('input:radio[name=buscador]:checked').val();
             let modalidad = $('#modalidad').val();
             let text_modalidad = $('#modalidad option:selected').text();
-            let cv = $('#cv').val();
+            // let cv = $('#cv').val();
+            let archivo = $('#input_lista_archivo').val();
 
             if(buscador == 1)
             {
@@ -1321,7 +1344,7 @@
                 data: {
                     buscador: buscador,
                     modalidad: modalidad,
-                    cv: cv,
+                    archivo: lista_archivo[0],
                 }
 
             })
@@ -1349,6 +1372,19 @@
                     $('#buscadores_1').addClass('show');
                     $('#buscadores_2').removeClass('show');
 
+
+                    console.log(data.archivo.estado);
+                    console.log(data.archivo.proceso.url);
+                    if(data.archivo.estado == 1)
+                    {
+                        $('#btn_descarga_cv').attr('disabled', false);
+                        $('#btn_descarga_cv').attr('onclick', 'abrirCV(\''+data.archivo.proceso.url+'\');');
+                    }
+                    else
+                    {
+                        $('#btn_descarga_cv').attr('disabled', true);
+                        $('#btn_descarga_cv').attr('onclick', '');
+                    }
                 }
                 else
                 {
@@ -1497,6 +1533,143 @@
                 });
 
         };
+
+        /** mis-asistente-archivo */
+        var myDropzone_CV ;
+        Dropzone.options.misAsistenteArchivo = {
+            init:function()
+            {
+                myDropzone_CV = this;
+            },
+            url: "{{ route('asistente.archivo.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
+            maxFilesize: 6,
+            maxFiles: 1,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre elarchivo al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 6 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_archivo();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_archivo(myDropzone_CV,'cv');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                cargar_lista_archivo(myDropzone_CV,'cv');
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_archivo(myDropzone_CV,'cv');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var lista_archivo = {};
+        function cargar_lista_archivo(obj_dropzone, alias_archivo)
+        {
+            // console.log('--------------cargar_lista_archivo----------------------');
+            lista_archivo = [];
+            let temp  = obj_dropzone.getAcceptedFiles();
+            $.each(temp, function( index, value )
+            {
+                if(value.status == "success")
+                {
+                    if(value.xhr !== undefined)
+                    {
+                        var archivo_temp = JSON.parse(value.xhr.response);
+                        lista_archivo[index] = [
+                            url = archivo_temp.archivo.url,
+                            nombre_original = archivo_temp.archivo.original_file_name,
+                            nombre_archivo = archivo_temp.archivo.nombre_archivo,
+                            file_extension = archivo_temp.archivo.file_extension,
+                        ];
+                        $('#input_lista_archivo').val('');
+                        $('#input_lista_archivo').val(JSON.stringify(lista_archivo));
+                    }
+                }
+            });
+        }
+
+        function abrirCV(url)
+        {
+            if(url != '')
+            {
+                var win = window.open(url, '_blank');
+                win.focus();
+            }
+        }
     </script>
 @endsection
 

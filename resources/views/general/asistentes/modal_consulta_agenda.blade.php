@@ -438,16 +438,16 @@
                 <button id="cerrar_tomar_hora" type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
-                <div class="form-row">
+
+                {{--  BUSCADOR DE RUT  --}}
+                <div class="form-row div_rut_buscar">
+
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="form-group">
                             <h6 class="text-c-blue f-14">Ingrese el RUT del paciente</h6>
                         </div>
                     </div>
-                </div>
 
-                {{--  BUSCADOR DE RUT  --}}
-                <div class="form-row div_rut_buscar">
                     <div class="col-sm-9 col-md-9">
                         <form id="validacion_rut_form">
                             <div class="form-group" id="validacion_rut_div">
@@ -684,7 +684,7 @@
                             </div>
 
                             <div class="modal-footer mb-0 pt-1 pb-0 paciente_view">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal"><i
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><i
                                         class="feather icon-x"></i> Cancelar</button>
                                 <button type="button" onclick="agendar_hora();" class="btn btn-info"><i
                                         class="feather icon-check"></i> Agendar hora</button>
