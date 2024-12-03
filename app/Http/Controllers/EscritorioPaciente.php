@@ -3139,6 +3139,7 @@ class EscritorioPaciente extends Controller
             $id_institucion = '';
             $fecha_registro = $request->fecha_registro;
             $tipo_examen = $request->id_tipo_examen;
+            $nombre_examen = $request->nombre_examen;
             $id_paciente = $paciente->id;
 
             $rut = $paciente->rut;
@@ -3178,7 +3179,7 @@ class EscritorioPaciente extends Controller
                 }
             }
 
-            $datos = ResultadoExamenController::registrar($id_lugar_atencion,$id_institucion,$tipo_examen,$id_paciente,$rut,$nombre,$apellido_paterno,$apellido_materno,$email,$observacion,$fecha_registro, $lista_archivo, $id_profesional, $profesional_rut, $profesional_nombre);
+            $datos = ResultadoExamenController::registrar($id_lugar_atencion,$id_institucion,$tipo_examen,$nombre_examen,$id_paciente,$rut,$nombre,$apellido_paterno,$apellido_materno,$email,$observacion,$fecha_registro, $lista_archivo, $id_profesional, $profesional_rut, $profesional_nombre);
         }
         else
         {

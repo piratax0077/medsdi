@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 class ResultadoExamenController extends Controller
 {
 
-    static public function registrar($id_lugar_atencion,$id_institucion,$tipo_examen,$id_paciente,$rut,$nombre,$apellido_paterno,$apellido_materno,$email,$observacion, $fecha_regsitro, $lista_archivo, $id_profesional, $profesional_rut, $profesional_nombre)
+    static public function registrar($id_lugar_atencion,$id_institucion,$tipo_examen,$nombre_examen,$id_paciente,$rut,$nombre,$apellido_paterno,$apellido_materno,$email,$observacion, $fecha_regsitro, $lista_archivo, $id_profesional, $profesional_rut, $profesional_nombre)
     {
         $datos = array();
         $error = array();
@@ -69,6 +69,10 @@ class ResultadoExamenController extends Controller
             $registro->id_user = $id_user;
 
             $registro->tipo_examen = $tipo_examen;
+
+            if(!empty($nombre_examen))
+                $registro->nombre_examen = $nombre_examen;
+
             $registro->id_paciente = $id_paciente;
             $registro->rut = $rut;
             $registro->nombre = $nombre;

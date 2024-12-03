@@ -34,92 +34,86 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div style="overflow-x:auto;">
-                                <table id="examenes-pcte" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Fecha</th>
-                                            <th>Nº de Orden</th>
-                                            <th>Profesional</th>
-                                            <th>Tipo de Examen</th>
-                                            <th>Nombre del examen</th>
-                                            <th>Comentarios</th>
-                                            <th>Estado</th>
-                                            <th>Examen</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if ($examenes_especialidad_realizados)
-                                            @foreach ($examenes_especialidad_realizados as $exam)
-                                                @if ($exam->HoraMedica->id_estado == 6)
-                                                    <tr>
-                                                        <td data-sort=" {{ date('Y-m-d', strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}">{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
-                                                        <td class="text-wrap">{{ $exam->id }}</td>
-                                                        <td class="text-wrap">{{ $exam->profesional->nombre.' '.$exam->profesional->apellido_uno.' '.$exam->profesional->apellido_dos }}</td>
-                                                        <td class="text-wrap">{{ $exam->nombre }}</td>
-                                                        <td class="text-wrap">
-                                                            @if ($exam->SubTipoEspecialidad)
-                                                                {{ $exam->SubTipoEspecialidad->nombre }}
-                                                            @else
-                                                                -
-                                                            @endif
-                                                        </td class="text-wrap">
-                                                        <td class="text-wrap">-</td>
-                                                        <td class="text-wrap">
-                                                            @if ($exam->revisado == 1)
-                                                                Revisado
-                                                            @else
-                                                                No revisado
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-success-light-c btn-xxs" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-file-plus"></i> Ver examen</button>
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
-                                        @endif
-
-                                        {{-- RESULTADODE DE EXAMENES LABORATORIO --}}
-                                        @if ($resultado_examen)
-                                            @foreach ( $resultado_examen as $result_ex)
+                            <table id="tabla_examenes_paciente_ro" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Nº de Orden</th>
+                                        <th>Profesional</th>
+                                        <th>Tipo de Examen</th>
+                                        <th>Nombre del examen</th>
+                                        <th>Comentarios</th>
+                                        <th>Estado</th>
+                                        <th>Examen</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if ($examenes_especialidad_realizados)
+                                        @foreach ($examenes_especialidad_realizados as $exam)
+                                            @if ($exam->HoraMedica->id_estado == 6)
                                                 <tr>
-                                                    <td>{{ date('d-m-Y',strtotime($result_ex->fecha_registro)) }}</td>
-                                                    <td>{{ $result_ex->id }}</td>
-                                                    <td>LABORATORIO</td>
+                                                    <td data-sort=" {{ date('Y-m-d', strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}">{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
+                                                    <td>{{ $exam->id }}</td>
+                                                    <td>{{ $exam->profesional->nombre.' '.$exam->profesional->apellido_uno.' '.$exam->profesional->apellido_dos }}</td>
+                                                    <td>{{ $exam->nombre }}</td>
                                                     <td>
-                                                        @if ($result_ex->obj_tipo_examen)
-                                                            @if (!empty($result_ex->obj_tipo_examen->nombre_examen))
-                                                                {{ $result_ex->obj_tipo_examen->nombre_examen }}
-                                                            @else
-                                                                {{ $result_ex->nombre_examen }}
-                                                            @endif
+                                                        @if ($exam->SubTipoEspecialidad)
+                                                            {{ $exam->SubTipoEspecialidad->nombre }}
                                                         @else
-                                                            {{ $result_ex->nombre_examen }}
+                                                            -
                                                         @endif
                                                     </td>
                                                     <td>-</td>
-                                                    <td>{{ $result_ex->observacion }}</td>
                                                     <td>
-                                                        @if ($result_ex->revisado == 1)
+                                                        @if ($exam->revisado == 1)
                                                             Revisado
                                                         @else
                                                             No revisado
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        @if ($result_ex->ResultadoExamenArchivo->count()>0)
-                                                            <button type="button" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',1);"><i class="feather icon-file-plus"></i> Ver examen</button>
-                                                        @else
-                                                            <button type="button" disabled="disabled" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-file-plus"></i> Ver examen</button>
-                                                        @endif
+                                                        <button type="button" class="btn btn-success-light-c btn-xxs" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-file-plus"></i> Ver examen</button>
                                                     </td>
                                                 </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
+                                            @endif
+                                        @endforeach
+                                    @endif
+
+                                    {{-- RESULTADODE DE EXAMENES LABORATORIO --}}
+                                    @if ($resultado_examen)
+                                        @foreach ( $resultado_examen as $result_ex)
+                                            <tr>
+                                                <td>{{ date('d-m-Y',strtotime($result_ex->fecha_registro)) }}</td>
+                                                <td>{{ $result_ex->id }}</td>
+                                                <td>LABORATORIO</td>
+                                                <td>
+                                                    @if ($result_ex->obj_tipo_examen)
+                                                        {{ $result_ex->obj_tipo_examen->nombre_examen }}
+                                                    @else
+                                                        -
+                                                    @endif
+                                                </td>
+                                                <td>-</td>
+                                                <td>{{ $result_ex->observacion }}</td>
+                                                <td>
+                                                    @if ($result_ex->revisado == 1)
+                                                        Revisado
+                                                    @else
+                                                        No revisado
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($result_ex->ResultadoExamenArchivo->count()>0)
+                                                        <button type="button" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',1);"><i class="feather icon-file-plus"></i> Ver examen</button>
+                                                    @else
+                                                        <button type="button" disabled="disabled" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-file-plus"></i> Ver examen</button>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -164,15 +158,11 @@
                                 </select>
                             </div>
                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <label class="floating-label-activo-sm">Nombre del examen</label>
-                                <input type="text" class="form-control form-control-sm" name="examen_nombre_examen" id="examen_nombre_examen">
-                            </div>
-                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <label class="floating-label-activo-sm">Comentarios</label>
                                 <textarea class="form-control form-control-sm" name="examen_comentario" id="examen_comentario"></textarea>
                             </div>
                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <label class="floating-label-activo-sm">Adjuntar examen</label>
+                                <label class="floating-label-activo-sm">Adjuntar exámen</label>
                                 <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-12">
                                         <div class=" text-justify pt-3 pb-1" role="alert">
@@ -198,12 +188,6 @@
 
 @section('page-script')
     <script type="text/javascript">
-    /**TABLA**/
-       $(document).ready(function() {
-       $('#examenes-pcte').DataTable({
-          responsive: true,
-      });
-    });
 
         $(document).ready(function () {
 
@@ -317,8 +301,8 @@
             else
             {
                 swal({
-                    title: "Ver resultado de examen laboratorio",
-                    text:"No se encuentra resultado de examen laboratorio",
+                    title: "Ver Resultado de Examen Laboratorio",
+                    text:"No Se encuentra resultado de examen Laboratorio",
                     icon: "error"
                 });
             }
@@ -330,7 +314,6 @@
             var numero_orden = $('#examen_numero_orden').val();
             var rut = $('#examen_rut').val();
             var nombre_profesional = $('#examen_nombre_profesional').val();
-            var nombre_examen = $('#examen_nombre_examen').val();
             var tipo_examen = $('#examen_tipo_examen').val();
             var comentario = $('#examen_comentario').val();
             var list_archivos = $('#input_lista_archivo').val();
@@ -344,7 +327,6 @@
                     _token: CSRF_TOKEN,
                     fecha_registro: fecha,
                     id_tipo_examen: tipo_examen,
-                    nombre_examen: nombre_examen,
                     comentario: comentario,
                     list_archivos: list_archivos,
                     profesional_rut: rut,
@@ -355,8 +337,8 @@
                 if (data.estado == 1)
                 {
                     swal({
-                        title: "Registro de examen",
-                        text: "Carga exitosa.\nSe actualizará la página en segundos.",
+                        title: "Registro de Examen",
+                        text: "Carga Exitosa.\nSe actualizará la pagina en segundos.",
                         icon: "success"
                     });
 
@@ -369,7 +351,7 @@
                 else
                 {
                     swal({
-                        title: "Registro de examen",
+                        title: "Registro de Examen",
                         text: "Error al cargar las ciudades",
                         icon: "error"
                     });
@@ -438,99 +420,99 @@
 
         /************** EXAMEN **************/
         Dropzone.options.misArchivosExamen = {
-                init:function()
-                {
-                    myDropzone_ex = this;
-                },
-                url: "{{ route('paciente.archivo.carga') }}",
-                method: 'post',
-                createImageThumbnails: true,
-                addRemoveLinks: true,
-                headers:{
-                    'X-CSRF-TOKEN' : CSRF_TOKEN,
-                },
+            init:function()
+            {
+                myDropzone_ex = this;
+            },
+            url: "{{ route('paciente.archivo.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+            },
 
-                acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
-                maxFilesize: 4,
-                maxFiles: 4,
-                /** El texto utilizado antes de que se eliminen los archivos. */
-                dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
+            acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
+            maxFilesize: 4,
+            maxFiles: 4,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
 
-                /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
-                dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
 
-                /**
-                 * El texto que se agregará antes del formulario alternativo.
-                 * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
-                 * ser ignorado.
-                 */
-                dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
 
-                /**
-                 * Si el tamaño del archivo es demasiado grande.
-                 * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
-                 */
-                dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+            dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
 
-                /** Si el archivo no coincide con el tipo de archivo. */
-                dictInvalidFileType: "No puedes subir archivos de este tipo.",
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
 
-                /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
-                dictCancelUpload: "Cancelar carga",
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
 
-                /** El texto que se muestra si una carga se canceló manualmente */
-                dictUploadCanceled: "Subida cancelada.",
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
 
-                /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
-                dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
 
-                /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
-                dictRemoveFile: "Eliminar archivo",
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
 
-                /**
-                 * Se muestra si `maxFiles` es st y se excede.
-                 */
-                dictMaxFilesExceeded: "No puede cargar más archivos.",
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
 
-                success: function(file, response){
-                    // console.log('-------------success-----------------------');
-                    cargar_lista_archivo(myDropzone_ex,'ex');
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_archivo(myDropzone_ex,'ex');
 
-                    if (file.previewElement) {
-                        return file.previewElement.classList.add("dz-success");
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
                     }
-                },
-                error(file, message) {
-                    // console.log('-------------error-----------------------');
-                    if (file.previewElement) {
-                        file.previewElement.classList.add("dz-error");
-                        if (typeof message !== "string" && message.error)
-                        {
-                            message = message.error;
-                        }
-                        else
-                        {
-                            message = message.message;
-                        }
-                        for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
-                            node.textContent = message;
-                        }
+                    else
+                    {
+                        message = message.message;
                     }
-                },
-                removedfile(file) {
-                    // console.log('-------------removedfile-----------------------');
-                    cargar_lista_archivo(myDropzone_ex,'ex');
-                    if (file.previewElement != null && file.previewElement.parentNode != null) {
-                        file.previewElement.parentNode.removeChild(file.previewElement);
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
                     }
-                    return this._updateMaxFilesReachedClass();
-                },
-                canceled: function canceled(file) {
-                    cargar_lista_archivo(myDropzone_ex,'ex');
-                    return this.emit("error", file, this.options.dictUploadCanceled);
-                },
-            };
-            /************** EXAMEN **************/
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_archivo(myDropzone_ex,'ex');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_archivo(myDropzone_ex,'ex');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+        /************** EXAMEN **************/
 
 
 
