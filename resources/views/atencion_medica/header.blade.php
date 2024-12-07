@@ -41,7 +41,7 @@
                                         <li>
                                             <a href="{{ ROUTE('dental.index') }}" class="dropdown-item"><i
                                                     class="feather icon-user"></i>
-                                                Escritorio Dental
+                                                Escritorio Dental123
                                             </a>
                                         </li>
                                     @endif

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Models\Articulo;
 use App\Models\Ciudad;
 use App\Models\ContactoEmergencia;
 use App\Models\DiagnosticoCie;
@@ -11,6 +12,8 @@ use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
 use App\Models\Prevision;
 use App\Models\Profesional;
+use App\Models\RecetaDosis;
+use App\Models\RecetaPresentacion;
 use App\Models\Region;
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -240,5 +243,39 @@ class UtilsController extends Controller
             return redirect()->route('home.ingreso',['mensaje' => 'Contraseña actualizada'])->with('mensaje', 'Contraseña actualizada');
             // return back()->with( 'mensaje', 'Contraseña actualizada');
         }
+    }
+
+    public function getDosis(Request $request)
+    {
+        $dosis = Articulo::where('cod_parent', $request->id_medicamento)->get();
+        return json_encode($dosis);
+    }
+
+    public function getArticulo(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $articulos = Articulo::orderby('nombre', 'asc')->select('id', 'nombre', 'droga', 'cant_comp', 'tipo_cont')->limit(15)->get();
+        } else {
+            $articulos = Articulo::orderby('nombre', 'asc')->select('id', 'nombre','droga', 'cant_comp', 'tipo_cont')->where('nombre', 'like', $search . '%')->limit(15)->get();
+        }
+
+        $response = array();
+        foreach ($articulos as $articulo) {
+            $response[] = array("value" => $articulo->id, "label" => $articulo->nombre,"droga" => $articulo->droga, "control" => $articulo->tipo_cont);
+        }
+        return response()->json($response);
+    }
+
+    public function getFrecuencia(Request $request)
+    {
+        $frecuencias = RecetaDosis::where('cod_parent', $request->id_dosis)->get();
+        return json_encode($frecuencias);
+    }
+
+    public function getCantComp(Request $request)
+    {
+        $cant_comp = RecetaPresentacion::where('tipo_presentacion', $request->cant_comp)->get();
+        return json_encode($cant_comp);
     }
 }

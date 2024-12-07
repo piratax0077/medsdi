@@ -25,56 +25,95 @@
             </div>
             <!--Cierre: Header-->
             <!--Botones-->
+
             <div class="row m-b-30">
                 <div class="col-md-12">
-                    <div class="card-deck">
-                        <div class="card subir py-3">
-                            <a href="{{ ROUTE('profesional.lugares_atencion') }}">
-                                <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-90 text-center mb-3" src="{{ asset('images/iconos/lugar.svg') }}"
-                                        alt="Mis Lugares de Atención">
-                                    <h5>
-                                        Mis Lugares de Atención
-                                    </h5>
-                                </div>
-                            </a>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card subir py-3">
+                                <a href="{{ ROUTE('profesional.lugares_atencion') }}">
+                                    <div class="card-body text-center" style="cursor:pointer">
+                                        <img class="wid-90 text-center mb-3" src="{{ asset('images/iconos/lugar.svg') }}"
+                                            alt="Mis Lugares de Atención">
+                                        <h5>
+                                            Mis Lugares de Atención
+                                        </h5>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
-                        <div class="card subir py-3">
-                            <a href="{{ route('profesional.mis_asistentes') }}">
-                                <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-90 text-center mb-3"
-                                        src="{{ asset('images/iconos/mis_asistentes.svg') }}" alt="Mis Asistentes">
-                                    <h5>
-                                        Mis Asistentes
-                                    </h5>
-                                </div>
-                            </a>
+                        <div class="col-md-4">
+                            <div class="card subir py-3">
+                                <a href="{{ route('profesional.mis_asistentes') }}">
+                                    <div class="card-body text-center" style="cursor:pointer">
+                                        <img class="wid-90 text-center mb-3"
+                                            src="{{ asset('images/iconos/mis_asistentes.svg') }}" alt="Mis Asistentes">
+                                        <h5>
+                                            Mis Asistentes
+                                        </h5>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
 
-                        <div class="card subir py-3">
-                            <a href="{{ route('profesional.diagnosticos_cie10') }}">
-                                <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-90 text-center mb-3"
-                                        src="{{ asset('images/iconos/diagnosticos_cie10.svg') }}"
-                                        alt="Diagnósticos Frecuentes CIE 10">
-                                    <h5>
-                                        Diagnósticos Frecuentes CIE 10
-                                    </h5>
-                                </div>
-                            </a>
+                        <div class="col-md-4">
+                            <div class="card subir py-3">
+                                <a href="{{ route('profesional.diagnosticos_cie10') }}">
+                                    <div class="card-body text-center" style="cursor:pointer">
+                                        <img class="wid-90 text-center mb-3"
+                                            src="{{ asset('images/iconos/diagnosticos_cie10.svg') }}"
+                                            alt="Diagnósticos Frecuentes CIE 10">
+                                        <h5>
+                                            Diagnósticos Frecuentes CIE 10
+                                        </h5>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
-						<div class="card subir py-3">
-                            <a href="busq_secretaria.php">
-                                <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-90 text-center mb-3" 
-									src="{{ asset('images/iconos/usuario_asistente.svg') }}"
-									
-									alt="Profesional">
-                                    <h5 class="f-16">
-                                       Contratar asistente Online
-                                    </h5>
-                                </div>
-                             </a>
+                        <div class="col-md-4">
+                            <div class="card subir py-3">
+                                <a href="busq_secretaria.php">
+                                    <div class="card-body text-center" style="cursor:pointer">
+                                        <img class="wid-90 text-center mb-3"
+                                        src="{{ asset('images/iconos/usuario_asistente.svg') }}"
+
+                                        alt="Profesional">
+                                        <h5 class="f-16">
+                                        Contratar asistente Online
+                                        </h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card subir py-3">
+                                <a href="busq_secretaria.php">
+                                    <div class="card-body text-center" style="cursor:pointer">
+                                        <img class="wid-90 text-center mb-3"
+                                        src="{{ asset('images/iconos/usuario_asistente.svg') }}"
+
+                                        alt="Profesional">
+                                        <h5 class="f-16">
+                                            Configuracion de mis aranceles
+                                        </h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card subir py-3">
+                                <a href="busq_secretaria.php">
+                                    <div class="card-body text-center" style="cursor:pointer">
+                                        <img class="wid-90 text-center mb-3"
+                                        src="{{ asset('images/iconos/usuario_asistente.svg') }}"
+
+                                        alt="Profesional">
+                                        <h5 class="f-16">
+                                        Personalizar mi ficha de atención
+                                        </h5>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
 
                     </div>

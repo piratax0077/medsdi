@@ -153,15 +153,15 @@
                                                                                     <div class="form-row">
                                                                                         <div class="form-group col-md-4">
                                                                                             <label class="floating-label-activo-sm">Derivado por:</label>
-                                                                                            <input type="text" class="form-control form-control-sm" name="" id="">
+                                                                                            <input type="text" class="form-control form-control-sm" name="derivado_por" id="derivado_por">
                                                                                         </div>
                                                                                         <div class="form-group col-md-4">
                                                                                             <label class="floating-label-activo-sm">Zona de Dolor</label>
-                                                                                            <input type="text" class="form-control form-control-sm" name="" id="">
+                                                                                            <input type="text" class="form-control form-control-sm" name="zona_dolor" id="zona_dolor">
                                                                                         </div>
                                                                                         <div class="form-group col-md-4">
                                                                                             <label class="floating-label-activo-sm">Historia Anterior</label>
-                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" name="" id=""></textarea>
+                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" name="historia_anterior" id="historia_anterior"></textarea>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -171,7 +171,7 @@
                                                                                             <div class="form-row">
                                                                                                 <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                                     <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                                    <input type="text" class="form-control form-control-sm" name="" id="">
+                                                                                                    <input type="text" class="form-control form-control-sm" name="numero_pieza" id="numero_pieza">
                                                                                                 </div>
                                                                                                 <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                                     <div class="form-group">
@@ -290,7 +290,8 @@
 
                                                                             <div class="row">
                                                                                 <div class="col-sm-4 col-md-4 mb-3">
-                                                                                    <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-pieza1" ><i class="fas fa-save"></i>Cargar Otra Pieza</button>
+                                                                                    {{-- <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-pieza1" ><i class="fas fa-save"></i>Cargar Otra Pieza</button> --}}
+                                                                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="registrar_nueva_pieza()"><i class="fas fa-check"></i> Guardar</button>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -406,6 +407,7 @@
                                                                                                             <div class="card-body">
                                                                                                                 <div id="contenedor_pieza_dental_endorx">
                                                                                                                     <div id="pieza_dentalrx" class="row">
+
                                                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                                             <div class="form-row">
                                                                                                                                 <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -462,6 +464,8 @@
                                                                                                                                 </div>
                                                                                                                             </div>
                                                                                                                         </div>
+
+
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                             </div>
@@ -469,6 +473,7 @@
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
+
                                                                                             <div class="tab-pane fade show" id="imagenes_dent" role="tabpanel" aria-labelledby="imagenes_dent_tab">
                                                                                                 <div class="row mb-1">
                                                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -2476,9 +2481,9 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
-                                </div>
                             </div>
                             <!--FORMULARIO / SIGNOS VITALES Y OTROS-->
                             @include('general.secciones_ficha.signos_vitales')
@@ -4912,6 +4917,7 @@
 @include('atencion_odontologica.modals.odontograma.modal_odontograma')
 
 
+
 <script>
 $(document).ready(function() {
     $('#tabla_odontologico_tratamiento').DataTable({
@@ -4930,6 +4936,140 @@ $(document).ready(function() {
          responsive: true,
      });
  });
+
+ $(document).ready(function(){
+        /* Sacar la funcion "agregarPieza de este ámbito */
+        $('.btn-agregar-pieza1').click(function(){
+            agregarPieza1();
+        });
+    });
+
+    function agregarPieza1()
+    {
+        var html = '';
+        html += '<hr>';
+        html += '<div id="pieza_dental_dolor" class="row">';
+        html += '    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">';
+        html += '    <div class="form-row">';
+        html += '            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">';
+        html += '                <label class="floating-label-activo-sm">Pieza N°</label>';
+        html += '                <input type="text" class="form-control form-control-sm" name="" id="">';
+        html += '            </div>';
+        html += '            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">';
+        html += '                <div class="form-group">';
+        html += '                    <label class="floating-label-activo-sm">Tipo de Dolor</label>';
+        html += '                    <select name="tipo_dolor" data-titulo="General_endodoncia" data-seccion="General_endodoncia"  id="tipo_dolor" class="form-control form-control-sm">';
+        html += '                        <option selected  value="1">Espontáneo</option>';
+        html += '                        <option value="2">Provocado</option>';
+        html += '                        <option value="3">Otro describir</option>';
+        html += '                    </select>';
+        html += '                </div>';
+        html += '                <div class="form-group" id="div_tipo_dolor" style="display:none;">';
+        html += '                    <label class="floating-label-activo-sm">Tipo de dolor</label>';
+        html += '                    <textarea class="form-control form-control-sm" data-titulo="General_endodoncia"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tipo_dolor" id="obs_tipo_dolor"></textarea>';
+        html += '                </div>';
+        html += '            </div>';
+        html += '            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">';
+        html += '                <div class="form-group">';
+        html += '                    <label class="floating-label-activo-sm">Intensidad</label>';
+        html += '                    <select name="intensidad" data-titulo="Ex_cuello" data-seccion="Cuello"  id="intensidad" class="form-control form-control-sm">';
+        html += '                        <option selected  value="1">Leve</option>';
+        html += '                        <option value="2">Moderado</option>';
+        html += '                        <option value="3">Intenso</option>';
+        html += '                        <option value="4">Otro describir</option>';
+        html += '                    </select>';
+        html += '                </div>';
+        html += '                <div class="form-group" id="div_intensidad" style="display:none;">';
+        html += '                    <label class="floating-label-activo-sm">Intensidad</label>';
+        html += '                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_intensidad" id="obs_intensidad"></textarea>';
+        html += '                </div>';
+        html += '            </div>';
+        html += '            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">';
+        html += '                <div class="form-group">';
+        html += '                    <label class="floating-label-activo-sm">Modo dolor</label>';
+        html += '                    <select name="modo_dolor" data-titulo="Ex_cuello" data-seccion="Cuello"  id="modo_dolor" class="form-control form-control-sm">';
+        html += '                        <option selected  value="1">Pulsátil</option>';
+        html += '                        <option value="2">Permanente</option>';
+        html += '                        <option value="3">Otro describir</option>';
+        html += '                    </select>';
+        html += '                </div>';
+        html += '                <div class="form-group" id="div_modo_dolor" style="display:none;">';
+        html += '                    <label class="floating-label-activo-sm">Modo dolor</label>';
+        html += '                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_modo_dolor" id="obs_modo_dolor"></textarea>';
+        html += '                </div>';
+        html += '            </div>';
+        html += '            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">';
+        html += '                <div class="form-group">';
+        html += '                    <label class="floating-label-activo-sm">Localización</label>';
+        html += '                    <select name="loc_dolor" data-titulo="Ex_cuello" data-seccion="Cuello"  id="loc_dolor" class="form-control form-control-sm">';
+        html += '                        <option selected  value="1">Localizado</option>';
+        html += '                        <option value="2">Referido</option>';
+        html += '                        <option value="3">Otro describir</option>';
+        html += '                    </select>';
+        html += '                </div>';
+        html += '                <div class="form-group" id="div_loc_dolor" style="display:none;">';
+        html += '                    <label class="floating-label-activo-sm">Localización</label>';
+        html += '                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_loc_dolor" id="obs_loc_dolor"></textarea>';
+        html += '                </div>';
+        html += '            </div>';
+        html += '            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">';
+        html += '                <div class="form-group">';
+        html += '                    <label class="floating-label-activo-sm">Provocación del Dolor</label>';
+        html += '                    <select name="provocacion_dolor" data-titulo="General_endodoncia" data-seccion="General_endodoncia"  id="provocacion_dolor" class="form-control form-control-sm">';
+        html += '                        <option selected  value="1">Frío</option>';
+        html += '                        <option value="2">Calor</option>';
+        html += '                        <option value="3">Actividad</option>';
+        html += '                        <option value="4">Masticación</option>';
+        html += '                        <option value="5">Otro describir</option>';
+        html += '                    </select>';
+        html += '                </div>';
+        html += '                <div class="form-group" id="div_provocacion_dolor" style="display:none;">';
+        html += '                    <label class="floating-label-activo-sm">Provocación del Dolor</label>';
+        html += '                    <textarea class="form-control form-control-sm" data-titulo="General_endodoncia"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_provocacion_dolor" id="obs_provocacion_dolor"></textarea>';
+        html += '                </div>';
+        html += '            </div>';
+        html += '        </div>';
+        html += '        <div class="form-row">';
+        html += '            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">';
+        html += '                <div class="form-group">';
+        html += '                    <label class="floating-label-activo-sm">Cuando duele</label>';
+        html += '                    <select name="cdo_duele" data-titulo="Ex_cuello" data-seccion="Cuello"  id="cdo_duele" class="form-control form-control-sm">';
+        html += '                        <option selected  value="1">Palpación</option>';
+        html += '                        <option value="2">Decubito</option>';
+        html += '                        <option value="3">Otro describir</option>';
+        html += '                    </select>';
+        html += '                </div>';
+        html += '                <div class="form-group" id="div_cdo_duele" style="display:none;">';
+        html += '                    <label class="floating-label-activo-sm">Cuando duele</label>';
+        html += '                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cdo_duele" id="obs_cdo_duele"></textarea>';
+        html += '                </div>';
+        html += '            </div>';
+        html += '            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">';
+        html += '                <div class="form-group">';
+        html += '                    <label class="floating-label-activo-sm">Tpo Evolución</label>';
+        html += '                    <select name="tpo_evolucion" data-titulo="Ex_cuello" data-seccion="Cuello"  id="tpo_evolucion" class="form-control form-control-sm">';
+        html += '                        <option selected  value="1">Menos de 1 Semana</option>';
+        html += '                        <option value="2">Más de 1 Semana</option>';
+        html += '                        <option value="3">Otro describir</option>';
+        html += '                    </select>';
+        html += '                </div>';
+        html += '                <div class="form-group" id="div_tpo_evolucion" style="display:none;">';
+        html += '                    <label class="floating-label-activo-sm">Tpo Evolución</label>';
+        html += '                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_evolucionr" id="obs_tpo_evolucion"></textarea>';
+        html += '                </div>';
+        html += '            </div>';
+        html += '            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">';
+        html += '                <div class="form-group">';
+        html += '                    <label class="floating-label-activo-sm">Efecto Analgésicos</label>';
+        html += '                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_loc_dolor" id="obs_loc_dolor"></textarea>';
+        html += '                </div>';
+        html += '            </div>';
+        html += '        </div>';
+        html += '    </div>';
+        html += '</div>';
+
+        $('#contenedor_pieza_dental_endodolor').append(html);
+    } // agregarPieza
 </script>
 @section('page-script-ficha-atencion')
     <script>
@@ -6963,6 +7103,21 @@ $(document).ready(function() {
             {
                 console.log('tipo examen no especificado');
             }
+        }
+
+        function registrar_nueva_pieza(){
+            let derivado_por = $('#derivado_por').val();
+            let zona_dolor = $('#zona_dolor').val();
+            let historia_anterior = $('#historia_anterior').val();
+            let numero_pieza = $('#numero_pieza').val();
+            let tipo_dolor = $('#tipo_dolor').val();
+            let intensidad = $('#intensidad').val();
+            let modo_dolor = $('#modo_dolor').val();
+            let loc_dolor = $('#loc_dolor').val();
+            let provocacion_dolor = $('#provocacion_dolor').val();
+            let cdo_duele = $('#cdo_duele').val();
+            let tpo_evolucion = $('#tpo_evolucion').val();
+            let obs_loc_dolor = $('#obs_loc_dolor').val();
         }
 
     </script>

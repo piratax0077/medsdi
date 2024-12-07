@@ -43,6 +43,7 @@ use App\Models\Laboratorio;
 use App\Models\LugarAtencion;
 use App\Models\MaterialesInsumosPaciente;
 use App\Models\MedicamentoUsoCronicoExterno;
+use App\Models\MotivoConsultas;
 use App\Models\OdontogramaPaciente;
 use App\Models\OrdenTrabajoMayor;
 use App\Models\OrdenTrabajoMenor;
@@ -669,11 +670,7 @@ class DentalController extends Controller
         $examenMedico = ExamenMedico::where('cod_parent', 0)->get();
 
 
-
-
-
         $examen_radiologico = ExamenRadiologico::count();
-
 
 
         if ($examen_radiologico == 0) {
@@ -687,18 +684,11 @@ class DentalController extends Controller
         }
 
 
-
         $anestesias_paciente = AntecedenteAnestesiaPaciente::where('id_paciente', $paciente->id)->get();
 
         $fracturas_paciente = AntecedenteFracturaPaciente::where('id_paciente', $paciente->id)->get();
 
         $hemorragias_paciente = AntecedenteHemorragiaPaciente::where('id_paciente', $paciente->id)->get();
-
-
-
-
-
-
 
         return view('app.dental.index_dental')->with(
 
@@ -2141,429 +2131,251 @@ class DentalController extends Controller
 
 
     public function registrar_ficha_atencion_dental(Request $request)
-
     {
+        try {
+            return $request;
+            $motivoConsulta = new MotivoConsultas;
+            $motivoConsulta->id_profesional = $request->id_profesional_fc;
+            $motivoConsulta->id_lugar_atencion = $request->id_lugar_atencion;
+            $motivoConsulta->id_paciente = $request->id_paciente_fc;
+            $motivoConsulta->id_especialidad = $request->id_especialidad;
+            $motivoConsulta->motivo = $request->motivo;
+            $motivoConsulta->antecedentes = $request->antecedentes;
+            $motivoConsulta->examen_fisico = $request->examen_fisico;
+            // if ($motivoConsulta->save()) {
+            //     // return redirect()->back()->with('success', 'El motivo de consulta se ha guardado con éxito.');
+            // } else {
+            //     return redirect()->back()->with('error', 'Algo salió mal al guardar el motivo de consulta.');
+            // }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
+        }
 
-        //$ficha_dental = new ficha_dentalAtencion();
+        $ficha_dental = new ficha_dentalAtencion();
 
-        //$hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+        $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
 
-        //$ficha_dental = ficha_dentalAtencion::where('id', $hora_medica->id_ficha_dental_atencion)->first();
-
-
-
+        $ficha_dental = ficha_dentalAtencion::where('id', $hora_medica->id_ficha_dental_atencion)->first();
 
 
         $user = Auth::user()->id;
-
         $profesional = Profesional::where('id_usuario', $user)->first();
-
-
 
         $ficha_dental = new FichaAtencionDental();
 
-
-
         if ($request->es_ficha_infantil == 1) {
-
             $ficha_dental->rut_acompañante = $request->rut_acompañante_ficha_dental;
-
             $ficha_dental->nombre_acompañante = $request->nombre_acompañante_ficha_dental;
-
-
-
             $ficha_dental->relacion_acompañante = $request->relacion_acompañante_ficha_dental;
-
             $ficha_dental->rut_responsable_pago = $request->rut_responsable_pago_ficha_dental;
-
             $ficha_dental->nombre_acompañante_pago = $request->nombre_acompañante_pago_ficha_dental;
-
             $ficha_dental->email_acompañante = $request->email_acompañante_ficha_dental;
-
             $ficha_dental->ficha_infantil = 1;
-
         }
-
-
-
-
-
-
 
         $ges = 0;
-
         if ($request->ges_ficha_dental == 'on') {
-
             $ges = 1;
-
         } else {
-
             $ges = 0;
-
         }
-
-
 
         $cronico = 0;
-
         if ($request->cronico_ficha_dental == 'on') {
-
             $cronico = 1;
-
         } else {
-
             $cronico = 0;
-
         }
-
 
 
         $anestesia_local = 0;
-
         if ($request->anestesia_local_ficha_dental == 'on') {
-
             $anestesia_local = 1;
-
         } else {
-
             $anestesia_local = 0;
-
         }
-
 
 
         $hemorragias = 0;
-
         if ($request->hemorragias_ficha_dental == 'on') {
-
             $hemorragias = 1;
-
         } else {
-
             $hemorragias = 0;
-
         }
-
 
 
         $fracturas = 0;
-
         if (
-
             $request->fracturas_ficha_dental == 'on'
-
         ) {
-
             $fracturas = 1;
-
         } else {
-
             $fracturas = 0;
-
         }
 
 
-
-
-
         /* $confidencial = 0;
-
         if ($request->confidencial == 'on') {
-
             $confidencial = 1;
-
         } else {
-
             $confidencial = 0;
-
         }*/
 
 
-
         $ficha_dental->motivo = $request->descripcion_consulta_ficha_dental;
-
         $ficha_dental->antecedentes = $request->descripcion_antecedentes_ficha_dental;
+
+
 
         //$ficha_dental->examen_fisico = $request->descripcion_examen_fisico;
 
 
-
         //Signos vitales
-
         if ($request->temperatura_ficha_dental != '') {
-
             $ficha_dental->temperatura = $request->temperatura_ficha_dental;
-
         } else {
-
             $ficha_dental->temperatura = null;
-
         }
-
-
 
         if ($request->pulso_ficha_dental != '') {
-
             $ficha_dental->pulso = $request->pulso_ficha_dental;
-
         } else {
-
             $ficha_dental->pulso = null;
-
         }
-
-
 
         if ($request->frecuencia_reposo_ficha_dental != '') {
-
             $ficha_dental->frecuencia_reposo = $request->frecuencia_reposo_ficha_dental;
-
         } else {
-
             $ficha_dental->frecuencia_reposo = null;
-
         }
-
-
 
         if ($request->peso_ficha_dental != '') {
-
             $ficha_dental->peso = $request->peso_ficha_dental;
-
         } else {
-
             $ficha_dental->peso = null;
-
         }
-
 
 
         if ($request->talla_ficha_dental != '') {
-
             $ficha_dental->talla = $request->talla_ficha_dental;
-
         } else {
-
             $ficha_dental->talla = null;
-
         }
-
 
 
         if ($request->imc_ficha_dental != '') {
-
             $ficha_dental->imc = $request->imc_ficha_dental;
-
         } else {
-
             $ficha_dental->imc = null;
-
         }
-
-
 
         if ($request->estado_nutricional_ficha_dental != '') {
-
             $ficha_dental->estado_nutricional = $request->estado_nutricional_ficha_dental;
-
         } else {
-
             $ficha_dental->estado_nutricional = null;
-
         }
-
-
 
         //presion Arterial
-
         if ($request->presion_bi_ficha_dental != '') {
-
             $ficha_dental->presion_bi = $request->presion_bi_ficha_dental;
-
         } else {
-
             $ficha_dental->presion_bi = null;
-
         }
-
-
 
         if ($request->presion_bd_ficha_dental != '') {
-
             $ficha_dental->presion_bd = $request->presion_bd_ficha_dental;
-
         } else {
-
             $ficha_dental->presion_bd = null;
-
         }
-
-
 
         if ($request->presion_de_pie_ficha_dental != '') {
-
             $ficha_dental->presion_de_pie = $request->presion_de_pie_ficha_dental;
-
         } else {
-
             $ficha_dental->presion_de_pie = null;
-
         }
-
-
 
         if ($request->presion_sentado_ficha_dental != '') {
-
             $ficha_dental->presion_sentado = $request->presion_sentado_ficha_dental;
-
         } else {
-
             $ficha_dental->presion_sentado = null;
-
         }
-
 
 
         //comunicacion y Traslado
-
         if ($request->estado_conciencia_ficha_dental != '') {
-
             $ficha_dental->ct_estado_conciencia = $request->estado_conciencia_ficha_dental;
-
         } else {
-
             $ficha_dental->ct_estado_conciencia = null;
-
         }
-
-
 
         if ($request->lenguaje_ficha_dental != '') {
-
             $ficha_dental->ct_lenguaje = $request->lenguaje_ficha_dental;
-
         } else {
-
             $ficha_dental->ct_lenguaje = null;
-
         }
-
-
 
         if ($request->traslado_ficha_dental != '') {
-
             $ficha_dental->ct_traslado = $request->traslado_ficha_dental;
-
         } else {
-
             $ficha_dental->ct_traslado = null;
-
         }
 
-
-
         $ficha_dental->hipotesis_diagnostico = $request->hipotesis_ficha_dental;
-
         $ficha_dental->diagnostico_ce10 = $request->cie10_ficha_dental;
 
-
-
         $ficha_dental->cronico = $cronico;
-
         $ficha_dental->ges = $ges;
 
-
-
         //dental
-
         $ficha_dental->anestesia_local = $anestesia_local;
-
         $ficha_dental->hemorragias = $hemorragias;
-
         $ficha_dental->fracturas = $fracturas;
 
 
 
         //$ficha_dental->confidencial = $confidencial;
-
         $ficha_dental->id_paciente = $request->paciente_atencion_dental;
-
         $ficha_dental->id_profesional = $profesional->id;
 
-
+        return $ficha_dental;
 
         if (!$ficha_dental->save()) {
-
             return 'error';
-
         }
 
-
-
         $examenes = json_decode($request->examenes);
-
-
-
         if (!$examenes == null) {
-
             for ($i = 0; $i < count($examenes); ++$i) {
-
                 $examen = new ExamenPPF();
-
                 $examen->examen = $examenes[$i]->nombre_examen;
-
                 $examen->tipo_examen = $examenes[$i]->tipo;
 
-
-
                 switch ($examenes[$i]->prioridad) {
-
                     case 'Baja':
-
                         $examen->id_prioridad = 1;
-
                         break;
-
                     case 'Media':
-
                         $examen->id_prioridad = 2;
-
                         break;
-
                     case 'Alta':
-
                         $examen->id_prioridad = 3;
-
                         break;
-
                     case 'Urgente':
-
                         $examen->id_prioridad = 4;
-
                         break;
-
                 }
 
 
 
                 //$examen->id_prioridad = 2;
-
                 $examen->id_profesional = $profesional->id;
-
                 $examen->id_ficha_atencion = $ficha_dental->id;
-
                 $examen->id_paciente = $request->paciente_atencion_dental;
-
                 $examen->tipo_ficha = 1;
 
-
-
                 if (!$examen->save()) {
-
                     return 'error';
-
                 }
-
             }
 
         }
@@ -2571,117 +2383,53 @@ class DentalController extends Controller
 
 
         $medicamentos = json_decode($request->medicamentos);
-
-
-
         if (!$medicamentos == null) {
-
             for ($i = 0; $i < count($medicamentos); ++$i) {
-
                 //dd($medicamentos);
-
                 $detalle_receta = new DetalleReceta();
-
                 $detalle_receta->frecuencia = $medicamentos[$i]->frecuencia;
-
                 $detalle_receta->periodo = $medicamentos[$i]->periodo;
-
                 $detalle_receta->comentario = $medicamentos[$i]->comentario;
-
                 $detalle_receta->presentacion = $medicamentos[$i]->presentacion;
-
                 $detalle_receta->dosis = $medicamentos[$i]->dosis;
-
                 $detalle_receta->producto = $medicamentos[$i]->medicamento;
-
                 $detalle_receta->id_ficha = $ficha_dental->id;
-
                 $detalle_receta->receta = $ficha_dental->id;
-
                 $detalle_receta->estado = 1;
-
                 $examen->tipo_ficha = 1;
 
-
-
-
-
                 if (!$detalle_receta->save()) {
-
                     return 'error';
-
                 }
 
             }
 
         }
 
-
-
         if (isset($request->es_ficha_endodoncia) && $request->es_ficha_endodoncia == 1) {
-
-
-
             $endodoncia_paciente = new EndodonciaPaciente();
-
-
-
             $endodoncia_paciente->nro_pieza = $request->nro_pieza_ficha_endodoncia;
-
             $endodoncia_paciente->derivado_por = $request->derivado_por_ficha_endodoncia;
-
             $endodoncia_paciente->zona_dolor = $request->zona_dolor_ficha_endodoncia;
-
             $endodoncia_paciente->historia_anterior = $request->historia_anterior_ficha_endodoncia;
-
             $endodoncia_paciente->tipo_dolor = $request->tipo_dolor_ficha_endodoncia;
-
             $endodoncia_paciente->provoca_dolor = $request->provoca_dolor_ficha_endodoncia;
-
-
-
             $endodoncia_paciente->tiempo_evolucion = $request->hidden_tiempo_evolucion_ficha_endodoncia;
-
-
-
             $endodoncia_paciente->examen_extraoral = $request->examen_extra_oral_ficha_endodoncia;
-
-
-
             $endodoncia_paciente->examen__periodonto = $request->examen_periodonto_ficha_endodoncia;
-
             $endodoncia_paciente->examen_intraoral = $request->examen_intraoral_ficha_endodoncia;
-
             $endodoncia_paciente->radiologia1 = $request->radiologia1_ficha_endodoncia;
-
             $endodoncia_paciente->radiologia2 = $request->radiologia2_ficha_endodoncia;
-
             $endodoncia_paciente->id_paciente = $request->paciente_atencion_dental;
-
             $endodoncia_paciente->id_profesional = $profesional->id;
-
             $endodoncia_paciente->id_ficha_atencion = $ficha_dental->id;
-
             // $endodoncia_paciente->id_lugar_atencion = $request->;
-
-
-
             if (!$endodoncia_paciente->save()) {
-
                 return 'error';
-
             }
-
         }
-
         $mensaje = 'Se ha agregado Biopsia de forma exitosa';
-
-
-
         return redirect()->back()->with('mensaje', $mensaje);
-
-
-
         /*else {
 
             if ($request->medicamentos == '' && $request->examenes == '') {
@@ -2809,56 +2557,29 @@ class DentalController extends Controller
 
 
     public function registrar_examen_radiologico(Request $request)
-
     {
-
         $user = Auth::user()->id;
-
         $profesional = Profesional::where('id_usuario', $user)->first();
-
         $examenes_radiologicos = json_decode($request->radiologicos);
 
-
-
-
-
         for ($i = 0; $i < count($examenes_radiologicos); $i++) {
-
             $radiologico  = new ExamenRadiologico;
-
             $radiologico->nro_orden = $examenes_radiologicos[$i]->nro_orden;
-
             $radiologico->tipo_examen_radiologico = $examenes_radiologicos[$i]->examen_radiologico;
-
             $radiologico->id_paciente = $request->paciente_radiologico;
-
             $radiologico->id_profesional = $profesional->id;
 
-
-
             if (!$radiologico->save()) {
-
                 return 'error';
-
             }
 
         }
 
-
-
         if (count($examenes_radiologicos) > 1) {
-
             $mensaje = 'Se ha agregado Examenwes de forma exitosa';
-
         } else {
-
             $mensaje = 'Se ha agregado Examen de forma exitosa';
-
         }
-
-
-
-
 
         return redirect()->back()->with('mensaje', $mensaje);
 

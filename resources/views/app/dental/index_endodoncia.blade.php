@@ -87,7 +87,7 @@
                         </div>
                         <div class="tab-pane fade" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
 
-                            @include('app.dental.secciones_ficha.fmu')
+                            {{-- @include('app.dental.secciones_ficha.fmu') --}}
 
                         </div>
                         <div class="tab-pane fade" id="atencion-previas" role="tabpanel"
@@ -774,7 +774,7 @@
                                 </button>
 
                                 <!--Boton Modal Formulario de interconsulta-->
-                                <button type="button" class="btn btn-sm btn-info  btn-block accion_modal_interconsulta">
+                                <button type="button" class="btn btn-sm btn-info">
                                     Interconsulta
                                 </button>
 
@@ -920,16 +920,6 @@
         @include("app.dental.modals.formularios_dentales.concentimientos_informados.cirugia_mayor")
 
         <!--Modals Atenciones Generales-->
-        <!--Formularios Generales-->
-        @include("app.dental.modals.atencion_general.formularios_generales.m_reposo")
-        @include("app.dental.modals.atencion_general.formularios_generales.interconsulta");
-        @include("app.dental.modals.atencion_general.formularios_generales.informe_medico");
-        @include("app.dental.modals.atencion_general.formularios_generales.uso_personal");
 
-        <!--Formularios Notificacion-->
-        @include("app.dental.modals.atencion_general.formularios_notificacion.constancia_ges")
-        @include("app.dental.modals.atencion_general.formularios_notificacion.enfermedades_declaracion_obligatoria");
-        @include("app.dental.modals.atencion_general.formularios_notificacion.reembolso_medico");
-        @include("app.dental.modals.atencion_general.formularios_notificacion.reembolso_dental");
     </div>
 @endsection

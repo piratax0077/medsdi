@@ -17,7 +17,9 @@
         padding: 10px;
         background: #eee;
     }
-
+    .image_paciente{
+        width: 50px;
+    }
 </style>
 @endsection
 
@@ -72,7 +74,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" id="contenedor_salas_hospital">
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-row">
@@ -134,28 +136,56 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="col-md-9">
+                                <div class="col-md-9" id="contenedor_salas_servicio">
                                     <div class="row">
                                         @for ($i = 1; $i <= $servicio->numero_salas; $i++)
+
                                             @php
                                                 $id_sala_servicio = $servicio->id.'-'.$i;
                                                 // Verificamos si la sala correspondiente ya tiene información en $servicio->salas
                                                 $salaInfo = $servicio->salas->where('id_sala_servicio', $id_sala_servicio)->first();
+
                                             @endphp
-                                            <div class="col-md-4">
+                                            <div class="col-md-4" >
                                                 <div class="card">
                                                     <div class="card-header d-flex align-items-center justify-content-between bg-info">Sala {{ $i }}</div>
-                                                    <div class="card-body">
+                                                    <div class="card-body {{ $salaInfo && $salaInfo->alerta == 1 ? 'boxEnAlerta white-background' : '' }}">
                                                         @if($salaInfo)
                                                             <p>Cantidad de camas: {{ $salaInfo->cantidad_camas }}</p>
                                                             <div class="camas-container d-flex flex-wrap">
                                                                 @for ($j = 1; $j <= $salaInfo->cantidad_camas; $j++)
-                                                                    <div class="cama-cubo m-1">
-                                                                        <button class="btn btn-outline-success btn-sm w-100" onclick="asignar_paciente_cama('{{ $servicio->nombre_servicio }}',{{ $j }},{{ $i }})">+</button>
+
+                                                                    <div class="cama-cubo m-1 ">
+                                                                        @foreach ($servicio->pacientes as $p)
+                                                                            @if($p->id_cama == $j && $salaInfo->id == $p->id_sala)
+
+
+                                                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                                                    <img src="{{ asset('images/paciente.png') }}" alt="image" class="image_paciente">
+                                                                                    <a href="javascript:void(0)" onclick="abrir_atencion_paciente({{ $p->id_paciente }},{{ $p->id_paciente_triage }})">
+                                                                                        <p>{{ $p->nombres }} {{ $p->apellido_uno_paciente }} {{ $p->apellido_dos_paciente }}</p>
+                                                                                        <p class="{{ $p->clase_html }} text-center rounded">{{ $p->urgencia }}</p>
+                                                                                    </a>
+                                                                                 </div>
+
+                                                                                 <div class="d-flex justify-content-between">
+                                                                                    <p>{{ $p->nombre }} {{ $p->apellido_uno }} {{ $p->apellido_dos }}</p>
+                                                                                    <button class="btn btn-outline-danger btn-sm" onclick="sacar_paciente_cama({{ $p->id }})"><i class="fas fa-trash"></i></button>
+                                                                                 </div>
+
+
+                                                                            @if(Auth::user()->id == $p->id_profesional)
+                                                                                <p>Paciente Propio</p>
+                                                                            @endif
+
+                                                                            @endif
+                                                                        @endforeach
                                                                     </div>
+
                                                                 @endfor
+
                                                                 <div class="col-md-12 text-center">
-                                                                    <a href="javascript:void(0)" onclick="clave1(5,'2 - Adulto')"><img src="https://urgencias.med-sdi.cl/images/iconos_urg/em.png" alt="" style="width: 40px;" class="pulsate-fwd"></a>
+                                                                    <a href="javascript:void(0)" onclick="clave1({{ $salaInfo->id }},'2 - Adulto')"><img src="https://urgencias.med-sdi.cl/images/iconos_urg/em.png" alt="" style="width: 40px;" class="pulsate-fwd"></a>
                                                                 </div>
                                                             </div>
                                                         @else
@@ -181,6 +211,7 @@
 
 <input type="hidden" name="id_box" id="id_box" value="">
 <input type="hidden" name="id_camilla" id="id_camilla" value="">
+<input type="hidden" name="id_servicio_interno" id="id_servicio_interno" value="{{ $servicio->id }}">
  @include('app.adm_hospital.modales.asociar_paciente_cama_servicio');
 <!--Cierre: Container Completo-->
 @endsection
@@ -191,11 +222,41 @@
 <script>
 // Objeto para almacenar los IDs de intervalo por cada 'id' de box
 var intervalIds = {};
+// Objeto para almacenar los IDs de intervalo por cada 'id' de box
+var intervalIds = {};
+document.addEventListener('DOMContentLoaded', function() {
+    // Paso 1: Seleccionar todos los boxes en alerta
+    const boxesEnAlerta = document.querySelectorAll('.boxEnAlerta');
+
+    boxesEnAlerta.forEach(box => {
+        // Paso 2: Alternar clases en intervalos
+        setInterval(() => {
+            if (box.classList.contains('red-background')) {
+                box.classList.remove('red-background');
+                box.classList.add('white-background');
+            } else {
+                box.classList.remove('white-background');
+                box.classList.add('red-background');
+            }
+        }, 1000); // Cambia 1000 por el intervalo de tiempo deseado en milisegundos
+
+        // Paso 3: Almacenar el ID del intervalo en el objeto
+        intervalIds[box.id] = true;
+
+        // Paso 4: Detener el intervalo al hacer clic en el box
+        box.addEventListener('click', () => {
+            console.log('Deteniendo el cambio de color para el box ' + box.id);
+            clearInterval(intervalIds[box.id]);
+            delete intervalIds[box.id]; // Eliminar la entrada del objeto
+            box.classList.remove('red-background', 'white-background');
+        });
 
 
 
-    {{--  function clave1(id, descripcion_box) {
-        let url = "{{ route('enfermeria.clave1') }}";
+    });
+});
+    function clave1(id, descripcion_box) {
+        let url = "{{ route('adm_hospital.clave1') }}";
         $.ajax({
             url: url,
             type: 'POST',
@@ -206,18 +267,11 @@ var intervalIds = {};
             success: function(data){
                 console.log(data);
                 let box = data.box;
-                let boxes_alerta = data.boxes_alerta;
-                    $('#lista_box_alerta').empty();
-                        boxes_alerta.forEach(box => {
-                            $('#lista_box_alerta').append(`
-                                <a class="dropdown">
-                                    <li><img src="https://urgencias.med-sdi.cl/images/iconos_urg/em.png" style="width: 40px;"> ${box.tipo_box}</li>
-                                </a>
-                            `);
-                        });
-                $('#contenedor_boxes').empty();
-                $('#contenedor_boxes').append(data.vista);
-                inicializarBoxesEnAlerta(); // Llama a la función directamente
+                let salas_alerta = data.salas_alerta;
+                console.log(salas_alerta);
+                $('#contenedor_salas_servicio').empty();
+                $('#contenedor_salas_servicio').append(data.vista);
+                inicializarSalasEnAlerta(); // Llama a la función directamente
                 swal({
                     title: "Clave 1",
                     text: data.mensaje+' '+descripcion_box,
@@ -226,13 +280,35 @@ var intervalIds = {};
                 })
 
 
+
+
             },
             error: function(error){
                 console.log(error);
             }
         });
 
-    }  --}}
+    }
+
+    // Contenido de boxesAlerta.js
+function inicializarSalasEnAlerta() {
+    const boxesEnAlerta = document.querySelectorAll('.boxEnAlerta');
+
+    boxesEnAlerta.forEach(box => {
+        const esAlerta = localStorage.getItem(box.id) === 'true';
+        intervalIds[box.id] = setInterval(() => {
+            if (box.classList.contains('red-background')) {
+                box.classList.remove('red-background');
+                box.classList.add('white-background');
+            } else {
+                box.classList.remove('white-background');
+                box.classList.add('red-background');
+            }
+        }, 1000);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', inicializarSalasEnAlerta);
 
     function cambiarColor(id, descripcion_box){
         var $cardBody = $('#card-body' + id);
@@ -420,16 +496,15 @@ var intervalIds = {};
         $('#modal_box').modal('show');
     }
 
-        {{--  function abrir_atencion_paciente(id_paciente, id_paciente_triage = null)
+         function abrir_atencion_paciente(id_paciente, id_paciente_triage = null)
         {
-            var url_ = "{{ route('enfermeria.atencion') }}";
+            var url_ = "{{ route('adm_hospital.atencion') }}";
             cambiar_estado_paciente_triage(id_paciente,id_paciente_triage,url_);
-        }  --}}
+        }
 
-        {{--  function cambiar_estado_paciente_triage(id_paciente,id_paciente_triage, url_)
+        function cambiar_estado_paciente_triage(id_paciente,id_paciente_triage, url_)
         {
-
-            let url = "{{ route('enfermeria.cambiar_estado_paciente_triage') }}";
+            let url = "{{ route('adm_hospital.cambiar_estado_paciente_triage') }}";
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -439,8 +514,9 @@ var intervalIds = {};
                 },
                 success: function(response){
                     console.log(response);
+                    let id_servicio_interno = $('#id_servicio_interno').val();
                     if(response.mensaje == 'OK'){
-                        window.location.href = url_ + '?id_paciente='+id_paciente;
+                        window.location.href = url_ + '?id_paciente='+id_paciente+'&id_servicio='+id_servicio_interno;
                     }
                     else{
                         swal({
@@ -458,7 +534,7 @@ var intervalIds = {};
                     console.log(error);
                 }
             });
-        }  --}}
+        }
 
         function mostrar_pacientes_graves(){
             // agregar y quitar clase d-none
@@ -582,6 +658,36 @@ var intervalIds = {};
         // Validar si la edad está en el rango de 0 a 120 años
         return edad >= 0 && edad <= 120;
     }
+
+    function sacar_paciente_cama(id){
+
+        swal({
+            title: "¿Estás seguro?",
+            text: "¿Deseas sacar al paciente de la cama?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if(willDelete){
+                let url = `/AdministradorHospital/Pacientes/Sacar/${id}`;
+                console.log(url);
+                $.ajax({
+                    type:'get',
+                    url: url,
+                    success: function(resp){
+                        console.log(resp);
+                        $('#contenedor_salas_servicio').empty();
+                        $('#contenedor_salas_servicio').append(resp.v);
+                    },
+                    error: function(error){
+                        console.log(error.responseText);
+                    }
+                })
+            }
+        });
+    }
+
 </script>
 @endsection
 

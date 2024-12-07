@@ -1,27 +1,33 @@
-<ul class="nav nav-tabs mb-3 mt-3" id="dental" role="tablist">
-    <li class="nav-item">
-        <a class="nav-atencion-medica active text-uppercase" id="ficha-dental-tab" data-toggle="tab" href="#ficha-dental"
-            role="tab" aria-controls="ficha-dental" aria-selected="true">Atención dental</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-atencion-medica text-uppercase" id="odonto-adulto-tab" data-toggle="tab" href="#odonto-adulto"
-            role="tab" aria-controls="odonto-adulto" aria-selected="false">Odontograma</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-atencion-medica text-uppercase" id="periodontograma-tab" data-toggle="tab" href="#periodontograma"
-            role="tab" aria-controls="periodontograma" aria-selected="false">Periodontrograma</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-atencion-medica text-uppercase" id="evaluacion-adulto-tab" data-toggle="tab"
-            href="#evaluacion-adulto" role="tab" aria-controls="evaluacion-adulto" aria-selected="false">Evaluación</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-atencion-medica text-uppercase" id="tratamiento-tab" data-toggle="tab" href="#tratamiento"
-            role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento</a>
-    </li>
-</ul>
-<div class="row">
-    <div class="col-md-12">
+<div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
+    <div class="col-md-12 py-0 px-2 ">
+        <div class="row mx-0">
+            <div class="col-sm-12 col-md-12">
+                <ul class="nav nav-tabs-secciones mb-3 mt-3"  id="dental" role="tablist">
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones active text-uppercase" id="ficha-dental-tab" data-toggle="tab" href="#ficha-dental"
+                            role="tab" aria-controls="ficha-dental" aria-selected="true">Atención dental</a>
+                    </li>
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones text-uppercase" id="odonto-adulto-tab" data-toggle="tab" href="#odonto-adulto"
+                            role="tab" aria-controls="odonto-adulto" aria-selected="false">Odontograma</a>
+                    </li>
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones text-uppercase" id="periodontograma-tab" data-toggle="tab" href="#periodontograma"
+                            role="tab" aria-controls="periodontograma" aria-selected="false">Periodontrograma</a>
+                    </li>
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones text-uppercase" id="evaluacion-adulto-tab" data-toggle="tab"
+                            href="#evaluacion-adulto" role="tab" aria-controls="evaluacion-adulto" aria-selected="false">Evaluación</a>
+                    </li>
+                    <li class="nav-item-secciones">
+                        <a class="nav-secciones text-uppercase" id="tratamiento-tab" data-toggle="tab" href="#tratamiento"
+                            role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-12">
         <div class="tab-content" id="dental-contenido">
             <div class="tab-pane fade show active" id="ficha-dental" role="tabpanel" aria-labelledby="ficha-dental-tab">
                 <form id="ficha_atencion_dental" action="{{ route('dental.registrar_ficha_atencion_dental') }}"
@@ -112,8 +118,6 @@
                                                         onclick="fractura_dental();">Fracturas</button>
                                                 </div>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -1262,9 +1266,11 @@
                                                 id="pcr_t">
                                         </div>
                                         <div class="form-group col-md-4" style="text-align:center" id="form_0">
-                                            <a href="periodontograma/perio.php" target="_blank"><button type="button"
+                                            <a href="atencion_odontologica\modals\periodontograma\index" target="_blank"><button type="button"
                                                     class="btn btn-primary btn-sm btn-block"> Abrir
                                                     periodontograma</button></a>
+
+
                                         </div>
                                         <div class="form-group col-md-4" style="text-align:center" id="form_derperi">
                                             <button type="button" class="btn btn-success btn-sm btn-block"

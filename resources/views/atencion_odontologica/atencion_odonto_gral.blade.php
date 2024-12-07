@@ -1,5 +1,14 @@
 @extends('template.dental.template_od_gral')
 
+@section('styles')
+<style>
+    .imagen_rx{
+        width: 200px;
+        height: 200px;
+    }
+</style>
+@endsection
+
 @section('Content')
     <!--Container Completo-->
     <div class="pcoded-main-container">
@@ -118,10 +127,13 @@
         @include("atencion_odontologica.formularios.Antecedentes_dentales.anestesia");
         @include("atencion_odontologica.formularios.Antecedentes_dentales.hemorragias");
         @include("atencion_odontologica.formularios.Antecedentes_dentales.fracturas");
-
-
+        @include('atencion_odontologica.include.modales.imagenes_paciente_dental');
+        @include('atencion_odontologica.include.modales.imagen_paciente_dental')
 
     </div>
 	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
+    <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
+    <input type="hidden" name="id_examen_oral_rx" id="id_examen_oral_rx" value="">
+    <input type="hidden" name="id_imagenes_dental" id="id_imagenes_dental" value="">
 @endsection
 

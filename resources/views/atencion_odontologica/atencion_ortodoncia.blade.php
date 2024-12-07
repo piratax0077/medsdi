@@ -1,4 +1,15 @@
 @extends('template.dental.template_orto')
+@section('styles')
+<style>
+    .imagen_rx{
+        width: 200px;
+    }
+</style>
+@endsection
+
+@section('Modals')
+@include('app.atencion_hospital.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia')
+@endsection
 
 @section('Content')
     <!--Container Completo-->

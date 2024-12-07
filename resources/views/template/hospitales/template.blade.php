@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-    <title>Centro Médico</title>
+     <title>SERVICIOS</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -101,7 +101,7 @@
     <script src="{{ asset('js/plugins/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/plugins/dataTables.responsive.min.js') }}"></script>
     {{--  <script src="{{ asset('js/pages/data-responsive-custom.js') }}"></script>  --}}
-    <script src="{{ asset('js/modals_dental.js') }}"></script>
+    {{--  <script src="{{ asset('js/modals_dental.js') }}"></script>  --}}
 
     <!-- bootstrap-tagsinput-latest Js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
@@ -128,6 +128,7 @@
 
     <!--Modals-->
     <script src="{{ asset('js/modals_admin_cm.js') }}"></script>
+    <script src="{{ asset('js/modals_atencion_medica.js') }}"></script>
     <script src="{{ asset('js/modals_centro_medico.js') }}"></script>
     <!--Tablas-->
     <script src="{{ asset('js/tablas_admin_cm.js') }}"></script>
@@ -374,6 +375,71 @@
                 });
             @endif
         });
+
+        function finalizar_atencion(nombre) {
+    swal({
+        title: "¿Está seguro de finalizar la atención de " + nombre + " ?",
+        text: "Una vez finalizada la atención no podrá realizar cambios",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            swal({
+                title: "Destino del paciente",
+                text: "Escribe el destino del paciente:",
+                content: "input", // Esto permite que el swal tenga un input de texto
+                button: {
+                    text: "Confirmar",
+                    closeModal: false,
+                },
+            })
+            .then((destino) => {
+                if (!destino) throw null; // Si no se ingresa un destino, no hacer nada
+                // Aquí puedes llamar a tu función AJAX, pasando el destino como parámetro
+                finalizar_atencion_ajax(destino);
+            })
+            .catch(err => {
+                if (err) {
+                    swal("Oh no!", "Ha ocurrido un error al procesar tu solicitud.", "error");
+                } else {
+                    swal.stopLoading();
+                    swal.close();
+                }
+            });
+        }
+    });
+}
+
+function finalizar_atencion_ajax(destino){
+        console.log(destino);
+       let id_paciente = dame_id_paciente();
+         $.ajax({
+                url: "{{ route('profesional.finalizar_atencion') }}",
+                type: 'POST',
+                data: {
+                 _token: "{{ csrf_token() }}",
+                 id_paciente: id_paciente,
+                destino: destino
+                },
+                success: function(response){
+                    console.log(response);
+                 if(response == 'OK'){
+                      swal("Atención finalizada", {
+                            icon: "success",
+                      }).then((value) => {
+                        console.log('finalizar_atencion_ajax');
+                      });
+                 }else{
+                      swal("Error", "No se pudo finalizar la atención", "error");
+                 }
+                },
+                error: function(){
+                 swal("Error", "No se pudo finalizar la atención", "error");
+                }
+          });
+    }
 
     function formatoRut(rut)
         {

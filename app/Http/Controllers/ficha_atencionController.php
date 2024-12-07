@@ -15,6 +15,10 @@ use App\Models\Articulo;
 use App\Models\ArticuloFaltante;
 use App\Models\CertificadoReposo;
 use App\Models\ConsentimientoFaltante;
+use App\Models\EvolucionPacienteHospital;
+use App\Models\EvolucionUrgencia;
+use App\Models\ExamenesDentalDolor;
+use App\Models\ExamenesDentalPieza;
 use App\Models\FormularioFaltante;
 use App\Models\Sugerencias;
 use App\Models\Ciudad;
@@ -32,6 +36,7 @@ use App\Models\ExamenEspecialidad;
 use App\Models\ExamenEspecialidadImg;
 use App\Models\ExamenEspecialidadTemplate;
 use App\Models\ExamenEspecialidadTipo;
+use App\Models\ExamenesDentalOralRx;
 use App\Models\ExamenMedico;
 use App\Models\ExamenPPF;
 use App\Models\FichaAtencion;
@@ -47,6 +52,8 @@ use App\Models\Hipertension;
 use App\Models\HoraMedica;
 use App\Models\InformeMedico;
 use App\Models\Interconsulta;
+use App\Models\ImagenesDentalRxPaciente;
+use App\Models\ImagenesDentalPaciente;
 use App\Models\Licencia;
 use App\Models\LicenciaPPF;
 use App\Models\LugarAtencion;
@@ -108,6 +115,7 @@ use App\Models\OftalmoExamenPresionOcular;
 use App\Models\OftalmoExamenVisionColores;
 use App\Models\RecomendacionDetalle;
 use App\Models\VideoConsultaInfo;
+use App\Models\TiposReceta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -1686,10 +1694,66 @@ class ficha_atencionController extends Controller
             }
         }
         /** CIERRE INFO ACOMPAÑANTE */
+        $tipos_receta = TiposReceta::all();
+        $detalle_receta_controlador = new DetalleRecetaController();
+        $recetas = $detalle_receta_controlador->dameTodoDetalleRecetaPaciente($paciente['id']);
+
+        $adm_hospital_controlador = new AdministradorHospitalController();
+        $procedimientos = $adm_hospital_controlador->dameProcedimientosPaciente($paciente->id);
+        $curaciones = $adm_hospital_controlador->dameCuracionesPaciente($paciente->id);
+        $examenControlador = new ExamenMedicoController();
+        $examenes_solicitados = $examenControlador->dame_examenes_solicitados($paciente->id);
+
+        $controles_ciclo = $this->dameEvolucionesPacienteHosp($paciente->id);
+        $examenes_dental = $this->dameExamenesPiezaDentalDolor($paciente->id);
+        $examenes_dental_end = $this->dameExamenesPiezaDentalEndDolor($paciente->id);
+
+        if(count($controles_ciclo) == 0)
+        {
+            // si no hay ciclos de control se inicia en 1 para manejar el id en la vista
+            $contador_div_evaluaciones = 1;
+        }else{
+            // si hay ciclos de control se suma 1 para manejar el id en la vista
+            $contador_div_evaluaciones = count($controles_ciclo) + 1;
+        }
+
+        foreach($controles_ciclo as $cc)
+        {
+            $cc->datos_evolucion = json_decode($cc->datos_evolucion);
+        }
+
+
+        if(count($examenes_dental) == 0)
+        {
+            // si no hay ciclos de control se inicia en 1 para manejar el id en la vista
+            $contador_div_examenes = 1;
+        }else{
+            // si hay ciclos de control se suma 1 para manejar el id en la vista
+            $contador_div_examenes = count($examenes_dental) + 1;
+        }
+
+        $examenes_rx_oral = $this->dameExamenesPiezaDentalOraxRx($paciente->id);
+
+        $imagenes = $this->dameInfoImagenesDentalPaciente($paciente->id);
+
+        $examenes_pieza = $this->dameExamenesPiezaDentalPieza($paciente->id);
 
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
+                'tipos_receta' => $tipos_receta,
+                'recetas' => $recetas,
+                'contador_div_evaluaciones' => $contador_div_evaluaciones,
+                'examenes_dental' => $examenes_dental,
+                'examenes_dental_end' => $examenes_dental_end,
+                'examenes_rx_oral' => $examenes_rx_oral,
+                'examenes_pieza' => $examenes_pieza,
+                'imagenes' => $imagenes,
+                'contador_div_examenes' => $contador_div_examenes,
+                'controles_ciclo' => $controles_ciclo,
+                'procedimientos' => $procedimientos,
+                'curaciones' => $curaciones,
+                'examenes_solicitados' => $examenes_solicitados,
                 'direccion_paciente' => $direccion_paciente,
                 'direccion_id_ciudad_paciente' => $direccion_id_ciudad_paciente,
                 'direccion_txt_ciudad_paciente' => $direccion_txt_ciudad_paciente,
@@ -1773,6 +1837,100 @@ class ficha_atencionController extends Controller
 
             ]
         );
+    }
+
+    public function dameExamenesPiezaDentalPieza($id_paciente){
+        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)->where('estado',1)->get();
+        return $examenes;
+    }
+
+    public function dameInfoImagenesDentalPaciente($id_paciente)
+    {
+        // Obtén las imágenes del paciente
+        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)->get();
+
+        // Itera sobre cada imagen para procesar `paths_imagenes`
+        foreach ($imagenes as $imagen) {
+            if (!empty($imagen->paths_imagenes)) {
+                // Intenta decodificar `paths_imagenes`
+                $imagenes_decoded = json_decode($imagen->paths_imagenes, true);
+
+                // Valida que la decodificación fue exitosa
+                if (json_last_error() === JSON_ERROR_NONE && is_array($imagenes_decoded)) {
+                    // Asigna los valores decodificados al atributo
+                    $imagen->paths_imagenes = array_map(function ($path) {
+                        // Decodifica cada JSON anidado
+                        $decodedPath = json_decode($path, true);
+
+                        // Valida el JSON interno y devuelve los datos o null si hay un error
+                        return json_last_error() === JSON_ERROR_NONE ? $decodedPath : null;
+                    }, $imagenes_decoded);
+                } else {
+                    // Si la decodificación falla, maneja el error (opcional)
+                    $imagen->paths_imagenes = [];
+                }
+            } else {
+                // Si `paths_imagenes` está vacío o no existe
+                $imagen->paths_imagenes = [];
+            }
+        }
+
+        return $imagenes;
+    }
+
+
+    public function dameExamenesPiezaDentalOraxRx($id_paciente){
+        $examenes = ExamenesDentalOralRx::where('id_paciente',$id_paciente)->get();
+        foreach ($examenes as $e) {
+            $imagenes = ImagenesDentalRxPaciente::where('id_examen', $e->id)->get();
+            $e->imagenes = $imagenes;
+            $nueva_lista_imagenes = []; // Inicializamos un nuevo array
+
+            foreach ($imagenes as $i) {
+                // Decodificamos el JSON contenido en el atributo `paths_imagenes`
+                $decoded_paths = json_decode($i->paths_imagenes, true);
+
+                // Creamos un nuevo objeto/array con la imagen y sus paths decodificados
+                $nueva_lista_imagenes[] = [
+                    'id' => $i->id,
+                    'id_examen' => $i->id_examen,
+                    'paths_imagenes' => $decoded_paths, // Ahora es un array decodificado
+                ];
+            }
+
+            // Puedes asignar este array al objeto `$e` si lo necesitas
+            $e->decoded_imagenes = $nueva_lista_imagenes; // Agregamos el array decodificado al examen
+        }
+
+        return $examenes;
+    }
+
+    public function dameEvolucionesPacienteHosp($idpaciente){
+        $controles_ciclo = EvolucionPacienteHospital::select('evoluciones_paciente_hosp.*','users.name as nombre')
+                                                    ->join('users','users.id','=','evoluciones_paciente_hosp.id_responsable')
+                                                    ->where('evoluciones_paciente_hosp.id_paciente', $idpaciente)
+                                                    ->get();
+
+        return $controles_ciclo;
+    }
+
+    public function dameEvolucionesPaciente($idpaciente){
+        $controles_ciclo = EvolucionUrgencia::select('evoluciones_urgencias.*','users.name as nombre')
+                                                    ->join('users','users.id','=','evoluciones_urgencias.id_responsable')
+                                                    ->where('evoluciones_urgencias.id_paciente', $idpaciente)
+                                                    ->get();
+
+        return $controles_ciclo;
+    }
+
+    public function dameExamenesPiezaDentalDolor($id_paciente){
+        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('tipo_examen',1)->get();
+        return $examenes;
+    }
+
+    public function dameExamenesPiezaDentalEndDolor($id_paciente){
+        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('tipo_examen',2)->get();
+        return $examenes;
     }
 
 	public function index_sdi(Request $request)
@@ -3393,6 +3551,74 @@ class ficha_atencionController extends Controller
             $nombre_especialidad = TipoEspecialidad::find($request->especialidad)->nombre ;
         else if(!empty($request->tipo_especialidad))
             $nombre_especialidad = Especialidad::find($request->profesion)->nombre ;
+		$lic_token = '';
+
+        if( !empty(session('lic_token')) && $profesional->id_espacialidad == 1)
+        {
+            $lic_token = session('lic_token');
+            $lic_log_id = session('lic_log_id');
+        }
+        else
+        {
+            /** calculo de periodo de vigencia para aprobacion */
+            $fecha = date('Y-m-d');
+            $hora =  date('H:i:s');
+            $fecha_actual  = date('Y-m-d H:i:s', strtotime($fecha.' '.$hora));
+            $fecha_vencimiento  = date ( 'Y-m-d H:i:s' ,strtotime ( '+'.(int)env('TIEMPO_ESPERA_CONFIRMACION').' hours' , strtotime ($fecha_actual) ) );
+            $fecha_expira = date ('Y-m-d H:i:s' ,strtotime ( '+'.((int)env('TIEMPO_ESPERA_CONFIRMACION')+(int)env('TIEMPO_EXP_PERMISO')).' hours' , strtotime ($fecha_actual) ) );
+
+            $id = LogUsersDevices::latest()->first();
+            if(is_object($id)==false)
+            $id=0;
+            else
+            $id = LogUsersDevices::latest()->first()->id;
+
+            $msj = array(
+                'id' => ($id+1),
+                'nombre' => mb_strtoupper($profesional->nombre.' '.$profesional->apellido_p.' '.$profesional->apellido_m),
+                'evento' => 'Interconsulta Siquiatría',
+                'fecha' => $fecha,
+                'hora' => $hora,
+                'nombre_especialidad' => $nombre_especialidad,
+                'nombre_profesional_inter' => $request->nombre_profesional_inter_sq,
+                'tipo' => 'interconsulta'
+            );
+
+            $log_users_devices = new LogUsersDevices();
+            $log_users_devices->id_user_create = $profesional->id_usuario;
+            $log_users_devices->id_user_recept = $profesional->id_usuario;
+            $log_users_devices->msg = json_encode($msj);
+            $log_users_devices->estado = 1;
+
+            $log_users_devices->fecha_ingreso = $fecha_actual;
+            $log_users_devices->fecha_termino = $fecha_vencimiento;
+            $log_users_devices->tipo = 16; // check sdi // ESTRUCTURA DE TEXTO
+            $token_temp = md5(uniqid());
+            $log_users_devices->token = $token_temp;
+            $log_users_devices->fecha_exp = $fecha_expira;
+
+            if($log_users_devices->save())
+            {
+                $datos['app']['estado'] = 1;
+                $datos['app']['msj'] = $msj;
+                $datos['app']['fecha_inicio'] = $fecha_actual;
+                $datos['app']['fecha_termino'] = $fecha_vencimiento;
+                $datos['app']['fecha_exp'] = $fecha_expira;
+                $datos['app']['tiempo'] = env('TIEMPO_ESPERA');
+                $datos['app']['last_id'] = $log_users_devices->id;
+                $datos['app']['token'] = $log_users_devices->token;
+            }
+            else
+            {
+                $datos['app']['estado'] = 0;
+                $datos['app']['msj'] = 'Solicitud de aprobacion con falla';
+            }
+
+            $lic_token = $token_temp;
+            $lic_log_id = $log_users_devices->id;
+        }
+
+
 
         $interconsulta = new Interconsulta();
         $interconsulta->id_especialidad = $request->profesion;
@@ -3402,7 +3628,7 @@ class ficha_atencionController extends Controller
         $interconsulta->fecha_solicitud = Carbon::now();
         $interconsulta->id_paciente = $ficha_atencion->id_paciente;
         $interconsulta->id_profesional_soli = $profesional->id;
-        $interconsulta->cod_auto_soli = session('lic_token');
+        $interconsulta->cod_auto_soli = $lic_token;
         if($request->id_fc)
         {
             $interconsulta->id_ficha_atencion_soli = $ficha_atencion->id;
@@ -3426,8 +3652,8 @@ class ficha_atencionController extends Controller
         if ($interconsulta->save())
         {
             /** REGISTRAR FIRMA PROFESIONAL */
-            $papeleria_token = session('lic_token');
-            $papeleria_log_id = session('lic_log_id');
+            $papeleria_token = $lic_token;
+            $papeleria_log_id = $lic_log_id;
             $prof_firma_registro = (object)CertificadoController::registroProfesionalFirma((int)$profesional->id, $papeleria_token, $papeleria_log_id, "8", $interconsulta->id);
 
             $datos['estado'] = 1;
@@ -3499,15 +3725,22 @@ class ficha_atencionController extends Controller
     public function pdf_interconsulta(Request $request)
     {
         $datos = array();
-        $interconsulta = Interconsulta::where('id', $request->id_interconsulta)
-                                        ->first();
+        $interconsulta = Interconsulta::where('id', $request->id_interconsulta)->first();
+
         if($interconsulta->count()>0)
         {
 
             $paciente = Paciente::find($interconsulta->id_paciente);
 
             // info solicitud
-            $ficha_atencion_soli = FichaAtencion::find($interconsulta->id_ficha_atencion_soli);
+			if(!empty($interconsulta->id_ficha_otro_prof_soli))
+            {
+                $ficha_atencion_soli = FichaOtrosProfesionales::find($interconsulta->id_ficha_otro_prof_soli);
+            }
+            else
+            {
+                $ficha_atencion_soli = FichaAtencion::find($interconsulta->id_ficha_atencion_soli);
+            }
             $lugar_atencion_soli = LugarAtencion::find($interconsulta->id_lugar_atencion_soli);
             $profesional_soli = Profesional::find($interconsulta->id_profesional_soli);
             // $token_firma_soli = encrypt( $profesional_soli->rut.'_'.$profesional_soli->email.'_'.$lugar_atencion_soli->id );
@@ -9599,7 +9832,7 @@ class ficha_atencionController extends Controller
                                         $hora->fecha_realizacion_consulta = now();
                                         $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
                                         $hora->save();
-                                        $ficha_actual_nueva = $nueva_ficha_atencion->id;
+                                        // $ficha_actual_nueva = $nueva_ficha_atencion->id;
                                     }
                                     else
                                     {
@@ -10218,6 +10451,50 @@ class ficha_atencionController extends Controller
 
                     if(!empty($profesional->id_tipo_especialidad))
                     {
+                        /** FICHAS DE ATENCIONES PREVIAS */
+                        $filtro_previas = array();
+                        $filtro_previas[] = array('id_paciente', $paciente->id);
+                        $filtro_previas[] = array('id_profesional', $profesional->id);
+                        $filtro_previas[] = array('finalizada', 1);
+                        $ficha_previas = FichaOtrosProfesionales::where($filtro_previas)->get();
+
+                        $datos['ficha_previas'] = $ficha_previas;
+
+                        /** FICHA ATENCION ACTUAL */
+                        if(empty($hora->id_ficha_otros_prof))
+                        {
+                            $nueva_ficha_atencion = new FichaOtrosProfesionales();
+                            $nueva_ficha_atencion->id_paciente = $paciente->id;
+                            $nueva_ficha_atencion->id_profesional = $profesional->id;
+                            $nueva_ficha_atencion->id_especialidad = $profesional->id_especialidad;
+                            $nueva_ficha_atencion->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+                            $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                            if ($nueva_ficha_atencion->save())
+                            {
+                                $hora->id_estado = 5;
+                                $hora->fecha_realizacion_consulta = now();
+                                $hora->id_ficha_atencion = NULL;
+                                $hora->id_ficha_otros_prof = $nueva_ficha_atencion->id;
+                                $hora->save();
+                                $ficha_actual_nueva = $nueva_ficha_atencion;
+                            }
+                            else
+                            {
+                                $nueva_ficha_atencion = '';
+                            }
+                        }
+                        else
+                        {
+                            $filtro_fichaAtencion = array();
+                            $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                            $filtro_fichaAtencion[] = array('id', $hora->id_ficha_otros_prof);
+                            $ficha_actual_nueva = FichaOtrosProfesionales::where($filtro_fichaAtencion)->first();
+                        }
+
+                        $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                        $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
+
                         switch (intval($profesional->id_tipo_especialidad))
                         {
                             case 28:// 28	FONOAUDIOLOGIA CLÍNICA ADULTOS Y NIÑOS
@@ -10375,7 +10652,7 @@ class ficha_atencionController extends Controller
                 case 8: //ENFERMERA UNIVERSITARIA
                     if(!empty($profesional->id_tipo_especialidad))
                     {
-						/** FICHAS DE ATENCIONES PREVIAS */
+                        /** FICHAS DE ATENCIONES PREVIAS */
                         $filtro_previas = array();
                         $filtro_previas[] = array('id_paciente', $paciente->id);
                         $filtro_previas[] = array('id_profesional', $profesional->id);

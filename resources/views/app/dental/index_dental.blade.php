@@ -1,6 +1,4 @@
 @extends('template.dental.template')
-
-
 @section('content')
     <!--Container Completo-->
     <div class="pcoded-main-container">
@@ -8,99 +6,82 @@
             <!--Header-->
             <div class="page-header">
                 <div class="page-block">
-                    <div class="row align-items-center">
-                        <div class="col-md-12 mb-2">
+                    <div class="row align-items-center pb-2">
+                        <div class="col-md-6">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 text-white d-inline ml-4" style="font-size: 1.2rem;"><strong>Registro
-                                        de atención dental</strong></h5>
-                                <!--Fecha del día-->
-                                <button type="button"
-                                    class="btn btn-outline-light btn-sm  d-inline float-right mr-4">Finalizar
-                                    Atención</button>
+                                <h5 class="text-white d-inline f-16 mt-1"><strong>Registro de atención dental</strong></h5>
+                                <p class="font-italic mt-0 mb-0 text-white">
+                                    @php
+                                        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                                        $fecha = \Carbon\Carbon::parse(now());
+                                        $mes = $meses[($fecha->format('n')) - 1];
+                                        $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+                                    @endphp
+                                    {{ $fecha }}
+                                </p>
                             </div>
+                        </div>
+                        <div class="col-md-6">
+
                         </div>
                     </div>
                 </div>
             </div>
             <!--Cierre: Header-->
-            <!--Menú Pills-->
-            <div class="row mx-4 mt-n4 mb-0">
-                <div class="col-sm-12 sin_padding bg-info">
-                    <ul class="nav nav-pills nav-fill" id="registro-dental" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="atencion-paciente-tab" data-toggle="pill"
-                                href="#atencion-paciente" role="tab" aria-controls="atencion-paciente" aria-selected="true">
-                                ATENDER PACIENTE</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="licencias-tab" data-toggle="pill" href="#licencias" role="tab"
-                                aria-controls="licencias" aria-selected="false">
-                                LICENCIA</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="fmu-tab" data-toggle="pill" href="#fmu" role="pill"
-                                aria-controls="fmu" aria-selected="false">
-                                FMU</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="atenciones-previas-tab" data-toggle="pill"
-                                href="#atencion-previas" role="tab" aria-controls="atencion-previas" aria-selected="false">
-                                ATENCIONES PREVIAS</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="examenes-tab" data-toggle="pill" href="#examenes" role="tab"
-                                aria-controls="examenes" aria-selected="false">
-                                EXÁMENES</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="presupuesto-tab" data-toggle="pill" href="#presupuesto" role="tab"
-                                aria-controls="presupuesto" aria-selected="false">
-                                PRESUPUESTOS</a>
-                        </li>
-                    </ul>
+            <!-- TAB ATENCIÓN -->
+            <div class="user-profile user-card pt-0">
+                <div class="card-body py-0">
+                    <div class="user-about-block m-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul class="nav nav-tabs profile-tabs nav-fill mt-2"id="registro-dental" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-reset active"id="atencion-paciente-tab" data-toggle="tab" href="#atencion-paciente" role="tab" aria-controls="atencion-paciente" aria-selected="true">Atender paciente</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-reset" id="licencias-tab" data-toggle="tab" href="#licencias" role="tab" aria-controls="licencias" aria-selected="false">Licencias</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="pill"aria-controls="fmu" aria-selected="false">FMU</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-reset" id="atenciones-previas-tab" data-toggle="tab" href="#atencion-previas" role="tab" aria-controls="atencion-previas" aria-selected="false">Historial de consultas</a>
+                                    </li>
+                                    <li class="nav-item">
+                                       <a class="nav-link text-reset" id="examenes-tab" data-toggle="tab" href="#examenes" role="tab" aria-controls="examenes" aria-selected="false">Exámenes</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-reset" id="presupuesto-tab" data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto" aria-selected="false">PRESUPUESTOS</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!--Cierre: Menú Pills-->
             <!--Contenido Pills-->
-            <div class="row mx-4 mt-0 h-100" style="overflow: scroll;">
-                <div class="col-sm-12 rounded-bottom bg-white">
+            <div class="row">
+                <div class="col-md-12">
                     <div class="tab-content" id="registro-dental-contenido">
-
-                        <div class="tab-pane fade show active" id="atencion-paciente" role="tabpanel"
-                            aria-labelledby="atencion-paciente-tab" role="tabpanel" aria-labelledby="atencion-paciente-tab">
-
-                            @include(
-                                'app.dental.secciones_dentales.ficha_atencion_dental'
-                            )
+                        <div class="tab-pane fade show active" id="atencion-paciente" role="tabpanel" aria-labelledby="atencion-paciente-tab">
+                            @include('app.dental.secciones_dentales.ficha_atencion_dental')
+                        </div>
+                        <div class="tab-pane fade show" id="licencias" role="tabpanel" aria-labelledby="licencias-tab">
 
                         </div>
-                        <div class="tab-pane fade" id="licencias" role="tabpanel" aria-labelledby="licencias-tab">
-
-                            @include('app.dental.secciones_ficha.licencias')
+                        <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
 
                         </div>
-                        <div class="tab-pane fade" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
-
-                            @include('app.dental.secciones_ficha/fmu')
-
-                        </div>
-                        <div class="tab-pane fade" id="atencion-previas" role="tabpanel"
+                        <div class="tab-pane fade show" id="atencion-previas" role="tabpanel"
                             aria-labelledby="atencion-previas-tab">
 
-                            @include(
-                                'app.dental.secciones_ficha/atenciones_previas'
-                            )
-
                         </div>
-                        <div class="tab-pane fade" id="examenes" role="tabpanel" aria-labelledby="examenes-tab">
-
-                            @include('app.dental.secciones_ficha/examenes')
-
+                        <div class="tab-pane fade show" id="examenes" role="tabpanel" aria-labelledby="examenes-tab">
+                            @include('general.secciones_ficha.bandeja_examenes')
                         </div>
-                        <div class="tab-pane fade" id="presupuesto" role="tabpanel" aria-labelledby="presupuesto-tab">
-
+                        <div class="tab-pane fade show" id="presupuesto" role="tabpanel" aria-labelledby="presupuesto-tab">
                             @include('app.dental.secciones_ficha/presupuesto')
-
                         </div>
                     </div>
                 </div>
@@ -804,7 +785,7 @@
                             <div class="card-body-sidebar">
                                 <!--Boton Modal Formulario Constancia Ges-->
                                 <button type="button"
-                                    class="btn btn-sm btn-info btn-block accion_modal_constancia_ges">Constancia
+                                    class="btn btn-sm btn-info btn">Constancia
                                     GES</button>
 
                                 <!--Boton Modal Formulario Enfermedades de Declaración Obligatoria -->
@@ -879,15 +860,13 @@
 
         <!--Modals odontograma-->
         @include('app.dental.modals.odontograma.modal_odontograma')
-        @include(
-            'app.dental.modals.Antecedentes_dentales.anestesia'
-        )
+        @include( 'app.dental.modals.Antecedentes_dentales.anestesia' )
         @include(
             'app.dental.modals.Antecedentes_dentales.hemorragias'
-        );
+        )
         @include(
             'app.dental.modals.Antecedentes_dentales.fracturas'
-        );
+        )
 
         <!--Ficha Dental Indicaciones-->
         @include(
@@ -957,42 +936,31 @@
 
         <!--Modals Atenciones Generales-->
         <!--Formularios Generales-->
-        @include(
-            'app.dental.modals.atencion_general.formularios_generales.m_reposo'
-        )
-        @include(
-            'app.dental.modals.atencion_general.formularios_generales.interconsulta'
-        );
-        @include(
-            'app.dental.modals.atencion_general.formularios_generales.informe_medico'
-        );
-        @include(
-            'app.dental.modals.atencion_general.formularios_generales.uso_personal'
-        );
+
+
+
 
         <!--Formularios Notificacion-->
-        @include(
-            'app.dental.modals.atencion_general.formularios_notificacion.constancia_ges'
-        )
+
         @include(
             'app.dental.modals.atencion_general.formularios_notificacion.enfermedades_declaracion_obligatoria'
-        );
+        )
         @include(
             'app.dental.modals.atencion_general.formularios_notificacion.reembolso_medico'
-        );
+        )
         @include(
             'app.dental.modals.atencion_general.formularios_notificacion.reembolso_dental'
-        );
+        )
 
         @include(
             'app.dental.modals.adulto.tratamiento_boca_completa'
-        );
+        )
         @include(
             'app.dental.modals.adulto.tratamiento_maxilar_inferior'
-        );
+        )
         @include(
             'app.dental.modals.adulto.tratamiento_maxilar_superior'
-        );
+        )
 
 
     </div>

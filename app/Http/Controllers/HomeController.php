@@ -39,13 +39,6 @@ class HomeController extends Controller
 		else
 			$roles_principal = $usuario->roles()->orderBy('id', 'DESC')->first();
 
-        // if (count($roles) > 1) {
-        //     return redirect('/Acceso');
-
-        // }
-
-        // switch ($usuario->roles()->first()->name) {
-
         switch ($roles_principal->name) {
             case 'Admin':
                 return redirect('/Acceso');

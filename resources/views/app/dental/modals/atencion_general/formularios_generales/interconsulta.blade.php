@@ -84,7 +84,7 @@
 
                             @csrf
                             <input type="hidden" name="ficha_id_interconsulta" id="ficha_id_interconsulta"
-                                value=" @if ($ficha != null) {{ $ficha->id }} @endif">
+                                value=" @if ($id_ficha_atencion != null) {{ $id_ficha_atencion }} @endif">
                             <input type="hidden" name="paciente_interconsulta" id="paciente_interconsulta"
                                 value="{{ $paciente->id }}">
                             <div class="form-row">

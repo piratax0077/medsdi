@@ -5,7 +5,7 @@
 namespace App\Http\Controllers;
 
 
-
+use App\Models\CuracionesServicio;
 use App\Models\Direccion;
 
 use App\Models\Especialidad;
@@ -17,6 +17,7 @@ use App\Models\Paciente;
 use App\Models\Prevision;
 
 use App\Models\Profesional;
+use App\Models\ProcedimientoServicio;
 
 use App\Models\User;
 
@@ -851,4 +852,275 @@ class PacienteController extends Controller
 
     }
 
+    public function indicarProcedimientoSDI(Request $request){
+
+
+        if($request->ind_med && strval($request->ind_med) !== '0'){
+
+            $procedimiento_servicio = new ProcedimientoServicio();
+            $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+            $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
+            $procedimiento_servicio->id_paciente = $request->id_paciente;
+            $procedimiento_servicio->id_responsable = Auth::user()->id;
+            // crear un array con los datos
+            $datos = [
+                'nombre_procedimiento' => $request->ind_med,
+                'ind_vig_sig' => '',
+            ];
+
+            // Convertir el array a JSON
+            $datos_json = json_encode($datos);
+            $procedimiento_servicio->datos_procedimiento = $datos_json;
+            $procedimiento_servicio->save();
+        }
+
+        if($request->ind_cc && strval($request->ind_cc) !== "0"){
+
+            $procedimiento_servicio = new ProcedimientoServicio();
+            $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+            $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
+            $procedimiento_servicio->id_paciente = $request->id_paciente;
+            $procedimiento_servicio->id_responsable = Auth::user()->id;
+
+            // crear un array con los datos
+            $datos = [
+                'nombre_procedimiento' => $request->ind_cc,
+                'ind_vig_sig' => '',
+            ];
+
+            // Convertir el array a JSON
+            $datos_json = json_encode($datos);
+            $procedimiento_servicio->datos_procedimiento = $datos_json;
+            $procedimiento_servicio->save();
+
+           $this->guardarControlCiclo($request->ind_cc, $request->id_paciente);
+        }
+
+        if($request->ind_pp && strval($request->ind_pp) !== "0"){
+            $procedimiento_servicio = new ProcedimientoServicio();
+            $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+            $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
+            $procedimiento_servicio->id_paciente = $request->id_paciente;
+            $procedimiento_servicio->id_responsable = Auth::user()->id;
+            // crear un array con los datos
+            $datos = [
+                'nombre_procedimiento' => $request->ind_pp,
+                'ind_vig_sig' => '',
+            ];
+
+            // Convertir el array a JSON
+            $datos_json = json_encode($datos);
+            $procedimiento_servicio->datos_procedimiento = $datos_json;
+            $procedimiento_servicio->save();
+        }
+
+        if($request->ind_proc && strval($request->ind_proc) !== "0"){
+            $procedimiento_servicio = new ProcedimientoServicio();
+            $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+            $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
+            $procedimiento_servicio->id_paciente = $request->id_paciente;
+            $procedimiento_servicio->id_responsable = Auth::user()->id;
+            // crear un array con los datos
+            $datos = [
+                'nombre_procedimiento' => $request->ind_proc,
+                'ind_vig_sig' => '',
+            ];
+
+            // Convertir el array a JSON
+            $datos_json = json_encode($datos);
+            $procedimiento_servicio->datos_procedimiento = $datos_json;
+            $procedimiento_servicio->save();
+        }
+
+        if($request->ind_inmmed && strval($request->ind_inmmed) !== "0"){
+            $procedimiento_servicio = new ProcedimientoServicio();
+            $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+            $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
+            $procedimiento_servicio->id_paciente = $request->id_paciente;
+            $procedimiento_servicio->id_responsable = Auth::user()->id;
+            // crear un array con los datos
+            $datos = [
+                'nombre_procedimiento' => $request->ind_inmmed,
+                'ind_vig_sig' => '',
+            ];
+
+            // Convertir el array a JSON
+            $datos_json = json_encode($datos);
+            $procedimiento_servicio->datos_procedimiento = $datos_json;
+            $procedimiento_servicio->save();
+        }
+
+        if($request->ind_cur && strval($request->ind_cur) !== "0"){
+            $procedimiento_servicio = new ProcedimientoServicio();
+            $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+            $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
+            $procedimiento_servicio->id_paciente = $request->id_paciente;
+            $procedimiento_servicio->id_responsable = Auth::user()->id;
+            // crear un array con los datos
+            $datos = [
+                'nombre_procedimiento' => $request->ind_cur,
+                'ind_vig_sig' => '',
+            ];
+
+            // Convertir el array a JSON
+            $datos_json = json_encode($datos);
+            $procedimiento_servicio->datos_procedimiento = $datos_json;
+            // $procedimiento_servicio->save();
+
+            $this->guardarCuracion($request->ind_cur, $request->id_paciente);
+        }
+
+        $procedimientos = $this->dameTodosProcedimientosPaciente($request->id_paciente);
+        $curaciones = $this->dameCuracionesPaciente($request->id_paciente);
+
+        return json_encode(
+            ['status' => 1,
+            'message' => 'Procedimiento(s) guardado(s) correctamente',
+            'procedimientos' => $procedimientos,
+            'curaciones' => $curaciones
+        ]
+    );
+
+    }
+
+    public function dameTodosProcedimientosPaciente($idpaciente){
+        $procedimientos =  ProcedimientoServicio::select('procedimientos_servicio.*','users.name as responsable')
+                                                    ->join('users','users.id','=','procedimientos_servicio.id_responsable')
+                                                    ->where('id_paciente', $idpaciente)
+                                                    ->get();
+
+            foreach($procedimientos as $procedimiento)
+            {
+
+                // sacar la fecha y hora del campo created_at
+                $procedimiento->fecha = date('d-m-Y', strtotime($procedimiento->created_at));
+                $procedimiento->hora = date('H:i', strtotime($procedimiento->created_at));
+            }
+
+            return $procedimientos;
+    }
+
+    public function dameCuracionesPaciente($idpaciente){
+        $curaciones =  CuracionesServicio::select('curaciones_servicio.*','users.name as responsable')
+                                             ->join('users','users.id','=','curaciones_servicio.id_responsable')
+                                             ->where('id_paciente', $idpaciente)
+                                             ->get();
+
+            foreach($curaciones as $curacion)
+            {
+                // convertir el atributo datos_procedimiento de longtext a array
+                $curacion->datos_curacion = json_decode($curacion->datos_curacion);
+                // sacar la fecha y hora del campo created_at
+                $curacion->fecha = date('d-m-Y', strtotime($curacion->created_at));
+                $curacion->hora = date('H:i', strtotime($curacion->created_at));
+            }
+
+            return $curaciones;
+    }
+
+    public function guardarCuracion($nombre_procedimiento, $id_paciente){
+        // guardar curacion
+        $nueva_curacion = new CuracionesServicio();
+        $nueva_curacion->id_institucion = 19; // Se debe cambiar por la institucion del profesional
+        $nueva_curacion->id_servicio = 4; // Se debe cambiar por el servicio del profesional
+        $nueva_curacion->id_paciente = $id_paciente;
+        $nueva_curacion->id_responsable = Auth::user()->id;
+        $nueva_curacion->otros = '';
+        $nueva_curacion->otros_2 = '';
+
+        // crear un array con los datos
+        $datos = [
+            'nombre_procedimiento' => $nombre_procedimiento,
+            'ind_vig_sig' => '',
+        ];
+
+        // Convertir el array a JSON
+        $datos_json = json_encode($datos);
+        $nueva_curacion->datos_curacion = $datos_json;
+        $nueva_curacion->save();
+
+        return true;
+    }
+
+    public function eliminarCuracion(Request $req){
+        try {
+            $curacion = CuracionesServicio::where('id', $req->id)->first();
+            $curacion->delete();
+            $procedimientos = $this->dameTodosProcedimientosPaciente($req->id_paciente);
+            $curaciones = $this->dameCuracionesPaciente($req->id_paciente);
+            return json_encode([
+                'estado' => 'success',
+                'mensaje' => 'Curación eliminada correctamente',
+                'procedimientos' => $procedimientos,
+                'curaciones' => $curaciones
+            ]);
+        } catch (\Exception $e) {
+            $procedimientos = $this->dameTodosProcedimientosPaciente($req->id_paciente);
+            $curaciones = $this->dameCuracionesPaciente($req->id_paciente);
+            return json_encode([
+                'estado' => 'error',
+                'mensaje' => $e->getMessage(),
+                'procedimientos' => $procedimientos,
+                'curaciones' => $curaciones
+            ]);
+        }
+    }
+
+    public function eliminarProcedimientoSDI(Request $request){
+        try {
+
+            $procedimiento = ProcedimientoServicio::where('id', $request->id)->first();
+
+            $procedimiento->delete();
+            $procedimientos = $this->dameTodosProcedimientosPaciente($request->id_paciente);
+            $curaciones = $this->dameCuracionesPaciente($request->id_paciente);
+            return json_encode([
+                'estado' => 'success',
+                'mensaje' => 'Procedimiento eliminado correctamente',
+                'procedimientos' => $procedimientos,
+                'curaciones' => $curaciones
+            ]);
+        } catch (\Exception $e) {
+            $procedimientos = $this->dameTodosProcedimientosPaciente($request->id_paciente);
+            $curaciones = $this->dameCuracionesPaciente($request->id_paciente);
+            return json_encode([
+                'estado' => 'error',
+                'mensaje' => $e->getMessage(),
+                'procedimientos' => $procedimientos,
+                'curaciones' => $curaciones
+            ]);
+        }
+
+    }
+
+    public function suspenderProcedimientoSDI(Request $request){
+        try {
+
+            $procedimiento = ProcedimientoServicio::where('id', $request->id)->first();
+            if($procedimiento->estado == 0) $procedimiento->estado = 1; else $procedimiento->estado = 0;
+            $procedimiento->save();
+            $procedimientos = $this->dameTodosProcedimientosPaciente($request->id_paciente);
+            $curaciones = $this->dameCuracionesPaciente($request->id_paciente);
+            return json_encode([
+                'estado' => 'success',
+                'mensaje' => 'Procedimiento suspendido correctamente',
+                'procedimientos' => $procedimientos,
+                'curaciones' => $curaciones
+            ]);
+        } catch (\Exception $e) {
+            $procedimientos = $this->dameTodosProcedimientosPaciente($request->id_paciente);
+            $curaciones = $this->dameCuracionesPaciente($request->id_paciente);
+            return json_encode([
+                'estado' => 'error',
+                'mensaje' => $e->getMessage(),
+                'procedimientos' => $procedimientos,
+                'curaciones' => $curaciones
+            ]);
+        }
+
+    }
+
+    public function guardarControlCiclo($id_cc, $id_paciente){
+        return $id_cc;
+    }
 }

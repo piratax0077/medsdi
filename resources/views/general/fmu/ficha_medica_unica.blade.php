@@ -40,7 +40,7 @@
                             @endforeach
                             @endif
                             @if(isset($paciente))
-                            <div class="row px-2 pt-2 text-uppercase">
+                            <div class="row px-2 pt-2 text-uppercase" id="ficha_unica_paciente">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-1">
                                     <h6 class="f-18" style="color:#596679;">{{$paciente->nombres}} {{$paciente->apellido_uno}} {{$paciente->apellido_dos}} <p>({{$paciente->rut}})</p><h6>
                                 </div>

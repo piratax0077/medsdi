@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+
+use App\Models\ImagenesDentalPaciente;
+
+use App\Models\ImagenesDentalRxPaciente;
 
 class CargaImagenController extends Controller
 {
@@ -36,7 +41,7 @@ class CargaImagenController extends Controller
         $datos['img']['file_extension'] = $file_extension;
         $datos['img']['file_mime_type'] = $file_mime_type;
 
-        return $datos;
+
         $datos = array();
 
         $request->validate([
@@ -63,6 +68,111 @@ class CargaImagenController extends Controller
         $datos['img']['file_mime_type'] = $file_mime_type;
 
         return $datos;
+    }
+
+    public function guardarImagenesRxDental(Request $request){
+
+        // Verifica si los parámetros están presentes
+        $request->validate([
+            'file' => 'required|array|min:1',
+            'file.*' => 'image|max:4096',
+            'id_paciente' => 'required|integer',
+            'id_lugar_atencion' => 'required|integer',
+            'id_especialidad' => 'required|integer',
+            'id_profesional' => 'required|integer',
+        ]);
+
+        $paths = [];
+
+        if ($request->hasFile('file')) {
+            foreach ($request->file('file') as $file) {
+                $path = $file->store('images', 'public');
+                $paths[] = $path;
+
+                 // Ahora copiamos la imagen de 'storage/app/public/images' a 'public/storage/images'
+                $publicPath = public_path('storage/images/' . basename($path));
+                File::copy(storage_path('app/public/' . $path), $publicPath);
+            }
+        }
+
+        $imagenes_rx = new ImagenesDentalRxPaciente;
+        $imagenes_rx->id_paciente = $request->id_paciente;
+        $imagenes_rx->id_especialidad = $request->id_especialidad;
+        $imagenes_rx->id_profesional = $request->id_profesional;
+        $imagenes_rx->id_lugar_atencion = $request->id_lugar_atencion;
+        $imagenes_rx->paths_imagenes = json_encode($paths);
+        $imagenes_rx->id_examen = $request->id_examen;
+        $imagenes_rx->estado = 1; // por defecto
+
+        if($imagenes_rx->save()){
+            // Retornar respuesta con los datos procesados
+            return response()->json([
+                'success' => true,
+                'paths' => $paths,
+                'total_imagenes' => count($paths),
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'paths' => $paths,
+                'total_imagenes' => count($paths),
+                'mensaje' => 'error'
+            ]);
+        }
+
+
+    }
+
+    public function guardarImagenesDental(Request $request){
+
+        // Verifica si los parámetros están presentes
+        $request->validate([
+            'file' => 'required|array|min:1',
+            'file.*' => 'image|max:4096',
+        ]);
+
+        $paths = [];
+
+        if ($request->hasFile('file')) {
+            foreach ($request->file('file') as $file) {
+                $path = $file->store('images', 'public');
+
+                // crear un objeto nuevo para guardar el detalle de la imagen y el path
+                $obj = new \stdClass();
+                $obj->path = $path;
+                $obj->momento = $request->detalle;
+
+                // agregar el objeto al array de paths
+                $paths[] = json_encode($obj);
+
+                 // Ahora copiamos la imagen de 'storage/app/public/images' a 'public/storage/images'
+                $publicPath = public_path('storage/images/' . basename($path));
+                File::copy(storage_path('app/public/' . $path), $publicPath);
+            }
+        }
+
+        $imagenes_rx = ImagenesDentalPaciente::find($request->id_examen);
+
+        $imagenes_rx->paths_imagenes = json_encode($paths);
+        $imagenes_rx->momento_imagen = $request->detalle;
+
+        if($imagenes_rx->save()){
+            // Retornar respuesta con los datos procesados
+            return response()->json([
+                'success' => true,
+                'paths' => $paths,
+                'total_imagenes' => count($paths),
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'paths' => $paths,
+                'total_imagenes' => count($paths),
+                'mensaje' => 'error'
+            ]);
+        }
+
+
     }
     /**
      * mover y renombrar archivo

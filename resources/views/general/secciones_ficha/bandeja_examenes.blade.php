@@ -41,7 +41,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if ($examenes_especialidad_realizados)
+                                            @if (isset($examenes_especialidad_realizados))
                                                 @foreach ($examenes_especialidad_realizados as $exam)
 													@if (!empty($exam->HoraMedica))
 														@if ($exam->HoraMedica->id_estado == 6 && $exam->revisado == 0)
@@ -66,7 +66,7 @@
                                             @endif
 
                                             {{-- RESULTADODE DE EXAMENES LABORATORIO --}}
-                                            @if ($resultado_examen)
+                                            @if (isset($resultado_examen))
                                                 @foreach ( $resultado_examen as $result_ex)
                                                     @if ($result_ex->revisado == 0)
                                                         <tr>
@@ -119,7 +119,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @if ($examenes_especialidad_realizados)
+                                            @if (isset($examenes_especialidad_realizados))
                                                 @foreach ($examenes_especialidad_realizados as $exam)
 													@if (!empty($exam->HoraMedica))
 														@if ($exam->HoraMedica->id_estado == 6 && $exam->revisado == 1)
@@ -169,7 +169,7 @@
                                         </thead>
                                         <tbody>
                                             {{-- RESULTADODE DE EXAMENES LABORATORIO RADIOLOGIA--}}
-                                            @if ($resultado_examen)
+                                            @if (isset($resultado_examen))
                                                 @foreach ( $resultado_examen as $result_ex)
                                                     @if ($result_ex->revisado == 1)
                                                         @if ($result_ex->tipo_examen == 354)
@@ -225,7 +225,7 @@
                                             </thead>
                                             <tbody>
                                                 {{-- RESULTADODE DE EXAMENES LABORATORIO RADIOLOGIA--}}
-                                                @if ($resultado_examen)
+                                                @if (isset($resultado_examen))
                                                     @foreach ( $resultado_examen as $result_ex)
                                                         @if ($result_ex->revisado == 1)
                                                             @if ($result_ex->tipo_examen != 354)

@@ -12,7 +12,7 @@
                     action="{{ route('dental.imprimir_certificado_reposo') }}" method="post">
                     @csrf
                     <input type="hidden" name="ficha_id_certificado_reposo" id="ficha_id_certificado_reposo"
-                        value=" @if ($ficha != null) {{ $ficha->id }} @endif">
+                        value=" @if ($id_ficha_atencion != null) {{ $id_ficha_atencion }} @endif">
                     <input type="hidden" name="paciente_certificado_reposo" id="paciente_certificado_reposo"
                         value="{{ $paciente->id }}">
                     <div class="form-row">
@@ -27,7 +27,7 @@
                     action="{{ route('dental.registrar_certificado_reposo') }}" method="post">
                     @csrf
                     <input type="hidden" name="ficha_id_certificado_reposo" id="ficha_id_certificado_reposo"
-                        value=" @if ($ficha != null) {{ $ficha->id }} @endif">
+                        value=" @if ($id_ficha_atencion != null) {{ $id_ficha_atencion }} @endif">
                     <input type="hidden" name="paciente_certificado_reposo" id="paciente_certificado_reposo"
                         value="{{ $paciente->id }}">
                     <div class="form-row">

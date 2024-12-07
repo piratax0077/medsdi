@@ -4,7 +4,7 @@
             role="tab" aria-controls="atencion-dental" aria-selected="true">Atención Atención dental</a>
     </li>
     <li class="nav-item-secciones">
-        <a class="nav-secciones text-uppercase" id="todontograma-dental-tab" data-toggle="tab" href="#odontograma-dental"
+        <a class="nav-secciones text-uppercase" id="odontograma-dental-tab" data-toggle="tab" href="#odontograma-dental"
             role="tab" aria-controls="odontograma-dental" aria-selected="false">Odontograma</a>
     </li>
     <li class="nav-item-secciones">
@@ -185,120 +185,8 @@
                         </div>
                         <!--Cierre: Formulario / Antecedentes-->
                         <!--Formulario / Signos vitales y otros-->
-                        <div class="col-sm-12">
-                            <div class="card mb-3">
-                                <div class="card-header bg-info align-middle">
-                                    <h6 class="float-left d-inline">Signos vitales y otros</h6>
-                                    <i id="signos_vitales_ficha_endodoncia"
-                                        class="float-right f-18 d-inline fas fa-angle-down  mb-0"
-                                        style="cursor:pointer"></i>
-                                </div>
+                        @include('general.secciones_ficha.signos_vitales')
 
-                                <div class="card-body" id="form_3_ficha_endodoncia" style="display:none">
-
-                                    <div class="form-row">
-                                        <div class="form-group col-md-1">
-                                            <label class="floating-label">Tº</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="temperatura_ficha_dental" id="temperatura_ficha_dental">
-                                        </div>
-                                        <div class="form-group col-md-1">
-                                            <label class="floating-label">Pulso</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="pulso_ficha_dental" id="pulso_ficha_dental">
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label class="floating-label">Frec. Reposo</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="frecuencia_reposo_ficha_dental"
-                                                id="frecuencia_reposo_ficha_dental">
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label class="floating-label">Peso</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="peso_ficha_dental" id="peso_ficha_dental">
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label class="floating-label">Talla</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="talla_ficha_dental" id="talla_ficha_dental">
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label class="floating-label">IMC</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="imc_ficha_dental" id="imc_ficha_dental">
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label class="floating-label">Estado Nutricional</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="estado_nutricional_ficha_dental"
-                                                id="estado_nutricional_ficha_dental">
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group mb-1">
-                                            <label><strong>Presión Arterial</strong></label>
-                                            <div class="switch switch-success d-inline m-r-10">
-                                                <input type="checkbox" id="p_arterial_ficha_endodoncia">
-                                                <label for="p_arterial_ficha_endodoncia"
-                                                    class="cr"></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-row" id="form_1_ficha_endodoncia" style="display:none">
-                                        <div class="form-group col-md-3">
-                                            <label class="floating-label">BI</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="presion_bi_ficha_dental" id="presion_bi_ficha_dental">
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label class="floating-label">BD</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="presion_bd_ficha_dental" id="presion_bd_ficha_dental">
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label class="floating-label">De pié</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="presion_de_pie_ficha_dental" id="presion_de_pie_ficha_dental">
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label class="floating-label">Sentado</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="presion_sentado_ficha_dental" id="presion_sentado_ficha_dental">
-                                        </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="form-group mb-1">
-                                            <label><strong>Comunicación y traslado</strong></label>
-                                            <div class="switch switch-success d-inline m-r-10">
-                                                <input type="checkbox" id="comunicacion_traslado_ficha_endodoncia">
-                                                <label for="comunicacion_traslado_ficha_endodoncia"
-                                                    class="cr"></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-row" id="form_2_ficha_endodoncia" style="display:none">
-                                        <div class="form-group col-md-4">
-                                            <label class="floating-label">Estado de conciencia</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="estado_conciencia_ficha_dental"
-                                                id="estado_conciencia_ficha_dental">
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label class="floating-label">Lenguaje</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="lenguaje_ficha_dental" id="lenguaje_ficha_dental">
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <label class="floating-label">Traslado</label>
-                                            <input type="text" class="form-control form-control-sm"
-                                                name="traslado_ficha_dental" id="traslado_ficha_dental">
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
                         <!--Cierre: Formulario / Signos vitales y otros-->
                         <!--Formulario / Diagnóstico-->
                         <div class="col-sm-12 mt-3">
@@ -571,22 +459,24 @@
                 <div class="row">
                     <div class="col-md-12 mt-3 mb-0">
                         <h6 class="f-16 text-c-blue">Evaluación</h6>
+
+
                         <hr>
                     </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-3 px-1 py-1">
                         <button type="button" class="btn btn-info btn-sm btn-block"
-                            onclick="maxilar_superior_inf();"><i class="feather icon-file-plus"></i> Maxilar
+                            onclick="tto_max_sup()";><i class="feather icon-file-plus"></i> Maxilar
                             superior</button>
                     </div>
                     <div class="col-md-3 px-1 py-1">
                         <button type="button" class="btn btn-info btn-sm btn-block"
-                            onclick="maxilar_inferior_inf();"><i class="feather icon-file-plus"></i> Maxilar
+                            onclick="tto_max_inf_ped()";><i class="feather icon-file-plus"></i> Maxilar
                             inferior</button>
                     </div>
                     <div class="col-md-3 px-1 py-1">
-                        <button type="button" class="btn btn-info btn-sm btn-block" onclick="boca_completa_inf();"><i
+                        <button type="button" class="btn btn-info btn-sm btn-block" onclick="tto_boca()";><i
                                 class="feather icon-file-plus"></i> Boca
                             Completa</button>
                     </div>

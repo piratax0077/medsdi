@@ -983,7 +983,7 @@
     {
 
         let id_medicamento = $('#id_medicamento_ficha_dental').val();
-        console.log(id_medicamento);
+        console.log('hola');;
 
         let url = "{{ route('dental.getDosis') }}";
         $.ajax({

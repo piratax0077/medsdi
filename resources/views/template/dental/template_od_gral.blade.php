@@ -25,6 +25,8 @@
 
     <!-- fileupload-custom css -->
     {{-- <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}"> --}}
+    <link rel="stylesheet" href='{{ asset('css/plugins/dropzone.min.css') }}'/>
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
     <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
 
     <!--Accordion-->
@@ -65,6 +67,7 @@
 
     </style>
     @yield('css-btn-autorizacion')
+    @yield('styles')
 </head>
 <body>
     @include('template.dental.header')
@@ -79,6 +82,7 @@
     @yield('modal-ficha-general-espc')
 
 
+    @include('app.atencion_hospital.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia')
 
     <!-- Modal de la vista fin -->
     <footer>
@@ -166,11 +170,11 @@
 
     <!--Tablas y Toggle atención ginecobstetrica-->
     {{-- <script src="{{ asset('js/atencion_especialidades.js') }}?upd={{ random_int(1111,9999) }}"></script> --}}
-    {{-- <script src="{{ asset('js/cara_dental.js') }}?upd={{ random_int(1111,9999) }}"></script> --}}
+    <script src="{{ asset('js/cara_dental.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
+        Dropzone.autoDiscover = false;
         $(document).ready(function () {
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
@@ -215,6 +219,8 @@
 				});
 			@endif
         });
+
+
 
         function presupuesto(){
             $('#modal_presupuesto').modal('show');
