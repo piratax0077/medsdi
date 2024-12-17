@@ -1,3 +1,6 @@
+<script>
+    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+</script>
 <!-- Scripts -->
 <script src="{{ asset('js/vendor-all.min.js') }}"></script>
 <script src="{{ asset('js/plugins/bootstrap.min.js') }}"></script>
@@ -27,3 +30,5 @@
 
 <!--Botón cards-->
 <script src="{{ asset('js/btn-cards.js') }}?upd={{ random_int(1111,9999) }}"></script>
+
+

@@ -86,11 +86,18 @@
                                                 <tr>
                                                     <td>{{ date('d-m-Y',strtotime($result_ex->fecha_registro)) }}</td>
                                                     <td>{{ $result_ex->id }}</td>
-                                                    <td>LABORATORIO</td>
+                                                    <td>
+                                                        @if (!empty($result_ex->profesional_nombre))
+                                                            LABORATORIO
+                                                        @else
+                                                            {{ $result_ex->profesional_nombre }}
+                                                        @endif
+                                                    </td>
                                                     <td>
                                                         @if ($result_ex->obj_tipo_examen)
                                                             @if (!empty($result_ex->obj_tipo_examen->nombre_examen))
                                                                 {{ $result_ex->obj_tipo_examen->nombre_examen }}
+
                                                             @else
                                                                 {{ $result_ex->nombre_examen }}
                                                             @endif
@@ -98,7 +105,13 @@
                                                             {{ $result_ex->nombre_examen }}
                                                         @endif
                                                     </td>
-                                                    <td>-</td>
+                                                    <td>
+                                                        @if (!empty($result_ex->nombre_examen))
+                                                            {{ $result_ex->nombre_examen }}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    </td>
                                                     <td>{{ $result_ex->observacion }}</td>
                                                     <td>
                                                         @if ($result_ex->revisado == 1)

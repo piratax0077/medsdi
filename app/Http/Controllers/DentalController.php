@@ -1046,7 +1046,7 @@ class DentalController extends Controller
 
                 foreach ($ho as $h) {
 
-                    if ($h == '1') {
+                    if ($h == '0') {
 
                         $horario_agenda = str_replace($h, '', $horario_agenda);
 
@@ -1144,7 +1144,7 @@ class DentalController extends Controller
 
                 foreach ($ho as $h) {
 
-                    if ($h == '1') {
+                    if ($h == '0') {
 
                         $horario_agenda = str_replace($h, '', $horario_agenda);
 
@@ -1240,7 +1240,7 @@ class DentalController extends Controller
 
                 foreach ($ho as $h) {
 
-                    if ($h == '1') {
+                    if ($h == '0') {
 
                         $horario_agenda = str_replace($h, '', $horario_agenda);
 

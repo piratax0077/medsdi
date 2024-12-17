@@ -1501,7 +1501,8 @@
         }
 
         let email = $('#reserva_hora_correo').val();
-        let url = "{{ route('agenda.validar_email') }}";
+        // let url = "{{ route('agenda.validar_email') }}";
+        let url = "{{ route('agenda.paciente.validar_email') }}";
 
         $.ajax({
                 url: url,

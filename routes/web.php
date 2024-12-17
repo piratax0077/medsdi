@@ -427,6 +427,8 @@ Route::group([
     /** registro de examen por paciente */
     Route::post('/examen/registro', [App\Http\Controllers\EscritorioPaciente::class, 'cargaExamenPorPaciente'])->name('paciente.examen.registro');
 
+    Route::post('/consulta/confidencial/cargar', [App\Http\Controllers\EscritorioPaciente::class, 'cargaConsultaConfidencial'])->name('paciente.consultas.confidenciales');
+
 });
 
 /** INICIO DE LICENCIA */
@@ -449,6 +451,8 @@ Route::group(
         Route::get('Check_sdi',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
         Route::get('Mi_Ficha_Medica', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('profesional.mi_ficha');
         Route::get('Mi_Ficha_Medica_Pdf', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedicaPdfView']);
+        Route::get('confidencial/solitar/autorizacion', [App\Http\Controllers\FmuAprobacionController::class, 'solicitarAutorizacionConfidencial'])->name('solicitud.aprobacion.fmu.confidencial');
+        Route::get('confidencial/validar/autorizacion', [App\Http\Controllers\FmuAprobacionController::class, 'validarAutorizacionConfidencial'])->name('validar.aprobacion.fmu.confidencial');
 
     }
 );
@@ -1134,6 +1138,7 @@ Route::group([
     Route::get('Hora-medica/hora/agendar/paciente/nuevo', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_hora_nuevo_paciente'])->name('agenda.agendar_hora_nuevo_paciente');
     Route::post('Hora-medica/paciente/nuevo', [App\Http\Controllers\AsistenteController::class, 'AgregarNuevoPaciente'])->name('agenda.paciente.nuevo');
     Route::get('Hora-medica/validar/email', [App\Http\Controllers\EscritorioProfesional::class, 'validar_rut'])->name('agenda.validar_email');
+    Route::get('Hora-medica/validar/email/paciente', [App\Http\Controllers\EscritorioProfesional::class, 'validar_email_paciente'])->name('agenda.paciente.validar_email');
 
     /** motor de busqueda asistente online*/
     Route::get('perfil/configuracion/busqueda/editar', [App\Http\Controllers\EscritorioAsistente::class, 'editar_configuracion_busqueda'])->name('asistente.editar_configuracion_busqueda');

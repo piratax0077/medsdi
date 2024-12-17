@@ -1063,6 +1063,8 @@
         });
 
         function validarEdad(fechaNacimiento) {
+
+            console.log('validarEdad - resources\views\app\profesional\agenda.blade.php');
             // Dividir la fecha de nacimiento en día, mes y año
             var partes = fechaNacimiento.split('/');
             var dia = parseInt(partes[0], 10);

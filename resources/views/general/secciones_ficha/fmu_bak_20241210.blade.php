@@ -572,10 +572,10 @@
                                                             <th class="text-center align-middle">Fecha</th>
                                                             <th class="text-center align-middle">Profesional</th>
                                                             <th class="text-center align-middle">Diagnóstico</th>
-                                                            <th class="text-center align-middle">Ficha</th>
-                                                            <th class="text-center align-middle">Exámenes</th>
                                                             <th class="text-center align-middle">Recetas</th>
-                                                            <th class="text-center align-middle">Archivos </th>
+                                                            <th class="text-center align-middle">Exámenes</th>
+                                                            {{-- <th class="text-center align-middle">Archivos </th> --}}
+                                                            {{-- <th class="text-center align-middle">Ficha</th> --}}
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -598,26 +598,12 @@
                                                                     <td class="text-center align-middle">{{ $f->hipotesis_diagnostico }}</td>
 
                                                                     <td class="text-center align-middle">
-                                                                        {{-- <a class="btn btn-xxs btn-info-light-c has-ripple"  @if (isset($f->id)) onclick="buscar_ficha_fmu({{ $f->id }});" @endif><i class="feather icon-file-plus"></i> Ver</a> --}}
-                                                                        <button type="button" class="btn btn-xxs btn-info-light-c" @if (isset($f->id)) onclick="buscar_ficha_atencion_atencion_previa_fmu({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</button>
+                                                                        <a class="badge badge-light-warning"  @if (isset($f->id)) onclick="buscar_receta_fmu({{ $f->id }});" @endif><i class="feather icon-file-plus"></i> Ver</a>
                                                                     </td>
 
                                                                     <td class="text-center align-middle">
-                                                                        {{-- <a class="badge badge-light-success" @if (isset($f->id)) onclick="buscar_examenes_fmu({{ $f->id }});" @endif><i class="feather icon-activity"></i> Ver</a> --}}
-                                                                        <button type="button" class="btn btn-xxs btn-success-light-c" @if (isset($f->id)) onclick="buscar_examenes_fmu({{ $f->id }});" @endif><i class="feather icon-activity"></i> Ver</button>
+                                                                        <a class="badge badge-light-success" @if (isset($f->id)) onclick="buscar_examenes_fmu({{ $f->id }});" @endif><i class="feather icon-activity"></i> Ver</a>
                                                                     </td>
-
-                                                                    <td class="text-center align-middle">
-                                                                        {{-- <a class="badge badge-light-warning"  @if (isset($f->id)) onclick="buscar_receta_fmu({{ $f->id }});" @endif><i class="feather icon-file-plus"></i> Ver</a> --}}
-                                                                        <button type="button" class="btn btn-xxs btn-warning-light-c"  @if (isset($f->id)) onclick="buscar_receta_fmu({{ $f->id }});" @endif><i class="feather icon-file-plus"></i> Ver</button>
-                                                                    </td>
-
-                                                                    <td class="text-center align-middle">
-                                                                        {{-- <a class="badge badge-light-warning"  @if (isset($f->id)) onclick="buscar_archivo_fmu({{ $f->id }});" @endif><i class="feather icon-file-plus"></i> Ver</a> --}}
-                                                                        <button type="button" class="btn btn-xxs btn-purple-light-c" @if (isset($f->id)) onclick="buscar_archivo_fmu({{ $f->id }});" @endif><i class="feather icon-folder"></i> Ver</button>
-                                                                    </td>
-
-
                                                                 </tr>
                                                             @endforeach
                                                         @else
@@ -805,5 +791,3 @@
 
     @include("general.secciones_ficha.modales_fmu.hist_medico_recetas_fmu")
     @include("general.secciones_ficha.modales_fmu.hist_medico_exa_fmu")
-    @include("general.secciones_ficha.modales_fmu.hist_cons_fmu")
-    @include("general.secciones_ficha.modales_fmu.hist_cons_archivo_fmu")

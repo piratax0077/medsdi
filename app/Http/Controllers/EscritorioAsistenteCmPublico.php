@@ -292,7 +292,7 @@ class EscritorioAsistenteCmPublico extends Controller
                     $ho = explode(',', $hor->dia);
                     // dd($ho);
                     foreach ($ho as $h) {
-                        if ($h == '1') {
+                        if ($h == '0') {
                             $horario_agenda = str_replace($h, '', $horario_agenda);
                         } else {
                             $horario_agenda = str_replace(',' . $h, '', $horario_agenda);

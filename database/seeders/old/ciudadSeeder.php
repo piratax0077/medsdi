@@ -82,7 +82,7 @@ class ciudadSeeder extends Seeder
             [65,'San Antonio',6],
             [66,'Santo Domingo',6],
             [67,'Catemu',6],
-            [68,'Llaillay',6],
+            [68,'Llay Llay',6],
             [69,'Panquehue',6],
             [70,'Putaendo',6],
             [71,'San Felipe',6],

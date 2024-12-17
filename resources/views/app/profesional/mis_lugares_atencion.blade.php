@@ -539,12 +539,17 @@
                                 <div class="form-group fill">
                                     <!--<label class="floating-label-activo-sm">Tipo de agenda </label>-->
                                     <select name="tipo_agenda_medica" id="tipo_agenda_medica" class="form-control form-control-sm" onclick="validar_tipo_agenda();">
-                                        <option value="0">Seleccione</option>
-                                        <option value="1">Atención General</option>
-                                        <option value="2">Atención Dental</option>
-                                        <option value="3">Atención Telemedicina</option>
-                                        <option value="4">Exámenes</option>
-                                        <option value="5">Procedimiento</option>
+
+                                        @if($profesional->id_especialidad == 2)
+                                            <option value="2">Atención Dental</option>
+                                        @else
+                                            <option value="0">Seleccione</option>
+                                            <option value="1">Atención General</option>
+                                            <option value="3">Atención Telemedicina</option>
+                                            <option value="4">Exámenes</option>
+                                            <option value="5">Procedimiento</option>
+                                        @endif
+
                                     </select>
                                 </div>
                             </div>

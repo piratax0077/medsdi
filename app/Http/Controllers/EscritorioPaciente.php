@@ -152,10 +152,14 @@ class EscritorioPaciente extends Controller
                                                     ->where('parametros.referencia', '=', 'Agenda_Estado');
                                         })
                                         ->where('id_paciente', $paciente->id)
-                                        ->whereRaw("fecha_consulta >= NOW() AND hora_inicio >= NOW()")
-                                        ->orderBy('fecha_consulta', 'DESC')
+                                        // ->whereRaw("fecha_consulta >= NOW() AND hora_inicio >= NOW()")
+                                        ->whereRaw("date(fecha_consulta) >= '".date('Y-m-d')."' ")
+                                        // ->whereIn('id_estado',[1,2,4,5,6,8])
+                                        ->orderBy('fecha_consulta', 'ASC')
                                         ->orderBy('hora_inicio', 'DESC')
                                         ->get();
+
+            // echo json_encode($hora_medica);
 
             if (isset($paciente)) {
 
@@ -3180,6 +3184,54 @@ class EscritorioPaciente extends Controller
             }
 
             $datos = ResultadoExamenController::registrar($id_lugar_atencion,$id_institucion,$tipo_examen,$nombre_examen,$id_paciente,$rut,$nombre,$apellido_paterno,$apellido_materno,$email,$observacion,$fecha_registro, $lista_archivo, $id_profesional, $profesional_rut, $profesional_nombre);
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function cargaConsultaConfidencial(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->id_paciente))
+        {
+            $error['id_paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $registros = FichaAtencion::with('Paciente')
+                                    ->with('Profesional')
+                                    ->with('LugarAtencion')
+                                    ->where('id_paciente', $request->id_paciente)
+                                    ->where('confidencial', true)
+                                    ->get();
+
+            $cant_registros = FichaAtencion::where('id_paciente', $request->id_paciente)->where('confidencial', true)->count();
+
+            if($cant_registros>0)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['cant_registros'] = $cant_registros;
+                $datos['registros'] = $registros;
+            }
+            else
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['cant_registros'] = $cant_registros;
+                $datos['registros'] = array();
+            }
         }
         else
         {

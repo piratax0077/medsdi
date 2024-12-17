@@ -578,6 +578,7 @@ class RecomendacionController extends Controller
             $regisrto_result = array();
             foreach ($registros as $key => $value)
             {
+                $paciente = Paciente::find($value->activo);
                 $detalle = RecomendacionDetalle::where('id_recomendacion',$value->id)->get();
                 $detalle_temp = array();
                 if($detalle)
@@ -613,6 +614,7 @@ class RecomendacionController extends Controller
                     }
                 }
 
+                $datos['paciente'] = $paciente;
                 $regisrto_result[] = array(
                     'id' => $value->id,
                     'id_ficha_atencion' => $value->atencion,
@@ -629,6 +631,7 @@ class RecomendacionController extends Controller
                     'detalle' => $detalle_temp,
                     'created_at' => $value->created_at,
                     'updated_at' => $value->updated_at,
+
                 );
             }
 

@@ -46,6 +46,7 @@
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                    <div class="alert-atencion alert alert-success alert-dismissible fade show" role="alert" id="mensaje_historias"></div>
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <form action="{{ route('fichaAtencion.registrar_ficha_orl') }}" method="POST">
@@ -598,8 +599,20 @@
             setTimeout(function(){
                 $('#mensaje_ficha').hide();
             }, 5000);
-            /** cronico */
 
+            @if($fichas->count()>0)
+                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+            @else
+                $('#mensaje_historias').html(' es la primera consulta del paciente. ');
+            @endif
+                $('#mensaje_historias').show();
+                setTimeout(function(){
+                    $('#mensaje_historias').hide();
+                }, 6000);
+
+
+
+            /** cronico */
             /** autocomplete de medicamentos generales */
             $("#nombre_medicamentocron").autocomplete({
                 source: function(request, response) {
@@ -1561,11 +1574,11 @@
         }
 
         // ALERTA DE ATENCION
-        window.setTimeout(function() {
-            $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
-                $(this).remove();
-            });
-        }, 5000);
+        // window.setTimeout(function() {
+        //     $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
+        //         $(this).remove();
+        //     });
+        // }, 5000);
 
          /** PERVISUALIZACION DE EXAMEN */
         function visualizar_pdf_examen(tipo_examen)

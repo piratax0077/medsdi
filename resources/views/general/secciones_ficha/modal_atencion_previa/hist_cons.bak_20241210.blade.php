@@ -1,36 +1,130 @@
 <div id="m_consultaant" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_consultaantLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+    <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h5 class="modal-title text-white" id="m_consultaantLabel" onclick="('#m_consultaant').modal('hide'); ">Datos de consulta de: </h5>
+            <div class="modal-header">
+                <h5 class="modal-title" id="m_consultaantLabel" onclick="('#m_consultaant').modal('hide'); ">Ficha clínica </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                      <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-
+            <div class="modal-body bg-light">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                        <h6 class="t-aten">Anamnesis</h6>
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="card-previas">
+                            <div class="card-header-previas">
+                                <strong><img class="icono-1" src="{{ asset('images/iconos/otros/lapiz.png') }}">Anamnesis</strong>
+                            </div>
+                            <div class="card-body-previas">
+                                <div class="row d-flex">
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+                                        <p><strong>Anamnesis</strong></p>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9 col-xxl-10 mb-1">
+                                        <p class="text-lowercase" id="texto_motivo"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <table class="table table-xs table-borderless">
-                            <tbody>
-                            <tr>
-                                <th scope="row">Motivo de consulta</th>
-                                <td class="text-wrap" id="texto_motivo">-</td>
-                            </tr>
-                        </table>
+                        <div class="card-previas">
+                            <div class="card-header-previas">
+                                <strong><img class="icono-1" src="{{ asset('images/iconos/otros/estetoscopio.png') }}">Exámen físico</strong>
+                            </div>
+                            <div class="card-body-previas ">
+                                <div class="row d-flex">
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+                                       <p><strong>Motivo de consulta</strong></p>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9 col-xxl-10 text-wrap mb-1">
+                                        <p class="text-lowercase" id="texto_ficha"></p>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9 col-xxl-10 text-wrap mb-1">
+                                        <p class="text-uppercase" id="texto_ficha_esp"></p>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9 col-xxl-10 mb-1">
+                                        <div id="ficha_imagenes"></div>
+                                    </div>
+                                     <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9 col-xxl-10 mb-1">
+                                        <div id="ficha_examenes_espec"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <hr class="mt-0 mb-3">
-
                 <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="card-previas">
+                            <div class="card-header-previas d-flex align-items-center">
+                               <strong><img class="icono-1 " src="{{ asset('images/iconos/otros/cruz.png') }}">Diagnóstico</strong>
+                            </div>
+                            <div class="card-body-previas">
+                                <div class="row d-flex">
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+                                        <p><strong>Diagnóstico</strong></p>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9 col-xxl-10 text-wrap mb-1">
+                                        <p class="text-lowercase" id="texto_diagnostico"></p>
+                                    </div>
+                                </div>
+                                <div class="row d-flex">
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+                                        <p><strong>Diagnóstico CIE-10</strong></p>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9 col-xxl-10 text-wrap mb-1">
+                                        <p class="text-lowercase" id="texto_cie_10"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="card-previas">
+                            <div class="card-header-previas">
+                            <strong><img class="icono-1" src="{{ asset('images/iconos/otros/indicaciones.png') }}">Indicaciones</strong>
+                            </div>
+                            <div class="card-body-previas">
+                                <div class="row d-flex">
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+                                        <p><strong>Indicaciones</strong></p>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9 col-xxl-10 mb-1">
+                                        <p class="text-lowercase" id="texto_indicaciones"></p>
+                                    </div>
+                                </div>
+                                <div class="row d-flex">
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+                                        <p><strong>Recetas</strong></p>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9 col-xxl-10 mb-1">
+                                        <p class="text-lowercase" id="texto_receta"></p>
+                                    </div>
+                                </div>
+                                <div class="row d-flex">
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3 col-xxl-2">
+                                        <p><strong>Exámenes</strong></p>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9 col-xxl-10 mb-1">
+                                        <p class="text-lowercase" id="texto_examen"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!--<div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h6 class="t-aten">Exámen físico</h6>
                     </div>
                     <hr>
@@ -39,7 +133,6 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <table class="table table-xs table-borderless">
-                            <tbody>
                             <tr>
                                 <td class="text-wrap text-justify" id="texto_ficha">-</td>
                             </tr>
@@ -57,7 +150,7 @@
                 <hr class="mt-0 mb-3">
 
                 <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h6 class="t-aten">Diagnóstico</h6>
                     </div>
                 </div>
@@ -81,7 +174,7 @@
                 <hr class="mt-0 mb-3">
 
                 <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <h6 class="t-aten">Indicaciones</h6>
                     </div>
                 </div>
@@ -108,7 +201,7 @@
                             </tr>
                         </table>
                     </div>
-                </div>
+                </div>-->
 
             </div>
             <div class="modal-footer">
@@ -118,8 +211,11 @@
     </div>
 </div>
 <script>
+    {{--  function buscar_ficha_atencion() {
+        $('#m_consultaant').modal('show');
+    }  --}}
 
-    function  buscar_ficha_atencion_atencion_previa(id_ficha_atencion)
+    function  buscar_ficha_atencion(id_ficha_atencion)
     {
         let url = "{{ route('ficha_clinica.get_ficha') }}";
 
@@ -166,8 +262,6 @@
 
     function carga_dinamica(data)
     {
-        console.log('carga_dinamica');
-        console.log(data);
         // PACIENTE
         var paciente_id = data.paciente.id;
         var paciente_nombre = data.paciente.nombre;

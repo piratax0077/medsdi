@@ -572,6 +572,17 @@ class EscritorioProfesional extends Controller
         return 'ok';
     }
 
+    public function validar_email_paciente(Request $request)
+    {
+        $email = Paciente::where('email', $request->email)->first();
+
+        if (isset($email) || $email != '') {
+            return 'fail';
+        }
+
+        return 'ok';
+    }
+
     public function registro()
     {
         return view('auth.Registros.registro_profesional');
@@ -888,9 +899,9 @@ class EscritorioProfesional extends Controller
             $ficha_atencion = FichaAtencion::where('id_profesional', $profesional->id)->distinct()->get(['id_paciente']);
             $prevision = Prevision::all();
             $region = Region::all();
-            $paciente = [];
+            $pacientes = [];
             foreach ($ficha_atencion as $f) {
-                array_push($paciente, $f->Paciente()->first());
+                array_push($pacientes, $f->Paciente()->first());
             }
             //code...
             $asunto = $req->asunto;
@@ -1790,6 +1801,7 @@ class EscritorioProfesional extends Controller
             'lugares' => $lugares,
             'region' => $region,
             'id_profesional' => $profesional->id,
+            'profesional' => $profesional,
         ]);
     }
 
@@ -1864,7 +1876,7 @@ class EscritorioProfesional extends Controller
             $ho = explode(',', $hor->dia);
             // dd($ho);
             foreach ($ho as $h) {
-                if ($h == '1') {
+                if ($h == '0') {
                     $horario_agenda = str_replace($h, '', $horario_agenda);
                 } else {
                     $horario_agenda = str_replace(',' . $h, '', $horario_agenda);
@@ -2322,8 +2334,37 @@ class EscritorioProfesional extends Controller
             return json_encode(array(
                     'estado' => 'error',
                     'id_profesional' => $profesional->id,
-                    'msj' => 'Paciente ya tiene Hora para este dia'
+                    'msj' => 'PACIENTE TIENE HORA AGENDADA PARA ESTE DIA'
                     ));
+        }
+        else
+        {
+
+            $hora_cunsulta = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
+
+            // DB::enableQueryLog(); // Habilitar el registro de consultas
+
+            $validar = HoraMedica::where('id_paciente', $paciente->id)
+                                ->whereIn('id_estado',[1,2,4,5,6,8])
+                                ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
+                                ->where(function($query) use ($hora_cunsulta) {
+                                    $query->whereTime('hora_inicio','>=', $hora_cunsulta)
+                                        ->orWhereTime('hora_termino','<=', $hora_cunsulta);
+                                })
+                                ->first();
+
+            // $queries = DB::getQueryLog();
+            // dd($queries);
+
+            if($validar)
+            {
+                return json_encode(array(
+                        'estado' => 'error',
+                        'id_profesional' => $profesional->id,
+                        'msj' => 'PACIENTE TIENE HORA AGENDADA PARA ESTE DÍA EN OTRO LUGAR DE ATENCIÓN'
+                        ));
+            }
+
         }
 
         /** buscar tiempo de la consult */

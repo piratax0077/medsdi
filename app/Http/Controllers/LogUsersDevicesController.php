@@ -782,6 +782,50 @@ class LogUsersDevicesController extends Controller
                         }
                     break;
 
+                    case 17: // CONFIDENCIAL
+                        $data = json_decode($value['msg'],false);
+                        $id = $data->id;
+                        $nombre = $data->nombre;
+                        $fecha = $data->fecha;
+                        // $profesional = $data->profesional;
+                        /** peticion */
+                        $value['msg_estado'] = "Se necesita <span class='color-azul txt_bold'>Autorización</span> para la visualizar Confidenciales";
+
+                        /** resultado */
+                        switch($value['estado'])
+                        {
+                            case 1:
+                                $value['msg_body'] = "<span class='color-azul txt_bold'>Autorización</span> para visualizar confidenciales<br>";
+                            break;
+                            case 2:
+                                $value['msg_body'] = "<span class='color-azul txt_bold'>Autorización</span> para visualizar confidenciales<br>";
+                            break;
+                            case 3:
+                                $value['msg_body'] = "<span class='color-azul txt_bold'>Autorización</span> para visualizar confidenciales<br>";
+                            break;
+                            case 4:
+                                $value['msg_body'] = "<span class='color-azul txt_bold'>Autorización</span> para visualizar confidenciales<br>";
+                            break;
+                        }
+
+                        /** lista log */
+                        switch($value['estado'])
+                        {
+                           case 1:
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>Autorizada</span> visualizar confidenciales</p><br>";
+                           break;
+                           case 2:
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Rechazada</span> visualizar confidenciales</p><br>";
+                           break;
+                           case 3:
+                               $msg_html_estructura = "<p><span class='color-rojo txt_bold'>Cancelada</span> visualizar confidenciales</p><br>";
+                           break;
+                           case 4:
+                               $msg_html_estructura = "<p><span class='color-verde txt_bold'>visualizar confidenciales<span class='color-rojo txt_bold'>Expirada</span></span></p><br>";
+                           break;
+                        }
+                    break;
+
                 }
 
 

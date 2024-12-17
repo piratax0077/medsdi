@@ -33,82 +33,26 @@
     -ms-transition: all 0.4s ease-out;
 }
 
-.btn-agenda-cons {
-    display: block;
-    width: 148px;
-    height: 30px;
-    padding-left: 3px;
-    font-weight: 600;
-    font-size: 0.7rem;
-    position: fixed;
-    right: -63px;
-    color: #fff;
-    top: 97px;
-    text-align: center;
+.caja-boton-flotante-tipo-agenda {
+    display: flex;
+    flex-direction: column;
+    align-content: stretch;
+    align-items: center;
+    justify-content: space-evenly;
+    position: absolute;
+    top: 171px;
+    right: -71px;
+    flex-wrap: nowrap;
+}
+
+.btn-tipo-agenda {
     z-index: 1000000000;
     cursor: pointer;
     transform: rotate(90deg);
-    padding-bottom: 5px;
-    padding-top: 6px;
-    padding-left: 3px;
-    padding-right: 3px;
-    background-color: #1cbebe;
+    margin-bottom: 153px;
+    width: 183px;
 }
 
-.btn-agenda-cons:hover {
-    color: #fff;
-}
-
-.btn-agenda-tel {
-    display: block;
-    width: 160px;
-    height: 30px;
-    padding-left: 3px;
-    font-weight: 600;
-    font-size: 0.68rem;
-    position: fixed;
-    right: -68px;
-    padding-bottom: 5px;
-    padding-top: 6px;
-    padding-left: 3px;
-    padding-right: 3px;
-    color: #fff;
-    top: 270px;
-    text-align: center;
-    z-index: 1000000000;
-    cursor: pointer;
-    transform: rotate(90deg);
-    background-color: #387fb6;
-}
-
-
-.btn-agenda-tel:hover {
-    color: #fff;
-}
-
-.btn-agenda-exa {
-    display: block;
-    width: 160px;
-    height: 30px;
-    padding-left: 3px;
-    font-weight: 600;
-    font-size: 0.68rem;
-    position: fixed;
-    right: -68px;
-    padding-bottom: 5px;
-    padding-top: 6px;
-    padding-left: 3px;
-    padding-right: 3px;
-    color: #fff;
-    top: 447px;
-    text-align: center;
-    z-index: 1000000000;
-    cursor: pointer;
-    transform: rotate(90deg);
-    background-color: #387fb6;
-}
-
-
-.btn-agenda-exa:hover {
+.btn-tipo-agenda:hover {
     color: #fff;
 }

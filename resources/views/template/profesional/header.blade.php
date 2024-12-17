@@ -10,6 +10,7 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ml-auto">
+
                 @if(isset($mensajes))
                     @if(count($mensajes) > 0)
                         <li>
@@ -24,17 +25,25 @@
                                     <ul></ul>
                                     <ul class="pro-body">
                                         @foreach ($mensajes as $mensaje)
-                                            <li>
-                                                <a href="{{ route('profesional.mensaje', ['id' => $mensaje->id]) }}" class="dropdown-item">
-                                                    <div class="media">
-                                                        <img class="img-radius img-40" src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="Foto de perfil" style="width: 50px;">
-                                                        <div class="media-body ml-3">
-                                                            <h6 class="pro-title">{{ $mensaje->datos_mensaje['titulo'] }}</h6>
-                                                            <p class="pro-date">{{ $mensaje->created_at->diffForHumans() }}</p>
+                                            @if (isset($mensaje->datos_mensaje))
+
+                                                <li>
+                                                    <a href="{{ route('profesional.mensaje', ['id' => $mensaje->id]) }}" class="dropdown-item">
+                                                        <div class="media">
+                                                            <img class="img-radius img-40" src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="Foto de perfil" style="width: 50px;">
+                                                            <div class="media-body ml-3">
+                                                                @if (array_key_exists('titulo', $mensaje->datos_mensaje))
+                                                                    <h6 class="pro-title">{{ $mensaje->datos_mensaje['titulo'] }}</h6>
+                                                                @else
+                                                                    <h6 class="pro-title">Sin titulo</h6>
+                                                                @endif
+                                                                <p class="pro-date">{{ $mensaje->created_at->diffForHumans() }}</p>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </a>
-                                            </li>
+                                                    </a>
+                                                </li>
+
+                                            @endif
                                         @endforeach
                                     </ul>
                                 </div>
