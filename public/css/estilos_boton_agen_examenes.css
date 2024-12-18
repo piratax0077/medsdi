@@ -23,7 +23,7 @@
     margin-bottom: 143px;
     width: auto;
     color: #fff;
-  
+
 }
 
 .btn-tipo-agenda:hover {
@@ -43,8 +43,21 @@
     z-index: 2000000;
 }
 
+.botones-container-asistente
+{
+    top: 42%; /* Posición centrada verticalmente */
+    width:80px;
+    position: fixed; /* Fija la posición en la pantalla */
+    right: 0; /* Pegado al lado derecho */
+    transform: translateY(-50%); /* Ajuste para centrar */
+    display: flex;
+    flex-direction: column; /* Organiza los botones verticalmente */
+    gap: 100px; /* Espacio entre botones */
+    z-index: 2000000;
+}
+
     /* Estilos generales de los botones */
-    .boton {
+.boton {
     transform: rotate(90deg);
     display: flex;
     align-items: center;
@@ -69,7 +82,7 @@
     background-color: #6d3b9f;
 }
 
-   
+
 
     /* Icono al inicio del botón */
     .boton i {

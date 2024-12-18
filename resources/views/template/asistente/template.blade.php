@@ -528,8 +528,9 @@
                 fecha = '{{ date("Y-m-d") }}';
             }
 
-            $('.btn-tipo-agenda').css('background-color','#387fb6');
+            $('.boton').css('background-color','#8b52c2');
             $('.btn-agenda-'+tipo_agenda).css('background-color','#1cbebe');
+
             $('#id_tipo_agenda').val(tipo_agenda);
 
             switch (parseInt(tipo_agenda)) {
@@ -1517,6 +1518,20 @@
                     data = JSON.parse(data);
                     if(data.tipo_paciente == 'SI')
                     {
+                        {{-- validacion para especialidad de pediatria --}}
+                        @if (isset($profesional))
+                            @if ($profesional->id_tipo_especialidad == 11)
+                                if (data.edad > 18) {
+                                    swal({
+                                        title: "Reserva de hora",
+                                        text: "El paciente es mayor de edad, el profesional es Pediatrico",
+                                        icon: "warning",
+                                        buttons: "Aceptar",
+                                    });
+                                }
+                            @endif
+                        @endif
+
                         $('.paciente_view').show();
                         $('.paciente_edit').hide();
 

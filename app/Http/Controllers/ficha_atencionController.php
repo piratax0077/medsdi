@@ -9673,7 +9673,7 @@ class ficha_atencionController extends Controller
                                         $hora->fecha_realizacion_consulta = now();
                                         $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
                                         $hora->save();
-                                        // $ficha_actual_nueva = $nueva_ficha_atencion->id;
+                                        $ficha_actual_nueva = $nueva_ficha_atencion;
                                     }
                                     else
                                     {

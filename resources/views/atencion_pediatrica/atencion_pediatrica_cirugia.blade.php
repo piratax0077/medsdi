@@ -124,5 +124,5 @@
     </div>
     <!--Cierre: Container Completo-->
 	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
+	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
 @endsection
-@include('app.profesional.modales.boton_flotante_agenda_autorizacion')

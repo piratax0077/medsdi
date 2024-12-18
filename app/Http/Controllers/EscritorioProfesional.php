@@ -2349,7 +2349,7 @@ class EscritorioProfesional extends Controller
                                 ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
                                 ->where(function($query) use ($hora_cunsulta) {
                                     $query->whereTime('hora_inicio','>=', $hora_cunsulta)
-                                        ->orWhereTime('hora_termino','<=', $hora_cunsulta);
+                                        ->whereTime('hora_termino','<=', $hora_cunsulta);
                                 })
                                 ->first();
 
