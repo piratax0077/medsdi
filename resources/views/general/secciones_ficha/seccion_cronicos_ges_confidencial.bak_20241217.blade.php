@@ -165,12 +165,13 @@
 <!-- MODAL CRONICO -->
 <!--******* Modal: ¿Enfermo crónico? *******-->
 <div id="form_enfermedad_cronica" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="form_enfermedad_cronica" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content bg-light">
             <div class="modal-header bg-info">
+
                 <div class="row">
                     <div class="col-md-6">
-                        <h5 class="modal-title text-white">Control de enfermedades crónicas</h5>
+                        <h5 class="modal-title text-white">Control de Enfermedades Crónicas</h5>
                     </div>
                     <div class="col-md-6">
                         <select class="form-control form-control-sm" onchange="cambiar_enfermedad_cronica();" id="cronicos" name="cronicos" >
@@ -194,10 +195,10 @@
                 <div id="control_peso_div"  style="display:">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h5 class="f-20 text-center text-c-blue">Control obesidad</h5>
+                            <h5 class="t-aten-dos text-center">Control obesidad</h5>
                         </div>
                     </div>
-                    <div class="card-informacion">
+                    <div class="card">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-3">
@@ -239,7 +240,7 @@
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
                                                     <button type="button" onclick="registrar_control_obesidad();"
-                                                    class="btn btn-info btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
+                                                    class="btn btn-info-light-c btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -300,7 +301,7 @@
                                                 <div class="form-row ">
                                                     <div class="col-sm-6 mt-2">
                                                         <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Medicamento</label>
+                                                            <label class="floating-label">Medicamento</label>
                                                             <input type="text" id="nombre_medicamento_cpeso" name="nombre_medicamento_cpeso" onblur="getDosis_cronico('cpeso');" class="form-control form-control-sm">
                                                             <input type="hidden" id="id_medicamento_cpeso" name="id_medicamento_cpeso" class="form-control " value="">
                                                             <input type="hidden" id="id_medicamento_tipo_control_cpeso" name="id_medicamento_tipo_control_cpeso" class="form-control" value="">
@@ -316,7 +317,7 @@
                                                     {{--  CUANDO SE ENCUENTRA MEDICAMENTO EN BUSQUEDA  --}}
                                                     <div class="col-sm-6 mt-2 medicamento_activo">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Presentación</label>
+                                                            <label class="floating-label">Presentación</label>
                                                             <select class="form-control form-control-sm" id="dosis_medicamento_cpeso" name="dosis_medicamento_cpeso" onchange="getFrecuencia_cronico('cpeso');getCantComp_cronico('cpeso');">
                                                                 <option>Seleccione una opción</option>
                                                             </select>
@@ -324,7 +325,7 @@
                                                     </div>
                                                     <div class="col-sm-6 mt-2 medicamento_activo">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Posología</label>
+                                                            <label class="floating-label">Posología</label>
                                                             <select class="form-control form-control-sm" id="frecuencia_medicamento_cpeso"
                                                                 name="frecuencia_medicamento_cpeso">
                                                                 <option>Seleccione una opción</option>
@@ -334,19 +335,19 @@
                                                     {{--  SI NO SE ENCUENTRA EL MEDICAMENTO EN LA BUSQUEDA  --}}
                                                     <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Presentación</label>
+                                                            <label class="floating-label">Presentación</label>
                                                             <input type="text" name="dosis_medicamento_cpeso_2" id="dosis_medicamento_cpeso_2" class="form-control form-control-sm ">
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Posología</label>
+                                                            <label class="floating-label">Posología</label>
                                                             <input type="text" name="frecuencia_medicamento_cpeso_2" id="frecuencia_medicamento_cpeso_2" class="form-control form-control-sm ">
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 mt-2">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Vía de Administración</label>
+                                                            <label class="floating-label">Vía de Administración</label>
                                                             <select class="form-control form-control-sm" id="via_administracion_cpeso" name="via_administracion_cpeso" onchange="validar_via_administracion_cronico('cpeso');">
                                                                 <option value="0">Seleccione</option>
                                                                 <option value="1">V&iacute;a Oral</option>
@@ -363,13 +364,13 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group fill" id="div_observaciones_medicamento_cpeso" style="display: none;">
-                                                            <label class="floating-label-activo-sm">Otra vía de Administración</label>
+                                                            <label class="floating-label">Otra vía de Administración</label>
                                                             <input type="text" id="observaciones_medicamento_cpeso" name="observaciones_medicamento_cpeso" class="form-control form-control-sm " disabled >
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 mt-2">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Periodo</label>
+                                                            <label class="floating-label">Periodo</label>
                                                             <select class="form-control form-control-sm" id="periodo_cpeso" name="periodo_cpeso" onchange="validar_periodo_cronico('cpeso');">
                                                                 <option value="0">Seleccione</option>
                                                                 <option value="1">SOS</option>
@@ -391,37 +392,34 @@
                                                         </div>
                                                     </div>
                                                     {{-- cantidad de medicamento a despachar o comprar    --}}
-                                                    <div class="col-sm-6">
-                                                        <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Cantidad a comprar o despachar</label>
+                                                    <div class="col-sm-6 mt-2">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label">Cantidad Comprar/Despachar</label>
                                                             <select class="form-control form-control-sm" id="cantidad_comprar_cpeso" name="cantidad_comprar_cpeso" onchange="validar_cantidad_comprar_cronico('cpeso');">
                                                                 <option value="0">Seleccione</option>
-                                                                <option value="999">Otra cantidad</option>
+                                                                <option value="999">Otra Cantidad</option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group" id="div_otra_cantidad_a_comprar_cpeso" style="display: none;">
-                                                            <label class="floating-label-activo-sm">Otra cantidad</label>
+                                                        <div class="form-group fill" id="div_otra_cantidad_a_comprar_cpeso" style="display: none;">
+                                                            <label class="floating-label">Otra Cantidad</label>
                                                             <input type="text" id="otra_cantidad_a_comprar_cpeso" name="otra_cantidad_a_comprar_cpeso" class="form-control form-control-sm " disabled >
                                                         </div>
                                                     </div>
 
                                                     <div class="col-sm-12 col-md-6  col-lg-6 col-xl-6 p-0">
-                                                        <button class="btn btn-success btn-block btn-sm" type="button" onclick="agregar_medicamento_cronico_patologia('cpeso')" id="btn_registro_med_cpeso"><i class="fa fa-plus"></i> Registrar</button>
+                                                        <button class="btn btn-success-light-c btn-block btn-sm" type="button" onclick="agregar_medicamento_cronico_patologia('cpeso')" id="btn_registro_med_cpeso"><i class="fa fa-plus"></i> Registrar</button>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div id="cpeso-med">
-
                                             </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 mx-auto text-center">
-                                                    @if (!empty(session('lic_token')) && session('lic_token') == 1)
-                                                        <button type="button" class="btn btn-info btn_agregar_medicamento text-center" onclick="agregar_a_receta('cpeso')"><i class="feather icon-check"></i> Agregar Medicamento a Receta</button>
-                                                    @else
-                                                        <button type="button" class="btn btn-info btn_agregar_medicamento text-center" onclick="agregar_a_receta('cpeso')" disabled="disabled"><i class="feather icon-check"></i> Agregar Medicamento a Receta</button>
-                                                    @endif
-                                                </div>
+                                            <div>
+                                                @if (!empty(session('lic_token')) && session('lic_token') == 1)
+                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('cpeso')">Agregar Medicamento a Receta</button>
+                                                @else
+                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('cpeso')" disabled="disabled">Agregar Medicamento a Receta</button>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -435,7 +433,7 @@
                 <div id="hipertension_div" style="display: none">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h5 class="f-20 text-center text-c-blue"Control hipertensión</h5>
+                            <h5 class="t-aten-dos text-center">Control hipertensión</h5>
                         </div>
                     </div>
                     <div class="card">
@@ -483,7 +481,7 @@
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-6 col-lg-3 col-xl-3">
                                                     <button type="button" onclick="registrar_hipertension();"
-                                                    class="btn btn-info btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
+                                                    class="btn btn-info-light-c btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -541,7 +539,7 @@
                                                 <div class="form-row ">
                                                     <div class="col-sm-6 mt-2">
                                                         <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Medicamento</label>
+                                                            <label class="floating-label">Medicamento</label>
                                                             <input type="text" id="nombre_medicamento_chipertension" name="nombre_medicamento_chipertension" onblur="getDosis_cronico('chipertension');" class="form-control form-control-sm">
                                                             <input type="hidden" id="id_medicamento_chipertension" name="id_medicamento_chipertension" class="form-control " value="">
                                                             <input type="hidden" id="id_medicamento_tipo_control_chipertension" name="id_medicamento_tipo_control_chipertension" class="form-control" value="">
@@ -557,7 +555,7 @@
                                                     {{--  CUANDO SE ENCUENTRA MEDICAMENTO EN BUSQUEDA  --}}
                                                     <div class="col-sm-6 mt-2 medicamento_activo">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Presentación</label>
+                                                            <label class="floating-label">Presentación</label>
                                                             <select class="form-control form-control-sm" id="dosis_medicamento_chipertension" name="dosis_medicamento_chipertension" onchange="getFrecuencia_cronico('chipertension');getCantComp_cronico('chipertension');">
                                                                 <option>Seleccione una opción</option>
                                                             </select>
@@ -565,7 +563,7 @@
                                                     </div>
                                                     <div class="col-sm-6 mt-2 medicamento_activo">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Posología</label>
+                                                            <label class="floating-label">Posología</label>
                                                             <select class="form-control form-control-sm" id="frecuencia_medicamento_chipertension"
                                                                 name="frecuencia_medicamento_chipertension">
                                                                 <option>Seleccione una opción</option>
@@ -575,19 +573,19 @@
                                                     {{--  SI NO SE ENCUENTRA EL MEDICAMENTO EN LA BUSQUEDA  --}}
                                                     <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Presentación</label>
+                                                            <label class="floating-label">Presentación</label>
                                                             <input type="text" name="dosis_medicamento_chipertension_2" id="dosis_medicamento_chipertension_2" class="form-control form-control-sm ">
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Posología</label>
+                                                            <label class="floating-label">Posología</label>
                                                             <input type="text" name="frecuencia_medicamento_chipertension_2" id="frecuencia_medicamento_chipertension_2" class="form-control form-control-sm ">
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 mt-2">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Vía de Administración</label>
+                                                            <label class="floating-label">Vía de Administración</label>
                                                             <select class="form-control form-control-sm" id="via_administracion_chipertension" name="via_administracion_chipertension" onchange="validar_via_administracion_cronico('chipertension');">
                                                                 <option value="0">Seleccione</option>
                                                                 <option value="1">V&iacute;a Oral</option>
@@ -604,13 +602,13 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group fill" id="div_observaciones_medicamento_chipertension" style="display: none;">
-                                                            <label class="floating-label-activo-sm">Otra vía de Administración</label>
+                                                            <label class="floating-label">Otra vía de Administración</label>
                                                             <input type="text" id="observaciones_medicamento_chipertension" name="observaciones_medicamento_chipertension" class="form-control form-control-sm " disabled >
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 mt-2">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Periodo</label>
+                                                            <label class="floating-label">Periodo</label>
                                                             <select class="form-control form-control-sm" id="periodo_chipertension" name="periodo_chipertension" onchange="validar_periodo_cronico('chipertension');">
                                                                 <option value="0">Seleccione</option>
                                                                 <option value="1">SOS</option>
@@ -627,42 +625,38 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group fill" id="div_observaciones_periodo_chipertension" style="display: none;">
-                                                            <label class="floating-label-activo-sm">Otro Periodo</label>
+                                                            <label class="floating-label">Otro Periodo</label>
                                                             <input type="text" id="observaciones_periodo_chipertension" name="observaciones_periodo_chipertension" class="form-control form-control-sm " disabled >
                                                         </div>
                                                     </div>
                                                     {{-- cantidad de medicamento a despachar o comprar    --}}
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-6 mt-2">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Cantidad a Comprar o Despachar</label>
+                                                            <label class="floating-label">Cantidad Comprar/Despachar</label>
                                                             <select class="form-control form-control-sm" id="cantidad_comprar_chipertension" name="cantidad_comprar_chipertension" onchange="validar_cantidad_comprar_cronico('chipertension');">
                                                                 <option value="0">Seleccione</option>
-                                                                <option value="999">Otra cantidad</option>
+                                                                <option value="999">Otra Cantidad</option>
                                                             </select>
                                                         </div>
                                                         <div class="form-group fill" id="div_otra_cantidad_a_comprar_chipertension" style="display: none;">
-                                                            <label class="floating-label-activo-sm">Otra Cantidad</label>
+                                                            <label class="floating-label">Otra Cantidad</label>
                                                             <input type="text" id="otra_cantidad_a_comprar_chipertension" name="otra_cantidad_a_comprar_chipertension" class="form-control form-control-sm " disabled >
                                                         </div>
                                                     </div>
 
                                                     <div class="col-sm-12 col-md-6  col-lg-6 col-xl-6 p-0">
-                                                        <button class="btn btn-success btn-block btn-sm" type="button" onclick="agregar_medicamento_cronico_patologia('chipertension')" id="btn_registro_med_chipertension"><i class="fa fa-plus"></i> Registrar</button>
+                                                        <button class="btn btn-success-light-c btn-block btn-sm" type="button" onclick="agregar_medicamento_cronico_patologia('chipertension')" id="btn_registro_med_chipertension"><i class="fa fa-plus"></i> Registrar</button>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div id="chipertension-med">
                                             </div>
                                             <div>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 mx-auto text-center">
                                                 @if (!empty(session('lic_token')) && session('lic_token') == 1)
-                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento text-center" onclick="agregar_a_receta('chipertension')"><i class="feather icon-check"></i>Agregar Medicamento a Receta</button>
+                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('chipertension')">Agregar Medicamento a Receta</button>
                                                 @else
-                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento text-center" onclick="agregar_a_receta('chipertension')" disabled="disabled"><i class="feather icon-check"></i>Agregar Medicamento a Receta</button>
+                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('chipertension')" disabled="disabled">Agregar Medicamento a Receta</button>
                                                 @endif
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -676,7 +670,7 @@
                 <div id="diabetes_div"  style="display: none">
                      <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h5 class="f-20 text-center text-c-blue">Control diabetes</h5>
+                            <h5 class="t-aten-dos text-center">Control diabetes</h5>
                         </div>
                     </div>
                     <div class="card">
@@ -740,7 +734,7 @@
                                                 </div>
                                                 <div class="form-group col-sm-12 col-md-3">
                                                     <button type="button" onclick="registrar_diabetes();"
-                                                        class="btn btn-info btn-sm btn-block"><i
+                                                        class="btn btn-info-light-c btn-sm btn-block"><i
                                                             class="feather icon-save"></i> Guardar control</button>
                                                 </div>
                                             </div>
@@ -811,7 +805,7 @@
                                                 <div class="form-row ">
                                                     <div class="col-sm-6 mt-2">
                                                         <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Medicamento</label>
+                                                            <label class="floating-label">Medicamento</label>
                                                             <input type="text" id="nombre_medicamento_cdiabet" name="nombre_medicamento_cdiabet" onblur="getDosis_cronico('cdiabet');" class="form-control form-control-sm">
                                                             <input type="hidden" id="id_medicamento_cdiabet" name="id_medicamento_cdiabet" class="form-control " value="">
                                                             <input type="hidden" id="id_medicamento_tipo_control_cdiabet" name="id_medicamento_tipo_control_cdiabet" class="form-control" value="">
@@ -827,7 +821,7 @@
                                                     {{--  CUANDO SE ENCUENTRA MEDICAMENTO EN BUSQUEDA  --}}
                                                     <div class="col-sm-6 mt-2 medicamento_activo">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Presentación</label>
+                                                            <label class="floating-label">Presentación</label>
                                                             <select class="form-control form-control-sm" id="dosis_medicamento_cdiabet" name="dosis_medicamento_cdiabet" onchange="getFrecuencia_cronico('cdiabet');getCantComp_cronico('cdiabet');">
                                                                 <option>Seleccione una opción</option>
                                                             </select>
@@ -835,7 +829,7 @@
                                                     </div>
                                                     <div class="col-sm-6 mt-2 medicamento_activo">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Posología</label>
+                                                            <label class="floating-label">Posología</label>
                                                             <select class="form-control form-control-sm" id="frecuencia_medicamento_cdiabet"
                                                                 name="frecuencia_medicamento_cdiabet">
                                                                 <option>Seleccione una opción</option>
@@ -845,19 +839,19 @@
                                                     {{--  SI NO SE ENCUENTRA EL MEDICAMENTO EN LA BUSQUEDA  --}}
                                                     <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Presentación</label>
+                                                            <label class="floating-label">Presentación</label>
                                                             <input type="text" name="dosis_medicamento_cdiabet_2" id="dosis_medicamento_cdiabet_2" class="form-control form-control-sm ">
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Posología</label>
+                                                            <label class="floating-label">Posología</label>
                                                             <input type="text" name="frecuencia_medicamento_cdiabet_2" id="frecuencia_medicamento_cdiabet_2" class="form-control form-control-sm ">
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 mt-2">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Vía de Administración</label>
+                                                            <label class="floating-label">Vía de Administración</label>
                                                             <select class="form-control form-control-sm" id="via_administracion_cdiabet" name="via_administracion_cdiabet" onchange="validar_via_administracion_cronico('cdiabet');">
                                                                 <option value="0">Seleccione</option>
                                                                 <option value="1">V&iacute;a Oral</option>
@@ -874,13 +868,13 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group fill" id="div_observaciones_medicamento_cdiabet" style="display: none;">
-                                                            <label class="floating-label-activo-sm">Otra vía de Administración</label>
+                                                            <label class="floating-label">Otra vía de Administración</label>
                                                             <input type="text" id="observaciones_medicamento_cdiabet" name="observaciones_medicamento_cdiabet" class="form-control form-control-sm " disabled >
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 mt-2">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Periodo</label>
+                                                            <label class="floating-label">Periodo</label>
                                                             <select class="form-control form-control-sm" id="periodo_cdiabet" name="periodo_cdiabet" onchange="validar_periodo_cronico('cdiabet');">
                                                                 <option value="0">Seleccione</option>
                                                                 <option value="1">SOS</option>
@@ -897,42 +891,38 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group fill" id="div_observaciones_periodo_cdiabet" style="display: none;">
-                                                            <label class="floating-label-activo-sm">Otro Periodo</label>
+                                                            <label class="floating-label">Otro Periodo</label>
                                                             <input type="text" id="observaciones_periodo_cdiabet" name="observaciones_periodo_cdiabet" class="form-control form-control-sm " disabled >
                                                         </div>
                                                     </div>
                                                     {{-- cantidad de medicamento a despachar o comprar    --}}
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-6 mt-2">
                                                         <div class="form-group fill">
-                                                            <label class="floating-label-activo-sm">Cantidad a Comprar o Despachar</label>
+                                                            <label class="floating-label">Cantidad Comprar/Despachar</label>
                                                             <select class="form-control form-control-sm" id="cantidad_comprar_cdiabet" name="cantidad_comprar_cdiabet" onchange="validar_cantidad_comprar_cronico('cdiabet');">
                                                                 <option value="0">Seleccione</option>
                                                                 <option value="999">Otra Cantidad</option>
                                                             </select>
                                                         </div>
                                                         <div class="form-group fill" id="div_otra_cantidad_a_comprar_cdiabet" style="display: none;">
-                                                            <label class="floating-label-activo-sm">Otra Cantidad</label>
+                                                            <label class="floating-label">Otra Cantidad</label>
                                                             <input type="text" id="otra_cantidad_a_comprar_cdiabet" name="otra_cantidad_a_comprar_cdiabet" class="form-control form-control-sm " disabled >
                                                         </div>
                                                     </div>
 
                                                     <div class="col-sm-12 col-md-6  col-lg-6 col-xl-6 p-0">
-                                                        <button class="btn btn-success btn-block btn-sm" type="button" onclick="agregar_medicamento_cronico_patologia('cdiabet')" id="btn_registro_med_cdiabet"><i class="fa fa-plus"></i> Registrar</button>
+                                                        <button class="btn btn-success-light-c btn-block btn-sm" type="button" onclick="agregar_medicamento_cronico_patologia('cdiabet')" id="btn_registro_med_cdiabet"><i class="fa fa-plus"></i> Registrar</button>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div id="cdiabet-med">
                                             </div>
                                             <div>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8 mx-auto text-center">
                                                 @if (!empty(session('lic_token')) && session('lic_token') == 1)
-                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento text-center" onclick="agregar_a_receta('cdiabet')"><i class="feather icon-check"></i>Agregar Medicamento a Receta</button>
+                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('cdiabet')">Agregar Medicamento a Receta</button>
                                                 @else
-                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento text-center" onclick="agregar_a_receta('cdiabet')" disabled="disabled"><i class="feather icon-check"></i>Agregar Medicamento a Receta</button>
+                                                    <button type="button" class="btn btn-success-light-c btn_agregar_medicamento  btn-block btn-sm" onclick="agregar_a_receta('cdiabet')" disabled="disabled">Agregar Medicamento a Receta</button>
                                                 @endif
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -946,7 +936,7 @@
                 <div id="cinsufren_div" style="display:none;">
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h5 class="f-20 text-center text-c-blue">Insuficiencia renal</h5>
+                            <h5 class="t-aten-dos text-center">Insuficiencia renal</h5>
                         </div>
                     </div>
                     <div class="card">
@@ -989,7 +979,7 @@
                                                 </div>
                                                 <div class="form-group col-sm-4 col-md-4">
                                                     <button type="button" onclick="registrar_control_insuficiencia_renal();"
-                                                    class="btn btn-info btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
+                                                    class="btn btn-info-light-c btn-sm btn-block"><i class="feather icon-save"></i> Guardar control</button>
                                                 </div>
                                             </div>
 
@@ -1084,7 +1074,7 @@
                     {{--
                     <div class="row">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <h5 class="f-20 text-center text-c-blue">Marcadores Tumorales</h5>
+                            <h5 class="t-aten-dos text-center">Marcadores Tumorales</h5>
                         </div>
                     </div>
                     <div class="card">
@@ -1209,13 +1199,13 @@
                 </div>
 
                 <div id="creumato_div" style="display:none;">
-                    <h4 class="azul">En construcción</h4>
-                    <img src="{{ asset('images/pages/discount.svg') }}" alt="" class="img-fluid mb-4 wid-90">
+                    <h3 class="azul">En construcción</h3>
+                    <img src="{{ asset('images/pages/discount.svg') }}" alt="" class="img-fluid mb-4 wid-100">
                 </div>
 
                 <div id="clitemia_div" style="display:none;">
-                    <h4 class="azul">En construcción</h4>
-                    <img src="{{ asset('images/pages/discount.svg') }}" alt="" class="img-fluid mb-4 wid-90">
+                    <h3 class="azul">En construcción</h3>
+                    <img src="{{ asset('images/pages/discount.svg') }}" alt="" class="img-fluid mb-4 wid-100">
                 </div>
 
             </div>
@@ -1234,7 +1224,7 @@
             <div class="modal-header bg-info">
 				<div class="row">
 					<div class="col-md-7">
-						<h5 class="modal-title text-white">Seleccione antecedente</h5>
+						<h5 class="modal-title text-white">Seleccione  Aquí Nuevo antecedente</h5>
 					</div>
 					<div class="col-md-5">
 						<select class="form-control form-control-sm" onchange="cambiar_antecedente();" id="nuevo_antecedente" name="nuevo_antecedente" onchange="mostrar(this.value);">
@@ -1254,53 +1244,53 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <h5 class="text-c-blue f-20 my-2 text-center" id="titulo_antecedente">Añadir XXX</h5>
+                        <h5 class="t-aten-dos" id="titulo_antecedente">Añadir XXX</h5>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="card-informacion pt-3">
-                            <div class="col-md-12" id="modal-body-input">
-                            </div>
-                            <div class="col-md-12">
-                                <input type="hidden" value="" id="id-antecedente-m">
-                                <input type="hidden" value="" id="tipo-antecedente-m">
-                                <input type="hidden" value="{{ $paciente->rut }}" id="user-rut">
-                                <input type="hidden" value="{{ $profesional->Especialidad()->first()->nombre }}" id="user-profesion">
-                                <input type="hidden" value="{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}" id="user-profesional">
-                                <input type="hidden" value="{{Auth::user()->id}}" id="user-id">
-                                <button type="button" class="btn btn-sm btn-info text-center" id="agregar-antecedente" onclick="agregarAntecedente()"><i class="feather icon-save"></i> Agregar antecedentes</button>
-                                <button type="button" class="btn btn-sm btn-info" id="modificar-antecedente" onclick="modificarAntecedente()"><i class="feather icon-edit"></i> Modificar antecedentes</button>
-                                <button type="button" class="btn btn-sm btn-danger" id="modificar-antecedente-cancelar" onclick="cancelarModificar()"><i class="feather icon-x"></i> Cancelar Modificar</button>
-                                {{-- <button type="button" class="btn btn-sm btn-danger-light-c" data-dismiss="modal" aria-label="Close"><i class="feather icon-x"></i> Cerrar</button> --}}
-                                {{-- <button type="button" class="btn btn-sm btn-danger-light-c" onclick="verModalAgregar('hide')"><i class="feather icon-x"></i> Cerrar</button> --}}
-                            </div>
-                            <div class="col-md-12 mt-3">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-xs" id="tabla_antecedentes">
-                                        <thead>
-                                            <tr>
-                                                <th>Procedimiento</th>
-                                                <th>Incidentes</th>
-                                                <th>Profesional</th>
-                                                <th>Fecha</th>
-                                                <th>Acción</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                    <div class="col-md-12" id="modal-body-input">
+                    </div>
+                    <div class="col-md-12">
+                        <input type="hidden" value="" id="id-antecedente-m">
+                        <input type="hidden" value="" id="tipo-antecedente-m">
+                        <input type="hidden" value="{{ $paciente->rut }}" id="user-rut">
+                        <input type="hidden" value="{{ $profesional->Especialidad()->first()->nombre }}" id="user-profesion">
+                        <input type="hidden" value="{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}" id="user-profesional">
+                        <input type="hidden" value="{{Auth::user()->id}}" id="user-id">
+                        <button type="button" class="btn btn-sm btn-primary-light-c" id="agregar-antecedente" onclick="agregarAntecedente()"><i class="feather icon-save"></i> Agregar antecedentes</button>
+                        <button type="button" class="btn btn-sm btn-primary-light-c" id="modificar-antecedente" onclick="modificarAntecedente()"><i class="feather icon-edit"></i> Modificar antecedentes</button>
+                        <button type="button" class="btn btn-sm btn-danger-light-c" id="modificar-antecedente-cancelar" onclick="cancelarModificar()"><i class="feather icon-x"></i> Cancelar Modificar</button>
+                        {{-- <button type="button" class="btn btn-sm btn-danger-light-c" data-dismiss="modal" aria-label="Close"><i class="feather icon-x"></i> Cerrar</button> --}}
+                        {{-- <button type="button" class="btn btn-sm btn-danger-light-c" onclick="verModalAgregar('hide')"><i class="feather icon-x"></i> Cerrar</button> --}}
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-xs" id="tabla_antecedentes">
+                                <thead>
+                                    <tr>
+                                        <th>Procedimiento</th>
+                                        <th>Incidentes</th>
+                                        <th>Profesional</th>
+                                        <th>Fecha</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-sm btn-danger-light-c" data-dismiss="modal" aria-label="Close"><i class="feather icon-x"></i> Cerrar Modal</button>
+                    </div>
+
                 </div>
+
             </div>
         </div>
     </div>
@@ -1710,7 +1700,7 @@
         if( peso == '' )
         {
             $('#registro_peso').focus();
-            mensaje += 'Debe ingresar el peso del control actual.\n';
+            mensaje += 'Debe ingresar el Peso del Control Actual.\n';
             validar = 1;
         }
         if( variacion == '' )
@@ -1929,16 +1919,15 @@
                 console.log(data);
                 console.log('-----------------------');
                 var html = '';
-                html += '<div class="table-responsive">';
-                html += '<table class="display table table-striped dt-responsive nowrap pb-4 table-sm" style="width:100%">';
+                html += '<table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">';
                 html += '<thead>';
                 html += '    <tr>';
-                html += '        <th class="align-middle">Nombre Medicamento</th>';
-                html += '        <th class="align-middle">Presentación</th>';
-                html += '        <th class="align-middle">Posología</th>';
-                html += '        <th class="align-middle">Cantidad Mensual</th>';
-                html += '        <th class="align-middle">Acción</th>';
-                html += '        <th class="align-middle">Check</th>';
+                html += '        <th class="text-center align-middle">Nombre Medicamento</th>';
+                html += '        <th class="text-center align-middle">Presentacion</th>';
+                html += '        <th class="text-center align-middle">Posologia</th>';
+                html += '        <th class="text-center align-middle">Cantidad Mensual</th>';
+                html += '        <th class="text-center align-middle">Acción</th>';
+                html += '        <th class="text-center align-middle">Check</th>';
                 html += '    </tr>';
                 html += '</thead>';
                 html += '<tbody>';
@@ -1947,12 +1936,12 @@
                     $.each(data.registros, function(index, value)
                     {
                         html += '<tr>';
-                        html += '    <td class=" align-middle">'+value.nombre_medicamento+'</td>';
-                        html += '    <td class=" align-middle">'+value.presentacion+'</td>';
-                        html += '    <td class=" align-middle">'+value.posologia+'</td>';
-                        html += '    <td class=" align-middle">'+value.cantidad+'</td>';
-                        html += '    <td class=" align-middle">';
-                        html += '        <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_med_cronico_patologia(\''+value.id+'\');"><i class="feather icon-x"></i></button>';
+                        html += '    <td class="align-left align-middle">'+value.nombre_medicamento+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.presentacion+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.posologia+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.cantidad+'</td>';
+                        html += '    <td class="text-center align-middle">';
+                        html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico_patologia(\''+value.id+'\');"><i class="feather icon-x"></i></button>';
                         html += '    </td>';
                         html += '    <td class="text-center align-middle">';
 
@@ -1978,7 +1967,6 @@
                 }
                 html += '</tbody>';
                 html += '</table>';
-                html += '</div>';
                 $('#'+tipo_enfermedad+'-med').html(html);
                 $('#descripcion_hipotesis').trigger('keyup');
             }
@@ -2029,7 +2017,7 @@
                 else{
 
                     swal({
-                        title: "Problema al eliminar Registro de Medicamento Crónico.",
+                        title: "Problema al Eliminar Registro de Medicamento Cronico.",
                         icon: "warning",
                         // buttons: "Aceptar",
                         //SuccessMode: true,
@@ -2039,7 +2027,7 @@
             else{
 
                 swal({
-                    title: "Problema al eliminar Registro de Medicamento Crónico.",
+                    title: "Problema al Eliminar Registro de Medicamento Cronico.",
                     icon: "warning",
                     // buttons: "Aceptar",
                     //SuccessMode: true,
@@ -2345,10 +2333,10 @@
                 var html = '';
                 html += '<thead>';
                 html += '    <tr>';
-                html += '        <th class="align-middle">Nombre Medicamento</th>';
-                html += '        <th class="align-middle">Cantidad Mensual</th>';
-                html += '        <th class="align-middle">Acción</th>';
-                html += '        <th class="align-middle">Check</th>';
+                html += '        <th class="text-center align-middle">Nombre Medicamento</th>';
+                html += '        <th class="text-center align-middle">Cantidad Mensual</th>';
+                html += '        <th class="text-center align-middle">Acción</th>';
+                html += '        <th class="text-center align-middle">Check</th>';
                 html += '    </tr>';
                 html += '</thead>';
                 html += '<tbody>';
@@ -2358,12 +2346,12 @@
                     $.each(data.registros, function(index, value)
                     {
                         html += '<tr>';
-                        html += '    <td class="align-middle">'+value.nombre_medicamento+'</td>';
-                        html += '    <td class="align-middle">'+value.cantidad+'</td>';
-                        html += '    <td class="align-middle">';
-                        html += '        <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_med_cronico_patologia(\''+value.id+'\');"><i class="feather icon-x"></i></button>';
+                        html += '    <td class="align-left align-middle">'+value.nombre_medicamento+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.cantidad+'</td>';
+                        html += '    <td class="text-center align-middle">';
+                        html += '        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_med_cronico_patologia(\''+value.id+'\');"><i class="feather icon-x"></i></button>';
                         html += '    </td>';
-                        html += '    <td class="align-middle">';
+                        html += '    <td class="text-center align-middle">';
                         html += '        <input type="checkbox" name="medicamento_cronico_patologia" id="medicamento_cronico_patologia_'+value.id+'">';
                         html += '    </td>';
                         html += '</tr>';
@@ -2418,8 +2406,8 @@
                 if(data.estado == 1)
                 {
                     swal({
-                        title: "Medicamento Crónico.",
-                        text: "Medicamento eliminado.",
+                        title: "Medicamento Cronico.",
+                        text: "Medicamento Eliminado.",
                         icon: "success",
                         // buttons: "Aceptar",
                         //SuccessMode: true,
@@ -2429,7 +2417,7 @@
                 else{
 
                     swal({
-                        title: "Problema al eliminar Registro de Medicamento Crónico.",
+                        title: "Problema al Eliminar Registro de Medicamento Cronico.",
                         icon: "warning",
                         // buttons: "Aceptar",
                         //SuccessMode: true,
@@ -2439,7 +2427,7 @@
             else{
 
                 swal({
-                    title: "Problema al eliminar Registro de Medicamento Crónico.",
+                    title: "Problema al Eliminar Registro de Medicamento Cronico.",
                     icon: "warning",
                     // buttons: "Aceptar",
                     //SuccessMode: true,
@@ -2497,11 +2485,11 @@
                 var html = '';
                 html += '<thead>';
                 html += '    <tr>';
-                html += '         <th class="align-middle">Nº Control</th>';
-                html += '         <th class="align-middle">Fecha</th>';
-                html += '         <th class="align-middle">Presión Sistólica</th>';
-                html += '         <th class="align-middle">Presión Diastólica</th>';
-                html += '         <th class="align-middle">Presión Ideal</th>';
+                html += '         <th class="text-center align-middle">Nº Control</th>';
+                html += '         <th class="text-center align-middle">Fecha</th>';
+                html += '         <th class="text-center align-middle">Presión Sistólica</th>';
+                html += '         <th class="text-center align-middle">Presión Diastólica</th>';
+                html += '         <th class="text-center align-middle">Presión Ideal</th>';
                 html += '    </tr>';
                 html += '</thead>';
                 html += '<tbody>';
@@ -2515,11 +2503,11 @@
                         fecha = fecha.getDate()+'-'+(fecha.getMonth()+1)+'-'+fecha.getFullYear()+' '+fecha.getHours()+':'+fecha.getMinutes();
 
                         html += '<tr>';
-                        html += '    <td class="align-middle">'+value.id+'</td>';
-                        html += '    <td class="align-middle">'+fecha+'</td>';
-                        html += '    <td class="align-middle">'+value.sistolica+'</td>';
-                        html += '    <td class="align-middle">'+value.diastolica+'</td>';
-                        html += '    <td class="align-middle">'+value.ideal+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.id+'</td>';
+                        html += '    <td class="text-center align-middle">'+fecha+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.sistolica+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.diastolica+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.ideal+'</td>';
                         html += '</tr>';
                     });
 
@@ -2528,7 +2516,7 @@
                 {
 
                     html += '<tr>';
-                    html += '    <td class="align-middle" colspan="5">SIN REGISTROS</td>';
+                    html += '    <td class="text-center align-middle" colspan="5">SIN REGISTROS</td>';
                     html += '</tr>';
 
                 }
@@ -2574,11 +2562,11 @@
 
                 html += '<thead>';
                 html += '    <tr>';
-                html += '    <th class="align-middle">Nº Control</th>';
-                html += '    <th class="align-middle">Fecha</th>';
-                html += '    <th class="align-middle">Peso</th>';
-                html += '    <th class="align-middle">Variación</th>';
-                html += '    <th class="align-middle">Peso Ideal</th>';
+                html += '    <th class="text-center align-middle">Nº Control</th>';
+                html += '    <th class="text-center align-middle">Fecha</th>';
+                html += '    <th class="text-center align-middle">Peso</th>';
+                html += '    <th class="text-center align-middle">Variación</th>';
+                html += '    <th class="text-center align-middle">Peso Ideal</th>';
                 html += '    <!-- <th class="text-center align-middle">Acción</th>-->';
                 html += '</tr>';
                 html += '</thead>';
@@ -2594,11 +2582,11 @@
 
 
                         html += '<tr>';
-                        html += '    <td class="align-middle">'+value.id+'</td>';
-                        html += '    <td class="align-middle">'+fecha+'</td>';
-                        html += '    <td class="align-middle">'+value.peso+'</td>';
-                        html += '    <td class="align-middle">'+value.variacion+'</td>';
-                        html += '    <td class="align-middle">'+value.ideal+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.id+'</td>';
+                        html += '    <td class="text-center align-middle">'+fecha+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.peso+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.variacion+'</td>';
+                        html += '    <td class="text-center align-middle">'+value.ideal+'</td>';
                         html += '    <!--<td class="text-center align-middle"><button href="#!" class="btn btn-danger btn-sm"><i class="feather icon-x"></i> Eliminar</button></td>-->';
                         html += '</tr>';
                     });
@@ -2608,7 +2596,7 @@
                 {
 
                     html += '<tr>';
-                    html += '    <td class="align-middle" colspan="5">SIN REGISTROS</td>';
+                    html += '    <td class="text-center align-middle" colspan="5">SIN REGISTROS</td>';
                     html += '</tr>';
 
                 }
@@ -2667,15 +2655,15 @@
                         // <th>Glicosilada ayuno</th>
                         // <th>Glicosilada postprandial</th>
                         html += '<tr>';
-                        html += '   <td class="align-middle">'+(index+1)+'</td>';//Nº_Control
-                        html += '   <td class="align-middle">'+fecha+'</td>'; //Peso
-                        html += '   <td class="align-middle">'+((value.peso!=null)?value.peso:'')+'</td>'; //Peso
-                        html += '   <td class="align-middle">'+((value.pies!=null)?value.pies:'')+'</td>'; //Piés
-                        html += '   <td class="align-middle">'+((value.hga1c!=null)?value.hga1c:'')+'</td>'; //Hg A1c
-                        html += '   <td class="align-middle">'+((value.creatina!=null)?value.creatina:'')+'</td>'; //Creatina
-                        html += '   <td class="align-middle">'+((value.glucosuria!=null)?value.glucosuria:'')+'</td>'; //Glucosuria
-                        html += '   <td class="align-middle">'+((value.glicosilada_ayuno!=null)?value.glicosilada_ayuno:'')+'</td>'; //Glicosilada ayuno
-                        html += '   <td class="align-middle">'+((value.glicosilada_postprandial!=null)?value.glicosilada_postprandial:'')+'</td>'; //Glicosilada postprandial
+                        html += '   <td class="text-center align-middle">'+(index+1)+'</td>';//Nº_Control
+                        html += '   <td class="text-center align-middle">'+fecha+'</td>'; //Peso
+                        html += '   <td class="text-center align-middle">'+((value.peso!=null)?value.peso:'')+'</td>'; //Peso
+                        html += '   <td class="text-center align-middle">'+((value.pies!=null)?value.pies:'')+'</td>'; //Piés
+                        html += '   <td class="text-center align-middle">'+((value.hga1c!=null)?value.hga1c:'')+'</td>'; //Hg A1c
+                        html += '   <td class="text-center align-middle">'+((value.creatina!=null)?value.creatina:'')+'</td>'; //Creatina
+                        html += '   <td class="text-center align-middle">'+((value.glucosuria!=null)?value.glucosuria:'')+'</td>'; //Glucosuria
+                        html += '   <td class="text-center align-middle">'+((value.glicosilada_ayuno!=null)?value.glicosilada_ayuno:'')+'</td>'; //Glicosilada ayuno
+                        html += '   <td class="text-center align-middle">'+((value.glicosilada_postprandial!=null)?value.glicosilada_postprandial:'')+'</td>'; //Glicosilada postprandial
                         html += '</tr>';
                     });
 
@@ -2684,7 +2672,7 @@
                 {
 
                     html += '<tr>';
-                    html += '    <td class="align-middle" colspan="8">SIN REGISTROS</td>';
+                    html += '    <td class="text-center align-middle" colspan="8">SIN REGISTROS</td>';
                     html += '</tr>';
 
                 }
@@ -2727,7 +2715,7 @@
                     $(data).each(function(i, v) { // indice, valor
                         select_cant_comp.append('<option value="' + v.id + '">' + v.cant +'</option>');
                     })
-                    select_cant_comp.append('<option value="999">Otra cantidad</option>');
+                    select_cant_comp.append('<option value="999">Otra Cantidad</option>');
 
                 } else {
 
@@ -2969,7 +2957,7 @@
         else
         {
             swal({
-                title: "Debe seleccionar al menos un medicamento para ingresar a Receta Médica.",
+                title: "Debe seleccionar al menos un medicamento para ingresar a Receta Medica.",
                 icon: "warning",
             });
         }
@@ -3016,13 +3004,13 @@
             {
                 case '1':
                     html+=`
-                        <table class="display table  table-borderless dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
                             <tr>
-                                <td class="f-16 font-weight-bold">Procedimiento</td>
+                                <td>Procedimiento</td>
                                 <td><input class="form-control" type="text" id="procedimiento"></td>
                             </tr>
                             <tr>
-                                <td class="f-16 font-weight-bold">Incidente</td>
+                                <td>Incidente</td>
                                 <td><textarea class="form-control" id="comentario"></textarea></td>
                             </tr>
                         </table>
@@ -3030,13 +3018,13 @@
                 break;
                 case '2':
                     html+=`
-                        <table class="display table table-borderless  dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
                             <tr>
-                                <td class="f-16 font-weight-bold">Nombre</td>
+                                <td>Nombre</td>
                                 <td><input class="form-control" type="text" id="nombre"></td>
                             </tr>
                             <tr>
-                                <td class="f-16 font-weight-bold">Comentario</td>
+                                <td>Comentario</td>
                                 <td><textarea class="form-control" id="comentario"></textarea></td>
                             </tr>
                         </table>
@@ -3044,17 +3032,17 @@
                 break;
                 case '3':
                     html+=`
-                        <table class="display table table-borderless dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
                             <tr>
-                                <td class="f-16 font-weight-bold">Fecha Cirugía</td>
+                                <td>Fecha Cirugía</td>
                                 <td><input class="form-control" type="date" id="fecha"></td>
                             </tr>
                             <tr>
-                                <td class="f-16 font-weight-bold">Procedimiento</td>
+                                <td>Procedimiento</td>
                                 <td><input class="form-control" type="text" id="procedimiento"></td>
                             </tr>
                             <tr>
-                                <td class="f-16 font-weight-bold">Incidente</td>
+                                <td>Incidente</td>
                                 <td><textarea class="form-control" id="comentario"></textarea></td>
                             </tr>
                         </table>
@@ -3062,13 +3050,13 @@
                 break;
                 case '4':
                     html+=`
-                        <table class="display table table-borderless dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
                             <tr>
-                                <td class="f-16 font-weight-bold">Procedimiento</td>
+                                <td>Procedimiento</td>
                                 <td><input class="form-control" type="text" id="procedimiento"></td>
                             </tr>
                             <tr>
-                                <td class="f-16 font-weight-bold">Detalle</td>
+                                <td>Detalle</td>
                                 <td><textarea class="form-control" id="comentario"></textarea></td>
                             </tr>
                         </table>
@@ -3076,17 +3064,17 @@
                 break;
                 case '5':
                     html+=`
-                        <table class="display table table-borderless dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
                             <tr>
-                                <td class="f-16 font-weight-bold">Nombre antecedente</td>
+                                <td>Nombre antecedente</td>
                                 <td><input class="form-control form-control-sm" type="text" id="procedimiento"></td>
                             </tr>
                             <tr>
-                                <td class="f-16 font-weight-bold">Institución</td>
+                                <td>Institución</td>
                                 <td><textarea class="form-control form-control-sm" id="institucion"></textarea></td>
                             </tr>
                             <tr>
-                                <td class="f-16 font-weight-bold">Fecha Evento</td>
+                                <td>Fecha Evento</td>
                                 <td><input class="form-control" type="date" id="fecha"></td>
                             </tr>
                         </table>
@@ -3094,13 +3082,13 @@
                 break;
                 case '6':
                     html+=`
-                        <table class="display table table-borderless dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
                             <tr>
-                                <td class="f-16 font-weight-bold">Nombre alergia</td>
+                                <td>Nombre alergia</td>
                                 <td><input class="form-control form-control-sm" type="text" id="nombre"></td>
                             </tr>
                             <tr>
-                                <td class="f-16 font-weight-bold">Detalle</td>
+                                <td>Detalle</td>
                                 <td><textarea class="form-control form-control-sm" id="comentario"></textarea></td>
                             </tr>
                         </table>
@@ -3108,9 +3096,9 @@
                 break;
                 case '7':
                     html+=`
-                        <table class="display table table-borderless dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
                             <tr>
-                                <td class="f-16 font-weight-bold">Nombre Medicamento</td>
+                                <td>Nombre Medicamento</td>
                                 <td>
                                     <div class="form-group">
                                         <input class="form-control form-control-sm" type="text" id="nombre_medicamento_cronico">
@@ -3118,7 +3106,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="f-16 font-weight-bold">Dosis</td>
+                                <td>Dosis</td>
                                 <td><textarea class="form-control" id="dosis"></textarea></td>
                             </tr>
 
@@ -3127,9 +3115,9 @@
                 break;
                 case '8':
                     html+=`
-                        <table class="display table table-borderless  dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                        <table class="display table table-striped table-hover dt-responsive nowrap pb-4 table-sm" style="width:100%">
                             <tr>
-                                <td class="f-16 font-weight-bold">Tipo de Discapacidad</td>
+                                <td>Tipo de Discapacidad</td>
                                 <td>
                                     <select class="form-control form-control-sm" name="discapacidad_tipo" id="discapacidad_tipo">
                                         <option value="Auditíva">Auditíva</option>
@@ -3142,13 +3130,13 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="f-16 font-weight-bold">Grado</td>
+                                <td>Grado</td>
                                 <td>
                                     <input class="form-control form-control-sm" type="text" id="discapacidad_grado">
                                 </td>
                             </tr>
                             <tr>
-                                <td class="f-16 font-weight-bold">Permanente</td>
+                                <td>Permanente</td>
                                 <td>
                                     <select class="form-control form-control-sm" name="discapacidad_permanente" id="discapacidad_permanente">
                                         <option value="si">SI</option>
@@ -3295,8 +3283,8 @@
                         permiso_ = '';
                         if(e.id_users == id_users)
                             permiso_ = `
-                                <buttom class="btn btn-icon btn-info feather icon-edit" onclick="verEditarAntecedente(${tipo},${e.id})"></buttom>
-                                <buttom class="btn btn-icon btn-danger feather icon-x" onclick="verModalDesactivar('show',${tipo},${e.id})"></buttom>
+                                <buttom class="btn btn-icon btn-info feather icon-edit-2" onclick="verEditarAntecedente(${tipo},${e.id})"></buttom>
+                                <buttom class="btn btn-icon btn-danger feather icon-x-square" onclick="verModalDesactivar('show',${tipo},${e.id})"></buttom>
                             `;
 
                         console.log(e.antecedente_data.procedimiento);
