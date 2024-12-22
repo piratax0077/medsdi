@@ -6,6 +6,10 @@
         width: 200px;
         height: 200px;
     }
+    .ui-autocomplete {
+        z-index: 9999999 !important;
+        position: absolute;
+    }
 </style>
 @endsection
 
@@ -135,5 +139,13 @@
     <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
     <input type="hidden" name="id_examen_oral_rx" id="id_examen_oral_rx" value="">
     <input type="hidden" name="id_imagenes_dental" id="id_imagenes_dental" value="">
+@endsection
+
+@section('js_inferior')
+<script>
+    function cargar_a_presupuesto(id){
+        alert(id);
+    }
+</script>
 @endsection
 

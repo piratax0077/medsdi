@@ -9,103 +9,121 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ route('dental_infantil.registrar_maxilar_superior_infantil') }}">
-                    @csrf
-                    <input type="hidden" name="id_paciente_maxilar_superior" id="id_paciente_maxilar_superior"
-                        value="{{ $paciente->id }}">
+                <ul class="nav nav-pills bg-white" id="personal_cm" role="tablist">
+                    <li class="nav-item">
+                        <a class="btn btn-outline-info active btn-sm mr-1 my-1" id="prof_salud-tab" data-toggle="tab" href="#prof-salud" role="tab" aria-controls="prof_-alud" aria-selected="false">Diagnostico</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-info btn-sm mr-1 my-1" id="odontologos-tab" data-toggle="tab" href="#odontologos" role="tab" aria-controls="odontologos" aria-selected="false">Tratamiento</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="Profesionales_cm">
+                    <div class="tab-pane fade active show" id="prof-salud" role="tabpanel" aria-labelledby="prof-salud-tab">
+                        <h1>hola</h1>
+                        <form method="POST" action="{{ route('dental_infantil.registrar_maxilar_superior_infantil') }}">
+                            @csrf
+                            <input type="hidden" name="id_paciente_maxilar_superior" id="id_paciente_maxilar_superior"
+                                value="{{ $paciente->id }}">
 
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <script>
-                                    var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
-                                        "Octubre", "Noviembre", "Diciembre");
-                                    var diasSemana = new Array("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado");
-                                    var f = new Date();
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <script>
+                                            var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
+                                                "Octubre", "Noviembre", "Diciembre");
+                                            var diasSemana = new Array("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado");
+                                            var f = new Date();
 
-                                    document.write(diasSemana[f.getDay()] + ", " + f.getDate() + " de " + meses[f.getMonth()] + " de " + f
-                                        .getFullYear());
-                                </script>
-                            </div>
-                            <div class="form-group">
-                                <label class="floating-label">Procedimiento</label>
-                                <select class="form-control form-control-sm"
-                                    id="procedimiento_infantil_maxilar_superior"
-                                    name="procedimiento_infantil_maxilar_superior">
-                                    <option value="0">Seleccione Procedimiento</option>
-                                    <option value="proc_pmi_01">Profilaxis boca completa</option>
-                                    <option value="proc_pmi_02">Fluoración tópica (gel) total niños y adultos</option>
-                                    <option value="proc_pmi_03">Destartraje boca completa</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="floating-label">Comentarios</label>
-                                <textarea class="form-control caja-texto form-control-sm" rows="2"
-                                    name="comentarios_infantil_maxilar_superior"
-                                    id="comentarios_infantil_maxilar_superior"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox"
-                                        id="terminado_infantil_maxilar_superior"
-                                        name="terminado_infantil_maxilar_superior">
-                                    <label class="form-check-label" for="terminado_infantil_maxilar_superior">Trabajo
-                                        terminado</label>
+                                            document.write(diasSemana[f.getDay()] + ", " + f.getDate() + " de " + meses[f.getMonth()] + " de " + f
+                                                .getFullYear());
+                                        </script>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="floating-label">Procedimiento</label>
+                                        <select class="form-control form-control-sm"
+                                            id="procedimiento_infantil_maxilar_superior"
+                                            name="procedimiento_infantil_maxilar_superior">
+                                            <option value="0">Seleccione Procedimiento</option>
+                                            <option value="proc_pmi_01">Profilaxis boca completa</option>
+                                            <option value="proc_pmi_02">Fluoración tópica (gel) total niños y adultos</option>
+                                            <option value="proc_pmi_03">Destartraje boca completa</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="floating-label">Comentarios</label>
+                                        <textarea class="form-control caja-texto form-control-sm" rows="2"
+                                            name="comentarios_infantil_maxilar_superior"
+                                            id="comentarios_infantil_maxilar_superior"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox"
+                                                id="terminado_infantil_maxilar_superior"
+                                                name="terminado_infantil_maxilar_superior">
+                                            <label class="form-check-label" for="terminado_infantil_maxilar_superior">Trabajo
+                                                terminado</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox"
+                                                id="agendar_hora_infantil_maxilar_superior"
+                                                name="agendar_hora_infantil_maxilar_superior">
+                                            <label class="form-check-label" for="agendar_hora_infantil_maxilar_superior">Nueva
+                                                Cita Agendar
+                                                control</label>
+                                            <!--lo lleva a la agenda-->
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success btn-sm  btn-block"><i
+                                                class="fa fa-plus"></i> Agregar
+                                            Tratamiento</button>
+                                    </div>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox"
-                                        id="agendar_hora_infantil_maxilar_superior"
-                                        name="agendar_hora_infantil_maxilar_superior">
-                                    <label class="form-check-label" for="agendar_hora_infantil_maxilar_superior">Nueva
-                                        Cita Agendar
-                                        control</label>
-                                    <!--lo lleva a la agenda-->
+                                <div class="col-md-4 text-center">
+                                    <img class="img-fluid" src="{{ asset('images/dientes/modelo_maxilar_inf.png') }}">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-success btn-sm  btn-block"><i
-                                        class="fa fa-plus"></i> Agregar
-                                    Tratamiento</button>
+                            <hr>
+
+                        </form>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <!--Tabla-->
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-xs">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center align-middle">Fecha</th>
+                                                <th class="text-center align-middle">Procedimiento</th>
+                                                <th class="text-center align-middle">Avance</th>
+                                                <th class="text-center align-middle">Comentarios</th>
+                                                <th class="text-center align-middle">Eliminar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-center align-middle">02/12/2021</td>
+                                                <td class="text-center align-middle">blanqueamiento</td>
+                                                <td class="text-center align-middle">terminado</td>
+                                                <td class="text-center align-middle">-</td>
+                                                <td class="text-center align-middle">
+                                                    <button class="btn btn-danger btn-sm btn-icon"><i
+                                                            class="feather icon-x"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!--Cierre: Tabla-->
                             </div>
-                        </div>
-                        <div class="col-md-4 text-center">
-                            <img class="img-fluid" src="{{ asset('images/dientes/modelo_maxilar_inf.png') }}">
                         </div>
                     </div>
-                    <hr>
+                    <div class="tab-pane fade" id="odontologos" role="tabpanel" aria-labelledby="odontologos-tab">
+                        <h1>Adios</h1>
 
-                </form>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <!--Tabla-->
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-xs">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center align-middle">Fecha</th>
-                                        <th class="text-center align-middle">Procedimiento</th>
-                                        <th class="text-center align-middle">Avance</th>
-                                        <th class="text-center align-middle">Comentarios</th>
-                                        <th class="text-center align-middle">Eliminar</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-center align-middle">02/12/2021</td>
-                                        <td class="text-center align-middle">blanqueamiento</td>
-                                        <td class="text-center align-middle">terminado</td>
-                                        <td class="text-center align-middle">-</td>
-                                        <td class="text-center align-middle">
-                                            <button class="btn btn-danger btn-sm btn-icon"><i
-                                                    class="feather icon-x"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!--Cierre: Tabla-->
                     </div>
                 </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancelar</button>

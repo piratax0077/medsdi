@@ -147,7 +147,7 @@
                         </div>
                         <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                             <button type="button" class="btn btn-icon btn-danger-light-c"
-                                onclick="eliminarExamenEndAgregado({{ $examen->id }})"><i class="feather icon-x"></i>
+                                onclick="eliminarExamenEndAgregado({{ $examen->id }},'endo')"><i class="feather icon-x"></i>
                             </button>
                             {{-- <button type="button" class="btn btn-icon btn-success-light-c" onclick="agregarEvolucionPaciente()"><i class="feather icon-save"></i> </button> --}}
                         </div>

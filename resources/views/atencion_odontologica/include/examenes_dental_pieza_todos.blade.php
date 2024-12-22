@@ -84,7 +84,7 @@
                 </select>
             </div>
         </div>
-        <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_pieza({{ $examen->id }})">X</button>
+        <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_pieza({{ $examen->id }},'gral')">X</button>
     </div>
 </div>
 

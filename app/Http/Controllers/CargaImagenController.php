@@ -102,6 +102,67 @@ class CargaImagenController extends Controller
         $imagenes_rx->id_lugar_atencion = $request->id_lugar_atencion;
         $imagenes_rx->paths_imagenes = json_encode($paths);
         $imagenes_rx->id_examen = $request->id_examen;
+        $imagenes_rx->tipo_examen = 1; // general
+        $imagenes_rx->estado = 1; // por defecto
+
+        if($imagenes_rx->save()){
+            // Retornar respuesta con los datos procesados
+            return response()->json([
+                'success' => true,
+                'paths' => $paths,
+                'total_imagenes' => count($paths),
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'paths' => $paths,
+                'total_imagenes' => count($paths),
+                'mensaje' => 'error'
+            ]);
+        }
+
+
+    }
+
+    public function guardarImagenesRxEndDental(Request $request){
+
+        // Verifica si los parámetros están presentes
+        $request->validate([
+            'file' => 'required|array|min:1',
+            'file.*' => 'image|max:4096',
+            'id_paciente' => 'required|integer',
+            'id_lugar_atencion' => 'required|integer',
+            'id_especialidad' => 'required|integer',
+            'id_profesional' => 'required|integer',
+        ]);
+
+        $paths = [];
+
+        if ($request->hasFile('file')) {
+            foreach ($request->file('file') as $file) {
+                $path = $file->store('images', 'public');
+                $paths[] = $path;
+
+                 // Ahora copiamos la imagen de 'storage/app/public/images' a 'public/storage/images'
+                $publicPath = public_path('storage/images/' . basename($path));
+                File::copy(storage_path('app/public/' . $path), $publicPath);
+            }
+        }
+
+        if($request->tipo_examen == 'endo'){
+            $tipo_examen = 2;
+        }else if($request->tipo_examen == 'odontop'){
+            $tipo_examen = 3; // para odontopediatria
+        }
+
+        $imagenes_rx = new ImagenesDentalRxPaciente;
+        $imagenes_rx->id_paciente = $request->id_paciente;
+        $imagenes_rx->id_especialidad = $request->id_especialidad;
+        $imagenes_rx->id_profesional = $request->id_profesional;
+        $imagenes_rx->id_lugar_atencion = $request->id_lugar_atencion;
+        $imagenes_rx->paths_imagenes = json_encode($paths);
+        $imagenes_rx->id_examen = $request->id_examen;
+        $imagenes_rx->tipo_examen = $tipo_examen;
         $imagenes_rx->estado = 1; // por defecto
 
         if($imagenes_rx->save()){

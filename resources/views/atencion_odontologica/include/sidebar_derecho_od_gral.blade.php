@@ -19,7 +19,7 @@
                         </h2>
                     </div>
                     <div id="collapse_nom_odonto" class="collapse" aria-labelledby="heading_nom_od"
-                        data-parent="#accordion_formularios_atencion">
+                        data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <img src="{{ asset('img_dental/sano.png') }}">
                              Diente Sano
@@ -74,7 +74,7 @@
                     </div>
                     <div id="collapse_examenes_dentales" class="collapse"
                         aria-labelledby="heading_examenes_dentales"
-                        data-parent="#accordion_formularios_atencion">
+                        data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ex_dent_rx()";>+ Orden Radiología</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ex_dent_bp()";>+ Biopsia</button>
@@ -95,7 +95,7 @@
                     </div>
                     <div id="collapse_lab_dental" class="collapse"
                         aria-labelledby="heading_lab_dental"
-                        data-parent="#accordion_formularios_atencion">
+                        data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="lab_dent_menor()";>+ ORDEN DE TRABAJO  MENOR</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="lab_dent_mayor()";>+ ORDEN DE TRABAJO MAYOR</button>
@@ -111,7 +111,7 @@
                             </button>
                         </h2>
                     </div>
-                    <div id="collapse_materiales" class="collapse" aria-labelledby="heading_materiales"  data-parent="#accordion_formularios_atencion">
+                    <div id="collapse_materiales" class="collapse" aria-labelledby="heading_materiales"  data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ped_insumos()";>+ PEDIDO INSUMOS</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="ped_materiales()";>+ PEDIDO MATERIALES</button>
@@ -128,7 +128,7 @@
                         </h2>
                     </div>
                     <div id="collapse_ayudante" class="collapse" aria-labelledby="heading_ayudante"
-                        data-parent="#accordion_formularios_atencion">
+                        data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="gasto_material()";>+ GASTO MATERIALES</button>
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="control_trab()";>+ CONTROL DE ENVIOS A LABORATORIO</button>
@@ -144,7 +144,7 @@
                                 aria-controls="collapse_recom"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i> RECOMENDACIONES A PACIENTES</button>
                         </h2>
                     </div>
-                    <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom"  data-parent="#accordion_formularios_atencion">
+                    <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom"  data-parent="#accordion_side_bar">
 
                         <div class="card-body-sidebar">
                             <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="dent_inf()";>+ La Dentición Temporal</button>

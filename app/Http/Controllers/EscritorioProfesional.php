@@ -25,6 +25,7 @@ use App\Models\Direccion;
 use App\Models\Especialidad;
 use App\Models\EvolucionPacienteHospital;
 use App\Models\EvolucionUrgencia;
+use App\Models\ExamenesBocaGeneral;
 use App\Models\ExamenesDentalDolor;
 use App\Models\ExamenesDentalPieza;
 use App\Models\ExamenesDentalOralRx;
@@ -1248,7 +1249,6 @@ class EscritorioProfesional extends Controller
 
     public function guardar_pieza_dental_end_dolor(Request $request){
         try {
-
             $dolor = new ExamenesDentalDolor;
             $dolor->derivado_por = $request->derivado_por;
             $dolor->zona_dolor = $request->zona_dolor;
@@ -1269,12 +1269,37 @@ class EscritorioProfesional extends Controller
             if($dolor->save()){
                 $examenes = $this->dameExamenesPiezaDentalEndDolor($request->id_paciente);
                 $v = view('atencion_odontologica.include.examenes_dental_dolor_end_todos',['examenes' => $examenes])->render();
-                return ['mensaje' => 'OK', 'v' => $v];
+                return ['mensaje' => 'OK', 'v' => $v, 'examenes' => $examenes];
             }
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();
         }
+    }
+
+    public function guardar_pieza_dental_odontp_dolor(Request $request){
+            $dolor = new ExamenesDentalDolor;
+            $dolor->derivado_por = $request->derivado_por;
+            $dolor->zona_dolor = $request->zona_dolor;
+            $dolor->historia_anterior = $request->historia_anterior;
+            $dolor->numero_pieza = $request->numero_pieza;
+            $dolor->tipo_dolor = $request->tipo_dolor;
+            $dolor->intensidad = $request->intensidad;
+            $dolor->modo_dolor = $request->modo_dolor;
+            $dolor->localizacion = $request->loc_dolor;
+            $dolor->provocacion_dolor = $request->provocacion_dolor;
+            $dolor->momento_dolor = $request->cdo_duele;
+            $dolor->tipo_evolucion = $request->tpo_evolucion;
+            $dolor->observaciones = $request->obs_loc_dolor;
+            $dolor->id_profesional = $request->id_profesional;
+            $dolor->id_paciente = $request->id_paciente;
+            $dolor->id_lugar_atencion = $request->id_lugar_atencion;
+            $dolor->tipo_examen = 3; // examen normal
+            if($dolor->save()){
+                $examenes = $this->dameExamenesPiezaDentalOdontopDolor($request->id_paciente);
+                $v = view('atencion_odontologica.include.examenes_dental_dolor_odontop_todos',['examenes' => $examenes])->render();
+                return ['mensaje' => 'OK', 'v' => $v, 'examenes' => $examenes];
+            }
     }
 
     public function mostrar_nueva_pieza_dental(Request $req){
@@ -1285,8 +1310,235 @@ class EscritorioProfesional extends Controller
         return ['mensaje' => 'OK','v' => $v];
     }
 
+    public function guardar_examen_boca_general(Request $req){
+
+        if($req->tipo_examen == "gral"){
+            $tipo_examen = 1;
+        }else if($req->tipo_examen == "endo"){
+            $tipo_examen = 2;
+        }else{
+            $tipo_examen = 3;
+        }
+        $examen_boca_general = new ExamenesBocaGeneral;
+        $examen_boca_general->id_paciente = $req->id_paciente;
+        $examen_boca_general->id_profesional = $req->id_profesional;
+        $examen_boca_general->id_lugar_atencion = $req->id_lugar_atencion;
+        $examen_boca_general->id_ficha_atencion = $req->id_ficha_atencion;
+        $examen_boca_general->id_especialidad = $req->id_especialidad;
+        $examen_boca_general->fecha = $req->fecha;
+        $examen_boca_general->tipo_examen = $tipo_examen;
+        $examen_boca_general->especialidad_examen = $req->especialidad_examen;
+        $examen_boca_general->diagnostico_tratamiento = $req->diag_seleccionado;
+        $examen_boca_general->terminado = $req->trabajo_terminado == 'Si' ? 1 : 0;
+        $examen_boca_general->agendar_control = $req->agendar_control == 'Si' ? 1 : 0;
+        $examen_boca_general->comentario = $req->comentarios;
+        $examen_boca_general->localizacion = $req->localizacion_examen;
+
+        if($examen_boca_general->save()){
+            $maxilar_superior_gral_tratamiento = $this->dameMaxilarSuperiorGeneralTratamiento($req->id_paciente);
+            $maxilar_superior_gral_diagnostico = $this->dameMaxilarSuperiorGeneralDiagnostico($req->id_paciente);
+            $maxilar_inferior_gral_tratamiento = $this->dameMaxilarInferiorGeneralTratamiento($req->id_paciente);
+            $maxilar_inferior_gral_diagnostico = $this->dameMaxilarInferiorGeneralDiagnostico($req->id_paciente);
+            $boca_completa_gral_tratamiento = $this->dameBocaCompletaGeneralTratamiento($req->id_paciente);
+            $boca_completa_gral_diagnostico = $this->dameBocaCompletaGeneralDiagnostico($req->id_paciente);
+
+            $maxilar_superior_gral_tratamiento_endo = $this->dameMaxilarSuperiorGeneralTratamientoEndodoncia($req->id_paciente);
+            $maxilar_superior_gral_diagnostico_endo = $this->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($req->id_paciente);
+            $maxilar_inferior_gral_tratamiento_endo = $this->dameMaxilarInferiorGeneralTratamientoEndodoncia($req->id_paciente);
+            $maxilar_inferior_gral_diagnostico_endo = $this->dameMaxilarInferiorGeneralDiagnosticoEndodoncia($req->id_paciente);
+            $boca_completa_gral_tratamiento_endo = $this->dameCompletaEndoTratamiento($req->id_paciente);
+            $boca_completa_gral_diagnostico_endo = $this->dameCompletaEndoDiagnostico($req->id_paciente);
+            return [
+            'mensaje' => 'OK',
+            'examen' => $examen_boca_general,
+            'maxilar_superior_gral_tratamiento' => $maxilar_superior_gral_tratamiento,
+            'maxilar_superior_gral_diagnostico' => $maxilar_superior_gral_diagnostico,
+            'maxilar_inferior_gral_tratamiento' => $maxilar_inferior_gral_tratamiento,
+            'maxilar_inferior_gral_diagnostico' => $maxilar_inferior_gral_diagnostico,
+            'boca_completa_gral_tratamiento' => $boca_completa_gral_tratamiento,
+            'boca_completa_gral_diagnostico' => $boca_completa_gral_diagnostico,
+            'maxilar_superior_gral_tratamiento_endo' => $maxilar_superior_gral_tratamiento_endo,
+            'maxilar_superior_gral_diagnostico_endo' => $maxilar_superior_gral_diagnostico_endo,
+            'maxilar_inferior_gral_tratamiento_endo' => $maxilar_inferior_gral_tratamiento_endo,
+            'maxilar_inferior_gral_diagnostico_endo' => $maxilar_inferior_gral_diagnostico_endo,
+            'boca_completa_gral_tratamiento_endo' => $boca_completa_gral_tratamiento_endo,
+            'boca_completa_gral_diagnostico_endo' => $boca_completa_gral_diagnostico_endo
+        ];
+        } else {
+            return ['mensaje' => 'Error'];
+        }
+    }
+
+    public function dameBocaCompletaGeneralTratamiento($id_paciente){
+        $examenes = ExamenesBocaGeneral::where('id_paciente',$id_paciente,'diagnosticos_dental.valor')
+        ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
+        ->where('localizacion','Boca completa')
+        ->where('examenes_boca_general.tipo_examen',1)
+        ->where('especialidad_examen','tratamiento')
+        ->get();
+        return $examenes;
+    }
+
+    public function dameBocaCompletaGeneralDiagnostico($id_paciente){
+        $examenes = ExamenesBocaGeneral::where('id_paciente',$id_paciente,'diagnosticos_dental.valor')
+        ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
+        ->where('localizacion','Boca completa')
+        ->where('examenes_boca_general.tipo_examen',1)
+        ->where('especialidad_examen','diagnostico')
+        ->get();
+        return $examenes;
+    }
+
+    public function dameMaxilarInferiorGeneralTratamiento($id_paciente){
+        $examenes = ExamenesBocaGeneral::where('id_paciente',$id_paciente,'diagnosticos_dental.valor')
+        ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
+        ->where('localizacion','Maxilar inferior')
+        ->where('examenes_boca_general.tipo_examen',1)
+        ->where('especialidad_examen','tratamiento')
+        ->get();
+        return $examenes;
+    }
+
+    public function dameMaxilarInferiorGeneralDiagnostico($id_paciente){
+        $examenes = ExamenesBocaGeneral::where('id_paciente',$id_paciente,'diagnosticos_dental.valor')
+        ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
+        ->where('localizacion','Maxilar inferior')
+        ->where('examenes_boca_general.tipo_examen',1)
+        ->where('especialidad_examen','diagnostico')
+        ->get();
+        return $examenes;
+    }
+
+    public function dameCompletaEndoTratamiento($id_paciente){
+        $examenes = ExamenesBocaGeneral::where('id_paciente',$id_paciente)->where('localizacion','Boca completa')->where('tipo_examen',2)->where('especialidad_examen','tratamiento')->get();
+        return $examenes;
+    }
+
+    public function dameCompletaEndoDiagnostico($id_paciente){
+        $examenes = ExamenesBocaGeneral::where('id_paciente',$id_paciente)->where('localizacion','Boca completa')->where('tipo_examen',2)->where('especialidad_examen','diagnostico')->get();
+        return $examenes;
+    }
+
+    public function dameMaxilarSuperiorGeneralTratamientoEndodoncia($id_paciente){
+        $examenes = ExamenesBocaGeneral::where('id_paciente',$id_paciente,'diagnosticos_dental.valor')
+        ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
+        ->where('examenes_boca_general.localizacion','Maxilar superior')
+        ->where('examenes_boca_general.tipo_examen',2)
+        ->where('examenes_boca_general.especialidad_examen','tratamiento')
+        ->get();
+        return $examenes;
+    }
+
+    public function dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($id_paciente){
+        $examenes = ExamenesBocaGeneral::where('id_paciente',$id_paciente)->where('localizacion','Maxilar superior')->where('tipo_examen',2)->where('especialidad_examen','diagnostico')->get();
+        return $examenes;
+    }
+
+    public function dameMaxilarInferiorGeneralTratamientoEndodoncia($id_paciente){
+        $examenes = ExamenesBocaGeneral::where('id_paciente',$id_paciente)->where('localizacion','Maxilar inferior')->where('tipo_examen',2)->where('especialidad_examen','tratamiento')->get();
+        return $examenes;
+    }
+
+    public function dameMaxilarInferiorGeneralDiagnosticoEndodoncia($id_paciente){
+        $examenes = ExamenesBocaGeneral::where('id_paciente',$id_paciente)->where('localizacion','Maxilar inferior')->where('tipo_examen',2)->where('especialidad_examen','diagnostico')->get();
+        return $examenes;
+    }
+
+    public function eliminar_diagnostico_dental(Request $req){
+
+        $diagnostico = ExamenesBocaGeneral::find($req->id);
+        if($diagnostico->delete()){
+            $maxilar_superior_gral_tratamiento = $this->dameMaxilarSuperiorGeneralTratamiento($req->id_paciente);
+            $maxilar_superior_gral_diagnostico = $this->dameMaxilarSuperiorGeneralDiagnostico($req->id_paciente);
+            $maxilar_inferior_gral_tratamiento = $this->dameMaxilarInferiorGeneralTratamiento($req->id_paciente);
+            $maxilar_inferior_gral_diagnostico = $this->dameMaxilarInferiorGeneralDiagnostico($req->id_paciente);
+            $boca_completa_gral_tratamiento = $this->dameBocaCompletaGeneralTratamiento($req->id_paciente);
+            $boca_completa_gral_diagnostico = $this->dameBocaCompletaGeneralDiagnostico($req->id_paciente);
+
+            $maxilar_superior_gral_tratamiento_endo = $this->dameMaxilarSuperiorGeneralTratamientoEndodoncia($req->id_paciente);
+            $maxilar_superior_gral_diagnostico_endo = $this->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($req->id_paciente);
+            $maxilar_inferior_gral_tratamiento_endo = $this->dameMaxilarInferiorGeneralTratamientoEndodoncia($req->id_paciente);
+            $maxilar_inferior_gral_diagnostico_endo = $this->dameMaxilarInferiorGeneralDiagnosticoEndodoncia($req->id_paciente);
+            $boca_completa_gral_tratamiento_endo = $this->dameCompletaEndoTratamiento($req->id_paciente);
+            $boca_completa_gral_diagnostico_endo = $this->dameCompletaEndoDiagnostico($req->id_paciente);
+            return [
+                'mensaje' => 'OK',
+                'examen' => $diagnostico,
+                'maxilar_superior_gral_tratamiento' => $maxilar_superior_gral_tratamiento,
+                'maxilar_superior_gral_diagnostico' => $maxilar_superior_gral_diagnostico,
+                'maxilar_inferior_gral_tratamiento' => $maxilar_inferior_gral_tratamiento,
+                'maxilar_inferior_gral_diagnostico' => $maxilar_inferior_gral_diagnostico,
+                'boca_completa_gral_tratamiento' => $boca_completa_gral_tratamiento,
+                'boca_completa_gral_diagnostico' => $boca_completa_gral_diagnostico,
+                'maxilar_superior_gral_tratamiento_endo' => $maxilar_superior_gral_tratamiento_endo,
+                'maxilar_superior_gral_diagnostico_endo' => $maxilar_superior_gral_diagnostico_endo,
+                'maxilar_inferior_gral_tratamiento_endo' => $maxilar_inferior_gral_tratamiento_endo,
+                'maxilar_inferior_gral_diagnostico_endo' => $maxilar_inferior_gral_diagnostico_endo,
+                'boca_completa_gral_tratamiento_endo' => $boca_completa_gral_tratamiento_endo,
+                'boca_completa_gral_diagnostico_endo' => $boca_completa_gral_diagnostico_endo
+            ];
+        }
+    }
+
+    public function eliminar_tratamiento_dental(Request $req){
+        $tratamiento = ExamenesBocaGeneral::find($req->id);
+        if($tratamiento->delete()){
+            $maxilar_superior_gral_tratamiento = $this->dameMaxilarSuperiorGeneralTratamiento($req->id_paciente);
+            $maxilar_superior_gral_diagnostico = $this->dameMaxilarSuperiorGeneralDiagnostico($req->id_paciente);
+            $maxilar_inferior_gral_tratamiento = $this->dameMaxilarInferiorGeneralTratamiento($req->id_paciente);
+            $maxilar_inferior_gral_diagnostico = $this->dameMaxilarInferiorGeneralDiagnostico($req->id_paciente);
+            $boca_completa_gral_tratamiento = $this->dameBocaCompletaGeneralTratamiento($req->id_paciente);
+            $boca_completa_gral_diagnostico = $this->dameBocaCompletaGeneralDiagnostico($req->id_paciente);
+
+            $maxilar_superior_gral_tratamiento_endo = $this->dameMaxilarSuperiorGeneralTratamientoEndodoncia($req->id_paciente);
+            $maxilar_superior_gral_diagnostico_endo = $this->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($req->id_paciente);
+            $maxilar_inferior_gral_tratamiento_endo = $this->dameMaxilarInferiorGeneralTratamientoEndodoncia($req->id_paciente);
+            $maxilar_inferior_gral_diagnostico_endo = $this->dameMaxilarInferiorGeneralDiagnosticoEndodoncia($req->id_paciente);
+            $boca_completa_gral_tratamiento_endo = $this->dameCompletaEndoTratamiento($req->id_paciente);
+            $boca_completa_gral_diagnostico_endo = $this->dameCompletaEndoDiagnostico($req->id_paciente);
+            return [
+                'mensaje' => 'OK',
+                'examen' => $tratamiento,
+                'maxilar_superior_gral_tratamiento' => $maxilar_superior_gral_tratamiento,
+                'maxilar_superior_gral_diagnostico' => $maxilar_superior_gral_diagnostico,
+                'maxilar_inferior_gral_tratamiento' => $maxilar_inferior_gral_tratamiento,
+                'maxilar_inferior_gral_diagnostico' => $maxilar_inferior_gral_diagnostico,
+                'boca_completa_gral_tratamiento' => $boca_completa_gral_tratamiento,
+                'boca_completa_gral_diagnostico' => $boca_completa_gral_diagnostico,
+                'maxilar_superior_gral_tratamiento_endo' => $maxilar_superior_gral_tratamiento_endo,
+                'maxilar_superior_gral_diagnostico_endo' => $maxilar_superior_gral_diagnostico_endo,
+                'maxilar_inferior_gral_tratamiento_endo' => $maxilar_inferior_gral_tratamiento_endo,
+                'maxilar_inferior_gral_diagnostico_endo' => $maxilar_inferior_gral_diagnostico_endo,
+                'boca_completa_gral_tratamiento_endo' => $boca_completa_gral_tratamiento_endo,
+                'boca_completa_gral_diagnostico_endo' => $boca_completa_gral_diagnostico_endo
+            ];
+        }
+    }
+
+    public function dameMaxilarSuperiorGeneralTratamiento($id_paciente){
+        $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
+                                            ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
+                                            ->where('examenes_boca_general.id_paciente',$id_paciente)
+                                            ->where('examenes_boca_general.localizacion','Maxilar superior')
+                                            ->where('examenes_boca_general.tipo_examen',1)
+                                            ->where('examenes_boca_general.especialidad_examen','tratamiento')
+                                            ->get();
+        return $examenes;
+    }
+
+    public function dameMaxilarSuperiorGeneralDiagnostico($id_paciente){
+        $examenes = ExamenesBocaGeneral::where('id_paciente',$id_paciente,'diagnosticos_dental.valor')
+        ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
+        ->where('localizacion','Maxilar superior')
+        ->where('examenes_boca_general.tipo_examen',1)
+        ->where('especialidad_examen','diagnostico')
+        ->get();
+        return $examenes;
+    }
+
     public function guardar_imagenes_dental_paciente(Request $req){
         try {
+
             $rx = new ImagenesDentalPaciente;
             $rx->id_ficha_atencion = $req->id_ficha_atencion;
             $rx->id_paciente = $req->id_paciente;
@@ -1295,6 +1547,7 @@ class EscritorioProfesional extends Controller
             $rx->id_especialidad = $req->id_especialidad;
             $rx->zona_y_motivo = $req->zona_motivo ? $req->zona_motivo : 'SIN ZONA NI MOTIVO';
             $rx->observaciones = $req->observaciones ? $req->observaciones : 'SIN OBSERVACIONES';
+            $rx->biopsia = $req->biopsia ? 1 : 0;
             $rx->estado = 1;
             if($rx->save()){
                 $imagenes = $this->dameInfoImagenesDentalPaciente($req->id_paciente);
@@ -1377,19 +1630,11 @@ class EscritorioProfesional extends Controller
         }
     }
 
-    public function eliminar_pieza_dental_rx(Request $req){
-       $examen = ExamenesDentalOralRx::find($req->id);
-       if($examen->delete()){
-            $examenes = $this->dameExamenesPiezaDentalOraxRx($req->id_paciente);
-            $v = view('atencion_odontologica.include.examenes_dental_oral_rx_todos',['examenes' => $examenes])->render();
-            return ['mensaje' => 'OK','v' => $v];
-        }
-    }
+    public function eliminar_nueva_pieza_dental_odontop(Request $req){
 
-    public function eliminar_nueva_pieza_dental_end(Request $req){
         $examen = ExamenesDentalDolor::find($req->id);
         if($examen->delete()){
-            $examenes = $this->dameExamenesPiezaDentalEndDolor($req->id_paciente);
+            $examenes = $this->dameExamenesPiezaDentalOdontopDolor($req->id_paciente);
             if(count($examenes) == 0)
             {
                 // si no hay ciclos de control se inicia en 1 para manejar el id en la vista
@@ -1399,9 +1644,69 @@ class EscritorioProfesional extends Controller
                 $contador_div_examenes = count($examenes) + 1;
             }
 
-            $v = view('atencion_odontologica.include.examenes_dental_dolor_end_todos', compact('examenes'))->render();
+            $v = view('atencion_odontologica.include.examenes_dental_dolor_odontop_todos', compact('examenes'))->render();
             return ['mensaje' => 'OK','vista' => $v];
         }
+    }
+
+    public function eliminar_pieza_dental_rx(Request $req){
+       $examen = ExamenesDentalOralRx::find($req->id);
+       if($examen->delete()){
+            $examenes = $this->dameExamenesPiezaDentalOraxRx($req->id_paciente);
+            $v = view('atencion_odontologica.include.examenes_dental_oral_rx_todos',['examenes' => $examenes])->render();
+            return ['mensaje' => 'OK','v' => $v];
+        }
+    }
+
+    public function eliminar_pieza_dental_rx_end(Request $req){
+        $examen = ExamenesDentalOralRx::find($req->id);
+        if($examen->delete()){
+            $examenes = $this->dameExamenesPiezaDentalOraxRxEnd($req->id_paciente);
+            $v = view('atencion_odontologica.include.examenes_dental_oral_rx_end_todos',['examenes' => $examenes])->render();
+            return ['mensaje' => 'OK','v' => $v];
+        }
+    }
+
+    public function eliminar_nueva_pieza_dental_rx_odontop(Request $req){
+        $examen = ExamenesDentalOralRx::find($req->id);
+        if($examen->delete()){
+            $examenes = $this->dameExamenesPiezaDentalOraxRxOdontop($req->id_paciente);
+            $v = view('atencion_odontologica.include.examenes_dental_oral_rx_odontop_todos',['examenes' => $examenes])->render();
+            return ['mensaje' => 'OK','v' => $v];
+        }
+    }
+
+    public function eliminar_nueva_pieza_dental_end(Request $req){
+        try {
+
+            $examen = ExamenesDentalDolor::find($req->id);
+            return $examen;
+        if($examen->delete()){
+            if($req->tipo_examen == 'endo'){
+                $examenes = $this->dameExamenesPiezaDentalEndDolor($req->id_paciente);
+                if(count($examenes) == 0)
+                {
+                    // si no hay ciclos de control se inicia en 1 para manejar el id en la vista
+                    $contador_div_examenes = 1;
+                }else{
+                    // si hay ciclos de control se suma 1 para manejar el id en la vista
+                    $contador_div_examenes = count($examenes) + 1;
+                }
+
+                $v = view('atencion_odontologica.include.examenes_dental_dolor_end_todos', compact('examenes'))->render();
+                return ['mensaje' => 'OK','vista' => $v];
+            }else{
+                $examenes = $this->dameExamenesPiezaDentalOdontopDolor($req->id_paciente);
+                $v = view('atencion_odontologica.include.examenes_dental_dolor_odontop_todos', compact('examenes'))->render();
+                return ['mensaje' => 'OK','vista' => $v];
+            }
+
+        }
+        } catch (\Exception $e) {
+            //throw $th;
+            return ['mensaje' => $e->getMessage()];
+        }
+
     }
 
     public function guardar_pieza_dental_examen_oral_rx(Request $req){
@@ -1428,9 +1733,66 @@ class EscritorioProfesional extends Controller
 
     }
 
+    public function guardar_pieza_dental_examen_dolor_odontop(Request $req){
+        return $req;
+    }
+
+    public function guardar_pieza_dental_examen_oral_rx_end(Request $req){
+        try {
+
+            if($req->tipo_examen == 'odontop'){
+                $tipo_examen = 3;
+            }else if($req->tipo_examen == 'endo'){
+                $tipo_examen = 2;
+            }else{
+                $tipo_examen = 1;
+            }
+            $rx = new ExamenesDentalOralRx;
+            $rx->id_ficha_atencion = $req->id_fc;
+            $rx->id_paciente = $req->id_paciente;
+            $rx->id_profesional = $req->id_profesional;
+            $rx->id_lugar_atencion = $req->id_lugar_atencion;
+            $rx->numero_pieza = $req->numero_pieza;
+            $rx->espacio_periodontal = $req->espacio_periodontal_aplical;
+            $rx->hueso_alveolal = $req->hueso_alveolar_apical;
+            $rx->observaciones = $req->obs ? $req->obs : 'SIN OBSERVACIONES';
+            $rx->tipo_examen = $tipo_examen;
+
+            if($rx->save()){
+
+                if($tipo_examen == 2){
+                    $examenes = $this->dameExamenesPiezaDentalOraxRxEnd($rx->id_paciente);
+                    $v = view('atencion_odontologica.include.examenes_dental_oral_rx_end_todos',['examenes' => $examenes])->render();
+                    return ['mensaje' => 'OK','v' => $v,'rx' => $rx,'examenes' => $examenes];
+                }else if($tipo_examen == 3){
+                    $examenes = $this->dameExamenesPiezaDentalOraxRxOdontop($rx->id_paciente);
+                    $v = view('atencion_odontologica.include.examenes_dental_dolor_odontop_todos',['examenes' => $examenes])->render();
+                    return ['mensaje' => 'OK','v' => $v,'rx' => $rx,'examenes' => $examenes];
+                }
+
+            }else{
+                return ['mensaje' => 'error'];
+            }
+        } catch (\Exception $e) {
+            return ['mensaje' => 'error','v' => $e->getMessage()];
+        }
+
+    }
+
     public function mostrar_nueva_pieza_dental_rx(Request $req){
         $idCounter = $req->counter;
         $v = view('atencion_odontologica.include.rx_pieza_dental',['counter' => $idCounter])->render();
+        return ['mensaje' => 'OK', 'v' => $v];
+    }
+
+    public function mostrar_nueva_pieza_dental_rx_end(Request $req){
+        $idCounter = $req->counter ? $req->counter : 1;
+        if($req->tipo_examen == 'endo'){
+            $v = view('atencion_odontologica.include.rx_pieza_dental_end',['counter' => $idCounter])->render();
+        }else if($req->tipo_examen == 'odontop'){
+            $v = view('atencion_odontologica.include.rx_pieza_dental_odontop',['counter' => $idCounter])->render();
+        }
+
         return ['mensaje' => 'OK', 'v' => $v];
     }
 
@@ -1440,11 +1802,50 @@ class EscritorioProfesional extends Controller
         return ['mensaje' => 'OK', 'v' => $v];
     }
 
+    public function mostrar_nueva_pieza_dental_examen_odontop(Request $req){
+        $idCounter = $req->count ? $req->count : 1;
+        $v = view('atencion_odontologica.include.pieza_dental_examen_odontop',['counter' => $idCounter])->render();
+        return ['mensaje' => 'OK', 'v' => $v];
+    }
+
+    public function mostrar_nueva_pieza_dental_end_examen(Request $req){
+        try {
+
+            $idCounter = $req->count ? $req->count : 1;
+            $tipo_examen = $req->tipo_examen;
+            if($tipo_examen == 'endo'){
+                $v = view('atencion_odontologica.include.pieza_dental_examen_end',['counter' => $idCounter, 'tipo_examen' => $tipo_examen])->render();
+                return ['mensaje' => 'OK', 'v' => $v];
+            }
+            if($tipo_examen == 'odontop'){
+                $v = view('atencion_odontologica.include.pieza_dental_examen_pieza_odontop',['counter' => $idCounter, 'tipo_examen' => $tipo_examen])->render();
+                return ['mensaje' => 'OK', 'v' => $v];
+            }
+
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
     public function eliminar_imagen_rx_paciente(Request $req){
         $imagen = ImagenesDentalRxPaciente::find($req->id);
         if($imagen->delete()){
             $examenes = $this->dameExamenesPiezaDentalOraxRx($req->id_paciente);
             $v = view('atencion_odontologica.include.examenes_dental_oral_rx_todos',['examenes' => $examenes])->render();
+
+            return ['mensaje' => 'OK','v' => $v];
+        }else{
+            return ['mensaje' => 'error'];
+        }
+    }
+
+    public function eliminar_imagen_rx_end_paciente(Request $req){
+        $imagen = ImagenesDentalRxPaciente::find($req->id);
+        if($imagen->delete()){
+            $examenes = $this->dameExamenesPiezaDentalOraxRxEnd($req->id_paciente);
+            $v = view('atencion_odontologica.include.examenes_dental_oral_rx_end_todos',['examenes' => $examenes])->render();
 
             return ['mensaje' => 'OK','v' => $v];
         }else{
@@ -1460,6 +1861,58 @@ class EscritorioProfesional extends Controller
 
     public function dameExamenesPiezaDentalOraxRx($id_paciente){
         $examenes = ExamenesDentalOralRx::where('id_paciente',$id_paciente)->get();
+        foreach ($examenes as $e) {
+            $imagenes = ImagenesDentalRxPaciente::where('id_examen', $e->id)->get();
+            $e->imagenes = $imagenes;
+            $nueva_lista_imagenes = []; // Inicializamos un nuevo array
+
+            foreach ($imagenes as $i) {
+                // Decodificamos el JSON contenido en el atributo `paths_imagenes`
+                $decoded_paths = json_decode($i->paths_imagenes, true);
+
+                // Creamos un nuevo objeto/array con la imagen y sus paths decodificados
+                $nueva_lista_imagenes[] = [
+                    'id' => $i->id,
+                    'id_examen' => $i->id_examen,
+                    'paths_imagenes' => $decoded_paths, // Ahora es un array decodificado
+                ];
+            }
+
+            // Puedes asignar este array al objeto `$e` si lo necesitas
+            $e->decoded_imagenes = $nueva_lista_imagenes; // Agregamos el array decodificado al examen
+        }
+
+        return $examenes;
+    }
+
+    public function dameExamenesPiezaDentalOraxRxEnd($id_paciente){
+        $examenes = ExamenesDentalOralRx::where('id_paciente',$id_paciente)->where('tipo_examen',2)->get();
+        foreach ($examenes as $e) {
+            $imagenes = ImagenesDentalRxPaciente::where('id_examen', $e->id)->get();
+            $e->imagenes = $imagenes;
+            $nueva_lista_imagenes = []; // Inicializamos un nuevo array
+
+            foreach ($imagenes as $i) {
+                // Decodificamos el JSON contenido en el atributo `paths_imagenes`
+                $decoded_paths = json_decode($i->paths_imagenes, true);
+
+                // Creamos un nuevo objeto/array con la imagen y sus paths decodificados
+                $nueva_lista_imagenes[] = [
+                    'id' => $i->id,
+                    'id_examen' => $i->id_examen,
+                    'paths_imagenes' => $decoded_paths, // Ahora es un array decodificado
+                ];
+            }
+
+            // Puedes asignar este array al objeto `$e` si lo necesitas
+            $e->decoded_imagenes = $nueva_lista_imagenes; // Agregamos el array decodificado al examen
+        }
+
+        return $examenes;
+    }
+
+    public function dameExamenesPiezaDentalOraxRxOdontop($id_paciente){
+        $examenes = ExamenesDentalOralRx::where('id_paciente',$id_paciente)->where('tipo_examen',3)->get();
         foreach ($examenes as $e) {
             $imagenes = ImagenesDentalRxPaciente::where('id_examen', $e->id)->get();
             $e->imagenes = $imagenes;
@@ -1536,6 +1989,14 @@ class EscritorioProfesional extends Controller
 
     public function guardar_pieza_dental_examen_pieza(Request $req){
 
+        if($req->tipo_examen == 'gral'){
+            $tipo_examen = 1;
+        }else if($req->tipo_examen == 'endo'){
+            $tipo_examen = 2;
+        }else{
+            $tipo_examen = 3; // odontopediatria
+        }
+
         $examen = new ExamenesDentalPieza;
         $examen->numero_pieza = $req->numero_pieza;
         $examen->resp_calor = $req->resp_calor;
@@ -1550,36 +2011,71 @@ class EscritorioProfesional extends Controller
         $examen->exploracion = $req->resp_expl;
         $examen->cavitaria = $req->resp_cavitaria;
         $examen->fecha_examen = Carbon::now()->format('Y-m-d');
+        $examen->tipo_examen = $tipo_examen; // general o endodoncia
         $examen->estado = 1; // por defecto activo
+        $examen->id_responsable = Auth::user()->id;
         if($examen->save()){
-            $examenes = $this->dameExamenesPiezaDentalPieza($req->id_paciente);
-            $v = view('atencion_odontologica.include.examenes_dental_pieza_todos',['examenes' => $examenes])->render();
 
-            return ['mensaje' => 'OK','v' => $v,    'examenes' => $examenes];
+            if($tipo_examen == 1){
+
+                $examenes = $this->dameExamenesPiezaDentalPieza($req->id_paciente);
+                $v = view('atencion_odontologica.include.examenes_dental_pieza_todos',['examenes' => $examenes])->render();
+            }else if($tipo_examen == 2){
+
+                $examenes = $this->dameExamenesPiezaDentalPiezaEnd($req->id_paciente);
+                $v = view('atencion_odontologica.include.examenes_dental_pieza_endodoncia_todos',['examenes' => $examenes])->render();
+            }else{
+                $examenes = $this->dameExamenesPiezaDentalPiezaOdontop($req->id_paciente);
+                $v = view('atencion_odontologica.include.examenes_dental_pieza_odontop_todos',['examenes' => $examenes])->render();
+            }
+            return ['mensaje' => 'OK','v' => $v,'examenes' => $examenes, 'tipo_examen' => $tipo_examen];
         }else{
             return ['mensaje' => 'error'];
         }
     }
 
     public function eliminar_pieza_dental_examen_pieza(Request $req){
+
         $examen = ExamenesDentalPieza::find($req->id);
         if($examen->delete()){
-            $examenes = $this->dameExamenesPiezaDentalPieza($req->id_paciente);
-            $v = view('atencion_odontologica.include.examenes_dental_pieza_todos',['examenes' => $examenes])->render();
-
-            return ['mensaje' => 'OK','v' => $v];
+            if($req->tipo == 'gral'){
+                $examenes = $this->dameExamenesPiezaDentalPieza($req->id_paciente);
+                $v = view('atencion_odontologica.include.examenes_dental_pieza_todos',['examenes' => $examenes])->render();
+            }else if($req->tipo == 'endo'){
+                $examenes = $this->dameExamenesPiezaDentalPiezaEnd($req->id_paciente);
+                $v = view('atencion_odontologica.include.examenes_dental_pieza_endodoncia_todos',['examenes' => $examenes])->render();
+            }else{
+                $examenes = $this->dameExamenesPiezaDentalPiezaOdontop($req->id_paciente);
+                $v = view('atencion_odontologica.include.examenes_dental_pieza_odontop_todos',['examenes' => $examenes])->render();
+            }
+            return ['mensaje' => 'OK','v' => $v,'tipo_examen' => $req->tipo, 'examenes' => $examenes];
         }else{
             return ['mensaje' => 'error'];
         }
     }
 
+    public function dameExamenesPiezaDentalPiezaEnd($id_paciente){
+        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)->where('tipo_examen',2)->where('estado',1)->get();
+        return $examenes;
+    }
+
+    public function dameExamenesPiezaDentalPiezaOdontop($id_paciente){
+        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)->where('tipo_examen',3)->where('estado',1)->get();
+        return $examenes;
+    }
+
     public function dameExamenesPiezaDentalPieza($id_paciente){
-        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)->get();
+        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)->where('tipo_examen',1)->where('estado',1)->get();
         return $examenes;
     }
 
     public function dameExamenesPiezaDentalEndDolor($id_paciente){
         $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('tipo_examen',2)->get();
+        return $examenes;
+    }
+
+    public function dameExamenesPiezaDentalOdontopDolor($id_paciente){
+        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('tipo_examen',3)->get();
         return $examenes;
     }
 

@@ -82,7 +82,7 @@
         </div>
     </div>
     <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_examen_pieza()">X</button>
-    <button type="button" class="btn btn-icon btn-primary-light-c" onclick="guardar_pieza_examen_pieza({{ $counter }})"><i class="fas fa-save"></i></button>
+    <button type="button" class="btn btn-icon btn-primary-light-c" onclick="guardar_pieza_examen_pieza({{ $counter }},'gral')"><i class="fas fa-save"></i></button>
 </div>
 
 <script>
@@ -103,6 +103,7 @@
         let id_profesional = $('#id_profesional').val();
         let id_ficha_atencion = $('#id_fc').val();
         let id_especialidad = $('#id_especialidad').val();
+        let tipo_examen = 'gral';
 
         let data = {
             _token: CSRF_TOKEN,
@@ -117,7 +118,8 @@
             id_lugar_atencion: id_lugar_atencion,
             id_profesional: id_profesional,
             id_ficha_atencion: id_ficha_atencion,
-            id_especialidad: id_especialidad
+            id_especialidad: id_especialidad,
+            tipo_examen: tipo_examen
         }
 
         let valido = 1;
@@ -154,6 +156,46 @@
                     $('#contenedor_pieza_dental_endo_gral').empty();
                     $('#contenedor_pieza_dental_endo_gral').append(resp.v);
                     $('#contenedor_nueva_pieza_dental').empty();
+                    $('#planificacion_examenes_gral').empty();
+                    let examenes = resp.examenes;
+                    examenes.forEach(examen => {
+                        $('#planificacion_examenes_gral').append(
+                            `<div class="form-row">
+                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-group fill">
+                                            <label class="floating-label-activo-sm">Pieza N°</label>
+                                            <input type="text" class="form-control form-control-sm" value="${examen.numero_pieza}">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-group fill">
+                                            <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                            <select name="piel_tegumnto" data-titulo="Ex_cuello" data-seccion="Cuello" id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
+                                                <option selected="" value="1">Uniradicular</option>
+                                                <option value="2">Biradicular</option>
+                                                <option value="2">Triradicular</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="div_piel_tegumnto" style="display:none;">
+                                            <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-group fill">
+                                            <label class="floating-label-activo-sm">Convenio</label>
+                                            <select name="adenopatias" data-titulo="Ex_cuello" data-seccion="Cuello" id="adenopatias" class="form-control form-control-sm">
+                                                <option selected="" value="1">Convenio</option>
+                                                <option value="2">Sin Convenio</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                            </div>
+                `
+                        );
+                    });
+                    // si es 1 es examen general
                     swal({
                         title: "Pieza dental guardada",
                         text: "La pieza dental para examen ha sido guardada correctamente.",

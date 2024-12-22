@@ -159,7 +159,7 @@
 
 
 function guardar_pieza_imagenes_rx(counter){
-        let biopsia = $('#biopsia_check_odont'+counter).val();
+        let biopsia = $('#biopsia_check_odont'+counter).is(':checked');
         let zona_motivo = $('#od_biop_zona'+counter).val();
         let observaciones = $('#obs_result_biopsia'+counter).val();
         let id_paciente = dame_id_paciente();
@@ -170,6 +170,7 @@ function guardar_pieza_imagenes_rx(counter){
 
         let data = {
             _token: CSRF_TOKEN,
+            biopsia: biopsia,
             zona_motivo: zona_motivo,
             observaciones:observaciones,
             id_paciente: id_paciente,

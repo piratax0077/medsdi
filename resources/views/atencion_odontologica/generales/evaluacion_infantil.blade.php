@@ -6,7 +6,7 @@
                 <hr>
             </div>
         </div>
-        <div class="row mb-3">
+        {{-- <div class="row mb-3">
             <div class="col-md-3 px-1 py-1">
                 <button type="button" class="btn btn-info btn-sm btn-block"
                     onclick="tto_max_sup()";><i class="feather icon-file-plus"></i> Maxilar
@@ -27,7 +27,7 @@
                         class="feather icon-file-plus"></i>Solicitud en
                     laboratorio</button>
             </div>
-        </div>
+        </div> --}}
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="card-a">
                 <div class="card-header-a" id="exam_esp">
@@ -69,6 +69,7 @@
                                                                 <div class="form-row">
                                                                     <div class="col-md-12">
                                                                         <h6 class="text-center text-c-blue mb-2">CUADRANTE 5</h6>
+                                                                        @foreach ($primer_cuadrante_infantil as $primer)
                                                                         <div class="table-responsive">
                                                                             <form id="form_6_5"
                                                                                 action="{{ route('dental_infantil.registrar_odontograma_infantil') }}" method="POST">
@@ -91,11 +92,7 @@
                                                                                         <td class="px-1 py-1 text-center align-middle">
                                                                                             <select id="pieza_odontograma_1" name="pieza_odontograma_1"
                                                                                                 class="form-control form-control-sm">
-                                                                                                <option value="5-5"> 5-5 </option>
-                                                                                                <option value="5-4"> 5-4 </option>
-                                                                                                <option value="5-3"> 5-3 </option>
-                                                                                                <option value="5-2"> 5-2 </option>
-                                                                                                <option value="5-1"> 5-1</option>
+                                                                                                <option value="{{ $primer->numero_pieza }}"> {{ $primer->numero_pieza }} </option>
                                                                                             </select>
                                                                                             <div id="t53">
                                                                                                 <img src="{{ asset('images/dientes/d53.png') }}"
@@ -236,6 +233,8 @@
                                                                                 </table>
                                                                             </form>
                                                                         </div>
+                                                                        @endforeach
+
                                                                     </div>
                                                                 </div>
                                                             </div>

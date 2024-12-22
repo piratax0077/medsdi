@@ -1,4 +1,4 @@
-@php $counter = 0; @endphp
+@php $counter = 1; @endphp
 @foreach ($examenes as $examen)
 
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">

@@ -85,7 +85,7 @@
                             <div class="form-group fill">
                                 <input type="hidden" name="biopsia_odont{{ $count }}" id="biopsia_odont{{ $count }}" value="">
                                 <div class="switch switch-success d-inline m-r-10">
-                                    <input type="checkbox" onchange="biopsia('odont',{{ $count }});" id="biopsia_check_odont{{ $count }}" name="biopsia_check_odont{{ $count }}" value="" disabled>
+                                    <input type="checkbox" onchange="biopsia('odont',{{ $count }});" id="biopsia_check_odont{{ $count }}" name="biopsia_check_odont{{ $count }}" value="" @if($imagen->biopsia == 1) checked @endif disabled>
                                     <label for="biopsia_check_odont{{ $count }}" class="cr"></label>
                                 </div>
                                 <label>biopsia</label>

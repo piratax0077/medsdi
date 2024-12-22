@@ -6,7 +6,7 @@
                 <hr>
             </div>
         </div>
-        <div class="row mb-3">
+        {{-- <div class="row mb-3">
             <div class="col-md-3 px-1 py-1">
                 <button type="button" class="btn btn-info btn-sm btn-block"
                     onclick="maxilar_superior()";><i class="feather icon-file-plus"></i> Maxilar superior</button>
@@ -27,7 +27,7 @@
                     onclick="prest_lab();"><i class="feather icon-file-plus"></i>Solicitud de laboratorio</button>
 
             </div>
-        </div>
+        </div> --}}
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="card-a">
                 <div class="card-header-a" id="exam_esp">
@@ -72,17 +72,20 @@
                                                     <div class="card">
                                                         <div class="card-body">
                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                <h6 class="text-center text-c-blue mb-2">GRUPO 1</h6>
                                                                 <div class="form-row">
+                                                                    @foreach ($primer_cuadrante as $primer)
                                                                     <div class="col-md-12">
-                                                                        <h6 class="text-center text-c-blue mb-2">GRUPO 1</h6>
+
                                                                         <div class="table-responsive">
                                                                             <form id="form_6_5" action="{{ route('dental.registrar_odontograma') }}" method="POST">
                                                                                 @csrf
-                                                                                <input type="hidden" name="ficha_id_atencion_dental_odon1"
-                                                                                    id="ficha_id_atencion_dental_odon1"{{--
+                                                                                <input type="hidden" name="ficha_id_atencion_dental_odon{{ $loop->index + 1 }}"
+                                                                                    id="ficha_id_atencion_dental_odon{{ $loop->index + 1 }}"{{--
                                                                                     value=" @if ($ficha != null) {{ $ficha->id }} @endif">--}}
-                                                                                <input type="hidden" name="paciente_atencion_dental_odon1"
-                                                                                    id="paciente_atencion_dental_odon1" value="{{ $paciente->id }}">
+                                                                                <input type="hidden" name="paciente_atencion_dental_odon{{ $loop->index + 1 }}"
+                                                                                    id="paciente_atencion_dental_odon{{ $loop->index + 1 }}_1" value="{{ $paciente->id }}">
+                                                                                    <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
                                                                                 <table class="table table-bordered table-xs" style="width:100%;">
                                                                                     <tr class="bg-encabezado">
                                                                                         <th class="text-center align-middle">PIEZA</th>
@@ -91,13 +94,9 @@
                                                                                     </tr>
                                                                                     <tr>
                                                                                         <td class="px-1 py-1 text-center align-middle">
-                                                                                            <select id="pieza_odontograma_1" name="pieza_odontograma_1"
+                                                                                            <select id="pieza_odontograma_{{ $loop->index + 1  }}_1" name="pieza_odontograma_{{ $loop->index + 1 }}_1"
                                                                                                 class="form-control form-control-sm">
-                                                                                                <option value="1-8"> 1-8 </option>
-                                                                                                <option value="1-7"> 1-7 </option>
-                                                                                                <option value="1-6"> 1-6 </option>
-                                                                                                <option value="1-5"> 1-5 </option>
-                                                                                                <option value="1-4"> 1-4</option>
+                                                                                                <option value="{{ $primer->numero_pieza }}"> {{ $primer->numero_pieza }} </option>
                                                                                             </select>
                                                                                             <div id="t53">
                                                                                                 <img src="{{ asset('images/dental/i/dientes/d18.png') }}"
@@ -110,8 +109,8 @@
                                                                                                     <tr>
                                                                                                         <td class="padding-caras"></td>
                                                                                                         <td class="padding-caras">
-                                                                                                            <div class="circulo-v" id="caraV1"
-                                                                                                                onclick="cambiar_color(1)">
+                                                                                                            <div class="circulo-v" id="caraV{{ $loop->index + 1 }}1"
+                                                                                                                onclick="cambiar_color({{ $loop->index + 1 }},1)">
                                                                                                                 V
                                                                                                             </div>
 
@@ -120,25 +119,25 @@
                                                                                                     </tr>
                                                                                                     <tr>
                                                                                                         <td class="padding-caras">
-                                                                                                            <div class="circulo-d" id="caraD1"
-                                                                                                                onclick="cambiar_colorD(1)">D</div>
+                                                                                                            <div class="circulo-d" id="caraD{{ $loop->index + 1 }}1"
+                                                                                                                onclick="cambiar_colorD({{ $loop->index + 1 }},1)">D</div>
                                                                                                         </td>
                                                                                                         <td class="padding-caras">
-                                                                                                            <div class="circulo-o" id="caraO1"
-                                                                                                                onclick="cambiar_colorO(1)">O</div>
+                                                                                                            <div class="circulo-o" id="caraO{{ $loop->index + 1 }}1"
+                                                                                                                onclick="cambiar_colorO({{ $loop->index + 1 }},1)">O</div>
 
                                                                                                         </td>
                                                                                                         <td class="padding-caras">
-                                                                                                            <div class="circulo-m" id="caraM1"
-                                                                                                                onclick="cambiar_colorM(1)">M</div>
+                                                                                                            <div class="circulo-m" id="caraM{{ $loop->index + 1 }}1"
+                                                                                                                onclick="cambiar_colorM({{ $loop->index + 1 }},1)">M</div>
 
                                                                                                         </td>
                                                                                                     </tr>
                                                                                                     <tr>
                                                                                                         <td class="padding-caras"></td>
                                                                                                         <td class="padding-caras">
-                                                                                                            <div class="circulo-p" id="caraP1"
-                                                                                                                onclick="cambiar_colorP(1)">P</div>
+                                                                                                            <div class="circulo-p" id="caraP{{ $loop->index + 1 }}1"
+                                                                                                                onclick="cambiar_colorP({{ $loop->index + 1 }},1)">P</div>
 
                                                                                                         </td>
                                                                                                         <td class="padding-caras"></td>
@@ -157,11 +156,11 @@
                                                                                         <td class="px-1 py-1"><button type="button"
                                                                                                 class="btn btn-block btn-sm btn-outline-primary"
                                                                                                 data-toggle="popover" title="Historia"
-                                                                                                data-content="cargar historia del diente">Ver
+                                                                                                data-content="cargar historia del diente" onclick="info_odontograma('{{ $primer->numero_pieza }}')">Ver
                                                                                                 historia</button></td>
                                                                                         <td class="px-1 py-1">
-                                                                                            <select class="form-control form-control-sm" id="diagnostico_1"
-                                                                                                name="diagnostico_1">
+                                                                                            <select class="form-control form-control-sm" id="diagnostico_{{ $loop->index + 1 }}_1"
+                                                                                                name="diagnostico_{{ $loop->index + 1 }}_1">
                                                                                                 <option value="0">Diagnóstico</option>
                                                                                                 <option value="1">Caries</option>
                                                                                                 <option value="2">Fractura</option>
@@ -171,10 +170,13 @@
                                                                                             </select>
                                                                                         </td>
                                                                                         <td class="px-1 py-1">
-                                                                                            <select class="form-control form-control-sm" id="tratamiento_1"
-                                                                                                name="tratamiento_1">
+                                                                                            <select class="form-control form-control-sm" id="tratamiento_{{ $loop->index + 1 }}_1"
+                                                                                                name="tratamiento_{{ $loop->index + 1 }}_1">
                                                                                                 <option>Tratamiento</option>
-                                                                                                <optgroup label="Tratamiento Pediátrico">
+                                                                                                @foreach ($tratamientos as $tratamiento)
+                                                                                                    <option value="{{ $tratamiento->id }}">{{ $tratamiento->descripcion }}</option>
+                                                                                                @endforeach
+                                                                                                {{-- <optgroup label="Tratamiento Pediátrico">
                                                                                                     <option value="dp_1">Examen inicial, plan de tratamiento y
                                                                                                         presupuesto
                                                                                                     </option>
@@ -226,24 +228,28 @@
                                                                                                         posterior</option>
                                                                                                     <option value="dp_24">Tratamiento diente gangrenado</option>
                                                                                                     <option value="dp_25">Urgencia odontopediátrica</option>
-                                                                                                </optgroup>
+                                                                                                </optgroup> --}}
                                                                                             </select>
                                                                                             <button type="submit"style="margin-top:15px" class="btn btn-success-light btn-sm">Registrar </button>
-                                                                                            <input type="hidden" name="odontograma1" id="odontograma1"
+                                                                                            <input type="hidden" name="odontograma{{ $loop->index + 1 }}_1" id="odontograma{{ $loop->index + 1 }}_1"
                                                                                                 value="1">
-                                                                                            <input type="hidden" name="caraM_check_1" id="caraM_check_1"
+                                                                                                <input type="hidden" name="cuadrante" id="cuadrante" value="1">
+                                                                                                <input type="hidden" name="posicion_pieza" id="posicion_pieza" value="{{ $loop->index + 1 }}">
+                                                                                            <input type="hidden" name="caraM_check_{{ $loop->index + 1 }}_1" id="caraM_check_{{ $loop->index + 1 }}_1"
                                                                                                 value="0">
-                                                                                            <input type="hidden" name="caraO_check_1" id="caraO_check_1"
+                                                                                            <input type="hidden" name="caraO_check_{{ $loop->index + 1 }}_1" id="caraO_check_{{ $loop->index + 1 }}_1"
                                                                                                 value="0">
-                                                                                            <input type="hidden" name="caraD_check_1" id="caraD_check_1" value="0">
-                                                                                            <input type="hidden" name="carav_check_1" id="carav_check_1"value="0">
-                                                                                            <input type="hidden" name="caraP_check_1" id="caraP_check_1"value="0">
+                                                                                            <input type="hidden" name="caraD_check_{{ $loop->index + 1 }}_1" id="caraD_check_{{ $loop->index + 1 }}_1" value="0">
+                                                                                            <input type="hidden" name="carav_check_{{ $loop->index + 1 }}_1" id="carav_check_{{ $loop->index + 1 }}_1"value="0">
+                                                                                            <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_1" id="caraP_check_{{ $loop->index + 1 }}_1"value="0">
                                                                                         </td>
                                                                                     </tr>
                                                                                 </table>
                                                                             </form>
                                                                         </div>
                                                                     </div>
+                                                                    @endforeach
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -261,6 +267,7 @@
                                                                 <div class="form-row">
                                                                     <div class="col-md-12">
                                                                         <h6 class="text-center text-c-blue mb-2">GRUPO 2</h6>
+                                                                        @foreach ($segundo_cuadrante as $segundo)
                                                                         <div class="table-responsive">
                                                                             <form id="form_5_5" action="{{ route('dental.registrar_odontograma') }}"
                                                                                 method="POST">
@@ -281,12 +288,7 @@
                                                                                         <td class="px-1 py-1 text-center align-middle">
                                                                                             <select id="pieza_odontograma_2" name="pieza_odontograma_2"
                                                                                                 class="form-control form-control-sm">
-                                                                                                <option value="1-3"> 1-3</option>
-                                                                                                <option value="1-2"> 1-2</option>
-                                                                                                <option value="1-1"> 1-1</option>
-                                                                                                <option value="2-1"> 2-1</option>
-                                                                                                <option value="2-2"> 2-2</option>
-                                                                                                <option value="2-3"> 2-3</option>
+                                                                                                <option value="{{ $segundo->numero_pieza }}"> {{ $segundo->numero_pieza }}</option>
                                                                                             </select>
                                                                                             <div id="t53">
                                                                                                 <img src="{{ asset('images/dental/i/dientes/d21.png') }}"
@@ -413,6 +415,8 @@
                                                                                             </select>
                                                                                             <input type="hidden" name="odontograma2" id="odontograma2"
                                                                                                 value="1">
+                                                                                                <input type="hidden" name="cuadrante" id="cuadrante" value="2">
+                                                                                                <input type="hidden" name="posicion_pieza" id="posicion_pieza" value="{{ $loop->index + 1 }}">
                                                                                             <input type="hidden" name="caraM_check_2" id="caraM_check_2"
                                                                                                 value="0">
                                                                                             <input type="hidden" name="caraO_check_2" id="caraO_check_2"
@@ -431,6 +435,8 @@
                                                                                 </table>
                                                                             </form>
                                                                         </div>
+                                                                        @endforeach
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -448,6 +454,7 @@
                                                             <div class="form-row">
                                                                 <div class="col-md-12">
                                                                     <h6 class="text-center text-c-blue mb-2">GRUPO 3</h6>
+                                                                    @foreach ($tercer_cuadrante as $tercer)
                                                                     <div class="table-responsive">
                                                                         <form id="form_7_5" action="{{ route('dental.registrar_odontograma') }}"
                                                                             method="POST">
@@ -469,11 +476,7 @@
                                                                                     <td class="px-1 py-1 text-center align-middle">
                                                                                         <select id="pieza_odontograma_3" name="pieza_odontograma_3"
                                                                                             class="form-control form-control-sm">
-                                                                                            <option value="2-4"> 2-4 </option>
-                                                                                            <option value="2-5"> 2-5 </option>
-                                                                                            <option value="2-6"> 2-6 </option>
-                                                                                            <option value="2-7"> 2-7 </option>
-                                                                                            <option value="2-8"> 2-8 </option>
+                                                                                            <option value="{{ $tercer->numero_pieza }}"> {{ $tercer->numero_pieza }} </option>
                                                                                         </select>
                                                                                         <div id="t53">
                                                                                             <img src="{{ asset('images/dental/i/dientes/d26.png') }}"
@@ -619,6 +622,8 @@
                                                                             </table>
                                                                         </form>
                                                                     </div>
+                                                                    @endforeach
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -635,6 +640,7 @@
                                                             <div class="form-row">
                                                                 <div class="col-md-12">
                                                                     <h6 class="text-center text-c-blue mb-2">GRUPO 4</h6>
+                                                                    @foreach ($cuarto_cuadrante as $cuarto)
                                                                     <div class="table-responsive">
                                                                         <form id="form_6_5" action="{{ route('dental.registrar_odontograma') }}"
                                                                             method="POST">
@@ -656,11 +662,8 @@
                                                                                     <td class="px-1 py-1 text-center align-middle">
                                                                                         <select id="pieza_odontograma_4" name="pieza_odontograma_4"
                                                                                             class="form-control form-control-sm">
-                                                                                            <option value="4-8"> 4-8 </option>
-                                                                                            <option value="4-7"> 4-7 </option>
-                                                                                            <option value="4-7"> 4-7 </option>
-                                                                                            <option value="4-5"> 4-5 </option>
-                                                                                            <option value="4-4"> 4-4</option>
+                                                                                            <option value="{{ $cuarto->numero_pieza }}"> {{ $cuarto->numero_pieza }} </option>
+
                                                                                         </select>
                                                                                         <div id="t53">
                                                                                             <img src="{{ asset('images/dental/i/dientes/d47.png') }}"
@@ -805,6 +808,8 @@
                                                                             </table>
                                                                         </form>
                                                                     </div>
+                                                                    @endforeach
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1196,7 +1201,7 @@
             <div class="col-md-12">
                 <div class="table-responsive">
                     <div class="table-responsive">
-                        <table class="table table-xs">
+                        <table class="table table-xs" id="table_odontograma">
                             <thead>
                                 <tr>
                                     <th>Fecha</th>
@@ -1204,20 +1209,28 @@
                                     <th>Caras</th>
                                     <th>Pieza</th>
                                     <th>Diagnóstico</th>
+                                    <th>Valor</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
                             <tbody>
+
+                                @if(isset($odontograma))
+                                @foreach ($odontograma as $odonto)
                                 <tr>
-                                    <td>00/00/000</td>
-                                    <td>Sellado</td>
-                                    <td>12</td>
-                                    <td>Vestibular, Distal</td>
-                                    <td>Caries</td>
+                                    <td>{{ $odonto->fecha }}</td>
+                                    <td>{{ $odonto->tratamiento }}</td>
+                                    <td>{{ $odonto->caras }}</td>
+                                    <td>{{ $odonto->pieza }}</td>
+                                    <td>{{ $odonto->descripcion }}</td>
+                                    <td>{{ number_format($odonto->valor,0,',','.') }}</td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-sm"><i class="feather icon-x"></i>Eliminar</button>
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto({{ $odonto->id }})"><i class="fas fa-save"></i>Cargar a presupuesto</button>
                                     </td>
                                 </tr>
+                                @endforeach
+                                @endif
                             </tbody>
                         </table>
                     </div>
