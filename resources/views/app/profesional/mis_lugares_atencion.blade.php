@@ -1070,7 +1070,7 @@
                     {
 
                         $.each(data.registro, function (index, value) {
-                            var html = '<option value="'+value.id+'">'+value.nombre+'</option>';
+                            var html = '<option value="'+value.id+'">'+value.nombre+' '+value.cantidad_bloques+'Blq.</option>';
                             $('#agrear_editar_procedimientos_id_procedimiento').append(html);
                         });
 

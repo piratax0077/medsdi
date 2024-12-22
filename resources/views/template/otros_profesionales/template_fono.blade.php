@@ -68,6 +68,7 @@
                 overflow: auto;
             }
         </style>
+        @yield('page-style')
     </head>
     <body>
         @include('template.pediatria.header')
@@ -272,6 +273,6 @@
         @yield('page-script-med-exa') {{--  seccion receta y exmaenes --}}
         @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
         @yield('js-sidebar') {{-- seccion js side bar --}}
-		@yield('page-script-btn-autorizacion')								  
+		@yield('page-script-btn-autorizacion')
     </body>
 </html>

@@ -285,6 +285,9 @@ class ficha_atencionController extends Controller
         $examenMedico = ExamenMedico::where('cod_parent', 0)->where('habilitado', 1)->orderby('nombre_examen', 'ASC')->get();
         $user = Auth::user()->id;
         $profesional = Profesional::where('id_usuario', $user)->first();
+
+        // echo json_encode($profesional);
+
         $profesional_especialidad = '';
         $prof_especialidad = '';
         $prof_tipo_especialidad = '';
@@ -984,7 +987,8 @@ class ficha_atencionController extends Controller
             /** examenes radiologicos */
             $examenes_radiologicos = '';
         }
-        else if(($profesional->id_tipo_especialidad == 54 || $profesional->id_tipo_especialidad == 55)  && empty($profesional->id_sub_tipo_especialidad))
+        // else if(($profesional->id_tipo_especialidad == 54 || $profesional->id_tipo_especialidad == 55)  && empty($profesional->id_sub_tipo_especialidad))
+        else if(($profesional->id_tipo_especialidad == 54 )  && empty($profesional->id_sub_tipo_especialidad))
         {
             // 54 - TECNOLOGO ORL (tecnologo)
             // 55 - EXAMENES ORL (fonoaudiologo)
@@ -1214,7 +1218,25 @@ class ficha_atencionController extends Controller
             /** fonoaudiologia */
             else if($profesional->id_especialidad == 4)
             {
-                $ruta_blade = 'atencion_otros_prof.atencion_fonoaudiologo';
+                if($profesional->id_tipo_especialidad == 55)
+                {
+                    $ruta_blade = 'atencion_otros_prof.atencion_fono_octavopar';
+
+                    $fichaTipo = '';
+                    $examen = '';
+                    $lista_examen_especial = '';
+
+                    /** examenes de la especialidad */
+                    $examenes_especialidad = '';
+
+                    /** examenes radiologicos */
+                    $examenes_radiologicos = '';
+                }
+                else
+                {
+                    // $ruta_blade = 'atencion_otros_prof.atencion_fonoaudiologo';
+                    $ruta_blade = 'atencion_otros_prof.atencion_fono';
+                }
             }
             /** nutricion */
             else if($profesional->id_especialidad == 5)
@@ -10606,6 +10628,7 @@ class ficha_atencionController extends Controller
                                         case 111: // 111	Laboratorio Anatomía Patológica
                                             break;
                                         case 112: // 112	Laboratorio Otorrinolaringología
+
                                             break;
                                         case 113: // 113	Laboratorio Oftalmología
                                             break;

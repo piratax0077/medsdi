@@ -193,8 +193,26 @@
                         <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $lugar_atencion }}">
                         <input type="hidden" name="fecha" id="fecha">
 
+                        @if ($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" id="div_procedimiento" name="div_procedimiento" style="display: none;">
+
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Procedimiento</label>
+                                    <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento" id="form_reseva_de_horas_id_procedimiento">
+                                        <option value="">Seleccione</option>
+                                        @if (isset($procedimientos) && !empty($procedimientos))
+                                            @foreach ($procedimientos as $proced )
+                                                <option value="{{ $proced->id }}" data-cant_bloque="{{ (empty($proced->cantidad_bloques_prof)?$proced->cantidad_bloques:$proced->cantidad_bloques_prof) }}">{{ $proced->nombre }} {{ (empty($proced->cantidad_bloques_prof)?$proced->cantidad_bloques:$proced->cantidad_bloques_prof) }}Blq.</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+
+                            </div>
+                        @endif
 
                         <div id="reserva_datos_paciente" class="row mx-3">
+
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <h6 class="text-c-blue f-16 d-inline">Información del paciente</h6>
                                 <button type="button" onclick="editar_info_paciente();" class="btn btn-sm btn-info-light-c float-right d-inline paciente_view">
@@ -410,6 +428,7 @@
                         </div>
 
                         <div id="reserva_agregar_paciente_hora">
+
                             <div class="form-row">
                                 <div class="col-sm-12 col-md-12">
                                     <div class="alert alert-danger py-1" role="alert">

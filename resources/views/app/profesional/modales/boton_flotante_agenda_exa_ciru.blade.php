@@ -217,7 +217,7 @@
                                                                     });
                                                                 }
                                                             });
-                                                            // console.log(arrayTemp);
+                                                            console.log(arrayTemp);
                                                             end(arrayTemp);
                                                         }
                                                         else
@@ -538,6 +538,7 @@
                                                     $('#rut_paciente_reserva').val('');
                                                     $('#reserva_agregar_paciente_hora').hide();
                                                     $('#fecha_consulta').val(date.dateStr);
+                                                    $('#div_procedimiento').hide();
                                                 }
                                                 else
                                                 {

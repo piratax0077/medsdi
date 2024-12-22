@@ -2431,6 +2431,8 @@
 
                     if (data !== 'null') {
 
+                        $('#div_procedimiento').show();
+
                         data = JSON.parse(data);
                         if (data.tipo_paciente == 'SI') {
 
@@ -2447,6 +2449,7 @@
                                     }
                                 @endif
                             @endif
+
 
                             $('.paciente_view').show();
                             $('.paciente_edit').hide();
@@ -3062,6 +3065,13 @@
             let id_lugar_atencion = $('#id_lugar_atencion').val();
             let tipo_agenda = $('#id_tipo_agenda').val();
             var tipo_agenda_text = 'C';
+            var procedimiento = '';
+            var proc_bloque = '';
+            if($('#form_reseva_de_horas_id_procedimiento').length == 1)
+            {
+                procedimiento = $('#form_reseva_de_horas_id_procedimiento').val();
+                proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
+            }
 
             console.log(tipo_agenda);
             console.log(tipo_agenda_text);
@@ -3119,6 +3129,8 @@
                         acompanante: acompanante,
                         lista_Acompanante: lista_Acompanante,
                         autorizacion_atencion: autorizacion_atencion,
+                        procedimiento: procedimiento,
+                        proc_bloque: proc_bloque,
                     }
                 })
                 .done(function(data) {

@@ -75,6 +75,7 @@ use App\Models\Invitacion;
 use App\Models\Licencia;
 use App\Models\PacienteHistoricoDatosMedicos;
 use App\Models\PacientesDependientes;
+use App\Models\ProcedimientosCentro;
 use App\Models\ProcedimientosCentroLugarAtencionProfesional;
 use App\Models\ProfesionalHorariosBloqueo;
 use App\Models\TipoBono;
@@ -1823,7 +1824,91 @@ class EscritorioProfesional extends Controller
     {
 
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $institucion = Instituciones::where('id_lugar_atencion',$request->lugares_atencion)->first();
 
+        if($institucion && $institucion->id_tipo_institucion == 2){
+            try {
+                // buscamos los servicios internos
+            $servicios_internos = $this->dame_servicios_internos($institucion->id, $institucion->id_lugar_atencion);
+
+            foreach($servicios_internos as $servicio_interno){
+                // preguntamos si es profesional es jefe de algun servicio
+                if($servicio_interno->jefe_servicio && $servicio_interno->jefe_servicio->id == $profesional->id){
+                    return view('app.adm_hospital.servicios.jefe_servicio.escritorio_adm',['servicio' => $servicio_interno])->render();
+                }
+            }
+
+            foreach($servicios_internos as $servicio_interno){
+                // preguntamos si el profesional pertenece al grupo de profesionales del hospital de algun servicio
+                foreach($servicio_interno->profesionales as $profesional_servicio){
+                    if($profesional_servicio->id == $profesional->id && $profesional->id_especialidad == 8){
+                        $enfermera = true;
+                        $tipos_receta = TiposReceta::all();
+                        $controles_ciclo = $this->dameEvolucionesPacienteHosp($servicio_interno->id_paciente);
+                        if(count($controles_ciclo) == 0)
+                        {
+                            // si no hay ciclos de control se inicia en 1 para manejar el id en la vista
+                            $contador_div_evaluaciones = 1;
+                        }else{
+                            // si hay ciclos de control se suma 1 para manejar el id en la vista
+                            $contador_div_evaluaciones = count($controles_ciclo) + 1;
+                        }
+                        foreach($controles_ciclo as $cc)
+                        {
+                            $cc->datos_evolucion = json_decode($cc->datos_evolucion);
+                        }
+                        $curaciones_planas = $this->dameCuracionesPlanasPaciente($servicio_interno->id_paciente);
+                        $curaciones_lpp = $this->dameCuracionesLppPaciente($servicio_interno->id_paciente);
+
+                        $controles_ciclo = $this->dameEvolucionesPacienteHosp($servicio_interno->id_paciente);
+
+                        $detalle_receta_controlador = new DetalleRecetaController();
+                        $recetas = $detalle_receta_controlador->dameTodoDetalleRecetaPaciente($servicio_interno->id_paciente);
+
+                        $resumen_recetas = "";
+                        foreach($recetas as $r){
+                            $resumen_recetas .= "<p>".$r->nombre_medicamento." ".$r->dosis." ".$r->nombre_frecuencia." ".$r->duracion." ".$r->comentario." con fecha ".$r->created_at."</p>";
+                        }
+                        // return view('app.adm_hospital.servicios.enfermera.escritorio_enfermera',[
+                        //     'servicio' => $servicio_interno,
+                        //     'institucion' => $institucion,
+                        //     'enfermera' => $enfermera,
+                        //     'tipos_receta' => $tipos_receta,
+                        //     'controles_ciclo' => $controles_ciclo,
+                        //     'contador_div_evaluaciones' => $contador_div_evaluaciones,
+                        //     'curacion_plana' => $curaciones_planas,
+                        //     'curaciones_lpp' => $curaciones_lpp,
+                        //     'controles_ciclo' => $controles_ciclo,
+                        //     'recetas' => $recetas,
+                        //     'resumen_recetas' => $resumen_recetas
+                        //     ])->render();
+                        $receta_control = RecetaControl::orderBy('Descripcion')->get();
+                        $examenMedico = ExamenMedico::where('cod_parent', 0)->where('habilitado', 1)->orderby('nombre_examen', 'ASC')->get();
+                        $examenControlador = new ExamenMedicoController();
+                        $examenes_solicitados = $examenControlador->dame_examenes_solicitados($servicio_interno->id_paciente);
+                        return view('app.adm_hospital.servicios.enfermera.home',[
+                            'enfermera' => $enfermera,
+                            'institucion' => $institucion,
+                            'servicio' => $servicio_interno,
+                            'tipos_receta' => $tipos_receta,
+                            'receta_control' => $receta_control,
+                            'examenMedico' => $examenMedico,
+                            'examenes_solicitados' => $examenes_solicitados
+                        ])->render();
+                    }
+                    if($profesional_servicio->id == $profesional->id){
+                        return view('app.adm_hospital.servicios.profesionales.escritorio',['servicio' => $servicio_interno])->render();
+                    }
+                }
+            }
+
+            return $servicios_internos;
+            } catch (\Exception $e) {
+                //throw $th;
+                return $e->getMessage();
+            }
+
+        }
         /** tipos de agendas del profesional */
         $tipo_agendas_temp = ProfesionalHorario::select('tipo_agenda')->where('id_lugar_atencion', $request->lugares_atencion)->where('id_profesional', $profesional->id)->orderBy('tipo_agenda')->groupBy('tipo_agenda')->first();
         $horario = array();
@@ -1922,6 +2007,24 @@ class EscritorioProfesional extends Controller
         $bloque_horario = ProfesionalHorariosBloqueo::where($filtro_bloqueos)->get();
         $tipo_bonos = TipoBono::where('estado', 1)->get();
 
+        $filtro_procedimiento = array();
+        $filtro_procedimiento[] = array('procedimientos_centro.id_lugar_atencion', $lugarAtencion->id);
+        $filtro_procedimiento[] = array('procedimientos_centro.estado', 1);
+        $id_profesional = $profesional->id;
+        // $filtro_procedimiento[] = array('procedimientos_lugar_atencion_profesional.id_profesional', '=', $id_profesional);
+        // $filtro_procedimiento[] = array('procedimientos_lugar_atencion_profesional.estado', '=', '1');
+        $procedimientos = ProcedimientosCentro::select( 'procedimientos_centro.id', 'procedimientos_centro.nombre', 'procedimientos_centro.minutos_bloque', 'procedimientos_centro.cantidad_bloques',
+                                                        'procedimientos_lugar_atencion_profesional.cantidad_bloques as cantidad_bloques_prof' )
+                                            ->leftJoin('procedimientos_lugar_atencion_profesional', function($join) use ($id_profesional) {
+                                                $join->on('procedimientos_centro.id', '=', 'procedimientos_lugar_atencion_profesional.id_procedimiento_centro' )
+                                                ->where('procedimientos_lugar_atencion_profesional.id_profesional', '=', $id_profesional )
+                                                ->where('procedimientos_lugar_atencion_profesional.estado', '=', 1 );
+                                            })
+                                            ->where($filtro_procedimiento)
+                                            ->get();
+        // echo json_encode($procedimientos);
+        // die();
+
         return view('app.profesional.agenda')->with(
             [
                 'horas_medicas' => $horas_medicas,
@@ -1942,6 +2045,7 @@ class EscritorioProfesional extends Controller
                 'bloque_horario' => $bloque_horario,
                 'tipo_bonos' => $tipo_bonos,
                 'tipo_agenda_activa' => $tipo_agendas_temp->tipo_agenda,
+                'procedimientos' => $procedimientos,
             ]
 
         );
@@ -2367,20 +2471,32 @@ class EscritorioProfesional extends Controller
 
         }
 
-        /** buscar tiempo de la consult */
-        $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
-        $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
-                                                    ->where('id_profesional', $profesional->id)
-                                                    ->where('id_lugar_atencion',$request->id_lugar_atencion)
-                                                    ->where('dia','like','%'.$dia_de_semana.'%')
-                                                    ->first();
+        $tiempo_consulta = 15;
+        $procedimiento = '';
 
-        // $profesional_horarios = '00:30:00';
-        // $tiempo_consulta = 30;
-        $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
-        $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
-        $totales = ($horas*60) + $minutos;
-        $tiempo_consulta = $totales;
+        if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
+        {
+            $procedimiento = $request->procedimiento;
+            $proc_bloque = ( !empty($request->proc_bloque)?intval($request->proc_bloque):1 );
+            $tiempo_consulta = intval($proc_bloque) * 15;
+        }
+        else
+        {
+            /** buscar tiempo de la consult */
+            $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
+            $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
+                                                        ->where('id_profesional', $profesional->id)
+                                                        ->where('id_lugar_atencion',$request->id_lugar_atencion)
+                                                        ->where('dia','like','%'.$dia_de_semana.'%')
+                                                        ->first();
+
+            // $profesional_horarios = '00:30:00';
+            // $tiempo_consulta = 30;
+            $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
+            $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
+            $totales = ($horas*60) + $minutos;
+            $tiempo_consulta = $totales;
+        }
 
         $hora_medica = new HoraMedica();
 
@@ -3090,7 +3206,7 @@ class EscritorioProfesional extends Controller
             'hora'=> $hora_medica->hora_inicio,
             'profesional_nombre'=> mb_strtoupper($profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos),
             'profesional_especialidad'=> mb_strtoupper($profesional->Especialidad()->first()->nombre),
-            'profesional_tipo_especialidad'=> mb_strtoupper($profesional->TipoEspecialidad()->first()->nombre),
+            'profesional_tipo_especialidad'=> ($profesional->TipoEspecialidad()->first()?mb_strtoupper($profesional->TipoEspecialidad()->first()->nombre):''),
             'profesional_sub_tipo_especialidad'=> $profesional->SubTipoEspecialidad()->first()?mb_strtoupper($profesional->SubTipoEspecialidad()->first()->nombre):'',
             // 'institucion'=> $nombre_institucion,
             'lugar_atencion'=> mb_strtoupper($lugar_atencion->nombre),
