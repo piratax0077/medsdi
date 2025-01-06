@@ -199,28 +199,37 @@ class Funciones{
         $log_users_devices->id_user_create = $id_user_create;
         $log_users_devices->id_user_recept = $id_user_recept;
         $log_users_devices->msg = json_encode($msj);
-        if($tipo_id != 12)
+
+        if($id_user_recept==6 || $id_user_recept==38)
         {
-            if( ($tipo_id == 13  || $tipo_id == 8) && ($id_user_recept==83 || $id_user_recept==3 ))
-            {
-                $log_users_devices->estado = 1;
-            }
-            else if( ($tipo_id == 2 ) && ($id_user_recept==83 || $id_user_recept==3 ))
-            {
-                $log_users_devices->estado = 1;
-            }
-            else
-            {
-                if($id_user_create == $id_user_recept)
-                    $log_users_devices->estado = 1;
-                else
-                    $log_users_devices->estado = 0;
-            }
+            $log_users_devices->estado = 1;
         }
         else
         {
-            $log_users_devices->estado = 0;
+            if($tipo_id != 12)
+            {
+                if( ($tipo_id == 13  || $tipo_id == 8) && ($id_user_recept==83 || $id_user_recept==3 || $id_user_recept==6 || $id_user_recept==38 ))
+                {
+                    $log_users_devices->estado = 1;
+                }
+                else if( ($tipo_id == 2 ) && ($id_user_recept==83 || $id_user_recept==3 || $id_user_recept==6 || $id_user_recept==38 ))
+                {
+                    $log_users_devices->estado = 1;
+                }
+                else
+                {
+                    if($id_user_create == $id_user_recept)
+                        $log_users_devices->estado = 1;
+                    else
+                        $log_users_devices->estado = 0;
+                }
+            }
+            else
+            {
+                $log_users_devices->estado = 0;
+            }
         }
+
         $log_users_devices->fecha_ingreso = $fecha_actual;
         $log_users_devices->fecha_termino = $fecha_vencimiento;
         $log_users_devices->tipo = $tipo_id; // check sdi // ESTRUCTURA DE TEXTO

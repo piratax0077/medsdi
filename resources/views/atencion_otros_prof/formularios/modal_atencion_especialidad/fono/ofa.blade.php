@@ -473,7 +473,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="form-group" id="div_tonolab" style="display:none">
-                                                                        <label id="" name="" class="floating-label-activo-sm" for="tonolab_obs">Obs Tono</label>
+                                                                        <label class="floating-label-activo-sm" for="tonolab_obs">Obs Tono</label>
                                                                         <textarea class="form-control form-control-sm" data-titulo="Obs Obs Tono" data-seccion="OFA LABIO SUPERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="tonolab_obs" id="tonolab_obs"></textarea>
                                                                     </div>
                                                                 </div>
@@ -555,20 +555,20 @@
                                                             <div class="form-row">
                                                                 <div class="col-sm-4 mt-2">
                                                                     <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" for="formalab" >Forma Labio</label>
+                                                                        <label class="floating-label-activo-sm" for="formalabi" >Forma Labio</label>
                                                                         <select name="formalabi" id="formalabi" data-titulo="Forma Labios" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('formalabi','div_formalabi','formalabi_obs',2);">
                                                                             <option value="1"> Normal</option>
                                                                             <option value="2"> Alterada (describir)</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="form-group" id="div_formalabi" style="display:none">
-                                                                        <label id="" name="" class="floating-label-activo-sm" for="formalab_obs" >Obs Forma Labios</label>
+                                                                        <label id="" name="" class="floating-label-activo-sm" for="formalabi_obs" >Obs Forma Labios</label>
                                                                         <textarea class="form-control form-control-sm" data-titulo="Obs Forma Labios" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="formalabi_obs" id="formalabi_obs"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-4 mt-2">
                                                                     <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" for="tonolab" >Tono</label>
+                                                                        <label class="floating-label-activo-sm" for="tonolabi" >Tono</label>
                                                                         <select name="tonolabi" id="tonolabi" data-titulo="Tono" data-seccion="OFA LABIO SUPERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tonolabi','div_tonolabi','tonolabi_obs',2);">
                                                                             <option value="1">Adecuado</option>
                                                                             <option value="2">Alterado</option>
@@ -581,33 +581,33 @@
                                                                 </div>
                                                                 <div class="col-sm-4 mt-2">
                                                                     <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" for="cicatriz_lab" >Cicatriz</label>
+                                                                        <label class="floating-label-activo-sm" for="cicatrizi_lab" >Cicatriz</label>
                                                                         <select name="cicatrizi_lab" id="cicatrizi_lab" data-titulo="Cicatriz" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cicatrizi_lab','div_cicatrizi_lab','cicatrizi_lab_obs',2);">
                                                                             <option value="1">No</option>
                                                                             <option value="2">Si (describir)</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="form-group" id="div_cicatrizi_lab" style="display:none">
-                                                                        <label id="" name="" class="floating-label-activo-sm"  for="cicatriz_lab_obs" >Obs.Cicatriz</label>
+                                                                        <label id="" name="" class="floating-label-activo-sm"  for="cicatrizi_lab_obs" >Obs.Cicatriz</label>
                                                                         <textarea class="form-control form-control-sm" data-titulo="Obs.Cicatriz" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="cicatrizi_lab_obs" id="cicatrizi_lab_obs"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-4 mt-2">
                                                                     <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" for="posicion_lab">Posición</label>
+                                                                        <label class="floating-label-activo-sm" for="posicioni_lab">Posición</label>
                                                                         <select name="posicioni_lab" id="posicioni_lab" data-titulo="Posición" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('posicioni_lab','div_posicioni_lab','posicioni_lab_obs',2);">
                                                                             <option value="1">Adecuado</option>
                                                                             <option value="2">Alteracion Funcional</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="form-group" id="div_posicioni_lab" style="display:none">
-                                                                        <label id="" name="" class="floating-label-activo-sm" for="posicion_lab_obs">Obs Posición</label>
+                                                                        <label id="" name="" class="floating-label-activo-sm" for="posicioni_lab_obs">Obs Posición</label>
                                                                         <textarea class="form-control form-control-sm" data-titulo="Obs Posición" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="posicioni_lab_obs" id="posicioni_lab_obs"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-4 mt-2">
                                                                     <div class="form-group">
-                                                                        <label class="floating-label-activo-sm" for="tamano_lab">Tamaño</label>
+                                                                        <label class="floating-label-activo-sm" for="tamanoi_lab">Tamaño</label>
                                                                         <select name="tamanoi_lab" id="tamanoi_lab" data-titulo="Tamaño" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tamanoi_lab','div_tamanoi_lab','tamanoi_lab_obs',2);">
                                                                             <option value="0">Seleccione</option>
                                                                             <option value="1"> Normal</option>
@@ -615,20 +615,20 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="form-group" id="div_tamanoi_lab" style="display:none">
-                                                                        <label  class="floating-label-activo-sm" for="tamano_lab_obs">Obs Tamaño</label>
+                                                                        <label  class="floating-label-activo-sm" for="tamanoi_lab_obs">Obs Tamaño</label>
                                                                         <textarea class="form-control form-control-sm" data-titulo="Obs Tamaño" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="tamanoi_lab_obs" id="tamanoi_lab_obs"></textarea>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-sm-4 mt-2">
                                                                     <div class="form-group">
-                                                                        <label class="floating-label-activo-sm"for="funcionalidad" >Funcionalidad Labial</label>
+                                                                        <label class="floating-label-activo-sm"for="funcionalidadi" >Funcionalidad Labial</label>
                                                                         <select name="funcionalidadi" id="funcionalidadi" data-titulo="Funcionalidad Labial" data-seccion="OFA LABIO INFERIOR" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('funcionalidadi','div_funcionalidadi','funcionalidadi_obs',2);">
                                                                             <option value="1">Adecuada</option>
                                                                             <option value="2">Alteracion Funcional</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="form-group" id="div_funcionalidadi" style="display:none">
-                                                                        <label  class="floating-label-activo-sm" for="funcionalidad_obs">Obs Funcionalidad Labial</label>
+                                                                        <label  class="floating-label-activo-sm" for="funcionalidadi_obs">Obs Funcionalidad Labial</label>
                                                                         <textarea class="form-control form-control-sm" data-titulo="Obs Funcionalidad Labial" data-seccion="OFA LABIO INFERIOR" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="funcionalidadi_obs" id="funcionalidadi_obs"></textarea>
                                                                     </div>
                                                                 </div>
@@ -636,7 +636,7 @@
                                                                 <div class="col-sm-12 mt-2">
 
                                                                     <div class="form-group" id="div_ofa_vest_boc">
-                                                                        <label id="" name="" class="floating-label-activo-sm" for="obs_lab_sup">Obs Examen del Labio Inferior</label>
+                                                                        <label id="" name="" class="floating-label-activo-sm" for="obs_lab_supi">Obs Examen del Labio Inferior</label>
                                                                         <textarea class="form-control form-control-sm" data-titulo="Obs Examen del Labio Superior" data-seccion="OFA LABIO INFERIO" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_lab_supi" id="obs_lab_supi"></textarea>
                                                                     </div>
                                                                 </div>
@@ -651,7 +651,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-info">Guardar</button>
+                                <button type="button" class="btn btn-info" onclick="registrar_est_ofa();">Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -663,5 +663,319 @@
 <script>
     function est_ofa(){
         $('#est_ofa').modal('show');
+    }
+
+    function registrar_est_ofa()
+    {
+        var id_ficha_otros_prof = $('#id_fc').val();
+        var id_ficha_fono = '';
+        var id_paciente = $('#id_paciente_fc').val();
+        var id_profesional = $('#id_profesional_fc').val();
+        var est_osea = $('#est_osea').val();
+        var est_osea_obs = $('#est_osea_obs').val();
+        var form_fac = $('#form_fac').val();
+        var form_fac_obs = $('#form_fac_obs').val();
+        var ap_bucal = $('#ap_bucal').val();
+        var ap_bucal_obs = $('#ap_bucal_obs').val();
+        var dientes = $('#dientes').val();
+        var dientes_obs = $('#dientes_obs').val();
+        var mordid = $('#mordid').val();
+        var mordid_obs = $('#mordid_obs').val();
+        var nariz = $('#nariz').val();
+        var nariz_obs = $('#nariz_obs').val();
+        var cara_obs = $('#cara_obs').val();
+        var vestib = $('#vestib').val();
+        var vestib_obs = $('#vestib_obs').val();
+        var fren_sup = $('#fren_sup').val();
+        var fren_sup_obs = $('#fren_sup_obs').val();
+        var fren_inf = $('#fren_inf').val();
+        var fren_inf_obs = $('#fren_inf_obs').val();
+        var fren_subl = $('#fren_subl').val();
+        var fren_subl_obs = $('#fren_subl_obs').val();
+        var palad_duro = $('#palad_duro').val();
+        var palad_duro_obs = $('#palad_duro_obs').val();
+        var palad_bl = $('#palad_bl').val();
+        var palad_bl_obs = $('#palad_bl_obs').val();
+        var cierre_vf = $('#cierre_vf').val();
+        var cierre_vf_obs = $('#cierre_vf_obs').val();
+        var uvul = $('#uvul').val();
+        var uvul_obs = $('#uvul_obs').val();
+        var amigd = $('#amigd').val();
+        var amigd_obs = $('#amigd_obs').val();
+        var adenoi = $('#adenoi').val();
+        var adenoi_obs = $('#adenoi_obs').val();
+        var obs_gral_boc = $('#obs_gral_boc').val();
+        var forma = $('#forma').val();
+        var forma_obs = $('#forma_obs').val();
+        var posicion = $('#posicion').val();
+        var posicion_obs = $('#posicion_obs').val();
+        var tono = $('#tono').val();
+        var tono_obs = $('#tono_obs').val();
+        var cicatriz = $('#cicatriz').val();
+        var cicatriz_obs = $('#cicatriz_obs').val();
+        var tam = $('#tam').val();
+        var tam_obs = $('#tam_obs').val();
+        var funcion = $('#funcion').val();
+        var funcion_obs = $('#funcion_obs').val();
+        var leng_obs = $('#leng_obs').val();
+        var formalab = $('#formalab').val();
+        var formalab_obs = $('#formalab_obs').val();
+        var tonolab = $('#tonolab').val();
+        var tonolab_obs = $('#tonolab_obs').val();
+        var cicatriz_lab = $('#cicatriz_lab').val();
+        var cicatriz_lab_obs = $('#cicatriz_lab_obs').val();
+        var posicion_lab = $('#posicion_lab').val();
+        var posicion_lab_obs = $('#posicion_lab_obs').val();
+        var tamano_lab = $('#tamano_lab').val();
+        var tamano_lab_obs = $('#tamano_lab_obs').val();
+        var funcionalidad = $('#funcionalidad').val();
+        var funcionalidad_obs = $('#funcionalidad_obs').val();
+        var obs_lab_sup = $('#obs_lab_sup').val();
+        var formalabi = $('#formalabi').val();
+        var formalabi_obs = $('#formalabi_obs').val();
+        var tonolabi = $('#tonolabi').val();
+        var tonolabi_obs = $('#tonolabi_obs').val();
+        var cicatrizi_lab = $('#cicatrizi_lab').val();
+        var cicatrizi_lab_obs = $('#cicatrizi_lab_obs').val();
+        var posicioni_lab = $('#posicioni_lab').val();
+        var posicioni_lab_obs = $('#posicioni_lab_obs').val();
+        var tamanoi_lab = $('#tamanoi_lab').val();
+        var tamanoi_lab_obs = $('#tamanoi_lab_obs').val();
+        var funcionalidadi = $('#funcionalidadi').val();
+        var funcionalidadi_obs = $('#funcionalidadi_obs').val();
+        var obs_lab_supi = $('#obs_lab_supi').val();
+
+        var url = "{{ route('ficha.otro.prof.registro.eval.ofa') }}";
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                    _token: CSRF_TOKEN,
+                    id_ficha_otros_prof: id_ficha_otros_prof,
+                    id_ficha_fono: id_ficha_fono,
+                    id_paciente: id_paciente,
+                    id_profesional: id_profesional,
+                    est_osea: est_osea,
+                    est_osea_obs: est_osea_obs,
+                    form_fac: form_fac,
+                    form_fac_obs: form_fac_obs,
+                    ap_bucal: ap_bucal,
+                    ap_bucal_obs: ap_bucal_obs,
+                    dientes: dientes,
+                    dientes_obs: dientes_obs,
+                    mordid: mordid,
+                    mordid_obs: mordid_obs,
+                    nariz: nariz,
+                    nariz_obs: nariz_obs,
+                    cara_obs: cara_obs,
+                    vestib: vestib,
+                    vestib_obs: vestib_obs,
+                    fren_sup: fren_sup,
+                    fren_sup_obs: fren_sup_obs,
+                    fren_inf: fren_inf,
+                    fren_inf_obs: fren_inf_obs,
+                    fren_subl: fren_subl,
+                    fren_subl_obs: fren_subl_obs,
+                    palad_duro: palad_duro,
+                    palad_duro_obs: palad_duro_obs,
+                    palad_bl: palad_bl,
+                    palad_bl_obs: palad_bl_obs,
+                    cierre_vf: cierre_vf,
+                    cierre_vf_obs: cierre_vf_obs,
+                    uvul: uvul,
+                    uvul_obs: uvul_obs,
+                    amigd: amigd,
+                    amigd_obs: amigd_obs,
+                    adenoi: adenoi,
+                    adenoi_obs: adenoi_obs,
+                    obs_gral_boc: obs_gral_boc,
+                    forma: forma,
+                    forma_obs: forma_obs,
+                    posicion: posicion,
+                    posicion_obs: posicion_obs,
+                    tono: tono,
+                    tono_obs: tono_obs,
+                    cicatriz: cicatriz,
+                    cicatriz_obs: cicatriz_obs,
+                    tam: tam,
+                    tam_obs: tam_obs,
+                    funcion: funcion,
+                    funcion_obs: funcion_obs,
+                    leng_obs: leng_obs,
+                    formalab: formalab,
+                    formalab_obs: formalab_obs,
+                    tonolab: tonolab,
+                    tonolab_obs: tonolab_obs,
+                    cicatriz_lab: cicatriz_lab,
+                    cicatriz_lab_obs: cicatriz_lab_obs,
+                    posicion_lab: posicion_lab,
+                    posicion_lab_obs: posicion_lab_obs,
+                    tamano_lab: tamano_lab,
+                    tamano_lab_obs: tamano_lab_obs,
+                    funcionalidad: funcionalidad,
+                    funcionalidad_obs: funcionalidad_obs,
+                    obs_lab_sup: obs_lab_sup,
+                    formalabi: formalabi,
+                    formalabi_obs: formalabi_obs,
+                    tonolabi: tonolabi,
+                    tonolabi_obs: tonolabi_obs,
+                    cicatrizi_lab: cicatrizi_lab,
+                    cicatrizi_lab_obs: cicatrizi_lab_obs,
+                    posicioni_lab: posicioni_lab,
+                    posicioni_lab_obs: posicioni_lab_obs,
+                    tamanoi_lab: tamanoi_lab,
+                    tamanoi_lab_obs: tamanoi_lab_obs,
+                    funcionalidadi: funcionalidadi,
+                    funcionalidadi_obs: funcionalidadi_obs,
+                    obs_lab_supi: obs_lab_supi,
+                    otro: '',
+                    estado: 1,
+                },
+            })
+        .done(function(data) {
+            if (data.estado == 1)
+            {
+
+                $('#est_ofa').modal('hide');
+                limpiar_est_ofa();
+                swal({
+                    title: "Registro de Evaluacion OFA",
+                    text: "Carga Exitosa.",
+                    icon: "success"
+                });
+            }
+            else
+            {
+                swal({
+                    title: "Registro de Evaluacion OFA",
+                    text: "Error al registrar",
+                    icon: "error"
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function limpiar_est_ofa()
+    {
+        $('#id_ficha_otros_prof').val(1);//bigInteger
+        $('#id_ficha_fono').val(1);//bigInteger
+        $('#id_paciente').val(1);//bigInteger
+        $('#id_profesional').val(1);//bigInteger
+        $('#est_osea').val(1);//integer
+        $('#est_osea_obs').val('');//string
+        $('#form_fac').val(1);//integer
+        $('#form_fac_obs').val('');//string
+        $('#ap_bucal').val(1);//integer
+        $('#ap_bucal_obs').val('');//string
+        $('#dientes').val(1);//integer
+        $('#dientes_obs').val('');//string
+        $('#mordid').val(1);//integer
+        $('#mordid_obs').val('');//string
+        $('#nariz').val(1);//integer
+        $('#nariz_obs').val('');//string
+        $('#cara_obs').val('');//string
+        $('#vestib').val(1);//integer
+        $('#vestib_obs').val('');//string
+        $('#fren_sup').val(1);//integer
+        $('#fren_sup_obs').val('');//string
+        $('#fren_inf').val(1);//integer
+        $('#fren_inf_obs').val('');//string
+        $('#fren_subl').val(1);//integer
+        $('#fren_subl_obs').val('');//string
+        $('#palad_duro').val(1);//integer
+        $('#palad_duro_obs').val('');//string
+        $('#palad_bl').val(1);//integer
+        $('#palad_bl_obs').val('');//string
+        $('#cierre_vf').val(1);//integer
+        $('#cierre_vf_obs').val('');//string
+        $('#uvul').val(1);//integer
+        $('#uvul_obs').val('');//string
+        $('#amigd').val(1);//integer
+        $('#amigd_obs').val('');//string
+        $('#adenoi').val(1);//integer
+        $('#adenoi_obs').val('');//string
+        $('#obs_gral_boc').val('');//string
+        $('#forma').val(1);//integer
+        $('#forma_obs').val('');//string
+        $('#posicion').val(1);//integer
+        $('#posicion_obs').val('');//string
+        $('#tono').val(1);//integer
+        $('#tono_obs').val('');//string
+        $('#cicatriz').val(1);//integer
+        $('#cicatriz_obs').val('');//string
+        $('#tam').val(1);//integer
+        $('#tam_obs').val('');//string
+        $('#funcion').val(1);//integer
+        $('#funcion_obs').val('');//string
+        $('#leng_obs').val('');//string
+        $('#formalab').val(1);//integer
+        $('#formalab_obs').val('');//string
+        $('#tonolab').val(1);//integer
+        $('#tonolab_obs').val('');//string
+        $('#cicatriz_lab').val(1);//integer
+        $('#cicatriz_lab_obs').val('');//string
+        $('#posicion_lab').val(1);//integer
+        $('#posicion_lab_obs').val('');//string
+        $('#tamano_lab').val(1);//integer
+        $('#tamano_lab_obs').val('');//string
+        $('#funcionalidad').val(1);//integer
+        $('#funcionalidad_obs').val('');//string
+        $('#obs_lab_sup').val('');//string
+        $('#formalabi').val(1);//integer
+        $('#formalabi_obs').val('');//string
+        $('#tonolabi').val(1);//integer
+        $('#tonolabi_obs').val('');//string
+        $('#cicatrizi_lab').val(1);//integer
+        $('#cicatrizi_lab_obs').val('');//string
+        $('#posicioni_lab').val(1);//integer
+        $('#posicioni_lab_obs').val('');//string
+        $('#tamanoi_lab').val(1);//integer
+        $('#tamanoi_lab_obs').val('');//string
+        $('#funcionalidadi').val(1);//integer
+        $('#funcionalidadi_obs').val('');//string
+        $('#obs_lab_supi').val('');//string
+        $('#otro').val('');//string
+        $('#estado').val(1);//integer
+
+        evaluar_para_carga_detalle('est_osea','div_est_osea','est_osea_obs',2);
+        evaluar_para_carga_detalle('form_fac','div_form_fac','form_fac_obs',2);
+        evaluar_para_carga_detalle('ap_bucal','div_ap_bucal','ap_bucal_obs',2);
+        evaluar_para_carga_detalle('dientes','div_dientes','dientes_obs',2);
+        evaluar_para_carga_detalle('mordid','div_mordid','mordid_obs',2);
+        evaluar_para_carga_detalle('nariz','div_nariz','nariz_obs',2);
+        evaluar_para_carga_detalle('vestib','div_vestib','vestib_obs',2);
+        evaluar_para_carga_detalle('fren_sup','div_fren_sup','fren_sup_obs',2);
+        evaluar_para_carga_detalle('fren_inf','div_fren_inf','fren_inf_obs',2);
+        evaluar_para_carga_detalle('fren_subl','div_fren_subl','fren_subl_obs',2);
+        evaluar_para_carga_detalle('palad_duro','div_palad_duro','palad_duro_obs',7);
+        evaluar_para_carga_detalle('palad_bl','div_palad_bl','palad_bl_obs',2);
+        evaluar_para_carga_detalle('cierre_vf','div_cierre_vf','cierre_vf_obs',5);
+        evaluar_para_carga_detalle('uvul','div_uvul','uvul_obs',7);
+        evaluar_para_carga_detalle('amigd','div_amigd','amigd_obs',3);
+        evaluar_para_carga_detalle('adenoi','div_adenoi','adenoi_obs',3);
+        evaluar_para_carga_detalle('forma','div_forma','forma_obs',2);
+        evaluar_para_carga_detalle('posicion','div_posicion','posicion_obs',2);
+        evaluar_para_carga_detalle('tono','div_tono','otono_obs',2);
+        evaluar_para_carga_detalle('cicatriz','div_cicatriz','cicatriz_obs',2);
+        evaluar_para_carga_detalle('tam','div_tam','tam_obs',4);
+        evaluar_para_carga_detalle('funcion','div_funcion','funcion_obs',2);
+        evaluar_para_carga_detalle('formalab','div_formalab','formalab_obs',2);
+        evaluar_para_carga_detalle('tonolab','div_tonolab','tonolab_obs',2);
+        evaluar_para_carga_detalle('cicatriz_lab','div_cicatriz_lab','cicatriz_lab_obs',2);
+        evaluar_para_carga_detalle('posicion_lab','div_posicion_lab','posicion_lab_obs',2);
+        evaluar_para_carga_detalle('tamano_lab','div_tamano_lab','tamano_lab_obs',2);
+        evaluar_para_carga_detalle('funcionalidad','div_funcionalidad','funcionalidad_obs',2);
+        evaluar_para_carga_detalle('formalabi','div_formalabi','formalabi_obs',2);
+        evaluar_para_carga_detalle('tonolabi','div_tonolabi','tonolabi_obs',2);
+        evaluar_para_carga_detalle('cicatrizi_lab','div_cicatrizi_lab','cicatrizi_lab_obs',2);
+        evaluar_para_carga_detalle('posicioni_lab','div_posicioni_lab','posicioni_lab_obs',2);
+        evaluar_para_carga_detalle('tamanoi_lab','div_tamanoi_lab','tamanoi_lab_obs',2);
+        evaluar_para_carga_detalle('funcionalidadi','div_funcionalidadi','funcionalidadi_obs',2);
+
     }
 </script>

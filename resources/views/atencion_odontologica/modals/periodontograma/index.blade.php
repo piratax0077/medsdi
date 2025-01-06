@@ -1,9 +1,9 @@
-﻿{{--  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3c.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+﻿ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3c.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-	<head>  --}}
+	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-		<link type="text/css" rel="stylesheet" href="{{ asset('js/dental/periodontograma/estilo.css') }}" media="screen" />
-		<link type="text/css" rel="print stylesheet" href="{{ asset('js/dental/periodontograma/estilo.css') }}" media="print" />
+		<link type="text/css" rel="stylesheet" href="{{ asset('js/dental/periodontograma/estilos.css') }}" media="screen" />
+		<link type="text/css" rel="print stylesheet" href="{{ asset('js/dental/periodontograma/estilos.css') }}" media="print" />
         <style>
             #i18,#i17,#i16,#i15,#i14,#i13,#i12,#i11{
             background: url('{{ asset('images/dental/periodontograma/img/periodontograma-oblicuas.png') }}') repeat-x center;
@@ -464,26 +464,7 @@
                 }
             }
 
-            function drawVisualization18a(data18a) {
-                // Create and draw the visualization.
-                var ac18a = new google.visualization.AreaChart(document.getElementById('visualization18a'));
-                ac18a.draw(data18a, {
-                isStacked: true,
-                backgroundColor: 'transparent',
-                legend: {position: 'none'},
-                tooltip: {trigger:'none'},
-                axisTitlesPosition: 'none',
-                theme: {chartArea: {width: '100%', height: '100%'}},
-                width: 40,
-                height: 160,
-                hAxis: {},
-                vAxis: {gridlines: {color: 'transparent', count: 31},baseline:0,textPosition:'none',viewWindowMode: 'explicit',viewWindow: {max:19,min:-12}}
-                });
 
-                $('#visualization18a iframe').attr('allowTransparency', 'true');
-                $('#visualization18a iframe').contents().find('body').css('background', 'transparent');
-
-            }
 
             function rangoNumero(campo){
                 var dato=document.getElementById(campo).value;
@@ -505,6 +486,27 @@
                     alert("El dato de margen gingival debe estar comprendido entre -9 y +9");
                     document.getElementById(campo).value='0';
                 }
+
+            }
+
+            function drawVisualization18a(data18a) {
+                // Create and draw the visualization.
+                var ac18a = new google.visualization.AreaChart(document.getElementById('visualization18a'));
+                ac18a.draw(data18a, {
+                isStacked: true,
+                backgroundColor: 'transparent',
+                legend: {position: 'none'},
+                tooltip: {trigger:'none'},
+                axisTitlesPosition: 'none',
+                theme: {chartArea: {width: '100%', height: '100%'}},
+                width: 40,
+                height: 160,
+                hAxis: {},
+                vAxis: {gridlines: {color: 'transparent', count: 31},baseline:0,textPosition:'none',viewWindowMode: 'explicit',viewWindow: {max:19,min:-12}}
+                });
+
+                $('#visualization18a iframe').attr('allowTransparency', 'true');
+                $('#visualization18a iframe').contents().find('body').css('background', 'transparent');
 
             }
 

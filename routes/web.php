@@ -220,6 +220,7 @@ Route::group([
     Route::post('registrar_maxilar_inferior_infantil', [DentalController::class, 'registrar_maxilar_inferior_infantil'])->name('dental_infantil.registrar_maxilar_inferior_infantil');
     Route::post('registrar_boca_completa_infantil', [DentalController::class, 'registrar_boca_completa_infantil'])->name('dental_infantil.registrar_boca_completa_infantil');
     Route::post('registrar_odontograma', [DentalController::class, 'registrar_odontograma'])->name('dental.registrar_odontograma');
+    Route::post('eliminar_odontograma', [DentalController::class, 'eliminar_odontograma'])->name('dental.eliminar_odontograma');
 
     //Cirugia Dental
     Route::get('cirugia_dental', [DentalController::class, 'index_cirugia_dental'])->name('dental.index_cirugia_dental');
@@ -429,6 +430,8 @@ Route::group([
     /** registro de examen por paciente */
     Route::post('/examen/registro', [App\Http\Controllers\EscritorioPaciente::class, 'cargaExamenPorPaciente'])->name('paciente.examen.registro');
 
+    Route::post('/consulta/confidencial/cargar', [App\Http\Controllers\EscritorioPaciente::class, 'cargaConsultaConfidencial'])->name('paciente.consultas.confidenciales');
+
 });
 
 
@@ -452,6 +455,8 @@ Route::group(
         Route::get('Check_sdi',[App\Http\Controllers\EscritorioPaciente::class, 'checkSdi'])->name('check_sdi'); // PARAMS OBLIGATORIOS urla=Inicio&urln=Mi_Ficha_Medica
         Route::get('Mi_Ficha_Medica', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('profesional.mi_ficha');
         Route::get('Mi_Ficha_Medica_Pdf', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedicaPdfView']);
+        Route::get('confidencial/solitar/autorizacion', [App\Http\Controllers\FmuAprobacionController::class, 'solicitarAutorizacionConfidencial'])->name('solicitud.aprobacion.fmu.confidencial');
+        Route::get('confidencial/validar/autorizacion', [App\Http\Controllers\FmuAprobacionController::class, 'validarAutorizacionConfidencial'])->name('validar.aprobacion.fmu.confidencial');
 
     }
 );
@@ -529,6 +534,7 @@ Route::group([
 	Route::get('buscar_Diagnosticos_cie10', [App\Http\Controllers\EscritorioProfesional::class, 'buscarDiagnostico_cie10'])->name('profesional.buscar_diagnosticos_cie10');
 	Route::post('registrar_Diagnosticos_cie10', [App\Http\Controllers\EscritorioProfesional::class, 'registrarDiagnosticoCie10Profesional'])->name('profesional.registrar_diagnosticos_cie10');
 
+    Route::get('/aranceles', [App\Http\Controllers\EscritorioProfesional::class, 'aranceles'])->name('profesional.aranceles');
 
     Route::get('Flujo_caja', [App\Http\Controllers\FlujoCajaController::class, 'ver_flujo_caja'])->name('profesional.flujo_caja');
     Route::get('Mis_estadisticas', [App\Http\Controllers\EscritorioProfesional::class, 'mis_estadisticas'])->name('profesional.mis_estadisticas');
@@ -568,6 +574,9 @@ Route::group([
     Route::post('/guardar_examen_boca_general', [App\Http\Controllers\EscritorioProfesional::class, 'guardar_examen_boca_general'])->name('profesional.guardar_examen_boca_general');
     Route::post('/eliminar_diagnostico_dental',[App\Http\Controllers\EscritorioProfesional::class, 'eliminar_diagnostico_dental'])->name('profesional.eliminar_diagnostico_dental');
     Route::post('/eliminar_tratamiento_dental',[App\Http\Controllers\EscritorioProfesional::class, 'eliminar_tratamiento_dental'])->name('profesional.eliminar_tratamiento_dental');
+    Route::post('/actualizar_tratamiento_dental',[App\Http\Controllers\EscritorioProfesional::class, 'actualizar_tratamiento_dental'])->name('profesional.actualizar_tratamiento_dental');
+    Route::post('/generar_pdf_presupuesto',[App\Http\Controllers\EscritorioProfesional::class, 'generar_pdf_presupuesto'])->name('profesional.generar_pdf_presupuesto_dental');
+    Route::post('/registrar_presupuesto_dental',[App\Http\Controllers\EscritorioProfesional::class, 'registrar_presupuesto_dental'])->name('profesional.registrar_presupuesto_dental');
 
     Route::get('FIcha_medica_unica/{id}', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('profesional.ficha_medica_unica');
     Route::get('Ficha_medica_unica_atencion/{id}', [App\Http\Controllers\EscritorioProfesional::class, 'miFichaMedicaAtencion'])->name('profesional.ficha_medica_unica_atencion');
@@ -671,6 +680,9 @@ Route::group([
     Route::post('/profesional/audifono/agregar', [App\Http\Controllers\EscritorioProfesional::class, 'agregarAudifono'])->name('profesional.registrar_audifono');
     Route::get('/profesional/audifono/ver', [App\Http\Controllers\EscritorioProfesional::class, 'verAudifono'])->name('profesional.ver_audifono');
 
+    /* RUTAS DENTAL FRANCISCO */
+    Route::post('/agregar/procedimiendo/dental', [App\Http\Controllers\EscritorioProfesional::class, 'agregarProcedimientoDental'])->name('profesional.agregar_procedimiento');
+    Route::post('/eliminar/procedimiendo/dental', [App\Http\Controllers\EscritorioProfesional::class, 'eliminarProcedimientoDental'])->name('profesional.eliminar_procedimiento');
 	/** LIQUIDACIONES */
     // Route::post('/profesional/liquidacion/agregar', [App\Http\Controllers\LiquidacionReciboController::class, 'agregarLiquidacion'])->name('profesional.agregar_liquidacion');
 	// Route::post('/profesional/liquidacion/modificar', [App\Http\Controllers\LiquidacionReciboController::class, 'modificarLiquidacion'])->name('profesional.modificar_liquidacion');
@@ -1149,6 +1161,8 @@ Route::group([
     /** modificar paciente */
     Route::get('paciente/modificar', [App\Http\Controllers\EscritorioPaciente::class, 'modificarPaciente'])->name('asistente.paciente.modificar');
 
+    Route::post('carga/archivo', [App\Http\Controllers\CargaArchivoController::class, 'cargaArchivoTemp'])->name('asistente.archivo.carga');
+
 });
 
 /* ASISTENTE Online*/
@@ -1191,6 +1205,7 @@ Route::group([
     Route::get('Hora-medica/hora/agendar/paciente/nuevo', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_hora_nuevo_paciente'])->name('agenda.agendar_hora_nuevo_paciente');
     Route::post('Hora-medica/paciente/nuevo', [App\Http\Controllers\AsistenteController::class, 'AgregarNuevoPaciente'])->name('agenda.paciente.nuevo');
     Route::get('Hora-medica/validar/email', [App\Http\Controllers\EscritorioProfesional::class, 'validar_rut'])->name('agenda.validar_email');
+    Route::get('Hora-medica/validar/email/paciente', [App\Http\Controllers\EscritorioProfesional::class, 'validar_email_paciente'])->name('agenda.paciente.validar_email');
 
     /** motor de busqueda asistente online*/
     Route::get('perfil/configuracion/busqueda/editar', [App\Http\Controllers\EscritorioAsistente::class, 'editar_configuracion_busqueda'])->name('asistente.editar_configuracion_busqueda');
@@ -1408,9 +1423,20 @@ Route::group([
 	/** OTROS PROFESIONALES */
     /** PSICOLOGIA */
     Route::post('Ficha_Atencion/crear/sico', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_sico'])->name('ficha.otro.prof.registrar_ficha_sico');
+    Route::post('sicologia/plan_tratamiento/registro', [App\Http\Controllers\PlanTratamientoTerapiaSicologicaController::class, 'registrar_r'])->name('ficha.otro.prof.plan_tratamiento.registro');
+    Route::post('sicologia/test_rorshchach/registro', [App\Http\Controllers\PsicoPsiquiatriaController::class, 'TestRorshchachRegistro'])->name('ficha.otro.prof.test_rorshchach.registro');
+    Route::post('sicologia/otros_test/registro', [App\Http\Controllers\PsicoPsiquiatriaController::class, 'OtrosTestPsicoPsiquiatrico'])->name('ficha.otro.prof.otros_test.registro');
 
     /** KINESIOLOGIA */
     Route::post('Ficha_Atencion/crear/kine', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_kine'])->name('ficha.otro.prof.registrar_ficha_kine');
+
+    /** FONOAUDIOLOGIA */
+    Route::post('Ficha_Atencion/crear/fonoaudiologia', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_fono'])->name('ficha.otro.prof.registrar_ficha_fono');
+    Route::post('fonoaudiologia/evaluacion/ofa/registro', [App\Http\Controllers\EvaluacionOfaController::class, 'Registrar_r'])->name('ficha.otro.prof.registro.eval.ofa');
+    Route::post('fonoaudiologia/evaluacion/voz/registro', [App\Http\Controllers\EvaluacionVozController::class, 'Registrar_r'])->name('ficha.otro.prof.registro.eval.voz');
+    Route::post('fonoaudiologia/evaluacion/espasmofemia/registro', [App\Http\Controllers\EvaluacionEspasmofemiaController::class, 'Registrar_r'])->name('ficha.otro.prof.registro.eval.espasmofemia');
+    Route::post('fonoaudiologia/habilida/pragmatica/registro', [App\Http\Controllers\HabilidadPragmaticaController::class, 'Registrar_r'])->name('ficha.otro.prof.registro.habilidad.pragmatica');
+    Route::post('fonoaudiologia/examen/praxias/registro', [App\Http\Controllers\ExamenPraxiasController::class, 'Registrar_r'])->name('ficha.otro.prof.registro.examen.praxias');
 
 });
 
@@ -2332,3 +2358,4 @@ Route::get('/paciente/videollamada/{id}/{nombre}', [App\Http\Controllers\JitsiCo
 /** IMPORTAR DIAGNOSTICOS DENTALES **/
 Route::get('/importar/diagnosticos', [App\Http\Controllers\DentalController::class, 'importacion_datos_excel'])->name('importar.diagnosticos');
 Route::post('/importar/diagnosticos/dentales', [App\Http\Controllers\DentalController::class, 'importarDiagnosticos'])->name('dental.importar_datos_excel');
+Route::post('/guardar/diagnostico/laboratorio', [App\Http\Controllers\DentalController::class, 'guardarDiagnosticoLaboratorio'])->name('dental.guardarLaboratorio');

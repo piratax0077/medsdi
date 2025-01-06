@@ -6,7 +6,7 @@
 
 		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 		<link type="text/css" rel="stylesheet" href="{{ asset('js/dental/periodontograma/estilo.css') }}" media="screen" />
-		{{--  <link type="text/css" rel="print stylesheet" href="{{ asset('js/dental/periodontograma/estilo.css') }}" media="print" />  --}}
+		 <link type="text/css" rel="print stylesheet" href="{{ asset('js/dental/periodontograma/estilo.css') }}" media="print" />
         <style>
             #i18,#i17,#i16,#i15,#i14,#i13,#i12,#i11{
             background: url('{{ asset('images/dental/periodontograma/img/periodontograma-oblicuas.png') }}') repeat-x center;

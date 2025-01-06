@@ -4,9 +4,11 @@
             <div class="card-body">
                 <div class="col-sm-12">
                     <h5 class="text-c-blue mt-1 mb-1 f-16">Tratamiento según presupuesto</h5>
-                    <hr>
+
+
                 </div>
                 <div class="col-sm-12">
+                    <button type="button" class="btn btn-primary btn-sm float-right" onclick="modalNuevoPresupuesto()">Agregar nuevo presupuesto</button>
                     <div class="dt-responsive table-responsive pb-4">
                         <table id="tratamiento_presupuesto"
                             class="display table table-striped table-hover dt-responsive nowrap table-sm"
@@ -21,6 +23,7 @@
                                     <th class="text-center align-middle">Presupuesto</th>
                                     <th class="text-center align-middle">Estado</th>
                                     <th class="text-center align-middle">Control</th>
+                                    <th class="text-center align-middle">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -32,7 +35,7 @@
                                     <td class="text-center align-middle">no</td>
                                     <td class="text-center align-middle">
                                         <button type="button" class="btn btn-info btn-sm" onclick="presupuesto()";>
-                                            <i class="fa fa-plus"></i> Cargar Presupuesto
+                                            <i class="fa fa-plus"></i> Trabajar en pieza
                                         </button>
                                     </td>
                                     <td class="text-center align-middle">
@@ -46,6 +49,12 @@
                                     </td>
                                     <td class="text-center align-middle">
                                         20/05/2022
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="presupuesto()";>
+                                            <i class="fa fa-trash"></i> Eliminar
+                                        </button>
+
                                     </td>
                                 </tr>
                             </tbody>

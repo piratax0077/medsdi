@@ -201,18 +201,21 @@ function buscar_paciente() {
         e.preventDefault();
     });
     let rut = $('#rut_paciente_reserva').val();
-    $('#reserva_agregar_paciente_hora').hide();
-    $('#reserva_datos_paciente').hide();
-    let url = "{{ route('profesional.buscar_rut_paciente') }}";
 
-    $.ajax({
+    if(rut != '')
+    {
+        $('#reserva_agregar_paciente_hora').hide();
+        $('#reserva_datos_paciente').hide();
+        let url = "{{ route('profesional.buscar_rut_paciente') }}";
 
-        url: url,
-        type: "get",
-        data: {
-            rut: rut,
-        },
-    })
+        $.ajax({
+
+            url: url,
+            type: "get",
+            data: {
+                rut: rut,
+            },
+        })
         .done(function (data) {
 
 
@@ -245,6 +248,15 @@ function buscar_paciente() {
         .fail(function (jqXHR, ajaxOptions, thrownError) {
             console.log(jqXHR, ajaxOptions, thrownError)
         });
+    }
+    else
+    {
+        swal({
+            title: "Buscar Paciente",
+            text: 'Debe ingresar RUT para buscar.',
+            icon: "error",
+        });
+    }
 };
 
 

@@ -216,6 +216,8 @@
 			@endif
         });
 
+
+
         function abrir_modal_clasificacion_colon(){
             $('#m_clasificacion').modal('show');
         }

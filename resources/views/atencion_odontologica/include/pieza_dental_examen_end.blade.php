@@ -168,6 +168,8 @@
                     let examenes = resp.examenes;
                     $('#contenedor_pieza_dental_endo').empty();
                     $('#contenedor_pieza_dental_endo').append(resp.v);
+                    $('#eval_adults').empty();
+                    $('#eval_adults').append(resp.vista_presupuestos);
                     $('#nueva_pieza_dental_endo').empty();
                     $('#planificacion_examenes_endo').empty();
                     examenes.forEach(e => {
@@ -212,7 +214,10 @@
                         icon: "success",
                         buttons: "Aceptar",
                         DangerMode: true,
-                    })
+                    });
+
+                    $('#contenedor_examenes_grupos_dentales').empty();
+                        $('#contenedor_examenes_grupos_dentales').append(data.vista_presupuestos);
                 }
             },
             error: function(error){
@@ -401,7 +406,8 @@
                         `);
                     });
                     $('#nueva_pieza_dental_endo').empty();
-
+                    $('#contenedor_examenes_grupos_dentales').empty();
+                    $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
                 }
             },
             error: function(error){

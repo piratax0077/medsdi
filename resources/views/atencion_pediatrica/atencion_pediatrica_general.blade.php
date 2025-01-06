@@ -131,6 +131,5 @@
     @include("atencion_pediatrica.formularios.modal_atencion_especialidad.ped_general.modal_antec_neonat")
 
     {{-- @include("atencion_pediatrica.sidebars.modals_especialidad.pediatria.modal_prev_accidentes") --}}
-
+	    @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
 @endsection
-@include('app.profesional.modales.boton_flotante_agenda_autorizacion')

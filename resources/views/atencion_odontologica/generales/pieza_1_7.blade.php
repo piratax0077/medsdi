@@ -147,7 +147,6 @@
 
                     <img src="{{ asset('images/dental/periodontograma/img/tabla1/tachados/periodontograma-dientes-arriba-tachados-17.png') }}"/>
 
-
                     <img src="{{ asset('images/dental/periodontograma/img/tabla3/implantes/periodontograma-dientes-abajo-tornillo-17b.png') }}"/>
 
                     <img src="{{ asset('images/dental/periodontograma/img/tabla3/tachados/periodontograma-dientes-abajo-tachados-17b.png') }}"/>

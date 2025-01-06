@@ -1,4 +1,5 @@
 @include('include.header')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @yield('page-styles')
 <body>
     <div class="loader-bg">
@@ -15,6 +16,7 @@
     @include('template.include.nocomplatible')
 
 </body>
+
 @yield('page-script')
 @include('include.script')
 </html>

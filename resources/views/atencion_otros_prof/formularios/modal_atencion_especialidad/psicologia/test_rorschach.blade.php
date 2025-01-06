@@ -1,46 +1,46 @@
 <div id="test_rorsch" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="test_rorsch" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-		<div class="modal-content" >
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+		<div class="modal-content">
 			<div class="modal-header bg-info">
-				<h5 class="modal-title text-white mt-1">TEST DE RORSCHACH</h5>
+				<h5 class="modal-title text-white mt-1">Test de Rorschach</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 			</div>
 			<div class="modal-body">
 					<div class="row">
 					    <div class="col-md-12">
-					        <ul class="nav nav-pills mb-3" id="tablas_examenes" role="tablist">
+					        <ul class="nav nav-tabs-aten nav-fill mb-3" id="tablas_examenes" role="tablist">
 					            <li class="nav-item">
-					                <a class="nav-link-wizard active" id="uno_tab" data-toggle="pill" href="#uno" role="tab" aria-controls="uno" aria-selected="true">LAM-1</a>
+					                <a class="nav-link-aten active" id="uno_tab" data-toggle="pill" href="#uno" role="tab" aria-controls="uno" aria-selected="true">LAM-1</a>
 					            </li>
 					            <li class="nav-item">
-					                <a class="nav-link-wizard" id="dos_tab" data-toggle="pill" href="#dos" role="tab" aria-controls="pills-home" aria-selected="true">LAM-2</a>
+					                <a class="nav-link-aten" id="dos_tab" data-toggle="pill" href="#dos" role="tab" aria-controls="pills-home" aria-selected="true">LAM-2</a>
 					            </li>
 					            <li class="nav-item">
-					                <a class="nav-link-wizard" id="tres_tab" data-toggle="pill" href="#tres" role="tab" aria-controls="pills-home" aria-selected="true">LAM-3</a>
+					                <a class="nav-link-aten" id="tres_tab" data-toggle="pill" href="#tres" role="tab" aria-controls="pills-home" aria-selected="true">LAM-3</a>
 					            </li>
 								 <li class="nav-item">
-					                <a class="nav-link-wizard " id="cuatro_tab" data-toggle="pill" href="#cuatro" role="tab" aria-controls="pills-home" aria-selected="true">LAM-4</a>
+					                <a class="nav-link-aten" id="cuatro_tab" data-toggle="pill" href="#cuatro" role="tab" aria-controls="pills-home" aria-selected="true">LAM-4</a>
 					            </li>
 					            <li class="nav-item">
-					                <a class="nav-link-wizard" id="cinco_tab" data-toggle="pill" href="#cinco" role="tab" aria-controls="pills-home" aria-selected="true">LAM-5</a>
+					                <a class="nav-link-aten" id="cinco_tab" data-toggle="pill" href="#cinco" role="tab" aria-controls="pills-home" aria-selected="true">LAM-5</a>
 					            </li>
 					            <li class="nav-item">
-					                <a class="nav-link-wizard" id="seis_tab" data-toggle="pill" href="#seis" role="tab" aria-controls="pills-home" aria-selected="true">LAM-6</a>
+					                <a class="nav-link-aten" id="seis_tab" data-toggle="pill" href="#seis" role="tab" aria-controls="pills-home" aria-selected="true">LAM-6</a>
 					            </li>
 								 <li class="nav-item">
-					                <a class="nav-link-wizard " id="siete_tab" data-toggle="pill" href="#siete" role="tab" aria-controls="pills-home" aria-selected="true">LAM-7</a>
+					                <a class="nav-link-aten" id="siete_tab" data-toggle="pill" href="#siete" role="tab" aria-controls="pills-home" aria-selected="true">LAM-7</a>
 					            </li>
 					            <li class="nav-item">
-					                <a class="nav-link-wizard" id="ocho_tab" data-toggle="pill" href="#ocho" role="tab" aria-controls="pills-home" aria-selected="true">LAM-8</a>
+					                <a class="nav-link-aten" id="ocho_tab" data-toggle="pill" href="#ocho" role="tab" aria-controls="pills-home" aria-selected="true">LAM-8</a>
 					            </li>
 					            <li class="nav-item">
-					                <a class="nav-link-wizard" id="nueve_tab" data-toggle="pill" href="#nueve" role="tab" aria-controls="pills-home" aria-selected="true">LAM-9</a>
+					                <a class="nav-link-aten" id="nueve_tab" data-toggle="pill" href="#nueve" role="tab" aria-controls="pills-home" aria-selected="true">LAM-9</a>
 					            </li>
 								<li class="nav-item">
-					                <a class="nav-link-wizard" id="diez_tab" data-toggle="pill" href="#diez" role="tab" aria-controls="pills-home" aria-selected="true">LAM-10</a>
+					                <a class="nav-link-aten" id="diez_tab" data-toggle="pill" href="#diez" role="tab" aria-controls="pills-home" aria-selected="true">LAM-10</a>
 					            </li>
                                 <li class="nav-item">
-					                <a class="nav-link-wizard" id="c_gen_tab" data-toggle="pill" href="#c_gen" role="tab" aria-controls="pills-home" aria-selected="true">COMENTARIOS</a>
+					                <a class="nav-link-aten" id="c_gen_tab" data-toggle="pill" href="#c_gen" role="tab" aria-controls="pills-home" aria-selected="true">Comentarios</a>
 					            </li>
 					        </ul>
 					    </div>
@@ -263,22 +263,18 @@
 									<div class="form-row">
                                         <div class="col-sm-12 mt-2">
                                             <label id="" name="" class="floating-label-activo-sm" for="comentarios_gen" >Comentarios Generales del test</label>
-                                            <textarea class="form-control form-control-sm" rows="20" onfocus="this.rows=20" onblur="this.rows=20;" name="comentarios_gen" id="comentarios_gen"></textarea>
+                                            <textarea class="form-control form-control-sm" rows="10" onfocus="this.rows=10" onblur="this.rows=10;" name="comentarios_gen" id="comentarios_gen"></textarea>
                                         </div>
                                         <br>
                                     </div>
 					            </div>
 					        </div>
 					    </div>
-                        <div class="col-md-12 col-sm-12 text-center">
-                            <hr>
-                            <button type="button" class="btn btn-danger">Cancelar</button>
-                            <button type="submit" class="btn btn-info">Guardar</button>
-                        </div>
 					</div>
 				</div>
 				<div class="modal-footer">
-
+					<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close"><i class="feather icon-x"></i> Cancelar</button>
+                    <button type="button" class="btn btn-info btn-sm" onclick="registrar_psi_rorsc();"><i class="feather icon-save"></i> Guardar</button>
 				</div>
 			</div>
 		</div>
@@ -287,5 +283,117 @@
 <script>
     function psi_rorsch() {
         $('#test_rorsch').modal('show');
+    }
+
+    function registrar_psi_rorsc()
+    {
+        var mensaje = '';
+        var valido = 1;
+
+        let id_ficha_otros_prof = $('#id_fc').val();
+        let id_profesional = $('#profesion_sq').val();
+        let id_especialidad = '{{ $profesional->id_especialidad }}';
+        let id_tipo_especialidad = '{{ $profesional->id_tipo_especialidad }}';
+        let id_paciente = $('#id_paciente_fc').val();
+
+        var lam_uno_resp = $('#lam_uno_resp').val();
+        var lam_uno_com = $('#lam_uno_com').val();
+        var lam_dos_resp = $('#lam_dos_resp').val();
+        var lam_dos_com = $('#lam_dos_com').val();
+        var lam_tres_resp = $('#lam_tres_resp').val();
+        var lam_tres_com = $('#lam_tres_com').val();
+        var lam_cuatro_resp = $('#lam_cuatro_resp').val();
+        var lam_cuatro_com = $('#lam_cuatro_com').val();
+        var lam_cinco_resp = $('#lam_cinco_resp').val();
+        var lam_cinco_com = $('#lam_cinco_com').val();
+        var lam_seis_resp = $('#lam_seis_resp').val();
+        var lam_seis_com = $('#lam_seis_com').val();
+        var lam_siete_resp = $('#lam_siete_resp').val();
+        var lam_siete_com = $('#lam_siete_com').val();
+        var lam_ocho_resp = $('#lam_ocho_resp').val();
+        var lam_ocho_com = $('#lam_ocho_com').val();
+        var lam_nueve_resp = $('#lam_nueve_resp').val();
+        var lam_nueve_com = $('#lam_nueve_com').val();
+        var lam_diez_resp = $('#lam_diez_resp').val();
+        var lam_diez_com = $('#lam_diez_com').val();
+        var comentarios_gen = $('#comentarios_gen').val();
+
+        let url = "{{ route('ficha.otro.prof.test_rorshchach.registro') }}";
+
+        // if(profesion == '') {
+        //     mensaje += 'Debe ingresar Profesión\n';
+        //     valido = 0;
+        // }
+
+        var token = CSRF_TOKEN;
+
+        if(valido == 1)
+        {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    _token:token,
+                    id_ficha_atencion:id_ficha_otros_prof,
+                    id_profesional:id_profesional,
+                    id_especialidad:id_especialidad,
+                    id_tipo_especialidad:id_tipo_especialidad,
+                    id_paciente:id_paciente,
+                    lam_uno_resp:lam_uno_resp,
+                    lam_uno_com:lam_uno_com,
+                    lam_dos_resp:lam_dos_resp,
+                    lam_dos_com:lam_dos_com,
+                    lam_tres_resp:lam_tres_resp,
+                    lam_tres_com:lam_tres_com,
+                    lam_cuatro_resp:lam_cuatro_resp,
+                    lam_cuatro_com:lam_cuatro_com,
+                    lam_cinco_resp:lam_cinco_resp,
+                    lam_cinco_com:lam_cinco_com,
+                    lam_seis_resp:lam_seis_resp,
+                    lam_seis_com:lam_seis_com,
+                    lam_siete_resp:lam_siete_resp,
+                    lam_siete_com:lam_siete_com,
+                    lam_ocho_resp:lam_ocho_resp,
+                    lam_ocho_com:lam_ocho_com,
+                    lam_nueve_resp:lam_nueve_resp,
+                    lam_nueve_com:lam_nueve_com,
+                    lam_diez_resp:lam_diez_resp,
+                    lam_diez_com:lam_diez_com,
+                    comentarios_gen:comentarios_gen,
+                },
+            })
+            .done(function(response) {
+                if (response.estado == 1) {
+                    swal({
+                        title: "Test de Rorschachdd" ,
+                        text: "Registro exitoso",
+                        icon: "success",
+                    })
+                    $('#test_rorsch').modal('hide');
+                }
+                else
+                {
+                    swal({
+                        title: "Test de Rorschachdd" ,
+                        text: "Falla en registro",
+                        icon: "error",
+                    });
+                }
+            })
+            .fail(function(e) {
+                console.log("error");
+                console.log(e);
+
+            });
+
+        }
+        else
+        {
+            swal({
+                title: "Test de Rorschachdd, campos requeridos" ,
+                text: mensaje,
+                icon: "error",
+            })
+        }
     }
 </script>

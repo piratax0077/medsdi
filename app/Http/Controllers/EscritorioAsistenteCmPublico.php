@@ -52,7 +52,11 @@ class EscritorioAsistenteCmPublico extends Controller
         // $filtro[] = array('tipo_empleado',$asistente_tipo->nombre);
         $filtro[] = array('estado',2) ;// contrato activo
         $filtro[] = array('id_empleado',$asistente->id) ;
-        $contrato = ContratoDependiente::where($filtro)->first();
+
+        // $filtro[] = array('tipo_empleado','ASISTENTE PUBLICO');
+        $array_tipo_empleado = array('ASISTENTE ADMINISTRATIVO', 'ASISTENTE CONSULTA', 'ASISTENTE JEFA CAJA', 'ASISTENTE MANEJO DE AGENDA', 'ASISTENTE ONLINE', 'ASISTENTE PUBLICO');
+
+        $contrato = ContratoDependiente::where($filtro)->whereIn('tipo_empleado',$array_tipo_empleado)->first();
         if($contrato)
         {
             $id_lugar_atencion = $contrato->id_lugar_atencion;
@@ -288,7 +292,7 @@ class EscritorioAsistenteCmPublico extends Controller
                     $ho = explode(',', $hor->dia);
                     // dd($ho);
                     foreach ($ho as $h) {
-                        if ($h == '1') {
+                        if ($h == '0') {
                             $horario_agenda = str_replace($h, '', $horario_agenda);
                         } else {
                             $horario_agenda = str_replace(',' . $h, '', $horario_agenda);

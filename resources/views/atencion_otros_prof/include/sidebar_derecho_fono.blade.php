@@ -104,17 +104,17 @@
 
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.informe_fono")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.eval_hab_pre")
-                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.evaluacion_espasmofemia")
-                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.evaluacion_voz")
+                    {{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.evaluacion_espasmofemia") --}}
+                    {{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.evaluacion_voz") --}}
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.fonema_p")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.fonema_r")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.habilidades_pragmaticas")
-                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.habla_leng")
+                    {{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.habla_leng") --}}
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.indicar_examen_esp")
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.interconsulta_fono")
-                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.ofa")
+                    {{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.ofa") --}}
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.planificacion")
-                    @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.praxias")
+                    {{-- @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.praxias") --}}
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.praxias_lam")
 
                     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.fono.sopaletras")

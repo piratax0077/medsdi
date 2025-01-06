@@ -27,6 +27,7 @@ class HomeController extends Controller
 {
     public function ingreso()
     {
+
         if (!isset(Auth::user()->id)) {
             return view('auth.Registros.ingreso_registro');
         }

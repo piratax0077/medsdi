@@ -291,6 +291,8 @@
                             icon: "success",
                             button: "Aceptar",
                         });
+                        $('#contenedor_examenes_grupos_dentales').empty();
+                        $('#contenedor_examenes_grupos_dentales').append(data.vista_presupuestos);
                         }else{
                             swal({
                             title: "Error al guardar",

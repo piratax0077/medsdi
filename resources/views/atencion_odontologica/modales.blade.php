@@ -76,7 +76,7 @@
                     @endif
 
                     @if($profesional->TipoEspecialidad()->first()->nombre == 'ODONTOLOGÍA GENERAL' )
-                    <a id="boton_3" class="fas fa-walking fa-2x" data-toggle="canvas" data-target="#formularios_odontologia" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Odontología" data-placement="left"></a>
+                    <a id="boton_3" class="fab fas fa-tooth fa-2x" data-toggle="canvas" data-target="#formularios_odontologia" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Odontología" data-placement="left"></a>
                     @endif
                     @if($profesional->TipoEspecialidad()->first()->nombre == 'ODONTOLOGÍA ESTÉTICA' )
                     <a id="boton_3" class="fas fa-fish fa-2x" data-toggle="canvas" data-target="#formularios_odonto_cosmet" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Od.Estética" data-placement="left"></a>

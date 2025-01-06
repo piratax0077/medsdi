@@ -9,9 +9,9 @@
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="odonto_adulto_tab" data-toggle="tab" href="#odonto_adulto" role="tab" aria-controls="odonto_adulto" aria-selected="false">Odontograma</a>
                     </li>
-                    <li class="nav-item-secciones">
+                    {{-- <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="periodontograma_tab" data-toggle="tab" href="#periodontograma" role="tab" aria-controls="periodontograma" aria-selected="false">Evaluación-PSR</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="evaluacion_general_tab" data-toggle="tab" href="#evaluacion_general" role="tab" aria-controls="evaluacion_general" aria-selected="false">Evaluación</a>
                     </li>
@@ -169,7 +169,7 @@
                                                                                     @foreach ($examenes_dental as $examen)
                                                                                     <div class="card">
                                                                                         <div class="card-body">
-                                                                                            <div id="h_dental" class="row my-2">
+                                                                                            {{-- <div id="h_dental" class="row my-2">
                                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                     <div class="form-row">
                                                                                                         <div class="col-md-4">
@@ -192,7 +192,7 @@
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                            </div>
+                                                                                            </div> --}}
                                                                                             <div >
                                                                                                 <div id="pieza_dental_dolor" class="row">
                                                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -1207,7 +1207,7 @@
                                                                                             @foreach ($examenes_dental_end as $examen)
                                                                                             <div class="card">
                                                                                                 <div class="card-body">
-                                                                                                    <div id="h_dental" class="row">
+                                                                                                    {{-- <div id="h_dental" class="row">
                                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                             <div class="form-row">
                                                                                                                 <div class="form-group col-md-4">
@@ -1224,7 +1224,7 @@
                                                                                                                 </div>
                                                                                                             </div>
                                                                                                         </div>
-                                                                                                    </div>
+                                                                                                    </div> --}}
 
                                                                                                     <div >
                                                                                                         <div id="pieza_dental_dolor" class="row">
@@ -2055,9 +2055,6 @@
                                                             <li class="nav-item">
                                                                 <a class="nav-link-aten text-reset" id="plan_od_ped-tab" data-toggle="tab" href="#plan_od_ped" role="tab" aria-controls="plan_od_ped" aria-selected="true">Planificación de tratamiento</a>
                                                             </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="hosp_od_ped-tab" data-toggle="tab" href="#hosp_od_ped" role="tab" aria-control="hosp_od_ped" aria-selected="false">Hospitalización</a>
-                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -2524,7 +2521,7 @@
                                                                                     @foreach ($examenes_dental_odontopediatria as $examen)
                                                                                     <div class="card">
                                                                                         <div class="card-body">
-                                                                                            <div id="h_dental" class="row">
+                                                                                            {{-- <div id="h_dental" class="row">
                                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                     <div class="form-row">
                                                                                                         <div class="form-group col-md-4">
@@ -2541,7 +2538,7 @@
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                            </div>
+                                                                                            </div> --}}
 
                                                                                             <div >
                                                                                                 <div id="pieza_dental_dolor" class="row">
@@ -3164,10 +3161,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <!--HOSPITALIZACION-->
-                                                            <div class="tab-pane fade show" id="hosp_od_ped" role="tabpanel" aria-labelledby="hosp_od_ped-tab">
-                                                                @include('general.hospitalizacion.hospitalizar')
-                                                            </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -3177,6 +3171,7 @@
                                 </div>
                             </div>
 
+
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="hospitalizar_paciente">
@@ -3184,6 +3179,8 @@
                                             Hospitalizar Paciente
                                         </button>
                                     </div>
+                                    @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+
                                     <div id="hospitalizar_paciente-c" class="collapse" aria-labelledby="hospitalizar_paciente" data-parent="#hospitalizar_paciente">
                                         <div class="card-body-aten-a shadow-none">
                                             @include('general.hospitalizacion.hospitalizar')
@@ -3263,7 +3260,7 @@
                         </div>
                         <!--CIERRE: ODONTOGRAMA--->
                         <!-- PSR-->
-                        <div class="tab-pane fade" id="periodontograma" role="tabpanel" aria-labelledby="periodontograma-tab">
+                        {{-- <div class="tab-pane fade" id="periodontograma" role="tabpanel" aria-labelledby="periodontograma-tab">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="card">
@@ -3301,7 +3298,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!-- EVALUAION-->
                         <div class="tab-pane fade" id="evaluacion_general" role="tabpanel" aria-labelledby="evaluacion_general_tab">
                             <div class="row">
@@ -3366,7 +3363,20 @@
 @include('atencion_odontologica.modals.odontograma.tratamiento_maxilar_superior')
 @include('atencion_odontologica.modals.odontograma.tratamiento_laboratorio')
 @include('atencion_odontologica.modals.odontograma.modal_odontograma')
-
+<div id="modal_autorizacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Recepcion de bonos" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_autorizacionLabel">Autorización</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion();"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body d-flex justify-content-between">
+                <button class="btn btn-info btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ENVIAR AUTORIZACION PRESUPUESTO</button>
+                <button class="btn btn-sm btn-danger" onclick="cerrar_autorizacion();">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 @include('atencion_odontologica.modals.infantil.tratamiento_boca_completainf')
 @include('atencion_odontologica.modals.infantil.tratamiento_maxilar_inferiorinf')
 @include('atencion_odontologica.modals.infantil.tratamiento_maxilar_superiorinf')
@@ -3593,6 +3603,39 @@
             }
         });
 
+        $('.tratamiento-autocomplete').each(function() {
+            $(this).autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getDiagnosticoDental') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            if (data.length == 0) {
+                                $('.diagnostico_activo').hide();
+                                $('.diagnostico_inactivo').show();
+                            } else {
+                                $('.diagnostico_activo').show();
+                                $('.diagnostico_inactivo').hide();
+                            }
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $(this).val(ui.item.label);
+                    $(this).next('input[type="hidden"]').val(ui.item.value); // Asigna el valor al input hidden correspondiente
+                    return false;
+                }
+            });
+        });
+
+
         $('#proc_seleccionado_gral_autocomplete').autocomplete({
             source: function(request, response) {
                 // Fetch data
@@ -3773,7 +3816,7 @@
                 });
             },
             select: function(event, ui) {
-                $('#proc_seleccionado_max_inf_gral_autocomplete').val(ui.item.label);
+                $('#proc_seleccionado_max_inf_endo_autocomplete').val(ui.item.label);
 
                 return false;
             }
@@ -8296,6 +8339,8 @@ function confirmar_eliminar_pieza_dental_pieza(id, tipo){
         _token: CSRF_TOKEN,
         id_paciente: dame_id_paciente(),
         id: id,
+        id_ficha_atencion: $('#id_fc').val(),
+        id_lugar_atencion: $('#id_lugar_atencion').val(),
         tipo: tipo
     }
 
@@ -8310,6 +8355,7 @@ function confirmar_eliminar_pieza_dental_pieza(id, tipo){
                 if(tipo == 'gral'){
                     $('#contenedor_pieza_dental_endo_gral').empty();
                     $('#contenedor_pieza_dental_endo_gral').append(resp.v);
+
                     $('#planificacion_examenes_gral').empty();
                     examenes.forEach(examen => {
                         $('#planificacion_examenes_gral').append(`
@@ -8432,7 +8478,10 @@ function confirmar_eliminar_pieza_dental_pieza(id, tipo){
                     title:'Exito',
                     text:'Se ha eliminado con éxito',
                     icon:'success'
-                })
+                });
+
+                $('#contenedor_examenes_grupos_dentales').empty();
+                $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
             }
         },
         error: function(error){
@@ -8645,6 +8694,33 @@ function eliminarExamenAgregadoRxOdontop(id) {
         }
     })
     }
+
+    function pedir_autorizacion_presupuesto_dental(){
+        swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de solicitar la autorización del presupuesto?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_pedir_autorizacion_presupuesto_dental();
+            }
+        })
+    }
+
+    function  confirmar_pedir_autorizacion_presupuesto_dental()
+        {
+            $('#modal_autorizacion').modal('show');
+            $('#modal_autorizacion_imagen').html('');
+            $('#modal_autorizacion_mensaje').html('');
+			$('#modal_autorizacion_btn_solicitar').attr('disabled', false);
+        }
+
+        function  cerrar_autorizacion()
+        {
+            $('#modal_autorizacion').modal('hide');
+        }
 </script>
 
 @endsection

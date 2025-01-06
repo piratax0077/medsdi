@@ -2116,97 +2116,97 @@
                 });
         };
 
-        function buscar_archivos(id_ficha_clinica) {
+        // function buscar_archivos(id_ficha_clinica) {
 
-            url = "{{ route('ficha_atencion.ver_archivos') }}";
-            id_ficha = id_ficha_clinica;
-            $('#table_atenciones_previas_archivos tbody').html('');
+        //     url = "{{ route('ficha_atencion.ver_archivos') }}";
+        //     id_ficha = id_ficha_clinica;
+        //     $('#table_atenciones_previas_archivos tbody').html('');
 
-            $.ajax({
-                    url: url,
-                    type: "get",
-                    data: {
-                        id_ficha_atencion: id_ficha
-                    },
-                    dataType: "json",
-                })
-                .done(function(data) {
-                    if (data != null) {
+        //     $.ajax({
+        //             url: url,
+        //             type: "get",
+        //             data: {
+        //                 id_ficha_atencion: id_ficha
+        //             },
+        //             dataType: "json",
+        //         })
+        //         .done(function(data) {
+        //             if (data != null) {
 
-                        $('#m_cons_archivosLabel').text('Documentos de esta consulta del Paciente: ' + data.paciente
-                            .nombre);
-                        if (data.estado == 1) {
-                            $('#table_atenciones_previas_archivos tbody').html('');
-                            var j = 1; //contador para asignar id al boton que borrara la fila
-                            $.each(data.registros, function(index, value) {
-                                var fecha = formatDate(value.fecha);
-                                var tipo = value.tipo;
-                                var id = value.id;
-                                var id_ficha_archivo = value.id_ficha;
-                                var url = value.url;
+        //                 $('#m_cons_archivosLabel').text('Documentos de esta consulta del Paciente: ' + data.paciente
+        //                     .nombre);
+        //                 if (data.estado == 1) {
+        //                     $('#table_atenciones_previas_archivos tbody').html('');
+        //                     var j = 1; //contador para asignar id al boton que borrara la fila
+        //                     $.each(data.registros, function(index, value) {
+        //                         var fecha = formatDate(value.fecha);
+        //                         var tipo = value.tipo;
+        //                         var id = value.id;
+        //                         var id_ficha_archivo = value.id_ficha;
+        //                         var url = value.url;
 
-                                var metodo = '';
-                                switch (tipo) {
-                                    case 'Certificado de Reposo':
-                                        metodo = 'ver_pdf_certificado_reposo';
-                                        break;
-                                    case 'Interconsulta':
-                                        metodo = '';
-                                        break;
-                                    case 'Informen Medico':
-                                        metodo = 'ver_pdf_informe_medico';
-                                        break;
-                                    case 'Uso Personal':
-                                        metodo = 'ver_pdf_uso_personal';
-                                        break;
+        //                         var metodo = '';
+        //                         switch (tipo) {
+        //                             case 'Certificado de Reposo':
+        //                                 metodo = 'ver_pdf_certificado_reposo';
+        //                                 break;
+        //                             case 'Interconsulta':
+        //                                 metodo = '';
+        //                                 break;
+        //                             case 'Informen Medico':
+        //                                 metodo = 'ver_pdf_informe_medico';
+        //                                 break;
+        //                             case 'Uso Personal':
+        //                                 metodo = 'ver_pdf_uso_personal';
+        //                                 break;
 
-                                    default:
-                                        metodo = '';
-                                        break;
-                                }
+        //                             default:
+        //                                 metodo = '';
+        //                                 break;
+        //                         }
 
-                                var fila = '';
-                                fila += '<tr class="tr_examen" id="row' + j + '">';
-                                fila += '    <td class="text-center align-middle">' + fecha + '</td>';
-                                fila += '    <td class="text-center align-middle">' + tipo + '</td>';
-                                if (metodo != '')
-                                    fila += '    <td class="text-center align-middle"><div onclick="' + metodo +
-                                    '(' + id_ficha_archivo +
-                                    '); $(\'#m_cons_archivos\').modal(\'hide\');" class="btn btn-success btn-sm has-ripple"><i class="feather icon-folder"></i> Ver Archivo</div></td>';
-                                else
-                                    fila +=
-                                    '    <td class="text-center align-middle"><div class="btn btn-success btn-sm has-ripple disabled"><i class="feather icon-folder"></i> Ver Archivo</div></td>';
-                                fila += '</tr>';
+        //                         var fila = '';
+        //                         fila += '<tr class="tr_examen" id="row' + j + '">';
+        //                         fila += '    <td class="text-center align-middle">' + fecha + '</td>';
+        //                         fila += '    <td class="text-center align-middle">' + tipo + '</td>';
+        //                         if (metodo != '')
+        //                             fila += '    <td class="text-center align-middle"><div onclick="' + metodo +
+        //                             '(' + id_ficha_archivo +
+        //                             '); $(\'#m_cons_archivos\').modal(\'hide\');" class="btn btn-success btn-sm has-ripple"><i class="feather icon-folder"></i> Ver Archivo</div></td>';
+        //                         else
+        //                             fila +=
+        //                             '    <td class="text-center align-middle"><div class="btn btn-success btn-sm has-ripple disabled"><i class="feather icon-folder"></i> Ver Archivo</div></td>';
+        //                         fila += '</tr>';
 
-                                j++;
+        //                         j++;
 
-                                $('#table_atenciones_previas_archivos tbody').append(fila);
+        //                         $('#table_atenciones_previas_archivos tbody').append(fila);
 
-                            });
-                        } else {
-                            $('#table_atenciones_previas_archivos tbody').html('');
-                            var fila = '<tr><td colspan="3"><span><h5>no existen registros</h5></span></td></tr>';
-                            $('#table_atenciones_previas_archivos tbody').append(fila);
-                        }
+        //                     });
+        //                 } else {
+        //                     $('#table_atenciones_previas_archivos tbody').html('');
+        //                     var fila = '<tr><td colspan="3"><span><h5>no existen registros</h5></span></td></tr>';
+        //                     $('#table_atenciones_previas_archivos tbody').append(fila);
+        //                 }
 
-                    } else {
-                        $('#table_atenciones_previas_archivos tbody').html('');
-                        var fila = '<tr><td colspan="3"><span><h5>no existen registros</h5></span></td></tr>'
-                        $('#table_atenciones_previas_archivos tbody').append(fila);
-                    }
-                    $('#m_cons_archivos').modal('show');
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+        //             } else {
+        //                 $('#table_atenciones_previas_archivos tbody').html('');
+        //                 var fila = '<tr><td colspan="3"><span><h5>no existen registros</h5></span></td></tr>'
+        //                 $('#table_atenciones_previas_archivos tbody').append(fila);
+        //             }
+        //             $('#m_cons_archivos').modal('show');
+        //         })
+        //         .fail(function(jqXHR, ajaxOptions, thrownError) {
+        //             console.log(jqXHR, ajaxOptions, thrownError)
+        //         });
 
-            $('#table_atenciones_previas_archivos').dataTable().fnClearTable();
-            $('#table_atenciones_previas_archivos').dataTable().fnDestroy();
-            $('#table_atenciones_previas_archivos').DataTable({
-                responsive: true,
-                "bPaginate": false,
-            });
-        }
+        //     $('#table_atenciones_previas_archivos').dataTable().fnClearTable();
+        //     $('#table_atenciones_previas_archivos').dataTable().fnDestroy();
+        //     $('#table_atenciones_previas_archivos').DataTable({
+        //         responsive: true,
+        //         "bPaginate": false,
+        //     });
+        // }
 
         function validar_email_agenda() {
 
@@ -2263,7 +2263,8 @@
             }
 
             let email = $('#reserva_hora_correo').val();
-            let url = "{{ route('profesional.validar_rut') }}";
+            // let url = "{{ route('profesional.validar_rut') }}";
+            let url = "{{ route('agenda.paciente.validar_email') }}";
 
             $.ajax({
                     url: url,
@@ -2331,7 +2332,8 @@
             }
 
             let email = $('#reserva_hora_representante_correo').val();
-            let url = "{{ route('profesional.validar_rut') }}";
+            // let url = "{{ route('profesional.validar_rut') }}";
+            let url = "{{ route('agenda.paciente.validar_email') }}";
 
             $.ajax({
                     url: url,
@@ -2409,11 +2411,14 @@
             validar_campo_telefono_representante();
 
             let rut = $('#rut_paciente_reserva').val();
-            $('#reserva_agregar_paciente_hora').hide();
-            $('#reserva_datos_paciente').hide();
-            let url = "{{ route('profesional.buscar_rut_paciente') }}";
 
-            $.ajax({
+            if(rut != '')
+            {
+                $('#reserva_agregar_paciente_hora').hide();
+                $('#reserva_datos_paciente').hide();
+                let url = "{{ route('profesional.buscar_rut_paciente') }}";
+
+                $.ajax({
 
                     url: url,
                     type: "get",
@@ -2426,8 +2431,25 @@
 
                     if (data !== 'null') {
 
+                        $('#div_procedimiento').show();
+
                         data = JSON.parse(data);
                         if (data.tipo_paciente == 'SI') {
+
+                            {{-- validacion para especialidad de pediatria --}}
+                            @if (isset($profesional))
+                                @if ($profesional->id_tipo_especialidad == 11)
+                                    if (data.edad > 18) {
+                                        swal({
+                                            title: "Reserva de hora",
+                                            text: "El paciente es mayor de edad, el profesional es Pediatrico",
+                                            icon: "warning",
+                                            buttons: "Aceptar",
+                                        });
+                                    }
+                                @endif
+                            @endif
+
 
                             $('.paciente_view').show();
                             $('.paciente_edit').hide();
@@ -2510,14 +2532,19 @@
                                 $('#seccion_acompanante').hide();
                                 $('#seccion_autorizacion').hide();
                             }
-                        } else {
+
+                        }
+                        else
+                        {
                             $('#reserva_datos_paciente').hide();
                             $('#reserva_agregar_paciente_hora').show();
 
                             $('#reserva_hora_nombres_paciente').val(data.nombres);
                             $('#reserva_hora_apellido_uno').val(data.apellido_uno);
                             $('#reserva_hora_apellido_dos').val(data.apellido_dos);
-                            $('#reserva_hora_fecha_nac').val(data.fecha_nac);
+
+                            $('#reserva_hora_fecha_nac').val((DateFormatVista(data.fecha_nac)));
+
                             if (data.sexo != null)
                                 $('#reserva_hora_sexo').val(data.sexo);
                             else
@@ -2533,10 +2560,12 @@
                             $('#reserva_hora_telefono_uno').val(data.telefono_uno);
 
                             {{--
-                        $('#reserva_hora_profesion').val();
-                        $('#reserva_hora_convenio').val();
-                        $('#reserva_hora_descripcion').val();
-                        --}}
+                            $('#reserva_hora_profesion').val();
+                            $('#reserva_hora_convenio').val();
+                            $('#reserva_hora_descripcion').val();
+                            --}}
+                            validar_email_agenda();
+                            validar_campo_telefono();
                         }
 
                     } else {
@@ -2549,6 +2578,15 @@
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
+            }
+            else
+            {
+                swal({
+                    title: "Buscar Paciente",
+                    text: 'Debe ingresar RUT para buscar.',
+                    icon: "error",
+                });
+            }
         };
 
         function desasociar_asistente(id_asistente) {
@@ -2687,84 +2725,84 @@
             $('#m_consultaant').modal('hide');
         }
 
-        function buscar_receta(id_ficha_clinica) {
+        // function buscar_receta(id_ficha_clinica) {
 
-            {{--  url = '{{ route('buscar.recetas') }}';  --}}
-            url = '{{ route('detalle_receta.ver_medicamentos') }}';
-            id_ficha = id_ficha_clinica;
-            $('#tabla_receta tbody').empty();
+        //     {{--  url = '{{ route('buscar.recetas') }}';  --}}
+        //     url = '{{ route('detalle_receta.ver_medicamentos') }}';
+        //     id_ficha = id_ficha_clinica;
+        //     $('#tabla_receta tbody').empty();
 
-            $.ajax({
-                    url: url,
-                    type: "get",
-                    data: {
-                        id_ficha: id_ficha
-                    },
-                    dataType: "json",
-                })
-                .done(function(data) {
-                    if (data != null) {
+        //     $.ajax({
+        //             url: url,
+        //             type: "get",
+        //             data: {
+        //                 id_ficha: id_ficha
+        //             },
+        //             dataType: "json",
+        //         })
+        //         .done(function(data) {
+        //             if (data != null) {
 
-                        $('#id_ficha_receta').text('Receta de Paciente: ' + data.paciente.nombre_paciente);
+        //                 $('#id_ficha_receta').text('Receta de Paciente: ' + data.paciente.nombre_paciente);
 
-                        if (data.estado == 1) {
-                            $('#tabla_atenciones_previas_receta tbody').html('');
-                            $.each(data.registros, function(index, value) {
-                                var fecha = formatDate(value.created_at);
-                                //var salida = formato(fecha);
-                                var medicamento = value.producto;
-                                var presentacion = value.presentacion;
-                                var posologia = value.posologia;
-                                var via_administracion = value.via_administracion;
-                                var periodo = value.periodo;
-                                var uso_cronico = value.uso_cronico;
-                                var cantidad_compr = value.cantidad_compra;
+        //                 if (data.estado == 1) {
+        //                     $('#tabla_atenciones_previas_receta tbody').html('');
+        //                     $.each(data.registros, function(index, value) {
+        //                         var fecha = formatDate(value.created_at);
+        //                         //var salida = formato(fecha);
+        //                         var medicamento = value.producto;
+        //                         var presentacion = value.presentacion;
+        //                         var posologia = value.posologia;
+        //                         var via_administracion = value.via_administracion;
+        //                         var periodo = value.periodo;
+        //                         var uso_cronico = value.uso_cronico;
+        //                         var cantidad_compr = value.cantidad_compra;
 
-                                if (uso_cronico == 1)
-                                    uso_cronico = 'USO CRONICO';
-                                else
-                                    uso_cronico = 'NORMAL';
+        //                         if (uso_cronico == 1)
+        //                             uso_cronico = 'USO CRONICO';
+        //                         else
+        //                             uso_cronico = 'NORMAL';
 
-                                var j = 1; //contador para asignar id al boton que borrara la fila
-                                var fila = '<tr class="tr_receta" id="row' + j + '">' +
-                                    '<td>' + fecha + '</td>' +
-                                    '<td>' + medicamento + '</td>' +
-                                    '<td>' + presentacion + '</td>' +
-                                    '<td>' + posologia + '</td>' +
-                                    '<td>' + via_administracion + '</td>' +
-                                    '<td>' + periodo + '</td>' +
-                                    '<td>' + uso_cronico + '</td>' +
-                                    '<td>' + cantidad_compr + '</td>' +
-                                    '</tr>';
-                                //esto seria lo que contendria la fila
+        //                         var j = 1; //contador para asignar id al boton que borrara la fila
+        //                         var fila = '<tr class="tr_receta" id="row' + j + '">' +
+        //                             '<td>' + fecha + '</td>' +
+        //                             '<td>' + medicamento + '</td>' +
+        //                             '<td>' + presentacion + '</td>' +
+        //                             '<td>' + posologia + '</td>' +
+        //                             '<td>' + via_administracion + '</td>' +
+        //                             '<td>' + periodo + '</td>' +
+        //                             '<td>' + uso_cronico + '</td>' +
+        //                             '<td>' + cantidad_compr + '</td>' +
+        //                             '</tr>';
+        //                         //esto seria lo que contendria la fila
 
-                                $('#tabla_atenciones_previas_receta tbody').append(fila);
-                            });
-                        } else {
-                            $('#tabla_atenciones_previas_receta tbody').html('');
-                            var fila = '<tr><td colspan="8"><span><h5>no existen registros</h5></span></td></tr>';
-                            $('#tabla_atenciones_previas_receta tbody').append(fila);
-                        }
+        //                         $('#tabla_atenciones_previas_receta tbody').append(fila);
+        //                     });
+        //                 } else {
+        //                     $('#tabla_atenciones_previas_receta tbody').html('');
+        //                     var fila = '<tr><td colspan="8"><span><h5>no existen registros</h5></span></td></tr>';
+        //                     $('#tabla_atenciones_previas_receta tbody').append(fila);
+        //                 }
 
-                    } else {
-                        $('#tabla_atenciones_previas_receta tbody').html('');
-                        var fila = '<tr><td colspan="8"><span><h5>no existen registros</h5></span></td></tr>';
-                        $('#tabla_atenciones_previas_receta tbody').append(fila);
-                    }
-                    $('#m_cons_receta').modal('show');
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+        //             } else {
+        //                 $('#tabla_atenciones_previas_receta tbody').html('');
+        //                 var fila = '<tr><td colspan="8"><span><h5>no existen registros</h5></span></td></tr>';
+        //                 $('#tabla_atenciones_previas_receta tbody').append(fila);
+        //             }
+        //             $('#m_cons_receta').modal('show');
+        //         })
+        //         .fail(function(jqXHR, ajaxOptions, thrownError) {
+        //             console.log(jqXHR, ajaxOptions, thrownError)
+        //         });
 
-            $('#tabla_atenciones_previas_receta').dataTable().fnClearTable();
-            $('#tabla_atenciones_previas_receta').dataTable().fnDestroy();
-            $('#tabla_atenciones_previas_receta').DataTable({
-                responsive: true,
-                "bPaginate": false,
-            });
+        //     $('#tabla_atenciones_previas_receta').dataTable().fnClearTable();
+        //     $('#tabla_atenciones_previas_receta').dataTable().fnDestroy();
+        //     $('#tabla_atenciones_previas_receta').DataTable({
+        //         responsive: true,
+        //         "bPaginate": false,
+        //     });
 
-        }
+        // }
 
         function ver_ficha_atencion(id) {
 
@@ -3027,6 +3065,13 @@
             let id_lugar_atencion = $('#id_lugar_atencion').val();
             let tipo_agenda = $('#id_tipo_agenda').val();
             var tipo_agenda_text = 'C';
+            var procedimiento = '';
+            var proc_bloque = '';
+            if($('#form_reseva_de_horas_id_procedimiento').length == 1)
+            {
+                procedimiento = $('#form_reseva_de_horas_id_procedimiento').val();
+                proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
+            }
 
             console.log(tipo_agenda);
             console.log(tipo_agenda_text);
@@ -3084,6 +3129,8 @@
                         acompanante: acompanante,
                         lista_Acompanante: lista_Acompanante,
                         autorizacion_atencion: autorizacion_atencion,
+                        procedimiento: procedimiento,
+                        proc_bloque: proc_bloque,
                     }
                 })
                 .done(function(data) {
@@ -4422,7 +4469,7 @@
                     },
                 })
                 .done(function(data) {
-
+                    console.log(data);
                     if (data == 'Failed') {
                         swal({
                             title: "Error",
@@ -5122,6 +5169,14 @@
 
 
             $('#tabla_examenes_profesional_ro').DataTable({
+                responsive: true,
+            });
+
+            $('#table_aranceles_dental').DataTable({
+                responsive: true,
+            });
+
+            $('#table_procedimientos_propios_dental').DataTable({
                 responsive: true,
             });
 

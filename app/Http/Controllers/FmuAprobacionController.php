@@ -294,4 +294,207 @@ class FmuAprobacionController extends Controller
 
         return $datos;
     }
+
+
+    public function solicitarAutorizacionConfidencial(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+
+        if(empty($request->id_paciente))
+        {
+            $error['id_paciente'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+
+            $paciente = Paciente::find($request->id_paciente);
+
+            if($paciente->id_usuario == Auth::user()->id)
+            {
+                $id_user_create = Auth::user()->id;
+                $id_user_recept = $paciente->id_usuario;
+                $evento = 'CONFIDENCIAL';
+                $nombre = $paciente->nombres;
+                $apellido_p = $paciente->apellido_uno;
+                $apellido_m = $paciente->apellido_dos;
+                $lugar = '';
+                // $profesional_log = $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos;
+                $profesional_log = '';
+                $tipo = 'CONFIDENCIAL';
+                $tipo_id = '17';
+
+                // $log_users_devices = new LogUsersDevices();
+                $funcion = new Funciones();
+                $log_users_devices = (object) $funcion->generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional_log,$tipo,$tipo_id);
+
+                $datos['log_users_devices'] = $log_users_devices->app;
+
+                if($log_users_devices->app['estado'] == 1)
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Solicitud enviada';
+                    session(['fmu_token' => $log_users_devices->app['token']]);
+                    session(['fmu_log_id' => $log_users_devices->app['last_id']]);
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Falla en solicitud';
+                    session(['fmu_autorizacion_token' => '']);
+                    session(['fmu_autorizacion_log_id' => '']);
+                }
+            }
+            else
+            {
+
+                $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+                $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
+
+                if($profesional)
+                {
+                    $id_user_create = Auth::user()->id;
+                    $id_user_recept = $paciente->id_usuario;
+                    $evento = 'CONFIDENCIAL';
+                    $nombre = $paciente->nombres;
+                    $apellido_p = $paciente->apellido_uno;
+                    $apellido_m = $paciente->apellido_dos;
+                    if($lugar_atencion) $lugar = $lugar_atencion->nombre;
+                    else                $lugar = '';
+                    $profesional_log = $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos;
+                    $tipo = 'CONFIDENCIAL';
+                    $tipo_id = '17';
+
+                    // $log_users_devices = new LogUsersDevices();
+                    $funcion = new Funciones();
+                    $log_users_devices = (object) $funcion->generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional_log,$tipo,$tipo_id);
+
+                    $datos['log_users_devices'] = $log_users_devices->app;
+
+                    if($log_users_devices->app['estado'] == 1)
+                    {
+                        $datos['estado'] = 1;
+                        $datos['msj'] = 'Solicitud enviada';
+                        session(['fmu_autorizacion_token' => $log_users_devices->app['token']]);
+                        session(['fmu_autorizacion_log_id' => $log_users_devices->app['last_id']]);
+                    }
+                    else
+                    {
+                        $datos['estado'] = 0;
+                        $datos['msj'] = 'Falla en solicitud';
+                        session(['fmu_autorizacion_token' => '']);
+                        session(['fmu_autorizacion_log_id' => '']);
+                    }
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Profesional no encontrado.';
+                    session(['fmu_autorizacion_token' => '']);
+                    session(['fmu_autorizacion_log_id' => '']);
+                }
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos.';
+            $datos['error'] = $error;
+            session(['fmu_autorizacion_token' => '']);
+            session(['fmu_autorizacion_log_id' => '']);
+        }
+
+        return $datos;
+    }
+
+    public function validarAutorizacionConfidencial(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->token))
+        {
+            $error['token'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $funcion = new Funciones();
+            $result = (object)$funcion->checkStatePermApp($request->token);
+
+            if($result->estado == 1)
+            {
+                $estado = $result->registro->estado;
+                if($estado == 0) // espera
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'En espera.';
+                    $datos['fmu_autorizacion_estado'] = 0;
+                    $datos['fmu_autorizacion_token'] = session('fmu_autorizacion_token');
+                    session(['fmu_autorizacion_estado' => 0]);
+                }
+                else if($estado == 1) // confirmado
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Confirmado.';
+                    $datos['fmu_autorizacion_estado'] = 1;
+                    $datos['fmu_autorizacion_token'] = session('fmu_autorizacion_token');
+                    session(['fmu_autorizacion_estado' => 1]);
+                }
+                else if($estado == 2) // rechazada
+                {
+                    $datos['estado'] = 2;
+                    $datos['msj'] = 'Rechazado.';
+                    $datos['fmu_autorizacion_estado'] = 2;
+                    $datos['fmu_autorizacion_token'] = session('fmu_autorizacion_token');
+                    session(['fmu_autorizacion_estado' => 2]);
+                }
+                else if($estado == 3) // cancelada
+                {
+                    $datos['estado'] = 3;
+                    $datos['msj'] = 'Cancelada.';
+                    $datos['fmu_autorizacion_estado'] = 3;
+                    $datos['fmu_autorizacion_token'] = session('fmu_autorizacion_token');
+                    session(['fmu_autorizacion_estado' => 3]);
+                }
+                else if($estado == 4) // aprobada expirada
+                {
+                    $datos['estado'] = 4;
+                    $datos['msj'] = 'Aprobada expirada.';
+                    $datos['fmu_autorizacion_estado'] = 4;
+                    $datos['fmu_autorizacion_token'] = session('fmu_autorizacion_token');
+                    session(['fmu_autorizacion_estado' => 4]);
+                }
+                else // nada
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'En espera.';
+                    $datos['fmu_autorizacion_estado'] = 0;
+                    $datos['fmu_autorizacion_token'] = session('fmu_autorizacion_token');
+                    session(['fmu_autorizacion_estado' => 0]);
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Solicitud no encontrada.';
+                session(['fmu_autorizacion_estado' => 0]);
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos.';
+            $datos['error'] = $error;
+            session(['fmu_autorizacion_estado' => 0]);
+        }
+
+        return $datos;
+    }
 }

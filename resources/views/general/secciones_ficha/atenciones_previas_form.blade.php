@@ -5,12 +5,12 @@
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
             @if(isset($titulo) && $titulo == 'NO')
-            {{--  nada  --}}
+                {{--  nada  --}}
             @else
-            </div>
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <h4 class="text-c-blue mt-3 f-20">Historial de atenciones</h4>
-            </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <h4 class="text-c-blue mt-3 f-20">Historial de atenciones</h4>
+                </div>
              @endif
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="card">
@@ -41,7 +41,7 @@
                                                 <td>{{ $f->hipotesis_diagnostico }}</td>
 
                                                 <td>
-                                                    <button type="button" class="btn btn-xxs btn-info-light-c" @if (isset($f->id)) onclick="buscar_ficha_atencion({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</button>
+                                                    <button type="button" class="btn btn-xxs btn-info-light-c" @if (isset($f->id)) onclick="buscar_ficha_atencion_atencion_previa({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</button>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-xxs btn-success-light-c" @if (isset($f->id)) onclick="buscar_examenes({{ $f->id }});" @endif><i class="feather icon-activity"></i> Ver</button>

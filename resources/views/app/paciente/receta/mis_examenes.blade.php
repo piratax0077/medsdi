@@ -34,86 +34,105 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table id="tabla_examenes_paciente_ro" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>Nº de Orden</th>
-                                        <th>Profesional</th>
-                                        <th>Tipo de Examen</th>
-                                        <th>Nombre del examen</th>
-                                        <th>Comentarios</th>
-                                        <th>Estado</th>
-                                        <th>Examen</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if ($examenes_especialidad_realizados)
-                                        @foreach ($examenes_especialidad_realizados as $exam)
-                                            @if ($exam->HoraMedica->id_estado == 6)
+                            <div style="overflow-x:auto;">
+                                <table id="examenes-pcte" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Nº de Orden</th>
+                                            <th>Profesional</th>
+                                            <th>Tipo de Examen</th>
+                                            <th>Nombre del examen</th>
+                                            <th>Comentarios</th>
+                                            <th>Estado</th>
+                                            <th>Examen</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if ($examenes_especialidad_realizados)
+                                            @foreach ($examenes_especialidad_realizados as $exam)
+                                                @if ($exam->HoraMedica->id_estado == 6)
+                                                    <tr>
+                                                        <td data-sort=" {{ date('Y-m-d', strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}">{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
+                                                        <td class="text-wrap">{{ $exam->id }}</td>
+                                                        <td class="text-wrap">{{ $exam->profesional->nombre.' '.$exam->profesional->apellido_uno.' '.$exam->profesional->apellido_dos }}</td>
+                                                        <td class="text-wrap">{{ $exam->nombre }}</td>
+                                                        <td class="text-wrap">
+                                                            @if ($exam->SubTipoEspecialidad)
+                                                                {{ $exam->SubTipoEspecialidad->nombre }}
+                                                            @else
+                                                                -
+                                                            @endif
+                                                        </td class="text-wrap">
+                                                        <td class="text-wrap">-</td>
+                                                        <td class="text-wrap">
+                                                            @if ($exam->revisado == 1)
+                                                                Revisado
+                                                            @else
+                                                                No revisado
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-success-light-c btn-xxs" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-file-plus"></i> Ver examen</button>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        @endif
+
+                                        {{-- RESULTADODE DE EXAMENES LABORATORIO --}}
+                                        @if ($resultado_examen)
+                                            @foreach ( $resultado_examen as $result_ex)
                                                 <tr>
-                                                    <td data-sort=" {{ date('Y-m-d', strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}">{{ date('d-m-Y',strtotime($exam->HoraMedica->fecha_realizacion_consulta)) }}</td>
-                                                    <td>{{ $exam->id }}</td>
-                                                    <td>{{ $exam->profesional->nombre.' '.$exam->profesional->apellido_uno.' '.$exam->profesional->apellido_dos }}</td>
-                                                    <td>{{ $exam->nombre }}</td>
+                                                    <td>{{ date('d-m-Y',strtotime($result_ex->fecha_registro)) }}</td>
+                                                    <td>{{ $result_ex->id }}</td>
                                                     <td>
-                                                        @if ($exam->SubTipoEspecialidad)
-                                                            {{ $exam->SubTipoEspecialidad->nombre }}
+                                                        @if (!empty($result_ex->profesional_nombre))
+                                                            LABORATORIO
+                                                        @else
+                                                            {{ $result_ex->profesional_nombre }}
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($result_ex->obj_tipo_examen)
+                                                            @if (!empty($result_ex->obj_tipo_examen->nombre_examen))
+                                                                {{ $result_ex->obj_tipo_examen->nombre_examen }}
+
+                                                            @else
+                                                                {{ $result_ex->nombre_examen }}
+                                                            @endif
+                                                        @else
+                                                            {{ $result_ex->nombre_examen }}
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if (!empty($result_ex->nombre_examen))
+                                                            {{ $result_ex->nombre_examen }}
                                                         @else
                                                             -
                                                         @endif
                                                     </td>
-                                                    <td>-</td>
+                                                    <td>{{ $result_ex->observacion }}</td>
                                                     <td>
-                                                        @if ($exam->revisado == 1)
+                                                        @if ($result_ex->revisado == 1)
                                                             Revisado
                                                         @else
                                                             No revisado
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <button type="button" class="btn btn-success-light-c btn-xxs" onclick="verExamenEspecialidad('{{ $exam->id }}',1);"><i class="feather icon-file-plus"></i> Ver examen</button>
+                                                        @if ($result_ex->ResultadoExamenArchivo->count()>0)
+                                                            <button type="button" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',1);"><i class="feather icon-file-plus"></i> Ver examen</button>
+                                                        @else
+                                                            <button type="button" disabled="disabled" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-file-plus"></i> Ver examen</button>
+                                                        @endif
                                                     </td>
                                                 </tr>
-                                            @endif
-                                        @endforeach
-                                    @endif
-
-                                    {{-- RESULTADODE DE EXAMENES LABORATORIO --}}
-                                    @if ($resultado_examen)
-                                        @foreach ( $resultado_examen as $result_ex)
-                                            <tr>
-                                                <td>{{ date('d-m-Y',strtotime($result_ex->fecha_registro)) }}</td>
-                                                <td>{{ $result_ex->id }}</td>
-                                                <td>LABORATORIO</td>
-                                                <td>
-                                                    @if ($result_ex->obj_tipo_examen)
-                                                        {{ $result_ex->obj_tipo_examen->nombre_examen }}
-                                                    @else
-                                                        -
-                                                    @endif
-                                                </td>
-                                                <td>-</td>
-                                                <td>{{ $result_ex->observacion }}</td>
-                                                <td>
-                                                    @if ($result_ex->revisado == 1)
-                                                        Revisado
-                                                    @else
-                                                        No revisado
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($result_ex->ResultadoExamenArchivo->count()>0)
-                                                        <button type="button" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_{{ $result_ex->id }}" onclick="verResultadoExamen('{{ $result_ex->id }}',1);"><i class="feather icon-file-plus"></i> Ver examen</button>
-                                                    @else
-                                                        <button type="button" disabled="disabled" class="btn btn-success-light-c btn-xxs" id="btn_verResultadoExamen_{{ $result_ex->id }}"><i class="feather icon-file-plus"></i> Ver examen</button>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -158,11 +177,15 @@
                                 </select>
                             </div>
                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label class="floating-label-activo-sm">Nombre del examen</label>
+                                <input type="text" class="form-control form-control-sm" name="examen_nombre_examen" id="examen_nombre_examen">
+                            </div>
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <label class="floating-label-activo-sm">Comentarios</label>
                                 <textarea class="form-control form-control-sm" name="examen_comentario" id="examen_comentario"></textarea>
                             </div>
                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <label class="floating-label-activo-sm">Adjuntar exámen</label>
+                                <label class="floating-label-activo-sm">Adjuntar examen</label>
                                 <div class="form-row">
                                     <div class="form-group col-sm-12 col-md-12">
                                         <div class=" text-justify pt-3 pb-1" role="alert">
@@ -188,6 +211,12 @@
 
 @section('page-script')
     <script type="text/javascript">
+    /**TABLA**/
+       $(document).ready(function() {
+       $('#examenes-pcte').DataTable({
+          responsive: true,
+      });
+    });
 
         $(document).ready(function () {
 
@@ -301,8 +330,8 @@
             else
             {
                 swal({
-                    title: "Ver Resultado de Examen Laboratorio",
-                    text:"No Se encuentra resultado de examen Laboratorio",
+                    title: "Ver resultado de examen laboratorio",
+                    text:"No se encuentra resultado de examen laboratorio",
                     icon: "error"
                 });
             }
@@ -314,6 +343,7 @@
             var numero_orden = $('#examen_numero_orden').val();
             var rut = $('#examen_rut').val();
             var nombre_profesional = $('#examen_nombre_profesional').val();
+            var nombre_examen = $('#examen_nombre_examen').val();
             var tipo_examen = $('#examen_tipo_examen').val();
             var comentario = $('#examen_comentario').val();
             var list_archivos = $('#input_lista_archivo').val();
@@ -327,6 +357,7 @@
                     _token: CSRF_TOKEN,
                     fecha_registro: fecha,
                     id_tipo_examen: tipo_examen,
+                    nombre_examen: nombre_examen,
                     comentario: comentario,
                     list_archivos: list_archivos,
                     profesional_rut: rut,
@@ -337,8 +368,8 @@
                 if (data.estado == 1)
                 {
                     swal({
-                        title: "Registro de Examen",
-                        text: "Carga Exitosa.\nSe actualizará la pagina en segundos.",
+                        title: "Registro de examen",
+                        text: "Carga exitosa.\nSe actualizará la página en segundos.",
                         icon: "success"
                     });
 
@@ -351,7 +382,7 @@
                 else
                 {
                     swal({
-                        title: "Registro de Examen",
+                        title: "Registro de examen",
                         text: "Error al cargar las ciudades",
                         icon: "error"
                     });

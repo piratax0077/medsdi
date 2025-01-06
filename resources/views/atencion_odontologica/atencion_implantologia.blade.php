@@ -10,7 +10,7 @@
                     <div class="row align-items-center pb-2">
                         <div class="col-md-6">
                             <div class="page-header-title">
-                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN IMPLANTOLOGÍA</strong></h5>
+                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN IMPLANTOLOGÍA123</strong></h5>
                                 <p class="font-italic mt-0 mb-0 text-white">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -18,7 +18,8 @@
                                         $mes = $meses[($fecha->format('n')) - 1];
                                         $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
                                     @endphp
-                                    {{ $fecha }}
+                                    {{ $fecha }} <br>
+                                    {{ $paciente->nombre }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }} {{ $paciente->rut }} &nbsp;  {{ $paciente->edad }} años.
                                 </p>
 
                             </div>
@@ -68,6 +69,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="Paciente hospitalizado" aria-selected="false">Hospitalización</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-reset" id="periodonto-tab" data-toggle="tab" href="#periodonto" role="tab" aria-controls="periodonto" aria-selected="false">Periodontograma</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -104,6 +108,7 @@
 						<div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
                             @include('general.hospitalizacion.hospitalizacion')
                         </div>
+
                     </div>
                 </div>
             </div>

@@ -159,7 +159,7 @@
                     <div class="form-row">
                         <div class="col-sm-3 mt-2">
                             <label class="floating-label-activo-sm">Nº de Sesiones</label>
-                            <input type="text" class="form-control form-control-sm" name="num_sesiones" id="num_sesiones">
+                            <input type="text" class="form-control form-control-sm" name="praxias_lam_num_sesiones" id="praxias_lam_num_sesiones">
                         </div>
                         <div class="col-sm-9 mt-2">
                             <label class="floating-label-activo-sm">Objetivos</label>

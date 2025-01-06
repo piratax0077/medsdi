@@ -213,7 +213,7 @@ class EscritorioAsistenteCmMnAg extends Controller
             $filtro_hora[] = array('id_lugar_atencion', $lugares_atencion->id);
             $filtro_hora[] = array('id_estado', 1);
             $fecha_incio = date('Y-m-d');
-            $fecha_termino = date('Y-m-d', strtotime(date('Y-m-d').'+1 days'));
+            $fecha_termino = date('Y-m-d', strtotime(date('Y-m-d').'+10 days'));
             $horas = HoraMedica::where($filtro_hora)
                                 ->with(['Notificacionesconfirmacion' => function($query){
                                     // $query->whereIn('estado_confirmacion', [0,1]);

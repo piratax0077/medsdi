@@ -1390,9 +1390,7 @@
 
     function validar_email_agenda() {
 
-        if ($("#reserva_hora_correo").val().indexOf('@', 0) == -1 || $("#reserva_hora_correo")
-            .val().indexOf(
-                '.', 0) == -1) {
+        if ($("#reserva_hora_correo").val().indexOf('@', 0) == -1 || $("#reserva_hora_correo").val().indexOf('.', 0) == -1) {
             swal({
                 title: "El correo electrónico introducido no es correcto.",
                 icon: "error",
@@ -1405,7 +1403,8 @@
         }
 
         let email = $('#reserva_hora_correo').val();
-        let url = "#";
+        // let url = "#";
+        let url = "{{ route('agenda.paciente.validar_email') }}";
 
         $.ajax({
                 url: url,

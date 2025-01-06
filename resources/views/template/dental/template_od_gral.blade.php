@@ -220,7 +220,18 @@
 			@endif
         });
 
+        $('#table_trabajos_presupuesto').DataTable({
+            responsive:'true'
+        });
 
+        var formatoMoneda = (valor) => {
+            return valor.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+        };
 
         function presupuesto(){
             $('#modal_presupuesto').modal('show');

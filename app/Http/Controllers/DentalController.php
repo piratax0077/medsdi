@@ -29,6 +29,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Diabete;
 use App\Models\DiagnosticoCie;
 use App\Models\DiagnosticosDental;
+use App\Models\DiagnosticosDentalProfesional;
 use App\Models\Direccion;
 use App\Models\EndodonciaPaciente;
 use App\Models\ExamenMedico;
@@ -984,7 +985,7 @@ class DentalController extends Controller
 
                 foreach ($ho as $h) {
 
-                    if ($h == '1') {
+                    if ($h == '0') {
 
                         $horario_agenda = str_replace($h, '', $horario_agenda);
 
@@ -1082,7 +1083,7 @@ class DentalController extends Controller
 
                 foreach ($ho as $h) {
 
-                    if ($h == '1') {
+                    if ($h == '0') {
 
                         $horario_agenda = str_replace($h, '', $horario_agenda);
 
@@ -1178,7 +1179,7 @@ class DentalController extends Controller
 
                 foreach ($ho as $h) {
 
-                    if ($h == '1') {
+                    if ($h == '0') {
 
                         $horario_agenda = str_replace($h, '', $horario_agenda);
 
@@ -1429,6 +1430,7 @@ class DentalController extends Controller
     public function registrar_odontograma(Request $request)
     {
         try {
+
             $user = Auth::user()->id;
             $profesional = Profesional::where('id_usuario', $user)->first();
 
@@ -1439,36 +1441,84 @@ class DentalController extends Controller
             $value = $posicion_pieza .'_'. $cuadrante;
 
             $caras = '';
-            if ($request->{'caraM_check_' . $value} == '1') {
-                $caras .= 'M' . $posicion_pieza . $cuadrante . '|';
+            if ($request->{'caraM'} == '1') {
+                $caras .= 'M' . '|';
             }
-            if ($request->{'caraO_check_' . $value} == '1') {
-                $caras .= 'O' . $posicion_pieza . $cuadrante . '|';
+            if ($request->{'caraO'} == '1') {
+                $caras .= 'O' . '|';
             }
-            if ($request->{'caraD_check_' . $value} == '1') {
-                $caras .= 'D' . $posicion_pieza . $cuadrante . '|';
+            if ($request->{'caraD'} == '1') {
+                $caras .= 'D' . '|';
             }
-            if ($request->{'carav_check_' . $value} == '1') {
-                $caras .= 'V' . $posicion_pieza . $cuadrante . '|';
+            if ($request->{'carav'} == '1') {
+                $caras .= 'V' . '|';
             }
-            if ($request->{'caraP_check_' . $value} == '1') {
-                $caras .= 'P' . $posicion_pieza . $cuadrante;
+            if ($request->{'caraP'} == '1') {
+                $caras .= 'P' . '|';
             }
 
-            $odontograma->diagnostico = $request->{'diagnostico_' . $value};
-            $odontograma->tratamiento = $request->{'tratamiento_' . $value};
+            $odontograma->diagnostico = $request->diagnostico;
+            $odontograma->tratamiento = $request->tratamiento;
             $odontograma->caras = $caras;
-            $odontograma->pieza = $request->{'pieza_odontograma_' . $value};
+            $odontograma->pieza = $request->pieza;
             $odontograma->id_paciente = $request->id_paciente;
             $odontograma->id_profesional = $profesional->id;
+            $odontograma->id_ficha_atencion = $request->id_ficha_atencion;
+            $odontograma->id_lugar_atencion = $request->id_lugar_atencion;
 
             if (!$odontograma->save()) {
-                return back()->with('messagge', 'error');
+                return ['mensaje', 'error'];
             }
             $mensaje = 'Se ha agregado Odontograma a pieza '.$odontograma->pieza.' de forma exitosa';
-            return redirect()->back()->with('mensaje', $mensaje);
+            $odontograma_paciente = $this->dame_odontograma_paciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion);
+            $valores = $this->dameValoresOdontograma($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion);
+            return ['status' => 1 ,'mensaje' => $mensaje, 'odontograma_paciente' => $odontograma_paciente,'valores' => $valores];
 
-            return 'ok';
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function dameValoresOdontograma($id_paciente, $id_ficha_atencion, $id_lugar_atencion){
+        $total_odontograma = 0;
+
+        $odontograma = $this->dame_odontograma_paciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion);
+
+        // Iterar y sumar valores
+        foreach ($odontograma as $item) {
+            if (isset($item['valor'])) {
+                $total_odontograma += $item['valor'];
+            }
+        }
+
+        return $total_odontograma;
+    }
+
+    public function dame_odontograma_paciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion){
+        $odontogramas = OdontogramaPaciente::select('odontogramas_pacientes.*','diagnosticos_dental.descripcion','diagnosticos_dental.valor')
+            ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
+            ->where('odontogramas_pacientes.id_paciente', $id_paciente)
+            ->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion)
+            ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
+            ->get();
+        return $odontogramas;
+    }
+
+    public function eliminar_odontograma(Request $request){
+        try {
+
+            $odontograma = OdontogramaPaciente::find($request->id);
+            $id_paciente = $odontograma->id_paciente;
+            $id_ficha_atencion = $odontograma->id_ficha_atencion;
+            $id_lugar_atencion = $odontograma->id_lugar_atencion;
+            if (!$odontograma->delete()) {
+                return back()->with('messagge', 'error');
+            }
+            $mensaje = 'Se ha eliminado Odontograma a pieza '.$odontograma->pieza.' de forma exitosa';
+            $odontograma_paciente = $this->dame_odontograma_paciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion);
+            $valores = $this->dameValoresOdontograma($id_paciente, $id_ficha_atencion, $id_lugar_atencion);
+            return ['status' => 1 ,'mensaje' => $mensaje, 'odontograma_paciente' => $odontograma_paciente,'valores' => $valores];
 
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -1485,23 +1535,50 @@ class DentalController extends Controller
     // Importar los datos
     $diagnosticos = Excel::toArray(new DiagnosticosDentalImport, $request->file('archivo'));
 
-    // Procesar únicamente las filas de la hoja 'ODONTO-GENERAL'
-    foreach ($diagnosticos['ARANCELES PEDIATRIA'] as $row) {
-        // Verificar que la fila tenga datos válidos en las columnas esperadas
-        if (isset($row[0], $row[1]) && !is_null($row[0]) && !is_null($row[1])) {
+    // Procesar únicamente las filas de la hoja 'ARANCEL DENTOLAB'
+    // Procesar únicamente las filas de la hoja 'ARANCEL DENTOLAB'
+    foreach ($diagnosticos['ARANCEL DENTOLAB'] as $row) {
+        // Verificar que la fila tenga datos válidos en las columnas esperadas y que el valor sea numérico
+        if (isset($row[0], $row[1]) && !is_null($row[0]) && is_numeric($row[1])) {
             // Crear y guardar el diagnóstico
             $diagnostico = new DiagnosticosDental();
             $diagnostico->descripcion = trim($row[0]); // Elimina espacios innecesarios
-            // $diagnostico->uco = $row[2];
             $diagnostico->valor = $row[1];
             $diagnostico->estado = 1;
-            $diagnostico->tipo_examen = 3;
+            $diagnostico->tipo_examen = 4;
             $diagnostico->save();
         }
     }
 
     return redirect()->back()->with('mensaje', 'Datos importados correctamente');
 }
+
+    public function guardarDiagnosticoLaboratorio(Request $request){
+        try {
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            // preguntar si existe el diagnóstico para el profesional
+            $existe = DiagnosticosDentalProfesional::where('id_diagnostico', $request->trabajo_id)->where('id_profesional', $profesional->id)->first();
+            if ($existe) {
+                $diagnostico = DiagnosticosDentalProfesional::find($existe->id);
+            }else{
+                $diagnostico = new DiagnosticosDentalProfesional();
+            }
+            $diagnostico->id_diagnostico = $request->trabajo_id;
+
+            $diagnostico->id_profesional = $profesional->id;
+            $diagnostico->laboratorio = $request->existe_laboratorio;
+
+            if($diagnostico->save()){
+                return ['status' => 1, 'mensaje' => 'Diagnóstico guardado correctamente'];
+            }else{
+                return ['status' => 0, 'mensaje' => 'Error al guardar diagnóstico'];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
 
 
     public function importacion_datos_excel(){

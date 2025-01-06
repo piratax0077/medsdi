@@ -146,6 +146,101 @@
     function cargar_a_presupuesto(id){
         alert(id);
     }
+
+    function eliminar_odontograma(id){
+        swal({
+            title: "¿Estás seguro?",
+            text: "Una vez eliminado, no podrás recuperar este odontograma!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            confirmar_eliminar_odontograma(willDelete, id);
+        })
+    }
+
+    function confirmar_eliminar_odontograma(willDelete, id){
+        if (willDelete) {
+            let url = "{{ route('dental.eliminar_odontograma') }}";
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                    id: id,
+                    id_paciente: dame_id_paciente(),
+                    id_ficha_atencion: $('#id_fc').val(),
+                    id_lugar_atencion: $('#id_lugar_atencion').val(),
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response){
+                    console.log(response);
+                    if(response.status == 1){
+                        swal({
+                            title: 'Odontograma',
+                            text: response.mensaje,
+                            icon: 'success'
+                        });
+
+                        let odontograma = response.odontograma_paciente;
+                        let html = '';
+                        odontograma.forEach(function(odonto){
+                            html += '<tr>';
+                            html += '<td>'+odonto.fecha+'</td>';
+                            html += '<td>'+odonto.tratamiento+'</td>';
+                            html += '<td>'+odonto.caras+'</td>';
+                            html += '<td>'+odonto.pieza+'</td>';
+                            html += '<td>'+odonto.descripcion+'</td>';
+                            html += '<td>'+odonto.valor+'</td>';
+                            html += '<td>';
+                            html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                            html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                            html += '</td>';
+                            html += '</tr>';
+                        });
+
+                        $('#table_odontograma tbody').html(html);
+                        $('#contenedor_piezas_dentales_presupuesto').empty();
+                        odontograma.forEach(function(odonto){
+                            $('#contenedor_piezas_dentales_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Pieza</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        });
+                        let valores = response.valores;
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores));
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+        } else {
+            swal("Operación cancelada");
+        }
+
+    }
 </script>
 @endsection
 

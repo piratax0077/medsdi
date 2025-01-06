@@ -51,7 +51,7 @@
                                                             <div class="col-sm-3 mt-2">
                                                                 <label  class="floating-label-activo-sm">Edad</label>
                                                                 <div class="form-group fill">
-                                                                    <input type="text" class="form-control form-control-sm" name="edad" id="edad">
+                                                                    <input type="number" min="0" class="form-control form-control-sm" name="edad" id="edad" value="{{ \Carbon\Carbon::parse($paciente->fecha_nac)->diff(\Carbon\Carbon::now())->format('%y') }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-3 mt-2">
@@ -522,7 +522,7 @@
                                                             <div class="col-sm-4 mt-2">
                                                                 <div class="form-group">
                                                                     <label class="floating-label-activo-sm">Coordinación Fono-resp</label>
-                                                                    <select name="coord_fono_resp" id="coord_fono_resp"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('coord_fono_resp','div_ocoord_fono_resp','coord_fono_resp_obs',2);">
+                                                                    <select name="coord_fono_resp" id="coord_fono_resp"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('coord_fono_resp','div_coord_fono_resp','coord_fono_resp_obs',2);">
                                                                         <option value="1">Adecuada</option>
                                                                         <option value="2">Alteracion Funcional</option>
                                                                     </select>
@@ -618,7 +618,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-info"> Guardar</button>
+                <button type="button" class="btn btn-info" onclick="registrar_ev_voz();"> Guardar</button>
             </div>
         </div>
     </div>
@@ -627,12 +627,286 @@
     function e_voz() {
         $('#m_voz').modal('show');
     }
+
+    function registrar_ev_voz()
+    {
+        var id_ficha_otros_prof = $('#id_fc').val();
+        var id_ficha_fono = '';
+        var id_paciente = $('#id_paciente_fc').val();
+        var id_profesional = $('#id_profesional_fc').val();
+        var edad = $('#edad').val();
+        var tpo_uso_vz = $('#tpo_uso_vz').val();
+        var tpo_disf = $('#tpo_disf').val();
+        var tpo_exp_ruidos = $('#tpo_exp_ruidos').val();
+        var audic = $('#audic').val();
+        var enf_resp = $('#enf_resp').val();
+        var uso_med = $('#uso_med').val();
+        var pat_ant = $('#pat_ant').val();
+        var habitos = $('#habitos').val();
+        var ttos_ant = $('#ttos_ant').val();
+        var voz_obs_gen = $('#voz_obs_gen').val();
+        var ev_voz_vest_boc = $('#ev_voz_vest_boc').val();
+        var ev_voz_vest_boc_obs = $('#ev_voz_vest_boc_obs').val();
+        var ev_voz_fre_sup = $('#ev_voz_fre_sup').val();
+        var ev_voz_fre_sup_obs = $('#ev_voz_fre_sup_obs').val();
+        var ev_voz_fr_inf = $('#ev_voz_fr_inf').val();
+        var ev_voz_fr_inf_obs = $('#ev_voz_fr_inf_obs').val();
+        var ev_voz_fr_sl = $('#ev_voz_fr_sl').val();
+        var ev_voz_fr_sl_obs = $('#ev_voz_fr_sl_obs').val();
+        var ev_voz_pd = $('#ev_voz_pd').val();
+        var ev_voz_pd_obs = $('#ev_voz_pd_obs').val();
+        var ev_voz_pb = $('#ev_voz_pb').val();
+        var ev_voz_pb_obs = $('#ev_voz_pb_obs').val();
+        var ev_voz_cvf = $('#ev_voz_cvf').val();
+        var ev_voz_cvf_obs = $('#ev_voz_cvf_obs').val();
+        var ev_voz_uvul = $('#ev_voz_uvul').val();
+        var ev_voz_uvul_obs = $('#ev_voz_uvul_obs').val();
+        var ev_voz_amig = $('#ev_voz_amig').val();
+        var ev_voz_amig_obs = $('#ev_voz_amig_obs').val();
+        var ev_voz_aden = $('#ev_voz_aden').val();
+        var ev_voz_aden_obs = $('#ev_voz_aden_obs').val();
+        var ev_voz_boc_obs = $('#ev_voz_boc_obs').val();
+        var posic_estatica = $('#posic_estatica').val();
+        var posic_dinamica = $('#posic_dinamica').val();
+        var ev_vf = $('#ev_vf').val();
+        var ev_vf_obs = $('#ev_vf_obs').val();
+        var ev_vext = $('#ev_vext').val();
+        var ev_vext_obs = $('#ev_vext_obs').val();
+        var ev_vro = $('#ev_vro').val();
+        var ev_vro_obs = $('#ev_vro_obs').val();
+        var ev_vflat = $('#ev_vflat').val();
+        var ev_vflat_obs = $('#ev_vflat_obs').val();
+        var ev_val = $('#ev_val').val();
+        var ev_val_obs = $('#ev_val_obs').val();
+        var ev_val_ep_obs = $('#ev_val_ep_obs').val();
+        var ex_resp_torax = $('#ex_resp_torax').val();
+        var ex_resp_torax_obs = $('#ex_resp_torax_obs').val();
+        var resp_din = $('#resp_din').val();
+        var resp_col = $('#resp_col').val();
+        var resp_col_obs = $('#resp_col_obs').val();
+        var resp_tpo_resp = $('#resp_tpo_resp').val();
+        var resp_tpo_resp_obs = $('#resp_tpo_resp_obs').val();
+        var resp_modo = $('#resp_modo').val();
+        var resp_modo_obs = $('#resp_modo_obs').val();
+        var soplo_dur = $('#soplo_dur').val();
+        var soplo_dur_obs = $('#soplo_dur_obs').val();
+        var soplo_fza = $('#soplo_fza').val();
+        var soplo_fza_obs = $('#soplo_fza_obs').val();
+        var coord_fono_resp = $('#coord_fono_resp').val();
+        var coord_fono_resp_obs = $('#coord_fono_resp_obs').val();
+        var ex_respiratorio_obs = $('#ex_respiratorio_obs').val();
+        var ataque_voc = $('#ataque_voc').val();
+        var ataque_voc_obs = $('#ataque_voc_obs').val();
+        var ton_voc = $('#ton_voc').val();
+        var ton_voc_obs = $('#ton_voc_obs').val();
+        var int_voz = $('#int_voz').val();
+        var int_voz_obs = $('#int_voz_obs').val();
+        var param_voc_obs = $('#param_voc_obs').val();
+
+        var url = "{{ route('ficha.otro.prof.registro.eval.voz') }}";
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                    _token: CSRF_TOKEN,
+                    id_ficha_otros_prof:id_ficha_otros_prof,
+                    id_ficha_fono:id_ficha_fono,
+                    id_paciente:id_paciente,
+                    id_profesional:id_profesional,
+                    edad:edad,
+                    tpo_uso_vz:tpo_uso_vz,
+                    tpo_disf:tpo_disf,
+                    tpo_exp_ruidos:tpo_exp_ruidos,
+                    audic:audic,
+                    enf_resp:enf_resp,
+                    uso_med:uso_med,
+                    pat_ant:pat_ant,
+                    habitos:habitos,
+                    ttos_ant:ttos_ant,
+                    voz_obs_gen:voz_obs_gen,
+                    ev_voz_vest_boc:ev_voz_vest_boc,
+                    ev_voz_vest_boc_obs:ev_voz_vest_boc_obs,
+                    ev_voz_fre_sup:ev_voz_fre_sup,
+                    ev_voz_fre_sup_obs:ev_voz_fre_sup_obs,
+                    ev_voz_fr_inf:ev_voz_fr_inf,
+                    ev_voz_fr_inf_obs:ev_voz_fr_inf_obs,
+                    ev_voz_fr_sl:ev_voz_fr_sl,
+                    ev_voz_fr_sl_obs:ev_voz_fr_sl_obs,
+                    ev_voz_pd:ev_voz_pd,
+                    ev_voz_pd_obs:ev_voz_pd_obs,
+                    ev_voz_pb:ev_voz_pb,
+                    ev_voz_pb_obs:ev_voz_pb_obs,
+                    ev_voz_cvf:ev_voz_cvf,
+                    ev_voz_cvf_obs:ev_voz_cvf_obs,
+                    ev_voz_uvul:ev_voz_uvul,
+                    ev_voz_uvul_obs:ev_voz_uvul_obs,
+                    ev_voz_amig:ev_voz_amig,
+                    ev_voz_amig_obs:ev_voz_amig_obs,
+                    ev_voz_aden:ev_voz_aden,
+                    ev_voz_aden_obs:ev_voz_aden_obs,
+                    ev_voz_boc_obs:ev_voz_boc_obs,
+                    posic_estatica:posic_estatica,
+                    posic_dinamica:posic_dinamica,
+                    ev_vf:ev_vf,
+                    ev_vf_obs:ev_vf_obs,
+                    ev_vext:ev_vext,
+                    ev_vext_obs:ev_vext_obs,
+                    ev_vro:ev_vro,
+                    ev_vro_obs:ev_vro_obs,
+                    ev_vflat:ev_vflat,
+                    ev_vflat_obs:ev_vflat_obs,
+                    ev_val:ev_val,
+                    ev_val_obs:ev_val_obs,
+                    ev_val_ep_obs:ev_val_ep_obs,
+                    ex_resp_torax:ex_resp_torax,
+                    ex_resp_torax_obs:ex_resp_torax_obs,
+                    resp_din:resp_din,
+                    resp_col:resp_col,
+                    resp_col_obs:resp_col_obs,
+                    resp_tpo_resp:resp_tpo_resp,
+                    resp_tpo_resp_obs:resp_tpo_resp_obs,
+                    resp_modo:resp_modo,
+                    resp_modo_obs:resp_modo_obs,
+                    soplo_dur:soplo_dur,
+                    soplo_dur_obs:soplo_dur_obs,
+                    soplo_fza:soplo_fza,
+                    soplo_fza_obs:soplo_fza_obs,
+                    coord_fono_resp:coord_fono_resp,
+                    coord_fono_resp_obs:coord_fono_resp_obs,
+                    ex_respiratorio_obs:ex_respiratorio_obs,
+                    ataque_voc:ataque_voc,
+                    ataque_voc_obs:ataque_voc_obs,
+                    ton_voc:ton_voc,
+                    ton_voc_obs:ton_voc_obs,
+                    int_voz:int_voz,
+                    int_voz_obs:int_voz_obs,
+                    param_voc_obs:param_voc_obs,
+                },
+            })
+        .done(function(data) {
+            if (data.estado == 1)
+            {
+
+                $('#m_voz').modal('hide');
+                limpiar_e_voz();
+                swal({
+                    title: "Registro de Evaluacion de la Voz",
+                    text: "Carga Exitosa.",
+                    icon: "success"
+                });
+            }
+            else
+            {
+                swal({
+                    title: "Registro de Evaluacion de la Voz",
+                    text: "Error al registrar",
+                    icon: "error"
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
+
+    function limpiar_e_voz()
+    {
+        $('#edad').val("{{ \Carbon\Carbon::parse($paciente->fecha_nac)->diff(\Carbon\Carbon::now())->format('%y') }}") ; // - text
+        $('#tpo_uso_vz').val(''); // - text
+        $('#tpo_disf').val(''); // - text
+        $('#tpo_exp_ruidos').val(''); // - text
+        $('#audic').val(''); // - text
+        $('#enf_resp').val(''); // - text
+        $('#uso_med').val(''); // - text
+        $('#pat_ant').val(''); // - text
+        $('#habitos').val(''); // - text
+        $('#ttos_ant').val(''); // - text
+        $('#voz_obs_gen').val(''); // - textarea
+        $('#ev_voz_vest_boc').val(1); // - select-one
+        $('#ev_voz_vest_boc_obs').val(''); // - textarea
+        $('#ev_voz_fre_sup').val(1); // - select-one
+        $('#ev_voz_fre_sup_obs').val(''); // - textarea
+        $('#ev_voz_fr_inf').val(1); // - select-one
+        $('#ev_voz_fr_inf_obs').val(''); // - textarea
+        $('#ev_voz_fr_sl').val(1); // - select-one
+        $('#ev_voz_fr_sl_obs').val(''); // - textarea
+        $('#ev_voz_pd').val(1); // - select-one
+        $('#ev_voz_pd_obs').val(''); // - textarea
+        $('#ev_voz_pb').val(1); // - select-one
+        $('#ev_voz_pb_obs').val(''); // - textarea
+        $('#ev_voz_cvf').val(1); // - select-one
+        $('#ev_voz_cvf_obs').val(''); // - textarea
+        $('#ev_voz_uvul').val(1); // - select-one
+        $('#ev_voz_uvul_obs').val(''); // - textarea
+        $('#ev_voz_amig').val(1); // - select-one
+        $('#ev_voz_amig_obs').val(''); // - textarea
+        $('#ev_voz_aden').val(1); // - select-one
+        $('#ev_voz_aden_obs').val(''); // - textarea
+        $('#ev_voz_boc_obs').val(''); // - textarea
+        $('#posic_estatica').val(''); // - text
+        $('#posic_dinamica').val(''); // - text
+        $('#ev_vf').val(1); // - select-one
+        $('#ev_vf_obs').val(''); // - textarea
+        $('#ev_vext').val(1); // - select-one
+        $('#ev_vext_obs').val(''); // - textarea
+        $('#ev_vro').val(1); // - select-one
+        $('#ev_vro_obs').val(''); // - textarea
+        $('#ev_vflat').val(1); // - select-one
+        $('#ev_vflat_obs').val(''); // - textarea
+        $('#ev_val').val(1); // - select-one
+        $('#ev_val_obs').val(''); // - textarea
+        $('#ev_val_ep_obs').val(''); // - textarea
+        $('#ex_resp_torax').val(1); // - select-one
+        $('#ex_resp_torax_obs').val(''); // - textarea
+        $('#resp_din').val(''); // - text
+        $('#resp_col').val(1); // - select-one
+        $('#resp_col_obs').val(''); // - textarea
+        $('#resp_tpo_resp').val(1); // - select-one
+        $('#resp_tpo_resp_obs').val(''); // - textarea
+        $('#resp_modo').val(1); // - select-one
+        $('#resp_modo_obs').val(''); // - textarea
+        $('#soplo_dur').val(1); // - select-one
+        $('#soplo_dur_obs').val(''); // - textarea
+        $('#soplo_fza').val(1); // - select-one
+        $('#soplo_fza_obs').val(''); // - textarea
+        $('#coord_fono_resp').val(1); // - select-one
+        $('#coord_fono_resp_obs').val(''); // - textarea
+        $('#ex_respiratorio_obs').val(''); // - textarea
+        $('#ataque_voc').val(1); // - select-one
+        $('#ataque_voc_obs').val(''); // - textarea
+        $('#ton_voc').val(1); // - select-one
+        $('#ton_voc_obs').val(''); // - textarea
+        $('#int_voz').val(1); // - select-one
+        $('#int_voz_obs').val(''); // - textarea
+        $('#param_voc_obs').val(''); // - textarea
+
+        evaluar_para_carga_detalle('ev_voz_vest_boc','div_ev_voz_vest_boc','ev_voz_vest_boc_obs',2);
+        evaluar_para_carga_detalle('ev_voz_fre_sup','div_ev_voz_fre_sup','ev_voz_fre_sup_obs',2);
+        evaluar_para_carga_detalle('ev_voz_fr_inf','div_ev_voz_fr_inf','ev_voz_fr_inf_obs',2);
+        evaluar_para_carga_detalle('ev_voz_fr_sl','div_ev_voz_fr_sl','ev_voz_fr_sl_obs',2);
+        evaluar_para_carga_detalle('ev_voz_pd','div_ev_voz_pd','ev_voz_pd_obs',7);
+        evaluar_para_carga_detalle('ev_voz_pb','div_ev_voz_pb','ev_voz_pb_obs',2);
+        evaluar_para_carga_detalle('ev_voz_cvf','div_ev_voz_cvf','ev_voz_cvf_obs',5);
+        evaluar_para_carga_detalle('ev_voz_uvul','div_ev_voz_uvul','ev_voz_uvul_obs',7);
+        evaluar_para_carga_detalle('ev_voz_amig','div_ev_voz_amig','ev_voz_amig_obs',3);
+        evaluar_para_carga_detalle('ev_voz_aden','div_ev_voz_aden','ev_voz_aden_obs',3);
+        evaluar_para_carga_detalle('ev_vf','div_ev_vf','ev_vf_obs',2);
+        evaluar_para_carga_detalle('ev_vext','div_ev_vext','ev_vext_obs',2);
+        evaluar_para_carga_detalle('ev_vro','div_ev_vro','ev_vro_obs',2);
+        evaluar_para_carga_detalle('ev_vflat','div_ev_vflat','ev_vflat_obs',2);
+        evaluar_para_carga_detalle('ev_val','div_ev_val','ev_val_obs',2);
+        evaluar_para_carga_detalle('ex_resp_torax','div_ex_resp_torax','ex_resp_torax_obs',2);
+        evaluar_para_carga_detalle('resp_col','div_resp_col','resp_col_obs',2);
+        evaluar_para_carga_detalle('resp_tpo_resp','div_resp_tpo_resp','resp_tpo_resp_obs',2);
+        evaluar_para_carga_detalle('resp_modo','div_resp_modo','resp_modo_obs',2);
+        evaluar_para_carga_detalle('soplo_dur','div_soplo_dur','soplo_dur_obs',2);
+        evaluar_para_carga_detalle('soplo_fza','div_soplo_fza','soplo_fza_obs',2);
+        evaluar_para_carga_detalle('coord_fono_resp','div_coord_fono_resp','coord_fono_resp_obs',2);
+        evaluar_para_carga_detalle('ataque_voc','div_ataque_voc','ataque_voc_obs',2);
+        evaluar_para_carga_detalle('ton_voc','div_ton_voc','ton_voc_obs',2);
+        evaluar_para_carga_detalle('int_voz','div_int_voz','int_voz_obs',2);
+
+    }
 </script>
-
-
-
-
-
-
-
-

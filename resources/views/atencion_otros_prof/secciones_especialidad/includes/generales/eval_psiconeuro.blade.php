@@ -31,7 +31,7 @@
                             <label class="floating-label-activo-sm" for="eval_ori">Orientación</label>
                             <select name="eval_ori" id="eval_ori" data-titulo="Orientación" data-seccion="Evaluación Psiconeurológica" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('eval_ori','div_eval_ori','eval_ori_obs',4);">
                                 <option value="0">Seleccione</option>
-                                <option value="1" selected>Orientado en Tpo y Espacio</option>
+                                <option value="1" selected>Orientado en Tiempo y Espacio</option>
                                 <option value="2">Perdido</option>
                                 <option value="3">Dudosa</option>
                                 <option value="4"> Observaciones (describir)</option>
@@ -74,8 +74,19 @@
                     </div>
                 </div>
                 <div class="form-row">
+                    <!--DROPZONE PARA SUBIR DIBUJOS U OTRO ARCHIVO-->
                     <div class="form-group col-md-12">
-                        <label class="floating-label" for="eval_com_coment">Comentario de la Evaluación</label>
+                        <div class=" text-justify pt-3 pb-1" role="alert">
+                            <input type="hidden" name="#" id="#" value="">
+                            <!-- [ Main Content ] start -->
+                            <div class="dropzone" id="#" action="{{ route('paciente.archivo.carga') }}"></div>
+                            <!-- [ file-upload ] end -->
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="floating-label-activo-sm" for="eval_com_coment">Comentario de la Evaluación</label>
                         <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="eval_com_coment" id="eval_com_coment"></textarea>
                     </div>
                 </div>

@@ -44,7 +44,7 @@ File: style.css
 
 
 .bg-fondo-gris {
-    background-color: #F4F4F4!important;
+    background-color:#ecf0f5!important;
 }
 /*
  * Container style
@@ -419,6 +419,7 @@ label {
     margin-bottom: 0.5rem;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
+    font-size: 0.86rem;
 }
 
 button {
@@ -2390,6 +2391,17 @@ select.form-control:focus::-ms-value {
 .form-control-plaintext.form-control-sm, .form-control-plaintext.form-control-lg {
     padding-right: 0;
     padding-left: 0;
+}
+
+.input-dental {
+    height: calc(0.9em + 0.7rem + 2px)!important;
+}
+.form-control-xs {
+    height: calc(0.9em + 0.7rem + 2px);
+    padding: 0.1rem 0.5rem 0.1rem 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    border-radius: 3px;
 }
 
 .form-control-sm {
@@ -4650,7 +4662,7 @@ input[type="button"].btn-block {
 
 .nav-link {
     font-family: 'Nunito', sans-serif;
-    font-size: 0.83rem;
+    font-size: 0.90rem!important;
     display: block;
     padding: 0.5rem 0.2rem;
     color: #616161;
@@ -4659,7 +4671,8 @@ input[type="button"].btn-block {
 }
 
 .nav-link.active {
-    font-weight: 600;
+    font-weight: 600!important;
+    font-size: 0.90rem!important;
 }
 .nav-link:hover, .nav-link:focus {
     text-decoration: none;
@@ -7146,11 +7159,7 @@ a.close.disabled {
 }
 
 .bg-gris{
-    background: rgb(250,250,250);
-    background: -moz-linear-gradient(108deg, rgba(250,250,250,1) 6%, rgba(236,236,236,1) 98%);
-    background: -webkit-linear-gradient(108deg, rgba(250,250,250,1) 6%, rgba(236,236,236,1) 98%);
-    background: linear-gradient(108deg, rgba(250,250,250,1) 6%, rgba(236,236,236,1) 98%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fafafa",endColorstr="#ececec",GradientType=1);
+    background-color: #ecf0f5!important;
 }
 
 .bg-primary {
@@ -20674,7 +20683,7 @@ h6 {
 }
 
 p {
-    font-size: 0.74rem!important;
+    font-size: 0.90rem!important;
 }
 
 b,
@@ -33822,7 +33831,7 @@ box-shadow: 0 1px 7px -1px rgba(69, 90, 100, 0.5)!important;
 
 .card-body-aten-a {
      border-top: 1px solid #c6c9cc!important;
-    padding-top: 0.65rem!important;
+    padding-top: 1rem!important;
     padding-button: 0.65rem!important;
     padding-left: 0.5rem!important;
     padding-right: 0.5rem!important;
@@ -33904,7 +33913,7 @@ box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.12)!important;"
   width: 100%;
   text-align: left;
   outline: none;
-  font-size: 0.82rem;
+  font-size: 0.94rem;
   transition: 0.4s;
   padding: 5px 0px 0px 3px;
   color: #1a49a3!important;
@@ -34003,6 +34012,13 @@ box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.12)!important;"
     text-transform: uppercase!important;
 }
 
+.t-modal {
+    font-size: 0.98rem!important;
+    color: #596679!important;
+    margin-bottom: 0.6rem!important;
+   
+}
+
 .fecha {
     font-size: 0.77rem!important;
     color: #37474f!important;
@@ -34025,7 +34041,7 @@ box-shadow: 0px 1px 6px 2px rgba(0,0,0,0.12)!important;"
 
 .t-aten-black {
     font-size: 0.77rem!important;
-    color: ##373a3c!important;
+    color: #373a3c!important;
     margin-bottom: 0.6rem!important;
     text-transform: uppercase!important;
 }
@@ -35098,6 +35114,150 @@ margin-bottom: 0px;
     margin-top: 0.5rem!important;
     margin-left: 0rem!important;
     margin-right: 0.100rem!important;
+}
+
+.nav-secciones.active{
+    color: #1a49a3;
+    font-size: 0.75rem!important;
+    background-color: #d0e0ff;
+    margin-bottom: 0.5rem!important;
+    margin-top: 0.5rem!important;
+    margin-left: 0rem!important;
+    margin-right: 0.100rem!important;
+    border: solid 1px #83a7e1!important;
+    font-weight:600!important;
+    transition: 0.3s!important;
+}
+
+.nav-secciones {
+    color: #C7C8C9;
+    border: solid 1px #dbdbdb!important;
+    font-size: 0.75rem!important;
+    background-color: #fff;
+    padding: 3px 6px!important;
+    border-radius: 0.2rem;
+    margin-bottom: 0.5rem!important;
+    margin-top: 0.5rem!important;
+    margin-left: 0rem!important;
+    margin-right:0.100rem!important;
+    line-height: 1.5;
+    font-weight:600!important;
+    transition: 0.2s!important;
+}
+
+.nav-secciones:hover{
+    color: #1a49a3;
+    font-size: 0.75rem!important;
+    background-color: #d0e0ff;
+    margin-bottom: 0.5rem!important;
+    margin-top: 0.5rem!important;
+    margin-left: 0rem!important;
+    margin-right: 0.100rem!important;
+    border: solid 1px #5f8dd7!important;
+    font-weight:600!important;
+    transition: 0.2s!important;
+
+}
+
+.nav-tabs-secciones {
+    border-bottom: 0px solid #dee2e6!important;
+    font-size: 0.75rem!important;
+    margin-bottom: 0.5rem!important;
+    margin-top: 0.5rem!important;
+    margin-left: 0rem!important;
+    margin-right: 0.100rem!important;
+}
+
+.nav-tabs-secciones .nav-item-secciones {
+    font-size: 0.75rem!important;
+    margin-bottom: 0.5rem!important;
+    margin-top: 0.5rem!important;
+    margin-left: 0rem!important;
+    margin-right: 0.100rem!important;
+}
+
+
+
+@media (max-width: 767.98px) { 
+.mtop-4 {
+    margin-top: 2rem;
+}
+
+
+ }
+
+ @media (max-width: 575.98px) { 
+
+.videocall {
+        display:flex!important; 
+        flex-direction: column!important;
+        margin-top: 20px;
+    }
+
+  }
+
+ @media (min-width: 576px) { 
+
+    .videocall {
+        display:flex!important; 
+        flex-direction: row!important;
+        margin-top: 20px;
+    }
+
+
+}
+
+
+
+/*AZUL*/
+.nav-tabs-aten {
+    border-bottom: none;
+}
+    .nav-link-aten-m.active {
+    background-color: #d0e0ff!important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 1px 3px!important;
+    color: #1a49a3!important;
+    border: 1px solid #a2c0f0;
+    transition: 0.2s!important;
+}
+
+.nav-link-aten-m {
+    background-color: ##802a2a !important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #738192 !important;
+    padding: 1px 3px!important;
+    margin-right: 3px!important;
+    border-radius: 3px;
+    margin-bottom: 2px!important;
+    margin-top: 2px!important;
+    border: 1px solid #e2e5e8;
+    transition: 0.2s!important;
+}
+
+.nav-link-aten-m:hover { 
+    background-color: #d0e0ff!important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 1px 3px!important;
+    color: ##802a2a!important;
+    margin-bottom: 2px!important;
+    margin-top: 2px!important;
+    border: 1px solid #a2c0f0;
+    transition: 0.2s!important;
+}
+
+
+
+.nav-link-aten-m {
+    display: block;
+    padding: 0.5rem 1rem;
+}
+
+.pointer{
+    cursor: pointer;
 }
 
 

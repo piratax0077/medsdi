@@ -63,6 +63,9 @@
                 z-index: 2006;
                 overflow: auto;
             }
+            .select2-container {
+                z-index: 3001 !important;
+            }
         </style>
     </head>
     <body>

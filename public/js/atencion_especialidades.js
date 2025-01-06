@@ -124,9 +124,9 @@ function examenes_fono() {
     $('#indicar_examen_fono').modal('show');
 }
 
-function est_ofa() {
-    $('#est_ofa').modal('show');
-}
+// function est_ofa() {
+//     $('#est_ofa').modal('show');
+// }
 
 function est_hpa() {
     $('#est_habpreart').modal('show');
@@ -140,17 +140,17 @@ function e_plan() {
     $('#plan').modal('show');
 }
 
-function e_praxias() {
-    $('#praxias').modal('show');
-}
+// function e_praxias() {
+//     $('#praxias').modal('show');
+// }
 
-function e_voz() {
-    $('#m_voz').modal('show');
-}
+// function e_voz() {
+//     $('#m_voz').modal('show');
+// }
 
-function e_espasmo() {
-    $('#m_eval_espasmof').modal('show');
-}
+// function e_espasmo() {
+//     $('#m_eval_espasmof').modal('show');
+// }
 
 function l_praxias() {
     $('#modal_lam_praxias').modal('show');
@@ -164,9 +164,9 @@ function tede() {
     $('#modal_tede').modal('show');
 }
 
-function pragma() {
-    $('#h_pragmati').modal('show');
-}
+// function pragma() {
+//     $('#h_pragmati').modal('show');
+// }
 
 function fon_r() {
     $('#fonema_r').modal('show');

@@ -1,30 +1,29 @@
 
 <!-- BOTÓN FLOTANTE AGENDA (ESPACIO PARA INSERTAR LA NUEVA AGENDA) -->
-<div class="bs-offset-main bs-canvas-anim">
+<div class="botones-container">
     @php
         // var_dump($tipo_agendas);
     @endphp
     @foreach ($tipo_agendas as $ta )
         @switch($ta)
             @case(1)
-                <button class="btn btn-tipo-agenda btn-agenda-cons btn-agenda-1 shadow-sm"  type="button" onclick="cargarAgendaProfesional(1, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-12"></i> Agenda Consulta</button>
+                <button class="btn boton btn-agenda-1 shadow-sm  pt-3" type="button" onclick="cargarAgendaProfesional(1, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar"></i> CONSULTA</button>
                 @break
 
             @case(2)
-
+                {{--  --}}
                 @break
 
             @case(3)
-                {{-- <button class="btn btn-tipo-agenda btn-agenda-tel btn-agenda-3 shadow-sm"  type="button" onclick="cargarAgendaProfesional(3, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-12"></i> <br>Agenda Telemedicina</button> --}}
-                <button class="btn btn-tipo-agenda btn-agenda-tel btn-agenda-3 shadow-sm"  type="button" onclick="cargarAgendaProfesional(3, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-12"></i> Agenda Telemedicina</button>
+                <button class="btn boton btn-agenda-3 shadow-sm  pt-3" type="button" onclick="cargarAgendaProfesional(3, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar"></i> TELEMEDICINA</button>
                 @break
 
             @case(4)
-                <button class="btn btn-tipo-agenda btn-agenda-exa btn-agenda-4 shadow-sm"  type="button" onclick="cargarAgendaProfesional(4, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-12"></i> Agenda Examenes</button>
+                <button class="btn boton btn-agenda-4 shadow-sm  pt-3" type="button" onclick="cargarAgendaProfesional(4, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar"></i> EXÁMENES</button>
                 @break
 
             @case(5)
-                <button class="btn btn-tipo-agenda btn-agenda-exa btn-agenda-5 shadow-sm"  type="button" onclick="cargarAgendaProfesional(5, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar f-12"></i> Agenda Modular</button>
+                <button class="btn boton btn-agenda-5 shadow-sm  pt-3" type="button" onclick="cargarAgendaProfesional(5, '{{ $lugar_atencion }}', '{{ $profesional->id}}', '{{ date('Y-m-d') }}');"><i class="feather icon-calendar"></i> MODULAR</button>
                 @break
 
             @default
@@ -53,7 +52,7 @@
 
         function cargarAgendaProfesional(tipo_agenda, id_lugar_atencion, id_profesional, fecha)
         {
-            $('.btn-tipo-agenda').css('background-color','#387fb6');
+            $('.boton').css('background-color','#8b52c2');
             $('.btn-agenda-'+tipo_agenda).css('background-color','#1cbebe');
 
             $('#id_tipo_agenda').val(tipo_agenda);
@@ -218,7 +217,7 @@
                                                                     });
                                                                 }
                                                             });
-                                                            // console.log(arrayTemp);
+                                                            console.log(arrayTemp);
                                                             end(arrayTemp);
                                                         }
                                                         else
@@ -539,6 +538,7 @@
                                                     $('#rut_paciente_reserva').val('');
                                                     $('#reserva_agregar_paciente_hora').hide();
                                                     $('#fecha_consulta').val(date.dateStr);
+                                                    $('#div_procedimiento').hide();
                                                 }
                                                 else
                                                 {

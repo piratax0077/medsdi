@@ -528,8 +528,9 @@
                 fecha = '{{ date("Y-m-d") }}';
             }
 
-            $('.btn-tipo-agenda').css('background-color','#387fb6');
+            $('.boton').css('background-color','#8b52c2');
             $('.btn-agenda-'+tipo_agenda).css('background-color','#1cbebe');
+
             $('#id_tipo_agenda').val(tipo_agenda);
 
             switch (parseInt(tipo_agenda)) {
@@ -1517,6 +1518,20 @@
                     data = JSON.parse(data);
                     if(data.tipo_paciente == 'SI')
                     {
+                        {{-- validacion para especialidad de pediatria --}}
+                        @if (isset($profesional))
+                            @if ($profesional->id_tipo_especialidad == 11)
+                                if (data.edad > 18) {
+                                    swal({
+                                        title: "Reserva de hora",
+                                        text: "El paciente es mayor de edad, el profesional es Pediatrico",
+                                        icon: "warning",
+                                        buttons: "Aceptar",
+                                    });
+                                }
+                            @endif
+                        @endif
+
                         $('.paciente_view').show();
                         $('.paciente_edit').hide();
 
@@ -3196,7 +3211,8 @@
             let buscador = $('input:radio[name=buscador]:checked').val();
             let modalidad = $('#modalidad').val();
             let text_modalidad = $('#modalidad option:selected').text();
-            let cv = $('#cv').val();
+            // let cv = $('#cv').val();
+            let archivo = $('#input_lista_archivo').val();
 
             if(buscador == 1)
             {
@@ -3219,7 +3235,7 @@
                 data: {
                     buscador: buscador,
                     modalidad: modalidad,
-                    cv: cv,
+                    archivo: lista_archivo[0],
                 }
 
             })
@@ -3247,6 +3263,18 @@
                     $('#buscadores_1').addClass('show');
                     $('#buscadores_2').removeClass('show');
 
+                    console.log(data.archivo.estado);
+                    console.log(data.archivo.proceso.url);
+                    if(data.archivo.estado == 1)
+                    {
+                        $('#btn_descarga_cv').attr('disabled', false);
+                        $('#btn_descarga_cv').attr('onclick', 'abrirCV(\''+data.archivo.proceso.url+'\');');
+                    }
+                    else
+                    {
+                        $('#btn_descarga_cv').attr('disabled', true);
+                        $('#btn_descarga_cv').attr('onclick', '');
+                    }
                 }
                 else
                 {

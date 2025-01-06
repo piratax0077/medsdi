@@ -87,10 +87,10 @@
                         </div>
                         <div class="col-md-4">
                             <div class="card subir py-3">
-                                <a href="busq_secretaria.php">
+                                <a href="{{ route('profesional.aranceles') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
                                         <img class="wid-90 text-center mb-3"
-                                        src="{{ asset('images/iconos/usuario_asistente.svg') }}"
+                                        src="{{ asset('images/iconos/adm_comercial.png') }}"
 
                                         alt="Profesional">
                                         <h5 class="f-16">

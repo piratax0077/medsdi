@@ -118,11 +118,8 @@
     </div>
 </div>
 <script>
-    {{--  function buscar_ficha_atencion() {
-        $('#m_consultaant').modal('show');
-    }  --}}
 
-    function  buscar_ficha_atencion(id_ficha_atencion)
+    function  buscar_ficha_atencion_atencion_previa(id_ficha_atencion)
     {
         let url = "{{ route('ficha_clinica.get_ficha') }}";
 
@@ -169,6 +166,8 @@
 
     function carga_dinamica(data)
     {
+        console.log('carga_dinamica');
+        console.log(data);
         // PACIENTE
         var paciente_id = data.paciente.id;
         var paciente_nombre = data.paciente.nombre;

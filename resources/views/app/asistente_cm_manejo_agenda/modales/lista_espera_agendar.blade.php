@@ -389,8 +389,8 @@
     }
 
     {{--  GENERAR HORA USUARIO EXISTENTE  --}}
-    function agendar_hora_lista_espera() {
-
+    function agendar_hora_lista_espera()
+    {
         let url = "{{ route('agenda.paciente.solicitar.hora') }}";
         let _token = $('#_token').val();
         let fecha_consulta = $('#le_reserva_hora_fecha_consulta').val()+' '+$('#le_reserva_hora_hora_consulta').val();

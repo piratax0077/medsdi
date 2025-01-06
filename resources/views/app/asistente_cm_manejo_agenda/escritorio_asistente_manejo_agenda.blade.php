@@ -546,12 +546,12 @@
                         tipo_agenda: tipo_agenda,
                     },
                     success:function(data){
-                        $('.btn-tipo-agenda').hide();
+                        $('.boton').hide();
                         if (data !== 'null')
                         {
                             if(data.estado == 1)
                             {
-                                $('.btn-tipo-agenda').css('background-color','#387fb6');
+                                $('.boton').css('background-color','#8b52c2');
                                 $('.btn-agenda-'+tipo_agenda).css('background-color','#1cbebe');
                                 $('#id_tipo_agenda').val(tipo_agenda);
 
@@ -1566,9 +1566,9 @@
             $('#reserva_agregar_paciente_hora').hide();
             $('#reserva_datos_paciente').hide();
             let url = "{{ route('agenda.buscar_rut_paciente') }}";
-
-            $.ajax({
-
+            if(rut != '')
+            {
+                $.ajax({
                     url: url,
                     type: "get",
                     data: {
@@ -1582,6 +1582,20 @@
                         data = JSON.parse(data);
                         if(data.tipo_paciente == 'SI')
                         {
+                            {{-- validacion para especialidad de pediatria --}}
+                            @if (isset($profesional))
+                                @if ($profesional->id_tipo_especialidad == 11)
+                                    if (data.edad > 18) {
+                                        swal({
+                                            title: "Reserva de hora",
+                                            text: "El paciente es mayor de edad, el profesional es Pediatrico",
+                                            icon: "warning",
+                                            buttons: "Aceptar",
+                                        });
+                                    }
+                                @endif
+                            @endif
+
                             $('.paciente_view').show();
                             $('.paciente_edit').hide();
 
@@ -1708,6 +1722,15 @@
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
+            }
+            else
+            {
+                swal({
+                    title: "Buscar Paciente",
+                    text: 'Debe ingresar RUT para buscar.',
+                    icon: "error",
+                });
+            }
         };
 
         function formatDateDB(dateStr) {

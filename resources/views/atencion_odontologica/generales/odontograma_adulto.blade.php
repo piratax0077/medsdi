@@ -11,7 +11,7 @@
                                 class="wid-40 img-fluid" role="button"
                                 onclick="info_odontograma('1.8');">
                         </div>
-                        <label data-ndiente="18" class="nav-label-dent">1.8</label>
+                        <label data-ndiente="18" class="nav-label-dent bg-c-blue rounded-pill p-2 text-white">1.8</label>
                     </td>
                     <td class="text-center px-0 py-0">
                         <div class="diente_adulto px-0 py-0" id="t17">

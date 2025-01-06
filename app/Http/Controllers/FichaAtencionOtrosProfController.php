@@ -484,11 +484,11 @@ class FichaAtencionOtrosProfController extends Controller
         }
     }
 
-
-
-
     public function store_kine(Request $request)// revisado
     {
+
+        echo json_encode($request->all());
+        die();
 
         $campos_requeridos = 1;
         $mensaje = '';
@@ -503,13 +503,17 @@ class FichaAtencionOtrosProfController extends Controller
             /** FICHA ATENCION OTROS PROFESIONALES*/
             $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
             $ficha = FichaOtrosProfesionales::where('id', $hora_medica->id_ficha_otros_prof)->first();
+
             $id_profesional = $request->id_profesional_fc;
             $id_paciente = $request->id_paciente_fc;
-            $ficha->motivo = $request->dg_ingreso;
-            $ficha->antecedentes = $request->cond_fis_ingreso;
+            $ficha->tipo_consulta_d = $request->tipo_consulta_d;
+            $ficha->cond_fis_ingreso = $request->cond_fis_ingreso;
+            $ficha->num_sesiones = $request->num_sesiones;
+            $ficha->dg_ingreso = $request->dg_ingreso;
+            $ficha->solicitud_prof = $request->solicitud_prof;
+            $ficha->espect_pcte = $request->espect_pcte;
             $ficha->hipotesis = $request->hipotesis;
-            $ficha->id_paciente = $id_paciente;
-            $ficha->id_profesional = $id_profesional;
+            $ficha->indicaciones = $request->indicaciones;
             $ficha->finalizada = 1;
 
             if (!$ficha->save())
@@ -529,7 +533,8 @@ class FichaAtencionOtrosProfController extends Controller
 
                     /** REGISTRO FICHA KINESIOLOGIA */
                     $ficha_kine = new FichaKinesiologia();
-                    $ficha_kine->id_ficha_otros_prof = $ficha->id;
+
+                    $ficha_kine->id_ficha_atencion_otros = $ficha->id;
                     $ficha_kine->id_profesional = $id_profesional;
                     $ficha_kine->id_paciente = $id_paciente;
                     $ficha_kine->postura = $request->postura;
@@ -753,7 +758,7 @@ class FichaAtencionOtrosProfController extends Controller
         }
     }
 
-    public function store_fono(Request $request)//listo - revisado
+        public function store_fono(Request $request)//listo - revisado
     {
 
         $campos_requeridos = 1;
@@ -769,11 +774,21 @@ class FichaAtencionOtrosProfController extends Controller
             /** FICHA ATENCION  */
             $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
             $ficha = FichaOtrosProfesionales::where('id', $hora_medica->id_ficha_otros_prof)->first();
+
             $id_profesional = $request->id_profesional_fc;
             $id_paciente = $request->id_paciente_fc;
+
+
             $ficha->motivo = $request->dg_ingreso;
             $ficha->antecedentes = $request->cond_fis_ingreso;
+																  
+														  
+													  
+															 
+														
             $ficha->hipotesis = $request->hipotesis;
+														  
+
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
             $ficha->finalizada = 1;
@@ -794,6 +809,7 @@ class FichaAtencionOtrosProfController extends Controller
 
                     /** REGISTRO FICHA FONOAUDIOLOGIA */
                     $ficha_fono = new FichaFonoaudiologia();
+
                     $ficha_fono->id_ficha_otros_prof = $ficha->id;
                     $ficha_fono->id_profesional = $id_profesional;
                     $ficha_fono->id_paciente = $id_paciente;
@@ -914,7 +930,6 @@ class FichaAtencionOtrosProfController extends Controller
             return back()->with('error', $mensaje)->withInput();
         }
     }
-
 
 
     public function store_nutri(Request $request)//listo - revisado

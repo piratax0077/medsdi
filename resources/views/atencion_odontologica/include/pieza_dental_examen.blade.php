@@ -155,6 +155,8 @@
                 if(resp.mensaje == 'OK'){
                     $('#contenedor_pieza_dental_endo_gral').empty();
                     $('#contenedor_pieza_dental_endo_gral').append(resp.v);
+                    $('#contenedor_examenes_grupos_dentales').empty();
+                    $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
                     $('#contenedor_nueva_pieza_dental').empty();
                     $('#planificacion_examenes_gral').empty();
                     let examenes = resp.examenes;
@@ -202,7 +204,8 @@
                         icon: "success",
                         buttons: "Aceptar",
                         DangerMode: true,
-                    })
+                    });
+
                 }
             },
             error: function(error){

@@ -15,7 +15,12 @@ class DiagnosticosDentalImport implements ToArray, WithStartRow, WithMultipleShe
      */
     public function startRow(): int
     {
-        return 2; // Empieza desde la fila 5
+        return 2; // Empieza desde la fila 2
+    }
+
+    public function endRow(): int
+    {
+        return 13; // Termina en la fila 13
     }
 
     /**
@@ -31,7 +36,7 @@ class DiagnosticosDentalImport implements ToArray, WithStartRow, WithMultipleShe
         foreach ($rows as $row) {
             $result[] = [
                 'descripcion' => $row[0], // Columna B
-                'valor' => $row[2],       // Columna D
+                'valor' => $row[1],       // Columna D
             ];
         }
 
@@ -46,7 +51,7 @@ class DiagnosticosDentalImport implements ToArray, WithStartRow, WithMultipleShe
     public function sheets(): array
     {
         return [
-            'ARANCELES PEDIATRIA' => $this, // Solo procesar la hoja llamada "ARANCELES PEDIATRIA"
+            'ARANCEL DENTOLAB' => $this, // Solo procesar la hoja llamada "ARANCEL DENTOLAB"
         ];
     }
 }

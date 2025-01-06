@@ -156,11 +156,11 @@
                                                 @foreach($boca_completa_gral_tratamientos as $tratamiento)
                                                 <tr>
                                                     <td class="text-center align-middle">{{$tratamiento->fecha}}</td>
-                                                    <td class="text-center align-middle">{{$tratamiento->procedimiento == '' ? 'SIN INFORMACION' : $tratamiento->procedimiento}}</td>
+                                                    <td class="text-center align-middle">{{$tratamiento->diagnostico_tratamiento == '' ? 'SIN INFORMACION' : $tratamiento->diagnostico_tratamiento}}</td>
                                                     <td class="text-center align-middle">{{$tratamiento->terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}}</td>
                                                     <td class="text-center align-middle">{{$tratamiento->comentario}}</td>
                                                     <td class="text-center align-middle">
-                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl({{ $tratamiento->id }})"><i
+                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl({{ $tratamiento->id }},'gral')"><i
                                                                 class="feather icon-x"></i></button>
                                                         @if($tratamiento->terminado == 1)
                                                         <button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto({{ $t->id }})"><i
@@ -269,7 +269,7 @@
                                                         <td class="text-center align-middle">{{ $t->diagnostico_tratamiento }}</td>
                                                         <td class="text-center align-middle">{{ $t->terminado == 1 ? 'TERMINADO' : 'PENDIENTE' }}</td>
                                                         <td class="text-center align-middle">{{ $t->comentario }}</td>
-                                                        <td class="text-center align-middle"><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_diagnostico_boca_compl({{ $t->id }},'gral')"><i
+                                                        <td class="text-center align-middle"><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_diagnostico_boca_compl({{ $t->id }},'endo')"><i
                                                                     class="fa fa-trash"></i></button>
                                                                     @if($t->terminado == 1)
                                                                     <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $t->id }})"><i class="fas fa-save"></i></button>
@@ -344,11 +344,11 @@
                                                 @foreach($boca_completa_gral_tratamiento_endo as $tratamiento)
                                                 <tr>
                                                     <td class="text-center align-middle">{{$tratamiento->fecha}}</td>
-                                                    <td class="text-center align-middle">{{$tratamiento->procedimiento == '' ? 'SIN INFORMACION' : $tratamiento->procedimiento}}</td>
+                                                    <td class="text-center align-middle">{{$tratamiento->diagnostico_tratamiento == '' ? 'SIN INFORMACION' : $tratamiento->diagnostico_tratamiento}}</td>
                                                     <td class="text-center align-middle">{{$tratamiento->terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}}</td>
                                                     <td class="text-center align-middle">{{$tratamiento->comentario}}</td>
                                                     <td class="text-center align-middle">
-                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl({{ $tratamiento->id }})"><i
+                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl({{ $tratamiento->id }},'endo')"><i
                                                                 class="feather icon-x"></i></button>
                                                                 @if($tratamiento->terminado == 1)
                                                                 <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $tratamiento->id }})"><i class="fas fa-save"></i></button>
@@ -457,6 +457,7 @@
                 if(tipo_examen == 'gral'){
                     $('#tbody_tratamientos_boca_compl').empty();
                     $('#planificacion_boca_completa_tratamientos_gral').empty();
+                    $('#contenedor_boca_completa_gral_tratamientos_presupuesto').empty();
                     tratamientos.forEach(t => {
                         $('#tbody_tratamientos_boca_compl').append(`
                         <tr>
@@ -465,7 +466,7 @@
                             <td class="text-center align-middle">${t.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
                             <td class="text-center align-middle">${t.comentario}</td>
                             <td class="text-center align-middle">
-                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${t.id})"><i
+                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${t.id},'gral')"><i
                                         class="feather icon-x"></i></button>
                                         ${t.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${t.id});"><i class="fas fa-save"> </i> </button>` : ''}
                             </td>
@@ -503,10 +504,36 @@
                                             </div>
                                         </div>
                                     </div>`);
+                        $('#contenedor_boca_completa_gral_tratamientos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${t.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${t.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
                     });
                 }else if(tipo_examen == 'endo'){
                     $('#tbody_tratamientos_boca_compl_endo').empty();
                     $('#planificacion_boca_completa_tratamientos_endo').empty();
+                    $('#contenedor_boca_completa_endo_tratamientos_presupuesto').empty();
                     tratamientos.forEach(t => {
                         $('#tbody_tratamientos_boca_compl_endo').append(`
                         <tr>
@@ -515,7 +542,7 @@
                             <td class="text-center align-middle">${t.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
                             <td class="text-center align-middle">${t.comentario}</td>
                             <td class="text-center align-middle">
-                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${t.id})"><i
+                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${t.id},'endo')"><i
                                         class="feather icon-x"></i></button>
                                         ${t.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${t.id});"><i class="fas fa-save"> </i> </button>` : ''}
                             </td>
@@ -553,8 +580,39 @@
                                             </div>
                                         </div>
                                     </div>`);
+
+                        $('#contenedor_boca_completa_endo_tratamientos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${t.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${t.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
                     });
                 }
+                let valores_examenes = response.valores_tratamientos[0];
+                let valores_piezas = response.valores_tratamientos[1];
+
+                $('#valores_examenes_presupuesto').html(formatoMoneda(valores_examenes));
+                $('#valores_piezas_presupuesto').html(formatoMoneda(valores_piezas));
             },
             error: function(xhr, status, error){
                 console.log(xhr.responseText);
@@ -633,6 +691,7 @@
                 if(tipo_examen == 'gral'){
                     $('#tbody_diagnosticos_boca_compl').empty();
                     $('#planificacion_boca_completa_diagnosticos_gral').empty();
+                    $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').empty();
                     diagnosticos.forEach(diagnostico => {
                         let html = `<tr>
                                     <td class="text-center align-middle">${diagnostico.fecha}</td>
@@ -679,10 +738,36 @@
                                         </div>
                                     </div>
                         `);
+                        $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
                     });
                 }else if(tipo_examen == 'endo'){
                     $('#tbody_diagnosticos_boca_compl_endo').empty();
                     $('#planificacion_boca_completa_diagnosticos_endo').empty();
+                    $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').empty();
                     diagnosticos.forEach(diagnostico => {
                         let html = `<tr>
                                     <td class="text-center align-middle">${diagnostico.fecha}</td>
@@ -729,8 +814,39 @@
                                         </div>
                                     </div>
                         `);
+                        $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
                     });
                 }
+
+                let valores_examenes = response.valores_tratamientos[0];
+                let valores_piezas = response.valores_tratamientos[1];
+
+                $('#valores_examenes_presupuesto').html(formatoMoneda(valores_examenes));
+                $('#valores_piezas_presupuesto').html(formatoMoneda(valores_piezas));
 
             },
             error: function(xhr, status, error){
@@ -770,6 +886,8 @@
         let data = {
             'id': id,
             'id_paciente' : dame_id_paciente(),
+            'id_ficha_atencion' : $('#id_fc').val(),
+            'id_lugar_atencion' : $('#id_lugar_atencion').val(),
             '_token': CSRF_TOKEN
         }
 
@@ -784,6 +902,7 @@
                 if(tipo_examen == 'gral'){
                     $('#tbody_diagnosticos_boca_compl').empty();
                     $('#planificacion_boca_completa_diagnosticos_gral').empty();
+                    $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').empty();
                     diagnosticos.forEach(diagnostico => {
                     let html = `<tr>
                                 <td class="text-center align-middle">${diagnostico.fecha}</td>
@@ -792,47 +911,74 @@
                                 <td class="text-center align-middle">${diagnostico.comentario}</td>
 
                                 <td class="text-center align-middle">
-                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id})"><i class="feather icon-x"></i></button>
+                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
                                     ${diagnostico.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id});"><i class="fas fa-save"> </i> </button>` : ''}
                                 </td>
                             </tr>`;
                     $('#tbody_diagnosticos_boca_compl').append(html);
                     $('#planificacion_boca_completa_diagnosticos_gral').append(`
-                    <div class="form-row">
-                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                            <div class="form-group fill">
-                                                <label class="floating-label-activo-sm">Boca completa</label>
-                                                <input type="text" class="form-control form-control-sm" value="${diagnostico.tipo_examen} ${diagnostico.diagnostico_tratamiento}">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                            <div class="form-group fill">
-                                                <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
-                                                <select name="piel_tegumnto" data-titulo="Ex_cuello" data-seccion="Cuello" id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
-                                                    <option selected="" value="1">Uniradicular</option>
-                                                    <option value="2">Biradicular</option>
-                                                    <option value="2">Triradicular</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group" id="div_piel_tegumnto" style="display:none;">
-                                                <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
-                                                <textarea class="form-control form-control-sm" data-titulo="Ex_cuello" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                            <div class="form-group fill">
-                                                <label class="floating-label-activo-sm">Convenio</label>
-                                                <select name="adenopatias" data-titulo="Ex_cuello" data-seccion="Cuello" id="adenopatias" class="form-control form-control-sm">
-                                                    <option selected="" value="1">Convenio</option>
-                                                    <option value="2">Sin Convenio</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>`);
+                        <div class="form-row">
+                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Boca completa</label>
+                                    <input type="text" class="form-control form-control-sm" value="${diagnostico.tipo_examen} ${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                    <select name="piel_tegumnto" data-titulo="Ex_cuello" data-seccion="Cuello" id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
+                                        <option selected="" value="1">Uniradicular</option>
+                                        <option value="2">Biradicular</option>
+                                        <option value="2">Triradicular</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="div_piel_tegumnto" style="display:none;">
+                                    <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Convenio</label>
+                                    <select name="adenopatias" data-titulo="Ex_cuello" data-seccion="Cuello" id="adenopatias" class="form-control form-control-sm">
+                                        <option selected="" value="1">Convenio</option>
+                                        <option value="2">Sin Convenio</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>`
+                    );
+                    $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').append(`
+                        <div class="form-group col-md-2">
+                            <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="floating-label-activo-sm">Prestación</label>
+                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="floating-label-activo-sm">Sub-Total</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label class="floating-label-activo-sm">Descuento</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="floating-label-activo-sm">Total prestación</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                        </div>
+                    `);
                 });
                 }else if(tipo_examen == 'endo'){
                     $('#tbody_diagnosticos_boca_compl_endo').empty();
                     $('#planificacion_boca_completa_diagnosticos_endo').empty();
+                    $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').empty();
                     diagnosticos_endo.forEach(diagnostico => {
                     let html = `<tr>
                                 <td class="text-center align-middle">${diagnostico.fecha}</td>
@@ -878,10 +1024,39 @@
                                             </div>
                                         </div>
                                     </div>`);
+                                $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').append(`
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="floating-label-activo-sm">Prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="floating-label-activo-sm">Descuento</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Total prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    </div>
+                                `);
                         });
                 }
 
+                let valores_examenes = response.valores_tratamientos[0];
+                let valores_piezas = response.valores_tratamientos[1];
 
+                $('#valores_examenes_presupuesto').html(formatoMoneda(valores_examenes));
+                $('#valores_piezas_presupuesto').html(formatoMoneda(valores_piezas));
 
 
             },
@@ -891,7 +1066,7 @@
         })
     }
 
-    function eliminar_tratamiento_boca_compl(id){
+    function eliminar_tratamiento_boca_compl(id, tipo){
         swal({
             title: "¿Esta seguro que desea ELIMINAR el tratamiento?",
             text: "Favor confirme o cancele la solicitud",
@@ -902,7 +1077,7 @@
         .then((willDelete) => {
             if (willDelete)
             {
-                confirmar_eliminar_tratamiento_boca_compl(id);
+                confirmar_eliminar_tratamiento_boca_compl(id, tipo);
             }
             else
             {
@@ -916,11 +1091,13 @@
         });
     }
 
-    function confirmar_eliminar_tratamiento_boca_compl(id){
+    function confirmar_eliminar_tratamiento_boca_compl(id, tipo){
         let url = "{{ ROUTE('profesional.eliminar_tratamiento_dental') }}";
         let data = {
             'id': id,
             'id_paciente' : dame_id_paciente(),
+            'id_ficha_atencion' : $('#id_fc').val(),
+            'id_lugar_atencion' : $('#id_lugar_atencion').val(),
             '_token': CSRF_TOKEN
         }
         $.ajax({
@@ -933,15 +1110,16 @@
                 let tratamientos_endo = response.boca_completa_gral_tratamiento_endo;
                 $('#tbody_tratamientos_boca_compl').empty();
                 $('#tbody_tratamientos_boca_compl_endo').empty();
+                $('#contenedor_boca_completa_gral_tratamientos_presupuesto').empty();
                 tratamientos.forEach(tratamiento => {
                     let html = `<tr>
                                 <td class="text-center align-middle">${tratamiento.fecha}</td>
-                                <td class="text-center align-middle">${tratamiento.tratamiento_seleccionado}</td>
+                                <td class="text-center align-middle">${tratamiento.diagnostico_tratamiento}</td>
                                 <td class="text-center align-middle">${tratamiento.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
                                 <td class="text-center align-middle">${tratamiento.comentario}</td>
 
                                 <td class="text-center align-middle">
-                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${tratamiento.id})"><i class="feather icon-x"></i></button>
+                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${tratamiento.id},'gral')"><i class="feather icon-x"></i></button>
                                     ${tratamiento.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id});"><i class="fas fa-save"> </i> </button>` : ''}
                                 </td>
                             </tr>`;
@@ -955,12 +1133,44 @@
                                 <td class="text-center align-middle">${tratamiento.comentario}</td>
 
                                 <td class="text-center align-middle">
-                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${tratamiento.id})"><i class="feather icon-x"></i></button>
+                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${tratamiento.id},'endo')"><i class="feather icon-x"></i></button>
                                     ${tratamiento.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id});"><i class="fas fa-save"> </i> </button>` : ''}
                                 </td>
                             </tr>`;
                             $('#tbody_tratamientos_boca_compl_endo').append(html);
-                        });
+                });
+                tratamientos_endo.forEach(tratamiento => {
+                    $('#contenedor_boca_completa_gral_tratamientos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${tratamiento.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${tratamiento.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${tratamiento.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${tratamiento.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
+                });
+                let valores_examenes = response.valores_tratamientos[0];
+                let valores_piezas = response.valores_tratamientos[1];
+
+                $('#valores_examenes_presupuesto').html(formatoMoneda(valores_examenes));
+                $('#valores_piezas_presupuesto').html(formatoMoneda(valores_piezas));
             },
             error: function(xhr, status, error){
                 console.log(xhr.responseText);
