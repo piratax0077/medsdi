@@ -11,7 +11,8 @@ use App\Models\TipoProducto;
 use App\Models\Responsable;
 use App\Models\TipoPago;
 use App\Models\Convenio;
-
+use App\Models\Profesional;
+use App\Models\ProfesionalConveniosIndependientes;
 use App\Models\Instituciones;
 use App\Models\Servicios;
 use App\Models\AdminInstServ;
@@ -235,5 +236,37 @@ class ConveniosController extends Controller
             //throw $th;
             return $e->getMessage();
         }
+    }
+
+
+    public function misPropiosConvenios(){
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $tipos_convenio = TipoConvenio::all();
+        $tipos_producto = TipoProducto::all();
+        $responsables = Responsable::all();
+        $tipos_pago = TipoPago::all();
+        $convenios = Convenio::all();
+        $tipos_convenio_institucion = TipoConvenioInstitucion::all();
+        // 1: CM 2: DENTAL
+        $tipoproducto_convenios = TipoProductoConvenios::where('id_tipo_convenio',2)->get();
+        return view('app.profesional.mis_convenios')->with([
+            'profesional' => $profesional,
+            'tipos_producto' => $tipos_producto,
+            'tipos_convenio' => $tipos_convenio,
+            'tipos_convenio_institucion' => $tipos_convenio_institucion,
+            'tipoproducto_convenios' => $tipoproducto_convenios
+        ]);
+    }
+
+    public function nuevoConvenio(Request $request){
+        return $request;
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $profesional_convenio = new ProfesionalConveniosIndependientes();
+        $profesional_convenio->nombre_convenio = $request->nombre_convenio;
+        $profesional_convenio->convenios = $request->convenios;
+        $profesional_convenio->tipo_atencion = $request->lugar_atencion_convenio;
+        $profesional_convenio->valor = $request->valor;
+        $profesional_convenio->id_profesional = $profesional->id;
+        $profesional_convenio->id_lugar_atencion = $request->id_lugar_atencion_valor;
     }
 }

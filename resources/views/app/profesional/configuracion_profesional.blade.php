@@ -29,7 +29,7 @@
             <div class="row m-b-30">
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card subir py-3">
                                 <a href="{{ ROUTE('profesional.lugares_atencion') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
@@ -42,7 +42,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card subir py-3">
                                 <a href="{{ route('profesional.mis_asistentes') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
@@ -56,7 +56,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card subir py-3">
                                 <a href="{{ route('profesional.diagnosticos_cie10') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
@@ -64,13 +64,13 @@
                                             src="{{ asset('images/iconos/diagnosticos_cie10.svg') }}"
                                             alt="Diagnósticos Frecuentes CIE 10">
                                         <h5>
-                                            Diagnósticos Frecuentes CIE 10
+                                            Configurar mis laboratorios
                                         </h5>
                                     </div>
                                 </a>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card subir py-3">
                                 <a href="busq_secretaria.php">
                                     <div class="card-body text-center" style="cursor:pointer">
@@ -85,7 +85,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card subir py-3">
                                 <a href="{{ route('profesional.aranceles') }}">
                                     <div class="card-body text-center" style="cursor:pointer">
@@ -100,7 +100,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="card subir py-3">
                                 <a href="busq_secretaria.php">
                                     <div class="card-body text-center" style="cursor:pointer">
@@ -115,7 +115,36 @@
                                 </a>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="card subir py-3">
+                                <a href="{{ ROUTE('profesional.mis_propios_convenios') }}">
+                                    <div class="card-body text-center" style="cursor:pointer">
+                                        <img class="wid-90 text-center mb-3"
+                                        src="{{ asset('images/iconos/usuario_asistente.svg') }}"
 
+                                        alt="Profesional">
+                                        <h5 class="f-16">
+                                        Mis convenios de atención
+                                        </h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card subir py-3">
+                                <a href="busq_secretaria.php">
+                                    <div class="card-body text-center" style="cursor:pointer">
+                                        <img class="wid-90 text-center mb-3"
+                                        src="{{ asset('images/iconos/usuario_asistente.svg') }}"
+
+                                        alt="Profesional">
+                                        <h5 class="f-16">
+                                        Mantención de equipo
+                                        </h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -31,7 +31,8 @@
                                         $mes = $meses[($fecha->format('n')) - 1];
                                         $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
                                     @endphp
-                                    {{ $fecha }}
+                                    {{ $fecha }} <br>
+                                    {{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }} {{ $paciente->rut }} &nbsp;  {{ $paciente->edad }} años.
                                 </p>
 
                             </div>
@@ -143,8 +144,1351 @@
 
 @section('js_inferior')
 <script>
-    function cargar_a_presupuesto(id){
-        alert(id);
+     $(document).ready(function () {
+            swal({
+                icon: 'info',
+                title: 'En Construcción',
+                text: 'Esta página se encuentra en desarrollo.',
+                confirmButtonText: 'Aceptar'
+            });
+        });
+    function cargar_a_presupuesto(id, tipo = null){
+        let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";
+        let data = {
+            id: id,
+            tipo: tipo,
+             _token: "{{ csrf_token() }}"
+        }
+        console.log(data);
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(tipo == null){
+                    if(resp.status == 1){
+                        swal({
+                            icon:'success',
+                            title:'Info',
+                            text: resp.mensaje
+                        });
+                        let odontograma = resp.odontograma_paciente;
+                        let html = '';
+                        odontograma.forEach(function(odonto){
+                            html += '<tr>';
+                            html += '<td>'+odonto.fecha+'</td>';
+                            html += '<td>'+odonto.tratamiento+'</td>';
+                            html += '<td>'+odonto.caras+'</td>';
+                            html += '<td>'+odonto.pieza+'</td>';
+                            html += '<td>'+odonto.diagnostico+'</td>';
+                            html += '<td>'+odonto.valor+'</td>';
+                            html += '<td>';
+                            html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                            if(odonto.presupuesto == 0){
+                                html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                            }else{
+                                html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                            }
+
+                            html += '</td>';
+                            html += '</tr>';
+                        });
+
+                        $('#table_odontograma tbody').html(html);
+                        $('#contenedor_piezas_dentales_presupuesto').empty();
+                        $('#table_trabajos_presupuesto tbody').empty();
+                        odontograma.forEach(function(odonto){
+                            if(odonto.presupuesto == 1){
+                                    $('#contenedor_piezas_dentales_presupuesto').append(`
+                                        <div class="form-group col-md-2">
+                                            <label class="floating-label-activo-sm">Pieza</label>
+                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label class="floating-label-activo-sm">Prestación</label>
+                                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label class="floating-label-activo-sm">Sub-Total</label>
+                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                        </div>
+                                        <div class="form-group col-md-1">
+                                            <label class="floating-label-activo-sm">Descuento</label>
+                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label class="floating-label-activo-sm">Total prestación</label>
+                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                        </div>
+                                    `);
+                                    $('#table_trabajos_presupuesto tbody').append(`
+                                        <tr>
+                                            <td>${odonto.fecha}</td>
+                                            <td>${odonto.diagnostico} </td>
+                                            <td>${odonto.caras} </td>
+                                            <td>${odonto.pieza} </td>
+                                            <td>${odonto.tratamiento} </td>
+                                            <td>${odonto.valor} </td>
+                                            <td> </td>
+                                            <td>
+                                                <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                            </td>
+                                        </tr>
+                                    `);
+                                }
+                            });
+                            let valores_boca_general = resp.valores[0];
+                            let valores_odontograma = resp.valores[1];
+                            let total_general = valores_boca_general + valores_odontograma;
+                            $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                            $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                            $('#subtotal_clinico').val(formatoMoneda(total_general));
+                            $('#total_clinico').val(formatoMoneda(total_general));
+                    }else{
+                        swal({
+                            icon:'error',
+                            title:'info',
+                            text: resp.mensaje
+                        });
+                    }
+                }else{
+                    swal({
+                            icon:'success',
+                            title:'Info',
+                            text: 'Examen cargado a presupuesto con éxito.'
+                        });
+                    let maxilar_superior_gral_diagnosticos = resp.maxilar_superior_gral_diagnosticos;
+                    $('#contenedor_maxilar_superior_gral_diagnosticos_presupuesto').empty();
+                    $('#tbody_diagnosticos').empty();
+                    maxilar_superior_gral_diagnosticos.forEach(diagnostico => {
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_maxilar_superior_gral_diagnosticos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+                        let html = `<tr>
+                                <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
+                                <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                <td class="text-center align-middle">${diagnostico.comentario}</td>
+                                <td class="text-center align-middle">${diagnostico.valor}</td>
+                                <td class="text-center align-middle">
+                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
+                                    ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                </td>
+                            </tr>`;
+                        $('#tbody_diagnosticos').append(html);
+                    });
+                    let maxilar_superior_gral_diagnosticos_endo = resp.maxilar_superior_gral_diagnosticos_endo;
+                    $('#contenedor_maxilar_superior_endo_diagnosticos_presupuesto').empty();
+                    $('#tbody_diagnosticos_endo').empty();
+                    maxilar_superior_gral_diagnosticos_endo.forEach(diagnostico => {
+                    if(diagnostico.presupuesto == 1){
+                        $('#contenedor_maxilar_superior_endo_diagnosticos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
+                    }
+                    let html = `<tr>
+                                    <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                    <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
+                                    <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                    <td class="text-center align-middle">${diagnostico.comentario}</td>
+                                    <td class="text-center align-middle">${diagnostico.valor} </td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico(${diagnostico.id},'endo')"><i class="feather icon-x"></i></button>
+                                         ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    </td>
+                                </tr>`;
+                        $('#tbody_diagnosticos_endo').append(html);
+                    });
+                    let maxilar_superior_gral_tratamientos = resp.maxilar_superior_gral_tratamientos;
+                    $('#contenedor_maxilar_superior_gral_tratamientos_presupuesto').empty();
+                    $('#tbody_tratamientos').empty();
+                    maxilar_superior_gral_tratamientos.forEach(diagnostico => {
+                    if(diagnostico.presupuesto == 1){
+                        $('#contenedor_maxilar_superior_gral_tratamientos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
+                    }
+                    $('#tbody_tratamientos').append(`
+                        <tr>
+                            <td class="text-center align-middle">${diagnostico.fecha}</td>
+                            <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : diagnostico.diagnostico_tratamiento}</td>
+                            <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                            <td class="text-center align-middle">${diagnostico.comentario}</td>
+                            <td class="text-center align-middle">${diagnostico.valor} </td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento(${diagnostico.id},'gral')"><i
+                                        class="feather icon-x"></i></button>
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                            </td>
+                        </tr>
+                    `);
+                    });
+                    let maxilar_superior_gral_tratamientos_endo = resp.maxilar_superior_gral_tratamientos_endo;
+                    $('#contenedor_maxilar_superior_endo_tratamientos_presupuesto').empty();
+                    $('#tbody_tratamientos_endo').empty();
+                    maxilar_superior_gral_tratamientos_endo.forEach(diagnostico => {
+                    if(diagnostico.presupuesto == 1){
+                        $('#contenedor_maxilar_superior_endo_tratamientos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
+                    }
+                    $('#tbody_tratamientos_endo').append(`
+                        <tr>
+                            <td class="text-center align-middle">${diagnostico.fecha}</td>
+                            <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : t.diagnostico_tratamiento}</td>
+                            <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                            <td class="text-center align-middle">${diagnostico.comentario}</td>
+                            <td class="text-center align-middle">${diagnostico.valor} </td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento(${diagnostico.id},'endo')"><i
+                                        class="feather icon-x"></i></button>
+                                         ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                            </td>
+                        </tr>
+                        `);
+                    });
+
+                    let maxilar_inferior_gral_diagnosticos = resp.maxilar_inferior_gral_diagnosticos;
+                    $('#contenedor_maxilar_inferior_gral_diagnosticos_presupuesto').empty();
+                    $('#tbody_diagnosticos_max_inf').empty();
+                    maxilar_inferior_gral_diagnosticos.forEach(diagnostico => {
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_maxilar_inferior_gral_diagnosticos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+                        let html = `<tr>
+                                    <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                    <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
+                                    <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                    <td class="text-center align-middle">${diagnostico.comentario}</td>
+                                    <td class="text-center align-middle">${diagnostico.valor} </td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_max_inf(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
+                                         ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    </td>
+                                </tr>`;
+                        $('#tbody_diagnosticos_max_inf').append(html);
+                    });
+                    let maxilar_inferior_gral_diagnosticos_endo = resp.maxilar_inferior_gral_diagnosticos_endo;
+                    $('#contenedor_maxilar_inferior_endo_diagnosticos_presupuesto').empty();
+                    $('#tbody_diagnosticos_max_inf_endo').empty();
+                    maxilar_inferior_gral_diagnosticos_endo.forEach(diagnostico => {
+                    if(diagnostico.presupuesto == 1){
+                        $('#contenedor_maxilar_inferior_endo_diagnosticos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
+                    }
+                    let valor = new Intl.NumberFormat("de-DE").format(diagnostico.valor);
+                    let html = `<tr>
+                                    <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                    <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
+                                    <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                    <td class="text-center align-middle">${diagnostico.comentario}</td>
+                                    <td class="text-center align-middle">${valor} </td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_max_inf(${diagnostico.id},'endo')"><i class="feather icon-x"></i></button>
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    </td>
+                                </tr>`;
+                            $('#tbody_diagnosticos_max_inf_endo').append(html);
+                    });
+                    let maxilar_inferior_gral_tratamientos = resp.maxilar_inferior_gral_tratamientos;
+                    $('#contenedor_maxilar_inferior_gral_tratamientos_presupuesto').empty();
+                    $('#tbody_tratamientos_max_inf').empty();
+                    maxilar_inferior_gral_tratamientos.forEach(diagnostico => {
+                    if(diagnostico.presupuesto == 1){
+                        $('#contenedor_maxilar_inferior_gral_tratamientos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
+                    }
+                    let valor = new Intl.NumberFormat("de-DE").format(diagnostico.valor);
+                    $('#tbody_tratamientos_max_inf').append(`
+                        <tr>
+                            <td class="text-center align-middle">${diagnostico.fecha}</td>
+                            <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : diagnostico.diagnostico_tratamiento}</td>
+                            <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                            <td class="text-center align-middle">${diagnostico.comentario}</td>
+                            <td class="text-center align-middle">${valor}</td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_max_inf(${diagnostico.id},'gral')"><i
+                                        class="feather icon-x"></i></button>
+                                        ${diagnostico.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : ''}
+                            </td>
+                        </tr>
+                        `);
+                    });
+                    let maxilar_inferior_gral_tratamientos_endo = resp.maxilar_inferior_gral_tratamientos_endo;
+                    $('#contenedor_maxilar_inferior_endo_tratamientos_presupuesto').empty();
+                    $('#tbody_tratamientos_max_inf_endo').empty();
+                    maxilar_inferior_gral_tratamientos_endo.forEach(diagnostico => {
+                    if(diagnostico.presupuesto == 1){
+                        $('#contenedor_maxilar_inferior_endo_tratamientos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
+                    }
+                    let valor = new Intl.NumberFormat("de-DE").format(diagnostico.valor);
+                    $('#tbody_tratamientos_max_inf_endo').append(`
+                            <tr>
+                                <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : diagnostico.diagnostico_tratamiento}</td>
+                                <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                <td class="text-center align-middle">${diagnostico.comentario}</td>
+                                <td class="text-center align-middle">${valor}</td>
+                                <td class="text-center align-middle">
+                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_max_inf(${diagnostico.id},'endo')"><i
+                                            class="feather icon-x"></i></button>
+                                            ${diagnostico.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : ''}
+                                </td>
+                            </tr>
+                        `);
+                    });
+
+
+                    let boca_completa_gral_diagnosticos = resp.boca_completa_gral_diagnosticos;
+                    $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').empty();
+                    $('#tbody_diagnosticos_boca_compl').empty();
+                    boca_completa_gral_diagnosticos.forEach(diagnostico => {
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+                        let html = `<tr>
+                                    <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                    <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
+                                    <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                    <td class="text-center align-middle">${diagnostico.comentario}</td>
+
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    </td>
+                                </tr>`;
+                                $('#tbody_diagnosticos_boca_compl').append(html);
+                    });
+                    let boca_completa_gral_diagnosticos_endo = resp.boca_completa_gral_diagnostico_endo;
+                    $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').empty();
+                    $('#tbody_diagnosticos_boca_compl_endo').empty();
+                    boca_completa_gral_diagnosticos_endo.forEach(diagnostico => {
+                    if(diagnostico.presupuesto == 1){
+                        $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
+                    }
+                    let html = `<tr>
+                                    <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                    <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
+                                    <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                    <td class="text-center align-middle">${diagnostico.comentario}</td>
+
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'endo')"><i class="feather icon-x"></i></button>
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    </td>
+                                </tr>`;
+                        $('#tbody_diagnosticos_boca_compl_endo').append(html);
+                    });
+                    let boca_completa_gral_tratamientos = resp.boca_completa_gral_tratamientos;
+                    $('#contenedor_boca_completa_gral_tratamientos_presupuesto').empty();
+                    $('#tbody_tratamientos_boca_compl').empty();
+                    boca_completa_gral_tratamientos.forEach(diagnostico => {
+                    if(diagnostico.presupuesto == 1){
+                        $('#contenedor_boca_completa_gral_tratamientos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
+                    }
+                    $('#tbody_tratamientos_boca_compl').append(`
+                        <tr>
+                            <td class="text-center align-middle">${diagnostico.fecha}</td>
+                            <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : diagnostico.diagnostico_tratamiento}</td>
+                            <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                            <td class="text-center align-middle">${diagnostico.comentario}</td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${diagnostico.id},'gral')"><i
+                                        class="feather icon-x"></i></button>
+                                ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                            </td>
+                        </tr>
+                        `);
+                    });
+                    let boca_completa_gral_tratamientos_endo = resp.boca_completa_gral_tratamientos_endo;
+                    $('#contenedor_boca_completa_endo_tratamientos_presupuesto').empty();
+                    $('#tbody_tratamientos_boca_compl_endo').empty();
+                    maxilar_superior_gral_tratamientos_endo.forEach(diagnostico => {
+                    if(diagnostico.presupuesto == 1){
+                        $('#contenedor_boca_completa_endo_tratamientos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
+                    }
+                    $('#tbody_tratamientos_boca_compl_endo').append(`
+                        <tr>
+                            <td class="text-center align-middle">${diagnostico.fecha}</td>
+                            <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : diagnostico.diagnostico_tratamiento}</td>
+                            <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                            <td class="text-center align-middle">${diagnostico.comentario}</td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${diagnostico.id},'endo')"><i
+                                        class="feather icon-x"></i></button>
+                                ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                            </td>
+                        </tr>
+                        `);
+                    });
+                    let valores_examenes = resp.valores[0];
+                    let valores_piezas = resp.valores[1];
+
+                    $('#valores_examenes_presupuesto').html(formatoMoneda(valores_examenes));
+                    $('#valores_piezas_presupuesto').html(formatoMoneda(valores_piezas));
+                }
+
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        });
+    }
+
+    function sacar_de_presupuesto(id, tipo = null){
+        let url = "{{ ROUTE('dental.sacar_tratamiento_presupuesto') }}";
+        let data = {
+            id: id,
+            tipo:tipo,
+             _token: "{{ csrf_token() }}"
+        }
+        console.log(data);
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(tipo == null){
+                    if(resp.status == 1){
+                        swal({
+                            icon:'success',
+                            title:'Info',
+                            text: resp.mensaje
+                        });
+                        let odontograma = resp.odontograma_paciente;
+                        let html = '';
+                        odontograma.forEach(function(odonto){
+                            html += '<tr>';
+                            html += '<td>'+odonto.fecha+'</td>';
+                            html += '<td>'+odonto.tratamiento+'</td>';
+                            html += '<td>'+odonto.caras+'</td>';
+                            html += '<td>'+odonto.pieza+'</td>';
+                            html += '<td>'+odonto.diagnostico+'</td>';
+                            html += '<td>'+odonto.valor+'</td>';
+                            html += '<td>';
+                            html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                            if(odonto.presupuesto == 0){
+                                html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                            }else{
+                                html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                            }
+
+                            html += '</td>';
+                            html += '</tr>';
+                        });
+
+                        $('#table_odontograma tbody').html(html);
+                        $('#contenedor_piezas_dentales_presupuesto').empty();
+                        $('#table_trabajos_presupuesto tbody').empty();
+                        odontograma.forEach(function(odonto){
+                            if(odonto.presupuesto == 1){
+                                    $('#contenedor_piezas_dentales_presupuesto').append(`
+                                        <div class="form-group col-md-2">
+                                            <label class="floating-label-activo-sm">Pieza</label>
+                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label class="floating-label-activo-sm">Prestación</label>
+                                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label class="floating-label-activo-sm">Sub-Total</label>
+                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                        </div>
+                                        <div class="form-group col-md-1">
+                                            <label class="floating-label-activo-sm">Descuento</label>
+                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label class="floating-label-activo-sm">Total prestación</label>
+                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                        </div>
+                                    `);
+                                    $('#table_trabajos_presupuesto tbody').append(`
+                                        <tr>
+                                            <td>${odonto.fecha}</td>
+                                            <td>${odonto.diagnostico} </td>
+                                            <td>${odonto.caras} </td>
+                                            <td>${odonto.pieza} </td>
+                                            <td>${odonto.tratamiento} </td>
+                                            <td>${odonto.valor} </td>
+                                            <td> </td>
+                                            <td>
+                                                <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                            </td>
+                                        </tr>
+                                    `);
+                                }
+                            });
+                            let valores_boca_general = resp.valores[0];
+                            let valores_odontograma = resp.valores[1];
+                            let total_general = valores_boca_general + valores_odontograma;
+                            $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                            $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                            $('#subtotal_clinico').val(formatoMoneda(total_general));
+                            $('#total_clinico').val(formatoMoneda(total_general));
+                    }else{
+                        swal({
+                            icon:'error',
+                            title:'info',
+                            text: resp.mensaje
+                        });
+                    }
+                }else{
+                    if(resp.status == 1){
+                        let maxilar_superior_gral_diagnosticos = resp.maxilar_superior_gral_diagnosticos;
+                        $('#contenedor_maxilar_superior_gral_diagnosticos_presupuesto').empty();
+                        $('#tbody_diagnosticos').empty();
+                        maxilar_superior_gral_diagnosticos.forEach(diagnostico => {
+                            if(diagnostico.presupuesto == 1){
+                                $('#contenedor_maxilar_superior_gral_diagnosticos_presupuesto').append(`
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="floating-label-activo-sm">Prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="floating-label-activo-sm">Descuento</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Total prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    </div>
+                                `);
+                            }
+                            let html = `<tr>
+                                    <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                    <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
+                                    <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                    <td class="text-center align-middle">${diagnostico.comentario}</td>
+                                    <td class="text-center align-middle">${diagnostico.valor}</td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    </td>
+                                </tr>`;
+                            $('#tbody_diagnosticos').append(html);
+                        });
+                        let maxilar_superior_gral_diagnosticos_endo = resp.maxilar_superior_gral_diagnosticos_endo;
+                        $('#contenedor_maxilar_superior_endo_diagnosticos_presupuesto').empty();
+                        $('#tbody_diagnosticos_endo').empty();
+                        maxilar_superior_gral_diagnosticos_endo.forEach(diagnostico => {
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_maxilar_superior_endo_diagnosticos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+                        let html = `<tr>
+                                    <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                    <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
+                                    <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                    <td class="text-center align-middle">${diagnostico.comentario}</td>
+                                    <td class="text-center align-middle">${diagnostico.valor} </td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico(${diagnostico.id},'endo')"><i class="feather icon-x"></i></button>
+                                         ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    </td>
+                                </tr>`;
+                        $('#tbody_diagnosticos_endo').append(html);
+                        });
+
+                        let maxilar_superior_gral_tratamientos = resp.maxilar_superior_gral_tratamientos;
+                        $('#contenedor_maxilar_superior_gral_tratamientos_presupuesto').empty();
+                        $('#tbody_tratamientos').empty();
+
+                        maxilar_superior_gral_tratamientos.forEach(diagnostico => {
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_maxilar_superior_gral_tratamientos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+                            $('#tbody_tratamientos').append(`
+                                <tr>
+                                    <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                    <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : diagnostico.diagnostico_tratamiento}</td>
+                                    <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                    <td class="text-center align-middle">${diagnostico.comentario}</td>
+                                    <td class="text-center align-middle">${diagnostico.valor} </td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento(${diagnostico.id},'gral')"><i
+                                                class="feather icon-x"></i></button>
+                                                ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                        let maxilar_superior_gral_tratamientos_endo = resp.maxilar_superior_gral_tratamientos_endo;
+                        $('#contenedor_maxilar_superior_endo_tratamientos_presupuesto').empty();
+                        $('#tbody_tratamientos_endo').empty();
+                        maxilar_superior_gral_tratamientos_endo.forEach(diagnostico => {
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_maxilar_superior_endo_tratamientos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+                        $('#tbody_tratamientos_endo').append(`
+                        <tr>
+                            <td class="text-center align-middle">${diagnostico.fecha}</td>
+                            <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : t.diagnostico_tratamiento}</td>
+                            <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                            <td class="text-center align-middle">${diagnostico.comentario}</td>
+                            <td class="text-center align-middle">${diagnostico.valor} </td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento(${diagnostico.id},'endo')"><i
+                                        class="feather icon-x"></i></button>
+                                         ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                            </td>
+                        </tr>
+                        `);
+                        });
+
+                        let maxilar_inferior_gral_diagnosticos = resp.maxilar_inferior_gral_diagnosticos;
+                        $('#contenedor_maxilar_inferior_gral_diagnosticos_presupuesto').empty();
+                        $('#tbody_diagnosticos_max_inf').empty();
+                        maxilar_inferior_gral_diagnosticos.forEach(diagnostico => {
+                            if(diagnostico.presupuesto == 1){
+                                $('#contenedor_maxilar_inferior_gral_diagnosticos_presupuesto').append(`
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="floating-label-activo-sm">Prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="floating-label-activo-sm">Descuento</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Total prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    </div>
+                                `);
+                            }
+                            let html = `<tr>
+                                    <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                    <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
+                                    <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                    <td class="text-center align-middle">${diagnostico.comentario}</td>
+                                    <td class="text-center align-middle">${diagnostico.valor} </td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_max_inf(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
+                                         ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    </td>
+                                </tr>`;
+                        $('#tbody_diagnosticos_max_inf').append(html);
+                        });
+                        let maxilar_inferior_gral_diagnosticos_endo = resp.maxilar_inferior_gral_diagnosticos_endo;
+                        $('#contenedor_maxilar_inferior_endo_diagnosticos_presupuesto').empty();
+                        $('#tbody_diagnosticos_max_inf_endo').empty();
+                        maxilar_inferior_gral_diagnosticos_endo.forEach(diagnostico => {
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_maxilar_inferior_endo_diagnosticos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+                        let valor = new Intl.NumberFormat("de-DE").format(diagnostico.valor);
+                        let html = `<tr>
+                                    <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                    <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
+                                    <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                    <td class="text-center align-middle">${diagnostico.comentario}</td>
+                                    <td class="text-center align-middle">${valor} </td>
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_max_inf(${diagnostico.id},'endo')"><i class="feather icon-x"></i></button>
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    </td>
+                                </tr>`;
+                            $('#tbody_diagnosticos_max_inf_endo').append(html);
+                        });
+                        let maxilar_inferior_gral_tratamientos = resp.maxilar_inferior_gral_tratamientos;
+                        $('#contenedor_maxilar_inferior_gral_tratamientos_presupuesto').empty();
+                        $('#tbody_tratamientos_max_inf').empty();
+                        maxilar_inferior_gral_tratamientos.forEach(diagnostico => {
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_maxilar_inferior_gral_tratamientos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+                        let valor = new Intl.NumberFormat("de-DE").format(diagnostico.valor);
+                        $('#tbody_tratamientos_max_inf').append(`
+                        <tr>
+                            <td class="text-center align-middle">${diagnostico.fecha}</td>
+                            <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : diagnostico.diagnostico_tratamiento}</td>
+                            <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                            <td class="text-center align-middle">${diagnostico.comentario}</td>
+                            <td class="text-center align-middle">${valor}</td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_max_inf(${diagnostico.id},'gral')"><i
+                                        class="feather icon-x"></i></button>
+                                        ${diagnostico.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : ''}
+                            </td>
+                        </tr>
+                        `);
+                        });
+                        let maxilar_inferior_gral_tratamientos_endo = resp.maxilar_inferior_gral_tratamientos_endo;
+                        $('#contenedor_maxilar_inferior_endo_tratamientos_presupuesto').empty();
+                        $('#tbody_tratamientos_max_inf_endo').empty();
+                        maxilar_inferior_gral_tratamientos_endo.forEach(diagnostico => {
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_maxilar_inferior_endo_tratamientos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+                        $('#tbody_tratamientos_max_inf_endo').append(`
+                            <tr>
+                                <td class="text-center align-middle">${t.fecha}</td>
+                                <td class="text-center align-middle">${t.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : t.diagnostico_tratamiento}</td>
+                                <td class="text-center align-middle">${t.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                <td class="text-center align-middle">${t.comentario}</td>
+                                <td class="text-center align-middle">${t.valor}</td>
+                                <td class="text-center align-middle">
+                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_max_inf(${t.id},'endo')"><i
+                                            class="feather icon-x"></i></button>
+                                            ${t.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>` : ''}
+                                </td>
+                            </tr>
+                        `);
+                        });
+
+
+                        let boca_completa_gral_diagnosticos = resp.boca_completa_gral_diagnosticos;
+                        $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').empty();
+                        $('#tbody_diagnosticos_boca_compl').empty();
+                        boca_completa_gral_diagnosticos.forEach(diagnostico => {
+                            if(diagnostico.presupuesto == 1){
+                                $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').append(`
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="floating-label-activo-sm">Prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="floating-label-activo-sm">Descuento</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Total prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    </div>
+                                `);
+                            }
+                            let html = `<tr>
+                                    <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                    <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
+                                    <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                    <td class="text-center align-middle">${diagnostico.comentario}</td>
+
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    </td>
+                                </tr>`;
+                                $('#tbody_diagnosticos_boca_compl').append(html);
+                        });
+                        let boca_completa_gral_diagnosticos_endo = resp.boca_completa_gral_diagnostico_endo;
+                        $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').empty();
+                        $('#tbody_diagnosticos_boca_compl_endo').empty();
+                        boca_completa_gral_diagnosticos_endo.forEach(diagnostico => {
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+                        let html = `<tr>
+                                    <td class="text-center align-middle">${diagnostico.fecha}</td>
+                                    <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento}</td>
+                                    <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                    <td class="text-center align-middle">${diagnostico.comentario}</td>
+
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'endo')"><i class="feather icon-x"></i></button>
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    </td>
+                                </tr>`;
+                        $('#tbody_diagnosticos_boca_compl_endo').append(html);
+                        });
+                        let boca_completa_gral_tratamientos = resp.boca_completa_gral_tratamientos;
+                        $('#contenedor_boca_completa_gral_tratamientos_presupuesto').empty();
+                        $('#tbody_tratamientos_boca_compl').empty();
+                        boca_completa_gral_tratamientos.forEach(diagnostico => {
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_boca_completa_gral_tratamientos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+                        $('#tbody_tratamientos_boca_compl').append(`
+                        <tr>
+                            <td class="text-center align-middle">${diagnostico.fecha}</td>
+                            <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : diagnostico.diagnostico_tratamiento}</td>
+                            <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                            <td class="text-center align-middle">${diagnostico.comentario}</td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${diagnostico.id},'gral')"><i
+                                        class="feather icon-x"></i></button>
+                                ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                            </td>
+                        </tr>
+                        `);
+                        });
+                        let boca_completa_gral_tratamientos_endo = resp.boca_completa_gral_tratamientos_endo;
+                        $('#contenedor_boca_completa_endo_tratamientos_presupuesto').empty();
+                        $('#tbody_tratamientos_boca_compl_endo').empty();
+                        maxilar_superior_gral_tratamientos_endo.forEach(diagnostico => {
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_boca_completa_endo_tratamientos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+                        $('#tbody_tratamientos_boca_compl_endo').append(`
+                        <tr>
+                            <td class="text-center align-middle">${diagnostico.fecha}</td>
+                            <td class="text-center align-middle">${diagnostico.diagnostico_tratamiento == '' ? 'SIN INFORMACION' : diagnostico.diagnostico_tratamiento}</td>
+                            <td class="text-center align-middle">${diagnostico.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                            <td class="text-center align-middle">${diagnostico.comentario}</td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${diagnostico.id},'endo')"><i
+                                        class="feather icon-x"></i></button>
+                                ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                            </td>
+                        </tr>
+                        `);
+                        });
+                        swal({
+                            icon:'success',
+                            title:'Info',
+                            text: 'Examen retirado con éxito.'
+                        });
+
+                        let valores_examenes = resp.valores[0];
+                        let valores_piezas = resp.valores[1];
+
+                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_examenes));
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_piezas));
+                    }
+
+                }
+
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        });
     }
 
     function eliminar_odontograma(id){
@@ -190,46 +1534,72 @@
                             html += '<td>'+odonto.tratamiento+'</td>';
                             html += '<td>'+odonto.caras+'</td>';
                             html += '<td>'+odonto.pieza+'</td>';
-                            html += '<td>'+odonto.descripcion+'</td>';
+                            html += '<td>'+odonto.diagnostico+'</td>';
                             html += '<td>'+odonto.valor+'</td>';
                             html += '<td>';
                             html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
-                            html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                            if(odonto.presupuesto == 0){
+                                html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                            }else{
+                                html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                            }
                             html += '</td>';
                             html += '</tr>';
                         });
 
                         $('#table_odontograma tbody').html(html);
                         $('#contenedor_piezas_dentales_presupuesto').empty();
+                        $('#table_trabajos_presupuesto tbody').empty();
                         odontograma.forEach(function(odonto){
-                            $('#contenedor_piezas_dentales_presupuesto').append(`
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Pieza</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label class="floating-label-activo-sm">Prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label class="floating-label-activo-sm">Descuento</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                </div>
-                            `);
+                            if(odonto.presupuesto == 1){
+                                $('#contenedor_piezas_dentales_presupuesto').append(`
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Pieza</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="floating-label-activo-sm">Prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="floating-label-activo-sm">Descuento</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Total prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    </div>
+                                `);
+                                $('#table_trabajos_presupuesto tbody').append(`
+                                    <tr>
+                                        <td>${odonto.fecha}</td>
+                                        <td>${odonto.diagnostico} </td>
+                                        <td>${odonto.caras} </td>
+                                        <td>${odonto.pieza} </td>
+                                        <td>${odonto.tratamiento} </td>
+                                        <td>${odonto.valor} </td>
+                                        <td> </td>
+                                        <td>
+                                            <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                        </td>
+                                    </tr>
+                                `);
+                            }
                         });
-                        let valores = response.valores;
-                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores));
+                        let valores_boca_general = response.valores[0];
+                        let valores_odontograma = response.valores[1];
+                        let total_general = valores_boca_general + valores_odontograma;
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#odon_adults').empty();
+                    $('#odon_adults').append(response.odontograma_paciente_vista);
                     }
                 },
                 error: function(error){

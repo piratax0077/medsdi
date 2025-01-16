@@ -19,7 +19,7 @@
                                         <th class="text-center align-middle">Fecha</th>
                                         <th class="text-center align-middle">Diagnóstico</th>
                                         <th class="text-center align-middle">Tratamiento</th>
-                                        <th class="text-center align-middle">Tipo examen</th>
+                                        <th class="text-center align-middle">Tipo especialidad</th>
                                         <th class="text-center align-middle">Caras</th>
                                         <th class="text-center align-middle">Responsable de atención</th>
                                         <th class="text-center align-middle">Estado</th>
@@ -41,13 +41,17 @@
     function info_odontograma(pieza) {
         console.log(pieza);
         let url ="{{ route('dental.dame_pieza') }}";
+        let id_paciente = dame_id_paciente();
+        if(id_paciente == '' || id_paciente == null){
+            id_paciente = $('#id_paciente').val();
+        }
         $.ajax({
             url: url,
             type: 'POST',
             data: {
                 pieza: pieza,
                 id_ficha_atencion: $('#id_fc').val(),
-                id_paciente: dame_id_paciente(),
+                id_paciente: id_paciente,
                 _token: "{{ csrf_token() }}"
             },
             success: function (response)  {
@@ -61,12 +65,12 @@
             // Mapea los datos si los nombres de las claves no coinciden
             const data = response.map(item => ({
                 fecha: item.fecha || 'N/A', // Asigna valor por defecto si falta
-                diagnostico: item.diagnostico || 'N/A',
-                tratamiento: item.tratamiento || 'N/A',
+                diagnostico:  item.diagnostico ? item.diagnostico.diagnostico : 'N/A',
+                tratamiento:  item.diagnostico ? item.diagnostico.tratamiento : 'N/A',
                 tipo_examen: tipoExamenMap[item.tipo_examen] || 'Otro',
-                caras: item.caras || 'N/A',
+                caras: item.diagnosticocaras || 'N/A',
                 responsable: item.profesional || 'N/A',
-                estado: item.estado == 1 ? 'En espera' : 'Inactivo'
+                estado: item.diagnostico.estado == 1 ? 'TERMINADO' : 'EN ESPERA'
             }));
 
             // Inicializa o actualiza la tabla

@@ -68,8 +68,15 @@
     <!-- select2 -->
     <link rel="stylesheet" type="text/css" href='{{ asset('css/plugins/select2.min.css') }}'/>
 
+    <script src="{{ asset('js/modals_atencion_dental.js') }}"></script>
+
     <!--Bs-Canvas-->
     <link rel="stylesheet" href='{{ asset('css/bs_canvas.css') }}'/>
+    <style>
+        .pcoded-navbar.menu-light.navbar-collapsed{
+            display: none;
+        }
+    </style>
     @yield('style')
 </head>
 

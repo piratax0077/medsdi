@@ -769,6 +769,7 @@
                                                                         }
                                                                     });
                                                                     console.log(arrayTemp);
+                                                                    console.log('aqui');
                                                                     end(arrayTemp);
                                                                 }
                                                                 else
@@ -794,6 +795,7 @@
                                                     },
                                                 })
                                                 .done(function(data) {
+                                                    console.log('hola');
                                                     if (data != null) {
 
                                                         // {{--  // console.log(info.event);  --}}
@@ -853,6 +855,7 @@
                                                             $('#bono_paciente_nombre').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
                                                             $('#bono_profesional_nombre').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
                                                             $('#bono_profesional_rut').val( data.profesional.rut);
+
                                                             $('#bono_hora_medica').val(info.event.id);
                                                             $('#bono_id_profesional').val(data.profesional.id);
                                                             $('#bono_id_paciente').val(data.paciente.id);

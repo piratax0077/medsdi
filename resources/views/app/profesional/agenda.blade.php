@@ -211,6 +211,24 @@
                             </div>
                         @endif
 
+                        @if ($profesional->id_especialidad == 2 )
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" id="div_procedimiento" name="div_procedimiento" style="display: none;">
+
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Procedimiento</label>
+                                    <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento" id="form_reseva_de_horas_id_procedimiento">
+                                        <option value="">Seleccione</option>
+                                        @if (isset($procedimientos_dentales) && !empty($procedimientos_dentales))
+                                            @foreach ($procedimientos_dentales as $proced )
+                                                <option value="{{ $proced->id }}" data-cant_bloque="{{ (empty($proced->cantidad_bloques)?$proced->cantidad_bloques:$proced->cantidad_bloques) }}">{{ $proced->descripcion }} {{ (empty($proced->cantidad_bloques)?$proced->cantidad_bloques:$proced->cantidad_bloques) }}Blq.</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+
+                            </div>
+                        @endif
+
                         <div id="reserva_datos_paciente" class="row mx-3">
 
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -868,20 +886,16 @@
     </div>
 
     <!--Evento Reserva-->
-
-    <!-- INICIO RECEPCION BONO  -->
-    <!--Modal Recepción de Bonos y programas-->
-    <div id="modal_recepcion_bonos_api" class="modal fade" tabindex="-1" role="dialog"
-        aria-labelledby="Recepcion de bonos" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+    @if($profesional->id_especialidad == 2)
+        <!-- Modal -->
+        <div class="modal fade" id="modal_recepcion_bonos_api" tabindex="-1" aria-labelledby="modal_recepcion_bonos_apiLabel" aria-hidden="true">
+            <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="modal_pago_consulta_title">Recepción de pago atención</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                        onclick="$('#modal_recepcion_bonos_api').modal('hide');"><span
-                            aria-hidden="true">×</span></button>
+                <div class="modal-header">
+                <h5 class="modal-title" id="modal_pago_consulta_title">Recepción de pago atención</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body pb-0">
+                <div class="modal-body">
                     <div class="form-row mb-2">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="alert alert-danger">
@@ -927,28 +941,32 @@
                                 <label class="floating-label-activo-sm">Clase Pago</label>
                                 <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm">
                                     <option value="0">Seleccione</option>
-                                    <option value="1">Emitido por Institucion</option>
-                                    <option value="2">Váucher</option>
-                                    <option value="3">Caja Vecina</option>
-                                    <option value="4">Bono Web</option>
-                                    <option value="5">Bono Web Pre-Pago</option>
-                                    <option value="6">Particular</option>
-                                    <option value="7">COPAGO Fonasa</option>
+                                    <option value="1">Efectivo</option>
+                                    <option value="2">Transferencia</option>
+                                    <option value="3">Tarjeta de débito</option>
+                                    <option value="4">Tarjeta de crédito</option>
+                                    <option value="5">Pago por aplicación móvil (Ej: Mercado Pago, PayPal, etc.)</option>
+                                    <option value="6">Cheque</option>
+                                    <option value="7">Crédito del paciente (acuerdo interno)</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Nº de bono o programa</label>
-                                <input type="text" class="form-control form-control-sm" name="bono_numero"
-                                    id="bono_numero">
+                                <label class="floating-label-activo-sm">Nº de presupuesto</label>
+                                <select class="form-control form-control-sm" name="presupuesto_numero"
+                                    id="presupuesto_numero" onchange="updateTotalValue()">
+                                </select>
                             </div>
+                        </div>
+                        <div class="col-sm-12 my-3 p-2" id="contenedor_tratamientos_presupuesto">
+
                         </div>
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <label class="floating-label-activo-sm">Convenio</label>
                                 <input type="text" class="form-control form-control-sm" name="bono_prevision_txt" id="bono_prevision_txt" disabled="disabled" value="">
-                                 <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm"  style="display: none;" onchange="$('#bono_prevision_txt').val( $('#bono_prevision option:selected').text() );$('#bono_prevision_txt').show();$('#bono_prevision').hide();actualizar_prevision_paciente('bono_id_paciente', 'bono_prevision');">
+                                <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm"  style="display: none;" onchange="$('#bono_prevision_txt').val( $('#bono_prevision option:selected').text() );$('#bono_prevision_txt').show();$('#bono_prevision').hide();actualizar_prevision_paciente('bono_id_paciente', 'bono_prevision');">
                                     <option value="0">Selecione una opción</option>
                                     @foreach ($prevision as $prev)
                                         <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
@@ -966,7 +984,20 @@
                                     class="form-control form-control-sm">
                             </div>
                         </div>
-
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Abono</label>
+                                <input name="bono_valor_abono_consulta" id="bono_valor_abono_consulta" type="number"
+                                    class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Saldo</label>
+                                <input name="bono_valor_saldo_consulta" id="bono_valor_saldo_consulta" type="number"
+                                    class="form-control form-control-sm">
+                            </div>
+                        </div>
                         <div class="col-sm-12">
                             <div class="form-group mb-3">
                                 <div class="switch switch-success d-inline m-r-10">
@@ -1001,14 +1032,158 @@
                         <div class="col-sm-12">
                             <div class="form-group text-center my-2 pb-2">
                                 <div onclick="recepcion_pago();" class="btn btn-info"><i class="feather icon-check"></i> Recepcionar</div>
+                                <button class="btn btn-primary"><i class="fas fa-check"></i>Generar Boleta</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+            </div>
+        </div>
+    @else
+        <!-- INICIO RECEPCION BONO  -->
+        <!--Modal Recepción de Bonos y programas-->
+        <div id="modal_recepcion_bonos_api" class="modal fade" tabindex="-1" role="dialog"
+            aria-labelledby="Recepcion de bonos" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-info">
+                        <h5 class="modal-title text-white" id="modal_pago_consulta_title">Recepción de pago atención</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            onclick="$('#modal_recepcion_bonos_api').modal('hide');"><span
+                                aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body pb-0">
+                        <div class="form-row mb-2">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="alert alert-danger">
+                                    <h6 class="text-danger p-16">Recuerde que siempre se debe validar datos del paciente, profesional y convenio con los datos del bono físico</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <input type="hidden" name="bono_hora_medica" id="bono_hora_medica">
+                            <input type="hidden" name="bono_id_profesional" id="bono_id_profesional">
+                            <input type="hidden" name="bono_id_paciente" id="bono_id_paciente">
+                            <input type="hidden" name="bono_id_tipo_bono" id="bono_id_tipo_bono" value="1">
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Rut del Paciente</label>
+                                    <input type="person" class="form-control form-control-sm" name="bono_paciente_rut"
+                                        id="bono_paciente_rut" disabled="disabled">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Nombre del Paciente</label>
+                                    <input type="text" class="form-control form-control-sm" name="bono_paciente_nombre"
+                                        id="bono_paciente_nombre" disabled="disabled">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm"> Nombre Profesional</label>
+                                    <input type="text" class="form-control form-control-sm" name="bono_profesional_nombre"
+                                        id="bono_profesional_nombre" disabled="disabled">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm"> Rut Profesional</label>
+                                    <input type="text" class="form-control form-control-sm" name="bono_profesional_rut"
+                                        id="bono_profesional_rut" disabled="disabled">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Clase Pago</label>
+                                    <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm">
+                                        <option value="0">Seleccione</option>
+                                        <option value="1">Emitido por Institucion</option>
+                                        <option value="2">Váucher</option>
+                                        <option value="3">Caja Vecina</option>
+                                        <option value="4">Bono Web</option>
+                                        <option value="5">Bono Web Pre-Pago</option>
+                                        <option value="6">Particular</option>
+                                        <option value="7">COPAGO Fonasa</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Nº de bono o programa</label>
+                                    <input type="text" class="form-control form-control-sm" name="bono_numero"
+                                        id="bono_numero">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <label class="floating-label-activo-sm">Convenio</label>
+                                    <input type="text" class="form-control form-control-sm" name="bono_prevision_txt" id="bono_prevision_txt" disabled="disabled" value="">
+                                    <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm"  style="display: none;" onchange="$('#bono_prevision_txt').val( $('#bono_prevision option:selected').text() );$('#bono_prevision_txt').show();$('#bono_prevision').hide();actualizar_prevision_paciente('bono_id_paciente', 'bono_prevision');">
+                                        <option value="0">Selecione una opción</option>
+                                        @foreach ($prevision as $prev)
+                                            <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-primary btn-sm" type="button" onclick="$('#bono_prevision_txt').hide();$('#bono_prevision').show();"><i class="feather icon-edit"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Valor total</label>
+                                    <input name="bono_valor_consulta" id="bono_valor_consulta" type="number"
+                                        class="form-control form-control-sm">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="form-group mb-3">
+                                    <div class="switch switch-success d-inline m-r-10">
+                                        <input type="checkbox" id="recepcion_programa">
+                                        <label for="recepcion_programa" class="cr"></label>
+                                    </div>
+                                    <label>Recepción de programa</label>
+                                </div>
+
+                                <div class="row" id="sesiones_programa" style="display: none;">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Tipo Bono</label>
+                                            <select  id="bono_id_tipo_bono" name="bono_id_tipo_bono"class="form-control form-control-sm">
+                                                {{-- <option value="0">Seleccione</option> --}}
+                                                @foreach ($tipo_bonos as $t_bono)
+                                                    <option value="{{ $t_bono->id }}">{{ $t_bono->nombre }}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Nº de Sesiones</label>
+                                            <input name="bono_sn_sesiones" id="bono_sn_sesiones" type="number"
+                                                class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group text-center my-2 pb-2">
+                                    <div onclick="recepcion_pago();" class="btn btn-info"><i class="feather icon-check"></i> Recepcionar</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- FIN RECEPCION BONO  -->
+        <!-- FIN RECEPCION BONO  -->
+    @endif
 
     @include('app.profesional.modales.boton_flotante_agenda_exa_ciru')
 

@@ -8,7 +8,7 @@
 
                 </div>
                 <div class="col-sm-12">
-                    <button type="button" class="btn btn-primary btn-sm float-right" onclick="modalNuevoPresupuesto()">Agregar nuevo presupuesto</button>
+                    {{-- <button type="button" class="btn btn-primary btn-sm float-right" onclick="modalNuevoPresupuesto()">Agregar nuevo presupuesto</button> --}}
                     <div class="dt-responsive table-responsive pb-4">
                         <table id="tratamiento_presupuesto"
                             class="display table table-striped table-hover dt-responsive nowrap table-sm"
@@ -18,26 +18,21 @@
                                     <th class="text-center align-middle">Fecha</th>
                                     <th class="text-center align-middle">Nº Presupuesto</th>
                                     <th class="text-center align-middle">Aprobado</th>
-                                    <th class="text-center align-middle">Pieza</th>
+                                    <th class="text-center align-middle">Pieza/Sector</th>
                                     <th class="text-center align-middle">Boca</th>
-                                    <th class="text-center align-middle">Presupuesto</th>
                                     <th class="text-center align-middle">Estado</th>
-                                    <th class="text-center align-middle">Control</th>
+                                    <th class="text-center align-middle">F. Control</th>
                                     <th class="text-center align-middle">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="text-center align-middle">23/05/2021</td>
+                                    <td class="text-center align-middle">{{ date('Y-m-d') }}</td>
                                     <td class="text-center align-middle">782638</td>
                                     <td class="text-center align-middle">Si</td>
                                     <td class="text-center align-middle">Sector I</td>
                                     <td class="text-center align-middle">no</td>
-                                    <td class="text-center align-middle">
-                                        <button type="button" class="btn btn-info btn-sm" onclick="presupuesto()";>
-                                            <i class="fa fa-plus"></i> Trabajar en pieza
-                                        </button>
-                                    </td>
+
                                     <td class="text-center align-middle">
                                         <div class="form-group col-md-4">
                                             <div class="switch switch-success d-inline m-r-2">
@@ -51,10 +46,9 @@
                                         20/05/2022
                                     </td>
                                     <td class="text-center align-middle">
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="presupuesto()";>
-                                            <i class="fa fa-trash"></i> Eliminar
+                                        <button type="button" class="btn btn-info btn-sm" onclick="presupuesto()";>
+                                            <i class="fa fa-plus"></i> Trabajar en pieza
                                         </button>
-
                                     </td>
                                 </tr>
                             </tbody>

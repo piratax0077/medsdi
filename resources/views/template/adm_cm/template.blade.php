@@ -331,6 +331,10 @@
                 responsive: true,
             });
 
+            $('#tabla_convenios_profesional').DataTable({
+                responsive: true,
+            });
+
             $('#tab_cont_asistentes_centroc').DataTable({
                 responsive: true,
             });

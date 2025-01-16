@@ -1991,6 +1991,8 @@ class AdministradorHospitalController  extends Controller
                     $paciente_sala->urgencia = '-----';
                     break;
             }
+            $escritorioProfesionalController = new EscritorioProfesional;
+            $odontograma = $escritorioProfesionalController->dameOdontogramaPaciente($paciente->id, $pt->id_ficha_atencion, $request->lugar_atencion_id);
 
             return view('app.adm_hospital.servicios.profesionales.escritorio_profesional_paciente')->with([
                 'direccion_id_region_paciente' => $direccion_id_region_paciente,
@@ -2016,6 +2018,7 @@ class AdministradorHospitalController  extends Controller
                 'curacion_plana' => $curaciones_planas,
                 'curaciones_lpp' => $curaciones_lpp,
                 'enfermera' => $enfermera,
+                'odontograma' => $odontograma,
                 // 'responsable' => $responsable,
                 'pacientes_contacto_emergencia' => $pacientes_contacto_emergencia,
                 'paciente_alergias' => $paciente_alergias,

@@ -51,6 +51,7 @@
                                     href="#enf_asig_grav" role="tab" aria-controls="enf_asig_grav"
                                     aria-selected="true">Asignación de Gravedad </a>
                             </li>
+
                         </ul>
                     </div>
                 </div>
@@ -844,6 +845,7 @@
                                 </div>
 
                             </div>
+
                             <!--EJECUTAR TRATAMIENTO-->
                             <div class="tab-pane fade show " id="enf_tto"
                                 role="tabpanel"aria-labelledby="enf_tto_tab">

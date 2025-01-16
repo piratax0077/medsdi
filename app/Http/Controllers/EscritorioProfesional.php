@@ -63,6 +63,7 @@ use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
 use App\Models\Prevision;
 use App\Models\Profesional;
+use App\Models\PresupuestosDental;
 use App\Models\ProfesionalAntecedenteAcademico;
 use App\Models\ProfesionalAsistente;
 use App\Models\ProfesionalConvenio;
@@ -1133,6 +1134,10 @@ class EscritorioProfesional extends Controller
         $paciente = Paciente::where('id', $hora_medica->id_paciente)->first();
         $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
 
+        $presupuestos_dentales = PresupuestosDental::where('id_paciente',$hora_medica->id_paciente)->get();
+
+        $paciente->presupuestos = $presupuestos_dentales;
+
         $edad = (\Carbon\Carbon::parse($paciente->fecha_nac)->age);
 
         $responsable = '';
@@ -1579,18 +1584,96 @@ class EscritorioProfesional extends Controller
     }
 
     public function generar_pdf_presupuesto(Request $req){
-        $odontograma = $this->dameOdontogramaPaciente($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion);
-        return $odontograma;
+        try {
+            $ficha_atencionController = new ficha_atencionController();
+            $paciente = Paciente::find($req->id_paciente);
+            $maxilar_superior_gral_tratamiento = $ficha_atencionController->dameMaxilarSuperiorGeneralTratamiento($paciente->id);
+            $maxilar_superior_gral_diagnostico = $ficha_atencionController->dameMaxilarSuperiorGeneralDiagnostico($paciente->id);
+            $maxilar_inferior_gral_tratamiento = $ficha_atencionController->dameMaxilarInferiorGeneralTratamiento($paciente->id);
+            $maxilar_inferior_gral_diagnostico = $ficha_atencionController->dameMaxilarInferiorGeneralDiagnostico($paciente->id);
+            $boca_completa_gral_tratamiento = $ficha_atencionController->dameBocaCompletaGeneralTratamiento($paciente->id);
+            $boca_completa_gral_diagnostico = $ficha_atencionController->dameBocaCompletaGeneralDiagnostico($paciente->id);
+            $maxilar_inferior_gral_tratamientos_endo = $ficha_atencionController->dameMaxilarInferiorGeneralTratamientoEndodoncia($paciente->id);
+            $maxilar_inferior_gral_diagnosticos_endo = $ficha_atencionController->dameMaxilarInferiorGeneralDiagnosticoEndodoncia($paciente->id);
+            $maxilar_superior_gral_tratamientos_endo = $ficha_atencionController->dameMaxilarSuperiorGeneralTratamientoEndodoncia($paciente->id);
+            $maxilar_superior_gral_diagnosticos_endo = $ficha_atencionController->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($paciente->id);
+            $boca_completa_gral_tratamiento_endo = $ficha_atencionController->dameCompletaEndoTratamiento($paciente->id);
+            $boca_completa_gral_diagnostico_endo = $ficha_atencionController->dameCompletaEndoDiagnostico($paciente->id);
+            $odontograma = $this->dameOdontogramaPaciente($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion);
+            $valores_odontograma = $this->dameValoresOdontograma($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion);
+
+
+
+            // Renderizar la vista del presupuesto dental
+            $pdf = Pdf::loadView('atencion_odontologica.PDF.presupuesto_dental', compact(
+                'odontograma',
+                'paciente',
+                'valores_odontograma',
+                'maxilar_superior_gral_tratamiento',
+                'maxilar_superior_gral_diagnostico',
+                'maxilar_inferior_gral_tratamiento',
+                'maxilar_inferior_gral_diagnostico',
+                'boca_completa_gral_tratamiento',
+                'boca_completa_gral_diagnostico',
+                'maxilar_inferior_gral_tratamientos_endo',
+                'maxilar_inferior_gral_diagnosticos_endo',
+                'maxilar_superior_gral_tratamientos_endo',
+                'maxilar_superior_gral_diagnosticos_endo',
+                'boca_completa_gral_tratamiento_endo',
+                'boca_completa_gral_diagnostico_endo'
+            ));
+            // Guardar el PDF en la carpeta public
+            $fileName = 'presupuesto_dental_' . $req->id_paciente . '.pdf';
+            $filePath = public_path('reportes/' . $fileName);
+            file_put_contents($filePath, $pdf->output());
+
+            // Devolver la ruta accesible del archivo PDF
+            return response()->json(['ruta' => asset('reportes/' . $fileName)]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+
     }
 
-    public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion){
-        $odontogramas = OdontogramaPaciente::select('odontogramas_pacientes.*','diagnosticos_dental.descripcion','diagnosticos_dental.valor')
+    public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion,$id_presupuesto = null){
+        $query = OdontogramaPaciente::select(
+            'odontogramas_pacientes.*',
+            'diagnosticos_dental.descripcion',
+            'diagnosticos_dental.cantidad_bloques',
+            'diagnosticos_dental.valor',
+            'tratamientos_dental.descripcion as diagnostico')
             ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
+            ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
             ->where('odontogramas_pacientes.id_paciente', $id_paciente)
             ->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion)
-            ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
-            ->get();
-        return $odontogramas;
+            ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion);
+
+            // Verificar si el parámetro $id_presupuesto no es nulo
+            if (!is_null($id_presupuesto)) {
+                $query->where('odontogramas_pacientes.id_presupuesto', $id_presupuesto);
+            }
+
+            // Obtener los resultados
+            $odontogramas = $query->get();
+
+            return $odontogramas;
+    }
+
+    public function atender_tratamiento_presupuesto(Request $req){
+
+        $pieza = OdontogramaPaciente::find($req->id);
+        if($req->checked){
+            $pieza->atendido = 1;
+            $pieza->save();
+            return ['msj' => 'Pieza '.$pieza->pieza.' atendida con éxito.'];
+        }else{
+            $pieza->atendido = 0;
+            $pieza->save();
+            return ['msj' => 'Pieza '.$pieza->pieza.' liberada.'];
+        }
+
+
+
     }
 
     public function eliminar_tratamiento_dental(Request $req){
@@ -1631,14 +1714,39 @@ class EscritorioProfesional extends Controller
     }
 
     public function actualizar_tratamiento_dental(Request $req){
+        try {
+            if($req->espera_lab == 1){
+                $estado = 3;
+            }else if($req->trabajo_terminado == 1){
+                $estado = 1;
+            }else{
+                $estado = 0;
+            }
+            $tratamiento = OdontogramaPaciente::find($req->id_odontograma);
 
-        $tratamiento = OdontogramaPaciente::find($req->id_odontograma);
-        return $tratamiento;
-        $tratamiento->diagnostico_tratamiento = $req->diag_seleccionado;
-        $tratamiento->terminado = $req->trabajo_terminado == 'Si' ? 1 : 0;
-        $tratamiento->agendar_control = $req->agendar_control == 'Si' ? 1 : 0;
-        $tratamiento->comentario = $req->comentarios;
+            $tratamiento->estado = $estado;
+            $tratamiento->agenda_control = $req->agenda_control == true ? 1 : 0;
+            $tratamiento->observaciones = $req->comentarios_tratamiento;
 
+            if($tratamiento->save()){
+                $odontograma_paciente = $this->dameOdontogramaPaciente($tratamiento->id_paciente, $tratamiento->id_ficha_atencion, $tratamiento->id_lugar_atencion);
+                $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
+                $valores = $this->dameValoresOdontograma($tratamiento->id_paciente, $tratamiento->id_ficha_atencion, $tratamiento->id_lugar_atencion);
+                return ['status' => 1 ,'mensaje' => 'Se ha actualizado correctamente', 'odontograma_paciente' => $odontograma_paciente,'valores' => $valores,'odontograma_paciente_vista' => $odontograma_paciente_vista];
+            }else{
+                return ['status' => 0, 'mensaje' => 'Ha ocurrido un error'];
+            }
+        } catch (\Exception $e) {
+            return ['status' => 0, 'mensaje' => $e->getMessage()];
+        }
+
+
+    }
+
+    public function dameValoresOdontograma($id_paciente, $id_ficha_atencion, $id_lugar_atencion){
+        $fichaController = new ficha_atencionController;
+        $valores = $fichaController->dameValores($id_paciente, $id_ficha_atencion, $id_lugar_atencion);
+        return $valores;
     }
 
     public function dameMaxilarSuperiorGeneralTratamiento($id_paciente){
@@ -3011,6 +3119,7 @@ class EscritorioProfesional extends Controller
     public function aranceles(){
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
        $trabajos = DiagnosticosDental::where('tipo_examen',1)->orWhere('tipo_examen',2)->orWhere('tipo_examen',3)->get();
+
        $mis_trabajos_profesional = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)->get();
 
       // Crear un array asociativo para un acceso más rápido
@@ -3029,6 +3138,15 @@ class EscritorioProfesional extends Controller
         }
 
         $mis_trabajos_agregados = DiagnosticosDental::where('id_responsable', $profesional->id)->get();
+
+        foreach($mis_trabajos_agregados as $mi_trabajo){
+            if (isset($mis_trabajos_profesional_map[$mi_trabajo->id])) {
+                $mi_trabajo->laboratorio = $mis_trabajos_profesional_map[$mi_trabajo->id];
+            } else {
+                $mi_trabajo->laboratorio = 0; // O el valor por defecto que prefieras
+            }
+        }
+
          $aranceles_lab = DiagnosticosDental::where('tipo_examen',4)->get();
 
         return view('app.profesional.aranceles_profesional')->with([
@@ -3072,6 +3190,15 @@ class EscritorioProfesional extends Controller
                     $trabajo->laboratorio = 0; // O el valor por defecto que prefieras
                 }
             }
+
+            foreach($procedimientos as $procedimiento){
+                if (isset($mis_trabajos_profesional_map[$procedimiento->id])) {
+                    $procedimiento->laboratorio = $mis_trabajos_profesional_map[$procedimiento->id];
+                } else {
+                    $procedimiento->laboratorio = 0; // O el valor por defecto que prefieras
+                }
+            }
+
             return ['status' => 'ok', 'procedimientos' => $procedimientos, 'trabajos' => $trabajos];
         }else{
             return ['status' => 'error'];
@@ -3100,11 +3227,22 @@ class EscritorioProfesional extends Controller
                     $trabajo->laboratorio = 0; // O el valor por defecto que prefieras
                 }
             }
+
+            foreach($procedimientos as $procedimiento){
+                if (isset($mis_trabajos_profesional_map[$procedimiento->id])) {
+                    $procedimiento->laboratorio = $mis_trabajos_profesional_map[$procedimiento->id];
+                } else {
+                    $procedimiento->laboratorio = 0; // O el valor por defecto que prefieras
+                }
+            }
+
             return ['status' => 'ok', 'procedimientos' => $procedimientos, 'trabajos' => $trabajos];
         }else{
             return ['status' => 'error'];
         }
     }
+
+
 
     public function config_profesional()
     {
@@ -3331,8 +3469,6 @@ class EscritorioProfesional extends Controller
         $hora_inicio_agenda = $hora_inicio_agenda_temp;
         $hora_termino_agenda = $hora_termino_agenda_temp;
 
-
-
         if (!isset($horario)) {
             return view('app.profesional.mis_lugares_atencion')->with([
                 'id_profesional' => $profesional->id,
@@ -3372,6 +3508,9 @@ class EscritorioProfesional extends Controller
                                             })
                                             ->where($filtro_procedimiento)
                                             ->get();
+
+        $procedimientos_dentales = DiagnosticosDental::all();
+
         // echo json_encode($procedimientos);
         // die();
 
@@ -3396,9 +3535,21 @@ class EscritorioProfesional extends Controller
                 'tipo_bonos' => $tipo_bonos,
                 'tipo_agenda_activa' => $tipo_agendas_temp->tipo_agenda,
                 'procedimientos' => $procedimientos,
+                'procedimientos_dentales' => $procedimientos_dentales
             ]
 
         );
+    }
+
+    public function dame_tratamientos_presupuesto(Request $req){
+        $presupuesto_dental = PresupuestosDental::find($req->id);
+        if($presupuesto_dental){
+            $tratamientos_piezas = $this->dameOdontogramaPaciente($presupuesto_dental->id_paciente, $presupuesto_dental->id_ficha_atencion, $presupuesto_dental->id_lugar_atencion, $presupuesto_dental->id);
+        }else{
+            $tratamientos_piezas = [];
+        }
+
+        return $tratamientos_piezas;
     }
 
     public function dameEvolucionesPacienteHosp($idpaciente){
@@ -3968,6 +4119,10 @@ class EscritorioProfesional extends Controller
 
         if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
         {
+            $procedimiento = $request->procedimiento;
+            $proc_bloque = ( !empty($request->proc_bloque)?intval($request->proc_bloque):1 );
+            $tiempo_consulta = intval($proc_bloque) * 15;
+        }else if($profesional->id_especialidad == 2){
             $procedimiento = $request->procedimiento;
             $proc_bloque = ( !empty($request->proc_bloque)?intval($request->proc_bloque):1 );
             $tiempo_consulta = intval($proc_bloque) * 15;

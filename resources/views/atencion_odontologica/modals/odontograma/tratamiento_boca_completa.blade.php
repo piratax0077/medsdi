@@ -82,10 +82,11 @@
                                                         <td class="text-center align-middle">{{ $t->comentario }}</td>
                                                         <td class="text-center align-middle"><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_diagnostico_boca_compl({{ $t->id }},'gral')"><i
                                                                     class="fa fa-trash"></i></button>
-                                                                    @if($t->terminado == 1)
-                                                                    <button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto({{ $t->id }})"><i
-                                                                        class="fa fa-save"></i></button>
-                                                                    @endif
+                                                                    @if($t->presupuesto == 0)
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $t->id }},'gral')"></button>
+                                                                @else
+                                                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $t->id }},'gral')"></button>
+                                                                @endif
                                                         </td>
 
                                                     </tr>
@@ -162,10 +163,11 @@
                                                     <td class="text-center align-middle">
                                                         <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl({{ $tratamiento->id }},'gral')"><i
                                                                 class="feather icon-x"></i></button>
-                                                        @if($tratamiento->terminado == 1)
-                                                        <button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto({{ $t->id }})"><i
-                                                            class="fa fa-save"></i></button>
-                                                        @endif
+                                                                @if($tratamiento->presupuesto == 0)
+                                                                <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $tratamiento->id }},'gral')"></button>
+                                                            @else
+                                                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $tratamiento->id }},'gral')"></button>
+                                                            @endif
                                                     </td>
                                                 </tr>
 
@@ -271,9 +273,11 @@
                                                         <td class="text-center align-middle">{{ $t->comentario }}</td>
                                                         <td class="text-center align-middle"><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_diagnostico_boca_compl({{ $t->id }},'endo')"><i
                                                                     class="fa fa-trash"></i></button>
-                                                                    @if($t->terminado == 1)
-                                                                    <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $t->id }})"><i class="fas fa-save"></i></button>
-                                                                    @endif
+                                                                    @if($t->presupuesto == 0)
+                                                                <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $t->id }},'gral')"></button>
+                                                            @else
+                                                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $t->id }},'gral')"></button>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -350,9 +354,11 @@
                                                     <td class="text-center align-middle">
                                                         <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl({{ $tratamiento->id }},'endo')"><i
                                                                 class="feather icon-x"></i></button>
-                                                                @if($tratamiento->terminado == 1)
-                                                                <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $tratamiento->id }})"><i class="fas fa-save"></i></button>
-                                                                @endif
+                                                                @if($tratamiento->presupuesto == 0)
+                                                                <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $tratamiento->id }},'gral')"></button>
+                                                            @else
+                                                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $tratamiento->id }},'gral')"></button>
+                                                            @endif
                                                     </td>
                                                 </tr>
 
@@ -468,7 +474,7 @@
                             <td class="text-center align-middle">
                                 <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${t.id},'gral')"><i
                                         class="feather icon-x"></i></button>
-                                        ${t.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${t.id});"><i class="fas fa-save"> </i> </button>` : ''}
+                                ${t.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                             </td>
                         </tr>
                         `);
@@ -504,31 +510,34 @@
                                             </div>
                                         </div>
                                     </div>`);
-                        $('#contenedor_boca_completa_gral_tratamientos_presupuesto').append(`
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">${t.localizacion}</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="floating-label-activo-sm">Prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${t.diagnostico_tratamiento}">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Sub-Total</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
-                            </div>
-                            <div class="form-group col-md-1">
-                                <label class="floating-label-activo-sm">Descuento</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Total prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                            </div>
-                        `);
+                        if(t.presupuesto == 1){
+                            $('#contenedor_boca_completa_gral_tratamientos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${t.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${t.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+
                     });
                 }else if(tipo_examen == 'endo'){
                     $('#tbody_tratamientos_boca_compl_endo').empty();
@@ -544,7 +553,7 @@
                             <td class="text-center align-middle">
                                 <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${t.id},'endo')"><i
                                         class="feather icon-x"></i></button>
-                                        ${t.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${t.id});"><i class="fas fa-save"> </i> </button>` : ''}
+                                ${t.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                             </td>
                         </tr>
                         `);
@@ -580,32 +589,34 @@
                                             </div>
                                         </div>
                                     </div>`);
+                        if(t.presupuesto == 1){
+                            $('#contenedor_boca_completa_endo_tratamientos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${t.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${t.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
 
-                        $('#contenedor_boca_completa_endo_tratamientos_presupuesto').append(`
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">${t.localizacion}</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="floating-label-activo-sm">Prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${t.diagnostico_tratamiento}">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Sub-Total</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
-                            </div>
-                            <div class="form-group col-md-1">
-                                <label class="floating-label-activo-sm">Descuento</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Total prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${t.valor}">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                            </div>
-                        `);
                     });
                 }
                 let valores_examenes = response.valores_tratamientos[0];
@@ -701,7 +712,7 @@
 
                                     <td class="text-center align-middle">
                                         <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
-                                        ${diagnostico.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id});"><i class="fas fa-save"> </i> </button>` : ''}
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                     </td>
                                 </tr>`;
                         $('#tbody_diagnosticos_boca_compl').append(html);
@@ -738,31 +749,34 @@
                                         </div>
                                     </div>
                         `);
-                        $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').append(`
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="floating-label-activo-sm">Prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Sub-Total</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
-                            </div>
-                            <div class="form-group col-md-1">
-                                <label class="floating-label-activo-sm">Descuento</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Total prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                            </div>
-                        `);
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+
                     });
                 }else if(tipo_examen == 'endo'){
                     $('#tbody_diagnosticos_boca_compl_endo').empty();
@@ -777,7 +791,7 @@
 
                                     <td class="text-center align-middle">
                                         <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'endo')"><i class="feather icon-x"></i></button>
-                                    ${diagnostico.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id});"><i class="fas fa-save"> </i> </button>` : ''}
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                     </td>
                                 </tr>`;
                         $('#tbody_diagnosticos_boca_compl_endo').append(html);
@@ -814,31 +828,34 @@
                                         </div>
                                     </div>
                         `);
-                        $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').append(`
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="floating-label-activo-sm">Prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Sub-Total</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
-                            </div>
-                            <div class="form-group col-md-1">
-                                <label class="floating-label-activo-sm">Descuento</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Total prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                            </div>
-                        `);
+                        if(diagnostico.presupuesto == 1){
+                            $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').append(`
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="floating-label-activo-sm">Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                </div>
+                            `);
+                        }
+
                     });
                 }
 
@@ -912,7 +929,7 @@
 
                                 <td class="text-center align-middle">
                                     <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
-                                    ${diagnostico.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id});"><i class="fas fa-save"> </i> </button>` : ''}
+                                    ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                 </td>
                             </tr>`;
                     $('#tbody_diagnosticos_boca_compl').append(html);
@@ -949,31 +966,34 @@
                             </div>
                         </div>`
                     );
-                    $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').append(`
-                        <div class="form-group col-md-2">
-                            <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
-                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label class="floating-label-activo-sm">Prestación</label>
-                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label class="floating-label-activo-sm">Sub-Total</label>
-                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
-                        </div>
-                        <div class="form-group col-md-1">
-                            <label class="floating-label-activo-sm">Descuento</label>
-                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label class="floating-label-activo-sm">Total prestación</label>
-                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
-                        </div>
-                        <div class="form-group col-md-2">
-                            <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                        </div>
-                    `);
+                    if(diagnostico.presupuesto == 1){
+                        $('#contenedor_boca_completa_gral_diagnosticos_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            </div>
+                        `);
+                    }
+
                 });
                 }else if(tipo_examen == 'endo'){
                     $('#tbody_diagnosticos_boca_compl_endo').empty();
@@ -988,7 +1008,7 @@
 
                                 <td class="text-center align-middle">
                                     <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'endo')"><i class="feather icon-x"></i></button>
-                                    ${diagnostico.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id});"><i class="fas fa-save"> </i> </button>` : ''}
+                                    ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                 </td>
                             </tr>`;
                             $('#tbody_diagnosticos_boca_compl_endo').append(html);
@@ -1024,31 +1044,34 @@
                                             </div>
                                         </div>
                                     </div>`);
-                                $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').append(`
-                                    <div class="form-group col-md-2">
-                                        <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
-                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="floating-label-activo-sm">Prestación</label>
-                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label class="floating-label-activo-sm">Sub-Total</label>
-                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
-                                    </div>
-                                    <div class="form-group col-md-1">
-                                        <label class="floating-label-activo-sm">Descuento</label>
-                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label class="floating-label-activo-sm">Total prestación</label>
-                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                    </div>
-                                `);
+                                    if(diagnostico.presupuesto == 1){
+                                        $('#contenedor_boca_completa_endo_diagnosticos_presupuesto').append(`
+                                            <div class="form-group col-md-2">
+                                                <label class="floating-label-activo-sm">${diagnostico.localizacion}</label>
+                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label class="floating-label-activo-sm">Prestación</label>
+                                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${diagnostico.diagnostico_tratamiento}">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                            </div>
+                                            <div class="form-group col-md-1">
+                                                <label class="floating-label-activo-sm">Descuento</label>
+                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="floating-label-activo-sm">Total prestación</label>
+                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                            </div>
+                                        `);
+                                    }
+
                         });
                 }
 
@@ -1113,16 +1136,16 @@
                 $('#contenedor_boca_completa_gral_tratamientos_presupuesto').empty();
                 tratamientos.forEach(tratamiento => {
                     let html = `<tr>
-                                <td class="text-center align-middle">${tratamiento.fecha}</td>
-                                <td class="text-center align-middle">${tratamiento.diagnostico_tratamiento}</td>
-                                <td class="text-center align-middle">${tratamiento.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
-                                <td class="text-center align-middle">${tratamiento.comentario}</td>
+                                    <td class="text-center align-middle">${tratamiento.fecha}</td>
+                                    <td class="text-center align-middle">${tratamiento.diagnostico_tratamiento}</td>
+                                    <td class="text-center align-middle">${tratamiento.terminado == 1 ? 'TERMINADO' : 'PENDIENTE'}</td>
+                                    <td class="text-center align-middle">${tratamiento.comentario}</td>
 
-                                <td class="text-center align-middle">
-                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${tratamiento.id},'gral')"><i class="feather icon-x"></i></button>
-                                    ${tratamiento.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id});"><i class="fas fa-save"> </i> </button>` : ''}
-                                </td>
-                            </tr>`;
+                                    <td class="text-center align-middle">
+                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${tratamiento.id},'gral')"><i class="feather icon-x"></i></button>
+                                        ${tratamiento.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    </td>
+                                </tr>`;
                     $('#tbody_tratamientos_boca_compl').append(html);
                 });
                 tratamientos_endo.forEach(tratamiento => {
@@ -1134,13 +1157,14 @@
 
                                 <td class="text-center align-middle">
                                     <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${tratamiento.id},'endo')"><i class="feather icon-x"></i></button>
-                                    ${tratamiento.terminado == 1 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id});"><i class="fas fa-save"> </i> </button>` : ''}
+                                    ${tratamiento.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                 </td>
                             </tr>`;
                             $('#tbody_tratamientos_boca_compl_endo').append(html);
                 });
                 tratamientos_endo.forEach(tratamiento => {
-                    $('#contenedor_boca_completa_gral_tratamientos_presupuesto').append(`
+                    if(tratamiento.presupuesto == 1){
+                        $('#contenedor_boca_completa_gral_tratamientos_presupuesto').append(`
                             <div class="form-group col-md-2">
                                 <label class="floating-label-activo-sm">${tratamiento.localizacion}</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
@@ -1165,6 +1189,8 @@
                                 <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                             </div>
                         `);
+                    }
+
                 });
                 let valores_examenes = response.valores_tratamientos[0];
                 let valores_piezas = response.valores_tratamientos[1];

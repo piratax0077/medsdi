@@ -69,6 +69,7 @@ use App\Models\Profesional;
 use App\Models\Region;
 use App\Models\SolicitudPabellonQuirurgico;
 use App\Models\SubTipoEspecialidad;
+use App\Models\TratamientosDental;
 use App\Models\TipoEspecialidad;
 use App\Models\TipoExamen;
 use App\Models\User;
@@ -1808,13 +1809,15 @@ class ficha_atencionController extends Controller
 
         $odontograma = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id);
 
-
         $paciente->edad = Carbon::parse($paciente->fecha_nac)->age;
+
         if($paciente->edad >= 18){
             $paciente->es_adulto = true;
         }else{
             $paciente->es_adulto = false;
         }
+
+        $diagnosticos_dentales = TratamientosDental::where('estado',1)->get();
 
         return view($ruta_blade)->with(
             [
@@ -1863,6 +1866,7 @@ class ficha_atencionController extends Controller
                 'quinto_cuadrante_endodoncia' => $quinto_cuadrante_endodoncia,
                 'sexto_cuadrante_endodoncia' => $sexto_cuadrante_endodoncia,
                 'tratamientos' => $tratamientos_dentales,
+                'diagnosticos' => $diagnosticos_dentales,
                 'odontograma' => $odontograma,
                 'biopsias' => $biopsias,
                 'imagenes' => $imagenes,
@@ -1979,9 +1983,12 @@ class ficha_atencionController extends Controller
         foreach ($funciones as $funcion) {
             $resultado = $this->$funcion($id_paciente);
             foreach ($resultado as $item) {
-                if (isset($item['valor'])) {
-                    $total_general += $item['valor'];
+                if($item['presupuesto'] == 1){
+                    if (isset($item['valor'])) {
+                        $total_general += $item['valor'];
+                    }
                 }
+
             }
         }
 
@@ -1991,17 +1998,21 @@ class ficha_atencionController extends Controller
 
         // Iterar y sumar valores
         foreach ($odontograma as $item) {
-            if (isset($item['valor'])) {
-                $total_odontograma += $item['valor'];
+            if($item['presupuesto'] == 1){
+                if (isset($item['valor'])) {
+                    $total_odontograma += $item['valor'];
+                }
             }
+
         }
 
         return [$total_general, $total_odontograma];
     }
 
     public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion){
-        $odontogramas = OdontogramaPaciente::select('odontogramas_pacientes.*','diagnosticos_dental.descripcion','diagnosticos_dental.valor')
+        $odontogramas = OdontogramaPaciente::select('odontogramas_pacientes.*','diagnosticos_dental.descripcion','diagnosticos_dental.valor','tratamientos_dental.descripcion as diagnostico')
             ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
+            ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico','=','tratamientos_dental.id')
             ->where('odontogramas_pacientes.id_paciente', $id_paciente)
             ->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion)
             ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)

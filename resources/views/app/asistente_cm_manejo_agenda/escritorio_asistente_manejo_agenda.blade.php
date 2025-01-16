@@ -738,6 +738,7 @@
                                                                 }
                                                             });
                                                             console.log(arrayTemp);
+                                                            console.log('adios');
                                                             end(arrayTemp);
                                                         }
                                                         else
@@ -764,6 +765,7 @@
                                                     },
                                             })
                                             .done(function(data) {
+                                                console.log(data);
                                                 if (data != null)
                                                 {
                                                     // data = JSON.parse(data);

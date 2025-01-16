@@ -192,7 +192,7 @@
                                     <form>
                                         <div class="form-row" id="contenedor_piezas_dentales_presupuesto">
                                             @foreach ($odontograma as $o)
-
+                                                @if($o->presupuesto == 1)
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">Pieza</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ $o->pieza }}">
@@ -216,39 +216,41 @@
                                                 <div class="form-group col-md-2">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                                                 </div>
-
+                                                @endif
                                             @endforeach
                                         </div>
                                         <div class="form-row" id="contenedor_maxilar_superior_gral_diagnosticos_presupuesto">
                                             @foreach ($maxilar_superior_gral_diagnosticos as $diagnostico)
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                                </div>
+                                                @if($diagnostico->presupuesto == 1)
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                    </div>
+                                                    <div class="form-group col-md-3">
+                                                        <label class="floating-label-activo-sm">Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-1">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Total prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                    </div>
+                                                @endif
                                             @endforeach
                                         </div>
                                         <div class="form-row" id="contenedor_maxilar_superior_gral_tratamientos_presupuesto">
                                             @foreach ($maxilar_superior_gral_tratamientos as $diagnostico)
-
+                                            @if($diagnostico->presupuesto == 1)
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
@@ -272,12 +274,12 @@
                                                 <div class="form-group col-md-2">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                                                 </div>
-
+                                                @endif
                                             @endforeach
                                         </div>
                                         <div class="form-row" id="contenedor_maxilar_superior_endo_tratamientos_presupuesto">
                                             @foreach ($maxilar_superior_gral_tratamientos_endo as $diagnostico)
-
+                                            @if($diagnostico->presupuesto == 1)
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
@@ -301,12 +303,12 @@
                                                 <div class="form-group col-md-2">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                                                 </div>
-
+                                                @endif
                                             @endforeach
                                         </div>
                                         <div class="form-row" id="contenedor_maxilar_superior_endo_diagnosticos_presupuesto">
                                             @foreach ($maxilar_superior_gral_diagnosticos_endo as $diagnostico)
-
+                                            @if($diagnostico->presupuesto == 1)
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
@@ -330,12 +332,12 @@
                                                 <div class="form-group col-md-2">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                                                 </div>
-
+                                                @endif
                                             @endforeach
                                         </div>
                                         <div class="form-row" id="contenedor_maxilar_inferior_gral_diagnosticos_presupuesto">
                                             @foreach ($maxilar_inferior_gral_diagnosticos as $diagnostico)
-
+                                            @if($diagnostico->presupuesto == 1)
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
@@ -359,12 +361,12 @@
                                                 <div class="form-group col-md-2">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                                                 </div>
-
+                                                @endif
                                             @endforeach
                                         </div>
                                         <div class="form-row" id="contenedor_maxilar_inferior_gral_tratamientos_presupuesto">
                                             @foreach ($maxilar_inferior_gral_tratamientos as $diagnostico)
-
+                                            @if($diagnostico->presupuesto == 1)
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
@@ -388,12 +390,12 @@
                                                 <div class="form-group col-md-2">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                                                 </div>
-
+                                                @endif
                                             @endforeach
                                         </div>
                                         <div class="form-row" id="contenedor_maxilar_inferior_endo_diagnosticos_presupuesto">
                                             @foreach ($maxilar_inferior_gral_diagnosticos_endo as $diagnostico)
-
+                                            @if($diagnostico->presupuesto == 1)
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
@@ -417,12 +419,12 @@
                                                 <div class="form-group col-md-2">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                                                 </div>
-
+                                                @endif
                                             @endforeach
                                         </div>
                                         <div class="form-row" id="contenedor_maxilar_inferior_endo_tratamientos_presupuesto">
                                             @foreach ($maxilar_inferior_gral_tratamientos_endo as $diagnostico)
-
+                                            @if($diagnostico->presupuesto == 1)
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
@@ -446,11 +448,12 @@
                                                 <div class="form-group col-md-2">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                                                 </div>
-
+                                                @endif
                                             @endforeach
                                         </div>
                                         <div class="form-row" id="contenedor_boca_completa_gral_tratamientos_presupuesto">
                                             @foreach ($boca_completa_gral_tratamientos as $diagnostico)
+                                            @if($diagnostico->presupuesto == 1)
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
@@ -474,10 +477,12 @@
                                                 <div class="form-group col-md-2">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                                                 </div>
+                                                @endif
                                             @endforeach
                                         </div>
                                         <div class="form-row" id="contenedor_boca_completa_gral_diagnosticos_presupuesto">
                                             @foreach ($boca_completa_gral_diagnosticos as $diagnostico)
+                                            @if($diagnostico->presupuesto == 1)
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
@@ -501,11 +506,12 @@
                                                 <div class="form-group col-md-2">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                                                 </div>
+                                                @endif
                                             @endforeach
                                         </div>
                                         <div class="form-row" id="contenedor_boca_completa_endo_tratamientos_presupuesto">
                                             @foreach ($boca_completa_gral_tratamiento_endo as $diagnostico)
-
+                                            @if($diagnostico->presupuesto == 1)
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
@@ -529,11 +535,12 @@
                                                 <div class="form-group col-md-2">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                                                 </div>
-
+                                                @endif
                                             @endforeach
                                         </div>
                                         <div class="form-row" id="contenedor_boca_completa_endo_diagnosticos_presupuesto">
                                             @foreach ($boca_completa_gral_diagnostico_endo as $diagnostico)
+                                            @if($diagnostico->presupuesto == 1)
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ $diagnostico->localizacion }}">
@@ -557,6 +564,7 @@
                                                 <div class="form-group col-md-2">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)"> Ver Estado Trabajo</button>
                                                 </div>
+                                                @endif
                                             @endforeach
                                         </div>
 
@@ -569,7 +577,7 @@
                                         <div class="row bg-light border p-3 text-center">
                                             <!-- Total -->
                                             <div class="col-md-3">
-                                                <h5>Total</h5>
+                                                <h5>Total Grupo/Boca</h5>
                                                 <p id="valores_examenes_presupuesto">$ {{ number_format($valores,0,',','.') }}</p>
                                             </div>
 
@@ -609,6 +617,7 @@
                                                 <div class="col-sm-2">
                                                     <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                                         <a class="nav-link-aten text-reset" id="od_laboratorio_trab-tab" data-toggle="tab" href="#od_laboratorio_trab" role="tab" aria-controls="od_laboratorio_trab" aria-selected="false">Estados Trabajos</a>
+                                                        <a class="nav-link-aten text-reset" id="costo_presupuesto_trab-tab" data-toggle="tab" href="#costo_presupuesto_trab" role="tab" aria-controls="costo_presupuesto_trab" aria-selected="false">Costo/Presupuesto Lab</a>
                                                         <a class="nav-link-aten text-reset" id="od_lab_estadopago-tab" data-toggle="tab" href="#od_lab_estadopago" role="tab" aria-controls="od_lab_estadopago" aria-selected="false">Estados de Pago</a>
                                                     </div>
                                                 </div>
@@ -675,6 +684,18 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="tab-pane fade show active" id="costo_presupuesto_trab" role="tabpanel" aria-labelledby="costo_presupuesto_trab-tab">
+                                                            <div class="col-sm-12 col-md-12">
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                        <div class="form-group">
+                                                                            <label class="floating-label-activo-sm">Costo Presupuesto Laboratorio</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
                                                         <div class="tab-pane fade show " id="od_lab_estadopago" role="tabpanel" aria-labelledby="od_lab_estadopago-tab">
                                                             <div class="col-sm-12 col-md-12">
                                                                 <div class="form-row">
@@ -739,15 +760,15 @@
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        <input type="text" class="form-control form-control-sm" name="subtotal_lab" id="subtotal_lab">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Descuento</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        <input type="text" class="form-control form-control-sm" name="descuento_lab" id="descuento_lab">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Total Laboratorio</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        <input type="text" class="form-control form-control-sm" name="total_lab" id="total_lab">
                                                     </div>
 
                                                 </div>
@@ -757,15 +778,15 @@
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        <input type="text" class="form-control form-control-sm" name="subtotal_clinico" id="subtotal_clinico" value="{{ number_format($valores + $valores_piezas,0,',','.') }}">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Descuento</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="   pieza">
+                                                        <input type="text" class="form-control form-control-sm" name="descuento_clinico" id="   descuento_clinico" value="0">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Total Clínico</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        <input type="text" class="form-control form-control-sm" name="total_clinico" id="total_clinico" value="{{ number_format($valores + $valores_piezas,0,',','.') }}">
                                                     </div>
 
                                                 </div>
@@ -775,7 +796,7 @@
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Total presupuesto</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        <input type="text" class="form-control form-control-sm" name="total_presupuesto" id="total_presupuesto">
                                                     </div>
                                                 </div>
                                             </form>

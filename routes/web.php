@@ -525,6 +525,8 @@ Route::group([
     Route::get('Mis_lugares_atencion', [App\Http\Controllers\EscritorioProfesional::class, 'mis_lugares'])->name('profesional.lugares_atencion');
     Route::post('agregar_centro', [App\Http\Controllers\EscritorioProfesional::class, 'agregar_lugar_atencion'])->name('profesional.agregar_centro');
     Route::get('mi_agenda', [App\Http\Controllers\EscritorioProfesional::class, 'mi_agenda'])->name('profesional.mi_agenda');
+    Route::post('dame_tratamientos_presupuesto',[App\Http\Controllers\EscritorioProfesional::class, 'dame_tratamientos_presupuesto'])->name('profesional.mi_agenda.dame_tratamientos_presupuesto');
+    Route::post('atender_tratamiento_presupuesto',[App\Http\Controllers\EscritorioProfesional::class, 'atender_tratamiento_presupuesto']) ->name('profesional.mi_agenda.atender_tratamiento_presupuesto');
     Route::get('mi_agenda/tipo', [App\Http\Controllers\EscritorioAsistente::class, 'buscarInfoProfesional'])->name('profesional.agenda.buscar_info_profesional');
     Route::get('atenciones_previas_paciente/{id}', [App\Http\Controllers\EscritorioProfesional::class, 'atenciones_previas_paciente'])->name('profesional.atenciones_previas_paciente');
     Route::get('mis_asistentes', [App\Http\Controllers\EscritorioProfesional::class, 'mis_asistentes'])->name('profesional.mis_asistentes');
@@ -2190,7 +2192,10 @@ Route::get('/profesional/tipo_especialidad', [App\Http\Controllers\EscritorioGen
 Route::get('/profesional/sub_tipo_especialidad', [App\Http\Controllers\EscritorioGeneral::class, 'cargar_sub_tipo_especialidad'])->name('web.profesional.buscar_sub_tipo_especialidad');
 Route::get('/profesional/buscador', [App\Http\Controllers\EscritorioGeneral::class, 'buscarProfesionalBuscador'])->name('web.profesionales.buscador');
 
+Route::get('/profesional/mis_convenios',[App\Http\Controllers\ConveniosController::class, 'misPropiosConvenios'])->name('profesional.mis_propios_convenios');
+
 Route::get('/profesional/mensaje/{id}', [App\Http\Controllers\EscritorioGeneral::class, 'mensaje'])->name('profesional.mensaje');
+Route::post('/profesional/convenio/nuevo',[App\Http\Controllers\ConveniosController::class, 'nuevoConvenio'])->name('profesional.convenio_nuevo');
 /** envio de correo prueba */
 Route::get('/correo/envio', [App\Http\Controllers\SendMailController::class, 'envioCorreoR'])->name('correo.envio');
 Route::get('/correo/envio_test', [App\Http\Controllers\SendMailController::class, 'envioCorreoTest'])->name('correo.envio.test');
@@ -2359,3 +2364,5 @@ Route::get('/paciente/videollamada/{id}/{nombre}', [App\Http\Controllers\JitsiCo
 Route::get('/importar/diagnosticos', [App\Http\Controllers\DentalController::class, 'importacion_datos_excel'])->name('importar.diagnosticos');
 Route::post('/importar/diagnosticos/dentales', [App\Http\Controllers\DentalController::class, 'importarDiagnosticos'])->name('dental.importar_datos_excel');
 Route::post('/guardar/diagnostico/laboratorio', [App\Http\Controllers\DentalController::class, 'guardarDiagnosticoLaboratorio'])->name('dental.guardarLaboratorio');
+Route::post('/cargar/tratamiento',[App\Http\Controllers\DentalController::class, 'cargar_tratamiento_presupuesto'])->name('dental.cargar_tratamiento_presupuesto');
+Route::post('/sacar/tratamiento',[App\Http\Controllers\DentalController::class, 'sacar_tratamiento_presupuesto'])->name('dental.sacar_tratamiento_presupuesto');

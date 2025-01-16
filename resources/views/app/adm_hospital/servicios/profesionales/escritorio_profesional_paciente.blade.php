@@ -100,6 +100,7 @@
                 </div>
             </div>
             @include("app.adm_hospital.include.sidebar_servicio_prof"){{-- modales y data de sidebar especialidad --}}
+            @include("app.dental.modals.odontograma.modal_odontograma")
         </div>
 
 @endsection

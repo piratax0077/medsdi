@@ -133,14 +133,7 @@
                                                                 </select>
                                                             </td>
                                                             <td class="px-1 py-1">
-                                                                <select class="form-control form-control-sm" id="tratamiento_{{ $loop->index + 1 }}_1"
-                                                                    name="tratamiento_{{ $loop->index + 1 }}_1">
-                                                                    <option>Tratamiento</option>
-                                                                    @foreach ($tratamientos as $tratamiento)
-                                                                        <option value="{{ $tratamiento->id }}">{{ $tratamiento->descripcion }}</option>
-                                                                    @endforeach
-
-                                                                </select>
+                                                                <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_{{ $loop->index + 1 }}_1" name="tratamiento_{{ $loop->index + 1 }}_1" placeholder="Tratamiento">
                                                                 <button type="button" onclick="registrar_odontograma_primer_cuadrante({{ $loop->index + 1 }},'gral')" style="margin-top:15px" class="btn btn-success-light btn-sm">Registrar </button>
                                                                 <input type="hidden" name="odontograma{{ $loop->index + 1 }}_1" id="odontograma{{ $loop->index + 1 }}_1"
                                                                     value="1">
@@ -259,13 +252,7 @@
                                                                 </select>
                                                             </td>
                                                             <td class="px-1 py-1">
-                                                                <select class="form-control form-control-sm" id="tratamiento_endo_{{ $loop->index + 1 }}_1"
-                                                                    name="tratamiento_endo_{{ $loop->index + 1 }}_1">
-                                                                    <option>Tratamiento</option>
-                                                                    @foreach ($tratamientos as $tratamiento)
-                                                                        <option value="{{ $tratamiento->id }}">{{ $tratamiento->descripcion }}</option>
-                                                                    @endforeach
-                                                                </select>
+                                                                <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_endo_{{ $loop->index + 1 }}_1" name="tratamiento_endo_{{ $loop->index + 1 }}_1" placeholder="Tratamiento">
                                                                 <button type="button" onclick="registrar_odontograma_primer_cuadrante({{ $loop->index + 1 }},'endo')" style="margin-top:15px" class="btn btn-success-light btn-sm">Registrar </button>
                                                                 <input type="hidden" name="odontograma{{ $loop->index + 1 }}_1" id="odontograma{{ $loop->index + 1 }}_1"
                                                                     value="1">
@@ -390,13 +377,7 @@
                                                                 </select>
                                                             </td>
                                                             <td class="px-1 py-1">
-                                                                <select class="form-control form-control-sm" id="tratamiento_{{ $loop->index + 1 }}_2"
-                                                                    name="tratamiento_{{ $loop->index + 1 }}_2">
-                                                                    <option>Tratamiento</option>
-                                                                    @foreach ($tratamientos as $tratamiento)
-                                                                        <option value="{{ $tratamiento->id }}">{{ $tratamiento->descripcion }}</option>
-                                                                    @endforeach
-                                                                </select>
+                                                                <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_{{ $loop->index + 1 }}_2" name="tratamiento_{{ $loop->index + 1 }}_2" placeholder="Tratamiento">
                                                                 <input type="hidden" name="odontograma{{ $loop->index + 1 }}2" id="odontograma{{ $loop->index + 1 }}2"
                                                                     value="1">
                                                                     <input type="hidden" name="cuadrante" id="cuadrante" value="2">
@@ -508,13 +489,7 @@
                                                                 </select>
                                                             </td>
                                                             <td class="px-1 py-1">
-                                                                <select class="form-control form-control-sm" id="tratamiento_endo_{{ $loop->index + 1 }}_2"
-                                                                    name="tratamiento_endo_{{ $loop->index + 1 }}_2">
-                                                                    <option>Tratamiento</option>
-                                                                    @foreach ($tratamientos as $tratamiento)
-                                                                        <option value="{{ $tratamiento->id }}">{{ $tratamiento->descripcion }}</option>
-                                                                    @endforeach
-                                                                </select>
+                                                                <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_endo_{{ $loop->index + 1 }}_2" name="tratamiento_endo_{{ $loop->index + 1 }}_2" placeholder="Tratamiento">
                                                                 <input type="hidden" name="odontograma_endo{{ $loop->index + 1 }}2" id="odontograma_endo{{ $loop->index + 1 }}2"
                                                                     value="1">
                                                                     <input type="hidden" name="cuadrante" id="cuadrante" value="2">
@@ -644,13 +619,7 @@
                                                             </select>
                                                         </td>
                                                         <td class="px-1 py-1">
-                                                            <select class="form-control form-control-sm" id="tratamiento_{{ $loop->index + 1 }}_3"
-                                                                name="tratamiento_{{ $loop->index + 1 }}_3">
-                                                                <option>Tratamiento</option>
-                                                                @foreach ($tratamientos as $tratamiento)
-                                                                    <option value="{{ $tratamiento->id }}">{{ $tratamiento->descripcion }}</option>
-                                                                @endforeach
-                                                            </select>
+                                                            <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_{{ $loop->index + 1 }}_3" name="tratamiento_{{ $loop->index + 1 }}_3" placeholder="Tratamiento">
                                                             <input type="hidden" name="odontograma{{ $loop->index + 1 }}_3" id="odontograma{{ $loop->index + 1 }}_3"
                                                                 value="1">
                                                                 <input type="hidden" name="cuadrante" id="cuadrante" value="3">
@@ -764,13 +733,7 @@
                                                             </select>
                                                         </td>
                                                         <td class="px-1 py-1">
-                                                            <select class="form-control form-control-sm" id="tratamiento_endo_{{ $loop->index + 1}}_3"
-                                                                name="tratamiento_endo_{{ $loop->index + 1}}_3">
-                                                                <option>Tratamiento</option>
-                                                                @foreach ($tratamientos as $tratamiento)
-                                                                    <option value="{{ $tratamiento->id }}">{{ $tratamiento->descripcion }}</option>
-                                                                @endforeach
-                                                            </select>
+                                                            <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_endo_{{ $loop->index + 1 }}_3" name="tratamiento_endo_{{ $loop->index + 1 }}_3" placeholder="Tratamiento">
                                                             <input type="hidden" name="odontograma3" id="odontograma3"
                                                                 value="1">
                                                             <input type="hidden" name="caraM_endo_check_{{ $loop->index + 1 }}_3" id="caraM_endo_check_{{ $loop->index + 1 }}_3"
@@ -902,13 +865,7 @@
                                                             </select>
                                                         </td>
                                                         <td class="px-1 py-1">
-                                                            <select class="form-control form-control-sm" id="tratamiento_{{ $loop->index + 1 }}_4"
-                                                                name="tratamiento_{{ $loop->index + 1 }}_4">
-                                                                <option>Tratamiento</option>
-                                                                @foreach ($tratamientos as $tratamiento)
-                                                                    <option value="{{ $tratamiento->id }}">{{ $tratamiento->descripcion }}</option>
-                                                                @endforeach
-                                                            </select>
+                                                            <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_{{ $loop->index + 1 }}_4" name="tratamiento_{{ $loop->index + 1 }}_4" placeholder="Tratamiento">
                                                             <input type="hidden" name="odontograma{{ $loop->index + 1 }}_4" id="odontograma{{ $loop->index + 1 }}_4"
                                                                 value="1">
                                                             <input type="hidden" name="caraM_check_{{ $loop->index + 1 }}_4" id="caraM_check_{{ $loop->index + 1 }}_4"
@@ -1023,13 +980,7 @@
                                                             </select>
                                                         </td>
                                                         <td class="px-1 py-1">
-                                                            <select class="form-control form-control-sm" id="tratamiento_endo_{{ $loop->index + 1 }}_4"
-                                                                name="tratamiento_endo_{{ $loop->index + 1 }}_4">
-                                                                <option>Tratamiento</option>
-                                                                @foreach ($tratamientos as $tratamiento)
-                                                                    <option value="{{ $tratamiento->id }}">{{ $tratamiento->descripcion }}</option>
-                                                                @endforeach
-                                                            </select>
+                                                            <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_endo_{{ $loop->index + 1 }}_4" name="tratamiento_endo_{{ $loop->index + 1 }}_4" placeholder="Tratamiento">
                                                             <input type="hidden" name="odontograma4" id="odontograma4"
                                                                 value="1">
                                                             <input type="hidden" name="caraM_endo_check_{{ $loop->index + 1 }}_4" id="caraM_endo_check_{{ $loop->index + 1 }}_4"
@@ -1160,13 +1111,7 @@
                                                             </select>
                                                         </td>
                                                         <td class="px-1 py-1">
-                                                            <select class="form-control form-control-sm" id="tratamiento_{{ $loop->index + 1 }}_5"
-                                                                name="tratamiento_{{ $loop->index + 1 }}_5">
-                                                                <option>Tratamiento</option>
-                                                                @foreach ($tratamientos as $tratamiento)
-                                                                    <option value="{{ $tratamiento->id }}">{{ $tratamiento->descripcion }}</option>
-                                                                @endforeach
-                                                            </select>
+                                                            <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_{{ $loop->index + 1 }}_5" name="tratamiento_{{ $loop->index + 1 }}_5" placeholder="Tratamiento">
                                                             <input type="hidden" name="odontograma{{ $loop->index + 1 }}_5" id="odontograma{{ $loop->index + 1 }}_5"
                                                                 value="1">
                                                             <input type="hidden" name="caraM_check_{{ $loop->index + 1 }}_5" id="caraM_check_{{ $loop->index + 1 }}_5"
@@ -1280,14 +1225,7 @@
                                                                 <option value="05">Restos radiculares</option>
                                                             </select>
                                                         </td>
-                                                        <td class="px-1 py-1">
-                                                            <select class="form-control form-control-sm" id="tratamiento_endo_{{ $loop->index + 1 }}_5"
-                                                                name="tratamiento_endo_{{ $loop->index + 1 }}_5">
-                                                                <option>Tratamiento</option>
-                                                                @foreach ($tratamientos as $tratamiento)
-                                                                    <option value="{{ $tratamiento->id }}">{{ $tratamiento->descripcion }}</option>
-                                                                @endforeach
-                                                            </select>
+                                                        <td                                                                                         <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_endo_{{ $loop->index + 1 }}_5" name="tratamiento_endo_{{ $loop->index + 1 }}_5" placeholder="Tratamiento">
                                                             <input type="hidden" name="odontograma4" id="odontograma4"
                                                                 value="1">
                                                             <input type="hidden" name="caraM_endo_check_{{ $loop->index + 1 }}_5" id="caraM_endo_check_{{ $loop->index + 1 }}_5"
@@ -1418,13 +1356,7 @@
                                                             </select>
                                                         </td>
                                                         <td class="px-1 py-1">
-                                                            <select class="form-control form-control-sm" id="tratamiento_{{ $loop->index + 1 }}_6"
-                                                                name="tratamiento_{{ $loop->index + 1 }}_6">
-                                                                <option>Tratamiento</option>
-                                                                @foreach ($tratamientos as $tratamiento)
-                                                                    <option value="{{ $tratamiento->id }}">{{ $tratamiento->descripcion }}</option>
-                                                                @endforeach
-                                                            </select>
+                                                            <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_{{ $loop->index + 1 }}_6" name="tratamiento_{{ $loop->index + 1 }}_6" placeholder="Tratamiento">
                                                             <input type="hidden" name="odontograma{{ $loop->index + 1 }}_6" id="odontograma{{ $loop->index + 1 }}_6"
                                                                 value="1">
                                                             <input type="hidden" name="caraM_check_{{ $loop->index + 1 }}_6" id="caraM_check_{{ $loop->index + 1 }}_6"
@@ -1539,13 +1471,7 @@
                                                             </select>
                                                         </td>
                                                         <td class="px-1 py-1">
-                                                            <select class="form-control form-control-sm" id="tratamiento_endo_{{ $loop->index + 1 }}_6"
-                                                                name="tratamiento_endo_{{ $loop->index + 1 }}_6">
-                                                                <option>Tratamiento</option>
-                                                                @foreach ($tratamientos as $tratamiento)
-                                                                    <option value="{{ $tratamiento->id }}">{{ $tratamiento->descripcion }}</option>
-                                                                @endforeach
-                                                            </select>
+                                                            <input type="text" class="form-control form-control-sm tratamiento-autocomplete" id="tratamiento_endo_{{ $loop->index + 1 }}_6" name="tratamiento_endo_{{ $loop->index + 1 }}_6" placeholder="Tratamiento">
                                                             <input type="hidden" name="odontograma4" id="odontograma4"
                                                                 value="1">
                                                             <input type="hidden" name="caraM_endo_check_{{ $loop->index + 1 }}_6" id="caraM_endo_check_{{ $loop->index + 1 }}_6"
@@ -1575,46 +1501,49 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="table-responsive">
-                        <div class="table-responsive">
-                            <table class="table table-xs" id="table_odontograma">
-                                <thead>
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>Prestación</th>
-                                        <th>Caras</th>
-                                        <th>Pieza</th>
-                                        <th>Diagnóstico</th>
-                                        <th>Valor</th>
-                                        <th>Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
 
-                                    @if(isset($odontograma))
-                                    @foreach ($odontograma as $odonto)
-                                    <tr>
-                                        <td>{{ $odonto->fecha }}</td>
-                                        <td>{{ $odonto->tratamiento }}</td>
-                                        <td>{{ $odonto->caras }}</td>
-                                        <td>{{ $odonto->pieza }}</td>
-                                        <td>{{ $odonto->descripcion }}</td>
-                                        <td>{{ number_format($odonto->valor,0,',','.') }}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma({{ $odonto->id }})"><i class="feather icon-x"></i>Eliminar</button>
-                                            <button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto({{ $odonto->id }})"><i class="fas fa-save"></i>Cargar a presupuesto</button>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                    @endif
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
+
+{{-- atencion_odontologica/include/cuadrantes.blade.php --}}
+<div>
+    <!-- Contenido de los cuadrantes -->
+</div>
+
+{{-- Script para inicializar el autocomplete --}}
+<script>
+    $(document).ready(function() {
+        $('.tratamiento-autocomplete').each(function() {
+            $(this).autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        url: "{{ route('dental.getDiagnosticoDental') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            if (data.length == 0) {
+                                $('.diagnostico_activo').hide();
+                                $('.diagnostico_inactivo').show();
+                            } else {
+                                $('.diagnostico_activo').show();
+                                $('.diagnostico_inactivo').hide();
+                            }
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $(this).val(ui.item.label);
+                    $(this).next('input[type="hidden"]').val(ui.item.value);
+                    return false;
+                }
+            });
+        });
+    });
+</script>
+

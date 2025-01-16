@@ -794,6 +794,7 @@
                                                                         }
                                                                     });
                                                                     console.log(arrayTemp);
+                                                                    console.log('coquimbo');
                                                                     end(arrayTemp);
                                                                 }
                                                                 else
@@ -808,7 +809,7 @@
 
                                         eventClick: function(info) {
                                             let id_hora_medica = info.event.id;
-                                            let url = "{{ route('agenda.buscar_hora_medica') }}";
+                                            let url = "{{ route('') }}";
 
                                             $.ajax({
 
@@ -820,6 +821,7 @@
                                                     }
                                                 })
                                                 .done(function(data) {
+                                                    console.log(data);
                                                     if (data != null) {
 
                                                         //{{-- console.log(info.event);  --}}
