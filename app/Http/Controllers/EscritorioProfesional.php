@@ -3954,7 +3954,13 @@ class EscritorioProfesional extends Controller
             $paciente['nombre_responsable'] = $nombres_representante;
             $paciente['id_responsable'] = $id_representante;
             $paciente['acompanante'] = $registro_temp;
+            $presupuestos_dentales = PresupuestosDental::where('id_paciente',$paciente->id)->get();
+
+            $paciente['presupuestos'] = $presupuestos_dentales;
         }
+
+
+
 
         return json_encode($paciente);
     }

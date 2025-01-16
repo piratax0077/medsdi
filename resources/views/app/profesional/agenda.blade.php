@@ -212,21 +212,16 @@
                         @endif
 
                         @if ($profesional->id_especialidad == 2 )
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" id="div_procedimiento" name="div_procedimiento" style="display: none;">
-
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Procedimiento</label>
-                                    <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento" id="form_reseva_de_horas_id_procedimiento">
-                                        <option value="">Seleccione</option>
-                                        @if (isset($procedimientos_dentales) && !empty($procedimientos_dentales))
-                                            @foreach ($procedimientos_dentales as $proced )
-                                                <option value="{{ $proced->id }}" data-cant_bloque="{{ (empty($proced->cantidad_bloques)?$proced->cantidad_bloques:$proced->cantidad_bloques) }}">{{ $proced->descripcion }} {{ (empty($proced->cantidad_bloques)?$proced->cantidad_bloques:$proced->cantidad_bloques) }}Blq.</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                </div>
-
+                        <div class="col-sm-12" id="div_procedimiento" style="display:  none;">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Nº de presupuesto</label>
+                                <select class="form-control form-control-sm" name="presupuesto_numero"
+                                    id="presupuesto_numero" onchange="updateTotalValue()">
+                                </select>
                             </div>
+                            <div id="contenedor_tratamientos_presupuesto"></div>
+                        </div>
+
                         @endif
 
                         <div id="reserva_datos_paciente" class="row mx-3">
@@ -951,17 +946,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Nº de presupuesto</label>
-                                <select class="form-control form-control-sm" name="presupuesto_numero"
-                                    id="presupuesto_numero" onchange="updateTotalValue()">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-12 my-3 p-2" id="contenedor_tratamientos_presupuesto">
 
-                        </div>
                         <div class="col-sm-6">
                             <div class="input-group">
                                 <label class="floating-label-activo-sm">Convenio</label>
