@@ -289,16 +289,7 @@
                                                         $('#bono_paciente_nombre').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
                                                         $('#bono_profesional_nombre').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
                                                         $('#bono_profesional_rut').val( data.profesional.rut);
-                                                        $('#presupuesto_numero').empty();
-                                                        $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
-                                                        console.log(data.paciente.presupuestos.length);
-                                                        if(data.paciente.presupuestos.length > 0){
-                                                            data.paciente.presupuestos.forEach(p => {
-                                                                $('#presupuesto_numero').append(`<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}</option>`);
-                                                            });
-                                                        }else{
-                                                            $('#presupuesto_numero').append(`<option value="1">Primera consulta</option>`);
-                                                        }
+
 
                                                         $('#bono_hora_medica').val(info.event.id);
                                                         $('#bono_id_profesional').val(data.profesional.id);
@@ -673,6 +664,7 @@
                     const totalValue = selectedOption.data('total') || ''; // Obtener el valor del atributo data-total
                     var bloques = 0;
                     $('#bono_valor_consulta').val(totalValue); // Actualizar el input de valor total
+                    $('#contenedor_tratamientos_presupuesto').show();
                     $('#contenedor_tratamientos_presupuesto').empty();
                     tratamientos.forEach(t => {
                         bloques += t.cantidad_bloques;

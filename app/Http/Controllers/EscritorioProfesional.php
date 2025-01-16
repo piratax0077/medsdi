@@ -1662,7 +1662,7 @@ class EscritorioProfesional extends Controller
     public function atender_tratamiento_presupuesto(Request $req){
 
         $pieza = OdontogramaPaciente::find($req->id);
-        if($req->checked){
+        if($req->checked == 'true'){
             $pieza->atendido = 1;
             $pieza->save();
             return ['msj' => 'Pieza '.$pieza->pieza.' atendida con éxito.'];

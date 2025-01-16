@@ -181,6 +181,8 @@
             $("#cerrar_tomar_hora").click(function() {
                 $("#agenda_agregar_paciente").modal('hide');
                 $('#rut_paciente_reserva').val('');
+                console.log('cerrando');
+
             });
 
             $("#cerrarModal").click(function() {
@@ -1578,6 +1580,8 @@
                         $('#reserva_hora_edad').val(data.edad);
 
                         $('#id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
+
+
 
                         if(data.edad < 18)
                         {
