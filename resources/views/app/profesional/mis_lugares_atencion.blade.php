@@ -1195,7 +1195,7 @@
         function validar_tipo_agenda()
         {
             var valor = $('#tipo_agenda_medica').val();
-            if(valor == 5)
+            if(valor == 5 || valor == 2)
             {
                 $('#duracion_horario').val('00:15:00');
                 $('#duracion_horario').attr('disabled', true);

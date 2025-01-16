@@ -243,6 +243,7 @@ class ExamenEspecialidadController extends Controller
                                     $cant_img_row++;
                                 }
                             }
+						 
 
                             if($cant_img_row == 3)
                             {

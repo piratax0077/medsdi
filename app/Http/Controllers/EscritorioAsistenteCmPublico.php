@@ -63,6 +63,22 @@ class EscritorioAsistenteCmPublico extends Controller
 
             $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
             $profesionales = $lugares_atencion->profesionales()->get();
+
+            foreach ($profesionales as $key_tipo_agenda => $value_tipo_agenda)
+            {
+                $registro_tipo_agenda = ProfesionalHorario::where('id_profesional', $value_tipo_agenda->id)->where('id_lugar_atencion', $id_lugar_atencion)->orderBy('id', 'ASC')->get();
+                $registro_tipo_agenda_cantidad = ProfesionalHorario::where('id_profesional', $value_tipo_agenda->id)->where('id_lugar_atencion', $id_lugar_atencion)->count();
+
+                if($registro_tipo_agenda_cantidad > 0)
+				{
+                    $profesionales[$key_tipo_agenda]['id_tipo_agenda'] = $registro_tipo_agenda[0]->tipo_agenda;
+				}
+                else
+				{
+                    $profesionales[$key_tipo_agenda]['id_tipo_agenda'] = 0;
+				}
+            }
+
             $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
             $tipo_bonos = TipoBono::where('estado', 1)->get();
 
