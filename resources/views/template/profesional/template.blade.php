@@ -3082,6 +3082,8 @@
             {
                 procedimiento = $('#form_reseva_de_horas_id_procedimiento').val();
                 proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
+            }else{
+                proc_bloque = parseInt($('#cantidad_bloques_atencion').text());
             }
 
             console.log(tipo_agenda);

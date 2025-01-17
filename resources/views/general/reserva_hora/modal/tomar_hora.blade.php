@@ -994,7 +994,7 @@
             },
 
 
-            dateClick: function(info) {
+            s: function(info) {
                 {{--  console.log('dateClick');  --}}
                 {{--  console.log(info);  --}}
                 {{--  console.log(info.date);  --}}

@@ -434,7 +434,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info pt-3 pb-2">
-                <h5 class="modal-title text-white text-center">Tomar hora</h5>
+                <h5 class="modal-title text-white text-center" id="titulo_modal_reserva_especialidad">Tomar hora</h5>
                 <button id="cerrar_tomar_hora" type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -474,7 +474,7 @@
                     <input type="hidden" name="fecha" id="fecha" value="">
                     <input type="hidden" name="reserva_hora_edad" id="reserva_hora_edad" value="">
                     <input type="hidden" name="reserva_hora_id_responsable" id="reserva_hora_id_responsable" value="">
-
+                    <div id="contenedor_procedimientos_presupuesto"></div>
 
                     <div id="reserva_datos_paciente" class="row mx-3">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -677,7 +677,7 @@
 
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" >
                                 <div class="form-group paciente_view">
-                                    <label class="floating-label-activo-sm">Descripción reserva</label>
+                                    <label class="floating-label-activo-sm">Observaciones acerca del paciente</label>
                                     <input type="text" class="form-control form-control-sm"
                                         name="reserva_hora_descripcion" id="reserva_hora_descripcion">
                                 </div>

@@ -568,8 +568,7 @@
         var activeDaysInRange = [];
         function cargarAgendaProfesional(tipo_agenda, fecha)
         {
-
-            var tipo_agenda_temp = $('#agenda_profesional_asistente option:selected').attr('data-id_tipo_agenda');
+			 var tipo_agenda_temp = $('#agenda_profesional_asistente option:selected').attr('data-id_tipo_agenda');
 
             if(tipo_agenda_temp != 0)
                 tipo_agenda = tipo_agenda_temp;
@@ -602,6 +601,7 @@
                         tipo_agenda: tipo_agenda,
                     },
                     success:function(data){
+                        console.log(data.profesional);
                         $('.boton').hide();
                         if (data !== 'null')
                         {
@@ -800,7 +800,6 @@
                                                                         }
                                                                     });
                                                                     console.log(arrayTemp);
-                                                                    console.log('coquimbo');
                                                                     end(arrayTemp);
                                                                 }
                                                                 else
@@ -815,7 +814,7 @@
 
                                         eventClick: function(info) {
                                             let id_hora_medica = info.event.id;
-                                            let url = "{{ route('') }}";
+                                            let url = "{{ route('agenda.buscar_hora_medica') }}";
 
                                             $.ajax({
 
@@ -827,7 +826,6 @@
                                                     }
                                                 })
                                                 .done(function(data) {
-                                                    console.log(data);
                                                     if (data != null) {
 
                                                         //{{-- console.log(info.event);  --}}
@@ -1058,7 +1056,39 @@
                                         },
 
                                         dateClick: function(date, jsEvent, view) {
+                                            console.log('especialidad del profesional : '+data.profesional.id_especialidad);
+                                            $('#contenedor_procedimientos_presupuesto').empty();
+                                            if(data.profesional.id_especialidad == 2){
+                                                $('#contenedor_procedimientos_presupuesto').append(`
+                                                    <div class="col-sm-12" id="div_procedimiento" style="display:  none;">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label-activo-sm">Seleccione opción o N° de presupuesto</label>
+                                                            <select class="form-control form-control-sm" name="presupuesto_numero"
+                                                                id="presupuesto_numero" onchange="updateTotalValue()">
+                                                            </select>
+                                                        </div>
+                                                        <div id="contenedor_tratamientos_presupuesto"></div>
+                                                    </div>`);
+                                            }else if(data.profesional.id_especialidad == 4 && data.profesional.id_tipo_especialidad == 55){
+                                                $('#contenedor_procedimientos_presupuesto').append(`
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" id="div_procedimiento" name="div_procedimiento" style="display: none;">
 
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Procedimiento</label>
+                                                            <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento" id="form_reseva_de_horas_id_procedimiento">
+                                                                <option value="">Seleccione</option>
+                                                                @if (isset($procedimientos) && !empty($procedimientos))
+                                                                    @foreach ($procedimientos as $proced )
+                                                                        <option value="{{ $proced->id }}" data-cant_bloque="{{ (empty($proced->cantidad_bloques_prof)?$proced->cantidad_bloques:$proced->cantidad_bloques_prof) }}">{{ $proced->nombre }} {{ (empty($proced->cantidad_bloques_prof)?$proced->cantidad_bloques:$proced->cantidad_bloques_prof) }}Blq.</option>
+                                                                    @endforeach
+                                                                @endif
+                                                            </select>
+                                                        </div>
+
+                                                    </div>`);
+                                            }else{
+                                                $('#contenedor_procedimientos_presupuesto').append(``);
+                                            }
                                             var valido = 1;
                                             var valido_fecha = 1;
                                             /** VALIDACION DE FUERA DE HORARIO */
@@ -1615,168 +1645,171 @@
 
 
             let rut = $('#rut_paciente_reserva').val();
-            if(rut != '')
+
+			if(rut != '')
             {
 
-                $('#reserva_agregar_paciente_hora').hide();
-                $('#reserva_datos_paciente').hide();
-                let url = "{{ route('agenda.buscar_rut_paciente') }}";
+				$('#reserva_agregar_paciente_hora').hide();
+				$('#reserva_datos_paciente').hide();
+				let url = "{{ route('agenda.buscar_rut_paciente') }}";
 
-                $.ajax({
+				$.ajax({
 
-                    url: url,
-                    type: "get",
-                    data: {
-                        rut: rut,
-                    },
-                })
-                .done(function(data) {
+						url: url,
+						type: "get",
+						data: {
+							rut: rut,
+						},
+					})
+					.done(function(data) {
 
+                        console.log(JSON.parse(data));
+						if (data !== 'null') {
+							data = JSON.parse(data);
+							if(data.tipo_paciente == 'SI')
+							{
+								$('.paciente_view').show();
+								$('.paciente_edit').hide();
 
-                    if (data !== 'null') {
-                        data = JSON.parse(data);
-                        if(data.tipo_paciente == 'SI')
-                        {
-                            {{-- validacion para especialidad de pediatria --}}
-                            @if (isset($profesional))
-                                @if ($profesional->id_tipo_especialidad == 11)
-                                    if (data.edad > 18) {
-                                        swal({
-                                            title: "Reserva de hora",
-                                            text: "El paciente es mayor de edad, el profesional es Pediatrico",
-                                            icon: "warning",
-                                            buttons: "Aceptar",
-                                        });
-                                    }
-                                @endif
-                            @endif
+								{{--  console.log(data);  --}}
+								$('#reserva_datos_paciente').show();
+								$('#reserva_hora_id_paciente').val(data.id);
+								$('#reserva_rut_paciente').text(data.rut);
 
-                            $('.paciente_view').show();
-                            $('.paciente_edit').hide();
+								$('#reserva_hora_nombre').text(data.nombres + ' ' + data.apellido_uno + ' ' + data.apellido_dos);
+								$('#input_reserva_hora_nombre').val(data.nombres);
+								$('#input_reserva_hora_apellido_uno').val(data.apellido_uno);
+								$('#input_reserva_hora_apellido_dos').val(data.apellido_dos);
 
-                            {{--  console.log(data);  --}}
-                            $('#reserva_datos_paciente').show();
-                            $('#reserva_hora_id_paciente').val(data.id);
-                            $('#reserva_rut_paciente').text(data.rut);
+								$('#reserva_fecha_nacimiento').text(data.fecha_nac);
+								$('#input_reserva_fecha_nacimiento').val(DateFormatVista(data.fecha_nac));
 
-                            $('#reserva_hora_nombre').text(data.nombres + ' ' + data.apellido_uno + ' ' + data.apellido_dos);
-                            $('#input_reserva_hora_nombre').val(data.nombres);
-                            $('#input_reserva_hora_apellido_uno').val(data.apellido_uno);
-                            $('#input_reserva_hora_apellido_dos').val(data.apellido_dos);
+								if (data.sexo == 'M') {
+									$('#reserva_sexo').text('Masculino');
+								} else {
+									$('#reserva_sexo').text('Femenino');
+								}
+								$('#input_reserva_hora_sexo').val(data.sexo);
 
-                            $('#reserva_fecha_nacimiento').text(data.fecha_nac);
-                            $('#input_reserva_fecha_nacimiento').val(DateFormatVista(data.fecha_nac));
+								$('#reserva_hora_email').text(data.email);
+								$('#input_reserva_hora_email').val(data.email);
 
-                            if (data.sexo == 'M') {
-                                $('#reserva_sexo').text('Masculino');
-                            } else {
-                                $('#reserva_sexo').text('Femenino');
-                            }
-                            $('#input_reserva_hora_sexo').val(data.sexo);
+								$('#reserva_hora_telefono').text(data.telefono_uno);
+								$('#input_reserva_hora_telefono').val(data.telefono_uno);
 
-                            $('#reserva_hora_email').text(data.email);
-                            $('#input_reserva_hora_email').val(data.email);
-
-                            $('#reserva_hora_telefono').text(data.telefono_uno);
-                            $('#input_reserva_hora_telefono').val(data.telefono_uno);
-
-                            $('#reserva_convenio').text(data.prevision.nombre);
-                            $('#input_reserva_convenio').val(data.prevision.id);
-
-                            $('#reserva_direccion').text(data.direccion.direccion+' '+data.direccion.numero_dir+', '+data.direccion.ciudad.nombre);
-                            $('#input_reserva_direccion_direccion').val(data.direccion.direccion);
-                            $('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir);
-
-                            $('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
-                            // $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
-                            buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', data.direccion.ciudad.id);
-
-                            $('#rut_paciente_reserva').val('');
-                            $('.div_rut_buscar').hide();
-
-                            $('#reserva_hora_edad').val(data.edad);
-
-                            $('#id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
-
-                            if(data.edad < 18)
-                            {
-                                $('#acompanante_representante').prop("checked", true);
-                                $('#acompanante_acompanante').prop("checked", false);
-                                $('#autorizacion_atencion').prop("checked", false);
-
-                                $('#div_info_representante').html(data.nombre_responsable);
-
-                                $('#reserva_hora_id_acompanante').html('');
-                                $.each(data.acompanante, function (indexInArray, valueOfElement)
-                                {
-                                    console.log(valueOfElement);
-                                    var html = '';
-                                    html = '<option value="'+valueOfElement.id_acompanante+'">'+valueOfElement.acompanante.nombre+' '+valueOfElement.acompanante.apellido_uno+' - '+valueOfElement.acompanante.rut+'</option>';
-                                    $('#reserva_hora_id_acompanante').append(html);
-                                });
-                                $('#reserva_hora_id_acompanante').select2();
-
-                                $('#reserva_hora_id_responsable').val(data.id_responsable);
-
-                                $('#seccion_acompanante').show();
-                                $('#seccion_autorizacion').show();
-                            }
-                            else
-                            {
-                                $('#acompanante_representante').prop("checked",false);
-                                $('#acompanante_acompanante').prop("checked",false);
-                                $('#autorizacion_atencion').prop("checked",false);
-                                $('#reserva_hora_id_acompanante').val('');
+								$('#reserva_convenio').text(data.prevision.nombre);
+								$('#input_reserva_convenio').val(data.prevision.id);
 
 
-                                $('#reserva_hora_id_responsable').val('');
+                                $('#div_procedimiento').css('display','block');
+								$('#reserva_direccion').text(data.direccion.direccion+' '+data.direccion.numero_dir+', '+data.direccion.ciudad.nombre);
+								$('#input_reserva_direccion_direccion').val(data.direccion.direccion);
+								$('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir);
 
-                                $('#seccion_acompanante').hide();
-                                $('#seccion_autorizacion').hide();
-                            }
-                        }
-                        else
-                        {
-                            $('#reserva_datos_paciente').hide();
-                            $('#reserva_agregar_paciente_hora').show();
+								$('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
+								// $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
+								buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', data.direccion.ciudad.id);
 
-                            $('#reserva_hora_nombres_paciente').val(data.nombres);
-                            $('#reserva_hora_apellido_uno').val(data.apellido_uno);
-                            $('#reserva_hora_apellido_dos').val(data.apellido_dos);
-                            $('#reserva_hora_fecha_nac').val(data.fecha_nac);
-                            if(data.sexo != null)
-                                $('#reserva_hora_sexo').val(data.sexo);
-                            else
-                                $('#reserva_hora_sexo').val(0);
+								$('#rut_paciente_reserva').val('');
+								$('.div_rut_buscar').hide();
+
+								$('#reserva_hora_edad').val(data.edad);
+
+								$('#id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
+
+                                $('#presupuesto_numero').empty();
+
+                                console.log(data.presupuestos.length);
+                                if(data.presupuestos.length > 0){
+                                    $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
+                                    data.presupuestos.forEach(p => {
+                                        $('#presupuesto_numero').append(`<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}</option>`);
+                                    });
+                                }else{
+                                    $('#presupuesto_numero').append(`<option value="0">Primera consulta</option>`);
+                                    $('#presupuesto_numero').append(`<option value="u">Urgencia</option>`);
+
+                                }
+
+								if(data.edad < 18)
+								{
+									$('#acompanante_representante').prop("checked", true);
+									$('#acompanante_acompanante').prop("checked", false);
+									$('#autorizacion_atencion').prop("checked", false);
+
+									$('#div_info_representante').html(data.nombre_responsable);
+
+									$('#reserva_hora_id_acompanante').html('');
+									$.each(data.acompanante, function (indexInArray, valueOfElement)
+									{
+										console.log(valueOfElement);
+										var html = '';
+										html = '<option value="'+valueOfElement.id_acompanante+'">'+valueOfElement.acompanante.nombre+' '+valueOfElement.acompanante.apellido_uno+' - '+valueOfElement.acompanante.rut+'</option>';
+										$('#reserva_hora_id_acompanante').append(html);
+									});
+									$('#reserva_hora_id_acompanante').select2();
+
+									$('#reserva_hora_id_responsable').val(data.id_responsable);
+
+									$('#seccion_acompanante').show();
+									$('#seccion_autorizacion').show();
+								}
+								else
+								{
+									$('#acompanante_representante').prop("checked",false);
+									$('#acompanante_acompanante').prop("checked",false);
+									$('#autorizacion_atencion').prop("checked",false);
+									$('#reserva_hora_id_acompanante').val('');
 
 
-                            $('#reserva_hora_correo').val(data.email);
-                            $('#region_agregar').val(data.direccion.ciudad.id_region);
-                            buscar_ciudad(data.direccion.id_ciudad);
-                            $('#reserva_hora_direccion').val(data.direccion.direccion);
-                            $('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
+									$('#reserva_hora_id_responsable').val('');
 
-                            $('#reserva_hora_telefono_uno').val(data.telefono_uno);
+									$('#seccion_acompanante').hide();
+									$('#seccion_autorizacion').hide();
+								}
+							}
+							else
+							{
+								$('#reserva_datos_paciente').hide();
+								$('#reserva_agregar_paciente_hora').show();
 
-                            $('#reserva_hora_id_responsable').val('');
+								$('#reserva_hora_nombres_paciente').val(data.nombres);
+								$('#reserva_hora_apellido_uno').val(data.apellido_uno);
+								$('#reserva_hora_apellido_dos').val(data.apellido_dos);
+								$('#reserva_hora_fecha_nac').val(data.fecha_nac);
+								if(data.sexo != null)
+									$('#reserva_hora_sexo').val(data.sexo);
+								else
+									$('#reserva_hora_sexo').val(0);
 
-                            {{--
-                            $('#reserva_hora_profesion').val();
-                            $('#reserva_hora_convenio').val();
-                            $('#reserva_hora_descripcion').val();
-                            --}}
-                        }
-                    } else {
-                        $('#reserva_datos_paciente').hide();
-                        $('#reserva_agregar_paciente_hora').show();
 
-                    }
+								$('#reserva_hora_correo').val(data.email);
+								$('#region_agregar').val(data.direccion.ciudad.id_region);
+								buscar_ciudad(data.direccion.id_ciudad);
+								$('#reserva_hora_direccion').val(data.direccion.direccion);
+								$('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
 
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
-            }
+								$('#reserva_hora_telefono_uno').val(data.telefono_uno);
+
+								$('#reserva_hora_id_responsable').val('');
+
+								{{--
+								$('#reserva_hora_profesion').val();
+								$('#reserva_hora_convenio').val();
+								$('#reserva_hora_descripcion').val();
+								--}}
+							}
+						} else {
+							$('#reserva_datos_paciente').hide();
+							$('#reserva_agregar_paciente_hora').show();
+
+						}
+
+					})
+					.fail(function(jqXHR, ajaxOptions, thrownError) {
+						console.log(jqXHR, ajaxOptions, thrownError)
+					});
+			}
             else
             {
                 swal({
@@ -1785,7 +1818,71 @@
                     icon: "error",
                 });
             }
-        };
+		};
+
+        // Función para actualizar el input de valor total
+        function updateTotalValue() {
+            const selectedOption = $('#presupuesto_numero option:selected'); // Obtener la opción seleccionada
+            let url = "{{ ROUTE('profesional.mi_agenda.dame_tratamientos_presupuesto') }}";
+            let id_presupuesto = selectedOption.val();
+
+            $.ajax({
+                type:'post',
+                url: url,
+                data:{
+                    id: id_presupuesto,
+                    _token: CSRF_TOKEN
+                },
+                success: function(resp){
+                    console.log(resp);
+                    let tratamientos = resp;
+                    const totalValue = selectedOption.data('total') || ''; // Obtener el valor del atributo data-total
+                    var bloques = 0;
+                    $('#bono_valor_consulta').val(totalValue); // Actualizar el input de valor total
+                    $('#contenedor_tratamientos_presupuesto').show();
+                    $('#contenedor_tratamientos_presupuesto').empty();
+                    tratamientos.forEach(t => {
+
+                        const checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        const disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">N° Pieza ${t.pieza} - ${t.tratamiento}</label>
+                            </div>`);
+
+
+                    });
+                    $('#contenedor_tratamientos_presupuesto').append('Se utilizan <span id="cantidad_bloques_atencion">'+bloques+'</span> bloques de atención.');
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+
+        }
+
+        function handleCheckboxClick(id, isChecked) {
+            console.log(`Checkbox con ID ${id} está ${isChecked ? 'seleccionado' : 'deseleccionado'}`);
+
+            // Aquí puedes manejar la lógica adicional o enviar el ID al servidor
+            $.ajax({
+                url: '{{ ROUTE("profesional.mi_agenda.atender_tratamiento_presupuesto") }}',
+                method: 'POST',
+                data: { id: id, checked: isChecked, _token: CSRF_TOKEN },
+                success: function(response) {
+                    console.log('Servidor respondió:', response);
+                    let bloques_actualizados = response.bloques;
+                    let bloques_original = parseInt($('#cantidad_bloques_atencion').text());
+                    let bloques = response.atendido == 1 ? bloques_original + bloques_actualizados : bloques_original - bloques_actualizados;
+                    $('#cantidad_bloques_atencion').html(bloques);
+                },
+                error: function(error) {
+                    console.error('Error al enviar datos:', error);
+                }
+            });
+        }
 
         {{--  REGISTRO NUEVO PACIENTE GENERACION DE HORA  --}}
         function agendar_hora_paciente_nuevo() {

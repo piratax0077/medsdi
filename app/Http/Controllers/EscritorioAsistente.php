@@ -720,6 +720,8 @@ class EscritorioAsistente extends Controller
         $profesion_oficio = ProfesionOficio::all();
         $tipo_bonos = TipoBono::where('estado', 1)->get();
 
+
+
         return view('app.asistente.agenda_por_profesional')->with([
             'asistente' => $asistente,
             'profesional' => $profesional,

@@ -667,16 +667,19 @@
                     $('#contenedor_tratamientos_presupuesto').show();
                     $('#contenedor_tratamientos_presupuesto').empty();
                     tratamientos.forEach(t => {
-                        bloques += t.cantidad_bloques;
+
                         const checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
                         const disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-                        $('#contenedor_tratamientos_presupuesto').append(`
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked}>
-                            <label class="form-check-label" for="tratamiento${t.id}">N° Pieza ${t.pieza} - ${t.tratamiento}</label>
-                        </div>`);
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">N° Pieza ${t.pieza} - ${t.tratamiento}</label>
+                            </div>`);
+
+
                     });
-                    $('#contenedor_tratamientos_presupuesto').append('Se utilizan '+bloques+' bloques de atención.');
+                    $('#contenedor_tratamientos_presupuesto').append('Se utilizan <span id="cantidad_bloques_atencion">'+bloques+'</span> bloques de atención.');
                 },
                 error: function(error){
                     console.log(error);
@@ -695,6 +698,10 @@
                 data: { id: id, checked: isChecked, _token: CSRF_TOKEN },
                 success: function(response) {
                     console.log('Servidor respondió:', response);
+                    let bloques_actualizados = response.bloques;
+                    let bloques_original = parseInt($('#cantidad_bloques_atencion').text());
+                    let bloques = response.atendido == 1 ? bloques_original + bloques_actualizados : bloques_original - bloques_actualizados;
+                    $('#cantidad_bloques_atencion').html(bloques);
                 },
                 error: function(error) {
                     console.error('Error al enviar datos:', error);

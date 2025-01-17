@@ -1,4 +1,4 @@
-@php $counter = 1; @endphp
+@php $counter = 1000; @endphp
 @foreach ($examenes as $examen)
 <div class="mb-3">
     <div class="form-row">

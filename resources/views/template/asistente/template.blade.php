@@ -1520,19 +1520,6 @@
                     data = JSON.parse(data);
                     if(data.tipo_paciente == 'SI')
                     {
-                        {{-- validacion para especialidad de pediatria --}}
-                        @if (isset($profesional))
-                            @if ($profesional->id_tipo_especialidad == 11)
-                                if (data.edad > 18) {
-                                    swal({
-                                        title: "Reserva de hora",
-                                        text: "El paciente es mayor de edad, el profesional es Pediatrico",
-                                        icon: "warning",
-                                        buttons: "Aceptar",
-                                    });
-                                }
-                            @endif
-                        @endif
 
                         $('.paciente_view').show();
                         $('.paciente_edit').hide();
