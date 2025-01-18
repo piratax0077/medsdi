@@ -1661,15 +1661,18 @@ class EscritorioProfesional extends Controller
 
     public function atender_tratamiento_presupuesto(Request $req){
 
-        $pieza = OdontogramaPaciente::find($req->id);
-        if($req->checked){
+        $pieza = OdontogramaPaciente::select('odontogramas_pacientes.*','diagnosticos_dental.descripcion','diagnosticos_dental.cantidad_bloques')
+                                        ->join('diagnosticos_dental','odontogramas_pacientes.diagnostico','diagnosticos_dental.id')
+                                        ->where('odontogramas_pacientes.id',$req->id)
+                                        ->first();
+        if($req->checked == 'true'){
             $pieza->atendido = 1;
             $pieza->save();
-            return ['msj' => 'Pieza '.$pieza->pieza.' atendida con éxito.'];
+            return ['msj' => 'Pieza '.$pieza->pieza.' atendida con éxito.','bloques' => $pieza->cantidad_bloques, 'atendido' => 1];
         }else{
             $pieza->atendido = 0;
             $pieza->save();
-            return ['msj' => 'Pieza '.$pieza->pieza.' liberada.'];
+            return ['msj' => 'Pieza '.$pieza->pieza.' liberada.','bloques' => $pieza->cantidad_bloques, 'atendido' => 0];
         }
 
 

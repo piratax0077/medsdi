@@ -479,7 +479,7 @@ Route::post('/eliminar_medicamento', [App\Http\Controllers\DetalleRecetaControll
     Route::post('/registrar_drogas_paciente',[App\Http\Controllers\PacienteController::class, 'registrarDrogas'])->name('registrar_drogas_paciente');
 
 Route::group([
-    'middleware' => ['role:Profesional|Admin|Ministerio|Institucion'],
+    'middleware' => ['role:Profesional|Admin|Ministerio|Institucion|Asistente|AsistenteCaja|AsistenteManejoAgenda|AsistenteJefaCaja|AsistenteOnline'],
     'prefix' => 'Profesional',
 ], function () {
     /*  Escritorio Profesional */

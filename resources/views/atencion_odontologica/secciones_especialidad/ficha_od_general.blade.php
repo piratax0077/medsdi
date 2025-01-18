@@ -708,7 +708,7 @@
                                                                         <div class="card">
                                                                             <div class="card-body">
                                                                                 <div id="contenedor_pieza_dental_endo_gral" class="mb-3">
-                                                                                    @php $count = 1; @endphp
+                                                                                    @php $counter = 1; @endphp
                                                                                     @foreach ($examenes_pieza as $examen)
                                                                                     <div class="mb-3">
                                                                                         <div class="form-row">
@@ -798,7 +798,7 @@
                                                                                         </div>
                                                                                     </div>
 
-                                                                                    @php $count++; @endphp
+                                                                                    @php $counter++; @endphp
                                                                                     @endforeach
                                                                                 </div>
                                                                                 <div id="pieza_dental_examen" class="row">
@@ -808,7 +808,7 @@
                                                                             </div>
                                                                             <div class="row">
                                                                                 <div class="col-sm-4 col-md-4 mb-3">
-                                                                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_pieza_dental_examen({{ $count }})" >Mostrar nueva pieza</button>
+                                                                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_pieza_dental_examen({{ $counter++ }})" >Mostrar nueva pieza</button>
                                                                                 </div>
                                                                             </div>
                                                                         </div>

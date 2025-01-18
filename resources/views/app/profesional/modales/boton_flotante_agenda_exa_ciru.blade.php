@@ -289,16 +289,7 @@
                                                         $('#bono_paciente_nombre').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
                                                         $('#bono_profesional_nombre').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
                                                         $('#bono_profesional_rut').val( data.profesional.rut);
-                                                        $('#presupuesto_numero').empty();
-                                                        $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
-                                                        console.log(data.paciente.presupuestos.length);
-                                                        if(data.paciente.presupuestos.length > 0){
-                                                            data.paciente.presupuestos.forEach(p => {
-                                                                $('#presupuesto_numero').append(`<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}</option>`);
-                                                            });
-                                                        }else{
-                                                            $('#presupuesto_numero').append(`<option value="1">Primera consulta</option>`);
-                                                        }
+
 
                                                         $('#bono_hora_medica').val(info.event.id);
                                                         $('#bono_id_profesional').val(data.profesional.id);
@@ -673,18 +664,22 @@
                     const totalValue = selectedOption.data('total') || ''; // Obtener el valor del atributo data-total
                     var bloques = 0;
                     $('#bono_valor_consulta').val(totalValue); // Actualizar el input de valor total
+                    $('#contenedor_tratamientos_presupuesto').show();
                     $('#contenedor_tratamientos_presupuesto').empty();
                     tratamientos.forEach(t => {
-                        bloques += t.cantidad_bloques;
+
                         const checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
                         const disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-                        $('#contenedor_tratamientos_presupuesto').append(`
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked}>
-                            <label class="form-check-label" for="tratamiento${t.id}">N° Pieza ${t.pieza} - ${t.tratamiento}</label>
-                        </div>`);
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">N° Pieza ${t.pieza} - ${t.tratamiento}</label>
+                            </div>`);
+
+
                     });
-                    $('#contenedor_tratamientos_presupuesto').append('Se utilizan '+bloques+' bloques de atención.');
+                    $('#contenedor_tratamientos_presupuesto').append('Se utilizan <span id="cantidad_bloques_atencion">'+bloques+'</span> bloques de atención.');
                 },
                 error: function(error){
                     console.log(error);
@@ -703,6 +698,10 @@
                 data: { id: id, checked: isChecked, _token: CSRF_TOKEN },
                 success: function(response) {
                     console.log('Servidor respondió:', response);
+                    let bloques_actualizados = response.bloques;
+                    let bloques_original = parseInt($('#cantidad_bloques_atencion').text());
+                    let bloques = response.atendido == 1 ? bloques_original + bloques_actualizados : bloques_original - bloques_actualizados;
+                    $('#cantidad_bloques_atencion').html(bloques);
                 },
                 error: function(error) {
                     console.error('Error al enviar datos:', error);

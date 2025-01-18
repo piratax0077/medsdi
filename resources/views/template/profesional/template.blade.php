@@ -2428,7 +2428,7 @@
                 })
                 .done(function(data) {
 
-
+                    console.log(JSON.parse(data));
                     if (data !== 'null') {
 
                         $('#div_procedimiento').show();
@@ -2497,6 +2497,17 @@
                             $('#reserva_hora_edad').val(data.edad);
 
                             // $('#id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
+                            $('#contenedor_tratamientos_presupuesto').hide();
+                            $('#presupuesto_numero').empty();
+                            $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
+                            console.log(data.presupuestos.length);
+                            if(data.presupuestos.length > 0){
+                                data.presupuestos.forEach(p => {
+                                    $('#presupuesto_numero').append(`<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}</option>`);
+                                });
+                            }else{
+                                $('#presupuesto_numero').append(`<option value="0">Primera consulta</option>`);
+                            }
 
                             if (data.edad < 18) {
                                 $('#acompanante_representante').prop("checked", true);
@@ -3071,6 +3082,8 @@
             {
                 procedimiento = $('#form_reseva_de_horas_id_procedimiento').val();
                 proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
+            }else{
+                proc_bloque = parseInt($('#cantidad_bloques_atencion').text());
             }
 
             console.log(tipo_agenda);
@@ -5423,6 +5436,7 @@
             $("#cerrar_tomar_hora").click(function() {
                 $("#agenda_agregar_paciente").modal('hide');
                 $('#rut_paciente_reserva').val('');
+
             });
             $("#cerrarModal").click(function() {
                 $("#consulta").modal('hide')
