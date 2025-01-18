@@ -34,6 +34,7 @@ use App\Models\SubTipoEspecialidad;
 use App\Models\TipoBono;
 use App\Models\TipoEspecialidad;
 use App\Models\User;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -700,36 +701,46 @@ class EscritorioAsistente extends Controller
         $lugares_atencion = $asistente->LugarAtencion()->get();
         $profesional = $asistente->Profesionales()->get();
         $conteo_prof = 0;
-        foreach ($profesional as $key => $value)
+
+        if($lugares_atencion->count()>0 || $profesional->count()>0)
         {
-            $conteo_prof++;
+            foreach ($profesional as $key => $value)
+            {
+                $conteo_prof++;
+            }
+
+            if($conteo_prof == 0)
+            {
+                $profesional_lugar_array = ProfesionalesLugaresAtencion::where('id_lugar_atencion', $lugares_atencion[0]->id)
+                                                                    ->pluck('id_profesional')
+                                                                    ->toArray();
+
+                $profesional = Profesional::whereIn('id', $profesional_lugar_array)->get();
+            }
+
+            $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
+            $prevision = Prevision::all();
+            $region = Region::all();
+            $profesion_oficio = ProfesionOficio::all();
+            $tipo_bonos = TipoBono::where('estado', 1)->get();
+
+            return view('app.asistente.agenda_por_profesional')->with([
+                'asistente' => $asistente,
+                'profesional' => $profesional,
+                'lugares_atencion' => $lugares_atencion,
+                'reg_confirmacion_hora' => $reg_confirmacion_hora,
+                'prevision' => $prevision,
+                'region' => $region,
+                'profesion_oficio' => $profesion_oficio,
+                'tipo_bonos' => $tipo_bonos,
+            ]);
+        }
+        else
+        {
+            $mensaje = 'Usted No esta asociada a ningun lugar de atencion o a profesionales';
+            return back()->with('error', $mensaje)->withInput();
         }
 
-        if($conteo_prof == 0)
-        {
-            $profesional_lugar_array = ProfesionalesLugaresAtencion::where('id_lugar_atencion', $lugares_atencion[0]->id)
-                                                                ->pluck('id_profesional')
-                                                                ->toArray();
-
-            $profesional = Profesional::whereIn('id', $profesional_lugar_array)->get();
-        }
-
-        $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
-        $prevision = Prevision::all();
-        $region = Region::all();
-        $profesion_oficio = ProfesionOficio::all();
-        $tipo_bonos = TipoBono::where('estado', 1)->get();
-
-        return view('app.asistente.agenda_por_profesional')->with([
-            'asistente' => $asistente,
-            'profesional' => $profesional,
-            'lugares_atencion' => $lugares_atencion,
-            'reg_confirmacion_hora' => $reg_confirmacion_hora,
-            'prevision' => $prevision,
-            'region' => $region,
-            'profesion_oficio' => $profesion_oficio,
-            'tipo_bonos' => $tipo_bonos,
-        ]);
     }
 
     public function agendar_hora_nuevo_paciente(Request $request)
@@ -759,7 +770,16 @@ class EscritorioAsistente extends Controller
             $paciente->apellido_dos = $request->reserva_hora_segundo_apellido;
             $paciente->sexo = $request->reserva_hora_sexo;
             // $paciente->profesion = $request->reserva_hora_profesion;
-            $paciente->fecha_nac = $request->reserva_hora_fecha_nac;
+
+            if (strpos($request->reserva_hora_fecha_nac, '/') !== false) {
+                // Si la fecha tiene el formato dd/mm/yyyy
+                $fechaConvertida = Carbon::createFromFormat('d/m/Y', $request->reserva_hora_fecha_nac)->format('Y-m-d');
+            } else {
+                // Si ya está en formato yyyy-mm-dd
+                $fechaConvertida = Carbon::createFromFormat('Y-m-d', $request->reserva_hora_fecha_nac)->format('Y-m-d');
+            }
+            $paciente->fecha_nac = $fechaConvertida;
+
             $paciente->id_prevision = $request->reserva_hora_convenio;
 
             $permitted_chars = '#\qwertyuiopasdfghjkklzxcvbnm123467890ABCDEFGHIJKLMNOPQRSTUVWXYZ&=';

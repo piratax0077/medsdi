@@ -87,10 +87,10 @@
 
                     <!-- Registro -->
                     <div class="toggle-block collapse">
-                        <ol class="position-relative carousel-indicators justify-content-center">
+                        {{-- <ol class="position-relative carousel-indicators justify-content-center">
                             <li class="active"></li>
                             <li class="toggle-btn"></li>
-                        </ol>
+                        </ol> --}}
                         <form method="post" action="{{ route('home.registro') }}" id="form_registro" name="form_registro">
                             @csrf
                             {{-- <div class="form-group mb-3">
@@ -126,9 +126,8 @@
                                 </select>
                             </div>
                             <div class="form-group mb-3">
-
-                                <input type="submit" class="btn btn-info mb-4" value="Registrarme">
-                                <button class="btn btn-outline-info mb-4 toggle-btn">Tengo una cuenta</button>
+                                <button type="submit" class="btn btn-info mb-4" value="Registrarme">Registrarme</button>
+                                <button type="button" class="btn btn-outline-info mb-4 toggle-btn">Tengo una cuenta</button>
                             </div>
                         </form>
 

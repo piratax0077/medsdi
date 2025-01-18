@@ -24,6 +24,7 @@ use App\Models\FonoInforme;
 use App\Models\HoraMedica;
 use App\Models\KineInforme;
 use App\Models\KinePlanificacion;
+use App\Models\OctavoPar;
 use App\Models\OtrosProfesionalesSeccionAntecedentes;
 use App\Models\Profesional;
 use Illuminate\Http\Request;
@@ -781,13 +782,13 @@ class FichaAtencionOtrosProfController extends Controller
 
             $ficha->motivo = $request->dg_ingreso;
             $ficha->antecedentes = $request->cond_fis_ingreso;
-																  
-														  
-													  
-															 
-														
+
+
+
+
+
             $ficha->hipotesis = $request->hipotesis;
-														  
+
 
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
@@ -2107,6 +2108,128 @@ class FichaAtencionOtrosProfController extends Controller
             {
                 $mensaje .= 'Informe con problema al registrar\n';
             }
+        }
+    }
+
+    public function store_fono_octa_par(Request $request)
+    {
+
+        // dd($request->all());
+
+        $campos_requeridos = 1;
+        $tipo_mensaje = 'success';
+        $mensaje = '';
+        if(empty( trim($request->concluciones_examen)))
+        {
+            $campos_requeridos = 0;
+            $mensaje = 'La conclucion es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún.';
+        }
+
+        if($campos_requeridos)
+        {
+            /** FICHA ATENCION  */
+            $id_profesional = $request->id_profesional_fc;
+            $id_paciente = $request->id_paciente_fc;
+
+            $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+            $ficha = FichaOtrosProfesionales::where('id', $hora_medica->id_ficha_otros_prof)->first();
+
+            $ficha->dg_ingreso = 'Examen Octavo PAr';
+            $ficha->hipotesis = $request->concluciones_examen;
+            $ficha->id_paciente = $id_paciente;
+            $ficha->id_profesional = $id_profesional;
+            $ficha->finalizada = 1;
+            if ($ficha->save())
+            {
+                $mensaje .= 'Ficha Clínica  guardada de forma correcta\n';
+
+                /** REGISTRO FICHA  OCTAVO PAR */
+                {
+                    $ficha_octavo_par = new OctavoPar();
+                    $ficha_octavo_par->id_otros_profesionales = $request->id_fc;
+                    $ficha_octavo_par->id_examen = $request->id_examen;
+                    $ficha_octavo_par->id_lugar_atencion = $request->id_lugar_atencion;
+                    $ficha_octavo_par->id_institucion = $request->id_institucion;
+                    $ficha_octavo_par->token = uniqid();
+                    $ficha_octavo_par->id_profesional = $request->id_profesional_fc;
+                    $ficha_octavo_par->id_paciente = $request->id_paciente_fc;
+                    $ficha_octavo_par->fecha_ex = $request->fecha_ex;
+                    $ficha_octavo_par->profesional = $request->profesional;
+                    $ficha_octavo_par->derivado_por = $request->derivado_por;
+                    $ficha_octavo_par->nombre_pcte = $request->nombre_pcte;
+                    $ficha_octavo_par->edad = $request->edad;
+                    $ficha_octavo_par->rut = $request->rut;
+                    $ficha_octavo_par->direccion = $request->direccion;
+                    $ficha_octavo_par->email = $request->email;
+                    $ficha_octavo_par->ant_especialidad = $request->ant_especialidad;
+                    $ficha_octavo_par->romberg = $request->romberg;
+                    $ficha_octavo_par->romberg_sens = $request->romberg_sens;
+                    $ficha_octavo_par->marcha_ojo_ab = $request->marcha_ojo_ab;
+                    $ficha_octavo_par->babinsky = $request->babinsky;
+                    $ficha_octavo_par->romberg_barre = $request->romberg_barre;
+                    $ficha_octavo_par->untenberg_fak = $request->untenberg_fak;
+                    $ficha_octavo_par->indicacion = $request->indicacion;
+                    $ficha_octavo_par->temblor = $request->temblor;
+                    $ficha_octavo_par->dismetria = $request->dismetria;
+                    $ficha_octavo_par->discinergia = $request->discinergia;
+                    $ficha_octavo_par->disdiadoco = $request->disdiadoco;
+                    $ficha_octavo_par->hipotonia = $request->hipotonia;
+                    $ficha_octavo_par->otras_pruebas = $request->otras_pruebas;
+                    $ficha_octavo_par->observaciones_equilibrio = $request->observaciones_equilibrio;
+                    $ficha_octavo_par->ng_1 = $request->ng_1;
+                    $ficha_octavo_par->ng_2 = $request->ng_2;
+                    $ficha_octavo_par->ng_3 = $request->ng_3;
+                    $ficha_octavo_par->ng_4 = $request->ng_4;
+                    $ficha_octavo_par->ng_5 = $request->ng_5;
+                    $ficha_octavo_par->ng_6 = $request->ng_6;
+                    $ficha_octavo_par->ng_7 = $request->ng_7;
+                    $ficha_octavo_par->ng_8 = $request->ng_8;
+                    $ficha_octavo_par->ng_9 = $request->ng_9;
+                    $ficha_octavo_par->ng_10 = $request->ng_10;
+                    $ficha_octavo_par->mov_oculares = $request->mov_oculares;
+                    $ficha_octavo_par->dismetria_ocular = $request->dismetria_ocular;
+                    $ficha_octavo_par->obs_comentarios = $request->obs_comentarios;
+                    $ficha_octavo_par->ex_ng_provocado = OctavoParController::estructuraExaNistagmoProvocado($request);
+                    $ficha_octavo_par->ex_p_calorica = OctavoParController::estructuraExaPruebaCalorica($request);
+                    // $ficha_octavo_par->otro = $request->otro;
+                    // $ficha_octavo_par->otro1 = $request->otro1;
+                    $ficha_octavo_par->estado = 1;
+
+                    if($ficha_octavo_par->save())
+                    {
+                        $tipo_mensaje = 'success';
+                        $mensaje .= 'Ficha Examen Octavo Par registrada con exito\n';
+                    }
+                    else
+                    {
+                        $tipo_mensaje = 'danger';
+                        $mensaje .= 'Ficha Examen Octavo Par con problema al registrar\n';
+                    }
+
+                    if($request->cerrarsession == 0 || $request->cerrarsession =='')
+                    {
+                        /** redireccion Redirect funciona correcto */
+                        return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+                    }
+                    else if($request->cerrarsession == 1)
+                    {
+                        //si funciona
+                        // $request->session()->invalidate();
+                        $request->session()->regenerateToken();
+                        return \Redirect::route('home.ingreso');
+
+                    }
+                }
+            }
+            else
+            {
+                return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
+            }
+
+        }
+        else
+        {
+            return back()->with('error', $mensaje)->withInput();
         }
     }
 }

@@ -815,7 +815,7 @@
 
                                         eventClick: function(info) {
                                             let id_hora_medica = info.event.id;
-                                            let url = "{{ route('') }}";
+                                            let url = "{{ route('agenda.buscar_hora_medica') }}";
 
                                             $.ajax({
 

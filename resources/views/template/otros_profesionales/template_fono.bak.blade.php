@@ -182,49 +182,6 @@
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-            {{--  mensaje de exito al registrar ficha clinica  --}}
-             @if(session('mensaje'))
-                swal({
-                    title: "Registro de Ficha Clínica.",
-                    text:"{{ session('mensaje') }}",
-                    icon: "info",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                });
-            @endif
-            {{--  mensaje de exito al registrar ficha clinica  --}}
-            @if(session('success'))
-                swal({
-                    title: "Registro de Ficha Clínica.",
-                    text:"{{ session('success') }}",
-                    icon: "success",
-                    // buttons: "Aceptar",
-                    //SuccessMode: true,
-                });
-            @endif
-
-			{{--  mensaje de erro al registrar ficha clinica  --}}
-			@if(session('error'))
-				swal({
-					title: "Registro de Ficha Clínica.",
-					text:"{{ session('error') }}",
-					icon: "error",
-					// buttons: "Aceptar",
-					//SuccessMode: true,
-				});
-			@endif
-
-			{{--  mensaje de warning al registrar ficha clinica  --}}
-			@if(session('warning'))
-				swal({
-					title: "Registro de Ficha Clínica.",
-					text:"{{ session('warning') }}",
-					icon: "warning",
-					// buttons: "Aceptar",
-					//SuccessMode: true,
-				});
-			@endif
-
             /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
             function  envio_indicaciones_pdf(id_modal){
                 let url = "{{ route('indicacion.medica.registro.envio') }}";

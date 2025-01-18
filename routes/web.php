@@ -1440,6 +1440,8 @@ Route::group([
     Route::post('fonoaudiologia/habilida/pragmatica/registro', [App\Http\Controllers\HabilidadPragmaticaController::class, 'Registrar_r'])->name('ficha.otro.prof.registro.habilidad.pragmatica');
     Route::post('fonoaudiologia/examen/praxias/registro', [App\Http\Controllers\ExamenPraxiasController::class, 'Registrar_r'])->name('ficha.otro.prof.registro.examen.praxias');
 
+    /** FONOAUDIOLOGIA OCTAVO PAR */
+    Route::post('Ficha_Atencion/crear/fonoaudiologia', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_fono_octa_par'])->name('ficha.otro.prof.registrar_octavo_par');
 });
 
 /**--CENTRO MEDICO--**/
