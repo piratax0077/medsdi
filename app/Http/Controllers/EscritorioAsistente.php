@@ -718,6 +718,32 @@ class EscritorioAsistente extends Controller
                 $profesional = Profesional::whereIn('id', $profesional_lugar_array)->get();
             }
 
+			$filtro = array();
+			// $filtro[] = array('tipo_empleado',$asistente_tipo->nombre);
+			$filtro[] = array('estado',2) ;// contrato activo
+			$filtro[] = array('id_empleado',$asistente->id) ;
+			$contrato = ContratoDependiente::where($filtro)->first();
+
+			if($contrato)
+			{
+				$id_lugar_atencion = $contrato->id_lugar_atencion;
+
+				foreach ($profesional as $key_tipo_agenda => $value_tipo_agenda)
+				{
+					$registro_tipo_agenda = ProfesionalHorario::where('id_profesional', $value_tipo_agenda->id)->where('id_lugar_atencion', $id_lugar_atencion)->orderBy('id', 'ASC')->get();
+
+					$registro_tipo_agenda_cantidad = ProfesionalHorario::where('id_profesional', $value_tipo_agenda->id)->where('id_lugar_atencion', $id_lugar_atencion)->count();
+
+					if($registro_tipo_agenda_cantidad > 0)
+					{
+						$profesional[$key_tipo_agenda]['id_tipo_agenda'] = $registro_tipo_agenda[0]->tipo_agenda;
+					}
+					else
+					{
+						$profesional[$key_tipo_agenda]['id_tipo_agenda'] = 0;
+					}
+				}
+			}
             $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
             $prevision = Prevision::all();
             $region = Region::all();
@@ -740,7 +766,6 @@ class EscritorioAsistente extends Controller
             $mensaje = 'Usted No esta asociada a ningun lugar de atencion o a profesionales';
             return back()->with('error', $mensaje)->withInput();
         }
-
     }
 
     public function agendar_hora_nuevo_paciente(Request $request)
@@ -1004,7 +1029,16 @@ class EscritorioAsistente extends Controller
                         $representante_nombres_paciente = $request->reserva_hora_representante_nombres_paciente;
                         $representante_apellido_uno = $request->reserva_hora_representante_apellido_uno;
                         $representante_apellido_dos = $request->reserva_hora_representante_apellido_dos;
-                        $representante_fecha_nac = $request->reserva_hora_representante_fecha_nac;
+
+                        if (strpos($request->reserva_hora_representante_fecha_nac, '/') !== false) {
+                            // Si la fecha tiene el formato dd/mm/yyyy
+                            $fechaConvertidaRepresentante = Carbon::createFromFormat('d/m/Y', $request->reserva_hora_representante_fecha_nac)->format('Y-m-d');
+                        } else {
+                            // Si ya está en formato yyyy-mm-dd
+                            $fechaConvertidaRepresentante = Carbon::createFromFormat('Y-m-d', $request->reserva_hora_representante_fecha_nac)->format('Y-m-d');
+                        }
+                        $representante_fecha_nac = $fechaConvertidaRepresentante;
+
                         $representante_sexo = $request->reserva_hora_representante_sexo;
                         $representante_convenio = $request->reserva_hora_representante_convenio;
                         $representante_correo = $request->reserva_hora_representante_correo;

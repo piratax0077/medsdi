@@ -1267,8 +1267,8 @@
                             $('#mensaje_reserva_hora_fecha_nac').html('La fecha cargada no es valida');
                         }
 
-                        validar_email_agenda();
-                        validar_campo_telefono();
+                        // validar_email_agenda();
+                        // validar_campo_telefono();
                     }
                 }
             }
