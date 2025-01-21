@@ -46,6 +46,22 @@
                                             <span id="datos_consulta_sexo"></span>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Email</strong>
+                                        <td>
+                                            <span id="datos_consulta_email"></span>
+                                        </td>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Telefono</strong>
+                                        <td>
+                                            <span id="datos_consulta_telefono"></span>
+                                        </td>
+                                        </th>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

@@ -815,10 +815,9 @@ class EscritorioPaciente extends Controller
 
         $odontograma = $this->dameOdontogramaPaciente($paciente->id);
 
-        return $paciente;
-
         return view('ficha_medica', [
             'id_usuario' => $id_usuario,
+            'odontograma' => $odontograma,
             'paciente' => $paciente,
             // 'contacto_emergencia' => $contacto_emergencia,
             'antecedentes_paciente' => $antecedentes_paciente,
@@ -1007,9 +1006,9 @@ class EscritorioPaciente extends Controller
             'tratamientos_dental.descripcion as diagnostico')
             ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
             ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
-            ->where('odontogramas_pacientes.id_paciente', $id_paciente)
+            ->where('odontogramas_pacientes.id_paciente', $id_paciente);
             // ->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion)
-            ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion);
+            // ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion);
 
             // Verificar si el parámetro $id_presupuesto no es nulo
             if (!is_null($id_presupuesto)) {

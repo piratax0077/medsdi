@@ -1542,6 +1542,7 @@ Route::group([
     Route::get('/Administracion/Comercial/sueldos', [App\Http\Controllers\AdministradorCmController::class, 'sueldos'])->name('adm_cm.sueldos');
     Route::post('/Administracion/Comercial/remuneracion/registrar', [App\Http\Controllers\RemuneracionesController::class, 'registrar'])->name('adm_cm.remuneracion.registrar');
     Route::post('/Administracion/Comercial/remuneracion/pagada', [App\Http\Controllers\RemuneracionesController::class, 'pagada'])->name('adm_cm.remuneracion.pagada');
+    Route::post('/Administracion/Comercial/registrar/multicaja', [App\Http\Controllers\RemuneracionesController::class, 'registrarMulticaja'])->name('adm_cm.registrar_multicaja');
 	/** CONTABILIDAD */
     Route::get('/Contabilidad',[App\Http\Controllers\ContabilidadController::class, 'index'])->name('contabilidad.home');
     Route::get('/Contabilidad/LibroContable', [App\Http\Controllers\AdministradorCmController::class, 'ContadorLibroContable'])->name('contabilidad.secciones_contabilidad.contable');

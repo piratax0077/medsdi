@@ -809,11 +809,14 @@
                                                 },
                                             })
                                             .done(function(data) {
+                                                console.log(data);
                                                 if (data != null)
                                                 {
                                                     $('#datos_consulta_rut').text(data.paciente.rut);
                                                     $('#datos_consulta_nombre').text(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
                                                     $('#datos_consulta_edad').text(data.paciente.fecha_nac);
+                                                    $('#datos_consulta_email').text(data.paciente.email);
+                                                    $('#datos_consulta_telefono').text(data.paciente.telefono_uno);
 
                                                     if (data.paciente.sexo == 'M') {
                                                         $('#datos_consulta_sexo').text('Masculino');
