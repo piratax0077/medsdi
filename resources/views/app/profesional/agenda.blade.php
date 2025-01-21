@@ -1225,6 +1225,8 @@
                                 console.log("La edad es válida.");
                                 $('#mensaje_reserva_hora_fecha_nac').html('');
                                 $('#mensaje_reserva_hora_fecha_nac').hide();
+                                validar_email_agenda();
+                                validar_campo_telefono();
                             } else {
                                 console.log("La edad no es válida.");
                                 $("#guardar_reserva_paciente").prop('disabled', true);
@@ -1233,8 +1235,7 @@
                                 $('#mensaje_reserva_hora_fecha_nac').html('La fecha cargada no es valida');
                             }
 
-                            validar_email_agenda();
-                            validar_campo_telefono();
+
                         }
                     }
                 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Direccion;
 use App\Models\Paciente;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -58,7 +59,16 @@ class AsistenteController extends Controller
                 $paciente->apellido_uno = $request->apellido_uno;
                 $paciente->apellido_dos = $request->apellido_dos;
                 $paciente->sexo = $request->sexo;
-                $paciente->fecha_nac = $request->fecha_nac;
+
+                if (strpos($request->reserva_hora_fecha_nac, '/') !== false) {
+                    // Si la fecha tiene el formato dd/mm/yyyy
+                    $fechaConvertida = Carbon::createFromFormat('d/m/Y', $request->reserva_hora_fecha_nac)->format('Y-m-d');
+                } else {
+                    // Si ya está en formato yyyy-mm-dd
+                    $fechaConvertida = Carbon::createFromFormat('Y-m-d', $request->reserva_hora_fecha_nac)->format('Y-m-d');
+                }
+                $paciente->fecha_nac = $fechaConvertida;
+
                 $paciente->id_prevision = $request->id_prevision;
                 $paciente->email = $request->email;
                 $paciente->telefono_uno = $request->telefono_uno;

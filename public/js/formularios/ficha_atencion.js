@@ -30,7 +30,7 @@ $('#ficha_atencion').on("submit", function (e) {
                 confidencial: confidencial,
             },
             success: function (data) {
-                return 'hola';
+                // return 'hola';
                 $("#ajaxResponse").append(data.msg);
                 console.log(data);
             }
