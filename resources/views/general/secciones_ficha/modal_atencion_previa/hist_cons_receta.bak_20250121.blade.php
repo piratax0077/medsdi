@@ -46,6 +46,9 @@
 
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal" onclick="$('#m_cons_receta').modal('hide'); "><i class="feather icon-x"></i> Cerrar</button>
+                </div>
         </div>
     </div>
 </div>

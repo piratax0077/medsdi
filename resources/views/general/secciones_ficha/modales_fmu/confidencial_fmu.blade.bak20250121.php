@@ -1,20 +1,20 @@
 <div id="confidencial_fmu" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confidencial_fmu" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
 		<div class="modal-content" >
-			<div class="modal-header bg-light">
-				<h5 class="modal-title text-c-blue mt-1">Información Confidencial</h5>
+			<div class="modal-header bg-info">
+				<h5 class="modal-title text-white mt-1">Confidencial</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="confidencia_fmu_cancelar();"><span aria-hidden="true">×</span></button>
                 <input type="hidden" id="confidencial_fmu_id_paciente" value="{{ $paciente->id }}">
 			</div>
 			<div class="modal-body">
                 <div class="row mr-0 ml-0">
-                    <div class="col-md-12 text-center">
-                        <button class="btn btn-info" id="modal_confidencial_fmu_btn_solicitar" onclick="solicitar_autorizacion_confidencial();">Solicitar permiso para visualizar</button>
+                    <div class="col-md-6 text-center">
+                        <button class="btn btn-success" id="modal_confidencial_fmu_btn_solicitar" onclick="solicitar_autorizacion_confidencial();">Solicitar Permiso para visualizar</button>
                     </div>
 
-                    <!--<div class="col-md-6 text-center">
+                    <div class="col-md-6 text-center">
                         <button class="btn btn-danger" id="modal_confidencial_fmu_btn_cancelar" onclick="confidencia_fmu_cancelar();">Cancelar</button>
-                    </div>-->
+                    </div>
                 </div>
 			</div>
 		</div>
@@ -26,12 +26,13 @@
         $('#confidencial_fmu').find('.modal-body').html('');
         var html = '';
         html += '<div class="row mr-0 ml-0">';
-        html += '    <div class="col-md-12 text-center">';
-        html += '        <button class="btn btn-info btn-lg" id="modal_confidencial_fmu_btn_solicitar" onclick="solicitar_autorizacion_confidencial();">Solicitar permiso para visualizar</button>';
+        html += '    <div class="col-md-6 text-center">';
+        html += '        <button class="btn btn-success" id="modal_confidencial_fmu_btn_solicitar" onclick="solicitar_autorizacion_confidencial();">Solicitar Permiso para visualizar</button>';
         html += '    </div>';
         html += '    ';
-  
-
+        html += '    <div class="col-md-6 text-center">';
+        html += '        <button class="btn btn-danger" id="modal_confidencial_fmu_btn_cancelar" onclick="confidencia_fmu_cancelar();">Cancelar</button>';
+        html += '    </div>';
         html += '</div>';
         $('#confidencial_fmu').find('.modal-body').html(html);
 
@@ -44,10 +45,13 @@
         $('#confidencial_fmu').find('.modal-body').html('');
         var html = '';
         html += '<div class="row mr-0 ml-0">';
-        html += '    <div class="col-md-12 text-center">';
-        html += '        <button class="btn btn-info btn-lg" id="modal_confidencial_fmu_btn_solicitar" onclick="solicitar_autorizacion_confidencial();">Solicitar permiso para visualizar</button>';
+        html += '    <div class="col-md-6 text-center">';
+        html += '        <button class="btn btn-success" id="modal_confidencial_fmu_btn_solicitar" onclick="solicitar_autorizacion_confidencial();">Solicitar Permiso para visualizar</button>';
         html += '    </div>';
         html += '    ';
+        html += '    <div class="col-md-6 text-center">';
+        html += '        <button class="btn btn-danger" id="modal_confidencial_fmu_btn_cancelar" onclick="confidencia_fmu_cancelar();">Cancelar</button>';
+        html += '    </div>';
         html += '</div>';
         $('#confidencial_fmu').find('.modal-body').html(html);
         $('#confidencial_fmu').modal('hide');
@@ -79,12 +83,8 @@
                         // $('#modal_autorizacion_fmu_mensaje').html('<h3>En espera de Aprobación</h3>');
 
                         var html = '';
-                        html += '<div class="row mr-0 ml-0">';
-                        html += '    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">';
                         html += '<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">';
-                        html += '<h4>En espera de aprobación</h4>';
-                        html += '    </div>';
-                        html += '    </div>';
+                        html += '<h3>En espera de Aprobación</h3>';
 
                         $('#confidencial_fmu').find('.modal-body').html('');
                         $('#confidencial_fmu').find('.modal-body').html(html);
@@ -97,12 +97,8 @@
                         // $('#modal_autorizacion_fmu_mensaje').html('<h3>Problema al solicitar Aprobación.</h3>');
 
                         var html = '';
-                        html += '<div class="row mr-0 ml-0">';
-                        html += '    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">';
                         html += '<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">';
-                        html += '<h4>Problema al solicitar aprobación.</h4>';
-                        html += '    </div>';
-                        html += '    </div>';
+                        html += '<h3>Problema al solicitar Aprobación.</h3>';
 
                         $('#confidencial_fmu').find('.modal-body').html('');
                         $('#confidencial_fmu').find('.modal-body').html(html);
@@ -112,10 +108,12 @@
                             var html = '';
                             html += '<div class="row mr-0 ml-0">';
                             html += '    <div class="col-md-6 text-center">';
-                            html += '        <button class="btn btn-info btn-lg" id="modal_confidencial_fmu_btn_solicitar" onclick="solicitar_autorizacion_confidencial();">Solicitar permiso para visualizar</button>';
+                            html += '        <button class="btn btn-success" id="modal_confidencial_fmu_btn_solicitar" onclick="solicitar_autorizacion_confidencial();">Solicitar Permiso para visualizar</button>';
                             html += '    </div>';
                             html += '    ';
-
+                            html += '    <div class="col-md-6 text-center">';
+                            html += '        <button class="btn btn-danger" id="modal_confidencial_fmu_btn_cancelar" onclick="confidencia_fmu_cancelar();">Cancelar</button>';
+                            html += '    </div>';
                             html += '</div>';
                             $('#confidencial_fmu').find('.modal-body').html(html);
                         }, 5000);
@@ -153,12 +151,8 @@
                         validar_autorizacion_fmu_confidencial(token);
                     }, 2000);
                     var html = '';
-                    html += '<div class="row mr-0 ml-0">';
-                    html += '    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">';
                     html += '<img src="{{ asset('images/spinner.svg') }}" alt="Cargando">';
-                    html += '<h4>En espera de aprobación</h4>';
-                    html += '    </div>';
-                    html += '    </div>';
+                    html += '<h3>En espera de Aprobación</h3>';
 
                     $('#confidencial_fmu').find('.modal-body').html('');
                     $('#confidencial_fmu').find('.modal-body').html(html);

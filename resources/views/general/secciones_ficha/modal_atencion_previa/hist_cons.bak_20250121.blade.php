@@ -1,120 +1,21 @@
 <div id="m_consultaant" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_consultaantLabel" aria-hidden="true">
-    <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-dialog  modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white" id="m_consultaantLabel" onclick="('#m_consultaant').modal('hide'); ">Ficha clínica </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#m_consultaant').modal('hide');" >
+                <h5 class="modal-title text-white" id="m_consultaantLabel" onclick="('#m_consultaant').modal('hide'); ">Datos de consulta de: </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                      <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <!--ANAMNESIS-->
+
                 <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
                         <h6 class="t-aten">Anamnesis</h6>
                     </div>
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="card-informacion">
-                            <div class="card-body">
-                                <div class="row">
-                                    <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Motivo de consulta</h6>
-                                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="texto_motivo"></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
-                <!--EX.FISICO-->
-                <div class="row mt-2">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <h6 class="t-aten">Exámen físico</h6>
-                    </div>
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="card-informacion">
-                            <div class="card-body">
-                                <div class="row">
-                                    <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Examen físico</h6>
-                                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify mb-2">
-                                        <p id="texto_ficha"></p>
-                                    </div>
-
-                                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify mb-2">
-                                        <p id="ficha_imagenes"></p>
-                                    </div>
-
-                                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="ficha_examenes_espec"></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                        
-               
-
-                <!--DIAGNÓSTICO-->
-                <div class="row mt-2">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <h6 class="t-aten">Diagnóstico</h6>
-                    </div>
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="card-informacion">
-                            <div class="card-body">
-                                <div class="row mb-2">
-                                    <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Diagnóstico</h6>
-                                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="texto_diagnostico"></p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Diagnóstico CIE-10</h6>
-                                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="texto_cie_10"></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--INDICACIONES-->
-                <div class="row mt-2">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <h6 class="t-aten">Indicaciones</h6>
-                    </div>
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="card-informacion">
-                            <div class="card-body">
-                                <div class="row mb-2">
-                                    <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Indicaciones</h6>
-                                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="texto_indicaciones"></p>
-                                    </div>
-                                </div>
-                                <div class="row mb-2">
-                                    <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Recetas</h6>
-                                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="texto_receta"></p>
-                                    </div>
-                                </div>
-                                <div class="row mb-2">
-                                    <h6 class="col-sm-12 col-md-12 col-lg-3 col-xl-3">Exámenes</h6>
-                                    <div class="col-sm-12 col-md-12 col-lg-9 col-xl-9 text-justify">
-                                        <p id="texto_examen"></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            
-
-                <!--<div class="row">
+                <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <table class="table table-xs table-borderless">
                             <tbody>
@@ -170,7 +71,7 @@
                                 <td class="text-wrap text-justify" id="texto_diagnostico">-</td>
                             </tr>
                             <tr>
-                                <th scope="row"></th>
+                                <th scope="row">Diagnóstico CIE-10</th>
                                 <td class="text-wrap text-justify" id="texto_cie_10">-</td>
                             </tr>
                         </table>
@@ -207,7 +108,11 @@
                             </tr>
                         </table>
                     </div>
-                </div>-->
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger-light-c btn-sm" data-dismiss="modal" onclick="$('#m_consultaant').modal('hide'); "><i class="feather icon-x"></i> Cerrar</button>
             </div>
         </div>
     </div>
