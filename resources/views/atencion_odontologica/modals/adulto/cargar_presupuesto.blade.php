@@ -286,8 +286,9 @@
                                 @foreach ($odontograma as $odonto)
                                 @php
                                     if($odonto->estado == 0) $estado = 'PENDIENTE';
-                                    if($odonto->estado == 1) $estado = 'TERMINADO';
-                                    if($odonto->estado == 3) $estado = 'EN ESPERA DE LAB';
+                                    else if($odonto->estado == 1) $estado = 'TERMINADO';
+                                    else if($odonto->estado == 3) $estado = 'EN ESPERA DE LAB';
+                                    else $estado = '';
                                 @endphp
                                 @if($odonto->presupuesto == 1)
                                 <tr>

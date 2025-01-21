@@ -119,7 +119,7 @@
                                             <option value="">Seleccione</option>
                                             @if($profesionales)
                                                 @foreach($profesionales as $key_pro => $value_pro)
-                                                    <option value="{{ $value_pro->id }}">{{ strtoupper($value_pro->nombre) }} {{ strtoupper($value_pro->apellido_uno) }} {{ strtoupper($value_pro->apellido_dos) }}</option>
+                                                    <option value="{{ $value_pro->id }}" data-id_tipo_agenda="{{ $value_pro->id_tipo_agenda }}">{{ strtoupper($value_pro->nombre) }} {{ strtoupper($value_pro->apellido_uno) }} {{ strtoupper($value_pro->apellido_dos) }}</option>
                                                 @endforeach
                                             @endif
                                         </select>
@@ -540,6 +540,10 @@
         var activeDaysInRange = [];
         function cargarAgendaProfesional(tipo_agenda, fecha)
         {
+            var tipo_agenda_temp = $('#agenda_profesional_asistente option:selected').attr('data-id_tipo_agenda');
+
+            if(tipo_agenda_temp != 0)
+                tipo_agenda = tipo_agenda_temp;
             console.log('asistente_cm/escritorio_asistente');
             if(fecha != undefined && fecha != '')
             {

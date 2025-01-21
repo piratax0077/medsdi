@@ -1351,7 +1351,7 @@ class EscritorioProfesional extends Controller
         $examen_boca_general->diagnostico_tratamiento = $req->diag_seleccionado;
         $examen_boca_general->terminado = $req->trabajo_terminado == 'Si' ? 1 : 0;
         $examen_boca_general->agendar_control = $req->agendar_control == 'Si' ? 1 : 0;
-        $examen_boca_general->comentario = $req->comentarios;
+        $examen_boca_general->comentario = $req->comentarios == '' ? 'SIN OBSERVACIONES' : $req->comentarios;
         $examen_boca_general->localizacion = $req->localizacion_examen;
 
         if($examen_boca_general->save()){
@@ -1645,7 +1645,7 @@ class EscritorioProfesional extends Controller
             ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
             ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
             ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-            ->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion)
+            // ->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion)
             ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion);
 
             // Verificar si el parámetro $id_presupuesto no es nulo
@@ -1660,20 +1660,37 @@ class EscritorioProfesional extends Controller
     }
 
     public function atender_tratamiento_presupuesto(Request $req){
-
-        $pieza = OdontogramaPaciente::select('odontogramas_pacientes.*','diagnosticos_dental.descripcion','diagnosticos_dental.cantidad_bloques')
-                                        ->join('diagnosticos_dental','odontogramas_pacientes.diagnostico','diagnosticos_dental.id')
-                                        ->where('odontogramas_pacientes.id',$req->id)
-                                        ->first();
-        if($req->checked == 'true'){
-            $pieza->atendido = 1;
-            $pieza->save();
-            return ['msj' => 'Pieza '.$pieza->pieza.' atendida con éxito.','bloques' => $pieza->cantidad_bloques, 'atendido' => 1];
+        if(!$req->tipo){
+            $pieza = OdontogramaPaciente::select('odontogramas_pacientes.*','diagnosticos_dental.descripcion','diagnosticos_dental.cantidad_bloques')
+            ->join('diagnosticos_dental','odontogramas_pacientes.diagnostico','diagnosticos_dental.id')
+            ->where('odontogramas_pacientes.id',$req->id)
+            ->first();
+            if($req->checked == 'true'){
+                $pieza->atendido = 1;
+                $pieza->save();
+                return ['msj' => 'Pieza '.$pieza->pieza.' atendida con éxito.','bloques' => $pieza->cantidad_bloques, 'atendido' => 1];
+            }else{
+                $pieza->atendido = 0;
+                $pieza->save();
+                return ['msj' => 'Pieza '.$pieza->pieza.' liberada.','bloques' => $pieza->cantidad_bloques, 'atendido' => 0];
+            }
         }else{
-            $pieza->atendido = 0;
-            $pieza->save();
-            return ['msj' => 'Pieza '.$pieza->pieza.' liberada.','bloques' => $pieza->cantidad_bloques, 'atendido' => 0];
+            $examen_boca_general = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor','diagnosticos_dental.cantidad_bloques')
+                                    ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
+                                    ->where('examenes_boca_general.id',$req->id)
+                                    ->first();
+            if($req->checked == 'true'){
+                $examen_boca_general->atendido = 1;
+                $examen_boca_general->save();
+                return ['msj' => $examen_boca_general->diagnostico_tratamiento.' atendida con éxito.','bloques' => $examen_boca_general->cantidad_bloques, 'atendido' => 1];
+            }else{
+                $examen_boca_general->atendido = 0;
+                $examen_boca_general->save();
+                return ['msj' => $examen_boca_general->diagnostico_tratamiento.' liberada.','bloques' => $examen_boca_general->cantidad_bloques, 'atendido' => 0];
+            }
         }
+
+
 
 
 
@@ -3160,6 +3177,67 @@ class EscritorioProfesional extends Controller
         ]);
     }
 
+    public function editarProcedimientoDental(Request $req){
+        $procedimiento = DiagnosticosDental::find($req->id);
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $procedimiento->descripcion = $req->nombre_procedimiento;
+        $procedimiento->uco = $req->cantidad_uco;
+        $procedimiento->valor = 15000 * $req->cantidad_uco;
+        $procedimiento->tipo_examen = 1;
+        $procedimiento->id_responsable = $profesional->id;
+
+        if($procedimiento->save()){
+            $trabajos = DiagnosticosDental::where('tipo_examen',1)->orWhere('tipo_examen',2)->orWhere('tipo_examen',3)->get();
+            $procedimientos = DiagnosticosDental::where('id_responsable',$profesional->id)->get();
+            $mis_trabajos_profesional = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)->get();
+            // Crear un array asociativo para un acceso más rápido
+            $mis_trabajos_profesional_map = [];
+            foreach ($mis_trabajos_profesional as $trabajo_profesional) {
+                $mis_trabajos_profesional_map[$trabajo_profesional->id_diagnostico] = $trabajo_profesional->laboratorio;
+            }
+
+            // Agregar el atributo 'laboratorio' a los trabajos
+            foreach ($trabajos as $trabajo) {
+                if (isset($mis_trabajos_profesional_map[$trabajo->id])) {
+                    $trabajo->laboratorio = $mis_trabajos_profesional_map[$trabajo->id];
+                } else {
+                    $trabajo->laboratorio = 0; // O el valor por defecto que prefieras
+                }
+            }
+
+            foreach($procedimientos as $procedimiento){
+                if (isset($mis_trabajos_profesional_map[$procedimiento->id])) {
+                    $procedimiento->laboratorio = $mis_trabajos_profesional_map[$procedimiento->id];
+                } else {
+                    $procedimiento->laboratorio = 0; // O el valor por defecto que prefiere
+                }
+            }
+
+            return ['status' => 'ok', 'procedimientos' => $procedimientos, 'trabajos' => $trabajos];
+        }else{
+            return ['status' => 'error'];
+        }
+    }
+
+    public function mostrarProcedimientoDental(Request $req){
+        $trabajo = DiagnosticosDental::find($req->id);
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $mis_trabajos_profesional = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)->get();
+        // Crear un array asociativo para un acceso más rápido
+        $mis_trabajos_profesional_map = [];
+        foreach ($mis_trabajos_profesional as $trabajo_profesional) {
+            $mis_trabajos_profesional_map[$trabajo_profesional->id_diagnostico] = $trabajo_profesional->laboratorio;
+        }
+
+        if (isset($mis_trabajos_profesional_map[$trabajo->id])) {
+            $trabajo->laboratorio = $mis_trabajos_profesional_map[$trabajo->id];
+        } else {
+            $trabajo->laboratorio = 0; // O el valor por defecto que prefiere
+        }
+
+        return ['status' => 'ok', 'procedimiento' => $trabajo];
+    }
+
     public function agregarProcedimientoDental(Request $req){
         // agregar procedimiento dental
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
@@ -3548,11 +3626,57 @@ class EscritorioProfesional extends Controller
         $presupuesto_dental = PresupuestosDental::find($req->id);
         if($presupuesto_dental){
             $tratamientos_piezas = $this->dameOdontogramaPaciente($presupuesto_dental->id_paciente, $presupuesto_dental->id_ficha_atencion, $presupuesto_dental->id_lugar_atencion, $presupuesto_dental->id);
+            $maxilar_superior_gral_diagnostico = $this->dameMaxilarSuperiorGeneralDiagnostico($presupuesto_dental->id_paciente);
+            $maxilar_superior_gral_tratamiento = $this->dameMaxilarSuperiorGeneralTratamiento($presupuesto_dental->id_paciente);
+            $maxilar_superior_gral_diagnosticos_endo = $this->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($presupuesto_dental->id_paciente);
+            $maxilar_superior_gral_tratamiento_endo = $this->dameMaxilarSuperiorGeneralTratamientoEndodoncia($presupuesto_dental->id_paciente);
+
+            $maxilar_inferior_gral_diagnostico = $this->dameMaxilarInferiorGeneralDiagnostico($presupuesto_dental->id_paciente);
+            $maxilar_inferior_gral_tratamiento = $this->dameMaxilarInferiorGeneralTratamiento($presupuesto_dental->id_paciente);
+            $maxilar_inferior_gral_diagnosticos_endo = $this->dameMaxilarInferiorGeneralDiagnosticoEndodoncia($presupuesto_dental->id_paciente);
+            $maxilar_inferior_gral_tratamiento_endo = $this->dameMaxilarInferiorGeneralTratamientoEndodoncia($presupuesto_dental->id_paciente);
+
+            $boca_completa_gral_diagnostico = $this->dameBocaCompletaGeneralDiagnostico($presupuesto_dental->id_paciente);
+            $boca_completa_gral_tratamiento = $this->dameBocaCompletaGeneralTratamiento($presupuesto_dental->id_paciente);
+            $boca_completa_gral_diagnostico_endo = $this->dameCompletaEndoDiagnostico($presupuesto_dental->id_paciente);
+            $boca_completa_gral_tratamiento_endo = $this->dameCompletaEndoTratamiento($presupuesto_dental->id_paciente);
+
+            $bloques = 0;
         }else{
             $tratamientos_piezas = [];
+            $maxilar_superior_gral_diagnostico = [];
+            $maxilar_superior_gral_tratamiento = [];
+            $maxilar_superior_gral_diagnosticos_endo = [];
+            $maxilar_superior_gral_tratamiento_endo = [];
+
+            $maxilar_inferior_gral_diagnostico = [];
+            $maxilar_inferior_gral_tratamiento = [];
+            $maxilar_inferior_gral_diagnosticos_endo = [];
+            $maxilar_inferior_gral_tratamiento_endo = [];
+
+            $boca_completa_gral_diagnostico = [];
+            $boca_completa_gral_tratamiento = [];
+            $boca_completa_gral_diagnostico_endo = [];
+            $boca_completa_gral_tratamiento_endo = [];
+            $bloques = $req->id == 0 || $req->id == 'u' ? 1 : 0;
         }
 
-        return $tratamientos_piezas;
+        return [
+            'tratamientos' => $tratamientos_piezas,
+            'maxilar_superior_gral_diagnosticos' => $maxilar_superior_gral_diagnostico,
+            'maxilar_superior_gral_tratamientos' => $maxilar_superior_gral_tratamiento,
+            'maxilar_superior_gral_diagnosticos_endo' => $maxilar_superior_gral_diagnosticos_endo,
+            'maxilar_superior_gral_tratamientos_endo' => $maxilar_superior_gral_tratamiento_endo,
+            'maxilar_inferior_gral_diagnosticos' => $maxilar_inferior_gral_diagnostico,
+            'maxilar_inferior_gral_tratamientos' => $maxilar_inferior_gral_tratamiento,
+            'maxilar_inferior_gral_diagnosticos_endo' => $maxilar_inferior_gral_diagnosticos_endo,
+            'maxilar_inferior_gral_tratamientos_endo' => $maxilar_inferior_gral_tratamiento_endo,
+            'boca_completa_gral_diagnosticos' => $boca_completa_gral_diagnostico,
+            'boca_completa_gral_tratamiento' => $boca_completa_gral_tratamiento,
+            'boca_completa_gral_diagnosticos_endo' => $boca_completa_gral_diagnostico_endo,
+            'boca_completa_gral_tratamientos_endo' => $boca_completa_gral_tratamiento_endo,
+            'bloques' => $bloques
+        ];
     }
 
     public function dameEvolucionesPacienteHosp($idpaciente){

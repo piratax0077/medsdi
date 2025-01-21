@@ -244,6 +244,7 @@
                             let valores_boca_general = resp.valores[0];
                             let valores_odontograma = resp.valores[1];
                             let total_general = valores_boca_general + valores_odontograma;
+                            $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
                             $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
                             $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                             $('#subtotal_clinico').val(formatoMoneda(total_general));
@@ -755,7 +756,7 @@
                             <td class="text-center align-middle">
                                 <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${diagnostico.id},'gral')"><i
                                         class="feather icon-x"></i></button>
-                                ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                             </td>
                         </tr>
                         `);
@@ -805,12 +806,46 @@
                         </tr>
                         `);
                     });
-                    let valores_examenes = resp.valores[0];
-                    let valores_piezas = resp.valores[1];
-
-                    $('#valores_examenes_presupuesto').html(formatoMoneda(valores_examenes));
-                    $('#valores_piezas_presupuesto').html(formatoMoneda(valores_piezas));
+                    let valores_boca_general = resp.valores[0];
+                    let valores_odontograma = resp.valores[1];
+                    let total_general = valores_boca_general + valores_odontograma;
+                    $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                    $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                    $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                    $('#subtotal_clinico').val(formatoMoneda(total_general));
+                    $('#total_clinico').val(formatoMoneda(total_general));
                 }
+
+                $('#tratamiento_presupuesto tbody').empty();
+                let presupuesto = resp.presupuesto;
+                console.log(presupuesto);
+                $('#tratamiento_presupuesto tbody').append(`
+                <tr>
+                    <td class="text-center align-middle">${presupuesto.fecha}</td>
+                    <td class="text-center align-middle">${presupuesto.id}</td>
+                    <td class="text-center align-middle">${presupuesto.aprobado}</td>
+                    <td class="text-center align-middle">Sector I</td>
+                    <td class="text-center align-middle">${presupuesto.boca}</td>
+
+                    <td class="text-center align-middle">
+                        <div class="form-group col-md-4">
+                            <div class="switch switch-success d-inline m-r-2">
+                                <input type="checkbox" id="info_finalizado" checked="">
+                                <label for="info_finalizado" class="cr"></label>
+                            </div>
+                            <label>Realizado?</label>
+                        </div>
+                    </td>
+                    <td class="text-center align-middle">
+                       ${presupuesto.fecha}
+                    </td>
+                    <td class="text-center align-middle">
+                        <button type="button" class="btn btn-info btn-sm" onclick="presupuesto()" ;="">
+                            <i class="fa fa-plus"></i> Trabajar en pieza
+                        </button>
+                    </td>
+                </tr>
+                `);
 
             },
             error: function(error){
@@ -911,6 +946,7 @@
                             let valores_boca_general = resp.valores[0];
                             let valores_odontograma = resp.valores[1];
                             let total_general = valores_boca_general + valores_odontograma;
+                            $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
                             $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
                             $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                             $('#subtotal_clinico').val(formatoMoneda(total_general));
@@ -1419,7 +1455,7 @@
                             <td class="text-center align-middle">
                                 <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${diagnostico.id},'gral')"><i
                                         class="feather icon-x"></i></button>
-                                ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                             </td>
                         </tr>
                         `);
@@ -1475,11 +1511,14 @@
                             text: 'Examen retirado con éxito.'
                         });
 
-                        let valores_examenes = resp.valores[0];
-                        let valores_piezas = resp.valores[1];
-
-                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_examenes));
-                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_piezas));
+                        let valores_boca_general = resp.valores[0];
+                        let valores_odontograma = resp.valores[1];
+                        let total_general = valores_boca_general + valores_odontograma;
+                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#subtotal_clinico').val(formatoMoneda(total_general));
+                        $('#total_clinico').val(formatoMoneda(total_general));
                     }
 
                 }
@@ -1596,6 +1635,7 @@
                         let valores_boca_general = response.valores[0];
                         let valores_odontograma = response.valores[1];
                         let total_general = valores_boca_general + valores_odontograma;
+                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
                         $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                         $('#odon_adults').empty();

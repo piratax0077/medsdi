@@ -52,6 +52,8 @@ use App\Models\LogUsersDevices;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
+use App\Models\OdontogramaPaciente;
+
 use App\Models\PacienteControlGlicemia;
 use App\Models\PacienteControlPeso;
 use App\Models\PacienteControlPresion;
@@ -811,6 +813,10 @@ class EscritorioPaciente extends Controller
 
         /* FIN --------------------------- HTML MODAL -------------------------- */
 
+        $odontograma = $this->dameOdontogramaPaciente($paciente->id);
+
+        return $paciente;
+
         return view('ficha_medica', [
             'id_usuario' => $id_usuario,
             'paciente' => $paciente,
@@ -990,6 +996,30 @@ class EscritorioPaciente extends Controller
 
         return view('app.paciente.ficha_medica', ['paciente' => $paciente]);
 
+    }
+
+    public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion = null, $id_lugar_atencion = null,$id_presupuesto = null){
+        $query = OdontogramaPaciente::select(
+            'odontogramas_pacientes.*',
+            'diagnosticos_dental.descripcion',
+            'diagnosticos_dental.cantidad_bloques',
+            'diagnosticos_dental.valor',
+            'tratamientos_dental.descripcion as diagnostico')
+            ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
+            ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
+            ->where('odontogramas_pacientes.id_paciente', $id_paciente)
+            // ->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion)
+            ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion);
+
+            // Verificar si el parámetro $id_presupuesto no es nulo
+            if (!is_null($id_presupuesto)) {
+                $query->where('odontogramas_pacientes.id_presupuesto', $id_presupuesto);
+            }
+
+            // Obtener los resultados
+            $odontogramas = $query->get();
+
+            return $odontogramas;
     }
 
 

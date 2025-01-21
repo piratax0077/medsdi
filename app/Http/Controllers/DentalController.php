@@ -1632,9 +1632,9 @@ class DentalController extends Controller
                 $valor_total = $valores[0] + $valores[1];
                 $presupuesto->valor_total = $valor_total;
                 $presupuesto->save();
-                return ['status' => 1, 'mensaje' => 'Pieza '.$pieza->pieza.' agregada con éxito.', 'odontograma_paciente' => $odontograma_paciente, 'valores' => $valores];
+                return ['status' => 1, 'mensaje' => 'Pieza '.$pieza->pieza.' agregada con éxito.', 'odontograma_paciente' => $odontograma_paciente, 'valores' => $valores,'presupuesto' => $presupuesto];
             }else{
-                return ['status' => 0, 'mensaje' => 'Ha ocurrido un error con la pieza '.$pieza->pieza.'.'];
+                return ['status' => 0, 'mensaje' => 'Ha ocurrido un error con la pieza '.$pieza->pieza.'.','presupuesto' => $presupuesto];
             }
         }else{
             $pieza = ExamenesBocaGeneral::find($request->id);
@@ -1692,6 +1692,7 @@ class DentalController extends Controller
                     'boca_completa_gral_diagnostico_endo' => $boca_completa_gral_diagnostico_endo,
                     'boca_completa_gral_tratamientos' => $boca_completa_gral_tratamiento,
                     'boca_completa_gral_diagnosticos' => $boca_completa_gral_diagnostico,
+                    'presupuesto' => $presupuesto,
                 ];
             }else{
                 return ['status' => 0, 'mensaje' => 'Ha ocurrido un error con la pieza '.$pieza->pieza.'.'];
@@ -2708,7 +2709,7 @@ class DentalController extends Controller
     public function dame_pieza(Request $request)
     {
         try {
-            $pieza = ExamenesDentalPieza::where('numero_pieza', $request->pieza)->where('id_ficha_atencion',$request->id_ficha_atencion)->get();
+            $pieza = ExamenesDentalPieza::where('numero_pieza', $request->pieza)->get();
             foreach ($pieza as $key => $value) {
                 $value->fecha = Carbon::parse($value->created_at)->format('Y-m-d H:m:s');
                 if($value->id_profesional == null){
@@ -2720,7 +2721,6 @@ class DentalController extends Controller
                 $value->diagnostico = OdontogramaPaciente::select('odontogramas_pacientes.*','tratamientos_dental.descripcion as diagnostico')
                                         ->join('tratamientos_dental','odontogramas_pacientes.diagnostico','tratamientos_dental.id')
                                         ->where('odontogramas_pacientes.pieza', $value->numero_pieza)
-                                        ->where('odontogramas_pacientes.id_ficha_atencion', $request->id_ficha_atencion)
                                         ->first();
             }
             return $pieza;

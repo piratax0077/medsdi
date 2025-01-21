@@ -32,6 +32,7 @@ Route::get('/autocomplete', [ficha_atencionController::class, 'autocomplete'])->
 Route::name('print')->get('/imprimir', [App\Http\Controllers\ficha_atencionController::class, 'imprimir']);
 Route::get('ver_receta_pdf/{id}', [App\Http\Controllers\EscritorioProfesional::class, 'ver_receta_pdf'])->name('profesional.ver_recetas_pdf');
 
+
 Route::get('pdf', function(){
     return view('PDF.pdf_receta_medica');
 });
@@ -924,7 +925,7 @@ Route::group([
 
 /* ASISTENTE caja Centro Medico*/
 Route::group([
-    'middleware' => ['role:AsistenteCaja|Admin|AsistenteLaboratorio'],
+    'middleware' => ['role:AsistenteCaja|Admin|AsistenteLaboratorio|AsistenteOnline'],
     'prefix' => 'Asistente/cm/',
 ], function () {
     Route::get('Inicio', [App\Http\Controllers\EscritorioAsistenteCmPublico::class, 'index'])->name('asistentecm.home');
@@ -2196,6 +2197,8 @@ Route::get('/profesional/mis_convenios',[App\Http\Controllers\ConveniosControlle
 
 Route::get('/profesional/mensaje/{id}', [App\Http\Controllers\EscritorioGeneral::class, 'mensaje'])->name('profesional.mensaje');
 Route::post('/profesional/convenio/nuevo',[App\Http\Controllers\ConveniosController::class, 'nuevoConvenio'])->name('profesional.convenio_nuevo');
+Route::post('/editar/procedimiento',[App\Http\Controllers\EscritorioProfesional::class, 'editarProcedimiento'])->name('profesional.editar_procedimiento');
+Route::post('/mostrar/procedimiento/dental',[App\Http\Controllers\EscritorioProfesional::class, 'mostrarProcedimientoDental'])->name('profesional.mostrar_procedimiento');
 /** envio de correo prueba */
 Route::get('/correo/envio', [App\Http\Controllers\SendMailController::class, 'envioCorreoR'])->name('correo.envio');
 Route::get('/correo/envio_test', [App\Http\Controllers\SendMailController::class, 'envioCorreoTest'])->name('correo.envio.test');

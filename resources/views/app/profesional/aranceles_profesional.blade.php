@@ -55,6 +55,7 @@ p {
                                             <th>UCO</th>
                                             <th>Cantidad de bloques</th>
                                             <th>¿Tiene laboratorio?</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -71,6 +72,9 @@ p {
                                                         ¿Laboratorio?
                                                     </label>
                                                 </div>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-outline-warning btn-sm" role="button" onclick="mostrar_prodecimiento({{ $t->id }})"><i class="fas fa-edit"></i> Editar</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -133,6 +137,7 @@ p {
                         <th>Procedimiento</th>
                         <th>UCO</th>
                         <th>¿Laboratorio?</th>
+                        <th>Bloques</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -149,7 +154,11 @@ p {
                                     </label>
                                 </div>
                             </td>
-                            <td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})">Eliminar</button></td>
+                            <td>{{ $mi_trabajo->cantidad_bloques }}</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})">Eliminar</button>
+                                <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_prodecimiento({{ $mi_trabajo->id }})">Editar</button>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -368,6 +377,36 @@ p {
 
                     // Dibuja la tabla nuevamente
                     table.draw();
+                },
+                error: function(error){
+                    console.log(error.responseText);
+                }
+            });
+        }
+
+        function mostrar_prodecimiento(id){
+            console.log(id);
+            let data = {
+                id: id,
+                _token: CSRF_TOKEN,
+            }
+
+            let url = '{{ ROUTE("profesional.mostrar_procedimiento") }}';
+
+            $.ajax({
+                type:'post',
+                url: url,
+                data: data,
+                success: function(response){
+                    console.log(response);
+                    // abrir modal
+                    $('#modalAgregarDiagnosticoDental').modal('show');
+                    // llenar los campos del modal
+                    $('#nombre_procedimiento_nuevo').val(response.procedimiento.descripcion);
+                    $('#cantidad_uco').val(response.procedimiento.uco);
+                    $('#cantidad_bloques').val(response.procedimiento.cantidad_bloques);
+                    $('#tiene_lab').prop('checked', response.procedimiento.laboratorio == 1 ? true : false);
+
                 },
                 error: function(error){
                     console.log(error.responseText);

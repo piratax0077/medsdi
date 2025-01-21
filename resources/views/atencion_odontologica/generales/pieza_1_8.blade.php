@@ -12,6 +12,7 @@
             width:54px;
             background-position: 0 -2px;
             background-repeat: no-repeat;
+
         }
 
 
@@ -295,12 +296,12 @@
     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <h5 class="text-c-blue f-20 text-center font-weight-bold mb-2">Palatino (pendiente)</h5>
+                <h5 class="text-c-blue f-20 text-center font-weight-bold mb-2">Palatino</h5>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-body">
                         <div class="form-row">
                             <div class="col-md-4">
@@ -318,7 +319,7 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                               <!-- <tr>
+                                               {{--  <!-- <tr>
                                                     <td class="titulo">P. sondaje</td>
                                                     <td class="borde">
                                                         <input style="width: 30%;height: 25px; margin-left: 7px" type="number" id="ps18b-a" name="ps18b-a" value="0" onchange="cargar18b();getDefectos();" tabindex="145"/>
@@ -371,7 +372,7 @@
                                                         <div style="width: 20%;height: 25px;margin-left: 7px" id="f18b-a">F-1</div><div style="width: 20%;height: 25px;margin-left: 7px" id="f18b-b">F-2</div>
 
                                                     </td>
-                                                </tr>-->
+                                                </tr>-->  --}}
 
                                         </tbody>
                                     </table>
@@ -449,12 +450,17 @@
                                         <div class="border py-2 pointer rounded-pill borde-celeste input-dental w-100" id="p18b-c"></div>
                                     </div>
                                 </div>
-                                <div class="form-row">
+                                <div class="form-row mt-3">
                                     <div class="col-sm-12 col-md-4">
-                                            <h6 class="font-weight-bold text-c-blue pt-2">Furca</h6>
+                                            <h6 class="font-weight-bold text-c-blue pt-2">Furcas</h6>
                                     </div>
-                                    <div class="col-sm-12 col-md-8">
+                                    <div class="col-sm-12 col-md-4">
+                                        <label class="floating-label-activo-sm">Furca 1</label>
                                         <div class="border rounded input-dental pointer w-100" id="f18b-a"></div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4">
+                                        <label class="floating-label-activo-sm">Furca 2</label>
+                                        <div class="border rounded input-dental pointer w-100" id="f18b-b"></div>
                                     </div>
                                 </div>
                             </form>
@@ -464,18 +470,21 @@
                 </div>
             </div>
         </div>
-    </div>
-    <!--FORMULARIO DE OBS. Y BOTÓN GUARDAR-->
-    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="form-group" id="obs_pieza1.8">
-                    <label class="floating-label-activo-sm">Obs. Pieza 1.8</label>
-                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 1.8" data-seccion="Eval_periimplantar"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_op_bruxismo" id="det_op_bruxismo" placeholder="Describa observaciones"></textarea>
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group" id="obs_pieza1.8">
+                            <label class="floating-label-activo-sm">Obs. Pieza 1.8</label>
+                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 1.8" data-seccion="Eval_periimplantar"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_op_bruxismo" id="det_op_bruxismo" placeholder="Describa observaciones"></textarea>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <!--FORMULARIO DE OBS. Y BOTÓN GUARDAR-->
+    
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
         <div id="obs_pieza1.8">
                 <button type="button" class="btn btn-info text-center"><i class="feather icon-save"></i>  Guardar evaluación 1.8</button>
@@ -908,7 +917,7 @@
 	$('#d18').toggle(
         function () {
             $('#diente18-a').css("background","url('{{ asset('images/dental/periodontograma/img/dientes/diente-ausente/dau18.png') }}')");
-            $('#diente18-a').css("background-position","-36px -13px");
+            $('#diente18-a').css("background-position","0px -2px");
             $('#diente18-a').css("background-repeat","no-repeat");
             $('#m18').prop('disabled', true); // Deshabilita el input con id 'm18'
             $('#i18').prop("disabled",true);
@@ -1054,7 +1063,7 @@
             $(this).css({"background":"#FFFFFF url('{{ asset('images/dental/periodontograma/img/cuadrado.png') }}') no-repeat center"});
             $('#f18').css({"background":"#FFFFFF"});
             $('#diente18-a').css("background","url('{{ asset('images/dental/periodontograma/img/dientes/implante/impl18.png') }}')");
-            $('#diente18-a').css("background-position","-38px -2px");
+            $('#diente18-a').css("background-position","1px -2px");
             $('#diente18-a').css("background-repeat","no-repeat");
 
             $('#diente18b-a').css("background","url('{{ asset('images/dental/periodontograma/img/tabla3/implantes/periodontograma-dientes-arriba-tornillo-18b.png') }}')");

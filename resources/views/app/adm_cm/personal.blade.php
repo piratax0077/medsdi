@@ -64,7 +64,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body" id="contenedor_asistentes_personal">
                                         <table id="asistentes_personal" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
                                             <thead>
                                                 <tr>

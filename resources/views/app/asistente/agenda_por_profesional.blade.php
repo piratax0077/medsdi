@@ -63,7 +63,7 @@
                                                 <select name="agenda_profesional_asistente" id="agenda_profesional_asistente" class="form-control form-control-sm" onchange="cargarAgendaProfesional(1,'')">
                                                     @if($profesional)
                                                         @foreach($profesional as $key_pro => $value_pro)
-                                                            <option value="{{ $value_pro->id }}">{{ $value_pro->nombre }} {{ $value_pro->apellido_uno }} {{ $value_pro->apellido_dos }}</option>
+                                                            <option value="{{ $value_pro->id }}" data-id_tipo_agenda="{{ $value_pro->id_tipo_agenda }}">{{ $value_pro->nombre }} {{ $value_pro->apellido_uno }} {{ $value_pro->apellido_dos }}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>

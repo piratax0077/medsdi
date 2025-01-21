@@ -1820,9 +1820,21 @@
                 },
                 success: function(resp){
                     console.log(resp);
-                    let tratamientos = resp;
+                    let tratamientos = resp.tratamientos;
+                    let maxilar_superior_gral_diagnosticos = resp.maxilar_superior_gral_diagnosticos;
+                    let maxilar_superior_gral_tratamientos = resp.maxilar_superior_gral_tratamientos;
+                    let maxilar_superior_gral_diagnosticos_endo = resp.maxilar_superior_gral_diagnosticos_endo;
+                    let maxilar_superior_gral_tratamientos_endo = resp.maxilar_superior_gral_tratamientos_endo;
+                    let maxilar_inferior_gral_diagnosticos = resp.maxilar_inferior_gral_diagnosticos;
+                    let maxilar_inferior_gral_tratamientos = resp.maxilar_inferior_gral_tratamientos;
+                    let maxilar_inferior_gral_diagnosticos_endo = resp.maxilar_inferior_gral_diagnosticos_endo;
+                    let maxilar_inferior_gral_tratamientos_endo = resp.maxilar_inferior_gral_tratamientos_endo;
+                    let boca_completa_gral_diagnosticos = resp.boca_completa_gral_diagnosticos;
+                    let boca_completa_gral_tratamientos = resp.boca_completa_gral_tratamientos;
+                    let boca_completa_gral_diagnosticos_endo = resp.boca_completa_gral_diagnosticos_endo;
+                    let boca_completa_gral_tratamientos_endo = resp.boca_completa_gral_tratamientos_endo;
                     const totalValue = selectedOption.data('total') || ''; // Obtener el valor del atributo data-total
-                    var bloques = 0;
+                    var bloques = resp.bloques;
                     $('#bono_valor_consulta').val(totalValue); // Actualizar el input de valor total
                     $('#contenedor_tratamientos_presupuesto').show();
                     $('#contenedor_tratamientos_presupuesto').empty();
@@ -1839,6 +1851,102 @@
 
 
                     });
+                    maxilar_superior_gral_diagnosticos.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_superior_gral_tratamientos.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_superior_gral_diagnosticos_endo.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_superior_gral_tratamientos_endo.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_inferior_gral_diagnosticos.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_inferior_gral_tratamientos.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_inferior_gral_diagnosticos_endo.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_inferior_gral_tratamientos_endo.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
                     $('#contenedor_tratamientos_presupuesto').append('Se utilizan <span id="cantidad_bloques_atencion">'+bloques+'</span> bloques de atención.');
                 },
                 error: function(error){
@@ -1847,21 +1955,21 @@
             });
 
         }
-
-        function handleCheckboxClick(id, isChecked) {
+        function handleCheckboxClick(id, isChecked, tipo = null) {
             console.log(`Checkbox con ID ${id} está ${isChecked ? 'seleccionado' : 'deseleccionado'}`);
 
             // Aquí puedes manejar la lógica adicional o enviar el ID al servidor
             $.ajax({
                 url: '{{ ROUTE("profesional.mi_agenda.atender_tratamiento_presupuesto") }}',
                 method: 'POST',
-                data: { id: id, checked: isChecked, _token: CSRF_TOKEN },
+                data: { id: id, checked: isChecked,tipo: tipo, _token: CSRF_TOKEN },
                 success: function(response) {
                     console.log('Servidor respondió:', response);
                     let bloques_actualizados = response.bloques;
                     let bloques_original = parseInt($('#cantidad_bloques_atencion').text());
                     let bloques = response.atendido == 1 ? bloques_original + bloques_actualizados : bloques_original - bloques_actualizados;
-                    $('#cantidad_bloques_atencion').html(bloques > 0 ? bloques : 0);
+                    if(bloques < 0) bloques = 0;
+                    $('#cantidad_bloques_atencion').html(bloques);
                 },
                 error: function(error) {
                     console.error('Error al enviar datos:', error);

@@ -3137,7 +3137,9 @@ class AdministradorCmController extends Controller
 
                     /** roles */
                     $usuario = User::where('id', $value->id_usuario)->first();
+
                     $roles = $usuario->roles()->get();
+
                     $array_roles = array();
                     foreach ($roles as $key_2 => $value_2) {
                         array_push($array_roles, $value_2->name);

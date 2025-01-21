@@ -9,9 +9,7 @@
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="odonto_adulto_tab" data-toggle="tab" href="#odonto_adulto" role="tab" aria-controls="odonto_adulto" aria-selected="false">Odontograma</a>
                     </li>
-                    <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="psr_odonto_tab" data-toggle="tab" href="#psr_odonto" role="tab" aria-controls="psr_odonto" aria-selected="false">Evaluación-PSR</a>
-                    </li>
+                   
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Evaluación-Peri-implantar</a>
                     </li>
@@ -57,6 +55,8 @@
                             </div>
                             <!--Motivo consulta-->
                             @include('atencion_odontologica.generales.motivo_consulta')
+
+                            @include('atencion_odontologica.generales.includes.odontologia_general')
 
                             <!--EXAMEN ODONT GENERAL - PARAMETROS DE CONTROL-->
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -1902,8 +1902,6 @@
                                 </div>
                             </div>
 
-                            <!--FORMULARIO / SIGNOS VITALES Y OTROS-->
-                            @include('general.secciones_ficha.signos_vitales')
 
                             <!--CRONICOS / GES / CONFIDENCIAL -->
                             {{--  @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')  --}}
@@ -2252,666 +2250,6 @@
                         </div>
                         <!--CIERRE: ODONTOGRAMA--->
 
-                        <!-- PSR-->
-                        <div class="tab-pane fade" id="psr_odonto" role="tabpanel" aria-labelledby="psr_odonto_tab">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-                                    <h6 class="text-c-blue f-22 font-weight-bold">PSR</h6>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <form>
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-6 text-center">
-                                                                <label
-                                                                    class="d-inline col-md-3 mb-1 font-weight-bolder form-inline mr-0 f-16 pr-0">GRUPO
-                                                                    I=</label>
-                                                                <input
-                                                                    class="form-control form-control-sm d-inline col-md-2 mb-1 form-inline ml-0"
-                                                                    type="text" name="" id="">
-                                                                <div class="table-responsive">
-                                                                    <table class="table table-bordered table-xs">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th class="text-center align-middle px-1 py-1">1.8</th>
-                                                                                <th class="text-center align-middle px-1 py-1">1.7</th>
-                                                                                <th class="text-center align-middle px-1 py-1">1.6</th>
-                                                                                <th class="text-center align-middle px-1 py-1">1.5</th>
-                                                                                <th class="text-center align-middle px-1 py-1">1.4</th>
-
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-6 text-center">
-                                                                <label
-                                                                    class="d-inline col-md-3 mb-1 font-weight-bolder form-inline mr-0 f-16 pr-0">GRUPO
-                                                                    II=</label>
-                                                                <input
-                                                                    class="form-control form-control-sm d-inline col-md-2 mb-1 form-inline ml-0"
-                                                                    type="text" name="" id="">
-                                                                <div class="table-responsive">
-                                                                    <table class="table table-bordered table-xs">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th class="text-center align-middle px-1 py-1">1.3</th>
-                                                                                <th class="text-center align-middle px-1 py-1">1.2</th>
-                                                                                <th class="text-center align-middle px-1 py-1">1.1</th>
-                                                                                <th class="text-center align-middle px-1 py-1">2.1</th>
-                                                                                <th class="text-center align-middle px-1 py-1">2.2</th>
-                                                                                <th class="text-center align-middle px-1 py-1">2.3</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-6 text-center">
-                                                                <label
-                                                                    class="d-inline col-md-3 mb-1 font-weight-bolder form-inline mr-0 f-16 pr-0">GRUPO
-                                                                    IV=</label>
-                                                                <input
-                                                                    class="form-control form-control-sm d-inline col-md-2 mb-1 form-inline ml-0"
-                                                                    type="text" name="" id="">
-                                                                <div class="table-responsive">
-                                                                    <table class="table table-bordered table-xs">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th class="text-center align-middle px-1 py-1">4.8</th>
-                                                                                <th class="text-center align-middle px-1 py-1">4.7</th>
-                                                                                <th class="text-center align-middle px-1 py-1">4.6</th>
-                                                                                <th class="text-center align-middle px-1 py-1">4.5</th>
-                                                                                <th class="text-center align-middle px-1 py-1">4.4</th>
-
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-6 text-center">
-                                                                <label
-                                                                    class="d-inline col-md-3 mb-1 font-weight-bolder form-inline mr-0 f-16 pr-0">GRUPO
-                                                                    III=</label>
-                                                                <input
-                                                                    class="form-control form-control-sm d-inline col-md-2 mb-1 form-inline ml-0"
-                                                                    type="text" name="" id="">
-                                                                <div class="table-responsive">
-                                                                    <table class="table table-bordered table-xs">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th class="text-center align-middle px-1 py-1">2.4</th>
-                                                                                <th class="text-center align-middle px-1 py-1">2.5</th>
-                                                                                <th class="text-center align-middle px-1 py-1">2.6</th>
-                                                                                <th class="text-center align-middle px-1 py-1">2.7</th>
-                                                                                <th class="text-center align-middle px-1 py-1">2.8</th>
-
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-6 text-center">
-                                                                <label
-                                                                    class="d-inline col-md-3 mb-1 font-weight-bolder form-inline mr-0 f-16 pr-0">GRUPO
-                                                                    V=</label>
-                                                                <input
-                                                                    class="form-control form-control-sm d-inline col-md-2 mb-1 form-inline ml-0"
-                                                                    type="text" name="" id="">
-                                                                <div class="table-responsive">
-                                                                    <table class="table table-bordered table-xs">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th class="text-center align-middle px-1 py-1">4.3</th>
-                                                                                <th class="text-center align-middle px-1 py-1">4.2</th>
-                                                                                <th class="text-center align-middle px-1 py-1">4.1</th>
-                                                                                <th class="text-center align-middle px-1 py-1">3.1</th>
-                                                                                <th class="text-center align-middle px-1 py-1">3.2</th>
-                                                                                <th class="text-center align-middle px-1 py-1">3.3</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group col-md-6 text-center">
-                                                                <label
-                                                                    class="d-inline col-md-3 mb-1 font-weight-bolder form-inline mr-0 f-16 pr-0">GRUPO
-                                                                    VI=</label>
-                                                                <input
-                                                                    class="form-control form-control-sm d-inline col-md-2 mb-1 form-inline ml-0"
-                                                                    type="text" name="" id="">
-                                                                <div class="table-responsive">
-                                                                    <table class="table table-bordered table-xs">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th class="text-center align-middle px-1 py-1">3.4</th>
-                                                                                <th class="text-center align-middle px-1 py-1">3.5</th>
-                                                                                <th class="text-center align-middle px-1 py-1">3.6</th>
-                                                                                <th class="text-center align-middle px-1 py-1">3.7</th>
-                                                                                <th class="text-center align-middle px-1 py-1">3.8</th>
-
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                                <td class="text-center align-middle px-1 py-1">
-                                                                                    <select class="form-control form-control-sm" id=""
-                                                                                        name="">
-                                                                                        <option>0</option>
-                                                                                        <option>1</option>
-                                                                                        <option>2</option>
-                                                                                        <option>3</option>
-                                                                                        <option>4</option>
-                                                                                        <option>1*</option>
-                                                                                        <option>2*</option>
-                                                                                        <option>3*</option>
-                                                                                        <option>4*</option>
-                                                                                    </select>
-                                                                                </td>
-                                                                            </tr>
-
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-4">
-                                                                <label class="floating-label">PSR</label>
-                                                                <input type="text" class="form-control form-control-sm" name="pct_t"
-                                                                    id="pcr_t">
-                                                            </div>
-                                                            <div class="form-group col-md-4" style="text-align:center" id="form_0">
-                                                                <!--<a href="periodontograma/perio.php" target="_blank"><button type="button"-->
-                                                                <a href="{{ route('periodontograma.ver') }}" target="_blank"><button type="button"
-                                                                        class="btn btn-primary btn-sm btn-block"> Abrir
-                                                                        periodontograma</button></a>
-                                                            </div>
-                                                            <div class="form-group col-md-4" style="text-align:center" id="form_derperi">
-                                                                <button type="button" class="btn btn-success btn-sm btn-block"
-                                                                    onclick="d_periodoncista1();"><i class="feather icon-file-plus"></i>
-                                                                    Derivar a Periodoncista</button>
-                                                            </div>
-                                                        </div>
-                                                        <hr>
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-12 text-center mx-auto">
-                                                                <button type="reset" class="btn btn-danger">Limpiar formulario</button>
-                                                                <button type="submit" class="btn btn-info">Guardar</button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--CIERRE: PSR--->
 
                         <!-- PERIIMPLANTE -->
                         <div class="tab-pane fade" id="eval_periimpl" role="tabpanel" aria-labelledby="eval_periimpl_tab">
@@ -3052,540 +2390,270 @@
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_16" role="tabpanel" aria-labelledby="eval_16_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                       <div class="form-row">
-                                                                            @include('atencion_odontologica.generales.pieza_1_6')
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_1_6')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_15" role="tabpanel" aria-labelledby="eval_15_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                       <div class="form-row">
-                                                                            @include('atencion_odontologica.generales.pieza_1_5')
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_1_5')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_14" role="tabpanel" aria-labelledby="eval_14_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                                <div class="row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                       <div class="form-row">
-                                                                            @include('atencion_odontologica.generales.pieza_1_4')
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_1_4')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_13" role="tabpanel" aria-labelledby="eval_13_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_1_3')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_1_3')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_12" role="tabpanel" aria-labelledby="eval_12_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_1_2')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_1_2')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_11" role="tabpanel" aria-labelledby="eval_11_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_1_1')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_1_1')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_21" role="tabpanel" aria-labelledby="eval_21_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_2_1')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_2_1')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_22" role="tabpanel" aria-labelledby="eval_22_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_2_2')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_2_2')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_23" role="tabpanel" aria-labelledby="eval_23_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_2_3')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_2_3')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_24" role="tabpanel" aria-labelledby="eval_24_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_2_4')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_2_4')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_25" role="tabpanel" aria-labelledby="eval_25_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_2_5')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_2_5')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_26" role="tabpanel" aria-labelledby="eval_26_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_2_6')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_2_6')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_27" role="tabpanel" aria-labelledby="eval_27_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_2_7')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_2_7')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_28" role="tabpanel" aria-labelledby="eval_28_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_2_8')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_2_8')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_48" role="tabpanel" aria-labelledby="eval_48_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_4_8')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_4_8')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_47" role="tabpanel" aria-labelledby="eval_47_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_4_7')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_4_7')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_46" role="tabpanel" aria-labelledby="eval_46_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_4_6')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_4_6')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_45" role="tabpanel" aria-labelledby="eval_45_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_4_5')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_4_5')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_44" role="tabpanel" aria-labelledby="eval_44_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_4_4')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_4_4')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_43" role="tabpanel" aria-labelledby="eval_43_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_4_3')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_4_3')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_42" role="tabpanel" aria-labelledby="eval_42_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_4_2')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_4_2')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_41" role="tabpanel" aria-labelledby="eval_41_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_4_1')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_4_1')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_31" role="tabpanel" aria-labelledby="eval_31_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_3_1')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_3_1')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_32" role="tabpanel" aria-labelledby="eval_32_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_3_2')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_3_2')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_33" role="tabpanel" aria-labelledby="eval_33_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_3_3')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_3_3')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="tab-pane fade  show " id="eval_34" role="tabpanel" aria-labelledby="eval_34_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_3_4')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_3_4')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_35" role="tabpanel" aria-labelledby="eval_35_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_3_5')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_3_5')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_36" role="tabpanel" aria-labelledby="eval_36_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_3_6')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_3_6')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_37" role="tabpanel" aria-labelledby="eval_37_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_3_7')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_3_7')
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade  show " id="eval_38" role="tabpanel" aria-labelledby="eval_38_tab">
                                             <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-row">
-                                                                        @include('atencion_odontologica.generales.pieza_3_8')
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-row">
+                                                        @include('atencion_odontologica.generales.pieza_3_8')
                                                     </div>
                                                 </div>
                                             </div>
@@ -3595,7 +2663,6 @@
                             </div>
                         </div>
                         <!-- CIERRE PERIIMPLANTE -->
-
                         <!-- EVALUACIÓN-->
                         <div class="tab-pane fade" id="evaluacion_general" role="tabpanel" aria-labelledby="evaluacion_general_tab">
                             <div class="row">

@@ -310,7 +310,7 @@
                     // data.registro.direccion.ciudad.nombre
 
                     $('#edit_empleado_id_contrato').val(data.registro.contrato.id);
-                    $('#edit_empleado_tipo_contrato').val(data.registro.contrato.tipo_contrato);
+                    $('#edit_empleado_tipo_contrato').val(data.registro.contrato.tipo_empleado);
                     // data.registro.contrato.id_empleado;
                     $('#edit_empleado_rut').val(data.registro.contrato.rut);
                     $('#edit_empleado_nombre').val(data.registro.contrato.nombres);
@@ -647,11 +647,11 @@
             valido = 0;
             mensaje += 'Campo requerido Hora salida colación\n';
         }
-        if(clave_ingreso == '')
-        {
-            valido = 0;
-            mensaje += 'Campo requerido clave_ingreso\n';
-        }
+        // if(clave_ingreso == '')
+        // {
+        //     valido = 0;
+        //     mensaje += 'Campo requerido clave_ingreso\n';
+        // }
 
         if(valido == 1)
         {
@@ -727,6 +727,8 @@
                             buttons: "Aceptar",
                         });
                         limpiar_formulario();
+                        $('#contenedor_asistentes_personal').empty();
+                        $('#contenedor_asistentes_personal').append(data.view);
                     }
                     else
                     {

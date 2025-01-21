@@ -720,6 +720,32 @@ class EscritorioAsistente extends Controller
         $profesion_oficio = ProfesionOficio::all();
         $tipo_bonos = TipoBono::where('estado', 1)->get();
 
+        $filtro = array();
+        // $filtro[] = array('tipo_empleado',$asistente_tipo->nombre);
+        $filtro[] = array('estado',2) ;// contrato activo
+        $filtro[] = array('id_empleado',$asistente->id) ;
+        $contrato = ContratoDependiente::where($filtro)->first();
+
+        if($contrato)
+        {
+            $id_lugar_atencion = $contrato->id_lugar_atencion;
+
+            foreach ($profesional as $key_tipo_agenda => $value_tipo_agenda)
+            {
+                $registro_tipo_agenda = ProfesionalHorario::where('id_profesional', $value_tipo_agenda->id)->where('id_lugar_atencion', $id_lugar_atencion)->orderBy('id', 'ASC')->get();
+
+                $registro_tipo_agenda_cantidad = ProfesionalHorario::where('id_profesional', $value_tipo_agenda->id)->where('id_lugar_atencion', $id_lugar_atencion)->count();
+
+                if($registro_tipo_agenda_cantidad > 0)
+				{
+                    $profesional[$key_tipo_agenda]['id_tipo_agenda'] = $registro_tipo_agenda[0]->tipo_agenda;
+				}
+                else
+				{
+                    $profesional[$key_tipo_agenda]['id_tipo_agenda'] = 0;
+				}
+            }
+        }
 
 
         return view('app.asistente.agenda_por_profesional')->with([

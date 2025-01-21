@@ -63,6 +63,7 @@ use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
 use App\Models\Presentacion;
+use App\Models\PresupuestosDental;
 use App\Models\Prevision;
 use App\Models\Producto;
 use App\Models\Profesional;
@@ -1819,6 +1820,8 @@ class ficha_atencionController extends Controller
 
         $diagnosticos_dentales = TratamientosDental::where('estado',1)->get();
 
+        $presupuesto_dental = $this->damePresupuestosDental($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id);
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1868,6 +1871,7 @@ class ficha_atencionController extends Controller
                 'tratamientos' => $tratamientos_dentales,
                 'diagnosticos' => $diagnosticos_dentales,
                 'odontograma' => $odontograma,
+                'presupuesto' => $presupuesto_dental,
                 'biopsias' => $biopsias,
                 'imagenes' => $imagenes,
                 'contador_div_examenes' => $contador_div_examenes,
@@ -1960,6 +1964,11 @@ class ficha_atencionController extends Controller
         );
     }
 
+    public function damePresupuestosDental($id_paciente, $id_ficha_atencion, $id_lugar_atencion){
+        $presupuestos = PresupuestosDental::where('id_paciente',$id_paciente)->where('id_lugar_atencion',$id_lugar_atencion)->where('estado',1)->first();
+        return $presupuestos;
+    }
+
     public function dameValores($id_paciente, $id_ficha_atencion, $id_lugar_atencion){
         $total_general = 0;
 
@@ -2014,8 +2023,9 @@ class ficha_atencionController extends Controller
             ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
             ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico','=','tratamientos_dental.id')
             ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-            ->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion)
+            // ->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion)
             ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
+            // ->where('odontogramas_pacientes.atendido',0)
             ->get();
         return $odontogramas;
     }

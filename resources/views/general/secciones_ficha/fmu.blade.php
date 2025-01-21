@@ -524,11 +524,7 @@
                                 </div>
                                 <div id="odonto_c" class="collapse" aria-labelledby="odonto" data-parent="#odonto">
                                     <div class="card-body-aten-a">
-                                        <form>
-                                            <div class="form-row">
-
-                                            </div>
-                                        </form>
+                                        @include('atencion_odontologica.generales.odontograma_adulto')
                                     </div>
                                 </div>
                             </div>

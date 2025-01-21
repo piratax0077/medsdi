@@ -18,8 +18,7 @@
                                         $mes = $meses[($fecha->format('n')) - 1];
                                         $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
                                     @endphp
-                                    {{ $fecha }} <br>
-                                    {{ $paciente->nombre }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }} {{ $paciente->rut }} &nbsp;  {{ $paciente->edad }} años.
+                                    {{ $fecha }}
                                 </p>
 
                             </div>
@@ -68,9 +67,6 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="Paciente hospitalizado" aria-selected="false">Hospitalización</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-reset" id="periodonto-tab" data-toggle="tab" href="#periodonto" role="tab" aria-controls="periodonto" aria-selected="false">Periodontograma</a>
                                     </li>
                                 </ul>
                             </div>

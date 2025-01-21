@@ -37,7 +37,7 @@ class EscritorioAsistenteCmPublico extends Controller
     /*Asistente Centro Medico*/
     public function index()
     {
-        return 'hola';
+
         $array_data = array();
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
         $region = Region::all();

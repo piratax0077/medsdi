@@ -26,12 +26,13 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @if($presupuesto)
                                 <tr>
                                     <td class="text-center align-middle">{{ date('Y-m-d') }}</td>
-                                    <td class="text-center align-middle">782638</td>
-                                    <td class="text-center align-middle">Si</td>
+                                    <td class="text-center align-middle">{{ $presupuesto->id }}</td>
+                                    <td class="text-center align-middle">{{ $presupuesto->aprobado == 0 ? 'NO' : 'SI' }}</td>
                                     <td class="text-center align-middle">Sector I</td>
-                                    <td class="text-center align-middle">no</td>
+                                    <td class="text-center align-middle">{{ $presupuesto->boca == 0 ? 'NO' : 'SI'}}</td>
 
                                     <td class="text-center align-middle">
                                         <div class="form-group col-md-4">
@@ -51,6 +52,7 @@
                                         </button>
                                     </td>
                                 </tr>
+                                @endif
                             </tbody>
                         </table>
 

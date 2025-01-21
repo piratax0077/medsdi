@@ -3,7 +3,7 @@
 
     // Crear un array para almacenar el estado final de cada pieza
     $piezasEstado = [];
-
+    if(isset($odontograma)){
     foreach ($odontograma as $pieza) {
         $codigoPieza = $pieza['pieza'];
         $tratamiento = $pieza['tratamiento'] ?? '';
@@ -23,6 +23,7 @@
             $piezasEstado[$codigoPieza] = 'normal';
         }
     }
+}
 @endphp
 <!--ODONTOGRAMA SUPERIOR ADULTOS-->
 <div class="col-md-12 d-flex flex-row align-items-end justify-content-center">
