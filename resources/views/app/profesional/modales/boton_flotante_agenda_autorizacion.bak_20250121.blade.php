@@ -59,7 +59,7 @@
 
 <!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION LICENCIA) -->
 
-   @if ($profesional->id_especialidad == 1)
+   @if ($profesional->id_especialidad == 1 || $profesional->id_especialidad == 2)
 		@if(!empty(session('lic_token')) && session('lic_estado') == 1)
 			<button class="btn btn-agenda-autorizacion btn-info btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ABRIR TALONARIOS</button>
 		@else
@@ -71,7 +71,7 @@
 
 <!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION FMU) -->
 
-    
+
         @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
             <button class="btn btn-agenda-autorizacion-fmu btn-info btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-file f-12"></i> FMU</button>
         @else

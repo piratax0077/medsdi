@@ -1,9 +1,9 @@
 <div id="m_cons_examen" class="modal fade" tabindex="-1" role="dialog"aria-labelledby="m_cons_examenLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="id_ficha_examen">Exámenes</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"  onclick="$('#m_cons_examen').modal('hide');">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white" id="id_ficha_examen">Exámenes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="('#m_cons_examen').modal('hide'); ">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -26,7 +26,9 @@
                 </form>
                 <!--fin autollenado-->
             </div>
-
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger-light-c" data-dismiss="modal" onclick="$('#m_cons_examen').modal('hide'); ">Cerrar</button>
+            </div>
         </div>
     </div>
 </div>
