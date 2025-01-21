@@ -88,25 +88,16 @@
             </div>
             <!-- tab general-->
             <!--Contenido de tab-->
-            <form action="{{ route('ficha.otro.prof.registrar_octavo_par') }}" method="POST">
-                <input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">
-                <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
-                <input type="hidden" name="id_examen" value="{{ $id_ficha_atencion }}" id="id_examen">
-                <input type="hidden" name="id_paciente_fc" value="{{ $paciente->id }}" id="id_paciente_fc">
-                <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
-                <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
-                <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
-                @csrf
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="tab-content" id="at-oftalmo">
-                            <!--Atender paciente-->
-                            <div class="tab-pane fade show active" id="atender" role="tabpanel" aria-labelledby="atender-tab">
-                                <!--INFORME EXAMEN DEL 8° PAR CRANEANO-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tab-content" id="at-oftalmo">
+                        <!--Atender paciente-->
+                        <div class="tab-pane fade show active" id="atender" role="tabpanel" aria-labelledby="atender-tab">
+                            <!--INFORME EXAMEN DEL 8° PAR CRANEANO-->
+                            {{-- <div class="tab-pane fade" id="atender" role="tabpanel" aria-labelledby="atender-tab"> --}}
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="f-18 text-c-blue mb-2">Informe examen del 8° par craneano</h6>
+                                         <h6 class="f-18 text-c-blue mb-2">Informe examen del 8° par craneano</h6>
                                     </div>
                                 </div>
                                 <div class="row div_form_examen_ocho_par">
@@ -122,45 +113,35 @@
                                                     <div class="form-row">
                                                         <div class="form-group col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                                             <label class="floating-label-activo-sm">Fecha de examen</label>
-                                                            <input type="date" class="form-control form-control-sm" name="fecha_ex" id="fecha_ex" value="{{ date('Y-m-d') }}" readonly>
+                                                            <input type="date" class="form-control form-control-sm" name="fecha_ex" id="fecha_ex">
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                                             <label class="floating-label-activo-sm">Examinador</label>
-                                                            <input type="text" class="form-control form-control-sm" name="profesional" id="profesional" value="Dr. {{ $profesional->apellido_uno }}" readonly>
+                                                            <input type="text" class="form-control form-control-sm" name="profesional" id="profesional">
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
                                                             <label class="floating-label-activo-sm">Derivado por:</label>
-                                                            <input type="text" class="form-control form-control-sm" name="derivado_por" id="derivado_por" value="">
+                                                            <input type="text" class="form-control form-control-sm" name="derivado_por" id="derivado_por">
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Nombre paciente</label>
-                                                            <input type="text" class="form-control form-control-sm" name="Nombre_pcte" id="Nombre_pcte" value="{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}">
+                                                            <input type="text" class="form-control form-control-sm" name="Nombre_pcte" id="Nombre_pcte">
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                                             <label class="floating-label-activo-sm">Edad</label>
-                                                            <input type="text" class="form-control form-control-sm" name="edad" id="edad" value="{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}" readonly>
+                                                            <input type="text" class="form-control form-control-sm" name="edad" id="edad">
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                                             <label class="floating-label-activo-sm">Rut</label>
-                                                            <input type="text" class="form-control form-control-sm" name="rut" id="rut" value="{{ $paciente->rut }}">
+                                                            <input type="text" class="form-control form-control-sm" name="rut" id="rut">
                                                         </div>
                                                         <div class="form-group col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Dirección</label>
-                                                            <input type="text" class="form-control form-control-sm" name="direccion" id="direccion"
-                                                            @if (isset($paciente))
-                                                                @if ($paciente->Direccion()->first() != null)
-                                                                    value="{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}"
-                                                                @else
-                                                                    value="NO HA REGISTRADO DIRECCIÓN !"
-                                                                @endif
-                                                            @else
-                                                                value="NO HA REGISTRADO DIRECCIÓN !"
-                                                            @endif
-                                                             readonly>
+                                                            <input type="text" class="form-control form-control-sm" name="direccion" id="direccion">
                                                         </div>
                                                         <div class="form-group col-sm-6 col-md-6 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Email</label>
-                                                            <input type="text" class="form-control form-control-sm" name="email" id="email" value="{{ $paciente->email }}" readonly>
+                                                            <input type="text" class="form-control form-control-sm" name="email" id="email">
                                                         </div>
                                                     </div>
                                                     <div class="form-row">
@@ -415,16 +396,16 @@
                                                                                 <tr>
                                                                                     <td>
                                                                                         <select id="ng_7" class="ng_esp" size="1" name="ng_7">
-                                                                                            <option value="1">t</option>
-                                                                                            <option value="2"> g</option>
-                                                                                            <option value="3"> f</option>
-                                                                                            <option value="4"> i</option>
-                                                                                            <option value="5"> h</option>
-                                                                                            <option value="6"> j</option>
-                                                                                            <option value="7"> k</option>
-                                                                                            <option value="8"> m</option>
-                                                                                            <option value="9"> l</option>
-                                                                                            <option value="10"> n</option>
+                                                                                           <option value="1">t</option>
+                                                                                           <option value="2"> g</option>
+                                                                                           <option value="3"> f</option>
+                                                                                           <option value="4"> i</option>
+                                                                                           <option value="5"> h</option>
+                                                                                           <option value="6"> j</option>
+                                                                                           <option value="7"> k</option>
+                                                                                           <option value="8"> m</option>
+                                                                                           <option value="9"> l</option>
+                                                                                           <option value="10"> n</option>
                                                                                         </select>
                                                                                     </td>
                                                                                     <td class="text_center">
@@ -547,13 +528,13 @@
                                                                                     <input id="LatEaS" class="form-control form-control-sm" type="text" name="LatEaS" title="LatEaS" size="9">
                                                                                 </td>
                                                                                 <td>
-                                                                                    <select id="par1" class="form-control form-control-sm" size="1" name="par1" title="par1">
+                                                                                    <select id="e415" class="form-control form-control-sm" size="1" name="par1" title="par1">
                                                                                         <option value="1"> Si</option>
                                                                                         <option selected value="2"> No</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td>
-                                                                                    <select id="fat1" class="form-control form-control-sm" size="1" name="fat1" title="fat1">
+                                                                                    <select id="e308" class="form-control form-control-sm" size="1" name="fat1" title="fat1">
                                                                                         <option value="1"> Si</option>
                                                                                         <option selected value="2"> No</option>
                                                                                     </select>
@@ -1236,14 +1217,14 @@
                                                                     <table id="tabla_registros_pc" class="display table table-striped  table-bordered dt-responsive nowrap table-xs">
                                                                         <thead>
                                                                             <tr>
-                                                                                <th scope="col"></th>
-                                                                                <th scope="col">DURACIÓN</th>
-                                                                                <th scope="col">FRECUENCIA</th>
-                                                                                <th scope="col">AMPLITUD</th>
-                                                                                <th scope="col">VÉRTIGO</th>
-                                                                                <th scope="col">NAUSEAS</th>
-                                                                                <th scope="col">VÓMITO</th>
-                                                                                <th scope="col">VCL</th>
+                                                                              <th scope="col"></th>
+                                                                              <th scope="col">DURACIÓN</th>
+                                                                              <th scope="col">FRECUENCIA</th>
+                                                                              <th scope="col">AMPLITUD</th>
+                                                                              <th scope="col">VÉRTIGO</th>
+                                                                              <th scope="col">NAUSEAS</th>
+                                                                              <th scope="col">VÓMITO</th>
+                                                                              <th scope="col">VCL</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -1252,37 +1233,37 @@
                                                                                     OI a 30°C
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="DUR_IO30" class="form-control form-control-sm text-c-blue" type="text" name="DUR_IO30" title="OIa30°C" size="9" style="color: #1a49a3;">
+                                                                                    <input id="DUR_30OI" class="form-control form-control-sm text-c-blue" type="text" name="DUR_30OI" title="OIa30°C" size="9" style="color: #1a49a3;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="FR_IO30" class="form-control form-control-sm"  type="text" name="FR_IO30" title="Nombre" size="9" style="color: #1a49a3;">
+                                                                                    <input id="FR_30OI" class="form-control form-control-sm"  type="text" name="FR_30OI" title="Nombre" size="9" style="color: #1a49a3;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="AM_IO30" class="form-control form-control-sm" type="text" name="AM_IO30" title="Nombre" size="9" style="color: #1a49a3;">
+                                                                                    <input id="AM_30OI" class="form-control form-control-sm" type="text" name="AM_30OI" title="Nombre" size="9" style="color: #1a49a3;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="IO30_1" class="form-control form-control-sm"  name="IO30_1" size="1" title="VERT" style="color: #1a49a3;">
+                                                                                    <select id="30OI_1" class="form-control form-control-sm"  name="30OI_1" size="1" title="VERT" style="color: #1a49a3;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="IO30_2" class="form-control form-control-sm" name="IO30_2" size="1" title="NAUSEAS" style="color: #1a49a3;">
+                                                                                    <select id="30OI_2" class="form-control form-control-sm" name="30OI_2" size="1" title="NAUSEAS" style="color: #1a49a3;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="IO30_3" class="form-control form-control-sm"  name="IO30_3" size="1" title="VOM" style="color: #1a49a3;">
+                                                                                    <select id="30OI_3" class="form-control form-control-sm"  name="30OI_3" size="1" title="VOM" style="color: #1a49a3;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="VCL_IO30" class="form-control form-control-sm"  type="text" name="VCL_IO30" title="VCL" size="9" style="color: #1a49a3;">
+                                                                                    <input id="VCL_30OI" class="form-control form-control-sm"  type="text" name="VCL_30OI" title="VCL" size="9" style="color: #1a49a3;">
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
@@ -1290,37 +1271,37 @@
                                                                                     OD a 30°C
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="DUR_OD30" class="form-control form-control-sm"  type="text" name="DUR_OD30"  size="9"style="color: #FF0000;">
+                                                                                    <input id="DUR_30OD" class="form-control form-control-sm"  type="text" name="DUR_30OD"  size="9"style="color: #FF0000;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="FR_OD30" class="form-control form-control-sm"  type="text" name="FR_OD30"  size="9"style="color: #FF0000;">
+                                                                                    <input id="FR_30OD" class="form-control form-control-sm"  type="text" name="FR_30OD"  size="9"style="color: #FF0000;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="AM_OD30" class="form-control form-control-sm"  type="text" name="AM_OD30"  size="9"style="color: #FF0000;">
+                                                                                    <input id="AM_30OD" class="form-control form-control-sm"  type="text" name="AM_30OD"  size="9"style="color: #FF0000;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="OD30_1" class="form-control form-control-sm"   name="OD30_1" size="1" style="color: #FF0000;">
+                                                                                    <select id="30OD_1" class="form-control form-control-sm"   name="30OD_1" size="1" style="color: #FF0000;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="OD30_2" class="form-control form-control-sm" name="OD30_2" size="1" style="color: #FF0000;">
+                                                                                    <select id="30OD_2" class="form-control form-control-sm" name="30OD_2" size="1" style="color: #FF0000;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="OD30_3" class="form-control form-control-sm" name="OD30_3" size="1" style="color: #FF0000;">
+                                                                                    <select id="30OD_3" class="form-control form-control-sm" name="30OD_3" size="1" style="color: #FF0000;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="VCL_OD30"class="form-control form-control-sm"type="text" name="VCL_OD30"  size="9"style="color: #FF0000;">
+                                                                                    <input id="VCL_30OD"class="form-control form-control-sm"type="text" name="VCL_30OD"  size="9"style="color: #FF0000;">
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
@@ -1328,143 +1309,143 @@
                                                                                     OI a 44°C
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="DUR_IO44"class="form-control form-control-sm"type="text" name="DUR_IO44"  size="9" style="color: #1a49a3;">
+                                                                                    <input id="DUR_44OI"class="form-control form-control-sm"type="text" name="DUR_44OI"  size="9" style="color: #1a49a3;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="FR_IO44"class="form-control form-control-sm"type="text" name="FR_IO44"  size="9" style="color: #1a49a3;">
+                                                                                    <input id="FR_44OI"class="form-control form-control-sm"type="text" name="FR_44OI"  size="9" style="color: #1a49a3;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="AM_IO44"class="form-control form-control-sm"type="text" name="AM_IO44"  size="9" style="color: #1a49a3;">
+                                                                                    <input id="AM_44OI"class="form-control form-control-sm"type="text" name="AM_44OI"  size="9" style="color: #1a49a3;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="IO44_1" class="form-control form-control-sm"name="IO44_1" size="1"  style="color: #1a49a3;">
+                                                                                    <select id="44OI_1" class="form-control form-control-sm"name="44OI_1" size="1"  style="color: #1a49a3;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select></td>
                                                                                 <td class="#">
-                                                                                    <select id="IO44_2" class="form-control form-control-sm" name="IO44_2" size="1"  style="color: #1a49a3;">
+                                                                                    <select id="44OI_2" class="form-control form-control-sm" name="44OI_2" size="1"  style="color: #1a49a3;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="IO44_3" class="form-control form-control-sm" name="IO44_3" size="1" style="color: #1a49a3;">
+                                                                                    <select id="44OI_3" class="form-control form-control-sm" name="44OI_3" size="1" style="color: #1a49a3;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="VCL_IO44"class="form-control form-control-sm"type="text" name="VCL_IO44" t size="9" style="color: #1a49a3;">
+                                                                                    <input id="VCL_44OI"class="form-control form-control-sm"type="text" name="VCL_44OI" t size="9" style="color: #1a49a3;">
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="text-danger font-weight-bold">
                                                                                     OD a 44°C</td>
                                                                                 <td class="#">
-                                                                                    <input id="DUR_OD44" class="form-control form-control-sm" type="text" name="DUR_OD44"  size="9"style="color: #FF0000;">
+                                                                                    <input id="DUR_44OD" class="form-control form-control-sm" type="text" name="DUR_44OD"  size="9"style="color: #FF0000;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="FR_OD44" class="form-control form-control-sm" type="text" name="FR_OD44"  size="9"style="color: #FF0000;">
+                                                                                    <input id="FR_44OD" class="form-control form-control-sm" type="text" name="FR_44OD"  size="9"style="color: #FF0000;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="AM_OD44" class="form-control form-control-sm" type="text" name="AM_OD44"  size="9"style="color: #FF0000;">
+                                                                                    <input id="AM_44OD" class="form-control form-control-sm" type="text" name="AM_44OD"  size="9"style="color: #FF0000;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="OD44_1" class="form-control form-control-sm"  name="OD44_1" size="1" style="color: #FF0000;">
+                                                                                    <select id="44OD_1" class="form-control form-control-sm"  name="44OD_1" size="1" style="color: #FF0000;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select></td>
                                                                                 <td class="#">
-                                                                                    <select id="OD44_2" class="form-control form-control-sm"  name="OD44_2" size="1" style="color: #FF0000;">
+                                                                                    <select id="44OD_2" class="form-control form-control-sm"  name="44OD_2" size="1" style="color: #FF0000;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select></td>
                                                                                 <td class="#">
-                                                                                    <select id="OD44_3" class="form-control form-control-sm"  name="OD44_3" size="1"  style="color: #FF0000;">
+                                                                                    <select id="44OD_3" class="form-control form-control-sm"  name="44OD_3" size="1"  style="color: #FF0000;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select></td>
                                                                                 <td class="#">
-                                                                                    <input id="VCL_OD44" class="form-control form-control-sm" type="text" name="VCL_OD44"  size="9"style="color: #FF0000;">
+                                                                                    <input id="VCL_44OD" class="form-control form-control-sm" type="text" name="VCL_44OD"  size="9"style="color: #FF0000;">
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="text-c-blue font-weight-bold">
                                                                                     OI a 18°C</td>
                                                                                 <td class="#">
-                                                                                    <input id="DUR_OI18" class="form-control form-control-sm" type="text" name="DUR_OI18"  size="9" style="color: #1a49a3;">
+                                                                                    <input id="DUR_18OI" class="form-control form-control-sm" type="text" name="DUR_18OI"  size="9" style="color: #1a49a3;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="FR_OI18" class="form-control form-control-sm" type="text" name="FR_OI18"  size="9" style="color: #1a49a3;">
+                                                                                    <input id="FR_18OI" class="form-control form-control-sm" type="text" name="FR_18OI"  size="9" style="color: #1a49a3;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="AM_OI18" class="form-control form-control-sm" type="text" name="AM_OI18" size="9" style="color: #1a49a3;">
+                                                                                    <input id="AM_18OI" class="form-control form-control-sm" type="text" name="AM_18OI" size="9" style="color: #1a49a3;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="OI18_1" class="form-control form-control-sm" name="OI18_1" size="1"  style="color: #1a49a3;">
+                                                                                    <select id="18OI_1" class="form-control form-control-sm" name="18OI_1" size="1"  style="color: #1a49a3;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select></td>
                                                                                 <td class="#">
-                                                                                    <select id="OI18_2" class="form-control form-control-sm" name="OI18_2" size="1" style="color: #1a49a3;">
+                                                                                    <select id="18OI_2" class="form-control form-control-sm" name="18OI_2" size="1" style="color: #1a49a3;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="OI18_3" class="form-control form-control-sm" name="OI18_3" size="1"  style="color: #1a49a3;">
+                                                                                    <select id="18OI_3" class="form-control form-control-sm" name="18OI_3" size="1"  style="color: #1a49a3;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="VCL_OI18"class="form-control form-control-sm"type="text" name="VCL_OI18" size="9" style="color:#1a49a3;">
+                                                                                    <input id="VCL_18OI"class="form-control form-control-sm"type="text" name="VCL_18OI" size="9" style="color:#1a49a3;">
                                                                                 </td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="text-danger font-weight-bold">
                                                                                     OD a 18°C</td>
                                                                                 <td class="#">
-                                                                                    <input id="DUR_OD18"class="form-control form-control-sm"type="text" name="DUR_OD18"  size="9"style="color: #FF0000;">
+                                                                                    <input id="DUR_18OD"class="form-control form-control-sm"type="text" name="DUR_18OD"  size="9"style="color: #FF0000;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="FR_OD18"class="form-control form-control-sm"type="text" name="FR_OD18"  size="9"style="color: #FF0000;">
+                                                                                    <input id="FR_18OD"class="form-control form-control-sm"type="text" name="FR_18OD"  size="9"style="color: #FF0000;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="AM_OD18"class="form-control form-control-sm"type="text" name="AM_OD18"  size="9"style="color: #FF0000;">
+                                                                                    <input id="AM_18OD"class="form-control form-control-sm"type="text" name="AM_18OD"  size="9"style="color: #FF0000;">
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="OD18_1" class="form-control form-control-sm" name="OD18_1" size="1" style="color: #FF0000;">
+                                                                                    <select id="18OD_1" class="form-control form-control-sm" name="18OD_1" size="1" style="color: #FF0000;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="OD18_2" class="form-control form-control-sm" name="OD18_2" size="1" style="color: #FF0000;">
+                                                                                    <select id="18OD_2" class="form-control form-control-sm" name="18OD_2" size="1" style="color: #FF0000;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <select id="OD18_3" class="form-control form-control-sm"name="OD18_3" size="1" style="color: #FF0000;">
+                                                                                    <select id="18OD_3" class="form-control form-control-sm"name="18OD_3" size="1" style="color: #FF0000;">
                                                                                         <option value="1">+</option>
                                                                                         <option value="2">++</option>
                                                                                         <option selected value="3">0</option>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td class="#">
-                                                                                    <input id="VCL_OD18"class="form-control form-control-sm"type="text" name="VCL_OD18"  size="9"style="color: #FF0000;">
+                                                                                    <input id="VCL_18OD"class="form-control form-control-sm"type="text" name="VCL_18OD"  size="9"style="color: #FF0000;">
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
@@ -1490,23 +1471,29 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            {{-- </div> --}}
                         </div>
-                    </div>
-                </div>
+                        <!--Licencia-->
+                        <!--Ficha Médica Única-->
+                        {{-- <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab"> --}}
+                            {{-- @include('general.secciones_ficha.fmu') --}}
+                        {{-- </div> --}}
+                        <!--Atenciones previas-->
+                        {{-- <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab"> --}}
+                            {{-- @include('general.secciones_ficha.atenciones_previas_form') --}}
+                        {{-- </div> --}}
+                        <!--Exámenes-->
+                        {{-- <div class="tab-pane fade show" id="examenes" role="tabpanel" aria-labelledby="examenes-tab"> --}}
+                            {{-- @include('general.secciones_ficha.bandeja_examenes') --}}
+                        {{-- </div> --}}
+                        <!--Hospitalización-->
+                        {{-- <div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab"> --}}
+                            {{-- @include('general.hospitalizacion.hospitalizacion_op') --}}
+                        {{-- </div> --}}
 
-                <div class="row">
-                    <!--GUARDAR O IMPRIMIR FICHA-->
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="row mb-3">
-                            <div class="col-md-12 text-center">
-                                <input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
-                            </div>
-                        </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
     <!-- SIDE BAR FONO -->

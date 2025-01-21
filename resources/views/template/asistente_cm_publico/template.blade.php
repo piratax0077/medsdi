@@ -156,7 +156,8 @@
     @endswitch
 
     @yield('content')
-    @yield('modales')
+    {{-- @yield('modales') --}}
+
 
     <footer>
         {{--  @include('template.include.footer')  --}}
@@ -226,6 +227,7 @@
 
     <!-- flatpickr -->
     <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
+
 
     <script>
 
@@ -335,7 +337,10 @@
             });
         }
     </script>
+
     @yield('page-script')
     @yield('btn-script-agenda')
+
+    @yield('modales')
 </body>
 </html>
