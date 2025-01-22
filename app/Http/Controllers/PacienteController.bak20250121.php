@@ -1,496 +1,260 @@
 <?php
 
-
-
 namespace App\Http\Controllers;
-
 
 use App\Models\CuracionesServicio;
 use App\Models\Direccion;
-
 use App\Models\Especialidad;
-
 use App\Models\FichaAtencion;
-
 use App\Models\Paciente;
-
 use App\Models\Prevision;
-
 use App\Models\Profesional;
 use App\Models\ProcedimientoServicio;
-
 use App\Models\User;
-
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\Crypt;
 
-
-
 class PacienteController extends Controller
-
 {
-
     public function index()
-
     {
-
         $paciente = new Paciente();
-
     }
-
-
 
     public function buscar_paciente(Request $request)
-
     {
-
         $paciente = Paciente::where('rut', $request->rut)->first();
-
-
-
         if (isset($paciente)) {
-
             return json_encode($paciente);
-
         }
-
     }
 
-
-
     public function crear_paciente(Request $request)
-
     {
-
         /* $user = Auth::user()->id;
-
          $profesional = Profesional::where('id_usuario', $user)->first();*/
-
-
 
         $validacion_email = User::where('email', $request->email_paciente_agregar)->first();
 
-
-
         if (isset($validacion_email) || $validacion_email != '') {
-
             return back()->with('mensaje', 'email ya se encuentra registrado');
-
         }
-
-
-
         //$apellidos = explode(" ", $request->apellidos_paciente_agregar);
-
-
-
         $direccion = new Direccion();
-
         $paciente = new Paciente();
-
         $paciente->rut = $request->rut_paciente_agregar;
-
         $paciente->nombres = $request->nombres_paciente_agregar;
-
         $paciente->apellido_uno = $request->apellido_uno_paciente_agregar;
-
         $paciente->apellido_dos = $request->apellido_dos_paciente_agregar;
-
         $paciente->sexo = 'M';
-
         $paciente->fecha_nac = $request->fecha_nac_paciente_agregar;
-
         $paciente->id_prevision = $request->prevision_agregar;
-
         $paciente->email = $request->email_paciente_agregar;
-
         $paciente->telefono_uno = $request->telefono_paciente_agregar;
-
         $paciente->id_direccion = $direccion->id;
 
-
-
         if ($paciente->save()) {
-
             $direccion->direccion = $request->direccion_paciente_agregar;
-
             $direccion->numero_dir = mt_rand(100, 9999);
-
             $direccion->id_ciudad = $request->ciudad_agregar;
 
-
-
             if (!$direccion->save()) {
-
                 back()->with('mensaje', 'error');
-
             }
-
-
-
             return back()->with('mensaje', 'se almacenado paciente al sistema');
-
         }
-
-
-
         return 'algo';
-
     }
-
-
 
     /* - Vue - */
-
     public function index2(){
-
         $code = Crypt::encryptString(Auth::user()->email);
-
         return view('template.pacienteTemplate',['code' => $code]);
-
     }
-
-
 
     public function getMisAtenciones(Request $request){
-
         $email = Crypt::decryptString($request->code);
-
         $paciente = Paciente::where('email', $email)->first();
-
         $fichas = FichaAtencion::where('id_paciente', $paciente->id)->get();
 
-
-
         $data = [
-
             'Fichas' => $fichas,
-
         ];
-
         return json_encode($data);
-
     }
 
-
-
     public function getMisProfesionales(Request $request){
-
         $user = User::where('email', Crypt::decryptString($request->code))->first();
-
         $fichas = FichaAtencion::where('id_paciente', $user->id)->get();
-
         $profesional = [];
-
         $especialidades = [];
-
         foreach ($fichas as $f) {
-
             $p = $f->profesional()->first();
-
             $espe = $p->Especialidad()->first()->nombre;
-
             $p->especialidad =  $espe;
-
             array_push($profesional, $p);
-
             array_push($especialidades, $espe);
-
         }
 
         $data = [
-
             'Profesionales' => $profesional,
-
             'Especialidad' => $especialidades,
-
         ];
 
         return json_encode($data);
-
     }
 
-
-
     public function getBuscarProfesional_1(Request $request){
-
         $especialidad = (isset($request->especialidad)) ? $request->especialidad : NULL;
-
         $convenios = (isset($request->convenios)) ? $request->convenios : NULL;
-
         $comuna = (isset($request->comuna)) ? $request->comuna : NULL;
-
-
-
         $Especialidad = Especialidad::where('nombre', 'like', '%'.$especialidad.'%')->get();
-
         $profesional = [];
 
         foreach ($Especialidad as $e) {
-
             if(isset($e->id)){
-
                 foreach ($e->Profesionales()->get() as $p) {
-
                     $p->especialidad =  $e->nombre;
-
                     array_push($profesional, $p) ;
-
                 }
-
             }
-
         };
 
         $data = [
-
             'Profesionales' => $profesional,
-
         ];
 
         return json_encode($data);
-
     }
-
-
 
     public function getBuscarProfesional_2(Request $request){
-
-
-
         $nombrerut = (isset($request->rut)) ? $request->rut : NULL;
-
         $comuna = (isset($request->comuna)) ? $request->comuna : NULL;
-
         $profesional = Profesional::where(function ($query) use ($nombrerut) {
-
             $query->where('rut', 'like', '%'.$nombrerut.'%')
-
                     ->orWhere('nombre', 'like', '%'.$nombrerut.'%')
-
                     ->orWhere('apellido_uno', 'like', '%'.$nombrerut.'%')
-
                     ->orWhere('apellido_dos', 'like', '%'.$nombrerut.'%');
-
         })->get();
 
-
-
         $data = [
-
             'Profesionales' => $profesional,
-
         ];
 
         return json_encode($data);
-
     }
-
-
 
     public function getBuscarProfesional_3(Request $request){
-
-
-
         $especialidad = (isset($request->especialidad)) ? $request->especialidad : NULL;
-
         $convenios = (isset($request->convenios)) ? $request->convenios : NULL;
-
         $comuna = (isset($request->comuna)) ? $request->comuna : NULL;
 
-
-
         $Especialidad = Especialidad::where('nombre', 'like', '%'.$especialidad.'%')->get();
-
         $profesional = [];
-
         foreach ($Especialidad as $e) {
-
             if(isset($e->id)){
-
                 foreach ($e->Profesionales()->get() as $p) {
-
                     array_push($profesional, $p) ;
-
                 }
-
             }
-
         }
 
-
-
         $data = [
-
             'Profesionales' => $profesional,
-
         ];
 
         return json_encode($data);
-
     }
 
-
-
     public function getRecetas(Request $request){
-
         $user = User::where('email', Crypt::decryptString($request->code))->first();
-
         $fichas = FichaAtencion::where('id_paciente', $user->id)->get();
-
         $recetas = [];
-
         foreach($fichas as $f){
 
             foreach($f->Recetas()->get() as $r){
-
                 $profesional = $f->Profesional()->first();
-
                 $profesional->Especialidad = $profesional->Especialidad()->first()->nombre;
-
                 $r->Profesional = $profesional;
-
                 $r->Diagnostico = $f->hipotesis_diagnostico;
-
                 $r->fechaReceta = \Carbon\Carbon::parse($r->created_at)->format('d/m/Y');
-
                 array_push($recetas, $r);
-
             }
-
         }
-
         $data = [
-
             'Recetas' => $recetas,
-
         ];
 
         return json_encode($data);
-
     }
-
-
-
-
-
-
 
     public function getLicencias(Request $request){
 
         $user = User::where('email', Crypt::decryptString($request->code))->first();
-
         $fichas = FichaAtencion::where('id_paciente', $user->id)->get();
 
         $licencias = [];
 
         foreach($fichas as $f){
-
             foreach($f->Licencias()->get() as $l){
-
                 $profesional = $f->Profesional()->first();
-
                 $profesional->Especialidad = $profesional->Especialidad()->first()->nombre;
-
                 $l->Profesional = $profesional;
-
                 $l->Diagnostico = $f->hipotesis_diagnostico;
-
                 $l->fechaLicencia = \Carbon\Carbon::parse($l->created_at)->format('d/m/Y');
-
                 array_push($licencias, $l);
-
             }
-
         }
 
         $data = [
-
             'Licencias' => $licencias,
-
         ];
 
         return json_encode($data);
-
     }
-
-
 
     public function getCertificados(Request $request){
-
         $user = User::where('email', Crypt::decryptString($request->code))->first();
-
         $fichas = FichaAtencion::where('id_paciente', $user->id)->get();
-
         $certificados = [];
-
         foreach($fichas as $f){
-
             foreach($f->Certificados()->get() as $c){
-
                 $profesional = $f->Profesional()->first();
-
                 $profesional->Especialidad = $profesional->Especialidad()->first()->nombre;
-
                 $c->Profesional = $profesional;
-
                 $c->Diagnostico = $f->hipotesis_diagnostico;
-
                 $c->fechaCertificado = \Carbon\Carbon::parse($c->created_at)->format('d/m/Y');
-
                 array_push($certificados, $c);
-
             }
-
         }
 
         $data = [
-
             'Certificados' => $certificados,
-
         ];
 
         return json_encode($data);
-
     }
-
-
 
     public function getExamenes(Request $request){
 
         $user = User::where('email', Crypt::decryptString($request->code))->first();
-
         $fichas = FichaAtencion::where('id_paciente', $user->id)->get();
-
         $examenes = [];
 
         foreach($fichas as $f){
-
             foreach($f->Examenes()->get() as $e){
-
                 $profesional = $f->Profesional()->first();
-
                 $profesional->Especialidad = $profesional->Especialidad()->first()->nombre;
-
                 $e->Profesional = $profesional;
-
                 $e->Diagnostico = $f->hipotesis_diagnostico;
-
                 $e->fechaExamen = \Carbon\Carbon::parse($e->created_at)->format('d/m/Y');
-
                 array_push($examenes, $e);
-
             }
-
         }
 
         $data = [
-
             'Examenes' => $examenes,
-
         ];
 
         return json_encode($data);
@@ -855,7 +619,7 @@ class PacienteController extends Controller
     public function indicarProcedimientoSDI(Request $request){
 
 
-        if(strval($request->ind_med) !== '0'){
+        if($request->ind_med && strval($request->ind_med) !== '0'){
 
             $procedimiento_servicio = new ProcedimientoServicio();
             $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
@@ -874,7 +638,7 @@ class PacienteController extends Controller
             $procedimiento_servicio->save();
         }
 
-        if(strval($request->ind_cc) !== "0"){
+        if($request->ind_cc && strval($request->ind_cc) !== "0"){
 
             $procedimiento_servicio = new ProcedimientoServicio();
             $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
@@ -896,7 +660,7 @@ class PacienteController extends Controller
            $this->guardarControlCiclo($request->ind_cc, $request->id_paciente);
         }
 
-        if(strval($request->ind_pp) !== "0"){
+        if($request->ind_pp && strval($request->ind_pp) !== "0"){
             $procedimiento_servicio = new ProcedimientoServicio();
             $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
             $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
@@ -914,7 +678,7 @@ class PacienteController extends Controller
             $procedimiento_servicio->save();
         }
 
-        if(strval($request->ind_proc) !== "0"){
+        if($request->ind_proc && strval($request->ind_proc) !== "0"){
             $procedimiento_servicio = new ProcedimientoServicio();
             $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
             $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
@@ -932,7 +696,7 @@ class PacienteController extends Controller
             $procedimiento_servicio->save();
         }
 
-        if(strval($request->ind_inmmed) !== "0"){
+        if($request->ind_inmmed && strval($request->ind_inmmed) !== "0"){
             $procedimiento_servicio = new ProcedimientoServicio();
             $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
             $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
@@ -950,7 +714,7 @@ class PacienteController extends Controller
             $procedimiento_servicio->save();
         }
 
-        if(strval($request->ind_cur) !== "0"){
+        if($request->ind_cur && strval($request->ind_cur) !== "0"){
             $procedimiento_servicio = new ProcedimientoServicio();
             $procedimiento_servicio->id_institucion = 19; // Se debe cambiar por la institucion del profesional
             $procedimiento_servicio->id_servicio = 4; // Se debe cambiar por el servicio del profesional
@@ -1070,6 +834,7 @@ class PacienteController extends Controller
         try {
 
             $procedimiento = ProcedimientoServicio::where('id', $request->id)->first();
+
             $procedimiento->delete();
             $procedimientos = $this->dameTodosProcedimientosPaciente($request->id_paciente);
             $curaciones = $this->dameCuracionesPaciente($request->id_paciente);
@@ -1123,7 +888,7 @@ class PacienteController extends Controller
         return $id_cc;
     }
 
-	static public function generarEmailPacienteTemporal($nombre, $apellido_uno, $apellido_dos)
+    static public function generarEmailPacienteTemporal($nombre, $apellido_uno, $apellido_dos)
     {
         // Limpieza de caracteres especiales y espacios
         $nombre = strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $nombre));
