@@ -699,7 +699,7 @@ class EscritorioAsistente extends Controller
     {
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
         $lugares_atencion = $asistente->LugarAtencion()->get();
-
+        $profesional = $asistente->Profesionales()->get();
         $conteo_prof = 0;
 
         if($lugares_atencion->count()>0 || $profesional->count()>0)
@@ -718,29 +718,11 @@ class EscritorioAsistente extends Controller
                 $profesional = Profesional::whereIn('id', $profesional_lugar_array)->get();
             }
 
-
-            $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
-            $prevision = Prevision::all();
-            $region = Region::all();
-            $profesion_oficio = ProfesionOficio::all();
-            $tipo_bonos = TipoBono::where('estado', 1)->get();
-
-            $filtro = array();
-			// $filtro[] = array('tipo_empleado',$asistente_tipo->nombre);
-			$filtro[] = array('estado',2) ;// contrato activo
-			$filtro[] = array('id_empleado',$asistente->id) ;
-			$contrato = ContratoDependiente::where($filtro)->first();
-
-			if($contrato)
-			{
-				$id_lugar_atencion = $contrato->id_lugar_atencion;
-                $profesional = $asistente->Profesionales()->get();
-
-				foreach ($profesional as $key_tipo_agenda => $value_tipo_agenda)
+            foreach ($profesional as $key_tipo_agenda => $value_tipo_agenda)
 				{
-					$registro_tipo_agenda = ProfesionalHorario::where('id_profesional', $value_tipo_agenda->id)->where('id_lugar_atencion', $id_lugar_atencion)->orderBy('id', 'ASC')->get();
+					$registro_tipo_agenda = ProfesionalHorario::where('id_profesional', $value_tipo_agenda->id)->where('id_lugar_atencion', $lugares_atencion[0]->id)->orderBy('id', 'ASC')->get();
 
-					$registro_tipo_agenda_cantidad = ProfesionalHorario::where('id_profesional', $value_tipo_agenda->id)->where('id_lugar_atencion', $id_lugar_atencion)->count();
+					$registro_tipo_agenda_cantidad = ProfesionalHorario::where('id_profesional', $value_tipo_agenda->id)->where('id_lugar_atencion', $lugares_atencion[0]->id)->count();
 
 					if($registro_tipo_agenda_cantidad > 0)
 					{
@@ -751,7 +733,12 @@ class EscritorioAsistente extends Controller
 						$profesional[$key_tipo_agenda]['id_tipo_agenda'] = 0;
 					}
 				}
-			}
+
+            $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
+            $prevision = Prevision::all();
+            $region = Region::all();
+            $profesion_oficio = ProfesionOficio::all();
+            $tipo_bonos = TipoBono::where('estado', 1)->get();
 
             return view('app.asistente.agenda_por_profesional')->with([
                 'asistente' => $asistente,
@@ -769,6 +756,7 @@ class EscritorioAsistente extends Controller
             $mensaje = 'Usted No esta asociada a ningun lugar de atencion o a profesionales';
             return back()->with('error', $mensaje)->withInput();
         }
+
     }
 
     public function agendar_hora_nuevo_paciente(Request $request)
@@ -1362,6 +1350,8 @@ class EscritorioAsistente extends Controller
     public function agendar_horas(Request $request)
     {
 
+        // var_dump($request->all());
+
         $paciente = paciente::where('id', $request->reserva_hora_id)->first();
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
         $profesional = Profesional::where('id', $request->id_profesional)->first();
@@ -1419,25 +1409,70 @@ class EscritorioAsistente extends Controller
             return json_encode(array(
                 'estado' => 'error',
                 'id_profesional' => $profesional->id,
-                'msj' => 'Paciente ya tiene Hora para este dia'
+                'msj' => 'PACIENTE TIENE HORA AGENDADA PARA ESTE DIA'
             ));
         }
+        else
+        {
 
+            $hora_cunsulta = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
 
-        /** buscar tiempo de la consult */
-        $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
-        $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
-                                                    ->where('id_profesional', $profesional->id)
-                                                    ->where('id_lugar_atencion',$request->id_lugar_atencion)
-                                                    ->where('dia','like','%'.$dia_de_semana.'%')
-                                                    ->first();
+            // DB::enableQueryLog(); // Habilitar el registro de consultas
 
-        // $profesional_horarios = '00:30:00';
-        // $tiempo_consulta = 30;
-        $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
-        $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
-        $totales = ($horas*60) + $minutos;
-        $tiempo_consulta = $totales;
+            $validar = HoraMedica::where('id_paciente', $paciente->id)
+                                ->whereIn('id_estado',[1,2,4,5,6,8])
+                                ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
+                                ->where(function($query) use ($hora_cunsulta) {
+                                    $query->whereTime('hora_inicio','>=', $hora_cunsulta)
+                                        ->whereTime('hora_termino','<=', $hora_cunsulta);
+                                })
+                                ->first();
+
+            // $queries = DB::getQueryLog();
+            // dd($queries);
+
+            if($validar)
+            {
+                return json_encode(array(
+                        'estado' => 'error',
+                        'id_profesional' => $profesional->id,
+                        'msj' => 'PACIENTE TIENE HORA AGENDADA PARA ESTE DÍA EN OTRO LUGAR DE ATENCIÓN'
+                        ));
+            }
+
+        }
+
+        $tiempo_consulta = 15;
+        $procedimiento = '';
+
+        if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
+        {
+            $procedimiento = $request->procedimiento;
+            $proc_bloque = ( !empty($request->proc_bloque)?intval($request->proc_bloque):1 );
+            $tiempo_consulta = intval($proc_bloque) * 15;
+        }else if($profesional->id_especialidad == 2){
+            $procedimiento = $request->procedimiento;
+            $proc_bloque = ( !empty($request->proc_bloque)?intval($request->proc_bloque):1 );
+            $tiempo_consulta = intval($proc_bloque) * 15;
+        }
+        else
+        {
+
+            /** buscar tiempo de la consult */
+            $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
+            $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
+                                                        ->where('id_profesional', $profesional->id)
+                                                        ->where('id_lugar_atencion',$request->id_lugar_atencion)
+                                                        ->where('dia','like','%'.$dia_de_semana.'%')
+                                                        ->first();
+
+            // $profesional_horarios = '00:30:00';
+            // $tiempo_consulta = 30;
+            $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
+            $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
+            $totales = ($horas*60) + $minutos;
+            $tiempo_consulta = $totales;
+        }
 
         $hora_medica = new HoraMedica();
 
@@ -1452,11 +1487,13 @@ class EscritorioAsistente extends Controller
 
         $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
         $hora_medica->alias_examen = $texto_alias_examen;
+
         $hora_medica->id_procedimiento = $request->id_procedimiento;
 
         $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
         $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
 
+        /**acompañantes */
         $hora_medica->acomp_representante = $request->representante;
         $hora_medica->acomp_acompanante = $request->acompanante;
         if(!empty($request->lista_Acompanante))

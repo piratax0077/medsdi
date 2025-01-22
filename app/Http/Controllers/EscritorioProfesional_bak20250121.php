@@ -3140,10 +3140,7 @@ class EscritorioProfesional extends Controller
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
        $trabajos = DiagnosticosDental::where('tipo_examen',1)->orWhere('tipo_examen',2)->orWhere('tipo_examen',3)->get();
 
-       $mis_trabajos_profesional = DiagnosticosDentalProfesional::select('diagnosticos_dental_profesional.*','diagnosticos_dental.descripcion')
-                                        ->join('diagnosticos_dental','diagnosticos_dental_profesional.id_diagnostico','=','diagnosticos_dental.id')
-                                        ->where('diagnosticos_dental_profesional.id_profesional', $profesional->id)
-                                        ->get();
+       $mis_trabajos_profesional = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)->get();
 
       // Crear un array asociativo para un acceso más rápido
         $mis_trabajos_profesional_map = [];
@@ -3160,21 +3157,17 @@ class EscritorioProfesional extends Controller
             }
         }
 
-        foreach($trabajos as $t){
-            $value = DiagnosticosDentalProfesional::where('id_diagnostico',$t->id)->where('id_profesional',$profesional->id)->first();
-            if($value){
-                $t->cantidad_uco = $value->cantidad_uco;
-                $t->cantidad_bloques = $value->cantidad_bloques;
-                $t->laboratorio = $value->laboratorio;
-            }
-        }
+        $mis_trabajos_agregados = DiagnosticosDentalProfesional::select('diagnosticos_dental_profesional.*','diagnosticos_dental.descripcion','diagnosticos_dental.uco')
+                                                                ->join('diagnosticos_dental','diagnosticos_dental.id','=','diagnosticos_dental_profesional.id_diagnostico')
+                                                                ->where('diagnosticos_dental_profesional.id_profesional', $profesional->id)
+                                                                ->get();
 
-        foreach($mis_trabajos_profesional as $mi_trabajo){
-            $value = DiagnosticosDentalProfesional::where('id_diagnostico',$mi_trabajo->id_diagnostico)->where('id_profesional',$profesional->id)->first();
-            if($value){
-                $mi_trabajo->uco = $value->uco;
-                $mi_trabajo->valor = $value->valor;
-                $mi_trabajo->laboratorio = $value->laboratorio;
+
+        foreach($mis_trabajos_agregados as $mi_trabajo){
+            if (isset($mis_trabajos_profesional_map[$mi_trabajo->id])) {
+                $mi_trabajo->laboratorio = $mis_trabajos_profesional_map[$mi_trabajo->id];
+            } else {
+                $mi_trabajo->laboratorio = 0; // O el valor por defecto que prefieras
             }
         }
 
@@ -3183,33 +3176,33 @@ class EscritorioProfesional extends Controller
         return view('app.profesional.aranceles_profesional')->with([
             'aranceles' => $aranceles_lab,
             'trabajos' => $trabajos,
-            'mis_trabajos_agregados' => $mis_trabajos_profesional,
+            'mis_trabajos_agregados' => $mis_trabajos_agregados,
             'profesional' => $profesional
         ]);
     }
 
-    public function guardarProcedimientoPropio(Request $req){
-        return $req;
-    }
-
     public function editarProcedimientoDental(Request $req){
-
-
         try {
-            $procedimiento_profesional = DiagnosticosDentalProfesional::find($req->id);
 
+            $procedimiento = DiagnosticosDental::find($req->id);
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            $procedimiento->descripcion = $req->nombre_procedimiento_nuevo;
+            $procedimiento->uco = $req->cantidad_uco;
+            $procedimiento->valor = 15000 * $req->cantidad_uco;
+            $procedimiento->tipo_examen = 1;
+            $procedimiento->id_responsable = $profesional->id;
 
-            $procedimiento_profesional->cantidad_uco = $req->cantidad_uco;
-            $procedimiento_profesional->cantidad_bloques = $req->cantidad_bloques;
-            $procedimiento_profesional->laboratorio = $req->tiene_lab ? 1 : 0;
-
-            if($procedimiento_profesional->save()){
+            if($procedimiento->save()){
+                // buscamos en la tabla diagnosticos dental profesional si existe el procedimiento para el profesional
+                $trabajo_profesional = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)->where('id_diagnostico', $procedimiento->id)->first();
+                if($trabajo_profesional){
+                    $trabajo_profesional->laboratorio = $req->tiene_lab ? 1 : 0;
+                    $trabajo_profesional->cantidad_bloques = $req->cantidad_bloques;
+                    $trabajo_profesional->save();
+                }
                 $trabajos = DiagnosticosDental::where('tipo_examen',1)->orWhere('tipo_examen',2)->orWhere('tipo_examen',3)->get();
-                $mis_trabajos_profesional = DiagnosticosDentalProfesional::select('diagnosticos_dental_profesional.*','diagnosticos_dental.descripcion')
-                                        ->join('diagnosticos_dental','diagnosticos_dental_profesional.id_diagnostico','=','diagnosticos_dental.id')
-                                        ->where('diagnosticos_dental_profesional.id_profesional', $profesional->id)
-                                        ->get();
+                $procedimientos = DiagnosticosDental::where('id_responsable',$profesional->id)->get();
+                $mis_trabajos_profesional = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)->get();
                 // Crear un array asociativo para un acceso más rápido
                 $mis_trabajos_profesional_map = [];
                 foreach ($mis_trabajos_profesional as $trabajo_profesional) {
@@ -3225,47 +3218,27 @@ class EscritorioProfesional extends Controller
                     }
                 }
 
-                foreach($trabajos as $t){
-                    $value = DiagnosticosDentalProfesional::where('id_diagnostico',$t->id)->where('id_profesional',$profesional->id)->first();
-                    if($value){
-                        $t->cantidad_uco = $value->cantidad_uco;
-                        $t->cantidad_bloques = $value->cantidad_bloques;
-                        $t->laboratorio = $value->laboratorio;
-                    }
-                }
-
-                foreach($mis_trabajos_profesional as $mi_trabajo){
-                    if (isset($mis_trabajos_profesional_map[$mi_trabajo->id])) {
-                        $mi_trabajo->laboratorio = $mis_trabajos_profesional_map[$mi_trabajo->id];
+                foreach($procedimientos as $procedimiento){
+                    if (isset($mis_trabajos_profesional_map[$procedimiento->id])) {
+                        $procedimiento->laboratorio = $mis_trabajos_profesional_map[$procedimiento->id];
                     } else {
-                        $mi_trabajo->laboratorio = 0; // O el valor por defecto que prefieras
+                        $procedimiento->laboratorio = 0; // O el valor por defecto que prefiere
                     }
                 }
 
-                foreach($mis_trabajos_profesional as $mi_trabajo){
-                    $value = DiagnosticosDentalProfesional::where('id_diagnostico',$mi_trabajo->id_diagnostico)->where('id_profesional',$profesional->id)->first();
-                    if($value){
-                        $mi_trabajo->uco = $value->uco;
-                        $mi_trabajo->valor = $value->valor;
-                    }
-                }
-
-                return ['status' => 'ok', 'procedimientos' => $mis_trabajos_profesional, 'trabajos' => $trabajos];
+                return ['status' => 'ok', 'procedimientos' => $procedimientos, 'trabajos' => $trabajos];
             }else{
                 return ['status' => 'error'];
             }
         } catch (\Exception $e) {
             //throw $th;
-            return $e->getMessage();
+            return ['status' => 'error','msj' => $e->getMessage()];
         }
 
     }
 
     public function mostrarProcedimientoDental(Request $req){
-        $trabajo = DiagnosticosDentalProfesional::select('diagnosticos_dental_profesional.*','diagnosticos_dental.descripcion')
-                                        ->join('diagnosticos_dental','diagnosticos_dental_profesional.id_diagnostico','=','diagnosticos_dental.id')
-                                        ->where('diagnosticos_dental_profesional.id', $req->id)->first();
-
+        $trabajo = DiagnosticosDental::find($req->id);
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         $mis_trabajos_profesional = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)->get();
         // Crear un array asociativo para un acceso más rápido
@@ -3274,18 +3247,18 @@ class EscritorioProfesional extends Controller
             $mis_trabajos_profesional_map[$trabajo_profesional->id_diagnostico] = $trabajo_profesional->laboratorio;
         }
 
-        foreach($mis_trabajos_profesional as $mi_trabajo){
-            if (isset($mis_trabajos_profesional_map[$mi_trabajo->id_diagnostico])) {
-                $mi_trabajo->laboratorio = $mis_trabajos_profesional_map[$mi_trabajo->id_diagnostico];
-            } else {
-                $mi_trabajo->laboratorio = 0; // O el valor por defecto que prefieras
-            }
+        if (isset($mis_trabajos_profesional_map[$trabajo->id])) {
+            $trabajo->laboratorio = $mis_trabajos_profesional_map[$trabajo->id];
+        } else {
+            $trabajo->laboratorio = 0; // O el valor por defecto que prefiere
         }
+
 
         return ['status' => 'ok', 'procedimiento' => $trabajo];
     }
 
     public function agregarProcedimientoDental(Request $req){
+
         // agregar procedimiento dental
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         $procedimiento = new DiagnosticosDental();
@@ -3303,7 +3276,13 @@ class EscritorioProfesional extends Controller
             $trabajo_profesional->save();
             $trabajos = DiagnosticosDental::where('tipo_examen',1)->orWhere('tipo_examen',2)->orWhere('tipo_examen',3)->get();
             $procedimientos = DiagnosticosDental::where('id_responsable',$profesional->id)->get();
-            $mis_trabajos_profesional = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)->get();
+
+            $mis_trabajos_profesional = DiagnosticosDentalProfesional::select('diagnosticos_dental_profesional.*','diagnosticos_dental.descripcion','diagnosticos_dental.uco')
+                                                                ->join('diagnosticos_dental','diagnosticos_dental.id','=','diagnosticos_dental_profesional.id_diagnostico')
+                                                                ->where('diagnosticos_dental_profesional.id_profesional', $profesional->id)
+                                                                ->get();
+
+
             // Crear un array asociativo para un acceso más rápido
             $mis_trabajos_profesional_map = [];
             foreach ($mis_trabajos_profesional as $trabajo_profesional) {
@@ -3319,28 +3298,32 @@ class EscritorioProfesional extends Controller
                 }
             }
 
-            foreach($procedimientos as $procedimiento){
-                if (isset($mis_trabajos_profesional_map[$procedimiento->id])) {
-                    $procedimiento->laboratorio = $mis_trabajos_profesional_map[$procedimiento->id];
+            foreach($mis_trabajos_profesional as $mi_trabajo){
+                if (isset($mis_trabajos_profesional_map[$mi_trabajo->id])) {
+                    $mi_trabajo->laboratorio = $mis_trabajos_profesional_map[$mi_trabajo->id];
                 } else {
-                    $procedimiento->laboratorio = 0; // O el valor por defecto que prefieras
+                    $mi_trabajo->laboratorio = 0; // O el valor por defecto que prefieras
                 }
             }
 
-            return ['status' => 'ok', 'procedimientos' => $procedimientos, 'trabajos' => $trabajos];
+            return ['status' => 'ok', 'procedimientos' => $mis_trabajos_agregados, 'trabajos' => $trabajos];
         }else{
             return ['status' => 'error'];
         }
     }
 
     public function eliminarProcedimientoDental(Request $req){
-        $procedimiento = DiagnosticosDental::find($req->id);
+        $procedimiento = DiagnosticosDentalProfesional::find($req->id);
+
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         if($procedimiento->delete()){
 
             $trabajos = DiagnosticosDental::where('tipo_examen',1)->orWhere('tipo_examen',2)->orWhere('tipo_examen',3)->get();
             $procedimientos = DiagnosticosDental::where('id_responsable',$profesional->id)->get();
-            $mis_trabajos_profesional = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)->get();
+            $mis_trabajos_profesional = DiagnosticosDentalProfesional::select('diagnosticos_dental_profesional.*','diagnosticos_dental.descripcion','diagnosticos_dental.uco')
+                                                                    ->join('diagnosticos_dental','diagnosticos_dental.id','=','diagnosticos_dental_profesional.id_diagnostico')
+                                                                    ->where('diagnosticos_dental_profesional.id_profesional', $profesional->id)
+                                                                    ->get();
             // Crear un array asociativo para un acceso más rápido
             $mis_trabajos_profesional_map = [];
             foreach ($mis_trabajos_profesional as $trabajo_profesional) {
@@ -3364,7 +3347,21 @@ class EscritorioProfesional extends Controller
                 }
             }
 
-            return ['status' => 'ok', 'procedimientos' => $procedimientos, 'trabajos' => $trabajos];
+            $mis_trabajos_agregados = DiagnosticosDentalProfesional::select('diagnosticos_dental_profesional.*','diagnosticos_dental.descripcion','diagnosticos_dental.uco')
+                                                                ->join('diagnosticos_dental','diagnosticos_dental.id','=','diagnosticos_dental_profesional.id_diagnostico')
+                                                                ->where('diagnosticos_dental_profesional.id_profesional', $profesional->id)
+                                                                ->get();
+
+
+            foreach($mis_trabajos_agregados as $mi_trabajo){
+                if (isset($mis_trabajos_profesional_map[$mi_trabajo->id])) {
+                    $mi_trabajo->laboratorio = $mis_trabajos_profesional_map[$mi_trabajo->id];
+                } else {
+                    $mi_trabajo->laboratorio = 0; // O el valor por defecto que prefieras
+                }
+            }
+
+            return ['status' => 'ok', 'procedimientos' => $mis_trabajos_agregados, 'trabajos' => $trabajos];
         }else{
             return ['status' => 'error'];
         }
@@ -5467,7 +5464,7 @@ class EscritorioProfesional extends Controller
 
     public function mi_horario_lugar_atencion_agregar(Request $request)
     {
-
+        return $request;
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         $hora_inicio = \Carbon\Carbon::parse($request->hora_inicio . ':01')->format('H:i:s');
         $hora_termino = \Carbon\Carbon::parse($request->hora_termino . ':00')->format('H:i:s');

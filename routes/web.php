@@ -2200,8 +2200,9 @@ Route::get('/profesional/mis_convenios',[App\Http\Controllers\ConveniosControlle
 
 Route::get('/profesional/mensaje/{id}', [App\Http\Controllers\EscritorioGeneral::class, 'mensaje'])->name('profesional.mensaje');
 Route::post('/profesional/convenio/nuevo',[App\Http\Controllers\ConveniosController::class, 'nuevoConvenio'])->name('profesional.convenio_nuevo');
-Route::post('/editar/procedimiento',[App\Http\Controllers\EscritorioProfesional::class, 'editarProcedimiento'])->name('profesional.editar_procedimiento');
+Route::post('/editar/procedimiento',[App\Http\Controllers\EscritorioProfesional::class, 'editarProcedimientoDental'])->name('profesional.editar_procedimiento');
 Route::post('/mostrar/procedimiento/dental',[App\Http\Controllers\EscritorioProfesional::class, 'mostrarProcedimientoDental'])->name('profesional.mostrar_procedimiento');
+Route::post('/guardar/procedimiento/propio',[App\Http\Controllers\EscritorioProfesional::class, 'guardarProcedimientoPropio'])->name('profesional.guardar_procedimiento_propio');
 /** envio de correo prueba */
 Route::get('/correo/envio', [App\Http\Controllers\SendMailController::class, 'envioCorreoR'])->name('correo.envio');
 Route::get('/correo/envio_test', [App\Http\Controllers\SendMailController::class, 'envioCorreoTest'])->name('correo.envio.test');

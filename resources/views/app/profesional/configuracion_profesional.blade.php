@@ -85,6 +85,7 @@
                                 </a>
                             </div>
                         </div>
+                        @if($profesional->id_especialidad == 2)
                         <div class="col-md-3">
                             <div class="card subir py-3">
                                 <a href="{{ route('profesional.aranceles') }}">
@@ -100,6 +101,7 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
                         <div class="col-md-3">
                             <div class="card subir py-3">
                                 <a href="busq_secretaria.php">
@@ -130,6 +132,7 @@
                                 </a>
                             </div>
                         </div>
+                        @if($profesional->id_especialidad == 2)
                         <div class="col-md-3">
                             <div class="card subir py-3">
                                 <a href="busq_secretaria.php">
@@ -145,6 +148,7 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>

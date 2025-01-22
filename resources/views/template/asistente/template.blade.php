@@ -2369,6 +2369,16 @@
             let tipo_agenda = $('#id_tipo_agenda').val();
             var tipo_agenda_text = 'C';
 
+            var procedimiento = '';
+            var proc_bloque = '';
+            if($('#form_reseva_de_horas_id_procedimiento').length == 1)
+            {
+                procedimiento = $('#form_reseva_de_horas_id_procedimiento').val();
+                proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
+            }else{
+                proc_bloque = parseInt($('#cantidad_bloques_atencion').text());
+            }
+
             console.log(tipo_agenda);
             console.log(tipo_agenda_text);
 
@@ -2428,9 +2438,12 @@
                         acompanante: acompanante,
                         lista_Acompanante: lista_Acompanante,
                         autorizacion_atencion: autorizacion_atencion,
+                        procedimiento: procedimiento,
+                        proc_bloque: proc_bloque,
                     }
                 })
                 .done(function(data) {
+                    console.log(data);
                     if (data != null) {
                         data = JSON.parse(data);
 

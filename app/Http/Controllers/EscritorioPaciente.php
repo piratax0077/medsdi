@@ -1858,20 +1858,36 @@ class EscritorioPaciente extends Controller
 
         if($valido)
         {
-            /** buscar tiempo de la consult */
-            $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
-            $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
-                                                        ->where('id_profesional', $profesional->id)
-                                                        ->where('id_lugar_atencion',$request->id_lugar_atencion)
-                                                        ->where('dia','like','%'.$dia_de_semana.'%')
-                                                        ->first();
+            $tiempo_consulta = 15;
+            $procedimiento = '';
 
-            // $profesional_horarios = '00:30:00';
-            // $tiempo_consulta = 30;
-            $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
-            $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
-            $totales = ($horas*60) + $minutos;
-            $tiempo_consulta = $totales;
+            if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
+            {
+                $procedimiento = $request->procedimiento;
+                $proc_bloque = ( !empty($request->proc_bloque)?intval($request->proc_bloque):1 );
+                $tiempo_consulta = intval($proc_bloque) * 15;
+            }else if($profesional->id_especialidad == 2){
+                $procedimiento = $request->procedimiento;
+                $proc_bloque = ( !empty($request->proc_bloque)?intval($request->proc_bloque):1 );
+                $tiempo_consulta = intval($proc_bloque) * 15;
+            }
+            else
+            {
+                /** buscar tiempo de la consult */
+                $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
+                $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
+                                                            ->where('id_profesional', $profesional->id)
+                                                            ->where('id_lugar_atencion',$request->id_lugar_atencion)
+                                                            ->where('dia','like','%'.$dia_de_semana.'%')
+                                                            ->first();
+
+                // $profesional_horarios = '00:30:00';
+                // $tiempo_consulta = 30;
+                $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
+                $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
+                $totales = ($horas*60) + $minutos;
+                $tiempo_consulta = $totales;
+            }
 
             $hora_medica = new HoraMedica();
 
