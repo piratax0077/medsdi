@@ -603,6 +603,11 @@
                     $('#btn_ver_agregar_hora_extra').attr('disabled', true);
                     $('#btn_ver_agregar_hora_examen').attr('disabled', true);
                     break;
+                case 4://MODULAR
+                    $('#titulo_tipo_agenda').html('AGENDA MODULAR');
+                    $('#btn_ver_agregar_hora_extra').attr('disabled', true);
+                    $('#btn_ver_agregar_hora_examen').attr('disabled', true);
+                    break;
             }
 
             var evaluacion = false;
@@ -633,6 +638,7 @@
                             {
                                 carga_tipos_agendas(data.tipo_agendas);
                                 carga_tipos_agendas_anular(data.tipo_agendas);
+                                $('.btn-agenda-seleccion').hide();
                                 $.each(data.tipo_agendas, function (key, value)
                                 {
                                     $('.btn-agenda-'+value).show();
