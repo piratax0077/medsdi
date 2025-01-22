@@ -720,6 +720,7 @@ class EscritorioAsistente extends Controller
             }
 
 
+
             $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
             $prevision = Prevision::all();
             $region = Region::all();
@@ -816,7 +817,7 @@ class EscritorioAsistente extends Controller
 
             if( (\Carbon\Carbon::parse($request->fecha_nac)->age) < 18 && !empty($request->reserva_hora_email))
             {
-                $paciente->email = $temp.'@'.$temp.'.cl';
+                $paciente->email = $temp.'@med-sdi.cl';
             }
             else
             {
@@ -830,7 +831,7 @@ class EscritorioAsistente extends Controller
                         }
                         else
                         {
-                            $paciente->email = $temp.'@'.$temp.'.cl';
+                            $paciente->email = $temp.'@med-sdi.cl';
                         }
                     }
                     else if($request->dependiente == 0)
@@ -843,7 +844,7 @@ class EscritorioAsistente extends Controller
                             }
                             else
                             {
-                                $paciente->email = $temp.'@'.$temp.'.cl';
+                                $paciente->email = $temp.'@med-sdi.cl';
                             }
                         }
                         else
@@ -854,7 +855,7 @@ class EscritorioAsistente extends Controller
                 }
                 else
                 {
-                    $paciente->email = $temp.'@'.$temp.'.cl';
+                    $paciente->email = $temp.'@med-sdi.cl';
                 }
             }
 
@@ -1064,7 +1065,7 @@ class EscritorioAsistente extends Controller
                         $paciente_representante->id_prevision = $representante_convenio;
 
                         if( $representante_result_codigo_validacion == 1 && empty($paciente_representante->email))
-                            $paciente_representante->email = $representante_temp.'@'.$representante_temp.'.com';
+                            $paciente_representante->email = $representante_temp.'@med-sdi.com';
                         else if( $representante_result_codigo_validacion == 1 && !empty($paciente_representante->email))
                             $paciente_representante->email = $representante_correo;
                         else
@@ -1362,6 +1363,8 @@ class EscritorioAsistente extends Controller
 
     public function agendar_horas(Request $request)
     {
+
+        // var_dump($request->all());
 
         $paciente = paciente::where('id', $request->reserva_hora_id)->first();
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();

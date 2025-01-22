@@ -4392,7 +4392,7 @@ class EscritorioProfesional extends Controller
                         }
                         else
                         {
-                            $paciente->email = $temp.'@'.$temp.'.cl';
+                            $paciente->email = $temp.'@med-sdi.cl';
                         }
                     }
                     else if($request->dependiente == 0)
@@ -4405,7 +4405,7 @@ class EscritorioProfesional extends Controller
                             }
                             else
                             {
-                                $paciente->email = $temp.'@'.$temp.'.cl';
+                                $paciente->email = $temp.'@med-sdi.cl';
                             }
                         }
                         else
@@ -4416,7 +4416,7 @@ class EscritorioProfesional extends Controller
                 }
                 else
                 {
-                    $paciente->email = $temp.'@'.$temp.'.cl';
+                    $paciente->email = $temp.'@med-sdi.cl';
                 }
             }
 
@@ -4617,7 +4617,7 @@ class EscritorioProfesional extends Controller
                         $paciente_representante->id_prevision = $representante_convenio;
 
                         if( $representante_result_codigo_validacion == 1 && empty($paciente_representante->email))
-                            $paciente_representante->email = $representante_temp.'@'.$representante_temp.'.com';
+                            $paciente_representante->email = $representante_temp.'@med-sdi.cl';
                         else if( $representante_result_codigo_validacion == 1 && !empty($paciente_representante->email))
                             $paciente_representante->email = $representante_correo;
                         else
