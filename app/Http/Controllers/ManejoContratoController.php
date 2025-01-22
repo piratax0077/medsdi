@@ -1302,6 +1302,7 @@ class ManejoContratoController extends Controller
 
     public function editarPersonal(Request $request)
     {
+
         $datos = array();
         $error = array();
         $valido = 1;

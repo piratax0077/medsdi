@@ -64,6 +64,9 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+// DB
+use Illuminate\Support\Facades\DB;
+
 use Carbon\Carbon;
 
 class AdministradorCmController extends Controller
@@ -4782,6 +4785,7 @@ class AdministradorCmController extends Controller
         if($valido)
         {
             $user = User::find($request->id_user);
+
             $rol = '';
             if($user)
             {
@@ -4805,6 +4809,25 @@ class AdministradorCmController extends Controller
                 switch (mb_strtoupper($request->id_tipo_movimiento))
                 {
                     case 'ASISTENTE':
+                        // Palabras a eliminar
+                        $palabras_a_eliminar = [' de '];
+
+                        // Eliminar palabras del campo 'nombre' en la consulta SQL
+                        $nombre_sin_palabras = 'REPLACE(REPLACE(nombre, " de ", ""), " ", "")';
+
+                        // Eliminar palabras del valor de $request->id_tipo
+                        $id_tipo_sin_palabras = str_replace($palabras_a_eliminar, '', $request->id_tipo);
+                        $id_tipo_sin_palabras = str_replace(' ', '', $id_tipo_sin_palabras);
+
+                        $asistente_tipo = AsistenteTipo::where(DB::raw($nombre_sin_palabras), 'LIKE', '%' . $id_tipo_sin_palabras . '%')->first();
+
+                        // buscamos el asistente por el id_usuario
+                        $asistente = Asistente::where('id_usuario', $user->id)->first();
+                        if($asistente_tipo){
+                            $asistente->id_asistente_tipo = $asistente_tipo->id;
+                            $asistente->save();
+                        }
+
                         // asistente tipo
                         // 1 - Asistente Publico
                         // 2 - Asistente Jefa Caja
@@ -4812,6 +4835,8 @@ class AdministradorCmController extends Controller
                         // 4 - Asistente Online
                         // 5 - Asistente Consulta
                         $rol = $request->id_tipo;
+                        /** actualizar asistente */
+
                         break;
                     case 'ADMINISTRADOR':
                         // TIPO ADMINISTRADO

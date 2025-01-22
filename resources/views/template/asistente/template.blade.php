@@ -2360,6 +2360,7 @@
                     }
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log('error');
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
         };
