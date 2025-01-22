@@ -1321,7 +1321,7 @@ class EscritorioAsistente extends Controller
                             'profesional_nombre'=> $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
                             'profesional_especialidad'=> $profesional->Especialidad()->first()->nombre ? $profesional->Especialidad()->first()->nombre : '',
                             'profesional_tipo_especialidad'=> $profesional->TipoEspecialidad()->first()->nombre ? $profesional->TipoEspecialidad()->first()->nombre : '',
-                            'profesional_sub_tipo_especialidad'=> '',
+                            'profesional_sub_tipo_especialidad'=> $profesional->subTipoEspecialidad()->exists() ? $profesional->subTipoEspecialidad()->first()->nombre : '',
                             // 'institucion'=> $nombre_institucion,
                             'lugar_atencion'=>$lugar_atencion ? $lugar_atencion->nombre : '',
                             'direccion'=> $lugar_atencion ? $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre : '',
