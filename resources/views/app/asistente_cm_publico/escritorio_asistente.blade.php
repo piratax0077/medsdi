@@ -841,6 +841,9 @@
                                                             $('#datos_consulta_sexo').text('Femenino');
                                                         }
 
+                                                        $('#datos_consulta_telefono').text(data.paciente.telefono_uno);
+                                                        $('#datos_consulta_email').text(data.paciente.email);
+
                                                         $('#estado_id_profesional').val(data.profesional.id);
                                                         $('#estado_id_paciente').val(data.paciente.id);
                                                         $('#id_hora_medica').val(id_hora_medica);

@@ -65,6 +65,22 @@
                                         </td>
                                         </th>
                                     </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Observaciones</strong>
+                                        <td>
+                                            <span id="datos_consulta_observaciones"></span>
+                                        </td>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Fecha última consulta</strong>
+                                        <td>
+                                            <span id="datos_consulta_fecha_ultima"></span>
+                                        </td>
+                                        </th>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

@@ -65,6 +65,22 @@
                                         </td>
                                         </th>
                                     </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Observaciones</strong>
+                                        <td>
+                                            <span id="datos_consulta_observaciones"></span>
+                                        </td>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Fecha última consulta</strong>
+                                        <td>
+                                            <span id="datos_consulta_fecha_ultima"></span>
+                                        </td>
+                                        </th>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -665,6 +681,23 @@
                                                 <div class="form-row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <input type="text" class="form-control form-control-sm" id="input_reserva_hora_telefono" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Fecha última atención</strong>
+                                        </th>
+                                        <td>
+                                            <div class="fecha_ultima_view">
+                                                <span id="reserva_fecha_ultima"></span>
+                                            </div>
+                                            <div class="fecha_ultima_edit" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_fecha_ultima" value="">
                                                     </div>
                                                 </div>
                                             </div>

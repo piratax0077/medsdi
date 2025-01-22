@@ -4134,7 +4134,7 @@ class EscritorioProfesional extends Controller
         }
 
 
-
+        $paciente->fecha_ultima = Carbon::now()->format('Y-m-d');
 
         return json_encode($paciente);
     }

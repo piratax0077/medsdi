@@ -1626,6 +1626,7 @@
 
                         $('#reserva_fecha_nacimiento').text(data.fecha_nac);
                         $('#input_reserva_fecha_nacimiento').val(DateFormatVista(data.fecha_nac));
+                        $('#reserva_fecha_ultima').text(data.fecha_ultima);
 
                         if (data.sexo == 'M') {
                             $('#reserva_sexo').text('Masculino');
