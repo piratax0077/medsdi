@@ -11,7 +11,7 @@
                 @break
 
             @case(2)
-                {{--  --}}
+                <button class="btn boton btn-agenda-2 shadow-sm  pt-3" style="display:none; " type="button" onclick="cargarAgendaProfesional(2, '{{ date('Y-m-d') }}');"><i class="feather icon-calendar"></i> DENTAL</button>
                 @break
 
             @case(3)
