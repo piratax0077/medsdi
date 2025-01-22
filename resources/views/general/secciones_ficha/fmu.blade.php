@@ -41,7 +41,7 @@
                                                 @endphp
                                             @endif
                                         @endforeach
-
+                                        <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
                                         <div class="row px-2 pt-2">
                                         	<div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
                                         		<h6 class="f-16">{{$paciente->nombres}} {{$paciente->apellido_uno}} {{$paciente->apellido_dos}} <small>({{$paciente->rut}})</small><h6>
@@ -778,7 +778,14 @@
                 });
             }
         }
+
+        function dame_id_paciente(){
+            return {{ $paciente->id }};
+        }
     </script>
+
+@include('atencion_odontologica.modals.odontograma.modal_odontograma')
+
 
 
     <!-- Tablas ficha médica única-->

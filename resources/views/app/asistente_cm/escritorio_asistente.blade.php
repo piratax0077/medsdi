@@ -1030,7 +1030,39 @@
                                         },
 
                                         dateClick: function(date, jsEvent, view) {
+                                            console.log('especialidad del profesional : '+data.profesional.id_especialidad);
+                                            $('#contenedor_procedimientos_presupuesto').empty();
+                                            if(data.profesional.id_especialidad == 2){
+                                                $('#contenedor_procedimientos_presupuesto').append(`
+                                                    <div class="col-sm-12" id="div_procedimiento" style="display:  none;">
+                                                        <div class="form-group fill">
+                                                            <label class="floating-label-activo-sm">Seleccione opción o N° de presupuesto</label>
+                                                            <select class="form-control form-control-sm" name="presupuesto_numero"
+                                                                id="presupuesto_numero" onchange="updateTotalValue()">
+                                                            </select>
+                                                        </div>
+                                                        <div id="contenedor_tratamientos_presupuesto"></div>
+                                                    </div>`);
+                                            }else if(data.profesional.id_especialidad == 4 && data.profesional.id_tipo_especialidad == 55){
+                                                $('#contenedor_procedimientos_presupuesto').append(`
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12" id="div_procedimiento" name="div_procedimiento" style="display: none;">
 
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Procedimiento</label>
+                                                            <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento" id="form_reseva_de_horas_id_procedimiento">
+                                                                <option value="">Seleccione</option>
+                                                                @if (isset($procedimientos) && !empty($procedimientos))
+                                                                    @foreach ($procedimientos as $proced )
+                                                                        <option value="{{ $proced->id }}" data-cant_bloque="{{ (empty($proced->cantidad_bloques_prof)?$proced->cantidad_bloques:$proced->cantidad_bloques_prof) }}">{{ $proced->nombre }} {{ (empty($proced->cantidad_bloques_prof)?$proced->cantidad_bloques:$proced->cantidad_bloques_prof) }}Blq.</option>
+                                                                    @endforeach
+                                                                @endif
+                                                            </select>
+                                                        </div>
+
+                                                    </div>`);
+                                            }else{
+                                                $('#contenedor_procedimientos_presupuesto').append(``);
+                                            }
                                             var valido = 1;
                                             var valido_fecha = 1;
                                             /** VALIDACION DE FUERA DE HORARIO */
@@ -1665,6 +1697,7 @@
 
                             $('#reserva_convenio').text(data.prevision.nombre);
                             $('#input_reserva_convenio').val(data.prevision.id);
+                            $('#div_procedimiento').css('display','block');
 
                             $('#reserva_direccion').text(data.direccion.direccion+' '+data.direccion.numero_dir+', '+data.direccion.ciudad.nombre);
                             $('#input_reserva_direccion_direccion').val(data.direccion.direccion);
@@ -1680,6 +1713,18 @@
                             $('#reserva_hora_edad').val(data.edad);
 
                             $('#id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
+
+                            console.log(data.presupuestos.length);
+                                if(data.presupuestos.length > 0){
+                                    $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
+                                    data.presupuestos.forEach(p => {
+                                        $('#presupuesto_numero').append(`<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}</option>`);
+                                    });
+                                }else{
+                                    $('#presupuesto_numero').append(`<option value="0">Primera consulta</option>`);
+                                    $('#presupuesto_numero').append(`<option value="u">Urgencia</option>`);
+
+                                }
 
                             if(data.edad < 18)
                             {

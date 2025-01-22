@@ -2709,19 +2709,19 @@ class DentalController extends Controller
     public function dame_pieza(Request $request)
     {
         try {
-            $pieza = ExamenesDentalPieza::where('numero_pieza', $request->pieza)->get();
+            $pieza = OdontogramaPaciente::select('odontogramas_pacientes.*','tratamientos_dental.descripcion as diagnostico')
+                        ->join('tratamientos_dental','odontogramas_pacientes.diagnostico','tratamientos_dental.id')
+                        ->where('odontogramas_pacientes.pieza', $request->pieza)
+                        ->get();
+
             foreach ($pieza as $key => $value) {
                 $value->fecha = Carbon::parse($value->created_at)->format('Y-m-d H:m:s');
                 if($value->id_profesional == null){
                     $value->profesional = 'No asignado';
                 }else{
-                    $profesional = Profesional::where('id_usuario', $value->id_profesional)->first();
+                    $profesional = Profesional::where('id', $value->id_profesional)->first();
                     $value->profesional = $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos;
                 }
-                $value->diagnostico = OdontogramaPaciente::select('odontogramas_pacientes.*','tratamientos_dental.descripcion as diagnostico')
-                                        ->join('tratamientos_dental','odontogramas_pacientes.diagnostico','tratamientos_dental.id')
-                                        ->where('odontogramas_pacientes.pieza', $value->numero_pieza)
-                                        ->first();
             }
             return $pieza;
         } catch (\Exception $e) {

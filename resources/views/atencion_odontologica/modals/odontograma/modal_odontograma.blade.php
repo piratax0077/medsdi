@@ -65,8 +65,8 @@
             // Mapea los datos si los nombres de las claves no coinciden
             const data = response.map(item => ({
                 fecha: item.fecha || 'N/A', // Asigna valor por defecto si falta
-                diagnostico:  item.diagnostico ? item.diagnostico.diagnostico : 'N/A',
-                tratamiento:  item.diagnostico ? item.diagnostico.tratamiento : 'N/A',
+                diagnostico:  item.diagnostico ? item.diagnostico : 'N/A',
+                tratamiento:  item.tratamiento ? item.tratamiento : 'N/A',
                 tipo_examen: tipoExamenMap[item.tipo_examen] || 'Otro',
                 caras: item.diagnosticocaras || 'N/A',
                 responsable: item.profesional || 'N/A',
