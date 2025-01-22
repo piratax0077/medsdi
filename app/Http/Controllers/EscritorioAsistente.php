@@ -699,6 +699,7 @@ class EscritorioAsistente extends Controller
     {
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
         $lugares_atencion = $asistente->LugarAtencion()->get();
+        $profesional = $asistente->Profesionales()->get();
 
         $conteo_prof = 0;
 
@@ -734,7 +735,7 @@ class EscritorioAsistente extends Controller
 			if($contrato)
 			{
 				$id_lugar_atencion = $contrato->id_lugar_atencion;
-                $profesional = $asistente->Profesionales()->get();
+
 
 				foreach ($profesional as $key_tipo_agenda => $value_tipo_agenda)
 				{
