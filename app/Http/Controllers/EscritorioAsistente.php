@@ -1419,25 +1419,70 @@ class EscritorioAsistente extends Controller
             return json_encode(array(
                 'estado' => 'error',
                 'id_profesional' => $profesional->id,
-                'msj' => 'Paciente ya tiene Hora para este dia'
+                'msj' => 'PACIENTE TIENE HORA AGENDADA PARA ESTE DIA'
             ));
         }
+        else
+        {
 
+            $hora_cunsulta = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
 
-        /** buscar tiempo de la consult */
-        $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
-        $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
-                                                    ->where('id_profesional', $profesional->id)
-                                                    ->where('id_lugar_atencion',$request->id_lugar_atencion)
-                                                    ->where('dia','like','%'.$dia_de_semana.'%')
-                                                    ->first();
+            // DB::enableQueryLog(); // Habilitar el registro de consultas
 
-        // $profesional_horarios = '00:30:00';
-        // $tiempo_consulta = 30;
-        $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
-        $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
-        $totales = ($horas*60) + $minutos;
-        $tiempo_consulta = $totales;
+            $validar = HoraMedica::where('id_paciente', $paciente->id)
+                                ->whereIn('id_estado',[1,2,4,5,6,8])
+                                ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
+                                ->where(function($query) use ($hora_cunsulta) {
+                                    $query->whereTime('hora_inicio','>=', $hora_cunsulta)
+                                        ->whereTime('hora_termino','<=', $hora_cunsulta);
+                                })
+                                ->first();
+
+            // $queries = DB::getQueryLog();
+            // dd($queries);
+
+            if($validar)
+            {
+                return json_encode(array(
+                        'estado' => 'error',
+                        'id_profesional' => $profesional->id,
+                        'msj' => 'PACIENTE TIENE HORA AGENDADA PARA ESTE DÍA EN OTRO LUGAR DE ATENCIÓN'
+                        ));
+            }
+
+        }
+
+        $tiempo_consulta = 15;
+        $procedimiento = '';
+
+        if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
+        {
+            $procedimiento = $request->procedimiento;
+            $proc_bloque = ( !empty($request->proc_bloque)?intval($request->proc_bloque):1 );
+            $tiempo_consulta = intval($proc_bloque) * 15;
+        }else if($profesional->id_especialidad == 2){
+            $procedimiento = $request->procedimiento;
+            $proc_bloque = ( !empty($request->proc_bloque)?intval($request->proc_bloque):1 );
+            $tiempo_consulta = intval($proc_bloque) * 15;
+        }
+        else
+        {
+
+            /** buscar tiempo de la consult */
+            $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
+            $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
+                                                        ->where('id_profesional', $profesional->id)
+                                                        ->where('id_lugar_atencion',$request->id_lugar_atencion)
+                                                        ->where('dia','like','%'.$dia_de_semana.'%')
+                                                        ->first();
+
+            // $profesional_horarios = '00:30:00';
+            // $tiempo_consulta = 30;
+            $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
+            $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
+            $totales = ($horas*60) + $minutos;
+            $tiempo_consulta = $totales;
+        }
 
         $hora_medica = new HoraMedica();
 
@@ -1452,11 +1497,13 @@ class EscritorioAsistente extends Controller
 
         $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
         $hora_medica->alias_examen = $texto_alias_examen;
+
         $hora_medica->id_procedimiento = $request->id_procedimiento;
 
         $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
         $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
 
+        /**acompañantes */
         $hora_medica->acomp_representante = $request->representante;
         $hora_medica->acomp_acompanante = $request->acompanante;
         if(!empty($request->lista_Acompanante))
