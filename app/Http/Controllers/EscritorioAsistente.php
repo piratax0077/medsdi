@@ -8,6 +8,7 @@ use App\Models\AsistenteContactoEmergencia;
 use App\Models\AsistenteLugarAtencion;
 use App\Models\AsistenteTipo;
 use App\Models\Bancos;
+use App\Models\Bodega;
 use App\Models\Categoria;
 use App\Models\Ciudad;
 use App\Models\ContactoEmergencia;
@@ -803,7 +804,8 @@ class EscritorioAsistente extends Controller
 
             if( (\Carbon\Carbon::parse($request->fecha_nac)->age) < 18 && !empty($request->reserva_hora_email))
             {
-                $paciente->email = $temp.'@'.$temp.'.cl';
+                // $paciente->email = $temp.'@med-sdi.cl';
+                $paciente->email = PacienteController::generarEmailPacienteTemporal($request->reserva_hora_nombre,$request->reserva_hora_primer_apellido,$request->reserva_hora_segundo_apellido);
             }
             else
             {
@@ -817,7 +819,8 @@ class EscritorioAsistente extends Controller
                         }
                         else
                         {
-                            $paciente->email = $temp.'@'.$temp.'.cl';
+                            // $paciente->email = $temp.'@med-sdi.cl';
+                            $paciente->email = PacienteController::generarEmailPacienteTemporal($request->reserva_hora_nombre,$request->reserva_hora_primer_apellido,$request->reserva_hora_segundo_apellido);
                         }
                     }
                     else if($request->dependiente == 0)
@@ -830,7 +833,8 @@ class EscritorioAsistente extends Controller
                             }
                             else
                             {
-                                $paciente->email = $temp.'@'.$temp.'.cl';
+                                // $paciente->email = $temp.'@med-sdi.cl';
+                                $paciente->email = PacienteController::generarEmailPacienteTemporal($request->reserva_hora_nombre,$request->reserva_hora_primer_apellido,$request->reserva_hora_segundo_apellido);
                             }
                         }
                         else
@@ -841,7 +845,8 @@ class EscritorioAsistente extends Controller
                 }
                 else
                 {
-                    $paciente->email = $temp.'@'.$temp.'.cl';
+                    // $paciente->email = $temp.'@med-sdi.cl';
+                    $paciente->email = PacienteController::generarEmailPacienteTemporal($request->reserva_hora_nombre,$request->reserva_hora_primer_apellido,$request->reserva_hora_segundo_apellido);
                 }
             }
 
@@ -1051,7 +1056,10 @@ class EscritorioAsistente extends Controller
                         $paciente_representante->id_prevision = $representante_convenio;
 
                         if( $representante_result_codigo_validacion == 1 && empty($paciente_representante->email))
-                            $paciente_representante->email = $representante_temp.'@'.$representante_temp.'.com';
+                        {
+                            // $paciente_representante->email = $representante_temp.'@med-sdi.cl';
+                            $paciente_representante->email = PacienteController::generarEmailPacienteTemporal($representante_nombres_paciente,$representante_apellido_uno,$representante_apellido_dos);
+                        }
                         else if( $representante_result_codigo_validacion == 1 && !empty($paciente_representante->email))
                             $paciente_representante->email = $representante_correo;
                         else
