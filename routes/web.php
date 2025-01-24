@@ -1144,7 +1144,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => ['role:Asistente|AsistenteAdm|AsistenteJefaCaja|AsistenteCaja|AsistenteOnline|AsistenteManejoAgenda|Admin|AsistenteLaboratorio'],
+    'middleware' => ['role:Asistente|AsistenteAdm|AsistenteJefaCaja|AsistenteCaja|AsistenteOnline|AsistenteManejoAgenda|Admin|AsistenteLaboratorio|Profesional'],
     'prefix' => 'Asistente/',
 ], function () {
     /** lista espera */

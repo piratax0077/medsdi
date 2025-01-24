@@ -1,6 +1,6 @@
 <!-- Modal consulta agenda profesional-->
 <div id="consulta" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="consulta" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <input type="hidden" name="estado_id_profesional" id="estado_id_profesional" value="">
             <input type="hidden" name="estado_id_paciente" id="estado_id_paciente" value="">
@@ -12,46 +12,103 @@
 
                 <form id="datos_hora_medica">
                     <div class="row">
+                        <div class="col-12">
+                            <button type="button" onclick="editar_info_paciente_asistente();" class="btn btn-sm btn-info-light-c float-right d-inline paciente_view_asistente has-ripple" style="">
+                                <i class="feather icon-edit"></i> Editar
+                            <span class="ripple ripple-animate"></span></button>
+                        </div>
+                        <input type="hidden" name="modificando_paciente_asistente" id="modificando_paciente_asistente" value="0">
+                    </div>
+                    <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <table class="table table-borderless table-xs text-break table-responsive modal-agenda">
                                 <tbody>
                                     <tr>
                                         <th scope="row">
                                             <strong>Rut</strong>
-                                        </th>
                                         <td>
                                             <span id="datos_consulta_rut"></span>
                                         </td>
+
+
+                                        </th>
                                     </tr>
                                     <tr>
                                         <th scope="row">
                                             <strong>Nombre</strong>
-                                        </th>
                                         <td>
-                                            <span id="datos_consulta_nombre"></span>
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_nombre"></span>
+                                            </div>
+
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-4">
+                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_nombre_asistente" value="">
+                                                    </div>
+                                                        <div class="col-sm-12 col-md-4">
+                                                            <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_uno_asistente" value="">
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-4">
+                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_dos_asistente" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
+                                        </th>
                                     </tr>
                                     <tr>
                                         <th scope="row">
                                             <strong>Fecha Nacimiento</strong>
-                                        </th>
                                         <td>
-                                            <span id="datos_consulta_edad"></span>
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_edad"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <input type="text" class="mask_date form-control form-control-sm"
+                                                    name="input_reserva_fecha_nacimiento_asistente" id="input_reserva_fecha_nacimiento_asistente"
+                                                    onchange="evaluar_edad();"
+                                                    maxlength="10" placeholder="dd/mm/aaaa"
+                                                    autocomplete="off"
+                                                    data-mask="00/00/0000"
+                                                />
+                                            </div>
+
                                         </td>
+                                        </th>
                                     </tr>
                                     <tr>
                                         <th scope="row">
                                             <strong>Sexo</strong>
-                                        </th>
                                         <td>
-                                            <span id="datos_consulta_sexo"></span>
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_sexo"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <select id="input_reserva_sexo_asistente" class="form-control form-control-sm">
+                                                    <option value="M">Masculino</option>
+                                                    <option value="F">Femenino</option>
+                                                </select>
+                                            </div>
+
                                         </td>
+                                        </th>
                                     </tr>
                                     <tr>
                                         <th scope="row">
                                             <strong>Email</strong>
                                         <td>
-                                            <span id="datos_consulta_email"></span>
+
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_email"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_email_asistente" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                         </th>
                                     </tr>
@@ -59,9 +116,33 @@
                                         <th scope="row">
                                             <strong>Telefono</strong>
                                         <td>
-                                            <span id="datos_consulta_telefono"></span>
+
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_telefono"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_telefono_asistente" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                         </th>
+                                    </tr>
+                                    <tr class="paciente_edit_asistente" style="display:none">
+
+                                        <td>
+                                            <button type="button" id="cancelar_modifcar_paciente" onclick="cancelar_modificacion_paciente_asistente();" class="btn btn-sm btn-danger has-ripple">
+                                                <i class="feather icon-x"></i> Cancelar actualización
+                                            <span class="ripple ripple-animate" style="height: 181.038px; width: 181.038px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -74.4315px; left: 20.481px;"></span></button>
+                                        </td>
+                                        <td>
+                                            <button type="button" id="actualizar_modificar_paciente" onclick="actualizar_paciente_asistente();" class="btn btn-sm btn-info">
+                                                <i class="feather icon-check"></i> Actualizar paciente
+                                            </button>
+
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">
