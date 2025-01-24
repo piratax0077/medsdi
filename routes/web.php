@@ -2075,7 +2075,7 @@ Route::group([
 
 // URGENCIA GENERICOS
 Route::group([
-    'middleware' => ['role:MedicoUrgencia|EnfermeraUrgencia|AdministrativoUrgencia|admin'],
+    'middleware' => ['role:MedicoUrgencia|EnfermeraUrgencia|AdministrativoUrgencia|admin|Asistente'],
     'prefix' => 'urgencia/',
 ], function () {
     Route::get('cargar/paciente/', [App\Http\Controllers\UrgenciaController::class, 'buscar_rut_paciente'])->name('urgencia.buscar_rut_paciente');

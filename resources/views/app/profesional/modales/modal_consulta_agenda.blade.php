@@ -9,6 +9,7 @@
                 <h6 id="cabecera_hora_medica" class="text-white f-16 mb-0 mt-0">Información del paciente</h6>
             </div>
             <div class="modal-body">
+
                 <form id="datos_hora_medica">
                     <div class="row">
                         <div class="col-sm-12 col-md-12">

@@ -1326,8 +1326,23 @@ class ManejoContratoController extends Controller
                     /** actualizar asistente */
                     $asistente_tipo = AsistenteTipo::where(DB::raw('UPPER(nombre)'), $request->tipo_empleado)->first();
 
+                    // if($request->tipo_empleado == "ASISTENTE PUBLICO"){
+                    //     $request->tipo_empleado = "ASISTENTE";
+                    // }
+
+                    // if($request->tipo_empleado == "ASISTENTE DENTAL"){
+                    //     $request->tipo_empleado = "Asistente Dental(tons)";
+                    // }
+
+                    // return $request->tipo_empleado;
+
+                    if($request->tipo_empleado == "ASISTENTE DENTAL TECNICA"){
+                        $request->tipo_empleado = "Asistente Tecn. Dental";
+                    }
+
                     // buscar el rol
                     $rol = Roles::where(DB::raw('UPPER(alias)'), strtoupper($request->tipo_empleado))->first();
+
 
                     if($asistente_tipo)
                         $registro_asistente->id_asistente_tipo = $asistente_tipo->id;
@@ -1335,13 +1350,16 @@ class ManejoContratoController extends Controller
                     // asignar nuevo rol al usuario
                     $registro = User::find($registro_asistente->id_usuario);
 
+                    // return [$rol, $asistente_tipo];
+
                     if($rol)
                     {
                         $registro->syncRoles([$rol->id]);
                     }
                     else
                     {
-                        $registro->syncRoles([$asistente_tipo->id]);
+                         $registro->syncRoles([$asistente_tipo->id]);
+                        // $registro->syncRoles([]);
                     }
 
                     $registro_asistente->rut = $request->rut;

@@ -4757,6 +4757,7 @@ class AdministradorCmController extends Controller
 
     public function modificar_rol_asistente(Request $request)
     {
+
         $datos = array();
         $error = array();
         $valido = 1;
@@ -4809,25 +4810,6 @@ class AdministradorCmController extends Controller
                 switch (mb_strtoupper($request->id_tipo_movimiento))
                 {
                     case 'ASISTENTE':
-                        // Palabras a eliminar
-                        $palabras_a_eliminar = [' de '];
-
-                        // Eliminar palabras del campo 'nombre' en la consulta SQL
-                        $nombre_sin_palabras = 'REPLACE(REPLACE(nombre, " de ", ""), " ", "")';
-
-                        // Eliminar palabras del valor de $request->id_tipo
-                        $id_tipo_sin_palabras = str_replace($palabras_a_eliminar, '', $request->id_tipo);
-                        $id_tipo_sin_palabras = str_replace(' ', '', $id_tipo_sin_palabras);
-
-                        $asistente_tipo = AsistenteTipo::where(DB::raw($nombre_sin_palabras), 'LIKE', '%' . $id_tipo_sin_palabras . '%')->first();
-
-                        // buscamos el asistente por el id_usuario
-                        $asistente = Asistente::where('id_usuario', $user->id)->first();
-                        if($asistente_tipo){
-                            $asistente->id_asistente_tipo = $asistente_tipo->id;
-                            $asistente->save();
-                        }
-
                         // asistente tipo
                         // 1 - Asistente Publico
                         // 2 - Asistente Jefa Caja
@@ -4856,6 +4838,7 @@ class AdministradorCmController extends Controller
                 if($request->movimiento == 1)
                 {
                     try {
+
                         $user->assignRole($rol);
                         $datos['estado'] = 1;
                         $datos['msj'] = 'perfil modificado';

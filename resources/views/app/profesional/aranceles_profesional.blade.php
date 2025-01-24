@@ -53,9 +53,8 @@ p {
                                             <th>Trabajo</th>
                                             <th>Arancel</th>
                                             <th>UCO</th>
-                                            <th>Cantidad de bloques</th>
                                             <th>¿Tiene laboratorio?</th>
-                                            <th>¿Es propio?</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -63,8 +62,7 @@ p {
                                         <tr>
                                             <td>{{ $t->descripcion }}</td>
                                             <td>{{ number_format($t->valor, 0, ',', '.') }}</td>
-                                            <td>{{ $t->cantidad_uco }}</td>
-                                            <td>{{ $t->cantidad_bloques }}</td>
+                                            <td>{{ $t->uco }}</td>
                                             <td>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" value="{{ $t->id }}" id="existeLaboratorioDental{{ $t->id }}" onclick="guardarLaboratorioIndex({{ $t->id }})" @if($t->laboratorio == 1) checked @endif>
@@ -74,12 +72,7 @@ p {
                                                 </div>
                                             </td>
                                             <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="{{ $t->id }}" id="tratamientoPropio{{ $t->id }}" onclick="guardarTratamientoPropioIndex({{ $t->id }})" >
-                                                    <label class="form-check-label" for="tratamientoPropio{{ $t->id }}">
-                                                        ¿Es propio?
-                                                    </label>
-                                                </div>
+                                                <button class="btn btn-outline-warning btn-sm" role="button" onclick="mostrar_prodecimiento({{ $t->id }})"><i class="fas fa-edit"></i> Editar</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -89,11 +82,55 @@ p {
                                 </table>
 							</div>
 						</div>
-                        <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregarDiagnosticoDental" type="button">Agregar nuevo Diagnóstico/Trabajo</button>
+
 					</div>
 				</div>
 			</div>
 		</div>
+        <div class="row my-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Trabajos y aranceles propios</h5>
+                        <table class="table w-100" id="table_procedimientos_propios_dental">
+                            <thead>
+                                <tr>
+                                    <th>Procedimiento</th>
+                                    <th>UCO</th>
+                                    <th>¿Laboratorio?</th>
+                                    <th>Bloques</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(isset($mis_trabajos_agregados))
+                                @foreach ($mis_trabajos_agregados as $mi_trabajo)
+                                    <tr>
+                                        <td>{{ $mi_trabajo->descripcion }}</td>
+                                        <td>{{ $mi_trabajo->uco }}</td>
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="{{ $mi_trabajo->id }}" id="existeLaboratorioDental{{ $mi_trabajo->id }}" onclick="guardarLaboratorio({{ $mi_trabajo->id }})" @if($mi_trabajo->laboratorio == 1) checked @endif>
+                                                <label class="form-check-label" for="existeLaboratorioDental{{ $mi_trabajo->id }}">
+                                                    ¿Laboratorio?
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>{{ $mi_trabajo->cantidad_bloques }}</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})">Eliminar</button>
+                                            <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_prodecimiento({{ $mi_trabajo->id }})">Editar</button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                        <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregarDiagnosticoDental" type="button">Agregar nuevo Diagnóstico/Trabajo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <!-- Modal -->
@@ -135,7 +172,7 @@ p {
             </div>
 
 
-            <button type="button" class="btn btn-success btn-sm w-100 my-3" id="btn_procesar" onclick="agregar_otro_procedimiento()">Agregar otro diagnostico</button>
+            <button type="button" class="btn btn-success btn-sm w-100 my-3" onclick="agregar_otro_procedimiento()">Agregar otro diagnostico</button>
             <table class="table w-100" id="table_procedimientos_propios_dental">
                 <thead>
                     <tr>
@@ -150,7 +187,7 @@ p {
                     @foreach ($mis_trabajos_agregados as $mi_trabajo)
                         <tr>
                             <td>{{ $mi_trabajo->descripcion }}</td>
-                            <td>{{ $mi_trabajo->cantidad_uco }}</td>
+                            <td>{{ $mi_trabajo->uco }}</td>
                             <td>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="{{ $mi_trabajo->id }}" id="existeLaboratorioDental{{ $mi_trabajo->id }}" onclick="guardarLaboratorio({{ $mi_trabajo->id }})" @if($mi_trabajo->laboratorio == 1) checked @endif>
@@ -162,7 +199,7 @@ p {
                             <td>{{ $mi_trabajo->cantidad_bloques }}</td>
                             <td>
                                 <button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})">Eliminar</button>
-                                <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})">Editar</button>
+                                <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_prodecimiento({{ $mi_trabajo->id }})">Editar</button>
                             </td>
                         </tr>
                     @endforeach
@@ -263,8 +300,8 @@ p {
                                         </label>
                                     </div>
                                 </td>`;
-                        html += `<td>${p.cantidad_bloques} </td>`;
-                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')">Eliminar</button></td>';
+                        html += '<td>' + p.cantidad_bloques + '</td>';
+                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')">Eliminar</button><button class="btn btn-warning btn-sm" type="button" onclick="editar_procedimiento(' + p.id + ')">Editar</button></td>';
                         html += '</tr>';
                         $('#table_procedimientos_propios_dental tbody').append(html);
                     });
@@ -283,7 +320,6 @@ p {
                             trabajo.descripcion,
                             trabajo.valor,
                             trabajo.uco,
-                            trabajo.cantidad_bloques,
                             `
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onclick="guardarLaboratorioIndex(${trabajo.id})" ${isChecked}>
@@ -292,7 +328,7 @@ p {
                                 </label>
                             </div>
                             `,
-                            `<button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(${trabajo.id})">Editar</button>`
+                            `<button class="btn btn-warning btn-sm" role="button" onclick="mostrar_prodecimiento(${trabajo.id})"><i class="fas fa-edit"></i> Editar</button>`
                         ]);
                     });
 
@@ -353,8 +389,8 @@ p {
                                         </label>
                                     </div>
                                 </td>`;
-                        html += `<td>${p.cantidad_bloques} </td>`;
-                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')">Eliminar</button> <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_procedimiento('+p.id_diagnostico+')"> Editar</button></td>';
+                        html += '<td>' + p.cantidad_bloques + '</td>';
+                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')">Eliminar</button><button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(' + p.id + ')">Editar</button></td>';
                         html += '</tr>';
                         $('#table_procedimientos_propios_dental tbody').append(html);
                     });
@@ -373,7 +409,6 @@ p {
                             trabajo.descripcion,
                             trabajo.valor,
                             trabajo.uco,
-                            trabajo.cantidad_bloques,
                             `
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onclick="guardarLaboratorioIndex(${trabajo.id})" ${isChecked}>
@@ -382,7 +417,7 @@ p {
                                 </label>
                             </div>
                             `,
-                            `<button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(${trabajo.id})">Editar</button>`
+                            `<button class="btn btn-warning btn-sm" role="button" onclick="mostrar_prodecimiento(${trabajo.id})"><i class="fas fa-edit"></i> Editar</button>`
                         ]);
                     });
 
@@ -395,7 +430,7 @@ p {
             });
         }
 
-        function mostrar_procedimiento(id){
+        function mostrar_prodecimiento(id){
             console.log(id);
             let data = {
                 id: id,
@@ -414,13 +449,9 @@ p {
                     $('#modalAgregarDiagnosticoDental').modal('show');
                     // llenar los campos del modal
                     $('#nombre_procedimiento_nuevo').val(response.procedimiento.descripcion);
-                    $('#cantidad_uco').val(response.procedimiento.cantidad_uco);
+                    $('#cantidad_uco').val(response.procedimiento.uco);
                     $('#cantidad_bloques').val(response.procedimiento.cantidad_bloques);
                     $('#tiene_lab').prop('checked', response.procedimiento.laboratorio == 1 ? true : false);
-
-                    $('#btn_procesar').attr('onclick', 'editar_procedimiento('+id+')');
-                    $('#btn_procesar').text('Editar procedimiento');
-                    $('#btn_procesar').removeClass('btn-success').addClass('btn-warning');
 
                 },
                 error: function(error){
@@ -459,7 +490,6 @@ p {
                                         </label>
                                     </div>
                                 </td>`;
-                        html += `<td>${p.cantidad_bloques} </td>`;
                         html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')">Eliminar</button></td>';
                         html += '</tr>';
                         $('#table_procedimientos_propios_dental tbody').append(html);
@@ -479,7 +509,6 @@ p {
                             trabajo.descripcion,
                             trabajo.valor,
                             trabajo.uco,
-                            trabajo.cantidad_bloques,
                             `
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onclick="guardarLaboratorio(${trabajo.id})" ${isChecked}>
@@ -488,7 +517,7 @@ p {
                                 </label>
                             </div>
                             `,
-                            `<button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(${trabajo.id})">Editar</button>`
+                            `<button class="btn btn-warning btn-sm" role="button" onclick="mostrar_prodecimiento(${trabajo.id})"><i class="fas fa-edit"></i> Editar</button>`
                         ]);
                     });
 
@@ -546,104 +575,6 @@ p {
                     alert('Error al guardar el estado del laboratorio');
                 }
             });
-        }
-
-        function guardarTratamientoPropioIndex(trabajoId){
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var tratamientoPropio = $('#tratamientoPropio' + trabajoId).is(':checked') ? 1 : 0;
-
-            $.ajax({
-                url: "{{ route('profesional.guardar_procedimiento_propio') }}", // Asegúrate de que esta ruta exista en tus rutas
-                type: 'POST',
-                data: {
-                    _token: CSRF_TOKEN,
-                    trabajo_id: trabajoId,
-                    tratamiento_propio: tratamientoPropio
-                },
-                success: function(response) {
-                    return console.log(response);
-                    // Actualizar procedimientos propios
-                    let procedimientos = response.procedimientos;
-                    $('#table_procedimientos_propios_dental tbody').empty();
-                    procedimientos.forEach(p => {
-                        const isChecked_ = p.laboratorio === 1 ? 'checked' : '';
-                        var html = '<tr>';
-                        html += '<td>' + p.descripcion + '</td>';
-                        html += '<td>' + p.uco + '</td>';
-                        html += `<td>
-                                    <div class="form-check">
-                                        <input class="form-check input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_}>
-                                        <label class="form-check label" for="existeLaboratorioDental${p.id}">
-                                            ¿Laboratorio?
-                                        </label>
-                                    </div>
-                                </td>`;
-                        html += `<td>${p.cantidad_bloques} </td>`;
-                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')">Eliminar</button><button type="button" class="btn btn-warning btn-sm"> Editar</button> </td>';
-                        html += '</tr>';
-                        $('#table_procedimientos_propios_dental tbody').append(html);
-                    });
-                }
-            });
-        }
-
-        function editar_procedimiento(id){
-            console.log(id);
-            var nombre_procedimiento_nuevo = $('#nombre_procedimiento_nuevo').val();
-            var cantidad_uco = $('#cantidad_uco').val();
-            var tiene_lab = $('#tiene_lab').is(':checked') ? 1 : 0;
-            var cantidad_bloques = $('#cantidad_bloques').val();
-            if (nombre_procedimiento_nuevo == '' || cantidad_uco == '' || cantidad_bloques == '') {
-                swal({
-                    title: 'Error',
-                    text: 'Debe ingresar el nombre del procedimiento, la cantidad de UCO y la cantidad de bloques',
-                    icon: 'error'
-                });
-                return;
-            }
-
-            let data = {
-                id: id,
-                nombre_procedimiento_nuevo: nombre_procedimiento_nuevo,
-                cantidad_uco: cantidad_uco,
-                tiene_lab: tiene_lab,
-                cantidad_bloques: cantidad_bloques,
-                _token: '{{ csrf_token() }}'
-            }
-
-            let url = "{{ route('profesional.editar_procedimiento') }}";
-
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: data,
-                success: function(response) {
-                    console.log(response);
-
-                    // Actualizar procedimientos propios
-                    let procedimientos = response.procedimientos;
-                    $('#table_procedimientos_propios_dental tbody').empty();
-                    procedimientos.forEach(p => {
-                        const isChecked_ = p.laboratorio === 1 ? 'checked' : '';
-                        var html = '<tr>';
-                        html += '<td>' + p.descripcion + '</td>';
-                        html += '<td>' + p.cantidad_uco + '</td>';
-                        html += `<td>
-                                    <div class="form-check">
-                                        <input class="form-check input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_}>
-                                        <label class="form-check label" for="existeLaboratorioDental${p.id}">
-                                            ¿Laboratorio?
-                                        </label>
-                                    </div>
-                                </td>`;
-                        html += `<td>${p.cantidad_bloques} </td>`;
-                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')">Eliminar</button><button type="button" class="btn btn-warning btn-sm"> Editar</button> </td>';
-                        html += '</tr>';
-                        $('#table_procedimientos_propios_dental tbody').append(html);
-                    });
-                }
-            });
-
         }
     </script>
 @endsection
