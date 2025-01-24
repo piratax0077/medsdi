@@ -60,39 +60,20 @@ class SendMailController extends Controller
 
             $correo = new CorreoGenerico($data);
 
-            $listaBlade = array(
-                // PACIENTE
-                // 'bienvenida_paciente_usuario', 'hora_agendada', 'confirmar_hora', 'hora_confirmada_paciente', 'hora_cancelada_paciente', 'hora_anulada_profesional',
-                // 'notificacion_video_llamada',
-                // 'resultado_examen',
-                // 'indicaciones_medicas_documento',
-                // 'compra_bono',
-
-                // PROFESIONAL
-                'profesional_usuario_creado', 'invitacion_profesional', 'invitacion_profesional_convenio',
-                // 'profesional_provisorio_creado',
-
-                // ASISTENTE
-                'bienvenida_asistente', 'bienvenida_asistente_usuario',
-
-                // INSTITUCION
-                // 'bienvenida_institucion',
-
-                // ADMIN INSTITUCION
-                // 'bienvenida_admin_institucion',
-
-                // TODOS
-                'recuperacion_contrasena', 'registrar_app',
-
-                // ?
-                // 'resultado_examen_lab',
-            );
-
-
-            if(in_array($blade, $listaBlade))
+            $lista_array = array('', 'jgkriman@gmail.com', 'danielasepulvedabravo@gmail.com', 'dasebraa@gmail.com', 'pgajardo1012@gmail.com');
+            $enviar_dev = 1;
+            foreach ($to as $key => $value)
             {
-                //envio correo a destino origen y copia oculta
-                $bcc = array(
+                if(in_array($value['email'], $lista_array) != false)
+                {
+                    $enviar_dev = 0;
+                }
+            }
+
+            if($enviar_dev)
+            {
+                // desarrollo
+                $to = array(
                     ['email'=>'contacto@med-sdi.cl','name'=>'Contacto MED-SDI'],
                     ['email'=>'jkriman@gmail.com','name'=>'Jaime']
                     //['email'=>'johan.e.davilap@gmail.com','name'=>'Johan']
@@ -100,34 +81,12 @@ class SendMailController extends Controller
             }
             else
             {
-                $lista_array = array('', 'jgkriman@gmail.com', 'danielasepulvedabravo@gmail.com', 'dasebraa@gmail.com', 'pgajardo1012@gmail.com', 'jcarcamo@med-sdi.cl', 'jlcarcamoaguad@gmail.com');
-                $enviar_dev = 1;
-                foreach ($to as $key => $value)
-                {
-                    if(in_array($value['email'], $lista_array) != false)
-                    {
-                        $enviar_dev = 0;
-                    }
-                }
-
-                if($enviar_dev)
-                {
-                    // desarrollo
-                    $to = array(
-                        ['email'=>'contacto@med-sdi.cl','name'=>'Contacto MED-SDI'],
-                        ['email'=>'jkriman@gmail.com','name'=>'Jaime']
-                        //['email'=>'johan.e.davilap@gmail.com','name'=>'Johan']
-                    );
-                }
-                else
-                {
-                    //envio correo a destino origen y copia oculta
-                    $bcc = array(
-                        ['email'=>'contacto@med-sdi.cl','name'=>'Contacto MED-SDI'],
-                        ['email'=>'jkriman@gmail.com','name'=>'Jaime']
-                        //['email'=>'johan.e.davilap@gmail.com','name'=>'Johan']
-                    );
-                }
+                //envio correo a destino origen y copia oculta
+                $bcc = array(
+                    ['email'=>'contacto@med-sdi.cl','name'=>'Contacto MED-SDI'],
+                    ['email'=>'jkriman@gmail.com','name'=>'Jaime']
+                    //['email'=>'johan.e.davilap@gmail.com','name'=>'Johan']
+                );
             }
 
             Mail::to($to)
