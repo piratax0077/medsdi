@@ -9,6 +9,9 @@
                 <h6 id="cabecera_hora_medica" class="text-white f-16 mb-0 mt-0">Información del paciente</h6>
             </div>
             <div class="modal-body">
+                <button type="button" onclick="editar_info_paciente();" class="btn btn-sm btn-info-light-c float-right d-inline paciente_view has-ripple" style="">
+                    <i class="feather icon-edit"></i> Editar
+                <span class="ripple ripple-animate" style="height: 74.5375px; width: 74.5375px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -16.6688px; left: 11.8687px;"></span></button>
                 <form id="datos_hora_medica">
                     <div class="row">
                         <div class="col-sm-12 col-md-12">

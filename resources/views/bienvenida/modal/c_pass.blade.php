@@ -44,7 +44,7 @@
 
         // var url = '{{ route('perfil.cambio_contrasena') }}';
         // var url = '{{ route('paciente.perfil.contrasena.liberar.bienvenida') }}';
-        var url = "{{ route('perfil.cambio_contrasena') }}"";
+        var url = "{{ route('perfil.cambio_contrasena') }}";
 
         $.ajax({
             url: url,

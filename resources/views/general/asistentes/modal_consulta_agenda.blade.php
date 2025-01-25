@@ -1,7 +1,7 @@
 <!-- Modal consulta agenda profesional-->
 <div id="consulta" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="consulta" aria-hidden="true"
     data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <input type="hidden" name="estado_id_profesional" id="estado_id_profesional" value="">
             <input type="hidden" name="estado_id_paciente" id="estado_id_paciente" value="">
@@ -10,9 +10,19 @@
                 <h6 id="cabecera_hora_medica" class="text-white f-16 mb-0 mt-0">Información del paciente</h6>
             </div>
             <div class="modal-body">
+
                 <form id="datos_hora_medica">
                     <div class="row">
+                        <div class="col-12">
+                            <button type="button" onclick="editar_info_paciente_asistente();" class="btn btn-sm btn-info-light-c float-right d-inline paciente_view_asistente has-ripple" style="">
+                                <i class="feather icon-edit"></i> Editar
+                            <span class="ripple ripple-animate"></span></button>
+                        </div>
+                        <input type="hidden" name="modificando_paciente_asistente" id="modificando_paciente_asistente" value="0">
+                    </div>
+                    <div class="row">
                         <div class="col-sm-12 col-md-12">
+
                             <table class="table table-borderless table-xs text-break table-responsive modal-agenda">
                                 <tbody>
                                     <tr>
@@ -29,7 +39,23 @@
                                         <th scope="row">
                                             <strong>Nombre</strong>
                                         <td>
-                                            <span id="datos_consulta_nombre"></span>
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_nombre"></span>
+                                            </div>
+
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-4">
+                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_nombre_asistente" value="">
+                                                    </div>
+                                                        <div class="col-sm-12 col-md-4">
+                                                            <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_uno_asistente" value="">
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-4">
+                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_dos_asistente" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                         </th>
                                     </tr>
@@ -37,7 +63,19 @@
                                         <th scope="row">
                                             <strong>Fecha Nacimiento</strong>
                                         <td>
-                                            <span id="datos_consulta_edad"></span>
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_edad"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <input type="text" class="mask_date form-control form-control-sm"
+                                                    name="input_reserva_fecha_nacimiento_asistente" id="input_reserva_fecha_nacimiento_asistente"
+                                                    onchange="evaluar_edad();"
+                                                    maxlength="10" placeholder="dd/mm/aaaa"
+                                                    autocomplete="off"
+                                                    data-mask="00/00/0000"
+                                                />
+                                            </div>
+
                                         </td>
                                         </th>
                                     </tr>
@@ -45,7 +83,16 @@
                                         <th scope="row">
                                             <strong>Sexo</strong>
                                         <td>
-                                            <span id="datos_consulta_sexo"></span>
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_sexo"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <select id="input_reserva_sexo_asistente" class="form-control form-control-sm">
+                                                    <option value="M">Masculino</option>
+                                                    <option value="F">Femenino</option>
+                                                </select>
+                                            </div>
+
                                         </td>
                                         </th>
                                     </tr>
@@ -53,7 +100,17 @@
                                         <th scope="row">
                                             <strong>Email</strong>
                                         <td>
-                                            <span id="datos_consulta_email"></span>
+
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_email"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_email_asistente" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                         </th>
                                     </tr>
@@ -61,9 +118,33 @@
                                         <th scope="row">
                                             <strong>Telefono</strong>
                                         <td>
-                                            <span id="datos_consulta_telefono"></span>
+
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_telefono"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_telefono_asistente" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </td>
                                         </th>
+                                    </tr>
+                                    <tr class="paciente_edit_asistente" style="display:none">
+
+                                        <td>
+                                            <button type="button" id="cancelar_modifcar_paciente" onclick="cancelar_modificacion_paciente_asistente();" class="btn btn-sm btn-danger has-ripple">
+                                                <i class="feather icon-x"></i> Cancelar actualización
+                                            <span class="ripple ripple-animate" style="height: 181.038px; width: 181.038px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -74.4315px; left: 20.481px;"></span></button>
+                                        </td>
+                                        <td>
+                                            <button type="button" id="actualizar_modificar_paciente" onclick="actualizar_paciente_asistente();" class="btn btn-sm btn-info">
+                                                <i class="feather icon-check"></i> Actualizar paciente
+                                            </button>
+
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">
@@ -502,6 +583,7 @@
                     <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                     <input type="hidden" id="fecha_consulta" name="fecha_consulta" value="">
                     <input type="hidden" id="reserva_hora_id_paciente" name="reserva_hora_id_paciente" value="">
+
                     <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="">
                     <input type="hidden" name="fecha" id="fecha" value="">
                     <input type="hidden" name="reserva_hora_edad" id="reserva_hora_edad" value="">
@@ -534,18 +616,18 @@
                                             </div>
 
                                                 <div class="paciente_edit" style="display:none">
-                                                <div class="form-row">
-                                                    <div class="col-sm-12 col-md-4">
-                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_nombre" value="">
-                                                    </div>
+                                                    <div class="form-row">
                                                         <div class="col-sm-12 col-md-4">
-                                                            <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_uno" value="">
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-4">
-                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_dos" value="">
+                                                            <input type="text" class="form-control form-control-sm" id="input_reserva_hora_nombre" value="">
+                                                        </div>
+                                                            <div class="col-sm-12 col-md-4">
+                                                                <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_uno" value="">
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-4">
+                                                            <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_dos" value="">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -1734,11 +1816,26 @@
         $('#modificando_paciente').val(1);
     }
 
+    function editar_info_paciente_asistente()
+    {
+        $('.paciente_view_asistente').hide();
+        $('.paciente_edit_asistente').show();
+        $('#modificando_paciente_asistente').val(1);
+    }
+
     function cancelar_modificacion_paciente()
     {
         $('.paciente_view').show();
         $('.paciente_edit').hide();
         $('#modificando_paciente').val(0);
+    }
+
+
+    function cancelar_modificacion_paciente_asistente()
+    {
+        $('.paciente_view_asistente').show();
+        $('.paciente_edit_asistente').hide();
+        $('#modificando_paciente_asistente').val(0);
     }
 
     function actualizar_paciente()
@@ -1927,6 +2024,154 @@
         }
 
 
+    }
+
+    function actualizar_paciente_asistente(){
+        var modificando = $('#modificando_paciente_asistente').val();
+        var id_paciente = $('#estado_id_paciente').val();
+        var nombre_paciente = $('#input_reserva_hora_nombre_asistente').val();
+        var apellido_uno_paciente = $('#input_reserva_hora_apellido_uno_asistente').val();
+        var apellido_dos_paciente = $('#input_reserva_hora_apellido_dos_asistente').val();
+        var fecha_nacimiento = $('#input_reserva_fecha_nacimiento_asistente').val();
+        var sexo_paciente = $('#input_reserva_sexo_asistente').val();
+        var email_paciente = $('#input_reserva_hora_email_asistente').val();
+        var telefono_paciente = $('#input_reserva_hora_telefono_asistente').val();
+        var valido = 1;
+        var mensaje = '';
+
+        var data = {
+            id: id_paciente,
+            nombre: nombre_paciente,
+            apellido_uno: apellido_uno_paciente,
+            apellido_dos: apellido_dos_paciente,
+            fecha_nacimiento: fecha_nacimiento,
+            sexo: sexo_paciente,
+            email: email_paciente,
+            telefono: telefono_paciente,
+        }
+
+        if( id_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Paciente Requerido\n';
+        }
+        if( nombre_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Nombre Paciente requerido\n';
+        }
+        if( apellido_uno_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Apellido Paterno de Pacientet requerido\n';
+        }
+        if( apellido_dos_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Apellido Materno de Pacientet requerido\n';
+        }
+        if( fecha_nacimiento == '' )
+        {
+            valido = 0;
+            mensaje += 'Fecha de Nacimiento del Pacientet requerido\n';
+        }
+        else
+        {
+            //fecha_nacimiento = formatDateDB(fecha_nacimiento);
+        }
+        if( sexo_paciente == '' )
+        {
+            valido = 0;
+            mensaje += 'Sexo del Pacientet requerido\n';
+        }
+
+        if(valido == 1)
+        {
+            if(modificando == 1)
+            {
+                let url = "{{ route('asistente.paciente.modificar') }}";
+
+                $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+                        id: id_paciente,
+                        nombre: nombre_paciente,
+                        apellido_uno: apellido_uno_paciente,
+                        apellido_dos: apellido_dos_paciente,
+                        fecha_nacimiento: fecha_nacimiento,
+                        sexo: sexo_paciente,
+                        email: email_paciente,
+                        telefono: telefono_paciente,
+                    },
+                })
+                .done(function(data) {
+                    console.log(data);
+                    if (data.estado == 1)
+                    {
+                        if (data.estado == 1)
+                        {
+                            $('#datos_consulta_nombre').text(nombre_paciente + ' ' + apellido_uno_paciente + ' ' + apellido_dos_paciente);
+                            $('#datos_consulta_edad').text(fecha_nacimiento);
+                            if (sexo_paciente == 'M') {
+                                $('#datos_consulta_sexo').text('Masculino');
+                            } else {
+                                $('#datos_consulta_sexo').text('Femenino');
+                            }
+                            $('#datos_consulta_email').text(email_paciente);
+                            $('#datos_consulta_telefono').text(telefono_paciente);
+
+                            $('.paciente_view_asistente').show();
+                            $('.paciente_edit_asistente').hide();
+                            $('#modificando_paciente_asistente').val(0);
+
+                            swal({
+                                title: "Actualización de Paciente",
+                                text: "Actualización Exitosa",
+                                icon: "success",
+                            });
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Actualización de Paciente",
+                                text: "Falla en Actualización.\nIntente de nuevo.",
+                                icon: "error",
+                            });
+                        }
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Actualización de Paciente",
+                            text: "Falla en Actualización.\nIntente de nuevo.",
+                            icon: "error",
+                        });
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
+            else
+            {
+                swal({
+                    title: "Actualización de Paciente",
+                    text: "Esta actualizando al paciente sin haber inicado proceso de edición",
+                    icon: "error",
+                });
+            }
+        }
+        else
+        {
+            swal({
+                title: "Actualización de Paciente",
+                text: "Campos requeridos.\n"+mensaje,
+                icon: "error",
+                buttons: "Aceptar"
+            });
+        }
     }
 
     function buscar_ciudad_general(input_region, input_ciudad, id_ciudad=0)

@@ -827,18 +827,25 @@
                                                 })
                                                 .done(function(data) {
                                                     if (data != null) {
-
-                                                        //{{-- console.log(info.event);  --}}
-                                                        // console.log(data);
-                                                        // data = JSON.parse(data);
+                                                        $('#reserva_hora_id_paciente_asistente').val(data.paciente.id);
                                                         $('#datos_consulta_rut').text(data.paciente.rut);
                                                         $('#datos_consulta_nombre').text(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
+                                                        $('#input_reserva_hora_nombre_asistente').val(data.paciente.nombres);
+                                                        $('#input_reserva_hora_apellido_uno_asistente').val(data.paciente.apellido_uno);
+                                                        $('#input_reserva_hora_apellido_dos_asistente').val(data.paciente.apellido_dos);
                                                         $('#datos_consulta_edad').text(data.paciente.fecha_nac);
+                                                        $('#input_reserva_fecha_nacimiento_asistente').val(data.paciente.fecha_nac);
+                                                        $('#datos_consulta_email').text(data.paciente.email);
+                                                        $('#input_reserva_hora_email_asistente').val(data.paciente.email);
+                                                        $('#datos_consulta_telefono').text(data.paciente.telefono_uno);
+                                                        $('#input_reserva_hora_telefono_asistente').val(data.paciente.telefono_uno);
 
                                                         if (data.paciente.sexo == 'M') {
                                                             $('#datos_consulta_sexo').text('Masculino');
+                                                            $('#input_reserva_sexo_asistente').val('M');
                                                         } else {
                                                             $('#datos_consulta_sexo').text('Femenino');
+                                                            $('#input_reserva_sexo_asistente').val('F');
                                                         }
 
                                                         $('#datos_consulta_telefono').text(data.paciente.telefono_uno);
