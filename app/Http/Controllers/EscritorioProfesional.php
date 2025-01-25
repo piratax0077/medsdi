@@ -3225,9 +3225,15 @@ class EscritorioProfesional extends Controller
     }
 
     public function mostrarProcedimientoDental(Request $req){
-        $trabajo = DiagnosticosDental::find($req->id);
+        $trabajo = DiagnosticosDentalProfesional::select('diagnosticos_dental_profesional.*','diagnosticos_dental.descripcion','diagnosticos_dental.uco','diagnosticos_dental.valor','diagnosticos_dental.tipo_examen','diagnosticos_dental.id_responsable','diagnosticos_dental.id as id_diagnostico')
+        ->join('diagnosticos_dental','diagnosticos_dental_profesional.id_diagnostico','=','diagnosticos_dental.id')
+        ->where('diagnosticos_dental_profesional.id', $req->id)
+        ->first();
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        $mis_trabajos_profesional = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)->get();
+        $mis_trabajos_profesional = DiagnosticosDentalProfesional::select('diagnosticos_dental_profesional.*','diagnosticos_dental.descripcion','diagnosticos_dental.uco','diagnosticos_dental.valor','diagnosticos_dental.tipo_examen','diagnosticos_dental.id_responsable','diagnosticos_dental.id as id_diagnostico')
+        ->join('diagnosticos_dental','diagnosticos_dental_profesional.id_diagnostico','=','diagnosticos_dental.id')
+           ->where('diagnosticos_dental_profesional.id_profesional', $profesional->id)
+           ->get();
         // Crear un array asociativo para un acceso más rápido
         $mis_trabajos_profesional_map = [];
         foreach ($mis_trabajos_profesional as $trabajo_profesional) {

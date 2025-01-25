@@ -531,7 +531,7 @@ p {
                     existe_laboratorio: existeLaboratorio
                 },
                 success: function(response) {
-                    console.log(response);
+                    return console.log(response);
                     // Actualizar procedimientos propios
                     let procedimientos = response.procedimientos;
                     $('#table_procedimientos_propios_dental tbody').empty();
