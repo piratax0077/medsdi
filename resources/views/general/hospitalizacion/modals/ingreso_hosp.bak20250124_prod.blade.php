@@ -310,8 +310,8 @@
                                                         <div class="card-informacion">
                                                             <div class="card-body">
                                                             <div id="form-servicios">
-
-
+                                                                
+                                                            
                                                                 <div class="tab-content" id="med_urgen">
                                                                     <!--INGRESO-->
                                                                     <div class="tab-pane fade show active" id="urg_ex_ingreso"
@@ -585,7 +585,8 @@
                                                                                 <h6 class="t-aten">Recetas e Indicaciones</h6>
                                                                             </div>
                                                                             <div class="col-md-12 ">
-                                                                                <ul class="nav nav-pills mb-3" id="tablas_examenes" role="tablist">
+                                                                                <ul class="nav nav-pills mb-3"
+                                                                                    id="tablas_examenes" role="tablist">
                                                                                     @foreach ($tipos_receta as $tipo_receta)
                                                                                         <li class="nav-item">
                                                                                             <a class="nav-link-wizard {{ $loop->first ? 'active' : '' }}"
@@ -638,7 +639,309 @@
                                                                                     <div class="tab-pane fade show active"
                                                                                         id="rec_1" role="tabpanel"
                                                                                         aria-labelledby="rec_1">
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-6 mt-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label">Medicamento</label>
+                                                                                                    <input type="text"
+                                                                                                        id="nombre_medicamento_ficha_dental"
+                                                                                                        name="nombre_medicamento_ficha_dental"
+                                                                                                        onblur="getDosis_sdi();"
+                                                                                                        class="form-control form-control-sm">
+                                                                                                    <input type="hidden"
+                                                                                                        id="id_medicamento_ficha_dental"
+                                                                                                        name="id_medicamento_ficha_dental"
+                                                                                                        class="form-control "
+                                                                                                        value="">
+                                                                                                    <input type="hidden"
+                                                                                                        id="id_medicamento_cant_comp"
+                                                                                                        name="id_medicamento_cant_comp"
+                                                                                                        class="form-control "
+                                                                                                        value="">
+                                                                                                    <input type="hidden"
+                                                                                                        id="id_medicamento_tipo_control"
+                                                                                                        name="id_medicamento_tipo_control"
+                                                                                                        class="form-control"
+                                                                                                        value="">
+                                                                                                </div>
+                                                                                            </div>
 
+                                                                                            <div class="col-sm-6 mt-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm">Composición:</label>
+                                                                                                    <div id="nombre_composicion_farmaco"
+                                                                                                        name="nombre_composicion_farmaco"
+                                                                                                        class="p-t-5">
+                                                                                                    </div>
+                                                                                                    <div id="mensaje_med_control"
+                                                                                                        name="mensaje_med_control"
+                                                                                                        class="alert-warning">
+                                                                                                    </div>
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            {{--  CUANDO SE ENCUENTRA MEDICAMENTO EN BUSQUEDA  --}}
+                                                                                            <div
+                                                                                                class="col-sm-6 mt-2 medicamento_activo">
+                                                                                                <div class="form-group fill">
+                                                                                                    <label
+                                                                                                        class="floating-label">Presentación</label>
+                                                                                                    <select
+                                                                                                        class="form-control form-control-sm"
+                                                                                                        id="dosis_medicamento_ficha_dental"
+                                                                                                        name="dosis_medicamento_ficha_dental"
+                                                                                                        onchange="getFrecuencia_sdi();getCantComp_sdi();">
+                                                                                                        <option>Seleccione una
+                                                                                                            opción</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="col-sm-6 mt-2 medicamento_activo">
+                                                                                                <div class="form-group fill">
+                                                                                                    <label
+                                                                                                        class="floating-label">Posología</label>
+                                                                                                    <select
+                                                                                                        class="form-control form-control-sm"
+                                                                                                        id="frecuencia_medicamento_ficha_dental"
+                                                                                                        name="frecuencia_medicamento_ficha_dental">
+                                                                                                        <option>Seleccione una
+                                                                                                            opción</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            {{--  SI NO SE ENCUENTRA EL MEDICAMENTO EN LA BUSQUEDA  --}}
+                                                                                            <div class="col-sm-6 mt-2 medicamento_inactivo"
+                                                                                                style="display:none;">
+                                                                                                <div class="form-group fill">
+                                                                                                    <label
+                                                                                                        class="floating-label">Presentación</label>
+                                                                                                    <input type="text"
+                                                                                                        name="dosis_medicamento_ficha_dental_2"
+                                                                                                        id="dosis_medicamento_ficha_dental_2"
+                                                                                                        class="form-control form-control-sm ">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-6 mt-2 medicamento_inactivo"
+                                                                                                style="display:none;">
+                                                                                                <div class="form-group fill">
+                                                                                                    <label
+                                                                                                        class="floating-label">Posología</label>
+                                                                                                    <input type="text"
+                                                                                                        name="frecuencia_medicamento_ficha_dental_2"
+                                                                                                        id="frecuencia_medicamento_ficha_dental_2"
+                                                                                                        class="form-control form-control-sm ">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-6 mt-2">
+                                                                                                <div class="form-group fill">
+                                                                                                    <label
+                                                                                                        class="floating-label">Vía
+                                                                                                        de
+                                                                                                        Administración</label>
+                                                                                                    <select
+                                                                                                        class="form-control form-control-sm"
+                                                                                                        id="via_administracion_ficha_dental"
+                                                                                                        name="via_administracion_ficha_dental"
+                                                                                                        onchange="validar_via_administracion_sdi();">
+                                                                                                        <option value="0">
+                                                                                                            Seleccione</option>
+                                                                                                        <option value="1">
+                                                                                                            V&iacute;a Oral
+                                                                                                        </option>
+                                                                                                        <option value="2">
+                                                                                                            V&iacute;a
+                                                                                                            Sublingual</option>
+                                                                                                        <option value="3">
+                                                                                                            V&iacute;a
+                                                                                                            T&oacute;pica
+                                                                                                        </option>
+                                                                                                        <option value="4">
+                                                                                                            V&iacute;a
+                                                                                                            Oftalmol&oacute;gica
+                                                                                                        </option>
+                                                                                                        <option value="5">
+                                                                                                            V&iacute;a
+                                                                                                            &Oacute;tica
+                                                                                                        </option>
+                                                                                                        <option value="6">
+                                                                                                            V&iacute;a
+                                                                                                            Inhalatoria</option>
+                                                                                                        <option value="7">
+                                                                                                            V&iacute;a Nasal
+                                                                                                        </option>
+                                                                                                        <option value="8">
+                                                                                                            V&iacute;a Rectal
+                                                                                                        </option>
+                                                                                                        <option value="9">
+                                                                                                            V&iacute;a Vaginal
+                                                                                                        </option>
+                                                                                                        <option value="10">
+                                                                                                            V&iacute;a parental
+                                                                                                        </option>
+                                                                                                        <option value="11">
+                                                                                                            Otra Vía</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group fill"
+                                                                                                    id="div_observaciones_medicamento_ficha_dental"
+                                                                                                    style="display: none;">
+                                                                                                    <label
+                                                                                                        class="floating-label">Otra
+                                                                                                        vía de
+                                                                                                        Administración</label>
+                                                                                                    <input type="text"
+                                                                                                        id="observaciones_medicamento_ficha_dental"
+                                                                                                        name="observaciones_medicamento_ficha_dental"
+                                                                                                        class="form-control form-control-sm "
+                                                                                                        disabled>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            {{--  <div class="col-sm-6 mt-2">
+                                                                                                <div class="form-group fill">
+                                                                                                    <label class="floating-label">Periodo</label>
+                                                                                                    <select class="form-control form-control-sm" id="periodo_ficha_dental" name="periodo_ficha_dental" onchange="validar_periodo_sdi();">
+                                                                                                        <option value="0">Seleccione</option>
+                                                                                                        <option value="1">SOS</option>
+                                                                                                        <option value="2">Dosis unica</option>
+                                                                                                        <option value="3">3 d&iacute;as</option>
+                                                                                                        <option value="4">5 d&iacute;as</option>
+                                                                                                        <option value="5">7 d&iacute;as</option>
+                                                                                                        <option value="6">10 d&iacute;as</option>
+                                                                                                        <option value="7">15 d&iacute;as</option>
+                                                                                                        <option value="8">30 d&iacute;as</option>
+                                                                                                        <option value="9">Permanente</option>
+                                                                                                        <option value="10">V&iacute;a parental</option>
+                                                                                                        <option value="11">Otro Periodo</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group fill" id="div_observaciones_periodo_ficha_dental" style="display: none;">
+                                                                                                    <label class="floating-label">Otro Periodo</label>
+                                                                                                    <input type="text" id="observaciones_periodo_ficha_dental" name="observaciones_periodo_ficha_dental" class="form-control form-control-sm " disabled >
+                                                                                                </div>
+                                                                                            </div>  --}}
+                                                                                            {{-- cantidad de medicamento a despachar o comprar    --}}
+                                                                                            {{--  <div class="col-sm-6 mt-2">
+                                                                                                <div class="form-group fill">
+                                                                                                    <label class="floating-label">Cantidad Comprar/Despachar</label>
+                                                                                                    <select class="form-control form-control-sm" id="cantidad_comprar" name="cantidad_comprar" onchange="validar_cantidad_comprar_sdi();">
+                                                                                                        <option value="0">Seleccione</option>
+                                                                                                        <option value="999">Otra Cantidad</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group fill" id="div_otra_cantidad_a_comprar" style="display: none;">
+                                                                                                    <label class="floating-label">Otra Cantidad</label>
+                                                                                                    <input type="text" id="otra_cantidad_a_comprar" name="otra_cantidad_a_comprar" class="form-control form-control-sm " disabled >
+                                                                                                </div>
+                                                                                            </div>  --}}
+
+                                                                                            <div class="col-sm-6">
+                                                                                                <button type="button"
+                                                                                                    onclick="indicar_medicamento_sdi(1)"
+                                                                                                    class="btn btn-success btn-sm float-right"><i
+                                                                                                        class="fa fa-plus"></i>
+                                                                                                    Agregar Medicamento</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-12">
+                                                                                                <div class="table-responsive">
+                                                                                                    <table
+                                                                                                        id="tabla_medicamento_cirugia_sdi"
+                                                                                                        class="table table-bordered table-xs">
+                                                                                                        <thead>
+                                                                                                            <tr>
+                                                                                                                <td class="text-center align-middle text-wrap hidden"
+                                                                                                                    hidden="hidden">
+                                                                                                                    id_tipo_control
+                                                                                                                </td>
+                                                                                                                <td class="text-center align-middle text-wrap hidden"
+                                                                                                                    hidden="hidden">
+                                                                                                                    id_producto
+                                                                                                                </td>
+                                                                                                                <td
+                                                                                                                    class="text-center align-middle text-wrap">
+                                                                                                                    Medicamentos
+                                                                                                                </td>
+                                                                                                                <td class="text-center align-middle text-wrap hidden"
+                                                                                                                    hidden="hidden">
+                                                                                                                    farmaco</td>
+                                                                                                                <td class="text-center align-middle text-wrap hidden"
+                                                                                                                    hidden="hidden">
+                                                                                                                    id_presentacion
+                                                                                                                </td>
+                                                                                                                {{-- <td class="text-center align-middle text-wrap">Presentación</td> --}}
+                                                                                                                <td class="text-center align-middle text-wrap"
+                                                                                                                    hidden="hidden">
+                                                                                                                    id_receta_dosis
+                                                                                                                </td>
+                                                                                                                <td
+                                                                                                                    class="text-center align-middle text-wrap hidden">
+                                                                                                                    Posología
+                                                                                                                </td>
+                                                                                                                <td
+                                                                                                                    class="text-center align-middle text-wrap">
+                                                                                                                    Via Adm.
+                                                                                                                </td>
+                                                                                                                <th
+                                                                                                                    class="text-center align-middle">
+                                                                                                                    Eliminar
+                                                                                                                </th>
+                                                                                                        </thead>
+                                                                                                        <tbody
+                                                                                                            id="tbody_tabla_medicamento_cirugia_sdi">
+                                                                                                            @foreach ($recetas as $r)
+                                                                                                                <tr>
+                                                                                                                    <td class="text-center align-middle text-wrap hidden"
+                                                                                                                        hidden="hidden">
+                                                                                                                        {{ $r->id_tipo_control }}
+                                                                                                                    </td>
+                                                                                                                    <td class="text-center align-middle text-wrap hidden"
+                                                                                                                        hidden="hidden">
+                                                                                                                        {{ $r->id_producto }}
+                                                                                                                    </td>
+                                                                                                                    <td
+                                                                                                                        class="text-center align-middle text-wrap">
+                                                                                                                        {{ $r->nombre_medicamento }}
+                                                                                                                    </td>
+                                                                                                                    <td class="text-center align-middle text-wrap hidden"
+                                                                                                                        hidden="hidden">
+                                                                                                                        {{ $r->farmaco }}
+                                                                                                                    </td>
+                                                                                                                    <td class="text-center align-middle text-wrap hidden"
+                                                                                                                        hidden="hidden">
+                                                                                                                        {{ $r->id_presentacion }}
+                                                                                                                    </td>
+                                                                                                                    {{-- <td class="text-center align-middle text-wrap">{{ $r->dosis }}</td> --}}
+                                                                                                                    <td class="text-center align-middle text-wrap hidden"
+                                                                                                                        hidden="hidden">
+                                                                                                                        {{ $r->id_receta_dosis }}
+                                                                                                                    </td>
+                                                                                                                    <td
+                                                                                                                        class="text-center align-middle text-wrap hidden">
+                                                                                                                        {{ $r->indicaciones }}
+                                                                                                                    </td>
+                                                                                                                    <td
+                                                                                                                        class="text-center align-middle text-wrap">
+                                                                                                                        {{ $r->via_administracion }}
+                                                                                                                    </td>
+                                                                                                                    <td
+                                                                                                                        class="text-center align-middle">
+                                                                                                                        <button
+                                                                                                                            type="button"
+                                                                                                                            class="btn btn-danger btn-sm"
+                                                                                                                            onclick="eliminar_medicamento_sdi({{ $r->id }})"><i
+                                                                                                                                class="fa fa-trash"></i></button>
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                            @endforeach
+                                                                                                        </tbody>
+                                                                                                    </table>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
 
 
@@ -646,7 +949,297 @@
                                                                                     <div class="tab-pane fade show"
                                                                                         id="rec_2" role="tabpanel"
                                                                                         aria-labelledby="rec_2">
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-6 mt-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm">Ingrese
+                                                                                                        Nombre
+                                                                                                        Medicamento</label>
+                                                                                                    <input type="text"
+                                                                                                        id="manual_nombre_medicamento_ficha_dental"
+                                                                                                        name="nombre_medicamento_ficha_dental"
+                                                                                                        class="form-control form-control-sm">
+                                                                                                    <input type="hidden"
+                                                                                                        id="manual_id_medicamento_ficha_dental"
+                                                                                                        name="manual_id_medicamento_ficha_dental"
+                                                                                                        value="0">
+                                                                                                    <input type="hidden"
+                                                                                                        id="med_faltante"
+                                                                                                        value="">
+                                                                                                </div>
+                                                                                            </div>
 
+                                                                                            <div class="col-sm-6 mt-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm">Farmaco</label>
+                                                                                                    <input type="text"
+                                                                                                        id="manual_nombre_composicion_farmaco"
+                                                                                                        name="manual_nombre_composicion_farmaco"
+                                                                                                        class="form-control form-control-sm">
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="col-sm-6 mt-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm">Tipo
+                                                                                                        Control</label>
+                                                                                                    <select
+                                                                                                        name="manual_tipo_control"
+                                                                                                        id="manual_tipo_control"
+                                                                                                        class="form-control form-control-sm">
+                                                                                                        <option value="">
+                                                                                                            Seleccione</option>
+                                                                                                        @if ($receta_control)
+                                                                                                            @foreach ($receta_control as $control)
+                                                                                                                @if ($control->cod_control !== 8)
+                                                                                                                    <option
+                                                                                                                        value="{{ $control->cod_control }}">
+                                                                                                                        {{ $control->descripcion }}
+                                                                                                                    </option>
+                                                                                                                @endif
+                                                                                                            @endforeach
+                                                                                                        @endif
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="col-sm-6 mt-2">
+                                                                                                <div class="form-group fill">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm">Ingrese
+                                                                                                        Presentación</label>
+                                                                                                    <input type="text"
+                                                                                                        id="manual_dosis_medicamento_ficha_dental"
+                                                                                                        name="manual_dosis_medicamento_ficha_dental"
+                                                                                                        class="form-control form-control-sm">
+
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="col-sm-6 mt-2">
+                                                                                                <div class="form-group fill">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm">Ingrese
+                                                                                                        Posología</label>
+                                                                                                    <input type="text"
+                                                                                                        id="manual_frecuencia_medicamento_ficha_dental"
+                                                                                                        name="manual_frecuencia_medicamento_ficha_dental"
+                                                                                                        class="form-control form-control-sm">
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="col-sm-6 mt-2">
+                                                                                                <div class="form-group fill">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm">Vía
+                                                                                                        de
+                                                                                                        Administración</label>
+                                                                                                    <select
+                                                                                                        class="form-control form-control-sm"
+                                                                                                        id="manual_via_administracion_ficha_dental"
+                                                                                                        name="manual_via_administracion_ficha_dental"
+                                                                                                        onchange="validar_via_administracion_manual_sdi();">
+                                                                                                        <option
+                                                                                                            value="0">
+                                                                                                            Seleccione</option>
+                                                                                                        <option
+                                                                                                            value="1">
+                                                                                                            V&iacute;a Oral
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="2">
+                                                                                                            V&iacute;a
+                                                                                                            Sublingual</option>
+                                                                                                        <option
+                                                                                                            value="3">
+                                                                                                            V&iacute;a
+                                                                                                            T&oacute;pica
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="4">
+                                                                                                            V&iacute;a
+                                                                                                            Oftalmol&oacute;gica
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="5">
+                                                                                                            V&iacute;a
+                                                                                                            &Oacute;tica
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="6">
+                                                                                                            V&iacute;a
+                                                                                                            Inhalatoria</option>
+                                                                                                        <option
+                                                                                                            value="7">
+                                                                                                            V&iacute;a Nasal
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="8">
+                                                                                                            V&iacute;a Rectal
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="9">
+                                                                                                            V&iacute;a Vaginal
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="10">
+                                                                                                            V&iacute;a parental
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="11">
+                                                                                                            Otra Vía</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group fill"
+                                                                                                    id="div_manual_observaciones_via_administracion_ficha_dental"
+                                                                                                    style="display: none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm">Otra
+                                                                                                        vía de
+                                                                                                        Administración</label>
+                                                                                                    <input type="text"
+                                                                                                        id="manual_observaciones_via_administracion_ficha_dental"
+                                                                                                        name="manual_observaciones_via_administracion_ficha_dental"
+                                                                                                        class="form-control form-control-sm "
+                                                                                                        disabled>
+                                                                                                </div>
+                                                                                            </div>
+
+
+
+                                                                                            <div class="col-sm-12">
+                                                                                                <div class="row">
+                                                                                                    {{--  <div class="col-sm-6">
+                                                                                                        <div class="form-group mb-1">
+                                                                                                            <label><strong>Uso Crónico</strong></label>
+                                                                                                            <div class="switch switch-success d-inline m-r-10">
+                                                                                                                <input type="checkbox" id="manual_medicamento_uso_cronico">
+                                                                                                                <label for="manual_medicamento_uso_cronico" class="cr"></label>
+                                                                                                            </div>
+                                                                                                            <div class="alert-primary" id="manual_mensaje_uso_cronico" style="display:none;">Acaba de seleccionar medicamento como USO CRÓNICO </div>
+                                                                                                        </div>
+                                                                                                    </div>  --}}
+                                                                                                    <div class="col-sm-6">
+                                                                                                        <button type="button"
+                                                                                                            onclick="indicar_medicamento_manual_sdi()"
+                                                                                                            class="btn btn-success btn-sm float-right"><i
+                                                                                                                class="fa fa-plus"></i>
+                                                                                                            Agregar Medicamento
+                                                                                                            Manual</button>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                        {{--  <div class="col-sm-6">
+                                                                                            <button type="button" onclick="indicar_medicamento_sdi(2)"
+                                                                                                class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Agregar Medicamento</button>
+                                                                                        </div>  --}}
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-12">
+                                                                                                <div class="table-responsive">
+                                                                                                    <table
+                                                                                                        id="tabla_medicamento_2"
+                                                                                                        class="table table-bordered table-xs">
+                                                                                                        <thead>
+                                                                                                            <tr>
+                                                                                                                <td class="text-center align-middle text-wrap hidden"
+                                                                                                                    hidden="hidden">
+                                                                                                                    id_tipo_control
+                                                                                                                </td>
+                                                                                                                <td class="text-center align-middle text-wrap hidden"
+                                                                                                                    hidden="hidden">
+                                                                                                                    id_producto
+                                                                                                                </td>
+                                                                                                                <td
+                                                                                                                    class="text-center align-middle text-wrap">
+                                                                                                                    Medicamentos
+                                                                                                                </td>
+                                                                                                                <td class="text-center align-middle text-wrap hidden"
+                                                                                                                    hidden="hidden">
+                                                                                                                    farmaco</td>
+                                                                                                                <td class="text-center align-middle text-wrap hidden"
+                                                                                                                    hidden="hidden">
+                                                                                                                    id_presentacion
+                                                                                                                </td>
+                                                                                                                {{-- <td class="text-center align-middle text-wrap">Presentación</td> --}}
+                                                                                                                <td class="text-center align-middle text-wrap"
+                                                                                                                    hidden="hidden">
+                                                                                                                    id_receta_dosis
+                                                                                                                </td>
+                                                                                                                <td
+                                                                                                                    class="text-center align-middle text-wrap hidden">
+                                                                                                                    Posología
+                                                                                                                </td>
+                                                                                                                <td class="text-center align-middle text-wrap hidden"
+                                                                                                                    hidden="hidden">
+                                                                                                                    id_via_administracion
+                                                                                                                </td>
+                                                                                                                <td
+                                                                                                                    class="text-center align-middle text-wrap">
+                                                                                                                    Vía Adm.
+                                                                                                                </td>
+                                                                                                                <th
+                                                                                                                    class="text-center align-middle">
+                                                                                                                    Eliminar
+                                                                                                                </th>
+                                                                                                            </tr>
+                                                                                                        </thead>
+                                                                                                        <tbody
+                                                                                                            id="tbody_tabla_medicamento_manual">
+                                                                                                            @foreach ($recetas as $r)
+                                                                                                                <tr>
+                                                                                                                    <td class="text-center align-middle text-wrap hidden"
+                                                                                                                        hidden="hidden">
+                                                                                                                        {{ $r->id_tipo_control }}
+                                                                                                                    </td>
+                                                                                                                    <td class="text-center align-middle text-wrap hidden"
+                                                                                                                        hidden="hidden">
+                                                                                                                        {{ $r->id_producto }}
+                                                                                                                    </td>
+                                                                                                                    <td
+                                                                                                                        class="text-center align-middle text-wrap">
+                                                                                                                        {{ $r->nombre_medicamento }}
+                                                                                                                    </td>
+                                                                                                                    <td class="text-center align-middle text-wrap hidden"
+                                                                                                                        hidden="hidden">
+                                                                                                                        {{ $r->farmaco }}
+                                                                                                                    </td>
+                                                                                                                    <td class="text-center align-middle text-wrap hidden"
+                                                                                                                        hidden="hidden">
+                                                                                                                        {{ $r->id_presentacion }}
+                                                                                                                    </td>
+                                                                                                                    {{-- <td class="text-center align-middle text-wrap">{{ $r->dosis }}</td> --}}
+                                                                                                                    <td class="text-center align-middle text-wrap hidden"
+                                                                                                                        hidden="hidden">
+                                                                                                                        {{ $r->id_receta_dosis }}
+                                                                                                                    </td>
+                                                                                                                    <td
+                                                                                                                        class="text-center align-middle text-wrap hidden">
+                                                                                                                        {{ $r->indicaciones }}
+                                                                                                                    </td>
+                                                                                                                    <td
+                                                                                                                        class="text-center align-middle text-wrap">
+                                                                                                                        {{ $r->via_administracion }}
+                                                                                                                    </td>
+                                                                                                                    <td
+                                                                                                                        class="text-center align-middle">
+                                                                                                                        <button
+                                                                                                                            type="button"
+                                                                                                                            class="btn btn-danger btn-sm"
+                                                                                                                            onclick="eliminar_medicamento_sdi({{ $r->id }})"><i
+                                                                                                                                class="fa fa-trash"></i></button>
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                            @endforeach
+                                                                                                        </tbody>
+                                                                                                    </table>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
 
                                                                                     <!--TAB 3-->
@@ -655,7 +1248,456 @@
                                                                                         role="tabpanel"
                                                                                         aria-labelledby="procedimiento_div_tab">
                                                                                         <div class="form-row">
+                                                                                            <div
+                                                                                                class="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="ind_med">Vías y
+                                                                                                        Cateter</label>
+                                                                                                    <select name="ind_med"
+                                                                                                        id="ind_med"
+                                                                                                        class="form-control form-control-sm"
+                                                                                                        onchange="evaluar_para_carga_detalle('ind_med','div_ind_med','obs_ind_med',5);">
+                                                                                                        <option selected
+                                                                                                            value="0">
+                                                                                                            Seleccione</option>
+                                                                                                        <option
+                                                                                                            value="Cateter o vía venosa periférica">
+                                                                                                            Cateter
+                                                                                                            o vía venosa
+                                                                                                            periférica</option>
+                                                                                                        <option
+                                                                                                            value="Cateter venoso central">
+                                                                                                            Cateter venoso
+                                                                                                            central</option>
+                                                                                                        <option
+                                                                                                            value="Catéter subcutáneo">
+                                                                                                            Catéter subcutáneo
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="otra">
+                                                                                                            otra </option>
+                                                                                                        <option
+                                                                                                            value="Otra Indicación">
+                                                                                                            Otra Indicación
+                                                                                                        </option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group"
+                                                                                                    id="div_ind_med"
+                                                                                                    style="display:none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="obs_ind_med">Descripción
+                                                                                                        <i>Otra
+                                                                                                            Indicación</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_ind_med" id="obs_ind_med"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="ind_cur">Curaciones</label>
+                                                                                                    <select name="ind_cur"
+                                                                                                        id="ind_cur"
+                                                                                                        class="form-control form-control-sm"
+                                                                                                        onchange="evaluar_para_carga_detalle('ind_cur','div_ind_cur','obs_ind_cur',9);">
+                                                                                                        <option selected
+                                                                                                            value="0">
+                                                                                                            Seleccione</option>
+                                                                                                        <option
+                                                                                                            value="Retiro de puntos">
+                                                                                                            Retiro de puntos
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Curación simple">
+                                                                                                            Curación simple
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Curación Avanzada">
+                                                                                                            Curación Avanzada
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Curación c/afrontamiento">
+                                                                                                            Curación
+                                                                                                            c/afrontamiento
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Sutura">
+                                                                                                            Sutura</option>
+                                                                                                        <option
+                                                                                                            value="Otra Indicación">
+                                                                                                            Otra Indicación
+                                                                                                        </option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group"
+                                                                                                    id="div_ind_cur"
+                                                                                                    style="display:none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="obs_ind_cur">Descripción
+                                                                                                        <i>Otra
+                                                                                                            Indicación</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_ind_cur" id="obs_ind_cur"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="ind_proc">Sondas
+                                                                                                        y procedimientos</label>
+                                                                                                    <select name="ind_proc"
+                                                                                                        id="ind_proc"
+                                                                                                        class="form-control form-control-sm"
+                                                                                                        onchange="evaluar_para_carga_detalle('ind_proc','div_ind_proc','obs_ind_proc',9);">
+                                                                                                        <option selected
+                                                                                                            value="0">
+                                                                                                            Seleccione</option>
+                                                                                                        <option
+                                                                                                            value="Sonda folley con medición de diuresis">
+                                                                                                            Sonda folley con
+                                                                                                            medición de diuresis
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Sonda folley sin medición de diuresis">
+                                                                                                            Sonda folley sin
+                                                                                                            medición de diuresis
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Sonda folley con irrigación vesical">
+                                                                                                            Sonda folley con
+                                                                                                            irrigación vesical
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Cateterismo vesical">
+                                                                                                            Cateterismo vesical
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Sonda Nasogástrica">
+                                                                                                            Sonda Nasogástrica
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Sonda Nasogástrica con lavado gástrico">
+                                                                                                            Sonda Nasogástrica
+                                                                                                            con lavado gástrico
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Sonda Nasogástrica medición de contenido">
+                                                                                                            Sonda Nasogástrica
+                                                                                                            medición de
+                                                                                                            contenido</option>
+                                                                                                        <option
+                                                                                                            value="6">
+                                                                                                            otra</option>
+                                                                                                        <option
+                                                                                                            value="9">
+                                                                                                            Otra </option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group"
+                                                                                                    id="div_ind_proc"
+                                                                                                    style="display:none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="obs_ind_proc">Descripción
+                                                                                                        <i>Otra
+                                                                                                            Indicación</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_ind_proc" id="obs_ind_proc"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="ind_inmmed">Inmovilización</label>
+                                                                                                    <select name="ind_inmmed"
+                                                                                                        id="ind_inmmed"
+                                                                                                        class="form-control form-control-sm"
+                                                                                                        onchange="evaluar_para_carga_detalle('ind_inmmed','div_ind_inmmed','obs_ind_inmmed',9);">
+                                                                                                        <option
+                                                                                                            value="0">
+                                                                                                            Seleccione</option>
+                                                                                                        <option
+                                                                                                            value="Vendaje en 8">
+                                                                                                            Vendaje en 8
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Cabestrillo">
+                                                                                                            Cabestrillo</option>
+                                                                                                        <option
+                                                                                                            value="Férula">
+                                                                                                            Férula</option>
+                                                                                                        <option
+                                                                                                            value="Vendaje Compresivo">
+                                                                                                            Vendaje Compresivo
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Valva de yeso braquiopalmar">
+                                                                                                            Valva de
+                                                                                                            yeso braquiopalmar
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Valva de yeso antebraquiopalmar">
+                                                                                                            Valva
+                                                                                                            de yeso
+                                                                                                            antebraquiopalmar
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="yeso bota larga">
+                                                                                                            yeso bota larga
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="yeso bota corta">
+                                                                                                            yeso bota corta
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="9">
+                                                                                                            Otra Inmovilización
+                                                                                                        </option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group"
+                                                                                                    id="div_ind_inmmed"
+                                                                                                    style="display:none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="obs_ind_inmmed">Descripción
+                                                                                                        <i>Otra
+                                                                                                            Indicación</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_ind_inmmed" id="obs_ind_inmmed"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="ind_cv_inmmed_urg">Control
+                                                                                                        de ciclo</label>
+                                                                                                    <select
+                                                                                                        name="ind_cv_inmmed_urg"
+                                                                                                        id="ind_cv_inmmed_urg"
+                                                                                                        class="form-control form-control-sm"
+                                                                                                        onchange="evaluar_para_carga_detalle('ind_cv_inmmed_urg','div_ind_cv_inmmed_urg','obs_ind_cv_inmmed_urg',6);">
+                                                                                                        <option
+                                                                                                            value="0">
+                                                                                                            Seleccione</option>
+                                                                                                        <option
+                                                                                                            value="Cada media hora">
+                                                                                                            Cada media hora
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Cada hora">
+                                                                                                            Cada hora</option>
+                                                                                                        <option
+                                                                                                            value="Cada dos horas">
+                                                                                                            Cada dos horas
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Cada 4 horas">
+                                                                                                            Cada 4 horas
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Suspender">
+                                                                                                            Suspender</option>
+                                                                                                        <option
+                                                                                                            value="6">
+                                                                                                            Otro</option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group"
+                                                                                                    id="div_ind_cv_inmmed_urg"
+                                                                                                    style="display:none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="obs_ind_cv_inmmed_urg">Descripción
+                                                                                                        <i>Otra
+                                                                                                            Indicación</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_ind_cv_inmmed_urg" id="obs_ind_cv_inmmed_urg"></textarea>
+                                                                                                </div>
+                                                                                            </div>
 
+                                                                                            <div
+                                                                                                class="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-2">
+
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="ind_pp">Preparar
+                                                                                                        para</label>
+                                                                                                    <select name="ind_pp"
+                                                                                                        id="ind_pp"
+                                                                                                        class="form-control form-control-sm"
+                                                                                                        onchange="evaluar_para_carga_detalle('ind_pp','div_ind_pp','obs_ind_pp',9);">
+                                                                                                        <option
+                                                                                                            value="0">
+                                                                                                            Seleccione</option>
+                                                                                                        <option
+                                                                                                            value="Cirugía">
+                                                                                                            Cirugía</option>
+                                                                                                        <option
+                                                                                                            value="Traslado">
+                                                                                                            Traslado</option>
+                                                                                                        <option
+                                                                                                            value="etc">etc
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="etc">etc
+                                                                                                        </option>
+                                                                                                        <option
+                                                                                                            value="Valva de yeso braquiopalmar">
+                                                                                                            Valva de
+                                                                                                            yeso braquiopalmar
+                                                                                                        </option>
+                                                                                                    </select>
+                                                                                                </div>
+                                                                                                <div class="form-group"
+                                                                                                    id="div_ind_pp"
+                                                                                                    style="display:none;">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="obs_b_com">Descripción
+                                                                                                        <i>Otra
+                                                                                                            Indicación</i></label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_ind_pp" id="obs_ind_pp"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            {{-- <div class="col-sm-6 mt-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label class="floating-label-activo-sm">Vigilar Signos de
+                                                                                                        Alerta</label>
+                                                                                                    <input type="text" id="ind_vig_sig" name="ind_vig_sig"
+                                                                                                        class="form-control form-control-sm">
+                                                                                                </div>
+                                                                                            </div> --}}
+
+
+                                                                                            <div
+                                                                                                class="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-2">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm"
+                                                                                                        for="obs_ind_med_servicio">Otras
+                                                                                                        Indicaciones (Indicar
+                                                                                                        nombre)</label>
+                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
+                                                                                                        name="obs_ind_med_servicio" id="obs_ind_med_servicio" onkeydown="mostrarObservaciones()"
+                                                                                                        placeholder="Indique nombre de procedimiento y el tipo (llene aqui)"></textarea>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-2 d-none"
+                                                                                                id="observaciones_otras_indicaciones">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        class="floating-label-activo-sm">Observaciones</label>
+                                                                                                    <input type="text"
+                                                                                                        id="obs_detalle_ind_med"
+                                                                                                        name="obs_detalle_ind_med"
+                                                                                                        class="form-control form-control-sm">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col-sm-12 mt-2">
+                                                                                                <button type="button"
+                                                                                                    class="btn btn-outline-success btn-sm float-right"
+                                                                                                    onclick="indicar_procedimiento_sdi()"><i
+                                                                                                        class="fas fa-save"></i>
+                                                                                                    Guardar</button>
+                                                                                            </div>
+                                                                                            {{-- PROCEDIMIENTOS --}}
+                                                                                            <!--Tabla-->
+                                                                                            <div class="col-sm-12 mt-2">
+                                                                                                <div class="table-responsive">
+                                                                                                    <table
+                                                                                                        id="tabla_procedimientos_servicio"
+                                                                                                        class="table table-bordered table-xs">
+                                                                                                        <thead>
+                                                                                                            <tr>
+                                                                                                                <td class="text-center align-middle text-wrap hidden"
+                                                                                                                    hidden="hidden">
+                                                                                                                    id_procedimiento
+                                                                                                                </td>
+                                                                                                                <td
+                                                                                                                    class="text-center align-middle text-wrap">
+                                                                                                                    Procedimiento
+                                                                                                                </td>
+                                                                                                                <td
+                                                                                                                    class="text-center align-middle text-wrap">
+                                                                                                                    Vigilar
+                                                                                                                    Signos de
+                                                                                                                    Alerta</td>
+                                                                                                                <th
+                                                                                                                    class="text-center align-middle">
+                                                                                                                    Acción
+                                                                                                                </th>
+                                                                                                            </tr>
+                                                                                                        </thead>
+                                                                                                        <tbody>
+                                                                                                            @foreach ($procedimientos as $p)
+                                                                                                                @if ($p->activo == 0)
+                                                                                                                @endif
+                                                                                                                <tr>
+                                                                                                                    <td class="text-center align-middle text-wrap hidden"
+                                                                                                                        hidden="hidden">
+                                                                                                                        {{ $p->id_procedimiento }}
+                                                                                                                    </td>
+                                                                                                                    <td
+                                                                                                                        class="text-center align-middle text-wrap">
+                                                                                                                        {{ $p->datos_procedimiento->nombre_procedimiento }}
+                                                                                                                        @if ($p->estado == 0)
+                                                                                                                            <span
+                                                                                                                                class="badge badge-warning">Suspendido</span>
+                                                                                                                        @endif
+                                                                                                                    </td>
+                                                                                                                    <td
+                                                                                                                        class="text-center align-middle text-wrap">
+                                                                                                                        <input
+                                                                                                                            type="text"
+                                                                                                                            id="ind_vig_sig{{ $p->id }}"
+                                                                                                                            name="ind_vig_sig{{ $p->id }}"
+                                                                                                                            class="form-control form-control-sm">
+                                                                                                                    </td>
+                                                                                                                    <td
+                                                                                                                        class="text-center align-middle">
+                                                                                                                        <button
+                                                                                                                            type="button"
+                                                                                                                            class="btn btn-danger btn-sm"
+                                                                                                                            onclick="eliminar_procedimiento_sdi({{ $p->id }})"><i
+                                                                                                                                class="fa fa-trash"></i>Eliminar</button>
+                                                                                                                        @if ($p->estado == 0)
+                                                                                                                            <button
+                                                                                                                                type="button"
+                                                                                                                                class="btn btn-success btn-sm"
+                                                                                                                                onclick="suspender_procedimiento_sdi({{ $p->id }})"><i
+                                                                                                                                    class="fas fa-ban"></i>Reponer</button>
+                                                                                                                        @else
+                                                                                                                            <button
+                                                                                                                                type="button"
+                                                                                                                                class="btn btn-warning btn-sm"
+                                                                                                                                onclick="suspender_procedimiento_sdi({{ $p->id }})"><i
+                                                                                                                                    class="fas fa-ban"></i>Suspender</button>
+                                                                                                                        @endif
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                            @endforeach
+                                                                                                        </tbody>
+                                                                                                    </table>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!--Cierre: Tabla-->
 
 
                                                                                         </div>
@@ -1143,14 +2185,14 @@
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
                                                                                 <button type="button" class="btn btn-info" onclick="registrar_salida_paciente()"> <i class="feather icon-save"></i> Guardar</button>
                                                                             </div>
-                                                                        </div>
+                                                                        </div>                                                                            
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-
+                                           
                                         </div>
                                     </div>
                                 </div>
