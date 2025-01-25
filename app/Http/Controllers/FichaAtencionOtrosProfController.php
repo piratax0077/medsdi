@@ -2125,8 +2125,43 @@ class FichaAtencionOtrosProfController extends Controller
             $mensaje = 'La conclucion es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún.';
         }
 
+
+        /** REGISTRO DE PROFESIONAO SOLICITADO POR */
+        if( !empty($request->solicitado_id_profesional_oct_par) || !empty($request->derivado_por_rut) )
+        {
+
+            if( empty($request->solicitado_id_profesional_oct_par) && !empty($request->derivado_por_rut) )
+            {
+
+                if(empty($request->solicitado_nombre_oct_par))
+                {
+                    $campos_requeridos = 0;
+                    $mensaje = 'Campo requerido NOMBRE del Solicitante.\n';
+                }
+                if(empty($request->solicitado_apellido_oct_par))
+                {
+                    $campos_requeridos = 0;
+                    $mensaje = 'Campo requerido APELLIDO del Solicitante.\n';
+                }
+                if(empty($request->solicitado_telefono_oct_par) || empty($request->solicitado_email_oct_par))
+                {
+                    $campos_requeridos = 0;
+                    $mensaje = 'Campo requerido TELÉFONO o EMAIL del Solicitante.\n';
+                }
+            }
+        }
+
         if($campos_requeridos)
         {
+            if( !empty($request->solicitado_id_profesional_oct_par) || !empty($request->derivado_por_rut) )
+            {
+
+                if( empty($request->solicitado_id_profesional_oct_par) && !empty($request->derivado_por_rut) )
+                {
+                    $profesional_provisorio = ProfesionalProvisorioController::registrar( $request->solicitado_nombre_oct_par, $request->solicitado_apellido_oct_par, '', '', $request->derivado_por_rut, $request->solicitado_email_oct_par, $request->solicitado_telefono_oct_par, '', '', '', '', '', '', '', '', '', 1);
+                }
+            }
+
             /** FICHA ATENCION  */
             $id_profesional = $request->id_profesional_fc;
             $id_paciente = $request->id_paciente_fc;
@@ -2141,6 +2176,18 @@ class FichaAtencionOtrosProfController extends Controller
             $ficha->finalizada = 1;
             if ($ficha->save())
             {
+                //  finalizar hora medica
+                $hora_medica->id_estado = 6;
+                $mensaje_estado_hora_medica = '';
+                if (!$hora_medica->save()) {
+                    $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
+                }
+                else
+                {
+                    $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
+                }
+                $mensaje .= $mensaje_estado_hora_medica;
+
                 $mensaje .= 'Ficha Clínica  guardada de forma correcta\n';
 
                 /** REGISTRO FICHA  OCTAVO PAR */
@@ -2155,6 +2202,7 @@ class FichaAtencionOtrosProfController extends Controller
                     $ficha_octavo_par->id_paciente = $request->id_paciente_fc;
                     $ficha_octavo_par->fecha_ex = $request->fecha_ex;
                     $ficha_octavo_par->profesional = $request->profesional;
+                    $ficha_octavo_par->id_derivado_por = $request->solicitado_id_profesional_oct_par;
                     $ficha_octavo_par->derivado_por = $request->derivado_por;
                     $ficha_octavo_par->nombre_pcte = $request->nombre_pcte;
                     $ficha_octavo_par->edad = $request->edad;
