@@ -93,6 +93,28 @@
                                                 @endforeach
                                             @endif
 
+                                            {{-- EXAMENES OCTAVO PAR --}}
+                                            @if (isset($reg_octavo_par))
+                                                @foreach ( $reg_octavo_par as $result_oct_par)
+                                                    @if ($result_oct_par->revisado == 0)
+                                                        <tr>
+                                                            <td>{{ date('d-m-Y',strtotime($result_oct_par->fecha_ex)) }}</td>
+                                                            <td>{{ $result_oct_par->id }}</td>
+                                                            {{-- <td>{{ $result_oct_par->nombre.' '.$result_oct_par->apellido_paterno.' '.$result_oct_par->apellido_materno }}</td> --}}
+                                                            <td>
+                                                                OCTAVO PAR
+                                                            </td>
+                                                            <td>
+                                                                OCTAVO PAR
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-xxs btn-success-light-c" id="btn_verResultadoExamenOctavoPar_{{ $result_oct_par->id }}" onclick="verResultadoOctavoPar('{{ $result_oct_par->id }}',1);"><i class="feather icon-activity"></i> Ver</button>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+
                                         </tbody>
                                     </table>
                                 </div>

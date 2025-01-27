@@ -111,6 +111,7 @@ use App\Models\TipoInforme;
 use App\Models\FichaUrologiaAdulto;
 use App\Models\FichaVenereas;
 use App\Models\GrupoSanguineo;
+use App\Models\OctavoPar;
 use App\Models\OdontogramaPaciente;
 use App\Models\OftalmoExamenAgudezaVisual;
 use App\Models\OftalmoExamenCampoVisual;
@@ -1822,6 +1823,9 @@ class ficha_atencionController extends Controller
 
         $presupuesto_dental = $this->damePresupuestosDental($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id);
 
+        /** EXAMEN OCTAVO PAR */
+        $reg_octavo_par = OctavoPar::where('id_paciente', $paciente->id)->get();
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1959,6 +1963,8 @@ class ficha_atencionController extends Controller
                 /** RESPONSABLES */
                 'responsables'  => $responsables,
                 'acompanantes'  => $acompanantes,
+
+                'reg_octavo_par'  => $reg_octavo_par,
 
             ]
         );

@@ -124,17 +124,56 @@
                                                             <label class="floating-label-activo-sm">Fecha de examen</label>
                                                             <input type="date" class="form-control form-control-sm" name="fecha_ex" id="fecha_ex" value="{{ date('Y-m-d') }}" readonly>
                                                         </div>
-                                                        <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
+                                                        <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                             <label class="floating-label-activo-sm">Examinador</label>
                                                             <input type="text" class="form-control form-control-sm" name="profesional" id="profesional" value="Dr. {{ $profesional->apellido_uno }}" readonly>
                                                         </div>
-                                                        <div class="form-group col-sm-12 col-md-12 col-lg-5 col-xl-5">
-                                                            <label class="floating-label-activo-sm">Derivado por:</label>
-                                                            <input type="text" class="form-control form-control-sm" name="derivado_por" id="derivado_por" value="">
+                                                        <div class="form-group col-sm-12 col-md-12 col-lg-7 col-xl-7">
+                                                            {{-- <label class="floating-label-activo-sm">Derivado por:</label> --}}
+                                                            {{-- <input type="text" class="form-control form-control-sm" name="derivado_por" id="derivado_por" value=""> --}}
+                                                            <div class="row">
+                                                                <div class="col-sm-6">
+                                                                    <input type="hidden" name="solicitado_id_profesional_oct_par" id="solicitado_id_profesional_oct_par" value="">
+                                                                    <label class="floating-label-activo-sm">Derivado por RUT:</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="derivado_por_rut" id="derivado_por_rut" value=""
+                                                                        onblur="cargar_profesional(this,'derivado_por', 'solicitado_id_profesional_oct_par', 'div_profesional_no_inscrito');"
+                                                                        onkeyup="cargar_profesional(this,'derivado_por', 'solicitado_id_profesional_oct_par', 'div_profesional_no_inscrito');"
+                                                                        oninput="formatoRut(this);"
+                                                                    >
+
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                    <label class="floating-label-activo-sm">Nombre:</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="derivado_por" id="derivado_por" value="">
+                                                                </div>
+                                                                <div class="form-group col-md-12" id="div_mensaje"  style="display: none;">
+                                                                    <span style="font-size: 10px;color: #ff0808;" id="mensaje_solicitado_por"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-3" id="div_profesional_no_inscrito" style="display: none;">
+
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Nombre</label>
+                                                                    <input type="text" class="form-control form-control-sm"  name="solicitado_nombre_oct_par" id="solicitado_nombre_oct_par" onchange="actualizar_solicitado_por('derivado_por', 'solicitado_nombre_oct_par', 'solicitado_apellido_oct_par');">
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Apellido</label>
+                                                                    <input type="text" class="form-control form-control-sm"  name="solicitado_apellido_oct_par" id="solicitado_apellido_oct_par" onchange="actualizar_solicitado_por('derivado_por', 'solicitado_nombre_oct_par', 'solicitado_apellido_oct_par');">
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Telefono</label>
+                                                                    <input type="text" class="form-control form-control-sm"  name="solicitado_telefono_oct_par" id="solicitado_telefono_oct_par" >
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Email</label>
+                                                                    <input type="text" class="form-control form-control-sm"  name="solicitado_email_oct_par" id="solicitado_email_oct_par" >
+                                                                </div>
+
+                                                            </div>
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                                             <label class="floating-label-activo-sm">Nombre paciente</label>
-                                                            <input type="text" class="form-control form-control-sm" name="Nombre_pcte" id="Nombre_pcte" value="{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}">
+                                                            <input type="text" class="form-control form-control-sm" name="nombre_pcte" id="nombre_pcte" value="{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}">
                                                         </div>
                                                         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                                             <label class="floating-label-activo-sm">Edad</label>
@@ -1513,6 +1552,113 @@
     @include("atencion_otros_prof.modales"){{-- base de botones de sidebar --}}
     @include("atencion_otros_prof.include.sidebar_derecho_fono"){{-- modales y data de sidebar especialidad --}}
 
- @endsection
+@endsection
+
+@section('page-script')
+    <script>
+
+        $(document).ready(function() {
+
+        });
+
+        function cargar_profesional(rut, input_nombre, input_id, div_solicitar)
+        {
+            rut = $(rut).val();
+
+            // console.log('------------------------------------');
+            // console.log(rut.length);
+            // console.log(rut);
+            // console.log('------------------------------------');
+
+            if(rut.length>5)
+            {
+                url = "{{ route('profesional.buscar') }}";
+                $.ajax({
+
+                    url: url,
+                    type: "GET",
+                    data: {
+                        rut : rut,
+                    },
+                })
+                .done(function(data)
+                {
+                    // console.log('-----------------------');
+                    // console.log(data);
+                    // console.log('-----------------------');
+                    if(data.estado == 1)
+                    {
+
+                        if(data.registros.length>0)
+                        {
+                            var nombre = data.registros[0].nombre+' '+data.registros[0].apellido_uno;
+                            var id = data.registros[0].id;
+                            // $('#'+input_nombre).attr('readonly', true);
+                            $('#'+input_nombre).val(nombre);
+                            $('#'+input_id).val(id);
+                            $('#'+div_solicitar).hide();
+                            mensaje = '';
+                            $('#div_mensaje').hide();
+                            $('#mensaje_solicitado_por').html(mensaje);
+                            $('#solicitado_nombre_oct_par').val('');
+                            $('#solicitado_apellido_oct_par').val('');
+                            $('#solicitado_telefono_oct_par').val('');
+                            $('#solicitado_email_oct_par').val('');
+                        }
+                        else
+                        {
+                            mensaje = 'Profesional no encontrato, debe ingresar datos.';
+                            $('#'+input_nombre).val('');
+                            $('#'+input_id).val('');
+                            $('#'+div_solicitar).show();
+                            $('#div_mensaje').show();
+                            $('#mensaje_solicitado_por').html(mensaje);
+                            $('#solicitado_nombre_oct_par').val('');
+                            $('#solicitado_apellido_oct_par').val('');
+                            $('#solicitado_telefono_oct_par').val('');
+                            $('#solicitado_email_oct_par').val('');
+                            $('#'+input_nombre).attr('readonly', true);
+                        }
+                    }
+                    else
+                    {
+                        mensaje = 'Se presento un problema en la busqueda intente nuevamente';
+                        $('#div_mensaje').show();
+                        $('#mensaje_solicitado_por').html(mensaje);
+                        $('#'+input_nombre).attr('readonly', false);
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
+            else if(rut.length==0)
+            {
+                $('#'+input_nombre).val('');
+                // $('#'+input_nombre).attr('readonly', true);
+                $('#'+input_id).val('');
+                $('#'+div_solicitar).hide();
+                $('#div_mensaje').hide();
+                $('#mensaje_solicitado_por').html('');
+            }
+        }
+
+        function actualizar_solicitado_por(input_solitado_por, input_nombre, input_apellido)
+        {
+            var nombre = $('#'+input_nombre).val();
+            var apellido = $('#'+input_apellido).val();
+            if(nombre != '' || apellido != '')
+            {
+                // $('#'+input_solitado_por).attr('readonly', true);
+                $('#'+input_solitado_por).val($('#'+input_nombre).val()+' '+$('#'+input_apellido).val());
+            }
+            else
+            {
+                // $('#'+input_solitado_por).attr('readonly', false);
+                $('#'+input_solitado_por).val();
+            }
+        }
+    </script>
+@endsection
 
 {{-- @include('app.profesional.modales.boton_flotante_agenda_autorizacion') --}}
