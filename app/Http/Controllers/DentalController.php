@@ -1552,22 +1552,19 @@ class DentalController extends Controller
     public function guardarDiagnosticoLaboratorio(Request $request){
         try {
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-            // preguntar si existe el diagnóstico para el profesional
-            $existe = DiagnosticosDentalProfesional::where('id_diagnostico', $request->trabajo_id)->where('id_profesional', $profesional->id)->first();
-            if ($existe) {
-                $diagnostico = DiagnosticosDentalProfesional::find($existe->id);
-            }else{
-                $diagnostico = new DiagnosticosDentalProfesional();
-            }
-            $diagnostico->id_diagnostico = $request->trabajo_id;
 
-            $diagnostico->id_profesional = $profesional->id;
+            // preguntar si existe el diagnóstico para el profesional
+            $diagnostico = DiagnosticosDentalProfesional::find($request->trabajo_id);
+
             $diagnostico->laboratorio = $request->existe_laboratorio;
 
             if($diagnostico->save()){
                 $trabajos = DiagnosticosDental::where('tipo_examen',1)->orWhere('tipo_examen',2)->orWhere('tipo_examen',3)->get();
                 $procedimientos = DiagnosticosDental::where('id_responsable',$profesional->id)->get();
-                $mis_trabajos_profesional = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)->get();
+                $mis_trabajos_profesional = DiagnosticosDentalProfesional::select('diagnosticos_dental_profesional.*','diagnosticos_dental.descripcion','diagnosticos_dental.uco','diagnosticos_dental.valor','diagnosticos_dental.tipo_examen','diagnosticos_dental.id_responsable','diagnosticos_dental.id as id_diagnostico')
+                        ->join('diagnosticos_dental','diagnosticos_dental_profesional.id_diagnostico','=','diagnosticos_dental.id')
+                        ->where('diagnosticos_dental_profesional.id_profesional', $profesional->id)
+                        ->get();
                 // Crear un array asociativo para un acceso más rápido
                 $mis_trabajos_profesional_map = [];
                 foreach ($mis_trabajos_profesional as $trabajo_profesional) {
@@ -1590,6 +1587,9 @@ class DentalController extends Controller
                         $procedimiento->laboratorio = 0; // O el valor por defecto que prefieras
                     }
                 }
+
+                $procedimientos = $mis_trabajos_profesional;
+
                 return ['status' => 1, 'mensaje' => 'Diagnóstico guardado correctamente','procedimientos' => $procedimientos, 'trabajos' => $trabajos];
             }else{
                 return ['status' => 0, 'mensaje' => 'Error al guardar diagnóstico'];

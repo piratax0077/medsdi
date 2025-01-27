@@ -42,6 +42,7 @@
     <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     {{-- autocomplete
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> --}}
@@ -59,6 +60,9 @@
     @yield('page-styles')
 
     <style>
+        .diagnostico_activo{
+            background: #fff !important;
+        }
         #loading {
             display: none;
             position: absolute;
@@ -120,7 +124,7 @@
     <script src="{{ asset('js/ripple.js') }}"></script>
     <script src="{{ asset('js/pcoded.min.js') }}"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="{{ asset('js/plugins/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/plugins/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/plugins/dataTables.responsive.min.js') }}"></script>
@@ -5321,6 +5325,42 @@
                     return false;
                 }
             });
+
+            $('#nombre_procedimiento').autocomplete({
+                source: function(request, response) {
+                // Fetch data
+                $.ajax({
+                    url: "{{ route('dental.getDiagnosticoDental') }}",
+                    type: 'post',
+                    dataType: "json",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        search: request.term
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        if( data.length == 0 )
+                        {
+                            $('.diagnostico_activo').hide();
+                            $('.diagnostico_inactivo').show();
+                        }
+                        else
+                        {
+                            $('.diagnostico_activo').show();
+                            $('.diagnostico_inactivo').hide();
+                        }
+                        response(data);
+                    }
+                });
+            },
+            select: function(event, ui) {
+                console.log(ui.item);
+                $('#id_procedimiento').val(ui.item.value);
+                 // Set selection
+                 $('#nombre_procedimiento').val(ui.item.label); // display the selected text
+                return false;
+            }
+        });
 
             $('#recepcion_programa').click(function() {
                 $('#sesiones_programa').toggle();
