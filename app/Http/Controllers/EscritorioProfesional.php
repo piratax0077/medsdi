@@ -3183,18 +3183,22 @@ class EscritorioProfesional extends Controller
     }
 
     public function editarProcedimientoDental(Request $req){
-        $procedimiento = DiagnosticosDental::find($req->id);
+
+        $procedimiento = DiagnosticosDentalProfesional::find($req->id);
+        $procedimiento_lab = DiagnosticosDental::find($procedimiento->id_diagnostico);
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        $procedimiento->descripcion = $req->nombre_procedimiento;
-        $procedimiento->uco = $req->cantidad_uco;
-        $procedimiento->valor = 15000 * $req->cantidad_uco;
-        $procedimiento->tipo_examen = 1;
-        $procedimiento->id_responsable = $profesional->id;
+        $procedimiento->cantidad_uco = $req->cantidad_uco;
+        $procedimiento->laboratorio = $req->tiene_lab;
+        $procedimiento->cantidad_bloques = $req->cantidad_bloques;
 
         if($procedimiento->save()){
             $trabajos = DiagnosticosDental::where('tipo_examen',1)->orWhere('tipo_examen',2)->orWhere('tipo_examen',3)->get();
             $procedimientos = DiagnosticosDental::where('id_responsable',$profesional->id)->get();
-            $mis_trabajos_profesional = DiagnosticosDentalProfesional::where('id_profesional', $profesional->id)->get();
+            $mis_trabajos_profesional = DiagnosticosDentalProfesional::select('diagnosticos_dental_profesional.*','diagnosticos_dental.descripcion','diagnosticos_dental.uco','diagnosticos_dental.valor','diagnosticos_dental.tipo_examen','diagnosticos_dental.id_responsable','diagnosticos_dental.id as id_diagnostico')
+                                        ->join('diagnosticos_dental','diagnosticos_dental_profesional.id_diagnostico','=','diagnosticos_dental.id')
+                                        ->where('diagnosticos_dental_profesional.id_profesional', $profesional->id)
+                                        ->get();
+
             // Crear un array asociativo para un acceso más rápido
             $mis_trabajos_profesional_map = [];
             foreach ($mis_trabajos_profesional as $trabajo_profesional) {
@@ -3218,6 +3222,8 @@ class EscritorioProfesional extends Controller
                 }
             }
 
+            $procedimientos = $mis_trabajos_profesional;
+
             return ['status' => 'ok', 'procedimientos' => $procedimientos, 'trabajos' => $trabajos];
         }else{
             return ['status' => 'error'];
@@ -3229,22 +3235,6 @@ class EscritorioProfesional extends Controller
         ->join('diagnosticos_dental','diagnosticos_dental_profesional.id_diagnostico','=','diagnosticos_dental.id')
         ->where('diagnosticos_dental_profesional.id', $req->id)
         ->first();
-        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        $mis_trabajos_profesional = DiagnosticosDentalProfesional::select('diagnosticos_dental_profesional.*','diagnosticos_dental.descripcion','diagnosticos_dental.uco','diagnosticos_dental.valor','diagnosticos_dental.tipo_examen','diagnosticos_dental.id_responsable','diagnosticos_dental.id as id_diagnostico')
-        ->join('diagnosticos_dental','diagnosticos_dental_profesional.id_diagnostico','=','diagnosticos_dental.id')
-           ->where('diagnosticos_dental_profesional.id_profesional', $profesional->id)
-           ->get();
-        // Crear un array asociativo para un acceso más rápido
-        $mis_trabajos_profesional_map = [];
-        foreach ($mis_trabajos_profesional as $trabajo_profesional) {
-            $mis_trabajos_profesional_map[$trabajo_profesional->id_diagnostico] = $trabajo_profesional->laboratorio;
-        }
-
-        if (isset($mis_trabajos_profesional_map[$trabajo->id])) {
-            $trabajo->laboratorio = $mis_trabajos_profesional_map[$trabajo->id];
-        } else {
-            $trabajo->laboratorio = 0; // O el valor por defecto que prefiere
-        }
 
         return ['status' => 'ok', 'procedimiento' => $trabajo];
     }
@@ -3312,6 +3302,8 @@ class EscritorioProfesional extends Controller
             $trabajo_profesional->id_profesional = $profesional->id;
             $trabajo_profesional->id_diagnostico = $procedimiento->id;
             $trabajo_profesional->laboratorio = $req->tiene_lab ? 1 : 0;
+            $trabajo_profesional->cantidad_bloques = $req->cantidad_bloques;
+            $trabajo_profesional->cantidad_uco = $req->cantidad_uco;
             $trabajo_profesional->save();
             $trabajos = DiagnosticosDental::where('tipo_examen',1)->orWhere('tipo_examen',2)->orWhere('tipo_examen',3)->get();
             $procedimientos = DiagnosticosDental::where('id_responsable',$profesional->id)->get();

@@ -98,7 +98,7 @@ p {
 		</div>
 
         <div class="row my-4">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Buscador</h5>
@@ -142,10 +142,12 @@ p {
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Trabajos y aranceles</h5>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">Trabajos y aranceles propios</h5>
                         <table class="table w-100" id="table_procedimientos_propios_dental">
                             <thead>
                                 <tr>
@@ -161,7 +163,7 @@ p {
                                 @foreach ($mis_trabajos_profesional as $mi_trabajo)
                                     <tr>
                                         <td>{{ $mi_trabajo->descripcion }}</td>
-                                        <td>{{ $mi_trabajo->uco }}</td>
+                                        <td>{{ $mi_trabajo->cantidad_uco }}</td>
                                         <td>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" value="{{ $mi_trabajo->id }}" id="existeLaboratorioDental{{ $mi_trabajo->id }}" onclick="guardarLaboratorio({{ $mi_trabajo->id }})" @if($mi_trabajo->laboratorio == 1) checked @endif>
@@ -172,8 +174,8 @@ p {
                                         </td>
                                         <td>{{ $mi_trabajo->cantidad_bloques }}</td>
                                         <td>
-                                            <button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})">Eliminar</button>
-                                            <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})">Editar</button>
+                                            <button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})"><i class="fas fa-trash"></i></button>
+                                            <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})"><i class="fas fa-edit"></i></button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -252,8 +254,8 @@ p {
                             </td>
                             <td>{{ $mi_trabajo->cantidad_bloques }}</td>
                             <td>
-                                <button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})">Eliminar</button>
-                                <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})">Editar</button>
+                                <button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})"><i class="fas fa-trash"></i></button>
+                                <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})"><i class="fas fa-edit"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -341,25 +343,33 @@ p {
 
                     // Actualizar procedimientos propios
                     let procedimientos = response.procedimientos;
-                    $('#table_procedimientos_propios_dental tbody').empty();
+                    var table_procedimientos_propios = $('#table_procedimientos_propios_dental').DataTable();
+
+                    // Limpia los datos de la tabla
+                    table_procedimientos_propios.clear();
+
+                    // Agrega las nuevas filas
                     procedimientos.forEach(p => {
-                        const isChecked_ = p.laboratorio === 1 ? 'checked' : '';
-                        var html = '<tr>';
-                        html += '<td>' + p.descripcion + '</td>';
-                        html += '<td>' + p.uco + '</td>';
-                        html += `<td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" onclick="guardarLaboratorio(${p.id})" ${isChecked_}>
-                                        <label class="form-check-label" for="existeLaboratorioDental${p.id}">
-                                            ¿Laboratorio?
-                                        </label>
-                                    </div>
-                                </td>`;
-                        html += '<td>' + p.cantidad_bloques + '</td>';
-                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')">Eliminar</button><button class="btn btn-warning btn-sm" type="button" onclick="editar_procedimiento(' + p.id + ')">Editar</button></td>';
-                        html += '</tr>';
-                        $('#table_procedimientos_propios_dental tbody').append(html);
+                        const isChecked_p = p.laboratorio == 1 ? 'checked' : '';
+                        table_procedimientos_propios.row.add([
+                            p.descripcion,
+                            p.uco,
+                            `
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
+                                <label class="form-check-label" for="existeLaboratorioDental${p.id}">
+                                    ¿Laboratorio?
+                                </label>
+                            </div>
+                            `,
+                            p.cantidad_bloques,
+                            `<button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="fas fa-trash"></i></button>
+                            <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="fas fa-edit"></i></button>`
+                        ]);
                     });
+
+                    // Redibuja la tabla
+                    table.draw();
 
                     // Actualizar la tabla DataTable
                     let trabajos = response.trabajos;
@@ -427,28 +437,35 @@ p {
                 data: data,
                 success: function(response){
                     console.log(response);
-
                     // Actualizar procedimientos propios
                     let procedimientos = response.procedimientos;
-                    $('#table_procedimientos_propios_dental tbody').empty();
+                    var table_procedimientos_propios = $('#table_procedimientos_propios_dental').DataTable();
+
+                    // Limpia los datos de la tabla
+                    table_procedimientos_propios.clear();
+
+                    // Agrega las nuevas filas
                     procedimientos.forEach(p => {
                         const isChecked_p = p.laboratorio == 1 ? 'checked' : '';
-                        var html = '<tr>';
-                        html += '<td>' + p.descripcion + '</td>';
-                        html += '<td>' + p.uco + '</td>';
-                        html += `<td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
-                                        <label class="form-check-label" for="existeLaboratorioDental${p.id}">
-                                            ¿Laboratorio?
-                                        </label>
-                                    </div>
-                                </td>`;
-                        html += '<td>' + p.cantidad_bloques + '</td>';
-                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')">Eliminar</button><button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(' + p.id + ')">Editar</button></td>';
-                        html += '</tr>';
-                        $('#table_procedimientos_propios_dental tbody').append(html);
+                        table_procedimientos_propios.row.add([
+                            p.descripcion,
+                            p.cantidad_uco,
+                            `
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
+                                <label class="form-check-label" for="existeLaboratorioDental${p.id}">
+                                    ¿Laboratorio?
+                                </label>
+                            </div>
+                            `,
+                            p.cantidad_bloques,
+                            `<button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="fas fa-trash"></i></button>
+                            <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="fas fa-edit"></i></button>`
+                        ]);
                     });
+
+                    // Redibuja la tabla
+                    table_procedimientos_propios.draw();
 
                     // Actualizar la tabla DataTable
                     let trabajos = response.trabajos;
@@ -500,16 +517,27 @@ p {
                 data: data,
                 success: function(response){
                     console.log(response);
-                    // abrir modal
-                    $('#modalAgregarDiagnosticoDental').modal('show');
-                    // llenar los campos del modal
-                    $('#nombre_procedimiento_nuevo').val(response.procedimiento.descripcion);
-                    $('#cantidad_uco').val(response.procedimiento.uco);
-                    $('#cantidad_bloques').val(response.procedimiento.cantidad_bloques);
-                    $('#tiene_lab').prop('checked', response.procedimiento.laboratorio == 1 ? true : false);
-                    $('#btn_guardar_procedimiento').attr('onclick', 'editar_procedimiento(' + id + ')');
-                    $('#btn_guardar_procedimiento').text('Editar');
-                    $('#btn_guardar_procedimiento').toggleClass('btn-success btn-warning');
+                    if(response.status == "ok"){
+                        // swal({
+                        //     title: 'Procedimiento dental',
+                        //     text: 'Se ha encontrado el procedimiento dental',
+                        //     icon: 'success'
+                        // });
+                        // abrir modal
+                        $('#modalAgregarDiagnosticoDental').modal('show');
+                        // llenar los campos del modal
+                        $('#nombre_procedimiento_nuevo').val(response.procedimiento.descripcion);
+                        $('#cantidad_uco').val(response.procedimiento.cantidad_uco);
+                        $('#cantidad_bloques').val(response.procedimiento.cantidad_bloques);
+                        $('#tiene_lab').prop('checked', response.procedimiento.laboratorio == 1 ? true : false);
+                        $('#btn_guardar_procedimiento').attr('onclick', 'editarProcedimiento(' + id + ')');
+                        $('#btn_guardar_procedimiento').text('Editar');
+                        $('#btn_guardar_procedimiento').removeClass('btn-success');
+                        $('#btn_guardar_procedimiento').addClass('btn-warning');
+
+
+                    }
+
 
                 },
                 error: function(error){
@@ -534,7 +562,7 @@ p {
                     return console.log(response);
                     // Actualizar procedimientos propios
                     let procedimientos = response.procedimientos;
-                    $('#table_procedimientos_propios_dental tbody').empty();
+                    $('#table_procedimientos_propios_dental').empty();
                     procedimientos.forEach(p => {
                         const isChecked_ = p.laboratorio === 1 ? 'checked' : '';
                         var html = '<tr>';
@@ -548,9 +576,9 @@ p {
                                         </label>
                                     </div>
                                 </td>`;
-                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')">Eliminar</button></td>';
+                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')"><i class="fas fa-trash"></i></button></td>';
                         html += '</tr>';
-                        $('#table_procedimientos_propios_dental tbody').append(html);
+                        $('#table_procedimientos_propios_dental').append(html);
                     });
 
                     // Actualizar la tabla DataTable
@@ -607,7 +635,7 @@ p {
                     console.log(response);
                     // Actualizar procedimientos propios
                     let procedimientos = response.procedimientos;
-                    $('#table_procedimientos_propios_dental tbody').empty();
+                    $('#table_procedimientos_propios_dental').empty();
                     procedimientos.forEach(p => {
                         const isChecked_ = p.laboratorio === 1 ? 'checked' : '';
                         var html = '<tr>';
@@ -621,9 +649,9 @@ p {
                                         </label>
                                     </div>
                                 </td>`;
-                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')">Eliminar</button></td>';
+                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')"><i class="fas fa-trash"></i></button></td>';
                         html += '</tr>';
-                        $('#table_procedimientos_propios_dental tbody').append(html);
+                        $('#table_procedimientos_propios_dental').append(html);
                     });
                     // Maneja la respuesta del servidor aquí
                     alert('Estado del laboratorio guardado correctamente');
@@ -669,63 +697,163 @@ p {
                 data: data,
                 success: function(response) {
                     console.log(response);
+                    if(response.status == 'ok' ){
+                        swal({
+                            title: 'Procedimiento guardado',
+                            text: 'El procedimiento se ha guardado correctamente',
+                            icon: 'success'
+                        });
+                        // limpiar campos
+                        $('#nombre_procedimiento').val('');
+                        $('#cantidad_bloques_buscador').val('');
+                        $('#cantidad_uco_buscador').val('');
+                        $('#tiene_lab_buscador').prop('checked', false);
 
-                    // Actualizar procedimientos propios
-                    let procedimientos = response.mis_trabajos_profesional;
-                    $('#table_procedimientos_propios_dental tbody').empty();
-                    procedimientos.forEach(p => {
-                        const isChecked_ = p.laboratorio === 1 ? 'checked' : '';
-                        var html = '<tr>';
-                        html += '<td>' + p.descripcion + '</td>';
-                        html += '<td>' + p.uco + '</td>';
-                        html += `<td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_}>
-                                        <label class="form-check-label" for="existeLaboratorioDental${p.id}">
-                                            ¿Laboratorio?
-                                        </label>
-                                    </div>
-                                </td>`;
-                        html += '<td>' + p.cantidad_bloques + '</td>';
-                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')">Eliminar</button><button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(' + p.id + ')">Editar</button></td>';
-                        html += '</tr>';
-                        $('#table_procedimientos_propios_dental tbody').append(html);
-                    });
+                        // Actualizar procedimientos propios
+                        let procedimientos = response.mis_trabajos_profesional;
+                        var table_procedimientos_propios = $('#table_procedimientos_propios_dental').DataTable();
 
-                    // Actualizar la tabla DataTable
-                    let trabajos = response.trabajos;
-                    let table = $('#table_aranceles_dental').DataTable(); // Accede a la instancia de DataTable
+                        // Limpia los datos de la tabla
+                        table_procedimientos_propios.clear();
 
-                    // Limpia los datos de la tabla correctamente
-                    table.clear();
+                        // Agrega las nuevas filas
+                        procedimientos.forEach(p => {
+                            const isChecked_p = p.laboratorio == 1 ? 'checked' : '';
+                            table_procedimientos_propios.row.add([
+                                p.descripcion,
+                                p.uco,
+                                `
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
+                                    <label class="form-check-label" for="existeLaboratorioDental${p.id}">
+                                        ¿Laboratorio?
+                                    </label>
+                                </div>
+                                `,
+                                p.cantidad_bloques,
+                                `<button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="fas fa-trash"></i></button>
+                                <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="fas fa-edit"></i></button>`
+                            ]);
+                        });
 
-                    // Agrega las nuevas filas
-                    trabajos.forEach(trabajo => {
-                        const isChecked = trabajo.laboratorio === 1 ? 'checked' : '';
-                        table.row.add([
-                            trabajo.descripcion,
-                            trabajo.valor,
-                            trabajo.uco,
-                            `
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onclick="guardarLaboratorioIndex(${trabajo.id})" ${isChecked}>
-                                <label class="form-check-label" for="existeLaboratorioDental${trabajo.id}" >
-                                    ¿Laboratorio?
-                                </label>
-                            </div>
-                            `,
-                            `<button class="btn btn-warning btn-sm" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="fas fa-edit"></i> Editar</button>`
-                        ]);
-                    });
+                        // Redibuja la tabla
+                        table_procedimientos_propios.draw();
 
-                    // Dibuja la tabla nuevamente
-                    table.draw();
+                        // Actualizar la tabla DataTable
+                        let trabajos = response.trabajos;
+                        let table = $('#table_aranceles_dental').DataTable(); // Accede a la instancia de DataTable
+
+                        // Limpia los datos de la tabla correctamente
+                        table.clear();
+
+                        // Agrega las nuevas filas
+                        trabajos.forEach(trabajo => {
+                            const isChecked = trabajo.laboratorio === 1 ? 'checked' : '';
+                            table.row.add([
+                                trabajo.descripcion,
+                                trabajo.valor,
+                                trabajo.uco,
+                                `
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onclick="guardarLaboratorioIndex(${trabajo.id})" ${isChecked}>
+                                    <label class="form-check-label" for="existeLaboratorioDental${trabajo.id}" >
+                                        ¿Laboratorio?
+                                    </label>
+                                </div>
+                                `,
+                                `<button class="btn btn-warning btn-sm" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="fas fa-edit"></i> Editar</button>`
+                            ]);
+                        });
+
+                        // Dibuja la tabla nuevamente
+                        table.draw();
+                    }
+
                 },
                 error: function(error) {
                     console.log(error);
                 }
             });
 
+        }
+
+        function editarProcedimiento(id){
+            var nombre_procedimiento_nuevo = $('#nombre_procedimiento_nuevo').val();
+            var cantidad_uco = $('#cantidad_uco').val();
+            var cantidad_bloques = $('#cantidad_bloques').val();
+            var tiene_lab = $('#tiene_lab').is(':checked') ? 1 : 0;
+            if (nombre_procedimiento_nuevo == '' || cantidad_uco == '') {
+                swal({
+                    title: 'Error',
+                    text: 'Debe ingresar el nombre del procedimiento y la cantidad de UCO',
+                    icon: 'error'
+                });
+                return;
+            }
+
+            let data = {
+                id: id,
+                nombre_procedimiento_nuevo: nombre_procedimiento_nuevo,
+                cantidad_uco: cantidad_uco,
+                cantidad_bloques: cantidad_bloques,
+                tiene_lab: tiene_lab,
+                nuevo_procedimiento: false,
+                _token: '{{ csrf_token() }}'
+            }
+
+            let url = "{{ route('profesional.editar_procedimiento') }}";
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function(response) {
+                    console.log(response);
+                    if(response.status === 'ok'){
+                        swal({
+                            title: 'Procedimiento editado',
+                            text: 'El procedimiento se ha editado correctamente',
+                            icon: 'success'
+                        });
+                        // ocultar modal
+                        $('#modalAgregarDiagnosticoDental').modal('hide');
+                        // Actualizar procedimientos propios
+                        let procedimientos = response.procedimientos;
+                        console.log(procedimientos);
+                        var table_procedimientos_propios = $('#table_procedimientos_propios_dental').DataTable();
+
+                        // Limpia los datos de la tabla
+                        table_procedimientos_propios.clear();
+
+                        // Agrega las nuevas filas
+                        procedimientos.forEach(p => {
+                            const isChecked_p = p.laboratorio == 1 ? 'checked' : '';
+                            table_procedimientos_propios.row.add([
+                                p.descripcion,
+                                p.cantidad_uco,
+                                `
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
+                                    <label class="form-check-label" for="existeLaboratorioDental${p.id}">
+                                        ¿Laboratorio?
+                                    </label>
+                                </div>
+                                `,
+                                p.cantidad_bloques,
+                                `<button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="fas fa-trash"></i></button>
+                                <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="fas fa-edit"></i></button>`
+                            ]);
+                        });
+
+                        // Redibuja la tabla
+                        table_procedimientos_propios.draw();
+                    }
+
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
         }
     </script>
 @endsection
