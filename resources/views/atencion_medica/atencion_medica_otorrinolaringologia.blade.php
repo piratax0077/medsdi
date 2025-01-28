@@ -10,7 +10,7 @@
                     <div class="row align-items-center pb-2">
                         <div class="col-md-6">
                             <div class="page-header-title">
-                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN OTORRINOLARINGOLOGÍA</strong></h5>
+                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN OTORRINOLARINGOLOGÍA 2</strong></h5>
                                 <p class="font-italic mt-0 mb-0 text-white">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");

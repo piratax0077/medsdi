@@ -3363,16 +3363,16 @@
 @include('atencion_odontologica.modals.odontograma.tratamiento_maxilar_superior')
 @include('atencion_odontologica.modals.odontograma.tratamiento_laboratorio')
 @include('atencion_odontologica.modals.odontograma.modal_odontograma')
-<div id="modal_autorizacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Recepcion de bonos" aria-hidden="true">
+<div id="modal_autorizacion_presupuesto" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Recepcion de bonos" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal_autorizacionLabel">Autorización</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion();"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion_presupuesto();"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body d-flex justify-content-between">
                 <button class="btn btn-info btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ENVIAR AUTORIZACION PRESUPUESTO</button>
-                <button class="btn btn-sm btn-danger" onclick="cerrar_autorizacion();">Cerrar</button>
+                <button class="btn btn-sm btn-danger" onclick="cerrar_autorizacion_presupuesto();">Cerrar</button>
             </div>
         </div>
     </div>
@@ -8711,15 +8711,15 @@ function eliminarExamenAgregadoRxOdontop(id) {
 
     function  confirmar_pedir_autorizacion_presupuesto_dental()
         {
-            $('#modal_autorizacion').modal('show');
+            $('#modal_autorizacion_presupuesto').modal('show');
             $('#modal_autorizacion_imagen').html('');
             $('#modal_autorizacion_mensaje').html('');
 			$('#modal_autorizacion_btn_solicitar').attr('disabled', false);
         }
 
-        function  cerrar_autorizacion()
+        function  cerrar_autorizacion_presupuesto()
         {
-            $('#modal_autorizacion').modal('hide');
+            $('#modal_autorizacion_presupuesto').modal('hide');
         }
 </script>
 
