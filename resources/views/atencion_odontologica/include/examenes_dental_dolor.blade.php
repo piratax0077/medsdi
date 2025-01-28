@@ -5,7 +5,7 @@
             <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Pieza N°</label>
-                    <input type="text" class="form-control form-control-sm" name="ex_grl_dol_pi_n{{ $counter }}" id="ex_grl_dol_pi_n{{ $counter }}">
+                    <input type="text" class="form-control form-control-sm" name="numero_pieza{{ $counter }}" id="numero_pieza{{ $counter }}">
                 </div>
             </div>
             <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">

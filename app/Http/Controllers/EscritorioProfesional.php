@@ -1239,6 +1239,7 @@ class EscritorioProfesional extends Controller
 
     public function guardar_pieza_dental_dolor(Request $request){
         try {
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
             $dolor = new ExamenesDentalDolor;
             $dolor->derivado_por = $request->derivado_por;
             $dolor->zona_dolor = $request->zona_dolor;
@@ -1256,8 +1257,9 @@ class EscritorioProfesional extends Controller
             $dolor->id_paciente = $request->id_paciente;
             $dolor->id_lugar_atencion = $request->id_lugar_atencion;
             $dolor->tipo_examen = 1; // examen normal
+            $dolor->tipo_especialidad = $profesional->id_tipo_especialidad;
             if($dolor->save()){
-                $examenes = $this->dameExamenesPiezaDentalDolor($request->id_paciente);
+                $examenes = $this->dameExamenesPiezaDentalDolor($request->id_paciente, $profesional->id_tipo_especialidad);
                 $v = view('atencion_odontologica.include.examenes_dental_dolor_todos',['examenes' => $examenes])->render();
                 return ['mensaje' => 'OK', 'v' => $v];
             }
@@ -1869,8 +1871,9 @@ class EscritorioProfesional extends Controller
 
     public function eliminar_nueva_pieza_dental(Request $req){
         $examen = ExamenesDentalDolor::find($req->id);
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($examen->delete()){
-            $examenes = $this->dameExamenesPiezaDentalDolor($req->id_paciente);
+            $examenes = $this->dameExamenesPiezaDentalDolor($req->id_paciente, $profesional->id_tipo_especialidad);
             if(count($examenes) == 0)
             {
                 // si no hay ciclos de control se inicia en 1 para manejar el id en la vista
@@ -2108,8 +2111,8 @@ class EscritorioProfesional extends Controller
         }
     }
 
-    public function dameExamenesPiezaDentalDolor($id_paciente){
-        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('tipo_examen',1)->get();
+    public function dameExamenesPiezaDentalDolor($id_paciente, $tipo_especialidad){
+        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('tipo_examen',1)->where('tipo_especialidad',$tipo_especialidad)->get();
         return $examenes;
     }
 

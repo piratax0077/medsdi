@@ -6078,7 +6078,7 @@
         let zona_dolor = $('#ex_grl_zdolor').val();
         let historia_anterior = $('#ex_grl_hp').val();
 
-        let pieza_numero = $('#ex_grl_dol_pi_n'+count).val();
+        let pieza_numero = $('#numero_pieza'+count).val();
         let tipo_dolor = $('#tipo_dolor'+count).val();
         let intensidad = $('#intensidad'+count).val();
         let modo_dolor = $('#modo_dolor'+count).val();

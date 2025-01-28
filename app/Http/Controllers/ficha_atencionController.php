@@ -1734,7 +1734,7 @@ class ficha_atencionController extends Controller
         $examenes_solicitados = $examenControlador->dame_examenes_solicitados($paciente->id);
 
         $controles_ciclo = $this->dameEvolucionesPacienteHosp($paciente->id);
-        $examenes_dental = $this->dameExamenesPiezaDentalDolor($paciente->id);
+        $examenes_dental = $this->dameExamenesPiezaDentalDolor($paciente->id, $profesional->id_tipo_especialidad);
         $examenes_dental_end = $this->dameExamenesPiezaDentalEndDolor($paciente->id);
 
         $examenes_dental_odontopediatria = $this->dameExamenesPiezaDentalPiezaOdontop($paciente->id);
@@ -2503,8 +2503,8 @@ class ficha_atencionController extends Controller
         return $controles_ciclo;
     }
 
-    public function dameExamenesPiezaDentalDolor($id_paciente){
-        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('tipo_examen',1)->get();
+    public function dameExamenesPiezaDentalDolor($id_paciente, $tipo_especialidad){
+        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('tipo_examen',1)->where('tipo_especialidad',$tipo_especialidad)->get();
         return $examenes;
     }
 
