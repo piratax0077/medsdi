@@ -20,103 +20,202 @@
                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
                     data-parent="#accordionExample">
                     <div class="card-body-sidebar">
-                        <div class="form-row pt-3">
-                            <label class="col-2 text-dark font-weight-bolder">Rut</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                {{ $paciente->rut }}
+                        <div id="info_paciente">
+                            <div class="form-row pt-3">
+                                <label class="col-2 text-dark font-weight-bolder">Rut</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    {{ $paciente->rut }}
+                                </div>
                             </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2  text-dark font-weight-bolder">Nombre</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                {{ $paciente->nombres }} {{ $paciente->apellido_uno . ' ' . $paciente->apellido_dos }}
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2  text-dark font-weight-bolder">Nombre</label>
+                                <div class="col-9 ml-2 text-secondary" id="nombre_completo_paciente">
+                                    {{ $paciente->nombres }} {{ $paciente->apellido_uno . ' ' . $paciente->apellido_dos }}
+                                </div>
                             </div>
-                        </div>
-                        <!--<hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">Apellidos</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                {{ $paciente->apellido_uno . ' ' . $paciente->apellido_dos }}
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">FN</label>
+                                <div class="col-9 ml-2 text-secondary" id="fecha_nac_paciente">
+                                    {{ $paciente->fecha_nac }} - (<span>{{ \Carbon\Carbon::parse($paciente->fecha_nac)->diff(\Carbon\Carbon::now())->format('%y') }}</span> años)
+                                </div>
                             </div>
-                        </div>-->
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">FN</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                {{ $paciente->fecha_nac }} - (<span>{{ \Carbon\Carbon::parse($paciente->fecha_nac)->diff(\Carbon\Carbon::now())->format('%y') }}</span> años)
-                            </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">Sexo</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                @if ($paciente->sexo == 'M')
-                                    Masculino
-                                @else
-                                    Femenino
-                                @endif
-                            </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2  text-c-blue font-weight-bolder">Convenios</label>
-                            <div class="col-9 ml-2 text-secondary">
-                               
-                            </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">Dirección</label>
-                            <div class="col-9 ml-2 text-secondary">
-
-                                @if (isset($paciente))
-                                    @if ($paciente->Direccion()->first() != null)
-                                        {{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Sexo</label>
+                                <div class="col-9 ml-2 text-secondary" id="sexo_paciente">
+                                    @if ($paciente->sexo == 'M')
+                                        Masculino
                                     @else
-                                        <span class="error">NO ha registrado dirección</span>
+                                        Femenino
                                     @endif
-                                @else
-                                    <span class="error">No ha registrado dirección</span>
-                                @endif
-
-
+                                </div>
                             </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1 text-dark ">
-                            <label class="col-2 text-dark font-weight-bolder">Comuna / Región</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                @if (isset($paciente))
-                                    @if ($paciente->Direccion()->first()->Ciudad()->first() != null)
-                                        {{ $paciente->Direccion()->first()->Ciudad()->first()->nombre }}<br>
-                                        {{ $paciente->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2  text-c-blue font-weight-bolder">Convenios</label>
+                                <div class="col-9 ml-2 text-secondary">
+
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Dirección</label>
+                                <div class="col-9 ml-2 text-secondary" id="direccion_paciente">
+
+                                    @if (isset($paciente))
+                                        @if ($paciente->Direccion()->first() != null)
+                                            {{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}
+                                        @else
+                                            <span class="error">NO ha registrado dirección</span>
+                                        @endif
                                     @else
-                                        <span class="error">No se ha registrado ciudad</span>
+                                        <span class="error">No ha registrado dirección</span>
                                     @endif
-                                @else
-                                    <span class="error">NO se ha registrado ciudad</span>
-                                @endif
 
+
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1 text-dark ">
+                                <label class="col-2 text-dark font-weight-bolder">Comuna / Región</label>
+                                <div class="col-9 ml-2 text-secondary" id="comuna_region_paciente">
+                                    @if (isset($paciente))
+                                        @if ($paciente->Direccion()->first()->Ciudad()->first() != null)
+                                            {{ $paciente->Direccion()->first()->Ciudad()->first()->nombre }}<br>
+                                            {{ $paciente->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
+                                        @else
+                                            <span class="error">No se ha registrado ciudad</span>
+                                        @endif
+                                    @else
+                                        <span class="error">NO se ha registrado ciudad</span>
+                                    @endif
+
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Email</label>
+                                <div class="col-9 ml-2 text-secondary" id="email_paciente">
+                                    {{ $paciente->email }}
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Teléfono</label>
+                                <div class="col-9 ml-2 text-secondary" id="telefono_paciente">
+                                    {{ $paciente->telefono_uno }}
+                                </div>
+                            </div>
+                            <div class="form-row mt-3 mb-5">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                   <button type="button" class="btn btn-primary-light-c btn-xxs" onclick="editarInformacionPaciente()"><i class="feather icon-edit"></i> Editar información</button>
+                                </div>
                             </div>
                         </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">Email</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                {{ $paciente->email }}
+                        <div id="info_paciente-edit" style="display: none">
+                            <div class="form-row pt-3">
+                                <label class="col-2 text-dark font-weight-bolder">Rut</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input type="text" id="paciente_rut_edit" class="form-control" value="{{ $paciente->rut }}">
+                                </div>
                             </div>
-                        </div>
-                        <hr class="mt-2">
-                        <div class="form-row mt-1">
-                            <label class="col-2 text-dark font-weight-bolder">Teléfono</label>
-                            <div class="col-9 ml-2 text-secondary">
-                                {{ $paciente->telefono_uno }}
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2  text-dark font-weight-bolder">Nombre</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input type="text" id="paciente_nombre_edit" class="form-control" value="{{ $paciente->nombres }}">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-row mt-3 mb-5">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                               <button type="button" class="btn btn-primary-light-c btn-xxs"><i class="feather icon-edit"></i> Editar información</button>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Apellido Paterno</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input type="text" id="paciente_apellido_uno_edit" class="form-control" value="{{ $paciente->apellido_uno }}">
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Apellido Materno</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input type="text" id="paciente_apellido_dos_edit" class="form-control" value="{{ $paciente->apellido_dos }}">
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">FN</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input type="date" name="paciente_fn_edit" id="paciente_fn_edit" class="form-control" value="{{ $paciente->fecha_nac }}">
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Sexo</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <select name="paciente_sexo_edit" id="paciente_sexo_edit" class="form-control">
+                                        <option value="M" @if ($paciente->sexo == 'M') selected @endif>Masculino</option>
+                                        <option value="F" @if ($paciente->sexo == 'F') selected @endif>Femenino</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2  text-c-blue font-weight-bolder">Convenios</label>
+                                <div class="col-9 ml-2 text-secondary">
+
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Dirección</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input type="text" class="form-control" id="paciente_dir_edit" value="{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}">
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1 text-dark ">
+                                <label class="col-2 text-dark font-weight-bolder">Región</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <select name="paciente_region_edit" id="paciente_region_edit" class="form-control" onchange="buscar_ciudad_paciente();">
+                                        <option value="0">Seleccione región</option>
+                                        @foreach ($regiones as $region)
+                                            <option value="{{ $region->id }}" @if ($paciente->Direccion()->first()->Ciudad()->first()->Region()->first()->id == $region->id) selected @endif>{{ $region->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Comuna</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <select name="paciente_comuna_edit" id="paciente_comuna_edit" class="form-control">
+                                        <option value="0">Seleccione comuna</option>
+                                        @foreach ($ciudades as $comuna)
+                                            <option value="{{ $comuna->id }}" @if ($paciente->Direccion()->first()->Ciudad()->first()->id == $comuna->id) selected @endif>{{ $comuna->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Email</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input type="text" id="paciente_email_edit" name="paciente_edit_email" class="form-control" value="{{ $paciente->email }}">
+                                </div>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="form-row mt-1">
+                                <label class="col-2 text-dark font-weight-bolder">Teléfono</label>
+                                <div class="col-9 ml-2 text-secondary">
+                                    <input type="text" class="form-control" id="paciente_telefono_edit" name="paciente_telefono_edit" value="{{ $paciente->telefono_uno }}">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3 mb-5">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                   <button type="button" class="btn btn-primary-light-c btn-xxs" onclick="guardarInformacionPaciente()"><i class="feather icon-save"></i> Guardar información</button>
+                                   <button type="button" class="btn btn-danger-light-c btn-xxs" onclick="cancelarInformacionPaciente()"><i class="fas fa-trash"></i>Cancelar edición</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -188,7 +287,7 @@
 
                             @if ($paciente->ContactosEmergencia()->first() != null)
                                 <span class="info">
-                                    
+
                                         {{ $paciente->ContactosEmergencia()->first()->Direccion()->first()->direccion .
                                             ' ' .
                                             $paciente->ContactosEmergencia()->first()->Direccion()->first()->numero_dir }}

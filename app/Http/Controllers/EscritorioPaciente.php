@@ -2943,8 +2943,11 @@ class EscritorioPaciente extends Controller
         $email = $request->email;
         $telefono = $request->telefono;
 
+        $region_paciente = Region::where('id', $region)->first();
+        $ciudad_paciente = Ciudad::where('id', $ciudad)->first();
 
         $paciente = Paciente::where('id', $request->id)->first();
+
         $email_origen = $paciente->email;
         $email_nuevo = $email;
 
@@ -2956,10 +2959,14 @@ class EscritorioPaciente extends Controller
         $paciente->id_prevision = $convenio ? $convenio : $paciente->id_prevision;
         $paciente->email = $email;
         $paciente->telefono_uno = $telefono;
+
         if( $paciente->save() )
         {
             $datos['estado'] = 1;
             $datos['msj'] = 'exito';
+            $paciente->region = $region_paciente->nombre;
+            $paciente->ciudad = $ciudad_paciente->nombre;
+            $datos['paciente'] = $paciente;
 
             /** modificar direccion */
             if($direccion){
@@ -2997,6 +3004,8 @@ class EscritorioPaciente extends Controller
                     {
                         $datos['direccion']['estado'] = 1;
                         $datos['direccion']['msj'] = 'exito';
+                        $ciudad = Ciudad::find($ciudad);
+                        $paciente->ciudad = $ciudad->nombre;
 
                         $paciente->id_direccion = $nueva_direccion->id;
                         if( $paciente->save() )
