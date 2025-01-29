@@ -1762,54 +1762,54 @@ class ficha_atencionController extends Controller
             // si hay ciclos de control se suma 1 para manejar el id en la vista
             $contador_div_examenes = count($examenes_dental) + 1;
         }
-        $examenes_rx_oral = $this->dameExamenesPiezaDentalOraxRx($paciente->id);
-        $examenes_rx_oral_endodoncia = $this->dameExamenesPiezaDentalOraxRxEnd($paciente->id);
-        $examenes_rx_oral_odontop = $this->dameExamenesPiezaDentalOraxRxOdontop($paciente->id);
-        $imagenes = $this->dameInfoImagenesDentalPaciente($paciente->id);
-        $examenes_pieza = $this->dameExamenesPiezaDentalPieza($paciente->id);
-        $examenes_pieza_end = $this->dameExamenesPiezaDentalPiezaEnd($paciente->id);
+        $examenes_rx_oral = $this->dameExamenesPiezaDentalOraxRx($paciente->id, $profesional->id_tipo_especialidad);
+        $examenes_rx_oral_endodoncia = $this->dameExamenesPiezaDentalOraxRxEnd($paciente->id, $profesional->id_tipo_especialidad);
+        $examenes_rx_oral_odontop = $this->dameExamenesPiezaDentalOraxRxOdontop($paciente->id, $profesional->id_tipo_especialidad);
+        $imagenes = $this->dameInfoImagenesDentalPaciente($paciente->id, $profesional->id_tipo_especialidad);
+        $examenes_pieza = $this->dameExamenesPiezaDentalPieza($paciente->id, $profesional->id_tipo_especialidad);
+        $examenes_pieza_end = $this->dameExamenesPiezaDentalPiezaEnd($paciente->id, $profesional->id_tipo_especialidad);
 
         $biopsias = $this->dameBiopsiasDentalPaciente($paciente->id);
 
-        $maxilar_superior_gral_tratamiento = $this->dameMaxilarSuperiorGeneralTratamiento($paciente->id);
-        $maxilar_superior_gral_diagnostico = $this->dameMaxilarSuperiorGeneralDiagnostico($paciente->id);
-        $maxilar_inferior_gral_tratamiento = $this->dameMaxilarInferiorGeneralTratamiento($paciente->id);
-        $maxilar_inferior_gral_diagnostico = $this->dameMaxilarInferiorGeneralDiagnostico($paciente->id);
-        $boca_completa_gral_tratamiento = $this->dameBocaCompletaGeneralTratamiento($paciente->id);
-        $boca_completa_gral_diagnostico = $this->dameBocaCompletaGeneralDiagnostico($paciente->id);
-        $maxilar_inferior_gral_tratamientos_endo = $this->dameMaxilarInferiorGeneralTratamientoEndodoncia($paciente->id);
-        $maxilar_inferior_gral_diagnosticos_endo = $this->dameMaxilarInferiorGeneralDiagnosticoEndodoncia($paciente->id);
-        $maxilar_superior_gral_tratamientos_endo = $this->dameMaxilarSuperiorGeneralTratamientoEndodoncia($paciente->id);
-        $maxilar_superior_gral_diagnosticos_endo = $this->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($paciente->id);
-        $boca_completa_gral_tratamiento_endo = $this->dameCompletaEndoTratamiento($paciente->id);
-        $boca_completa_gral_diagnostico_endo = $this->dameCompletaEndoDiagnostico($paciente->id);
+        $maxilar_superior_gral_tratamiento = $this->dameMaxilarSuperiorGeneralTratamiento($paciente->id, $profesional->id_tipo_especialidad);
+        $maxilar_superior_gral_diagnostico = $this->dameMaxilarSuperiorGeneralDiagnostico($paciente->id, $profesional->id_tipo_especialidad);
+        $maxilar_inferior_gral_tratamiento = $this->dameMaxilarInferiorGeneralTratamiento($paciente->id, $profesional->id_tipo_especialidad);
+        $maxilar_inferior_gral_diagnostico = $this->dameMaxilarInferiorGeneralDiagnostico($paciente->id, $profesional->id_tipo_especialidad);
+        $boca_completa_gral_tratamiento = $this->dameBocaCompletaGeneralTratamiento($paciente->id, $profesional->id_tipo_especialidad);
+        $boca_completa_gral_diagnostico = $this->dameBocaCompletaGeneralDiagnostico($paciente->id, $profesional->id_tipo_especialidad);
+        $maxilar_inferior_gral_tratamientos_endo = $this->dameMaxilarInferiorGeneralTratamientoEndodoncia($paciente->id, $profesional->id_tipo_especialidad);
+        $maxilar_inferior_gral_diagnosticos_endo = $this->dameMaxilarInferiorGeneralDiagnosticoEndodoncia($paciente->id, $profesional->id_tipo_especialidad);
+        $maxilar_superior_gral_tratamientos_endo = $this->dameMaxilarSuperiorGeneralTratamientoEndodoncia($paciente->id, $profesional->id_tipo_especialidad);
+        $maxilar_superior_gral_diagnosticos_endo = $this->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($paciente->id, $profesional->id_tipo_especialidad);
+        $boca_completa_gral_tratamiento_endo = $this->dameCompletaEndoTratamiento($paciente->id, $profesional->id_tipo_especialidad);
+        $boca_completa_gral_diagnostico_endo = $this->dameCompletaEndoDiagnostico($paciente->id, $profesional->id_tipo_especialidad);
 
-        $valores_tratamientos = $this->dameValores($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id);
+        $valores_tratamientos = $this->dameValores($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
 
-        $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id,'adulto');
-        $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id,'adulto');
-        $tercer_cuadrante = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id,'adulto');
-        $cuarto_cuadrante = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($paciente->id,'adulto');
-        $quinto_cuadrante = $this->dameExamenesPiezaDentalPiezaQuintoCuadrante($paciente->id,'adulto');
-        $sexto_cuadrante = $this->dameExamenesPiezaDentalPiezaSextoCuadrante($paciente->id,'adulto');
+        $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad);
+        $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad);
+        $tercer_cuadrante = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad);
+        $cuarto_cuadrante = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad);
+        $quinto_cuadrante = $this->dameExamenesPiezaDentalPiezaQuintoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad);
+        $sexto_cuadrante = $this->dameExamenesPiezaDentalPiezaSextoCuadrante($paciente->id,'adulto', $profesional->id_tipo_especialidad);
 
-        $primer_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id,'endodoncia');
-        $segundo_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id,'endodoncia');
-        $tercer_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id,'endodoncia');
-        $cuarto_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($paciente->id,'endodoncia');
-        $quinto_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaQuintoCuadrante($paciente->id,'endodoncia');
-        $sexto_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaSextoCuadrante($paciente->id,'endodoncia');
+        $primer_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id,'endodoncia', $profesional->id_tipo_especialidad);
+        $segundo_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id,'endodoncia', $profesional->id_tipo_especialidad);
+        $tercer_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id,'endodoncia', $profesional->id_tipo_especialidad);
+        $cuarto_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($paciente->id,'endodoncia', $profesional->id_tipo_especialidad);
+        $quinto_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaQuintoCuadrante($paciente->id,'endodoncia', $profesional->id_tipo_especialidad);
+        $sexto_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaSextoCuadrante($paciente->id,'endodoncia', $profesional->id_tipo_especialidad);
 
-        $primer_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id,'infantil');
-        $segundo_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id,'infantil');
-        $tercer_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id,'infantil');
-        $cuarto_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($paciente->id,'infantil');
-        $quinto_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaQuintoCuadrante($paciente->id,'infantil');
-        $sexto_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaSextoCuadrante($paciente->id,'infantil');
+        $primer_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($paciente->id,'infantil', $profesional->id_tipo_especialidad);
+        $segundo_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($paciente->id,'infantil', $profesional->id_tipo_especialidad);
+        $tercer_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($paciente->id,'infantil', $profesional->id_tipo_especialidad);
+        $cuarto_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($paciente->id,'infantil', $profesional->id_tipo_especialidad);
+        $quinto_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaQuintoCuadrante($paciente->id,'infantil', $profesional->id_tipo_especialidad);
+        $sexto_cuadrante_infantil = $this->dameExamenesPiezaDentalPiezaSextoCuadrante($paciente->id,'infantil', $profesional->id_tipo_especialidad);
 
         $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();
 
-        $odontograma = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id);
+        $odontograma = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
 
         $paciente->edad = Carbon::parse($paciente->fecha_nac)->age;
 
@@ -1975,41 +1975,40 @@ class ficha_atencionController extends Controller
         return $presupuestos;
     }
 
-    public function dameValores($id_paciente, $id_ficha_atencion, $id_lugar_atencion){
+    public function dameValores($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad){
         $total_general = 0;
 
-        // Lista de funciones a llamar
-        $funciones = [
-            'dameMaxilarSuperiorGeneralTratamiento',
-            'dameMaxilarSuperiorGeneralDiagnostico',
-            'dameMaxilarInferiorGeneralTratamiento',
-            'dameMaxilarInferiorGeneralDiagnostico',
-            'dameBocaCompletaGeneralTratamiento',
-            'dameBocaCompletaGeneralDiagnostico',
-            'dameMaxilarInferiorGeneralTratamientoEndodoncia',
-            'dameMaxilarInferiorGeneralDiagnosticoEndodoncia',
-            'dameMaxilarSuperiorGeneralTratamientoEndodoncia',
-            'dameMaxilarSuperiorGeneralDiagnosticoEndodoncia',
-            'dameCompletaEndoTratamiento',
-            'dameCompletaEndoDiagnostico'
-        ];
+         // Lista de funciones a llamar con sus argumentos
+    $funciones = [
+        ['dameMaxilarSuperiorGeneralTratamiento', [$id_paciente, $tipo_especialidad]],
+        ['dameMaxilarSuperiorGeneralDiagnostico', [$id_paciente, $tipo_especialidad]],
+        ['dameMaxilarInferiorGeneralTratamiento', [$id_paciente, $tipo_especialidad]],
+        ['dameMaxilarInferiorGeneralDiagnostico', [$id_paciente, $tipo_especialidad]],
+        ['dameBocaCompletaGeneralTratamiento', [$id_paciente, $tipo_especialidad]],
+        ['dameBocaCompletaGeneralDiagnostico', [$id_paciente, $tipo_especialidad]],
+        ['dameMaxilarInferiorGeneralTratamientoEndodoncia', [$id_paciente, $tipo_especialidad]],
+        ['dameMaxilarInferiorGeneralDiagnosticoEndodoncia', [$id_paciente, $tipo_especialidad]],
+        ['dameMaxilarSuperiorGeneralTratamientoEndodoncia', [$id_paciente, $tipo_especialidad]],
+        ['dameMaxilarSuperiorGeneralDiagnosticoEndodoncia', [$id_paciente, $tipo_especialidad]],
+        ['dameCompletaEndoTratamiento', [$id_paciente, $tipo_especialidad]],
+        ['dameCompletaEndoDiagnostico', [$id_paciente, $tipo_especialidad]]
+    ];
 
-        // Recorremos cada función
+       // Recorremos cada función
         foreach ($funciones as $funcion) {
-            $resultado = $this->$funcion($id_paciente);
+            $resultado = call_user_func_array([$this, $funcion[0]], $funcion[1]);
             foreach ($resultado as $item) {
-                if($item['presupuesto'] == 1){
+                if ($item['presupuesto'] == 1) {
                     if (isset($item['valor'])) {
                         $total_general += $item['valor'];
                     }
                 }
-
             }
         }
 
         $total_odontograma = 0;
 
-        $odontograma = $this->dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion);
+        $odontograma = $this->dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad);
 
         // Iterar y sumar valores
         foreach ($odontograma as $item) {
@@ -2024,36 +2023,39 @@ class ficha_atencionController extends Controller
         return [$total_general, $total_odontograma];
     }
 
-    public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion){
+    public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad){
         $odontogramas = OdontogramaPaciente::select('odontogramas_pacientes.*','diagnosticos_dental.descripcion','diagnosticos_dental.valor','tratamientos_dental.descripcion as diagnostico')
             ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
             ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico','=','tratamientos_dental.id')
             ->where('odontogramas_pacientes.id_paciente', $id_paciente)
             // ->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion)
             ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
+            ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad)
             // ->where('odontogramas_pacientes.atendido',0)
             ->get();
         return $odontogramas;
     }
 
-    public function dameCompletaEndoTratamiento($id_paciente){
+    public function dameCompletaEndoTratamiento($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Boca completa')
         ->where('examenes_boca_general.tipo_examen',2)
         ->where('especialidad_examen','tratamiento')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
     }
 
-    public function dameCompletaEndoDiagnostico($id_paciente){
+    public function dameCompletaEndoDiagnostico($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Boca completa')
         ->where('examenes_boca_general.tipo_examen',2)
         ->where('especialidad_examen','diagnostico')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
     }
@@ -2080,20 +2082,22 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameMaxilarInferiorGeneralTratamientoEndodoncia($id_paciente){
+    public function dameMaxilarInferiorGeneralTratamientoEndodoncia($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Maxilar inferior')
         ->where('examenes_boca_general.tipo_examen',2)
         ->where('especialidad_examen','tratamiento')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
     }
 
-    public function dameMaxilarInferiorGeneralDiagnosticoEndodoncia($id_paciente){
+    public function dameMaxilarInferiorGeneralDiagnosticoEndodoncia($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Maxilar inferior')
         ->where('examenes_boca_general.tipo_examen',2)
@@ -2102,7 +2106,7 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameBocaCompletaGeneralTratamiento($id_paciente){
+    public function dameBocaCompletaGeneralTratamiento($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
 
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
@@ -2110,11 +2114,12 @@ class ficha_atencionController extends Controller
         ->where('examenes_boca_general.tipo_examen',1)
         ->where('especialidad_examen','tratamiento')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
     }
 
-    public function dameBocaCompletaGeneralDiagnostico($id_paciente){
+    public function dameBocaCompletaGeneralDiagnostico($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
 
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
@@ -2122,22 +2127,24 @@ class ficha_atencionController extends Controller
         ->where('examenes_boca_general.tipo_examen',1)
         ->where('especialidad_examen','diagnostico')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
     }
 
-    public function dameMaxilarInferiorGeneralTratamiento($id_paciente){
+    public function dameMaxilarInferiorGeneralTratamiento($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Maxilar inferior')
         ->where('examenes_boca_general.tipo_examen',1)
         ->where('especialidad_examen','tratamiento')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
     }
 
-    public function dameMaxilarInferiorGeneralDiagnostico($id_paciente){
+    public function dameMaxilarInferiorGeneralDiagnostico($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
 
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
@@ -2145,14 +2152,16 @@ class ficha_atencionController extends Controller
         ->where('examenes_boca_general.tipo_examen',1)
         ->where('especialidad_examen','diagnostico')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
     }
 
-    public function dameMaxilarSuperiorGeneralTratamiento($id_paciente){
+    public function dameMaxilarSuperiorGeneralTratamiento($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
                                             ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
                                             ->where('examenes_boca_general.id_paciente',$id_paciente)
+                                            ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
                                             ->where('examenes_boca_general.localizacion','Maxilar superior')
                                             ->where('examenes_boca_general.tipo_examen',1)
                                             ->where('examenes_boca_general.especialidad_examen','tratamiento')
@@ -2160,7 +2169,7 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameMaxilarSuperiorGeneralDiagnostico($id_paciente){
+    public function dameMaxilarSuperiorGeneralDiagnostico($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
 
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
@@ -2168,12 +2177,16 @@ class ficha_atencionController extends Controller
         ->where('examenes_boca_general.tipo_examen',1)
         ->where('especialidad_examen','diagnostico')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
     }
 
     public function dameMaxilarInferiorGeneral($id_paciente){
-        $examenes = ExamenesBocaGeneral::where('id_paciente',$id_paciente)->where('localizacion','Maxilar inferior')->where('tipo_examen',1)->get();
+        $examenes = ExamenesBocaGeneral::where('id_paciente',$id_paciente)
+        ->where('localizacion','Maxilar inferior')
+        ->where('tipo_examen',1)
+        ->get();
         return $examenes;
     }
 
@@ -2213,16 +2226,21 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameExamenesPiezaDentalPieza($id_paciente){
-        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)->where('tipo_examen',1)->where('estado',1)->get();
+    public function dameExamenesPiezaDentalPieza($id_paciente, $tipo_especialidad){
+        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)
+        ->where('tipo_examen',1)
+        ->where('tipo_especialidad', $tipo_especialidad)
+        ->where('estado',1)
+        ->get();
         return $examenes;
     }
 
-    public function dameExamenesPiezaDentalPiezaPrimerCuadrante($id_paciente, $tipo_paciente) {
+    public function dameExamenesPiezaDentalPiezaPrimerCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad) {
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '1.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2230,6 +2248,7 @@ class ficha_atencionController extends Controller
             $tipo = 3;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '5.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2237,6 +2256,7 @@ class ficha_atencionController extends Controller
             $tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '1.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2246,12 +2266,13 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameExamenesPiezaDentalPiezaSegundoCuadrante($id_paciente, $tipo_paciente) {
+    public function dameExamenesPiezaDentalPiezaSegundoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad) {
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $otro_tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '2.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2259,6 +2280,7 @@ class ficha_atencionController extends Controller
             $tipo = 3;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '6.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2266,6 +2288,7 @@ class ficha_atencionController extends Controller
             $tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '2.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2274,12 +2297,13 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameExamenesPiezaDentalPiezaTercerCuadrante($id_paciente, $tipo_paciente) {
+    public function dameExamenesPiezaDentalPiezaTercerCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad) {
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $otro_tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '3.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2287,6 +2311,7 @@ class ficha_atencionController extends Controller
             $tipo = 3;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '7.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2294,6 +2319,7 @@ class ficha_atencionController extends Controller
             $tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '3.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2302,12 +2328,13 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameExamenesPiezaDentalPiezaCuartoCuadrante($id_paciente, $tipo_paciente) {
+    public function dameExamenesPiezaDentalPiezaCuartoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad) {
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $otro_tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '4.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2315,6 +2342,7 @@ class ficha_atencionController extends Controller
             $tipo = 3;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '8.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2322,6 +2350,7 @@ class ficha_atencionController extends Controller
             $tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '4.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2330,12 +2359,13 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameExamenesPiezaDentalPiezaQuintoCuadrante($id_paciente, $tipo_paciente) {
+    public function dameExamenesPiezaDentalPiezaQuintoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad) {
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $otro_tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '5.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2343,6 +2373,7 @@ class ficha_atencionController extends Controller
             $tipo = 3;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '9.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2350,6 +2381,7 @@ class ficha_atencionController extends Controller
             $tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '5.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2358,12 +2390,13 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameExamenesPiezaDentalPiezaSextoCuadrante($id_paciente, $tipo_paciente) {
+    public function dameExamenesPiezaDentalPiezaSextoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad) {
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $otro_tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '6.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2371,6 +2404,7 @@ class ficha_atencionController extends Controller
             $tipo = 3;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '6.%'") // Convierte a cadena y filtra
                     ->get();
@@ -2378,6 +2412,7 @@ class ficha_atencionController extends Controller
             $tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
+                    ->where('tipo_especialidad', $tipo_especialidad)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '6.%'") // Convierte a cadena y filtra
                     ->get();

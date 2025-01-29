@@ -759,7 +759,7 @@ class FichaAtencionOtrosProfController extends Controller
         }
     }
 
-        public function store_fono(Request $request)//listo - revisado
+    public function store_fono(Request $request)//listo - revisado
     {
 
         $campos_requeridos = 1;

@@ -37,6 +37,7 @@
                     <input type="hidden" name="rut_paciente_fc" value="{{ $paciente->rut }}" id="rut_paciente_fc">
                     <input type="hidden" name="prevision_paciente_fc" value="{{ $paciente->prevision->id }}" id="prevision_paciente_fc">
                     <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
+                    <input type="hidden" name="id_especialidad" id="id_especialidad" value="{{ $profesional->id_especialidad }}">
                     <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
                     <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
                     <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
@@ -2316,6 +2317,41 @@
 @include('atencion_odontologica.modals.infantil.tratamiento_maxilar_superiorinf')
 
 <script>
+
+    $(document).ready(function(){
+        $('.tratamiento-autocomplete').each(function() {
+            $(this).autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getDiagnosticoDental') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            if (data.length == 0) {
+                                $('.diagnostico_activo').hide();
+                                $('.diagnostico_inactivo').show();
+                            } else {
+                                $('.diagnostico_activo').show();
+                                $('.diagnostico_inactivo').hide();
+                            }
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $(this).val(ui.item.label);
+                    $(this).next('input[type="hidden"]').val(ui.item.value); // Asigna el valor al input hidden correspondiente
+                    return false;
+                }
+            });
+        });
+    });
+
     function evaluar_para_carga_detalle(select, div, input, valor)
     {
         var valor_select = $('#'+select+'').val();
@@ -3071,7 +3107,7 @@ let derivado_por = $('#ex_grl_deriv').val();
 let zona_dolor = $('#ex_grl_zdolor').val();
 let historia_anterior = $('#ex_grl_hp').val();
 
-let pieza_numero = $('#ex_grl_dol_pi_n'+count).val();
+let pieza_numero = $('#numero_pieza'+count).val();
 let tipo_dolor = $('#tipo_dolor'+count).val();
 let intensidad = $('#intensidad'+count).val();
 let modo_dolor = $('#modo_dolor'+count).val();
@@ -3166,6 +3202,32 @@ $.ajax({
         console.log(error);
     }
 });
+}
+
+function mostrar_pieza_dental_examen(count){
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_examen') }}";
+    let data = {
+        count: count,
+        id_paciente: dame_id_paciente(),
+        _token: CSRF_TOKEN
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_nueva_pieza_dental').empty();
+                $('#contenedor_nueva_pieza_dental').append(resp.v);
+
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
 }
 
 function guardar_pieza_dental_end(count){

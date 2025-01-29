@@ -2964,8 +2964,9 @@ class EscritorioPaciente extends Controller
         {
             $datos['estado'] = 1;
             $datos['msj'] = 'exito';
-            $paciente->region = $region_paciente->nombre;
-            $paciente->ciudad = $ciudad_paciente->nombre;
+            $paciente->region = $region_paciente ? $region_paciente->nombre : '';
+            $paciente->ciudad = $ciudad_paciente ? $ciudad_paciente->nombre : '';
+            $paciente->email = $email;
             $datos['paciente'] = $paciente;
 
             /** modificar direccion */

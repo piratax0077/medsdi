@@ -434,7 +434,7 @@
                         } else {
                             $('#sexo_paciente').text('Femenino');
                         }
-                        $('#email_paciente').text(paciente.email);
+                        $('#email_paciente_').text(paciente.email);
                         $('#telefono_paciente').text(paciente.telefono_uno);
                         $('#comuna_region_paciente').html(paciente.ciudad + '<br> ' + paciente.region);
 

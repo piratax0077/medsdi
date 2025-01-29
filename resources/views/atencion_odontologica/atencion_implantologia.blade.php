@@ -1650,5 +1650,185 @@
         }
 
     }
+
+    function dame_id_paciente(){
+        return $('#id_paciente').val();
+    }
+
+    function eliminar_pieza_dental_pieza(id,tipo){
+    swal({
+        title: 'Advertencia',
+        text: '¿Está seguro de eliminar esta pieza?',
+        icon: 'warning',
+        buttons: ['Cancelar', 'Aceptar'],
+        dangerMode: true
+    })
+    .then((aceptar) => {
+        if (aceptar) {
+            confirmar_eliminar_pieza_dental_pieza(id, tipo);
+        } else {
+            Swal.fire('Cancelado', 'La pieza no fue eliminada :(', 'error');
+        }
+    });
+}
+
+function confirmar_eliminar_pieza_dental_pieza(id, tipo){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_pieza') }}";
+    let data = {
+        _token: CSRF_TOKEN,
+        id_paciente: dame_id_paciente(),
+        id: id,
+        id_ficha_atencion: $('#id_fc').val(),
+        id_lugar_atencion: $('#id_lugar_atencion').val(),
+        tipo: tipo
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                let examenes = resp.examenes;
+                if(tipo == 'gral'){
+                    $('#contenedor_pieza_dental_endo_gral').empty();
+                    $('#contenedor_pieza_dental_endo_gral').append(resp.v);
+
+                    $('#planificacion_examenes_gral').empty();
+                    examenes.forEach(examen => {
+                        $('#planificacion_examenes_gral').append(`
+                            <div class="form-row">
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Pieza N°</label>
+                                        <input type="text" class="form-control form-control-sm" value="${examen.numero_pieza}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                        <select name="piel_tegumnto" data-titulo="Ex_cuello" data-seccion="Cuello" id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
+                                            <option selected="" value="1">Uniradicular</option>
+                                            <option value="2">Biradicular</option>
+                                            <option value="2">Triradicular</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="div_piel_tegumnto" style="display:none;">
+                                        <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Convenio</label>
+                                        <select name="adenopatias" data-titulo="Ex_cuello" data-seccion="Cuello" id="adenopatias" class="form-control form-control-sm">
+                                            <option selected="" value="1">Convenio</option>
+                                            <option value="2">Sin Convenio</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        `);
+                    });
+                }else if(tipo == 'endo'){
+                    $('#contenedor_pieza_dental_endo').empty();
+                    $('#contenedor_pieza_dental_endo').append(resp.v);
+                    $('#planificacion_examenes_endo').empty();
+                    examenes.forEach(examen => {
+                        $('#planificacion_examenes_endo').append(`
+                            <div class="form-row">
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Pieza N°</label>
+                                        <input type="text" class="form-control form-control-sm" value="${examen.numero_pieza}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                        <select name="piel_tegumnto" data-titulo="Ex_cuello" data-seccion="Cuello" id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
+                                            <option selected="" value="1">Uniradicular</option>
+                                            <option value="2">Biradicular</option>
+                                            <option value="2">Triradicular</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="div_piel_tegumnto" style="display:none;">
+                                        <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Convenio</label>
+                                        <select name="adenopatias" data-titulo="Ex_cuello" data-seccion="Cuello" id="adenopatias" class="form-control form-control-sm">
+                                            <option selected="" value="1">Convenio</option>
+                                            <option value="2">Sin Convenio</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        `);
+                    });
+                }else{
+                    $('#contenedor_pieza_dental_odontop_examen').empty();
+                    $('#contenedor_pieza_dental_odontop_examen').append(resp.v);
+                    $('#planificacion_examenes_odontop').empty();
+                    examenes.forEach(examen => {
+                        $('#planificacion_examenes_odontop').append(`
+                        <div class="form-row">
+                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Pieza N°</label>
+                                    <input type="text" class="form-control form-control-sm" value="${examen.numero_pieza}">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                    <select name="piel_tegumnto" data-titulo="Ex_cuello" data-seccion="Cuello" id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
+                                        <option selected="" value="1">Uniradicular</option>
+                                        <option value="2">Biradicular</option>
+                                        <option value="2">Triradicular</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="div_piel_tegumnto" style="display:none;">
+                                    <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Convenio</label>
+                                    <select name="adenopatias" data-titulo="Ex_cuello" data-seccion="Cuello" id="adenopatias" class="form-control form-control-sm">
+                                        <option selected="" value="1">Convenio</option>
+                                        <option value="2">Sin Convenio</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        `);
+                    });
+                }
+                swal({
+                    title:'Exito',
+                    text:'Se ha eliminado con éxito',
+                    icon:'success'
+                });
+
+                $('#contenedor_examenes_grupos_dentales').empty();
+                $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+
 </script>
 @endsection

@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg"  data-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Indicar Examen</h5>
+                <h5 class="modal-title text-white mt-1" id="modal_indicar_examen">Indicar Examen 2</h5>
                 <button type="button" class="close" aria-label="Close"  onclick="cerrarModalExamenesFicha();">
                     <span aria-hidden="true">x</span>
                 </button>
@@ -15,7 +15,7 @@
                         <div class="form-group fill">
                             <label class="floating-label">Tipo Examen</label>
 
-                            <select class="form-control form-control-sm" name="tipo_examen" id="tipo_examen">
+                            <select class="form-control form-control-sm" name="tipo_examen_d" id="tipo_examen_d">
                                 <option value="0">Seleccione</option>
                                 @foreach ($examenMedico as $exa)
                                     <option value="{{ $exa->cod_examen }}">
@@ -29,7 +29,7 @@
                         <div class="form-group fill">
                             <label class="floating-label-activo-sm">Sub-tipo de Examen</label>
 
-                            <select class="form-control form-control-sm" name="sub_tipo_examen" id="sub_tipo_examen">
+                            <select class="form-control form-control-sm" name="sub_tipo_examen_d" id="sub_tipo_examen_d">
                                 <option value="">Seleccione</option>
                             </select>
                         </div>
@@ -37,7 +37,7 @@
                     <div class="col-sm-12 mt-2">
                         <div class="form-group fill">
                             <label class="floating-label-activo-sm">Examen</label>
-                            <select class="form-control form-control-sm" name="examen" id="examen">
+                            <select class="form-control form-control-sm" name="examen_d" id="examen_d">
                                 <option value="">Seleccione</option>
                             </select>
                         </div>

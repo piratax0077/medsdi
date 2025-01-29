@@ -309,6 +309,15 @@
             });
         }
         /** FIN METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
+
+        var formatoMoneda = (valor) => {
+            return valor.toLocaleString('es-MX', {
+                style: 'currency',
+                currency: 'MXN',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+        };
     </script>
     @yield('js_inferior')
     @yield('page-script')

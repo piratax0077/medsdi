@@ -97,7 +97,7 @@
                             <hr class="mt-2">
                             <div class="form-row mt-1">
                                 <label class="col-2 text-dark font-weight-bolder">Email</label>
-                                <div class="col-9 ml-2 text-secondary" id="email_paciente">
+                                <div class="col-9 ml-2 text-secondary" id="email_paciente_">
                                     {{ $paciente->email }}
                                 </div>
                             </div>
