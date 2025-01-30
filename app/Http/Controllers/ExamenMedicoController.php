@@ -41,6 +41,7 @@ class ExamenMedicoController extends Controller
             $nueva_solicitud_examen->id_institucion = 1;
             $nueva_solicitud_examen->id_servicio = 1;
             $nueva_solicitud_examen->id_paciente = $request->id_paciente;
+            $nueva_solicitud_examen->id_ficha_atencion = $request->id_ficha_atencion;
             $nueva_solicitud_examen->id_responsable = Auth::user()->id;
             // crear un objeto json con los datos del examen
             $datos_examen = array(
@@ -52,26 +53,29 @@ class ExamenMedicoController extends Controller
                 'imagenologia_con_contraste' => $imagenologia_con_contraste,
             );
             $nueva_solicitud_examen->datos_examen = json_encode($datos_examen);
-            
+
             if($nueva_solicitud_examen->save()){
-                $examenes_solicitados = $this->dame_examenes_solicitados($request->id_paciente);
-                
+                $examenes_solicitados = $this->dame_examenes_solicitados($request->id_paciente, $request->id_ficha_atencion);
+
                 return response()->json(['estado' => 'success', 'mensaje' => 'Examen solicitado correctamente','examenes' => $examenes_solicitados]);
             }else{
-                $examenes_solicitados = $this->dame_examenes_solicitados($request->id_paciente);
+                $examenes_solicitados = $this->dame_examenes_solicitados($request->id_paciente, $request->id_ficha_atencion);
                 return response()->json(['estado' => 'error', 'mensaje' => 'Error al solicitar el examen','examenes' => $examenes_solicitados]);
             }
         } catch (\Exception $e) {
             //throw $th;
             return response()->json(['estado' => 'error', 'mensaje' => 'Error al solicitar el examen: '.$e->getMessage(),'examenes' => []]);
         }
-        
+
     }
 
-    public function dame_examenes_solicitados($id_paciente){
-        $examenes_solicitados = ExamenSolicitudServicio::select('examenes_solicitudes_servicio.*','users.name as responsable')
-                                ->leftjoin('users','examenes_solicitudes_servicio.id_responsable','users.id')
+    public function dame_examenes_solicitados($id_paciente, $id_ficha_atencion = null){
+        $examenes_solicitados = ExamenSolicitudServicio::select('examenes_solicitudes_servicio.*', 'users.name as responsable')
+                                ->leftJoin('users', 'examenes_solicitudes_servicio.id_responsable', 'users.id')
                                 ->where('examenes_solicitudes_servicio.id_paciente', $id_paciente)
+                                ->when($id_ficha_atencion, function ($query, $id_ficha_atencion) {
+                                    return $query->where('examenes_solicitudes_servicio.id_ficha_atencion', $id_ficha_atencion);
+                                })
                                 ->get();
         foreach ($examenes_solicitados as $examen_solicitado) {
             $examen_solicitado->datos_examen = json_decode($examen_solicitado->datos_examen);
@@ -84,10 +88,10 @@ class ExamenMedicoController extends Controller
     public function eliminar_examen_cirugia(Request $req){
         $examen = ExamenSolicitudServicio::find($req->id);
         if($examen->delete()){
-            $examenes_solicitados = $this->dame_examenes_solicitados($req->id_paciente);
+            $examenes_solicitados = $this->dame_examenes_solicitados($req->id_paciente, $req->id_ficha_atencion);
             return response()->json(['estado' => 'success', 'mensaje' => 'Examen eliminado correctamente','examenes' => $examenes_solicitados]);
         }else{
-            $examenes_solicitados = $this->dame_examenes_solicitados($req->id_paciente);
+            $examenes_solicitados = $this->dame_examenes_solicitados($req->id_paciente, $req->id_ficha_atencion);
             return response()->json(['estado' => 'error', 'mensaje' => 'Error al eliminar el examen','examenes' => $examenes_solicitados]);
         }
     }

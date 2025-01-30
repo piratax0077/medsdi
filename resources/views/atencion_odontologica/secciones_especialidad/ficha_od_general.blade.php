@@ -8031,6 +8031,10 @@ function ocultar_pieza_imagenes_rx(){
     $('#contenedor_nueva_imagen_dent').empty();
 }
 
+function ocultar_pieza_imagenes_rx_estudio(){
+    $('#contenedor_nueva_imagen_dent_estudio').empty();
+}
+
 function eliminar_pieza_dental_rx(id){
     swal({
             title: 'Advertencia',

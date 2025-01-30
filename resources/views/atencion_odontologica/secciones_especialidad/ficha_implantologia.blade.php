@@ -109,12 +109,45 @@
                                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Antecedentes Generales</label>
-                                                                                                               <ul>
-                                                                                                                <li>antecedente 1</li>
-                                                                                                                <li>antecedente 2</li>
-                                                                                                                <li>antecedente 3</li>
-                                                                                                                <li>antecedente 4</li>
-                                                                                                               </ul>
+
+                                                                                                               <table class="table" id="tabla_antecedentes_paciente">
+                                                                                                                <thead>
+                                                                                                                    <tr>
+                                                                                                                        <th>Antecedentes Médicos</th>
+                                                                                                                        <th>Comentario</th>
+                                                                                                                    </tr>
+                                                                                                                </thead>
+                                                                                                                <tbody>
+                                                                                                                    <tr>
+                                                                                                                        <td>Transfusion</td>
+                                                                                                                        <td>{{ $antecedentes_paciente->transfusion }}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td>Donación de órganos</td>
+                                                                                                                        <td>{{ $antecedentes_paciente->dona_organos }}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td>Donación de órganos parcial</td>
+                                                                                                                        <td>{{ $antecedentes_paciente->dona_organos_parcial }}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td>Donación de sangre</td>
+                                                                                                                        <td>{{ $antecedentes_paciente->dona_sangre }}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td>Hepatitis</td>
+                                                                                                                        <td>{{ $antecedentes_paciente->hepatitis }}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td>Impedimento para donar</td>
+                                                                                                                        <td>{{ $antecedentes_paciente->impedimento_donar }}</td>
+                                                                                                                    </tr>
+                                                                                                                    <tr>
+                                                                                                                        <td>Comentario</td>
+                                                                                                                        <td>{{ $antecedentes_paciente->comentario_gs }}</td>
+                                                                                                                    </tr>
+                                                                                                                </tbody>
+                                                                                                               </table>
                                                                                                             </div>
                                                                                                         </div>
 
@@ -218,7 +251,7 @@
                                                             </div>
                                                             <!--ESTUDIO RADIOLÓGICO POR PIEZA-->
                                                             <div class="tab-pane fade show" id="estudio_rx" role="tabpanel" aria-labelledby="estudio_rx_tab">
-                                                                <div id="contenedor_imagenes_dent">
+                                                                <div id="contenedor_imagenes_dent_estudio">
                                                                     @php $count = 1; @endphp
                                                                     @foreach ($imagenes as $imagen)
                                                                         <div class="card">
@@ -248,7 +281,7 @@
                                                                                                                             <!-- Botón para eliminar imagen -->
                                                                                                                             <button type="button"
                                                                                                                                     class="btn btn-outline-danger btn-sm my-2"
-                                                                                                                                    onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
+                                                                                                                                    onclick="eliminar_imagen_dental_estudio({{ $imagen->id }}, '{{ $path['path'] }}')">
                                                                                                                                 <i class="fas fa-trash"></i>
                                                                                                                             </button>
                                                                                                                         </div>
@@ -302,7 +335,7 @@
                                                                                 <div class="form-row">
                                                                                     <div class="col-sm-12 mt-2">
 
-                                                                                        <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_imagenes({{ $imagen->id }})">X</button>
+                                                                                        <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_imagenes_estudio({{ $imagen->id }})">X</button>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -311,14 +344,15 @@
                                                                     @endforeach
                                                                 </div>
 
-                                                                <div id="contenedor_nueva_imagen_dent">
+                                                                <div id="contenedor_nueva_imagen_dent_estudio">
 
                                                                 </div>
+
                                                                 <div class="form-row">
                                                                     <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
                                                                         <div class="form-group">
 
-                                                                            <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nuevas_imagenes_dent({{ $count }})">MOSTRAR NUEVA PIEZA</button>
+                                                                            <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nuevas_imagenes_dent_estudio({{ $count }})">MOSTRAR NUEVA PIEZA</button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -4510,6 +4544,356 @@ $.ajax({
         console.log(error.responseText);
     }
 })
+}
+
+
+function mostrar_nuevas_imagenes_dent(counter){
+    let url = "{{ ROUTE('profesional.mostrar_nuevas_imagenes_dental') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            counter: counter,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+            $('#contenedor_nueva_imagen_dent').empty();
+            $('#contenedor_nueva_imagen_dent').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function mostrar_nuevas_imagenes_dent_estudio(counter){
+    let url = "{{ ROUTE('profesional.mostrar_nuevas_imagenes_dental') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            counter: counter,
+            tipo: 'estudio',
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+            $('#contenedor_nueva_imagen_dent_estudio').empty();
+            $('#contenedor_nueva_imagen_dent_estudio').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function ocultar_pieza_imagenes_rx(){
+    $('#contenedor_nueva_imagen_dent').empty();
+}
+
+function ocultar_pieza_imagenes_rx_estudio(){
+    $('#contenedor_nueva_imagen_dent_estudio').empty();
+}
+
+function mostrar_nueva_pieza_ex_radio(counter){
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_rx') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            counter: counter,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+            $('#contenedor_examenes_oral_rx').empty();
+            $('#contenedor_examenes_oral_rx').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+
+
+function eliminar_pieza_dental_rx(id){
+    swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar este examen?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_eliminar_pieza_dental_rx(id);
+            }
+        })
+}
+
+function editar_pieza_dental_rx(id){
+    // abrir_modal
+    $('#modal_agregar_imagenes_dental_paciente').modal('show');
+}
+
+
+function confirmar_eliminar_pieza_dental_rx(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_rx') }}";
+    let id_paciente = dame_id_paciente();
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data:{
+            id: id,
+            id_paciente: id_paciente,
+            _token: CSRF_TOKEN
+        },
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#pieza_dentalrx').empty();
+                $('#pieza_dentalrx').append(resp.v);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+
+function amplificar_imagen(path){
+    // abrir modal
+    $('#modal_imagen_dental_rx').modal('show');
+    $('.zoom-container').on('mousemove', function (e) {
+            const $img = $(this).find('img');
+            const offsetX = e.offsetX; // Posición X del mouse dentro del contenedor
+            const offsetY = e.offsetY; // Posición Y del mouse dentro del contenedor
+            const width = $(this).width();
+            const height = $(this).height();
+            const xPercent = (offsetX / width) * 100; // Porcentaje X
+            const yPercent = (offsetY / height) * 100; // Porcentaje Y
+
+            $img.css('transform-origin', `${xPercent}% ${yPercent}%`); // Ajusta el origen de transformación
+        });
+    $('#imagen_paciente_rx').attr('src',"{{ asset('storage') }}"+"/"+path);
+}
+
+function eliminar_rx(id){
+    swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar esta RX?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmarEliminarImagenRx(id);
+            }
+        })
+}
+
+function confirmarEliminarImagenRx(id){
+    let url = "{{ ROUTE('profesional.eliminar_imagen_rx_paciente') }}";
+    let data = {
+        _token: CSRF_TOKEN,
+        id:id,
+        id_paciente: dame_id_paciente()
+    }
+
+    $.ajax({
+        type:'post',
+        data: data,
+        url: url,
+        success: function(resp){
+            if(resp.mensaje == 'OK'){
+                $('#pieza_dentalrx').empty();
+                $('#pieza_dentalrx').append(resp.v);
+            }else{
+                $('#pieza_dentalrx').empty();
+                $('#pieza_dentalrx').append(resp.mensaje);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function eliminar_imagen_dental(id,path){
+    swal({
+        title: 'Advertencia',
+        text: '¿Está seguro de eliminar esta imagen?',
+        icon: 'warning',
+        buttons: ['Cancelar', 'Aceptar'],
+        dangerMode: true,
+        confirmButtonText: 'Sí, eliminarlo!',
+        cancelButtonText: 'Cancelar',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        closeOnConfirm: false,
+        closeOnCancel: true,
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+
+    })
+    .then((confirm) => {
+        if (confirm) {
+            confirmar_eliminar_imagen_dental(id,path);
+        } else {
+            Swal.fire('Cancelado', 'La imagen no fue eliminada :(', 'error');
+        }
+    });
+
+}
+
+function confirmar_eliminar_imagen_dental(id,path){
+    let url = "{{ route('profesional.eliminar_imagen_dental_paciente') }}";
+    let data = {
+        _token: CSRF_TOKEN,
+        id:id,
+        path: path,
+        id_paciente: dame_id_paciente()
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_imagenes_dent').empty();
+                $('#contenedor_imagenes_dent').append(resp.v);
+            }else{
+                // $('#contenedor_imagenes_dent').empty();
+                // $('#contenedor_imagenes_dent').append(resp.mensaje);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function eliminar_pieza_dental_imagenes(id){
+    swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar esta información?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_eliminar_pieza_dental_imagenes(id);
+            }
+        })
+}
+
+function confirmar_eliminar_pieza_dental_imagenes(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_imagenes_paciente') }}";
+    let id_paciente = dame_id_paciente();
+
+    let data = {
+        _token: CSRF_TOKEN,
+        id_paciente: id_paciente,
+        id: id
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_imagenes_dent').empty();
+                $('#contenedor_imagenes_dent').append(resp.v);
+                swal({
+                    title:'Exito',
+                    text:'Se ha guardado con exito',
+                    icon:'success'
+                })
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function eliminar_pieza_dental_imagenes_estudio(id){
+    swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar esta información?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_eliminar_pieza_dental_imagenes_estudio(id);
+            }
+        })
+}
+
+function confirmar_eliminar_pieza_dental_imagenes_estudio(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_imagenes_paciente') }}";
+    let id_paciente = dame_id_paciente();
+
+    let data = {
+        _token: CSRF_TOKEN,
+        id_paciente: id_paciente,
+        id: id
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_imagenes_dent_estudio').empty();
+                $('#contenedor_imagenes_dent_estudio').append(resp.v);
+                swal({
+                    title:'Exito',
+                    text:'Se ha guardado con exito',
+                    icon:'success'
+                })
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function mostrar_pieza_dental_examen(count){
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_examen') }}";
+    let data = {
+        count: count,
+        id_paciente: dame_id_paciente(),
+        _token: CSRF_TOKEN
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_nueva_pieza_dental').empty();
+                $('#contenedor_nueva_pieza_dental').append(resp.v);
+
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
 }
 </script>
 

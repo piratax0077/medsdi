@@ -68,6 +68,7 @@
                                         <th class="text-center align-middle">Procedimiento</th>
                                         <th class="text-center align-middle">Incidente</th>
                                         <th class="text-center align-middle">Rut responsable</th>
+                                        <th class="text-center align-middle">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -88,6 +89,10 @@
                                                     </td>
                                                     <td class="text-center align-middle">
                                                         {{ $anes_pac->antecedente_data->rut_responsable }}
+                                                    </td>
+                                                    <td class="text-center align-middle">
+                                                        <button type="button" class="btn btn-outline-warning btn-sm" onclick="editar_antecedente({{ $anes_pac->id }})"><i class="fas fa-edit"></i></button>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_antecedente({{ $anes_pac->id }})"><i class="fas fa-trash"></i></button>
                                                     </td>
                                                 </tr>
                                             @endif
@@ -146,7 +151,7 @@
         data.estado = 1;
         // data.token_ = CSRF_TOKEN;
 
-        // console.log(data);
+        var tipo_antecedente = data.id_tipo_antecedente;
 
         jQuery.ajax({
 
@@ -155,9 +160,10 @@
             data: data
         })
         .done(function(data) {
+            console.log(data);
             if(data.estado==1)
             {
-                cargarRegistrosAntecedentes(parseInt(tipo), 'table_anestecia_antecedentes_modal');
+                cargarRegistrosAntecedentes_d(tipo_antecedente, 'table_anestecia_antecedentes_modal');
                 swal({
                     title: 'Antecedente Anestecia',
                     text: 'Registro Ingresado',
@@ -178,8 +184,9 @@
         });
     }
 
-    function cargarRegistrosAntecedentes(tipo, div)
+    function cargarRegistrosAntecedentes_d(tipo, div)
     {
+        console.log(tipo);
         var data = {};
         var url = "{{ url('/api/antecedente/ver_registros') }}";
 
@@ -194,6 +201,7 @@
             type: "GET",
             data: data,
             success: (resp)=>{
+                console.log(resp);
                 if(resp.estado==1)
                 {
                     var html_ = '';
@@ -211,10 +219,14 @@
 
                         html_ +=`
                             <tr>
-                                <td>${e.antecedente_data.fecha_regitro}</td>
-                                <td>${e.antecedente_data.procedimiento}</td>
-                                <td>${e.antecedente_data.comentario}</td>
-                                <td>${e.antecedente_data.rut_responsable}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.fecha_regitro}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.procedimiento}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.comentario}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.rut_responsable}</td>
+                                <td class="text-center align-middle">
+                                    <button type="button" class="btn btn-outline-warning btn-sm" onclick="editar_antecedente(${e.id})"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_antecedente(${e.id})"><i class="fas fa-trash"></i></button>
+                                </td>
                             </tr>
                         `;
 
@@ -225,6 +237,63 @@
             error: (resp)=>{
                 console.warn(resp);
             }
+        });
+    }
+
+    function eliminar_antecedente(id){
+        swal({
+            title: "¿Esta seguro que desea ELIMINAR el antecedente?",
+            text: "Favor confirme o cancele la solicitud",
+            icon: "warning",
+            buttons: ["Cancelar", "Solicitar"],
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                eliminar_antecedente_confirmar(id);
+            }
+        });
+    }
+
+    function eliminar_antecedente_confirmar(id){
+        var data = {};
+        var url = '{{ url("/api/antecedente/eliminar") }}';
+
+        /* CAMPOS */
+        // data.nombre = $('#nombre').val();
+        data.id_antecedente = id;
+        data.id_tipo_antecedente = 1;
+        data.id_paciente = $('#id_paciente_fc').val();
+        tipo_antecedente = 1;
+
+        jQuery.ajax({
+
+            url: url,
+            type: "POST",
+            data: data
+        })
+        .done(function(data) {
+            console.log(data);
+            if(data.estado==1)
+            {
+                cargarRegistrosAntecedentes_d(tipo_antecedente, 'table_anestecia_antecedentes_modal');
+                swal({
+                    title: 'Antecedente Anestecia',
+                    text: 'Registro eliminado',
+                    icon: 'success',
+                });
+            }
+            else
+            {
+                swal({
+                    title: 'Antecedente Anestecia',
+                    text: 'Campo Obligatorio: '+JSON.stringify(data.error),
+                    icon: 'danger',
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
         });
     }
 </script>

@@ -1820,9 +1820,12 @@ class EscritorioProfesional extends Controller
     }
 
     public function mostrar_nuevas_imagenes_dental(Request $req){
+
         $idCounter = $req->counter;
+        $opt = $req->tipo ? true : false;
         $responsable = User::find(Auth::user()->id);
-        $v = view('atencion_odontologica.include.imagenes_dental',['counter' => $idCounter])->render();
+
+        $v = view('atencion_odontologica.include.imagenes_dental',['counter' => $idCounter,'opt' => $opt])->render();
         return ['mensaje' => 'OK','v' => $v];
     }
 
@@ -2345,19 +2348,19 @@ class EscritorioProfesional extends Controller
                 $examenes = $this->dameExamenesPiezaDentalPiezaOdontop($req->id_paciente);
                 $v = view('atencion_odontologica.include.examenes_dental_pieza_odontop_todos',['examenes' => $examenes])->render();
             }
-            $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($req->id_paciente,'adulto');
-            $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($req->id_paciente,'adulto');
-            $tercer_cuadrante = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($req->id_paciente,'adulto');
-            $cuarto_cuadrante = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($req->id_paciente,'adulto');
-            $quinto_cuadrante = $this->dameExamenesPiezaDentalPiezaQuintoCuadrante($req->id_paciente,'adulto');
-            $sexto_cuadrante = $this->dameExamenesPiezaDentalPiezaSextoCuadrante($req->id_paciente,'adulto');
+            $primer_cuadrante = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($req->id_paciente,'adulto', $profesional->id_tipo_especialidad);
+            $segundo_cuadrante = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($req->id_paciente,'adulto', $profesional->id_tipo_especialidad);
+            $tercer_cuadrante = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($req->id_paciente,'adulto', $profesional->id_tipo_especialidad);
+            $cuarto_cuadrante = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($req->id_paciente,'adulto', $profesional->id_tipo_especialidad);
+            $quinto_cuadrante = $this->dameExamenesPiezaDentalPiezaQuintoCuadrante($req->id_paciente,'adulto', $profesional->id_tipo_especialidad);
+            $sexto_cuadrante = $this->dameExamenesPiezaDentalPiezaSextoCuadrante($req->id_paciente,'adulto', $profesional->id_tipo_especialidad);
 
-            $primer_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($req->id_paciente,'endodoncia');
-            $segundo_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($req->id_paciente,'endodoncia');
-            $tercer_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($req->id_paciente,'endodoncia');
-            $cuarto_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($req->id_paciente,'endodoncia');
-            $quinto_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaQuintoCuadrante($req->id_paciente,'endodoncia');
-            $sexto_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaSextoCuadrante($req->id_paciente,'endodoncia');
+            $primer_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaPrimerCuadrante($req->id_paciente,'endodoncia', $profesional->id_tipo_especialidad);
+            $segundo_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaSegundoCuadrante($req->id_paciente,'endodoncia', $profesional->id_tipo_especialidad);
+            $tercer_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaTercerCuadrante($req->id_paciente,'endodoncia', $profesional->id_tipo_especialidad);
+            $cuarto_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaCuartoCuadrante($req->id_paciente,'endodoncia', $profesional->id_tipo_especialidad);
+            $quinto_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaQuintoCuadrante($req->id_paciente,'endodoncia', $profesional->id_tipo_especialidad);
+            $sexto_cuadrante_endodoncia = $this->dameExamenesPiezaDentalPiezaSextoCuadrante($req->id_paciente,'endodoncia', $profesional->id_tipo_especialidad);
 
             $paciente = Paciente::where('id', $req->id_paciente)->first();
             $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();

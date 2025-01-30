@@ -150,6 +150,11 @@
                 text: 'Esta página se encuentra en desarrollo.',
                 confirmButtonText: 'Aceptar'
             });
+            $('#tabla_antecedentes_paciente').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
         });
     function cargar_a_presupuesto(id, tipo = null){
         let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";

@@ -88,6 +88,7 @@ class CargaImagenController extends Controller
             foreach ($request->file('file') as $file) {
                 $path = $file->store('images', 'public');
                 $paths[] = $path;
+                $urls[] = Storage::url($path); // Obtén la URL pública de la imagen
 
                  // Ahora copiamos la imagen de 'storage/app/public/images' a 'public/storage/images'
                 $publicPath = public_path('storage/images/' . basename($path));
@@ -110,12 +111,14 @@ class CargaImagenController extends Controller
             return response()->json([
                 'success' => true,
                 'paths' => $paths,
+                'urls' => $urls,
                 'total_imagenes' => count($paths),
             ]);
         }else{
             return response()->json([
                 'success' => false,
                 'paths' => $paths,
+                'urls' => $urls,
                 'total_imagenes' => count($paths),
                 'mensaje' => 'error'
             ]);

@@ -138,6 +138,7 @@ function initDropzone() {
 }
 
 function guardar_nueva_pieza_ex_radio(counter){
+    console.log('hola');
     // Verifica los datos antes de procesar la cola de imágenes
     let numero_pieza = $('#rx_numero_pieza'+counter).val();
     let espacio_periodontal_aplical = $('#rx_esp_peri_apical'+counter).val();
@@ -213,6 +214,18 @@ function guardar_nueva_pieza_ex_radio(counter){
                     title:'Exito',
                     text:'Pieza agregada correctamente'
                 });
+                // Mostrar las imágenes subidas
+                if (resp.rx && resp.rx.decoded_imagenes) {
+                    resp.rx.decoded_imagenes.forEach(function(imagen) {
+                        imagen.paths_imagenes.forEach(function(path) {
+                            $('#contenedor_examenes_oral_rx').append(`
+                                <div class="col-md-4">
+                                    <img src="${path}" class="img-fluid" alt="Imagen subida">
+                                </div>
+                            `);
+                        });
+                    });
+                }
             } else {
                 $('#pieza_dentalrx').empty();
                 $('#pieza_dentalrx').append(resp.mensaje);
@@ -234,6 +247,17 @@ function guardar_nueva_pieza_ex_radio(counter){
                 dropzone.on("queuecomplete", function() {
                     // Una vez que la cola esté completa, podemos realizar más acciones si es necesario
                     console.log("Carga de imágenes completada.");
+
+                    // Mostrar las imágenes subidas
+                    if (resp.urls && resp.urls.length > 0) {
+                        resp.urls.forEach(function(url) {
+                            $('#contenedor_piezas_ex_oral').append(`
+                                <div class="col-md-4">
+                                    <img src="${url}" class="img-fluid" alt="Imagen subida">
+                                </div>
+                            `);
+                        });
+                    }
                 });
             } else {
                 console.log("No hay imágenes para cargar.");

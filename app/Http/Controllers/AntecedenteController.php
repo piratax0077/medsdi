@@ -627,4 +627,88 @@ class AntecedenteController extends Controller
 
         return json_encode($json_data);
     }
+
+    public function eliminar(Request $request){
+
+        $antecedente = Antecedente::find($request->id_antecedente);
+        if($antecedente->delete())
+            {
+				$datos['estado'] = 1;
+                $datos['msg'] = 'Registros Creado';
+                $datos['request_data'] = $request->all();
+
+				if( $request->id_tipo_antecedente == 7)
+                {
+					$profesional = Profesional::where('id_usuario', $request->id_users)->get()->first();
+
+					$registro_med_cronico = new MedicamentoUsoCronicoGeneral();
+					$registro_med_cronico->id_ficha_atencion = NULL;
+					$registro_med_cronico->id_paciente = $request->id_paciente;
+					$registro_med_cronico->id_profesional = $profesional->id;
+					$registro_med_cronico->nombre_medicamento = $request->nombre_medicamento_cronico;
+					$registro_med_cronico->cantidad = $request->dosis;
+					$registro_med_cronico->cliente = 0;
+					$registro_med_cronico->tipo_enfermedad = 'cronica';
+					$registro_med_cronico->estado = 1;
+
+					if($registro_med_cronico->save())
+					{
+						$datos['med_cronico']['estado'] = 1;
+						$datos['med_cronico']['msg'] = 'Registros Creado';
+					}
+					else
+					{
+						$datos['med_cronico']['estado'] = 0;
+						$datos['med_cronico']['msg'] = 'Falla Registros';
+					}
+                }
+
+                $texto_datos = '';
+
+                switch($request->id_tipo_antecedente)
+                {
+                    case 1: //Antecedentes Anestesias Pacientes
+                        $texto_datos .= 'Registro de Antecedentes Anestesias Pacientes -> Procedimiento: '.$request->procedimiento.', Incidente: '.$request->comentario.', Fecha:'.$request->fecha_regitro.'';
+                    break;
+                    case 2: //Patologías Crónicas
+                        $texto_datos .= 'Registro de Patologías Crónicas -> Nombre: '.$request->nombre.', Comentario:'.$request->comentario;
+                    break;
+                    case 3: //Antecedentes Cirugias y Procedimientos
+                        $texto_datos .= 'Registro de Antecedentes Cirugias y Procedimientos -> Fecha: '.$request->fecha.', Procedimiento: '.$request->procedimiento.', Incidente:'.$request->comentario.'';
+                    break;
+                    case 4: //Antecedentes Hemorragias Pacientes
+                        $texto_datos .= 'Registro de Antecedentes Hemorragias Pacientes -> Procedimiento: '.$request->procedimiento.', Incidente: '.$request->comentario.'';
+                    break;
+                    case 5: //Solicitud de Antecedentes a servicios asistenciales
+                        $texto_datos .= 'Registro de Solicitud de Antecedentes a servicios asistenciales -> Antecedente: '.$request->procedimiento.', Institución: '.$request->institucion.', Fecha:'.$request->fecha.'';
+                    break;
+                    case 6: //Antecedentes de Alergias
+                        $texto_datos .= 'Registro de Antecedentes de Alergias -> Alergia: '.$request->nombre.', Detalle:'.$request->comentario.'';
+                    break;
+                    case 7: //Antecedentes de Medicamento Crónico
+                        $texto_datos .= 'Registro de Antecedentes de Medicamento Crónico -> Medicamento: '.$request->nombre_medicamento_cronico.', Dosis:'.$request->dosis.'';
+                    break;
+                    case 8: //Presenta alguna discapacidad ?
+                        $texto_datos .= 'Registro de Presenta alguna discapacidad ? -> Tipo de Discapacidad: '.$request->discapacidad_tipo.', Grado: '.$request->discapacidad_grado.', Permanente:'.$request->discapacidad_permanente.'';
+                    break;
+                }
+
+                $profesional = Profesional::where('id_usuario', $request->id_users)->get()->first();
+
+                $return_log = PacienteHistoricoDatosMedicosController::registrar($request->id_paciente, $profesional->id, $texto_datos);
+
+                $datos['log_datos_med'] = $return_log;
+                Log::build([
+                    'path' => storage_path('logs/log_datos_medicos_' . date('Ymd') . '.log'),
+                ])->info(json_encode($return_log) );
+            }
+			else
+			{
+                $datos['estado'] = 0;
+                $datos['msg'] = 'Problemas al registrar';
+                $datos['request_data'] = $request->all();
+            }
+
+            return response($datos)->header('Content-Type', 'application/json');
+    }
 }

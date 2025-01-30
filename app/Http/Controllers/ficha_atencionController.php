@@ -1731,7 +1731,7 @@ class ficha_atencionController extends Controller
         $procedimientos = $adm_hospital_controlador->dameProcedimientosPaciente($paciente->id);
         $curaciones = $adm_hospital_controlador->dameCuracionesPaciente($paciente->id);
         $examenControlador = new ExamenMedicoController();
-        $examenes_solicitados = $examenControlador->dame_examenes_solicitados($paciente->id);
+        $examenes_solicitados = $examenControlador->dame_examenes_solicitados($paciente->id, $id_ficha_atencion);
 
         $controles_ciclo = $this->dameEvolucionesPacienteHosp($paciente->id);
         $examenes_dental = $this->dameExamenesPiezaDentalDolor($paciente->id, $profesional->id_tipo_especialidad);
@@ -1765,7 +1765,7 @@ class ficha_atencionController extends Controller
         $examenes_rx_oral = $this->dameExamenesPiezaDentalOraxRx($paciente->id, $profesional->id_tipo_especialidad);
         $examenes_rx_oral_endodoncia = $this->dameExamenesPiezaDentalOraxRxEnd($paciente->id, $profesional->id_tipo_especialidad);
         $examenes_rx_oral_odontop = $this->dameExamenesPiezaDentalOraxRxOdontop($paciente->id, $profesional->id_tipo_especialidad);
-        $imagenes = $this->dameInfoImagenesDentalPaciente($paciente->id, $profesional->id_tipo_especialidad);
+        $imagenes = $this->dameInfoImagenesDentalPaciente($paciente->id, $id_ficha_atencion);
         $examenes_pieza = $this->dameExamenesPiezaDentalPieza($paciente->id, $profesional->id_tipo_especialidad);
         $examenes_pieza_end = $this->dameExamenesPiezaDentalPiezaEnd($paciente->id, $profesional->id_tipo_especialidad);
 
@@ -2433,10 +2433,14 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameInfoImagenesDentalPaciente($id_paciente)
+    public function dameInfoImagenesDentalPaciente($id_paciente, $id_ficha_atencion = null)
     {
         // Obtén las imágenes del paciente
-        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)->get();
+        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)
+        ->when($id_ficha_atencion, function ($query, $id_ficha_atencion) {
+            return $query->where('id_ficha_atencion', $id_ficha_atencion);
+        })
+        ->get();
 
         // Itera sobre cada imagen para procesar `paths_imagenes`
         foreach ($imagenes as $imagen) {

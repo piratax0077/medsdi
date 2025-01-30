@@ -241,6 +241,29 @@
                 li.tab('show');
             @endif
 
+            $('#tabla_examen_cirugia_d').DataTable({
+                "paging": false,
+                "info": false,
+                "searching": true,
+                "ordering": false,
+                "responsive": true,
+                "autoWidth": false,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "No se encontraron resultados",
+                    "info": "Mostrando la página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrando de _MAX_ registros)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+
         });
 
         function editarInformacionPaciente(){
@@ -396,7 +419,7 @@
                 e.preventDefault();
                 tipo_examen = $('#tipo_examen_d').val();
 
-                $("#sub_tipo_examen_d_d").empty();
+                $("#sub_tipo_examen_d").empty();
                 $("#examen_d").empty();
                 $.ajax({
                         url: '{{ route('listar.sub_tipo_examen') }}',

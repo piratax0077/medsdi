@@ -55,6 +55,7 @@ Route::get('/log_user_devices/check_state_sol',       [LogUsersDevicesController
 //USER DEVICES - CRUD
 Route::post('/antecedente/registrar',    [AntecedenteController::class, 'registrar']);
 Route::post('/antecedente/modificar',    [AntecedenteController::class, 'modificar']);
+Route::post('/antecedente/eliminar',    [AntecedenteController::class, 'eliminar']);
 Route::get('/antecedente/ver_registros',[AntecedenteController::class, 'verRegistros']);
 Route::get('/antecedente/ver_registro', [AntecedenteController::class, 'verRegistro']);
 Route::post('/antecedente/estado',       [AntecedenteController::class, 'estado']);
