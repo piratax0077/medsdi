@@ -4895,6 +4895,33 @@ function mostrar_pieza_dental_examen(count){
         }
     })
 }
+
+function pedir_autorizacion_presupuesto_dental(){
+        swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de solicitar la autorización del presupuesto?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_pedir_autorizacion_presupuesto_dental();
+            }
+        })
+    }
+
+    function  confirmar_pedir_autorizacion_presupuesto_dental()
+    {
+        $('#modal_autorizacion_presupuesto').modal('show');
+        $('#modal_autorizacion_imagen').html('');
+        $('#modal_autorizacion_mensaje').html('');
+        $('#modal_autorizacion_btn_solicitar').attr('disabled', false);
+    }
+
+    function  cerrar_autorizacion_presupuesto()
+    {
+        $('#modal_autorizacion_presupuesto').modal('hide');
+    }
 </script>
 
 

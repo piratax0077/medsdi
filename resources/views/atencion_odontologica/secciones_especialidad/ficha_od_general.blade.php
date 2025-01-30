@@ -8350,17 +8350,17 @@ function eliminarExamenAgregadoRxOdontop(id) {
     }
 
     function  confirmar_pedir_autorizacion_presupuesto_dental()
-        {
-            $('#modal_autorizacion_presupuesto').modal('show');
-            $('#modal_autorizacion_imagen').html('');
-            $('#modal_autorizacion_mensaje').html('');
-			$('#modal_autorizacion_btn_solicitar').attr('disabled', false);
-        }
+    {
+        $('#modal_autorizacion_presupuesto').modal('show');
+        $('#modal_autorizacion_imagen').html('');
+        $('#modal_autorizacion_mensaje').html('');
+        $('#modal_autorizacion_btn_solicitar').attr('disabled', false);
+    }
 
-        function  cerrar_autorizacion_presupuesto()
-        {
-            $('#modal_autorizacion_presupuesto').modal('hide');
-        }
+    function  cerrar_autorizacion_presupuesto()
+    {
+        $('#modal_autorizacion_presupuesto').modal('hide');
+    }
 </script>
 
 @endsection

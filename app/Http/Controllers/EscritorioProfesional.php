@@ -1414,7 +1414,7 @@ class EscritorioProfesional extends Controller
         }
     }
 
-    public function dameBocaCompletaGeneralTratamiento($id_paciente){
+    public function dameBocaCompletaGeneralTratamiento($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Boca completa')
@@ -1425,7 +1425,7 @@ class EscritorioProfesional extends Controller
         return $examenes;
     }
 
-    public function dameBocaCompletaGeneralDiagnostico($id_paciente){
+    public function dameBocaCompletaGeneralDiagnostico($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Boca completa')
@@ -1436,29 +1436,31 @@ class EscritorioProfesional extends Controller
         return $examenes;
     }
 
-    public function dameMaxilarInferiorGeneralTratamiento($id_paciente){
+    public function dameMaxilarInferiorGeneralTratamiento($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Maxilar inferior')
         ->where('examenes_boca_general.tipo_examen',1)
         ->where('especialidad_examen','tratamiento')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
     }
 
-    public function dameMaxilarInferiorGeneralDiagnostico($id_paciente){
+    public function dameMaxilarInferiorGeneralDiagnostico($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Maxilar inferior')
         ->where('examenes_boca_general.tipo_examen',1)
         ->where('especialidad_examen','diagnostico')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
     }
 
-    public function dameCompletaEndoTratamiento($id_paciente){
+    public function dameCompletaEndoTratamiento($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Boca completa')
@@ -1469,7 +1471,7 @@ class EscritorioProfesional extends Controller
         return $examenes;
     }
 
-    public function dameCompletaEndoDiagnostico($id_paciente){
+    public function dameCompletaEndoDiagnostico($id_paciente, $tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Boca completa')

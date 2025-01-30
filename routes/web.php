@@ -289,7 +289,7 @@ Route::group([
 Route::post('/odontograma/dame_pieza', [DentalController::class, 'dame_pieza'])->name('dental.dame_pieza');
 
 Route::group([
-    'middleware' => ['role:Admin|Paciente|Asistente'],
+    'middleware' => ['role:Admin|Paciente|Asistente|Profesional'],
     'prefix' => 'Paciente',
 ], function () {
     /*  Escritorio Paciente  */
