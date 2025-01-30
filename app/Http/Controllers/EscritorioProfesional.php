@@ -511,6 +511,10 @@ class EscritorioProfesional extends Controller
 
     public function index()
     {
+
+        $usuario = User::where('id', Auth::user()->id)->first();
+        $roles = $usuario->roles()->orderBy('id', 'DESC')->get();
+
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
         $region = Region::all();
@@ -540,7 +544,20 @@ class EscritorioProfesional extends Controller
             {
                 // preguntamos si esta asociada a algun servicio de hospital
 
-                return view('app.profesional.escritorio_profesional')->with([
+                $direccion_escritorio = 'app.profesional.escritorio_profesional';
+                if($profesional->id_especialidad == 4)
+                {
+                    /** profesional de laboratorio */
+                    $direccion_escritorio = 'app.laboratorio.lab_profesional.escritorio_profesional_laboratorio';
+                }
+                else
+                {
+                    /** otros */
+                    $direccion_escritorio = 'app.profesional.escritorio_profesional';
+                }
+
+
+                return view($direccion_escritorio)->with([
                     'region' => $region,
                     'profesional' => $profesional,
                     'hora_dia' => $horas_dia,

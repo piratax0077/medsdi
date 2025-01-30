@@ -17,8 +17,8 @@
                             <h5 class="m-b-10 font-weight-bold">Profesionales del centro</h5>
                         </div>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('laboratorio.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="laboratorio.home">Profesionales</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('laboratorio.adm_general.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('laboratorio.profesionales_institucion') }}">Profesionales</a></li>
                         </ul>
                     </div>
                 </div>
