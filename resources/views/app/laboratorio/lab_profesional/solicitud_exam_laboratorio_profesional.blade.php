@@ -12,7 +12,7 @@
                                 <h5 class="m-b-10 font-weight-bold">Solicitud de exámenes</h5>
                             </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="escritorio_profesional_laboratorio.php" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}"data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
                                 <li class="breadcrumb-item"><a href="procesos_laboratorio.php">Procesos</a></li>
                                 <li class="breadcrumb-item"><a href="solicitud_exam_laboratorio_profesional.php">Solicitud de exámenes</a></li>
                             </ul>

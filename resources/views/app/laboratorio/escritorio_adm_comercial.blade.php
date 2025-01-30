@@ -12,8 +12,8 @@
                             <h5 class="m-b-10 font-weight-bold">Escritorio comercial</h5>
                         </div>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="#">Administración comercial</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('laboratorio.adm_general.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('laboratorio.area_comercial') }}">Administración comercial</a></li>
                         </ul>
                     </div>
                 </div>

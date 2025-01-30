@@ -10,7 +10,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class=" font-weight-bold">Administrador general centro médico</h5>
+                                <h5 class=" font-weight-bold">Administrador general laboratorio</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">

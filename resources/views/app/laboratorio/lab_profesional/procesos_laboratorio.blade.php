@@ -12,8 +12,8 @@
                             <h5 class="m-b-10 font-weight-bold">Procesos</h5>
                         </div>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="escritorio_profesional_laboratorio.php"data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="procesos_laboratorio.php">Procesos</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}"data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('laboratorio.lab_profesional.procesos_laboratorio') }}">Procesos</a></li>
                             </ul>
                         </div>
                     </div>
@@ -25,7 +25,7 @@
                 <div class="col-md-12">
                     <div class="card-deck m-b-30">
                         <div class="card subir">
-                            <a href="{{ ROUTE('app.laboratorio.lab_profesional.solicitud_exam_laboratorio_profesional') }}">
+                            <a href="{{ ROUTE('laboratorio.lab_profesional.solicitud_exam_laboratorio_profesional') }}">
                                 <div class="card-body text-center" style="cursor:pointer">
 									<img class="wid-60 text-center" src="{{ asset('images/iconos/solicitud_examen.svg') }}">
                                     <h5 class="mt-2">Solicitud de exámenes</h5>
@@ -53,7 +53,7 @@
                             </a>
                         </div>
                         <div class="card subir">
-                            <a href="{{ ROUTE('app.laboratorio.lab_profesional.resultados') }}">
+                            <a href="{{ ROUTE('laboratorio.lab_profesional.resultados') }}">
                                 <div class="card-body text-center" style="cursor:pointer">
 									<img class="wid-60 text-center" src="{{ asset('images/iconos/resultado_examenes.svg') }}">
                                     <h5 class="mt-2">Resultados de exámenes</h5>

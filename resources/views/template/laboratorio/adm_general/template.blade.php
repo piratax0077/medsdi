@@ -13,16 +13,30 @@
     <link rel="stylesheet" href="{{ asset('/css/style.css') }}?t={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/style_index.css') }}?t={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/escritorio_laboratorio.css') }}?t={{ time() }}">
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Rating css -->
     <link rel="stylesheet" href='{{ asset('css/plugins/bars-1to10.css') }}'/>
 
     <link rel="stylesheet" href='{{ asset('css/boton-flotante.css') }}'/>
     <!--Estilos base-->
     <link rel="stylesheet" href='{{ asset('css/style.css') }}'/>
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
     <!--Estilos escritorios-->
     <link rel="stylesheet" href='{{ asset('css/escritorios.css') }}'/>
     <!--Estilos formularios sm-->
     <link rel="stylesheet" href='{{ asset('css/formulario_sm.css') }}'/>
+
+        <!-- fRANCISCO -->
+        <script src="{{ asset('js/compras.js') }}"></script>
+
+    <script src="https://kit.fontawesome.com/eb496ab1a0.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
+
     <!-- data tables css -->
     <link rel="stylesheet" href='{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}'/>
     <link rel="stylesheet" href='{{ asset('css/plugins/responsive.bootstrap4.min.css') }}'/>
@@ -33,6 +47,9 @@
     <link rel="stylesheet" href='{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}'/>
     <!-- fileupload-custom css -->
     <link rel="stylesheet" href='{{ asset('css/plugins/dropzone.min.css') }}'/>
+     <!-- fileupload-custom css -->
+     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
+
     <!--Accordion-->
     <link rel="stylesheet" type="text/css" href='{{ asset('css/accordion.css') }}'/>
     <!--Card Sidebar-->
@@ -41,9 +58,14 @@
     <link rel="stylesheet" type="text/css" href='{{ asset('css/pills_modals.css') }}'/>
     <!--Tab wizard_formularios-->
     <link rel="stylesheet" type="text/css" href='{{ asset('css/tab_wizard_formularios.css') }}'/>
+
+    <!-- select2 -->
+    <link rel="stylesheet" type="text/css" href='{{ asset('css/plugins/select2.min.css') }}'/>
+
     <!--Bs-Canvas-->
     <link rel="stylesheet" href='{{ asset('css/bs_canvas.css') }}'/>
     <link rel="stylesheet" type="text/css" href='{{ asset('css/escritorio_laboratorio.css') }}'/>
+    @yield('style')
 
 </head>
 
@@ -55,7 +77,7 @@
         </div>
     </div>
 
-    @include('template.laboratorio.adm_general..menu')
+    @include('template.laboratorio.adm_general.menu')
     @include('template.laboratorio.adm_general.header')
 
 
@@ -116,6 +138,11 @@
     <script src="{{ asset('js/plugins/apexcharts.min.js') }}"></script>
     <!-- peity chart js -->
     <script src="{{ asset('js/plugins/jquery.peity.min.js') }}"></script>
+    <!-- validador de rut -->
+    <script src="{{ asset('js/rut.min.js') }}"></script>
+        <!-- file-upload Js -->
+        <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
+        <!-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> -->
 
     <!--Gráficos-->
     {{--  <script src="{{ asset('js/graficos/sf-prof-admin-cm.js') }}"></script>
@@ -128,7 +155,18 @@
     <!-- sweet alert Js -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
     <script src="{{ asset('js/alerta_suscripcion.js') }}"></script>
-     <!-- Tablas -->
+{{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+
+    <!-- fancy box -->
+    <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
+    <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
+
+    <!--select2 -->
+    <script src="{{ asset('js/plugins/select2.full.min.js')}}"></script>
+
+    <!-- Tablas -->
     <script src="{{ asset('js/facturacion.js') }}"></script>
 	<script>
         function cuenta_corriente() {
@@ -262,6 +300,8 @@
 
          });
 	</script>
+
+    {{--
     <script>
         $(function() {
             var options = {
@@ -477,6 +517,7 @@
             chart.render();
         });
     </script>
+    --}}
     @yield('page-script')
 </body>
 

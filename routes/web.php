@@ -1273,43 +1273,79 @@ Route::post('/agregar_observaciones_tratamiento', [App\Http\Controllers\Escritor
 
 /** LABORATORIO  */
 Route::group([
-    'middleware' => ['role:Laboratorio|Admin|Institucion'],
+    'middleware' => ['role:Admin|Institucion|AsistenteAdm|Adm_Comercial|Profesional|AdministradorLaboratorio'],
     'prefix' => 'Laboratorio',
 ], function () {
-    Route::get('/Laboratorio/home', [App\Http\Controllers\LaboratorioController::class, 'home'])->name('app.laboratorio.adm_general.home');
-    Route::get('/Laboratorio/adm_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'admin_laboratorio'])->name('app.laboratorio.adm_general.admin_laboratorio');
-    Route::get('/Laboratorio/sucursales_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'sucursales_laboratorio'])->name('app.laboratorio.adm_general.sucursales_laboratorio');
-	Route::get('/Laboratorio/profesionales_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'profesionales_laboratorio'])->name('app.laboratorio.adm_general.profesionales_laboratorio');
-	Route::get('/Laboratorio/asistentes_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'asistentes_laboratorio'])->name('app.laboratorio.adm_general.asistentes_laboratorio');
-	Route::get('/Laboratorio/lista_exam', [App\Http\Controllers\LaboratorioController::class, 'lista_exam'])->name('app.laboratorio.adm_general.lista_exam');
-	Route::get('/Laboratorio/administracion', [App\Http\Controllers\LaboratorioController::class, 'administracion'])->name('app.laboratorio.adm_general.administracion');
-	Route::get('/Laboratorio/administracion/Gastos_laboratorio_admin', [App\Http\Controllers\LaboratorioController::class, 'gastos_laboratorio_admin'])->name('app.laboratorio.adm_general.gastos_laboratorio_admin');
-	Route::get('/Laboratorio/administracion/Inventario_laboratorio_admin', [App\Http\Controllers\LaboratorioController::class, 'inventario_laboratorio_admin'])->name('app.laboratorio.adm_general.inventario_laboratorio_admin');
-	Route::get('/Laboratorio/administracion/Proveedores_laboratorio_admin', [App\Http\Controllers\LaboratorioController::class, 'proveedores_laboratorio_admin'])->name('app.laboratorio.adm_general.proveedores_laboratorio_admin');
+    // Route::get('/Laboratorio/home', [App\Http\Controllers\LaboratorioController::class, 'home'])->name('laboratorio.adm_general.home');
+    // Route::get('/Inicio', [App\Http\Controllers\LaboratorioController::class, 'index'])->name('laboratorio.home');
+    Route::get('/Inicio', [App\Http\Controllers\EscritorioInstitucion::class, 'index'])->name('laboratorio.adm_general.home');
 
-	Route::get('/Laboratorio/perfil_admin', [App\Http\Controllers\LaboratorioController::class, 'perfil_admin'])->name('app.laboratorio.adm_general.perfil_admin');
-	Route::get('/Laboratorio/perfil_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'perfil_laboratorio'])->name('app.laboratorio.adm_general.perfil_laboratorio');
-	Route::get('/Laboratorio/suscripcion_pago_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'suscripcion_pago_laboratorio'])->name('app.laboratorio.adm_general.suscripcion_pago_laboratorio');
+    Route::get('/adm_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'admin_laboratorio'])->name('laboratorio.adm_general.admin_laboratorio');
+    Route::get('/sucursales_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'sucursales_laboratorio'])->name('laboratorio.adm_general.sucursales_laboratorio');
+	Route::get('/profesionales_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'profesionales_laboratorio'])->name('laboratorio.adm_general.profesionales_laboratorio');
+	Route::get('/asistentes_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'asistentes_laboratorio'])->name('laboratorio.adm_general.asistentes_laboratorio');
+	Route::get('/lista_exam', [App\Http\Controllers\LaboratorioController::class, 'lista_exam'])->name('laboratorio.adm_general.lista_exam');
+	Route::get('/administracion', [App\Http\Controllers\LaboratorioController::class, 'administracion'])->name('laboratorio.adm_general.administracion');
+	Route::get('/administracion/Gastos_laboratorio_admin', [App\Http\Controllers\LaboratorioController::class, 'gastos_laboratorio_admin'])->name('laboratorio.adm_general.gastos_laboratorio_admin');
+	Route::get('/administracion/Inventario_laboratorio_admin', [App\Http\Controllers\LaboratorioController::class, 'inventario_laboratorio_admin'])->name('laboratorio.adm_general.inventario_laboratorio_admin');
+	Route::get('/administracion/Proveedores_laboratorio_admin', [App\Http\Controllers\LaboratorioController::class, 'proveedores_laboratorio_admin'])->name('laboratorio.adm_general.proveedores_laboratorio_admin');
 
-	Route::get('/Laboratorio/agenda_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'agenda_laboratorio'])->name('app.laboratorio.lab_asistente.agenda_laboratorio');
-	Route::get('/Laboratorio/orden_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'orden_laboratorio'])->name('app.laboratorio.lab_asistente.orden_laboratorio');
-	Route::get('/Laboratorio/cotizar_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'cotizar_laboratorio'])->name('app.laboratorio.lab_asistente.cotizar_laboratorio');
-	Route::get('/Laboratorio/pacientes_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'pacientes_laboratorio'])->name('app.laboratorio.lab_asistente.pacientes_laboratorio');
-	Route::get('/Laboratorio/resultados_examenes_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'resultados_examenes_laboratorio'])->name('app.laboratorio.lab_asistente.resultados_examenes_laboratorio');
+	Route::get('/perfil_admin', [App\Http\Controllers\LaboratorioController::class, 'perfil_admin'])->name('laboratorio.adm_general.perfil_admin');
+	Route::get('/perfil_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'perfil_laboratorio'])->name('laboratorio.adm_general.perfil_laboratorio');
+	Route::get('/suscripcion_pago_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'suscripcion_pago_laboratorio'])->name('laboratorio.adm_general.suscripcion_pago_laboratorio');
 
-    Route::get('/Laboratorio/lab_asistente', [App\Http\Controllers\LaboratorioController::class, 'escritorio_asistente_laboratorio'])->name('app.laboratorio.lab_asistente');
-    Route::get('/Laboratorio/escritorio_profesional_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'escritorio_profesional_laboratorio'])->name('app.laboratorio.lab_profesional.escritorio_profesional_laboratorio');
-	Route::get('/Laboratorio/pacientes_laboratoriop', [App\Http\Controllers\LaboratorioController::class, 'pacientes_laboratorio'])->name('app.laboratorio.lab_profesional.pacientes_laboratorio');
+	Route::get('/agenda_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'agenda_laboratorio'])->name('laboratorio.lab_asistente.agenda_laboratorio');
+	Route::get('/orden_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'orden_laboratorio'])->name('laboratorio.lab_asistente.orden_laboratorio');
+	Route::get('/cotizar_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'cotizar_laboratorio'])->name('laboratorio.lab_asistente.cotizar_laboratorio');
+	Route::get('/pacientes_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'pacientes_laboratorio'])->name('laboratorio.lab_asistente.pacientes_laboratorio');
+	Route::get('/resultados_examenes_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'resultados_examenes_laboratorio'])->name('laboratorio.lab_asistente.resultados_examenes_laboratorio');
 
-	Route::get('/Laboratorio/procesos_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'procesos_laboratorio'])->name('app.laboratorio.lab_profesional.procesos_laboratorio');
-	Route::get('/Laboratorio/inventario_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'inventario_laboratorio'])->name('app.laboratorio.lab_profesional.inventario_laboratorio');
-	Route::get('/Laboratorio/gastos_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'gastos_laboratorio'])->name('app.laboratorio.lab_profesional.gastos_laboratorio');
-	Route::get('/Laboratorio/resultados', [App\Http\Controllers\LaboratorioController::class, 'resultados'])->name('app.laboratorio.lab_profesional.resultados');
-	Route::get('/Laboratorio/proveedores_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'proveedores_laboratorio'])->name('app.laboratorio.lab_profesional.proveedores_laboratorio');
-	Route::get('/Laboratorio/recepcion_muestras', [App\Http\Controllers\LaboratorioController::class, 'recepcion_muestras'])->name('app.laboratorio.lab_profesional.recepcion_muestras');
-	Route::get('/Laboratorio/solicitud_exam_laboratorio_profesional', [App\Http\Controllers\LaboratorioController::class, 'solicitud_exam_laboratorio_profesional'])->name('app.laboratorio.lab_profesional.solicitud_exam_laboratorio_profesional');
-    Route::get('/dame_laboratorio/{id}', [App\Http\Controllers\LaboratorioController::class, 'dame_laboratorio'])->name('app.laboratorio.lab_profesional.dame_laboratorio');
+    Route::get('/lab_asistente', [App\Http\Controllers\LaboratorioController::class, 'escritorio_asistente_laboratorio'])->name('laboratorio.lab_asistente');
+    Route::get('/escritorio_profesional_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'escritorio_profesional_laboratorio'])->name('laboratorio.lab_profesional.escritorio_profesional_laboratorio');
+	Route::get('/pacientes_laboratoriop', [App\Http\Controllers\LaboratorioController::class, 'pacientes_laboratorio'])->name('laboratorio.lab_profesional.pacientes_laboratorio');
+
+	Route::get('/procesos_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'procesos_laboratorio'])->name('laboratorio.lab_profesional.procesos_laboratorio');
+	Route::get('/inventario_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'inventario_laboratorio'])->name('laboratorio.lab_profesional.inventario_laboratorio');
+	Route::get('/gastos_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'gastos_laboratorio'])->name('laboratorio.lab_profesional.gastos_laboratorio');
+	Route::get('/resultados', [App\Http\Controllers\LaboratorioController::class, 'resultados'])->name('laboratorio.lab_profesional.resultados');
+	Route::get('/proveedores_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'proveedores_laboratorio'])->name('laboratorio.lab_profesional.proveedores_laboratorio');
+	Route::get('/recepcion_muestras', [App\Http\Controllers\LaboratorioController::class, 'recepcion_muestras'])->name('laboratorio.lab_profesional.recepcion_muestras');
+	Route::get('/solicitud_exam_laboratorio_profesional', [App\Http\Controllers\LaboratorioController::class, 'solicitud_exam_laboratorio_profesional'])->name('laboratorio.lab_profesional.solicitud_exam_laboratorio_profesional');
+    Route::get('/dame_laboratorio/{id}', [App\Http\Controllers\LaboratorioController::class, 'dame_laboratorio'])->name('laboratorio.lab_profesional.dame_laboratorio');
     Route::post('editar_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'editar_laboratorio'])->name('laboratorio.editar_laboratorio');
+
+    Route::get('/Configuracion', [App\Http\Controllers\LaboratorioController::class, 'configuracion'])->name('laboratorio.configuracion');
+    Route::get('/Configuracion/comercial', [App\Http\Controllers\LaboratorioController::class, 'perfil_laboratorio_comercial'])->name('laboratorio.configuracion_esc_comercial');
+    Route::post('/Configuracion/perfil/datos/editar', [App\Http\Controllers\LaboratorioController::class, 'editarDatosPerfil'])->name('laboratorio.editar_datos_perfil');
+    Route::post('/Configuracion/perfil/datos/responsable/editar', [App\Http\Controllers\LaboratorioController::class, 'editarDatosPerfilResponsable'])->name('laboratorio.editar_datos_perfil_responsable');
+    Route::post('/Configuracion/perfil/datos/responsable_medico/editar', [App\Http\Controllers\LaboratorioController::class, 'editarDatosPerfilResponsableMedico'])->name('laboratorio.editar_datos_perfil_responsable_medico');
+    Route::get('/Configuracion/perfil_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'perfil'])->name('laboratorio.perfil_laboratorio');
+    Route::get('/Configuracion/departamentos_servicios', [App\Http\Controllers\LaboratorioController::class, 'departamentos'])->name('laboratorio.departamentos_servicios');
+    Route::post('/registrar_servicio', [App\Http\Controllers\LaboratorioController::class, 'registrar_servicio'])->name('laboratorio.registrar_servicio');
+    Route::post('/registrar_servicio_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'registrar_servicio_laboratorio'])->name('laboratorio.registrar_servicio_laboratorio');
+    Route::post('/eliminar_servicio_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'eliminar_servicio_laboratorio'])->name('laboratorio.eliminar_servicio_laboratorio');
+    Route::get('/Estadisticas', [App\Http\Controllers\LaboratorioController::class, 'estadisticas'])->name('laboratorio.estadisticas');
+    Route::get('/Profesionales_institucion', [App\Http\Controllers\LaboratorioController::class, 'profesionales_institucion'])->name('laboratorio.profesionales_institucion');
+    // Route::get('/Mis/Profesionales', [App\Http\Controllers\LaboratorioController::class, 'adm_inst_mis_profesionales'])->name('laboratorio.mis_profesionales');
+    Route::get('/Pacientes', [App\Http\Controllers\LaboratorioController::class, 'adm_buscar_pacientes'])->name('laboratorio.pacientes');
+	Route::get('/Personal', [App\Http\Controllers\LaboratorioController::class, 'personal'])->name('laboratorio.personal');
+    Route::get('/Mis/Profesionales', [App\Http\Controllers\LaboratorioController::class, 'adm_inst_mis_profesionales'])->name('adm_cm.mis_profesionales');
+    Route::get('/Profesional/lugar_atencion/horario', [App\Http\Controllers\LaboratorioController::class, 'mi_horario_lugar_atencion'])->name('laboratorio.prof_horario_lugar_atencion');
+    Route::post('dame_profesional_lab', [App\Http\Controllers\LaboratorioController::class, 'dame_profesional'])->name('laboratorio.dame_profesional_cm');
+
+	Route::get('/Profesionales', [App\Http\Controllers\LaboratorioController::class, 'profesionales'])->name('laboratorio.profesionales');
+    Route::get('/Profesionales/{id}', [App\Http\Controllers\LaboratorioController::class, 'profesionales_id'])->name('laboratorio.profesionales_id');
+    // Route::get('/Profesionales_institucion', [App\Http\Controllers\LaboratorioController::class, 'profesionales_institucion'])->name('laboratorio.profesionales_institucion');
+    Route::get('/Mis/Profesionales', [App\Http\Controllers\LaboratorioController::class, 'adm_inst_mis_profesionales'])->name('laboratorio.mis_profesionales');
+	Route::post('/Profesionales/asociar/existente', [App\Http\Controllers\LaboratorioController::class, 'asociarProfesionalExistente'])->name('laboratorio.asociar_profesional_existente');
+	Route::post('/Profesionales/asociar/nuevo', [App\Http\Controllers\LaboratorioController::class, 'asociarProfesionalNuevo'])->name('laboratorio.asociar_profesional_nuevo');
+	Route::get('/Profesionales/buscar/{id_profesional}', [App\Http\Controllers\LaboratorioController::class, 'buscar_profesional'])->name('laboratorio.profesional_buscar');
+
+    Route::get('/historial_mensajes_profesional/{id}', [App\Http\Controllers\LaboratorioController::class, 'historial_mensajes_profesional'])->name('laboratorio.historial_mensajes_profesional');
+    Route::get('/Administracion/Comercial', [App\Http\Controllers\LaboratorioController::class, 'areaComercial'])->name('laboratorio.area_comercial');
+    // Route::post('dame_profesional_servicio', [App\Http\Controllers\LaboratorioController::class, 'dame_profesional'])->name('laboratorio.dame_profesional_cm');
+    Route::post('agregar_laboratorio',[App\Http\Controllers\LaboratorioController::class, 'agregar_laboratorio'])->name('laboratorio.agregar_laboratorio');
+    Route::post('eliminar_laboratorio',[App\Http\Controllers\LaboratorioController::class, 'eliminar_laboratorio'])->name('laboratorio.eliminar_laboratorio_cm');
 });
 
 
@@ -1710,61 +1746,22 @@ Route::group([
 Route::post('/examen/indicar_examen_cirugia', [App\Http\Controllers\ExamenMedicoController::class, 'indicar_examen_cirugia'])->name('examen.indicar_examen_cirugia');
 
 Route::get('/dosis/get', [App\Http\Controllers\UtilsController::class, 'getDosis'])->name('dosis.get');
-    /** MEDICAMENTOS */
-    Route::post('/autocomplete', [App\Http\Controllers\UtilsController::class, 'autocomplete'])->name('autocompletar.medicamento');
-    Route::post('/medicamentos/get', [App\Http\Controllers\UtilsController::class, 'getArticulo'])->name('medicamentos.get');
 
-        /** EXAMEN MEDICO */
-        Route::get('/examen/medico/get', [App\Http\Controllers\ExamenMedicoController::class, 'get_examen'])->name('examen.medico.get');
-        Route::get('/examen/medico/sub/tipo/get', [App\Http\Controllers\ExamenMedicoController::class, 'get_sub_tipo_examen'])->name('examen.medico.sub_tipo_examen.get');
-        Route::get('/examen/medico/buscar/get', [App\Http\Controllers\ExamenMedicoController::class, 'buscar_examen'])->name('examen.medico.buscar.examen.get');
-        Route::post('/examen/indicar_examen_cirugia', [App\Http\Controllers\ExamenMedicoController::class, 'indicar_examen_cirugia'])->name('examen.indicar_examen_cirugia');
-        Route::post('/examen/eliminar_examen_cirugia', [App\Http\Controllers\ExamenMedicoController::class, 'eliminar_examen_cirugia'])->name('examen.eliminar_examen_cirugia');
+/** MEDICAMENTOS */
+Route::post('/autocomplete', [App\Http\Controllers\UtilsController::class, 'autocomplete'])->name('autocompletar.medicamento');
+Route::post('/medicamentos/get', [App\Http\Controllers\UtilsController::class, 'getArticulo'])->name('medicamentos.get');
 
-        /** FRECUENCIA MEDICAMENTO */
-    Route::get('/frecuencia/get', [App\Http\Controllers\UtilsController::class, 'getFrecuencia'])->name('frecuencia.get');
-    Route::get('/presentacion/get', [App\Http\Controllers\UtilsController::class, 'getCantComp'])->name('presentacion.get');
-/** -- LABORATORIO --  **/
+/** EXAMEN MEDICO */
+Route::get('/examen/medico/get', [App\Http\Controllers\ExamenMedicoController::class, 'get_examen'])->name('examen.medico.get');
+Route::get('/examen/medico/sub/tipo/get', [App\Http\Controllers\ExamenMedicoController::class, 'get_sub_tipo_examen'])->name('examen.medico.sub_tipo_examen.get');
+Route::get('/examen/medico/buscar/get', [App\Http\Controllers\ExamenMedicoController::class, 'buscar_examen'])->name('examen.medico.buscar.examen.get');
+Route::post('/examen/indicar_examen_cirugia', [App\Http\Controllers\ExamenMedicoController::class, 'indicar_examen_cirugia'])->name('examen.indicar_examen_cirugia');
+Route::post('/examen/eliminar_examen_cirugia', [App\Http\Controllers\ExamenMedicoController::class, 'eliminar_examen_cirugia'])->name('examen.eliminar_examen_cirugia');
 
-Route::group([
-	'middleware' => ['role:Admin|Institucion|AsistenteAdm|Adm_Comercial|Profesional|AdministradorLaboratorio'],
-    'prefix' => 'Laboratorio',
-], function () {
-    Route::get('/Inicio', [App\Http\Controllers\LaboratorioController::class, 'index'])->name('laboratorio.home');
-    Route::get('/Configuracion', [App\Http\Controllers\LaboratorioController::class, 'configuracion'])->name('laboratorio.configuracion');
-    Route::get('/Configuracion/comercial', [App\Http\Controllers\LaboratorioController::class, 'perfil_laboratorio_comercial'])->name('laboratorio.configuracion_esc_comercial');
-    Route::post('/Configuracion/perfil/datos/editar', [App\Http\Controllers\LaboratorioController::class, 'editarDatosPerfil'])->name('laboratorio.editar_datos_perfil');
-    Route::post('/Configuracion/perfil/datos/responsable/editar', [App\Http\Controllers\LaboratorioController::class, 'editarDatosPerfilResponsable'])->name('laboratorio.editar_datos_perfil_responsable');
-    Route::post('/Configuracion/perfil/datos/responsable_medico/editar', [App\Http\Controllers\LaboratorioController::class, 'editarDatosPerfilResponsableMedico'])->name('laboratorio.editar_datos_perfil_responsable_medico');
-    Route::get('/Configuracion/perfil_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'perfil'])->name('laboratorio.perfil_laboratorio');
-    Route::get('/Configuracion/departamentos_servicios', [App\Http\Controllers\LaboratorioController::class, 'departamentos'])->name('laboratorio.departamentos_servicios');
-    Route::post('/registrar_servicio', [App\Http\Controllers\LaboratorioController::class, 'registrar_servicio'])->name('laboratorio.registrar_servicio');
-    Route::post('/registrar_servicio_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'registrar_servicio_laboratorio'])->name('laboratorio.registrar_servicio_laboratorio');
-    Route::post('/eliminar_servicio_laboratorio', [App\Http\Controllers\LaboratorioController::class, 'eliminar_servicio_laboratorio'])->name('laboratorio.eliminar_servicio_laboratorio');
-    Route::get('/Estadisticas', [App\Http\Controllers\LaboratorioController::class, 'estadisticas'])->name('laboratorio.estadisticas');
-    Route::get('/Profesionales_institucion', [App\Http\Controllers\LaboratorioController::class, 'profesionales_institucion'])->name('laboratorio.profesionales_institucion');
-    Route::get('/Mis/Profesionales', [App\Http\Controllers\LaboratorioController::class, 'adm_inst_mis_profesionales'])->name('laboratorio.mis_profesionales');
-    Route::get('/Pacientes', [App\Http\Controllers\LaboratorioController::class, 'adm_buscar_pacientes'])->name('laboratorio.pacientes');
-	Route::get('/Personal', [App\Http\Controllers\LaboratorioController::class, 'personal'])->name('laboratorio.personal');
-    Route::get('/Mis/Profesionales', [App\Http\Controllers\LaboratorioController::class, 'adm_inst_mis_profesionales'])->name('adm_cm.mis_profesionales');
-    Route::get('/Profesional/lugar_atencion/horario', [App\Http\Controllers\LaboratorioController::class, 'mi_horario_lugar_atencion'])->name('laboratorio.prof_horario_lugar_atencion');
-    Route::post('dame_profesional_lab', [App\Http\Controllers\LaboratorioController::class, 'dame_profesional'])->name('laboratorio.dame_profesional_cm');
+/** FRECUENCIA MEDICAMENTO */
+Route::get('/frecuencia/get', [App\Http\Controllers\UtilsController::class, 'getFrecuencia'])->name('frecuencia.get');
+Route::get('/presentacion/get', [App\Http\Controllers\UtilsController::class, 'getCantComp'])->name('presentacion.get');
 
-	Route::get('/Profesionales', [App\Http\Controllers\LaboratorioController::class, 'profesionales'])->name('laboratorio.profesionales');
-    Route::get('/Profesionales/{id}', [App\Http\Controllers\LaboratorioController::class, 'profesionales_id'])->name('laboratorio.profesionales_id');
-    Route::get('/Profesionales_institucion', [App\Http\Controllers\LaboratorioController::class, 'profesionales_institucion'])->name('laboratorio.profesionales_institucion');
-    Route::get('/Mis/Profesionales', [App\Http\Controllers\LaboratorioController::class, 'adm_inst_mis_profesionales'])->name('laboratorio.mis_profesionales');
-	Route::post('/Profesionales/asociar/existente', [App\Http\Controllers\LaboratorioController::class, 'asociarProfesionalExistente'])->name('laboratorio.asociar_profesional_existente');
-	Route::post('/Profesionales/asociar/nuevo', [App\Http\Controllers\LaboratorioController::class, 'asociarProfesionalNuevo'])->name('laboratorio.asociar_profesional_nuevo');
-	Route::get('/Profesionales/buscar/{id_profesional}', [App\Http\Controllers\LaboratorioController::class, 'buscar_profesional'])->name('laboratorio.profesional_buscar');
-
-    Route::get('/historial_mensajes_profesional/{id}', [App\Http\Controllers\LaboratorioController::class, 'historial_mensajes_profesional'])->name('laboratorio.historial_mensajes_profesional');
-    Route::get('/Administracion/Comercial', [App\Http\Controllers\LaboratorioController::class, 'areaComercial'])->name('laboratorio.area_comercial');
-    // Route::post('dame_profesional_servicio', [App\Http\Controllers\LaboratorioController::class, 'dame_profesional'])->name('laboratorio.dame_profesional_cm');
-    Route::post('agregar_laboratorio',[App\Http\Controllers\LaboratorioController::class, 'agregar_laboratorio'])->name('laboratorio.agregar_laboratorio');
-    Route::post('eliminar_laboratorio',[App\Http\Controllers\LaboratorioController::class, 'eliminar_laboratorio'])->name('laboratorio.eliminar_laboratorio_cm');
-
-});
 
 Route::post('guardar_box_atencion', [App\Http\Controllers\BoxController::class, 'guardarBoxAtencion'])->name('guardar_box_atencion');
 Route::post('guardar_box_servicio', [App\Http\Controllers\BoxController::class, 'guardarBoxServicio'])->name('adm_cm.guardar_box_servicio');
@@ -1775,6 +1772,7 @@ Route::post('finalizar_contrato',[App\Http\Controllers\AdministradorCmController
 Route::post('generar_liquidacion_profesional',[App\Http\Controllers\AdministradorCmController::class,'generar_liquidacion_profesional'])->name('adm_cm.generar_liquidacion_profesional');
 Route::post('eliminar_liquidacion_profesional',[App\Http\Controllers\AdministradorCmController::class,'eliminar_liquidacion_profesional'])->name('adm_cm.eliminar_liquidacion_profesional');
 Route::post('generar_pdf_liquidacion',[App\Http\Controllers\AdministradorCmController::class,'generarPdfLiquidacion'])->name('adm_cm.generar_pdf_liquidacion');
+
 Route::group([
 	'middleware' => ['role:Admin|Institucion|AsistenteAdm|Adm_Comercial|Adm_Institucion'],
     'prefix' => 'Administrador/gastos',
