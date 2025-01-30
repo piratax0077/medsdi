@@ -1979,20 +1979,20 @@ class ficha_atencionController extends Controller
         $total_general = 0;
 
          // Lista de funciones a llamar con sus argumentos
-    $funciones = [
-        ['dameMaxilarSuperiorGeneralTratamiento', [$id_paciente, $tipo_especialidad]],
-        ['dameMaxilarSuperiorGeneralDiagnostico', [$id_paciente, $tipo_especialidad]],
-        ['dameMaxilarInferiorGeneralTratamiento', [$id_paciente, $tipo_especialidad]],
-        ['dameMaxilarInferiorGeneralDiagnostico', [$id_paciente, $tipo_especialidad]],
-        ['dameBocaCompletaGeneralTratamiento', [$id_paciente, $tipo_especialidad]],
-        ['dameBocaCompletaGeneralDiagnostico', [$id_paciente, $tipo_especialidad]],
-        ['dameMaxilarInferiorGeneralTratamientoEndodoncia', [$id_paciente, $tipo_especialidad]],
-        ['dameMaxilarInferiorGeneralDiagnosticoEndodoncia', [$id_paciente, $tipo_especialidad]],
-        ['dameMaxilarSuperiorGeneralTratamientoEndodoncia', [$id_paciente, $tipo_especialidad]],
-        ['dameMaxilarSuperiorGeneralDiagnosticoEndodoncia', [$id_paciente, $tipo_especialidad]],
-        ['dameCompletaEndoTratamiento', [$id_paciente, $tipo_especialidad]],
-        ['dameCompletaEndoDiagnostico', [$id_paciente, $tipo_especialidad]]
-    ];
+        $funciones = [
+            ['dameMaxilarSuperiorGeneralTratamiento', [$id_paciente, $tipo_especialidad]],
+            ['dameMaxilarSuperiorGeneralDiagnostico', [$id_paciente, $tipo_especialidad]],
+            ['dameMaxilarInferiorGeneralTratamiento', [$id_paciente, $tipo_especialidad]],
+            ['dameMaxilarInferiorGeneralDiagnostico', [$id_paciente, $tipo_especialidad]],
+            ['dameBocaCompletaGeneralTratamiento', [$id_paciente, $tipo_especialidad]],
+            ['dameBocaCompletaGeneralDiagnostico', [$id_paciente, $tipo_especialidad]],
+            ['dameMaxilarInferiorGeneralTratamientoEndodoncia', [$id_paciente, $tipo_especialidad]],
+            ['dameMaxilarInferiorGeneralDiagnosticoEndodoncia', [$id_paciente, $tipo_especialidad]],
+            ['dameMaxilarSuperiorGeneralTratamientoEndodoncia', [$id_paciente, $tipo_especialidad]],
+            ['dameMaxilarSuperiorGeneralDiagnosticoEndodoncia', [$id_paciente, $tipo_especialidad]],
+            ['dameCompletaEndoTratamiento', [$id_paciente, $tipo_especialidad]],
+            ['dameCompletaEndoDiagnostico', [$id_paciente, $tipo_especialidad]]
+        ];
 
        // Recorremos cada función
         foreach ($funciones as $funcion) {
@@ -2023,17 +2023,29 @@ class ficha_atencionController extends Controller
         return [$total_general, $total_odontograma];
     }
 
-    public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad){
-        $odontogramas = OdontogramaPaciente::select('odontogramas_pacientes.*','diagnosticos_dental.descripcion','diagnosticos_dental.valor','tratamientos_dental.descripcion as diagnostico')
+    public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null){
+        $query = OdontogramaPaciente::select(
+            'odontogramas_pacientes.*',
+            'diagnosticos_dental.descripcion',
+            'diagnosticos_dental.cantidad_bloques',
+            'diagnosticos_dental.valor',
+            'tratamientos_dental.descripcion as diagnostico')
             ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
-            ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico','=','tratamientos_dental.id')
+            ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
             ->where('odontogramas_pacientes.id_paciente', $id_paciente)
             // ->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion)
             ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
-            ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad)
-            // ->where('odontogramas_pacientes.atendido',0)
-            ->get();
-        return $odontogramas;
+            ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
+
+            // Verificar si el parámetro $id_presupuesto no es nulo
+            if (!is_null($id_presupuesto)) {
+                $query->where('odontogramas_pacientes.id_presupuesto', $id_presupuesto);
+            }
+
+            // Obtener los resultados
+            $odontogramas = $query->get();
+
+            return $odontogramas;
     }
 
     public function dameCompletaEndoTratamiento($id_paciente, $tipo_especialidad){
@@ -2060,24 +2072,26 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameMaxilarSuperiorGeneralTratamientoEndodoncia($id_paciente){
+    public function dameMaxilarSuperiorGeneralTratamientoEndodoncia($id_paciente,$tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('examenes_boca_general.localizacion','Maxilar superior')
         ->where('examenes_boca_general.tipo_examen',2)
         ->where('examenes_boca_general.especialidad_examen','tratamiento')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
     }
 
-    public function dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($id_paciente){
+    public function dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($id_paciente,$tipo_especialidad){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Maxilar superior')
         ->where('examenes_boca_general.tipo_examen',2)
         ->where('especialidad_examen','diagnostico')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
     }

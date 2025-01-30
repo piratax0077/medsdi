@@ -1,4 +1,5 @@
 @extends('template.dental.template_od_impl')
+
 @section('styles')
 <style>
     .imagen_rx{

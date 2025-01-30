@@ -65,6 +65,7 @@
 
     </style>
     @yield('css-btn-autorizacion')
+    @yield('styles')
 </head>
 <body>
     @include('atencion_odontologica.generales.eval_periimplante')
@@ -167,6 +168,12 @@
     <!--Tablas y Toggle atención ginecobstetrica-->
     <script src="{{ asset('js/atencion_especialidades.js') }}?upd={{ random_int(1111,9999) }}"></script>
     <script src="{{ asset('js/cara_dental.js') }}?upd={{ random_int(1111,9999) }}"></script>
+
+    <script>
+        window.getDiagnosticoDentalUrl = "{{ route('dental.getDiagnosticoDental') }}";
+    </script>
+    @routes
+    <script src="{{asset('js/dental/tratamientos_dental.js')}}"></script>
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -319,6 +326,8 @@
             });
         };
     </script>
+
+
     @yield('js_inferior')
     @yield('page-script')
     @yield('page-script-ficha-atencion'){{-- ficha_orl.blade --}}
@@ -328,6 +337,7 @@
     @yield('js-sidebar') {{-- seccion js side bar --}}
     @yield('js-lic') {{-- seccion js side bar --}}
 	@yield('page-script-btn-autorizacion')
+
 </body>
 
 </html>
