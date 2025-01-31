@@ -226,26 +226,22 @@
                                                                                                                                         <tr>
                                                                                                                                             <th class="text-center align-middle">Fecha</th>
                                                                                                                                             <th class="text-center align-middle">Procedimiento</th>
-                                                                                                                                            <th class="text-center align-middle">Tipo de antecedente</th>
                                                                                                                                             <th class="text-center align-middle">Responsable</th>
                                                                                                                                             <th class="text-center align-middle">Detalles / Comentarios</th>
                                                                                                                                         </tr>
                                                                                                                                     </thead>
-                                                                                                                                    <tbody>
+
+                                                                                                                                    <!-- Sección Anestesia -->
+                                                                                                                                    <tbody id="tbody_anestesia">
+                                                                                                                                        <tr class="table-primary">
+                                                                                                                                            <td colspan="4" class="text-center"><strong>Antecedentes de Anestesia</strong></td>
+                                                                                                                                        </tr>
                                                                                                                                         @if (isset($antecedentes))
                                                                                                                                             @foreach ($antecedentes as $antecedente)
-                                                                                                                                                @if ($antecedente->estado == 1)
+                                                                                                                                                @if ($antecedente->id_tipo_antecedente == 1 && $antecedente->estado == 1)
                                                                                                                                                     <tr>
                                                                                                                                                         <td class="text-center align-middle">{{ $antecedente->antecedente_data->fecha }}</td>
                                                                                                                                                         <td class="text-center align-middle">{{ $antecedente->antecedente_data->procedimiento }}</td>
-                                                                                                                                                        <td class="text-center align-middle">
-                                                                                                                                                            @switch($antecedente->id_tipo_antecedente)
-                                                                                                                                                                @case(1) Anestesia @break
-                                                                                                                                                                @case(4) Hemorragia @break
-                                                                                                                                                                @case(9) Fractura @break
-                                                                                                                                                                @default Otro
-                                                                                                                                                            @endswitch
-                                                                                                                                                        </td>
                                                                                                                                                         <td class="text-center align-middle">
                                                                                                                                                             {{ $antecedente->antecedente_data->profesional ?? 'N/A' }} <br/>
                                                                                                                                                             {{ $antecedente->antecedente_data->rut_responsable }}
@@ -256,7 +252,53 @@
                                                                                                                                             @endforeach
                                                                                                                                         @endif
                                                                                                                                     </tbody>
+
+                                                                                                                                    <!-- Sección Hemorragias -->
+                                                                                                                                    <tbody id="tbody_hemorragias">
+                                                                                                                                        <tr class="table-danger">
+                                                                                                                                            <td colspan="4" class="text-center"><strong>Antecedentes de Hemorragia</strong></td>
+                                                                                                                                        </tr>
+                                                                                                                                        @if (isset($antecedentes))
+                                                                                                                                            @foreach ($antecedentes as $antecedente)
+                                                                                                                                                @if ($antecedente->id_tipo_antecedente == 4 && $antecedente->estado == 1)
+                                                                                                                                                    <tr>
+                                                                                                                                                        <td class="text-center align-middle">{{ $antecedente->antecedente_data->fecha }}</td>
+                                                                                                                                                        <td class="text-center align-middle">{{ $antecedente->antecedente_data->procedimiento }}</td>
+                                                                                                                                                        <td class="text-center align-middle">
+                                                                                                                                                            {{ $antecedente->antecedente_data->profesional ?? 'N/A' }} <br/>
+                                                                                                                                                            {{ $antecedente->antecedente_data->rut_responsable }}
+                                                                                                                                                        </td>
+                                                                                                                                                        <td class="text-center align-middle">{{ $antecedente->comentario }}</td>
+                                                                                                                                                    </tr>
+                                                                                                                                                @endif
+                                                                                                                                            @endforeach
+                                                                                                                                        @endif
+                                                                                                                                    </tbody>
+
+                                                                                                                                    <!-- Sección Fracturas -->
+                                                                                                                                    <tbody id="tbody_fracturas">
+                                                                                                                                        <tr class="table-warning">
+                                                                                                                                            <td colspan="4" class="text-center"><strong>Antecedentes de Fracturas</strong></td>
+                                                                                                                                        </tr>
+                                                                                                                                        @if (isset($antecedentes))
+                                                                                                                                            @foreach ($antecedentes as $antecedente)
+                                                                                                                                                @if ($antecedente->id_tipo_antecedente == 9 && $antecedente->estado == 1)
+                                                                                                                                                    <tr>
+                                                                                                                                                        <td class="text-center align-middle">{{ $antecedente->antecedente_data->fecha }}</td>
+                                                                                                                                                        <td class="text-center align-middle">{{ $antecedente->antecedente_data->procedimiento }}</td>
+                                                                                                                                                        <td class="text-center align-middle">
+                                                                                                                                                            {{ $antecedente->antecedente_data->profesional ?? 'N/A' }} <br/>
+                                                                                                                                                            {{ $antecedente->antecedente_data->rut_responsable }}
+                                                                                                                                                        </td>
+                                                                                                                                                        <td class="text-center align-middle">{{ $antecedente->comentario }}</td>
+                                                                                                                                                    </tr>
+                                                                                                                                                @endif
+                                                                                                                                            @endforeach
+                                                                                                                                        @endif
+                                                                                                                                    </tbody>
+
                                                                                                                                 </table>
+
 
                                                                                                                             </div>
                                                                                                                         </div>

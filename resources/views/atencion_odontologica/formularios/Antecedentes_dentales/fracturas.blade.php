@@ -189,6 +189,7 @@
                 if(resp.estado==1)
                 {
                     var html_ = '';
+                    var html__ = '';
                     var permiso_ = '';
                     var id_users = parseInt('{{ Auth::user()->id }}');
 
@@ -216,6 +217,35 @@
 
                     });
                     $('#'+div+' tbody').html(html_);
+
+                    $('#tbody_fracturas').empty();
+                    $('#tbody_fracturas').append(`
+                    <tr class="table-primary">
+                        <td colspan="4" class="text-center"><strong>Antecedentes de Anestesia</strong></td>
+                    </tr>
+                    `);
+                    resp.registros.forEach(e => {
+
+                        // permiso_ = '';
+                        // if(e.id_users == id_users)
+                        // permiso_ = `
+                        //     <buttom class="btn btn-icon btn-info feather icon-edit-2" onclick="verModalAgregar('show',${tipo},${e.id})"></buttom>
+                        //     <buttom class="btn btn-icon btn-danger feather icon-x-square" onclick="verModalDesactivar('show',${tipo},${e.id})"></buttom>
+                        // `;
+
+                        html__ +=`
+                            <tr>
+                                <td class="text-center align-middle">${e.antecedente_data.fecha_regitro}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.procedimiento}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.profesional} <br> ${e.antecedente_data.rut_responsable}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.comentario}</td>
+
+
+                            </tr>
+                        `;
+
+                    });
+                    $('#tbody_fracturas').append(html__);
                 }
             },
             error: (resp)=>{
