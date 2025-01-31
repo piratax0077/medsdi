@@ -2222,8 +2222,10 @@ class EscritorioProfesional extends Controller
 
     public function eliminar_imagen_dental_paciente(Request $req){
         $imagen = ImagenesDentalPaciente::find($req->id);
+        return $imagen;
        // recibimos el path de la imagen
        $path = $req->path;
+        return $path;
         // eliminamos el archivo
         $imagen->paths_imagenes = json_encode(array_diff(json_decode($imagen->paths_imagenes, true), [$path]));
         // actualizamos el registro en la base de datos

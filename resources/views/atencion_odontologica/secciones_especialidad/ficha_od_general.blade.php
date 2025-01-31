@@ -682,7 +682,7 @@
                                                                                                     <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
                                                                                                         <div class="form-group">
 
-                                                                                                            <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nuevas_imagenes_dent({{ $count }})">MOSTRAR NUEVA PIEZA</button>
+                                                                                                            <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nuevas_imagenes_dent({{ $count }})">CARGAR NUEVAS IMAGENES</button>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
@@ -7796,7 +7796,7 @@ function eliminar_imagen_dental(id,path){
         if (confirm) {
             confirmar_eliminar_imagen_dental(id,path);
         } else {
-            Swal.fire('Cancelado', 'La imagen no fue eliminada :(', 'error');
+            swal('Cancelado', 'La imagen no fue eliminada :(', 'error');
         }
     });
 

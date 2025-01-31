@@ -110,44 +110,100 @@
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Antecedentes Generales</label>
 
-                                                                                                               <table class="table" id="tabla_antecedentes_paciente">
-                                                                                                                <thead>
-                                                                                                                    <tr>
-                                                                                                                        <th>Antecedentes Médicos</th>
-                                                                                                                        <th>Comentario</th>
-                                                                                                                    </tr>
-                                                                                                                </thead>
-                                                                                                                <tbody>
-                                                                                                                    <tr>
-                                                                                                                        <td>Transfusion</td>
-                                                                                                                        <td>{{ $antecedentes_paciente->transfusion }}</td>
-                                                                                                                    </tr>
-                                                                                                                    <tr>
-                                                                                                                        <td>Donación de órganos</td>
-                                                                                                                        <td>{{ $antecedentes_paciente->dona_organos }}</td>
-                                                                                                                    </tr>
-                                                                                                                    <tr>
-                                                                                                                        <td>Donación de órganos parcial</td>
-                                                                                                                        <td>{{ $antecedentes_paciente->dona_organos_parcial }}</td>
-                                                                                                                    </tr>
-                                                                                                                    <tr>
-                                                                                                                        <td>Donación de sangre</td>
-                                                                                                                        <td>{{ $antecedentes_paciente->dona_sangre }}</td>
-                                                                                                                    </tr>
-                                                                                                                    <tr>
-                                                                                                                        <td>Hepatitis</td>
-                                                                                                                        <td>{{ $antecedentes_paciente->hepatitis }}</td>
-                                                                                                                    </tr>
-                                                                                                                    <tr>
-                                                                                                                        <td>Impedimento para donar</td>
-                                                                                                                        <td>{{ $antecedentes_paciente->impedimento_donar }}</td>
-                                                                                                                    </tr>
-                                                                                                                    <tr>
-                                                                                                                        <td>Comentario</td>
-                                                                                                                        <td>{{ $antecedentes_paciente->comentario_gs }}</td>
-                                                                                                                    </tr>
-                                                                                                                </tbody>
-                                                                                                               </table>
+                                                                                                                <div class="row">
+                                                                                                                    {{-- Tratamientos en curso --}}
+                                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+                                                                                                                        <div class="card border-card-primary h-100">
+                                                                                                                            <div class="card-body-aten-a">
+                                                                                                                                <ul>
+                                                                                                                                    <li><strong>Tratamientos en curso</strong></li>
+                                                                                                                                    @if (isset($tratamiento_activo))
+                                                                                                                                        @foreach ( $tratamiento_activo as $receta)
+                                                                                                                                            @foreach ( $receta['detalle'] as $detalle)
+                                                                                                                                                @if ($detalle['id_tipo_control'] == 8)
+                                                                                                                                                    <li style="font-size: 12px">
+                                                                                                                                                        Receta Magistral<br/>&nbsp;&nbsp;
+                                                                                                                                                        <span style="font-size: 9px; font-weight: bold;">
+                                                                                                                                                            @php
+                                                                                                                                                                $producto_detalle_temp = json_decode($detalle['producto']);
+                                                                                                                                                                // var_dump($producto_detalle_temp[0]) ;
+                                                                                                                                                            @endphp
+                                                                                                                                                            @foreach ( $producto_detalle_temp as $det_temp)
+                                                                                                                                                                {{ $det_temp->nombre }}: {{ $det_temp->cantidad }} |
+                                                                                                                                                            @endforeach
+                                                                                                                                                        </span>
+                                                                                                                                                    </li>
+                                                                                                                                                @else
+                                                                                                                                                    <li style="font-size: 12px">{{ $detalle['producto'] }}<br/>&nbsp;&nbsp;<span style="font-size: 9px; font-weight: bold;">{{ $detalle['farmaco'] }}</span></li>
+                                                                                                                                                @endif
+                                                                                                                                            @endforeach
+                                                                                                                                        @endforeach
+                                                                                                                                    @else
+                                                                                                                                        <li>No hay registros</li>
+                                                                                                                                    @endif
+                                                                                                                                    <li></li>
+                                                                                                                                </ul>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                    {{-- Medicamentos crónicos --}}
+                                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+                                                                                                                        <div class="card border-card-primary h-100">
+                                                                                                                            <div class="card-body-aten-a">
+                                                                                                                                <ul>
+                                                                                                                                    <li><strong>Medicamentos crónicos</strong></li>
+                                                                                                                                </ul>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                    {{-- Cirugías recientes --}}
+                                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+                                                                                                                        <div class="card border-card-primary h-100">
+                                                                                                                            <div class="card-body-aten-a">
+                                                                                                                                <ul>
+                                                                                                                                    <li><strong>Cirugías recientes</strong></li>
+                                                                                                                                    @if(isset($antecedentes))
+                                                                                                                                    @foreach ($antecedentes as $data)
+                                                                                                                                        @if($data->id_tipo_antecedente==3)
+                                                                                                                                            {{-- <li>{!! $data->antecedente_data->procedimiento.'<br/>&nbsp;&nbsp;&nbsp;- '.substr($data->comentario, 0, 30) !!}</li> --}}
+                                                                                                                                            <li> * {!! $data->antecedente_data->procedimiento.' - '.$data->comentario !!}</li>
+                                                                                                                                        @else
+                                                                                                                                            {{-- <li>No hay registros</li> --}}
+                                                                                                                                        @endif
+                                                                                                                                    @endforeach
+                                                                                                                                    @endif
+                                                                                                                                </ul>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                    {{-- Medicamentos recientes --}}
+                                                                                                                    {{-- <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3"> --}}
+                                                                                                                        {{-- <div class="card border-card-primary h-100"> --}}
+                                                                                                                            {{-- <div class="card-body"> --}}
+                                                                                                                                {{-- <ul> --}}
+                                                                                                                                    {{-- <li><strong>Medicamentos recientes</strong></li> --}}
+                                                                                                                                    {{-- <li>No hay registros</li> --}}
+                                                                                                                                {{-- </ul> --}}
+                                                                                                                            {{-- </div> --}}
+                                                                                                                        {{-- </div> --}}
+                                                                                                                    {{-- </div> --}}
+
+                                                                                                                    {{-- Prótesis y ortesis --}}
+                                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
+                                                                                                                        <div class="card border-card-primary h-100">
+                                                                                                                            <div class="card-body-aten-a">
+                                                                                                                                <ul>
+                                                                                                                                    <li><strong>Prótesis y ortesis</strong></li>
+                                                                                                                                    <li>No hay registros</li>
+                                                                                                                                </ul>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                </div>
                                                                                                             </div>
                                                                                                         </div>
 
@@ -165,12 +221,43 @@
                                                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                                             <div class="form-group">
                                                                                                                                 <label class="floating-label-activo-sm">Antecedentes Dentales</label>
-                                                                                                                               <ul>
-                                                                                                                                <li>antecedente 1</li>
-                                                                                                                                <li>antecedente 2</li>
-                                                                                                                                <li>antecedente 3</li>
-                                                                                                                                <li>antecedente 4</li>
-                                                                                                                               </ul>
+                                                                                                                                <table id="table_antecedentes_unificada" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                                                                                                    <thead>
+                                                                                                                                        <tr>
+                                                                                                                                            <th class="text-center align-middle">Fecha</th>
+                                                                                                                                            <th class="text-center align-middle">Procedimiento</th>
+                                                                                                                                            <th class="text-center align-middle">Tipo de antecedente</th>
+                                                                                                                                            <th class="text-center align-middle">Responsable</th>
+                                                                                                                                            <th class="text-center align-middle">Detalles / Comentarios</th>
+                                                                                                                                        </tr>
+                                                                                                                                    </thead>
+                                                                                                                                    <tbody>
+                                                                                                                                        @if (isset($antecedentes))
+                                                                                                                                            @foreach ($antecedentes as $antecedente)
+                                                                                                                                                @if ($antecedente->estado == 1)
+                                                                                                                                                    <tr>
+                                                                                                                                                        <td class="text-center align-middle">{{ $antecedente->antecedente_data->fecha }}</td>
+                                                                                                                                                        <td class="text-center align-middle">{{ $antecedente->antecedente_data->procedimiento }}</td>
+                                                                                                                                                        <td class="text-center align-middle">
+                                                                                                                                                            @switch($antecedente->id_tipo_antecedente)
+                                                                                                                                                                @case(1) Anestesia @break
+                                                                                                                                                                @case(4) Hemorragia @break
+                                                                                                                                                                @case(9) Fractura @break
+                                                                                                                                                                @default Otro
+                                                                                                                                                            @endswitch
+                                                                                                                                                        </td>
+                                                                                                                                                        <td class="text-center align-middle">
+                                                                                                                                                            {{ $antecedente->antecedente_data->profesional ?? 'N/A' }} <br/>
+                                                                                                                                                            {{ $antecedente->antecedente_data->rut_responsable }}
+                                                                                                                                                        </td>
+                                                                                                                                                        <td class="text-center align-middle">{{ $antecedente->comentario }}</td>
+                                                                                                                                                    </tr>
+                                                                                                                                                @endif
+                                                                                                                                            @endforeach
+                                                                                                                                        @endif
+                                                                                                                                    </tbody>
+                                                                                                                                </table>
+
                                                                                                                             </div>
                                                                                                                         </div>
                                                                                                                     </div>
@@ -352,7 +439,7 @@
                                                                     <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
                                                                         <div class="form-group">
 
-                                                                            <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nuevas_imagenes_dent_estudio({{ $count }})">MOSTRAR NUEVA PIEZA</button>
+                                                                            <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nuevas_imagenes_dent_estudio({{ $count }})">CARGAR NUEVA IMAGEN</button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -4728,13 +4815,7 @@ function eliminar_imagen_dental(id,path){
         icon: 'warning',
         buttons: ['Cancelar', 'Aceptar'],
         dangerMode: true,
-        confirmButtonText: 'Sí, eliminarlo!',
-        cancelButtonText: 'Cancelar',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        closeOnConfirm: false,
-        closeOnCancel: true,
         confirmButtonClass: 'btn btn-success',
         cancelButtonClass: 'btn btn-danger',
 
@@ -4743,7 +4824,7 @@ function eliminar_imagen_dental(id,path){
         if (confirm) {
             confirmar_eliminar_imagen_dental(id,path);
         } else {
-            Swal.fire('Cancelado', 'La imagen no fue eliminada :(', 'error');
+            swal('Cancelado', 'La imagen no fue eliminada :(', 'error');
         }
     });
 

@@ -221,6 +221,8 @@
 					//SuccessMode: true,
 				});
 			@endif
+
+            $('#table_antecedentes_unificada').DataTable();
         });
 
 
