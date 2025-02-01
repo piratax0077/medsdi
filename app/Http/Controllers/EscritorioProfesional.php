@@ -30,6 +30,7 @@ use App\Models\EvolucionUrgencia;
 use App\Models\ExamenesBocaGeneral;
 use App\Models\ExamenesDentalDolor;
 use App\Models\ExamenesDentalPieza;
+use App\Models\ExamenesDentalPiezaHistoria;
 use App\Models\ExamenesDentalOralRx;
 
 use App\Models\ExamenPPF;
@@ -2078,6 +2079,19 @@ class EscritorioProfesional extends Controller
 
     }
 
+    public function mostrar_nueva_pieza_dental_hist(Request $req){
+        try {
+            $idCounter = $req->count ? $req->count : 1;
+            $v = view('atencion_odontologica.include.pieza_dental_hist',['counter' => $idCounter])->render();
+            return ['mensaje' => 'OK', 'v' => $v];
+
+
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
     public function eliminar_imagen_rx_paciente(Request $req){
         $imagen = ImagenesDentalRxPaciente::find($req->id);
         if($imagen->delete()){
@@ -2320,6 +2334,30 @@ class EscritorioProfesional extends Controller
         }else{
             return ['mensaje' => 'error'];
         }
+    }
+
+    public function guardar_pieza_dental_examen_pieza_hist(Request $req){
+
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $examen = new ExamenesDentalPiezaHistoria;
+        $examen->id_paciente = $req->id_paciente;
+        $examen->id_lugar_atencion = $req->id_lugar_atencion;
+        $examen->id_profesional = $profesional->id;
+        $examen->id_especialidad = $profesional->id_especialidad;
+        $examen->id_ficha_atencion = $req->id_ficha_atencion;
+        $examen->numero_pieza = $req->pieza;
+        $examen->fecha_examen = Carbon::now();
+        $examen->perdida = $req->perdida_texto;
+        $examen->tiempo = $req->tiempo_texto;
+        $examen->estado = 1;
+        $examen->observaciones = $req->observaciones !== null ? $req->observaciones : '';
+
+        if($examen->save()){
+            $examenes = $this->dameExamenesPiezaDentalPiezaHistoria($req->id_paciente, $profesional->id_tipo_especialidad);
+            $v = view('atencion_odontologica.include.examenes_dental_pieza_historial_todos',['examenes' => $examenes])->render();
+        }
+
+        return ['mensaje' => 'OK','v' => $v,'examenes' => $examenes];
     }
 
     public function eliminar_pieza_dental_examen_pieza(Request $req){
@@ -2577,6 +2615,13 @@ class EscritorioProfesional extends Controller
         $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)
         ->where('tipo_examen',1)
         ->where('tipo_especialidad',$tipo_especialidad)
+        ->where('estado',1)
+        ->get();
+        return $examenes;
+    }
+
+    public function dameExamenesPiezaDentalPiezaHistoria($id_paciente){
+        $examenes = ExamenesDentalPiezaHistoria::where('id_paciente',$id_paciente)
         ->where('estado',1)
         ->get();
         return $examenes;

@@ -570,9 +570,11 @@ Route::group([
     Route::post('/mostrar_nueva_pieza_dental_examen',[App\Http\Controllers\EscritorioProfesional::class,'mostrar_nueva_pieza_dental_examen'])->name('profesional.mostrar_nueva_pieza_dental_examen');
     Route::post('/mostrar_nueva_pieza_dental_examen_odontop',[App\Http\Controllers\EscritorioProfesional::class,'mostrar_nueva_pieza_dental_examen_odontop'])->name('profesional.mostrar_nueva_pieza_dental_examen_odontop');
     Route::post('/mostrar_nueva_pieza_dental_end_examen',[App\Http\Controllers\EscritorioProfesional::class,'mostrar_nueva_pieza_dental_end_examen'])->name('profesional.mostrar_nueva_pieza_dental_examen_end');
+    Route::post('/mostrar_nueva_pieza_dental_hist',[App\Http\Controllers\EscritorioProfesional::class,'mostrar_nueva_pieza_dental_hist'])->name('profesional.mostrar_nueva_pieza_dental_hist');
     Route::post('/guardar_imagenes_dental_paciente',[App\Http\Controllers\EscritorioProfesional::class,'guardar_imagenes_dental_paciente'])->name('profesional.guardar_imagenes_dental_paciente');
     Route::post('/eliminar_imagen_dental_paciente',[App\Http\Controllers\EscritorioProfesional::class,'eliminar_imagen_dental_paciente'])->name('profesional.eliminar_imagen_dental_paciente');
     Route::post('/guardar_pieza_dental_examen_pieza',[App\Http\Controllers\EscritorioProfesional::class,'guardar_pieza_dental_examen_pieza'])->name('profesional.guardar_pieza_examen_pieza');
+    Route::post('/guardar_pieza_dental_examen_pieza_hist',[App\Http\Controllers\EscritorioProfesional::class,'guardar_pieza_dental_examen_pieza_hist'])->name('profesional.guardar_pieza_examen_pieza_hist');
     Route::post('/eliminar_pieza_dental_examen_pieza',[App\Http\Controllers\EscritorioProfesional::class,'eliminar_pieza_dental_examen_pieza'])->name('profesional.eliminar_pieza_dental_pieza');
     Route::post('/guardar_examen_boca_general', [App\Http\Controllers\EscritorioProfesional::class, 'guardar_examen_boca_general'])->name('profesional.guardar_examen_boca_general');
     Route::post('/eliminar_diagnostico_dental',[App\Http\Controllers\EscritorioProfesional::class, 'eliminar_diagnostico_dental'])->name('profesional.eliminar_diagnostico_dental');

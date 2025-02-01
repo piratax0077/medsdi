@@ -320,63 +320,73 @@
                                                             </div>
                                                             <!--HISTORIA-->
                                                             <div class="tab-pane fade show " id="hist_piezas" role="tabpanel" aria-labelledby="hist_piezas_tab">
+                                                                @foreach ($examenes_pre_implante as $e)
+                                                                <div class="card-body mb-2">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                            <div class="form-row">
+                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                    <div class="form-group fill">
+                                                                                        <label class="floating-label-activo-sm">Pieza N°</label>
+                                                                                        <input type="text" class="form-control form-control-sm" name="historia_pza" id="historia_pza" value="3.2">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                                                                                    <div class="form-group fill">
+                                                                                        <label class="floating-label-activo-sm">Pérdida de la pieza</label>
+                                                                                        <select name="perdida" id="perdida" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perdida','div_perdida','obs_perdida',3);">
+                                                                                            <option selected="" value="1">Espontánea</option>
+                                                                                            <option value="2">Extracción por Urgencia</option>
+                                                                                            <option value="3">Otro describir</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group" id="div_perdida" style="display:none;">
+                                                                                        <label class="floating-label-activo-sm">Otro motivo</label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perdida" id="obs_perdida"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                                                                                    <div class="form-group fill">
+                                                                                        <label class="floating-label-activo-sm">Años</label>
+                                                                                        <select name="anos_perd" id="anos_perd" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('anos_perd','div_anos_perd','obs_anos_perd',4);">
+                                                                                            <option selected="" value="1">< 1 año</option>
+                                                                                            <option value="2">2 años</option>
+                                                                                            <option value="3">3 años</option>
+                                                                                            <option value="4">Otro describir</option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                    <div class="form-group" id="div_anos_perd" style="display:none;">
+                                                                                        <label class="floating-label-activo-sm">Años</label>
+                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anos_perd" id="obs_anos_perd"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                            <div class="form-group">
+                                                                                <label class="floating-label-activo-sm">Observaciones Pérdida</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Oral" data-seccion="Examen Oral" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oral" id="obs_ex_oral"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                @endforeach
+
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <div class="card">
                                                                             <div class="card-body">
-                                                                                <div class="row">
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                <div class="form-group fill">
-                                                                                                    <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                                    <input type="text" class="form-control form-control-sm" name="historia_pza" id="historia_pza" value="3.2">
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                                                                                <div class="form-group fill">
-                                                                                                    <label class="floating-label-activo-sm">Pérdida de la pieza</label>
-                                                                                                    <select name="perdida" id="perdida" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perdida','div_perdida','obs_perdida',3);">
-                                                                                                        <option selected="" value="1">Espontánea</option>
-                                                                                                        <option value="2">Extracción por Urgencia</option>
-                                                                                                        <option value="3">Otro describir</option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                                <div class="form-group" id="div_perdida" style="display:none;">
-                                                                                                    <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perdida" id="obs_perdida"></textarea>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                                                                                <div class="form-group fill">
-                                                                                                    <label class="floating-label-activo-sm">Años</label>
-                                                                                                    <select name="anos_perd" id="anos_perd" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('anos_perd','div_anos_perd','obs_anos_perd',4);">
-                                                                                                        <option selected="" value="1">< 1 año</option>
-                                                                                                        <option value="2">2 años</option>
-                                                                                                        <option value="3">3 años</option>
-                                                                                                        <option value="4">Otro describir</option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                                <div class="form-group" id="div_anos_perd" style="display:none;">
-                                                                                                    <label class="floating-label-activo-sm">Años</label>
-                                                                                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anos_perd" id="obs_anos_perd"></textarea>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
+
+                                                                                <div id="contenedor_piezas_hist"></div>
+                                                                                <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nueva_pieza_dental_hist()"><i class="fas fa-save"></i> Mostrar nueva pieza</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
 
 
-                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                    <div class="form-group">
-                                                                        <label class="floating-label-activo-sm">Observaciones Pérdida</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Oral" data-seccion="Examen Oral" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oral" id="obs_ex_oral"></textarea>
-                                                                    </div>
-                                                                </div>
+
                                                             </div>
                                                             <!--ESTUDIO RADIOLÓGICO POR PIEZA-->
                                                             <div class="tab-pane fade show" id="estudio_rx" role="tabpanel" aria-labelledby="estudio_rx_tab">
@@ -5019,7 +5029,7 @@ function mostrar_pieza_dental_examen(count){
     })
 }
 
-function pedir_autorizacion_presupuesto_dental(){
+    function pedir_autorizacion_presupuesto_dental(){
         swal({
             title: 'Advertencia',
             text: '¿Está seguro de solicitar la autorización del presupuesto?',
@@ -5044,6 +5054,32 @@ function pedir_autorizacion_presupuesto_dental(){
     function  cerrar_autorizacion_presupuesto()
     {
         $('#modal_autorizacion_presupuesto').modal('hide');
+    }
+
+    function mostrar_nueva_pieza_dental_hist(count){
+        let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_hist') }}";
+        let data = {
+            count: count,
+            id_paciente: dame_id_paciente(),
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.mensaje == 'OK'){
+                    $('#contenedor_piezas_hist').empty();
+                    $('#contenedor_piezas_hist').append(resp.v);
+
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        })
     }
 </script>
 

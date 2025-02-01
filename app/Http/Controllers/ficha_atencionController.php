@@ -22,6 +22,7 @@ use App\Models\EvolucionUrgencia;
 use App\Models\ExamenesBocaGeneral;
 use App\Models\ExamenesDentalDolor;
 use App\Models\ExamenesDentalPieza;
+use App\Models\ExamenesDentalPiezaHistoria;
 use App\Models\FormularioFaltante;
 use App\Models\Sugerencias;
 use App\Models\Ciudad;
@@ -1825,6 +1826,8 @@ class ficha_atencionController extends Controller
 
         /** EXAMEN OCTAVO PAR */
         $reg_octavo_par = OctavoPar::where('id_paciente', $paciente->id)->get();
+        /** EXAMENES EVALUACION PRE IMPLANTE DENTAL  */
+        $examenes_preimplante = ExamenesDentalPiezaHistoria::where('id_paciente', $paciente->id)->get();
 
         return view($ruta_blade)->with(
             [
@@ -1835,6 +1838,7 @@ class ficha_atencionController extends Controller
                 'valores' => $valores_tratamientos[0],
                 'valores_piezas' => $valores_tratamientos[1],
                 'examenes_dental' => $examenes_dental,
+                'examenes_pre_implante' => $examenes_preimplante,
                 'examenes_dental_end' => $examenes_dental_end,
                 'examenes_dental_odontopediatria' => $examenes_dental_odontopediatria,
                 'examenes_rx_oral' => $examenes_rx_oral,
