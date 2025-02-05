@@ -68,6 +68,7 @@
                                         <th class="text-center align-middle">Procedimiento</th>
                                         <th class="text-center align-middle">Rut responsable</th>
                                         <th class="text-center align-middle">Tratamientos o complicaciones</th>
+                                        <th class="text-center align-middle">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -79,6 +80,10 @@
                                                     <td class="text-center align-middle">{{ $hem_pac->antecedente_data->procedimiento }}</td>
                                                     <td class="text-center align-middle">{{ $hem_pac->antecedente_data->profesional }}<br/>{{ $hem_pac->antecedente_data->rut_responsable }}</td>
                                                     <td class="text-center align-middle">{{ $hem_pac->comentario }}</td>
+                                                    <td class="text-center align-middle">
+                                                        <button type="button" class="btn btn-outline-warning btn-sm"><i class="fas fa-edit"></i></button>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_antecedente_hemorragia({{ $hem_pac->id }})"><i class="fas fa-trash"></i></button>
+                                                    </td>
                                                 </tr>
                                             @endif
                                         @endforeach
@@ -185,6 +190,7 @@
                 if(resp.estado==1)
                 {
                     var html_ = '';
+                    var html__ = '';
                     var permiso_ = '';
                     var id_users = parseInt('{{ Auth::user()->id }}');
 
@@ -199,20 +205,154 @@
 
                         html_ +=`
                             <tr>
-                                <td>${e.antecedente_data.fecha_regitro}</td>
-                                <td>${e.antecedente_data.procedimiento}</td>
-                                <td>${e.antecedente_data.profesional}<br/>${e.antecedente_data.rut_responsable}</td>
-                                <td>${e.antecedente_data.comentario}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.fecha_regitro}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.procedimiento}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.profesional}<br/>${e.antecedente_data.rut_responsable}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.comentario}</td>
+                                <td class="text-center align-middle">
+                                    <button class="btn btn-outline-warning btn-sm" type="button"><i class="fas fa-edit"></i> </button>
+                                    <button class="btn btn-outline-danger btn-sm" type="button" onclick="eliminar_antecedente_hemorragia(${e.id})"><i class="fas fa-trash"></i> </button>
+                                </td>
                             </tr>
                         `;
 
                     });
                     $('#'+div+' tbody').html(html_);
+
+                    $('#tbody_hemorragias').empty();
+                    $('#tbody_hemorragias').append(`
+                    <tr class="table-primary">
+                        <td colspan="4" class="text-center"><strong>Antecedentes de Anestesia</strong></td>
+                    </tr>
+                    `);
+                    resp.registros.forEach(e => {
+
+                        // permiso_ = '';
+                        // if(e.id_users == id_users)
+                        // permiso_ = `
+                        //     <buttom class="btn btn-icon btn-info feather icon-edit-2" onclick="verModalAgregar('show',${tipo},${e.id})"></buttom>
+                        //     <buttom class="btn btn-icon btn-danger feather icon-x-square" onclick="verModalDesactivar('show',${tipo},${e.id})"></buttom>
+                        // `;
+
+                        html__ +=`
+                            <tr>
+                                <td class="text-center align-middle">${e.antecedente_data.fecha_regitro}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.procedimiento}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.profesional} <br> ${e.antecedente_data.rut_responsable}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.comentario}</td>
+
+
+                            </tr>
+                        `;
+
+                    });
+                    $('#tbody_hemorragias').append(html__);
                 }
             },
             error: (resp)=>{
                 console.warn(resp);
             }
+        });
+    }
+
+    function buscar_nombre_profesional(input_rut, input_nombre)
+    {
+        rut = $('#'+input_rut).val();
+
+        if(rut.length>5)
+        {
+            url = "{{ route('paciente.buscar.prof.rut') }}";
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    rut : rut,
+                },
+            })
+            .done(function(data)
+            {
+                if(data.estado == 1)
+                {
+                    // if(data.profesional.length>0)
+                    {
+                        var nombre = 'Dr. '+data.profesional.apellido_uno;
+                        $('#'+input_nombre).val(nombre);
+                    }
+                    // else
+                    // {
+                    //     $('#'+input_nombre).val('');
+                    // }
+                }
+                else
+                {
+                    $('#'+input_nombre).val('');
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
+        else if(rut.length==0)
+        {
+            $('#'+input_nombre).val('');
+        }
+    }
+
+    function eliminar_antecedente_hemorragia(id){
+        swal({
+            title: "¿Esta seguro que desea ELIMINAR el antecedente de hemorragia?",
+            text: "Favor confirme o cancele la solicitud",
+            icon: "warning",
+            buttons: ["Cancelar", "Solicitar"],
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                eliminar_antecedente_hemorragia_confirmar(id);
+            }
+        });
+    }
+
+    function eliminar_antecedente_hemorragia_confirmar(id){
+        var data = {};
+        var url = '{{ url("/api/antecedente/eliminar") }}';
+
+        /* CAMPOS */
+        // data.nombre = $('#nombre').val();
+        data.id_antecedente = id;
+        data.id_tipo_antecedente = 4;
+        data.id_paciente = $('#id_paciente_fc').val();
+        tipo_antecedente = 1;
+        var tipo= 4;
+
+        jQuery.ajax({
+
+            url: url,
+            type: "POST",
+            data: data
+        })
+        .done(function(data) {
+            console.log(data);
+            if(data.estado==1)
+            {
+                cargarRegistrosHemorragia(tipo, 'table_antecedente_hemorragias_modal');
+                swal({
+                    title: 'Antecedente Hemorragia',
+                    text: 'Registro eliminado',
+                    icon: 'success',
+                });
+            }
+            else
+            {
+                swal({
+                    title: 'Antecedente Hemorragia',
+                    text: 'Campo Obligatorio: '+JSON.stringify(data.error),
+                    icon: 'danger',
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
         });
     }
 </script>

@@ -580,21 +580,22 @@
                                                                         <div id="contenedor_nueva_imagen_dent">
 
                                                                         </div>
+                                                                        <div class="form-row my-3">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <label class="floating-label-activo-sm">Observaciones Examen Oral</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oral" id="obs_ex_oral"></textarea>
+                                                                            </div>
+                                                                        </div>
                                                                         <div class="form-row">
                                                                             <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
                                                                                 <div class="form-group">
 
-                                                                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nuevas_imagenes_dent({{ $count }})">MOSTRAR NUEVA PIEZA</button>
+                                                                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nuevas_imagenes_dent({{ $count }})">CARGAR NUEVAS IMAGENES</button>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-row">
-                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <label class="floating-label-activo-sm">Observaciones Examen Oral</label>
-                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oral" id="obs_ex_oral"></textarea>
-                                                                        </div>
-                                                                    </div>
+
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -682,7 +682,7 @@
                                                                                                     <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
                                                                                                         <div class="form-group">
 
-                                                                                                            <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nuevas_imagenes_dent({{ $count }})">MOSTRAR NUEVA PIEZA</button>
+                                                                                                            <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nuevas_imagenes_dent({{ $count }})">CARGAR NUEVAS IMAGENES</button>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
@@ -3570,371 +3570,7 @@
             }
         });
 
-        $('#diag_seleccionado_gral_autocomplete').autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getDiagnosticoDental') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        if( data.length == 0 )
-                        {
-                            $('.diagnostico_activo').hide();
-                            $('.diagnostico_inactivo').show();
-                        }
-                        else
-                        {
-                            $('.diagnostico_activo').show();
-                            $('.diagnostico_inactivo').hide();
-                        }
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#diag_seleccionado_gral_autocomplete').val(ui.item.label);
-                $('#id_medicamento_cronico').val(ui.item.value);
-                return false;
-            }
-        });
 
-        $('.tratamiento-autocomplete').each(function() {
-            $(this).autocomplete({
-                source: function(request, response) {
-                    // Fetch data
-                    $.ajax({
-                        url: "{{ route('dental.getDiagnosticoDental') }}",
-                        type: 'post',
-                        dataType: "json",
-                        data: {
-                            _token: CSRF_TOKEN,
-                            search: request.term
-                        },
-                        success: function(data) {
-                            if (data.length == 0) {
-                                $('.diagnostico_activo').hide();
-                                $('.diagnostico_inactivo').show();
-                            } else {
-                                $('.diagnostico_activo').show();
-                                $('.diagnostico_inactivo').hide();
-                            }
-                            response(data);
-                        }
-                    });
-                },
-                select: function(event, ui) {
-                    $(this).val(ui.item.label);
-                    $(this).next('input[type="hidden"]').val(ui.item.value); // Asigna el valor al input hidden correspondiente
-                    return false;
-                }
-            });
-        });
-
-
-        $('#proc_seleccionado_gral_autocomplete').autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getDiagnosticoDental') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        console.log(data);
-
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#proc_seleccionado_gral_autocomplete').val(ui.item.label);
-                $('#id_medicamento_cronico').val(ui.item.value);
-
-                return false;
-            }
-        });
-
-        $('#diag_seleccionado_endo_autocomplete').autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getDiagnosticoDental') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        if( data.length == 0 )
-                        {
-                            $('.diagnostico_activo').hide();
-                            $('.diagnostico_inactivo').show();
-                        }
-                        else
-                        {
-                            $('.diagnostico_activo').show();
-                            $('.diagnostico_inactivo').hide();
-                        }
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#diag_seleccionado_endo_autocomplete').val(ui.item.label);
-                return false;
-            }
-        });
-
-        $('#proc_seleccionado_endo_autocomplete').autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getDiagnosticoDental') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        console.log(data);
-
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#proc_seleccionado_endo_autocomplete').val(ui.item.label);
-
-                return false;
-            }
-        });
-        $('#diag_seleccionado_max_inf_gral_autocomplete').autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getDiagnosticoDental') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#diag_seleccionado_max_inf_gral_autocomplete').val(ui.item.label);
-                return false;
-            }
-        });
-
-        $('#proc_seleccionado_max_inf_gral_autocomplete').autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getDiagnosticoDental') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        console.log(data);
-
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#proc_seleccionado_max_inf_gral_autocomplete').val(ui.item.label);
-
-                return false;
-            }
-        });
-        $('#diag_seleccionado_max_inf_endo_autocomplete').autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getDiagnosticoDental') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        if( data.length == 0 )
-                        {
-                            $('.diagnostico_activo').hide();
-                            $('.diagnostico_inactivo').show();
-                        }
-                        else
-                        {
-                            $('.diagnostico_activo').show();
-                            $('.diagnostico_inactivo').hide();
-                        }
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#diag_seleccionado_max_inf_endo_autocomplete').val(ui.item.label);
-                return false;
-            }
-        });
-
-        $('#proc_seleccionado_max_inf_endo_autocomplete').autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getDiagnosticoDental') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        console.log(data);
-
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#proc_seleccionado_max_inf_endo_autocomplete').val(ui.item.label);
-
-                return false;
-            }
-        });
-
-        $('#diag_seleccionado_boca_compl_gral_autocomplete').autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getDiagnosticoDental') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        if( data.length == 0 )
-                        {
-                            $('.diagnostico_activo').hide();
-                            $('.diagnostico_inactivo').show();
-                        }
-                        else
-                        {
-                            $('.diagnostico_activo').show();
-                            $('.diagnostico_inactivo').hide();
-                        }
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#diag_seleccionado_boca_compl_gral_autocomplete').val(ui.item.label);
-                return false;
-            }
-        });
-
-        $('#proc_seleccionado_boca_compl_gral_autocomplete').autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getDiagnosticoDental') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        console.log(data);
-
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#proc_seleccionado_boca_compl_gral_autocomplete').val(ui.item.label);
-
-                return false;
-            }
-        });
-
-        $('#diag_seleccionado_boca_compl_endo_autocomplete').autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getDiagnosticoDental') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        if( data.length == 0 )
-                        {
-                            $('.diagnostico_activo').hide();
-                            $('.diagnostico_inactivo').show();
-                        }
-                        else
-                        {
-                            $('.diagnostico_activo').show();
-                            $('.diagnostico_inactivo').hide();
-                        }
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#diag_seleccionado_boca_compl_endo_autocomplete').val(ui.item.label);
-                return false;
-            }
-        });
-
-        $('#proc_seleccionado_boca_compl_endo_autocomplete').autocomplete({
-            source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getDiagnosticoDental') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        console.log(data);
-
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                $('#proc_seleccionado_boca_compl_endo_autocomplete').val(ui.item.label);
-
-                return false;
-            }
-        });
 
 
 
@@ -8160,7 +7796,7 @@ function eliminar_imagen_dental(id,path){
         if (confirm) {
             confirmar_eliminar_imagen_dental(id,path);
         } else {
-            Swal.fire('Cancelado', 'La imagen no fue eliminada :(', 'error');
+            swal('Cancelado', 'La imagen no fue eliminada :(', 'error');
         }
     });
 
@@ -8714,17 +8350,17 @@ function eliminarExamenAgregadoRxOdontop(id) {
     }
 
     function  confirmar_pedir_autorizacion_presupuesto_dental()
-        {
-            $('#modal_autorizacion_presupuesto').modal('show');
-            $('#modal_autorizacion_imagen').html('');
-            $('#modal_autorizacion_mensaje').html('');
-			$('#modal_autorizacion_btn_solicitar').attr('disabled', false);
-        }
+    {
+        $('#modal_autorizacion_presupuesto').modal('show');
+        $('#modal_autorizacion_imagen').html('');
+        $('#modal_autorizacion_mensaje').html('');
+        $('#modal_autorizacion_btn_solicitar').attr('disabled', false);
+    }
 
-        function  cerrar_autorizacion_presupuesto()
-        {
-            $('#modal_autorizacion_presupuesto').modal('hide');
-        }
+    function  cerrar_autorizacion_presupuesto()
+    {
+        $('#modal_autorizacion_presupuesto').modal('hide');
+    }
 </script>
 
 @endsection

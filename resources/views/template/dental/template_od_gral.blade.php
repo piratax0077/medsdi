@@ -58,6 +58,7 @@
     {{--  /** agregar css */  --}}
     <!--cara dental-->
     <link rel="stylesheet" href="{{ asset('css/cara_dental.css') }}">
+
     <style>
         .ui-front {
             position: absolute;
@@ -171,7 +172,12 @@
     <!--Tablas y Toggle atención ginecobstetrica-->
     {{-- <script src="{{ asset('js/atencion_especialidades.js') }}?upd={{ random_int(1111,9999) }}"></script> --}}
     <script src="{{ asset('js/cara_dental.js') }}?upd={{ random_int(1111,9999) }}"></script>
-
+    <!-- Tratamientos dental autocomplete -->
+    <script>
+        window.getDiagnosticoDentalUrl = "{{ route('dental.getDiagnosticoDental') }}";
+    </script>
+    @routes
+    <script src="{{asset('js/dental/tratamientos_dental.js')}}"></script>
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         Dropzone.autoDiscover = false;

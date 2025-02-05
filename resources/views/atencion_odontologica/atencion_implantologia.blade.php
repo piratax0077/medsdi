@@ -1,4 +1,5 @@
 @extends('template.dental.template_od_impl')
+
 @section('styles')
 <style>
     .imagen_rx{
@@ -133,7 +134,9 @@
         @include("atencion_odontologica.formularios.Antecedentes_dentales.fracturas");
         @include('atencion_odontologica.include.modales.imagenes_paciente_dental');
         @include('atencion_odontologica.include.modales.imagen_paciente_dental')
-
+        @include('atencion_odontologica.generales.includes.modales.recomendaciones_generales_implan') 
+        @include('atencion_odontologica.generales.includes.modales.recomendaciones_especiales_implan') 
+     
     </div>
 	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
     <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">

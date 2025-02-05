@@ -65,6 +65,7 @@
                                         <th class="text-center align-middle">Procedimiento</th>
                                         <th class="text-center align-middle">Responsable</th>
                                         <th class="text-center align-middle">Tratamientos o complicaciones</th>
+                                        <th class="text-center align-middle">Acciones</th>
 
                                     </tr>
                                 </thead>
@@ -75,8 +76,12 @@
                                                 <tr>
                                                     <td class="text-center align-middle">{{ $frac_pac->antecedente_data->fecha }}</td>
                                                     <td class="text-center align-middle">{{ $frac_pac->antecedente_data->procedimiento }}</td>
-                                                    <td class="text-center align-middle">{{ $frac_pac->antecedente_data->profesional }}<br/>{{ $hem_pac->antecedente_data->rut_responsable }}</td>
+                                                    <td class="text-center align-middle">{{ $frac_pac->antecedente_data->profesional }}<br/>{{ $frac_pac->antecedente_data->rut_responsable }}</td>
                                                     <td class="text-center align-middle">{{ $frac_pac->comentario }}</td>
+                                                    <td class="text-center align-middle">
+                                                        <button type="button" class="btn btn-outline-warning btn-sm"><i class="fas fa-edit"> </i> </button>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_antecedente_fractura({{ $frac_pac->id }})"><i class="fas fa-trash"> </i> </button>
+                                                    </td>
                                                 </tr>
                                             @endif
                                         @endforeach
@@ -118,12 +123,6 @@
         var tipo = 9;
         var data = {};
         var url = '{{ url("/api/antecedente/registrar") }}';
-
-
-
-
-
-
 
         /* CAMPOS */
         data.procedimiento = $('#procedimiento_fractura_ficha_atencion').val();
@@ -190,6 +189,7 @@
                 if(resp.estado==1)
                 {
                     var html_ = '';
+                    var html__ = '';
                     var permiso_ = '';
                     var id_users = parseInt('{{ Auth::user()->id }}');
 
@@ -204,20 +204,111 @@
 
                         html_ +=`
                             <tr>
-                                <td>${e.antecedente_data.fecha_regitro}</td>
-                                <td>${e.antecedente_data.procedimiento}</td>
-                                <td>${e.antecedente_data.profesional}<br/>${e.antecedente_data.rut_responsable}</td>
-                                <td>${e.antecedente_data.comentario}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.fecha_regitro}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.procedimiento}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.profesional}<br/>${e.antecedente_data.rut_responsable}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.comentario}</td>
+                                <td class="text-center align-middle">
+                                    <button type="button" class="btn btn-outline-warning btn-sm"><i class="fas fa-edit"> </i> </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_antecedente_fractura(${e.id})"><i class="fas fa-trash"> </i> </button>
+                                </td>
                             </tr>
                         `;
 
                     });
                     $('#'+div+' tbody').html(html_);
+
+                    $('#tbody_fracturas').empty();
+                    $('#tbody_fracturas').append(`
+                    <tr class="table-primary">
+                        <td colspan="4" class="text-center"><strong>Antecedentes de Anestesia</strong></td>
+                    </tr>
+                    `);
+                    resp.registros.forEach(e => {
+
+                        // permiso_ = '';
+                        // if(e.id_users == id_users)
+                        // permiso_ = `
+                        //     <buttom class="btn btn-icon btn-info feather icon-edit-2" onclick="verModalAgregar('show',${tipo},${e.id})"></buttom>
+                        //     <buttom class="btn btn-icon btn-danger feather icon-x-square" onclick="verModalDesactivar('show',${tipo},${e.id})"></buttom>
+                        // `;
+
+                        html__ +=`
+                            <tr>
+                                <td class="text-center align-middle">${e.antecedente_data.fecha_regitro}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.procedimiento}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.profesional} <br> ${e.antecedente_data.rut_responsable}</td>
+                                <td class="text-center align-middle">${e.antecedente_data.comentario}</td>
+
+
+                            </tr>
+                        `;
+
+                    });
+                    $('#tbody_fracturas').append(html__);
                 }
             },
             error: (resp)=>{
                 console.warn(resp);
             }
+        });
+    }
+
+    function eliminar_antecedente_fractura(id){
+        swal({
+            title: "¿Esta seguro que desea ELIMINAR el antecedente de fractura?",
+            text: "Favor confirme o cancele la solicitud",
+            icon: "warning",
+            buttons: ["Cancelar", "Solicitar"],
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                eliminar_antecedente_fractura_confirmar(id);
+            }
+        });
+    }
+
+    function eliminar_antecedente_fractura_confirmar(id){
+        var data = {};
+        var url = '{{ url("/api/antecedente/eliminar") }}';
+
+        /* CAMPOS */
+        // data.nombre = $('#nombre').val();
+        data.id_antecedente = id;
+        data.id_tipo_antecedente = 9;
+        data.id_paciente = $('#id_paciente_fc').val();
+        tipo_antecedente = 1;
+        var tipo= 9;
+
+        jQuery.ajax({
+
+            url: url,
+            type: "POST",
+            data: data
+        })
+        .done(function(data) {
+            console.log(data);
+            if(data.estado==1)
+            {
+                cargarRegistrosFractura(tipo, 'table_antecedente_fractura_modal');
+                swal({
+                    title: 'Antecedente Fractura',
+                    text: 'Registro eliminado',
+                    icon: 'success',
+                });
+            }
+            else
+            {
+                swal({
+                    title: 'Antecedente Fractura',
+                    text: 'Campo Obligatorio: '+JSON.stringify(data.error),
+                    icon: 'danger',
+                });
+            }
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
         });
     }
 </script>
