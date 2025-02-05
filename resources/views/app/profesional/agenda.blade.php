@@ -1547,177 +1547,186 @@
         }
 
         function editar_info_paciente()
-    {
-        $('.paciente_view').hide();
-        $('.paciente_edit').show();
-        $('#modificando_paciente').val(1);
-    }
-
-    function editar_info_paciente_asistente()
-    {
-        $('.paciente_view_asistente').hide();
-        $('.paciente_edit_asistente').show();
-        $('#modificando_paciente_asistente').val(1);
-    }
-
-    function cancelar_modificacion_paciente()
-    {
-        $('.paciente_view').show();
-        $('.paciente_edit').hide();
-        $('#modificando_paciente').val(0);
-    }
-
-
-    function cancelar_modificacion_paciente_asistente()
-    {
-        $('.paciente_view_asistente').show();
-        $('.paciente_edit_asistente').hide();
-        $('#modificando_paciente_asistente').val(0);
-    }
-
-    function actualizar_paciente()
-    {
-        var modificando = $('#modificando_paciente').val();
-        var id_paciente = $('#reserva_hora_id_paciente').val();
-        var nombre_paciente = $('#input_reserva_hora_nombre').val();
-        var apellido_uno_paciente = $('#input_reserva_hora_apellido_uno').val();
-        var apellido_dos_paciente = $('#input_reserva_hora_apellido_dos').val();
-        var fecha_nacimiento = $('#input_reserva_fecha_nacimiento').val();
-        var sexo_paciente = $('#input_reserva_sexo').val();
-        var convenio_paciente = $('#input_reserva_convenio').val();
-        var convenio_txt_paciente = $('#input_reserva_convenio option:selected').text()
-        var direccion_paciente = $('#input_reserva_direccion_direccion').val();
-        var numero_direccion_paciente = $('#input_reserva_direccion_numero_dir').val();
-        var region_paciente = $('#input_reserva_direccion_region').val();
-        var ciudad_paciente = $('#input_reserva_direccion_ciudad').val();
-        var ciudad_txt_paciente = $('#input_reserva_direccion_ciudad option:selected').text();
-        var email_paciente = $('#input_reserva_hora_email').val();
-        var telefono_paciente = $('#input_reserva_hora_telefono').val();
-        var valido = 1;
-        var mensaje = '';
-
-        if( id_paciente == '' )
         {
-            valido = 0;
-            mensaje += 'Paciente Requerido\n';
-        }
-        if( nombre_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Nombre Paciente requerido\n';
-        }
-        if( apellido_uno_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Apellido Paterno de Pacientet requerido\n';
-        }
-        if( apellido_dos_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Apellido Materno de Pacientet requerido\n';
-        }
-        if( fecha_nacimiento == '' )
-        {
-            valido = 0;
-            mensaje += 'Fecha de Nacimiento del Pacientet requerido\n';
-        }
-        else
-        {
-            fecha_nacimiento = formatDateDB(fecha_nacimiento);
-        }
-        if( sexo_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Sexo del Pacientet requerido\n';
-        }
-        if( convenio_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Convenio del Pacientet requerido\n';
-        }
-        if( direccion_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Dirección del Pacientet requerido\n';
-        }
-        if( numero_direccion_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Número de Dirección del Pacientet requerido\n';
-        }
-        if( region_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Región de Dirección del Pacientet requerido\n';
-        }
-        if( ciudad_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Ciudad de Dirección del Pacientet requerido\n';
-        }
-        if( email_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Email del Pacientet requerido\n';
-        }
-        if( telefono_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Teléfono del Pacientet requerido\n';
+            $('.paciente_view').hide();
+            $('.paciente_edit').show();
+            $('#modificando_paciente').val(1);
         }
 
-        if(valido == 1)
+        function editar_info_paciente_asistente()
         {
-            if(modificando == 1)
+            $('.paciente_view_asistente').hide();
+            $('.paciente_edit_asistente').show();
+            $('#modificando_paciente_asistente').val(1);
+        }
+
+        function cancelar_modificacion_paciente()
+        {
+            $('.paciente_view').show();
+            $('.paciente_edit').hide();
+            $('#modificando_paciente').val(0);
+        }
+
+
+        function cancelar_modificacion_paciente_asistente()
+        {
+            $('.paciente_view_asistente').show();
+            $('.paciente_edit_asistente').hide();
+            $('#modificando_paciente_asistente').val(0);
+        }
+
+        function actualizar_paciente()
+        {
+            var modificando = $('#modificando_paciente').val();
+            var id_paciente = $('#reserva_hora_id_paciente').val();
+            var nombre_paciente = $('#input_reserva_hora_nombre').val();
+            var apellido_uno_paciente = $('#input_reserva_hora_apellido_uno').val();
+            var apellido_dos_paciente = $('#input_reserva_hora_apellido_dos').val();
+            var fecha_nacimiento = $('#input_reserva_fecha_nacimiento').val();
+            var sexo_paciente = $('#input_reserva_sexo').val();
+            var convenio_paciente = $('#input_reserva_convenio').val();
+            var convenio_txt_paciente = $('#input_reserva_convenio option:selected').text()
+            var direccion_paciente = $('#input_reserva_direccion_direccion').val();
+            var numero_direccion_paciente = $('#input_reserva_direccion_numero_dir').val();
+            var region_paciente = $('#input_reserva_direccion_region').val();
+            var ciudad_paciente = $('#input_reserva_direccion_ciudad').val();
+            var ciudad_txt_paciente = $('#input_reserva_direccion_ciudad option:selected').text();
+            var email_paciente = $('#input_reserva_hora_email').val();
+            var telefono_paciente = $('#input_reserva_hora_telefono').val();
+            var valido = 1;
+            var mensaje = '';
+
+            if( id_paciente == '' )
             {
-                let url = "{{ route('asistente.paciente.modificar') }}";
+                valido = 0;
+                mensaje += 'Paciente Requerido\n';
+            }
+            if( nombre_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Nombre Paciente requerido\n';
+            }
+            if( apellido_uno_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Apellido Paterno de Pacientet requerido\n';
+            }
+            if( apellido_dos_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Apellido Materno de Pacientet requerido\n';
+            }
+            if( fecha_nacimiento == '' )
+            {
+                valido = 0;
+                mensaje += 'Fecha de Nacimiento del Pacientet requerido\n';
+            }
+            else
+            {
+                fecha_nacimiento = formatDateDB(fecha_nacimiento);
+            }
+            if( sexo_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Sexo del Pacientet requerido\n';
+            }
+            if( convenio_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Convenio del Pacientet requerido\n';
+            }
+            if( direccion_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Dirección del Pacientet requerido\n';
+            }
+            if( numero_direccion_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Número de Dirección del Pacientet requerido\n';
+            }
+            if( region_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Región de Dirección del Pacientet requerido\n';
+            }
+            if( ciudad_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Ciudad de Dirección del Pacientet requerido\n';
+            }
+            if( email_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Email del Pacientet requerido\n';
+            }
+            if( telefono_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Teléfono del Pacientet requerido\n';
+            }
 
-                $.ajax({
+            if(valido == 1)
+            {
+                if(modificando == 1)
+                {
+                    let url = "{{ route('asistente.paciente.modificar') }}";
 
-                    url: url,
-                    type: "get",
-                    data: {
-                        id: id_paciente,
-                        nombre: nombre_paciente,
-                        apellido_uno: apellido_uno_paciente,
-                        apellido_dos: apellido_dos_paciente,
-                        fecha_nacimiento: fecha_nacimiento,
-                        sexo: sexo_paciente,
-                        convenio: convenio_paciente,
-                        direccion: direccion_paciente,
-                        numero_direccion: numero_direccion_paciente,
-                        region: region_paciente,
-                        ciudad: ciudad_paciente,
-                        email: email_paciente,
-                        telefono: telefono_paciente,
-                    },
-                })
-                .done(function(data) {
-                    if (data.estado == 1)
-                    {
+                    $.ajax({
+
+                        url: url,
+                        type: "get",
+                        data: {
+                            id: id_paciente,
+                            nombre: nombre_paciente,
+                            apellido_uno: apellido_uno_paciente,
+                            apellido_dos: apellido_dos_paciente,
+                            fecha_nacimiento: fecha_nacimiento,
+                            sexo: sexo_paciente,
+                            convenio: convenio_paciente,
+                            direccion: direccion_paciente,
+                            numero_direccion: numero_direccion_paciente,
+                            region: region_paciente,
+                            ciudad: ciudad_paciente,
+                            email: email_paciente,
+                            telefono: telefono_paciente,
+                        },
+                    })
+                    .done(function(data) {
                         if (data.estado == 1)
                         {
-                            $('#reserva_hora_nombre').text(nombre_paciente + ' ' + apellido_uno_paciente + ' ' + apellido_dos_paciente);
-                            $('#reserva_fecha_nacimiento').text(fecha_nacimiento);
-                            if (sexo_paciente == 'M') {
-                                $('#reserva_sexo').text('Masculino');
-                            } else {
-                                $('#reserva_sexo').text('Femenino');
+                            if (data.estado == 1)
+                            {
+                                $('#reserva_hora_nombre').text(nombre_paciente + ' ' + apellido_uno_paciente + ' ' + apellido_dos_paciente);
+                                $('#reserva_fecha_nacimiento').text(fecha_nacimiento);
+                                if (sexo_paciente == 'M') {
+                                    $('#reserva_sexo').text('Masculino');
+                                } else {
+                                    $('#reserva_sexo').text('Femenino');
+                                }
+                                $('#reserva_hora_email').text(email_paciente);
+                                $('#reserva_hora_telefono').text(telefono_paciente);
+                                $('#reserva_convenio').text(convenio_txt_paciente);
+                                $('#reserva_direccion').text(direccion_paciente+' '+numero_direccion_paciente+', '+ciudad_txt_paciente);
+
+                                $('.paciente_view').show();
+                                $('.paciente_edit').hide();
+                                $('#modificando_paciente').val(0);
+
+                                swal({
+                                    title: "Actualización de Paciente",
+                                    text: "Actualización Exitosa",
+                                    icon: "success",
+                                });
                             }
-                            $('#reserva_hora_email').text(email_paciente);
-                            $('#reserva_hora_telefono').text(telefono_paciente);
-                            $('#reserva_convenio').text(convenio_txt_paciente);
-                            $('#reserva_direccion').text(direccion_paciente+' '+numero_direccion_paciente+', '+ciudad_txt_paciente);
-
-                            $('.paciente_view').show();
-                            $('.paciente_edit').hide();
-                            $('#modificando_paciente').val(0);
-
-                            swal({
-                                title: "Actualización de Paciente",
-                                text: "Actualización Exitosa",
-                                icon: "success",
-                            });
+                            else
+                            {
+                                swal({
+                                    title: "Actualización de Paciente",
+                                    text: "Falla en Actualización.\nIntente de nuevo.",
+                                    icon: "error",
+                                });
+                            }
                         }
                         else
                         {
@@ -1727,147 +1736,147 @@
                                 icon: "error",
                             });
                         }
-                    }
-                    else
-                    {
-                        swal({
-                            title: "Actualización de Paciente",
-                            text: "Falla en Actualización.\nIntente de nuevo.",
-                            icon: "error",
-                        });
-                    }
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        console.log(jqXHR, ajaxOptions, thrownError)
+                    });
+                }
+                else
+                {
+                    swal({
+                        title: "Actualización de Paciente",
+                        text: "Esta actualizando al paciente sin haber inicado proceso de edición",
+                        icon: "error",
+                    });
+                }
             }
             else
             {
                 swal({
                     title: "Actualización de Paciente",
-                    text: "Esta actualizando al paciente sin haber inicado proceso de edición",
+                    text: "Campos requeridos.\n"+mensaje,
                     icon: "error",
+                    buttons: "Aceptar"
                 });
             }
-        }
-        else
-        {
-            swal({
-                title: "Actualización de Paciente",
-                text: "Campos requeridos.\n"+mensaje,
-                icon: "error",
-                buttons: "Aceptar"
-            });
-        }
 
 
-    }
-
-    function actualizar_paciente_asistente(){
-        var modificando = $('#modificando_paciente_asistente').val();
-        var id_paciente = $('#estado_id_paciente').val();
-        var nombre_paciente = $('#input_reserva_hora_nombre_asistente').val();
-        var apellido_uno_paciente = $('#input_reserva_hora_apellido_uno_asistente').val();
-        var apellido_dos_paciente = $('#input_reserva_hora_apellido_dos_asistente').val();
-        var fecha_nacimiento = $('#input_reserva_fecha_nacimiento_asistente').val();
-        var sexo_paciente = $('#input_reserva_sexo_asistente').val();
-        var email_paciente = $('#input_reserva_hora_email_asistente').val();
-        var telefono_paciente = $('#input_reserva_hora_telefono_asistente').val();
-        var valido = 1;
-        var mensaje = '';
-
-        var data = {
-            id: id_paciente,
-            nombre: nombre_paciente,
-            apellido_uno: apellido_uno_paciente,
-            apellido_dos: apellido_dos_paciente,
-            fecha_nacimiento: fecha_nacimiento,
-            sexo: sexo_paciente,
-            email: email_paciente,
-            telefono: telefono_paciente,
         }
 
-        if( id_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Paciente Requerido\n';
-        }
-        if( nombre_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Nombre Paciente requerido\n';
-        }
-        if( apellido_uno_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Apellido Paterno de Pacientet requerido\n';
-        }
-        if( apellido_dos_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Apellido Materno de Pacientet requerido\n';
-        }
-        if( fecha_nacimiento == '' )
-        {
-            valido = 0;
-            mensaje += 'Fecha de Nacimiento del Pacientet requerido\n';
-        }
-        else
-        {
-            //fecha_nacimiento = formatDateDB(fecha_nacimiento);
-        }
-        if( sexo_paciente == '' )
-        {
-            valido = 0;
-            mensaje += 'Sexo del Pacientet requerido\n';
-        }
+        function actualizar_paciente_asistente(){
+            var modificando = $('#modificando_paciente_asistente').val();
+            var id_paciente = $('#estado_id_paciente').val();
+            var nombre_paciente = $('#input_reserva_hora_nombre_asistente').val();
+            var apellido_uno_paciente = $('#input_reserva_hora_apellido_uno_asistente').val();
+            var apellido_dos_paciente = $('#input_reserva_hora_apellido_dos_asistente').val();
+            var fecha_nacimiento = $('#input_reserva_fecha_nacimiento_asistente').val();
+            var sexo_paciente = $('#input_reserva_sexo_asistente').val();
+            var email_paciente = $('#input_reserva_hora_email_asistente').val();
+            var telefono_paciente = $('#input_reserva_hora_telefono_asistente').val();
+            var valido = 1;
+            var mensaje = '';
 
-        if(valido == 1)
-        {
-            if(modificando == 1)
+            var data = {
+                id: id_paciente,
+                nombre: nombre_paciente,
+                apellido_uno: apellido_uno_paciente,
+                apellido_dos: apellido_dos_paciente,
+                fecha_nacimiento: fecha_nacimiento,
+                sexo: sexo_paciente,
+                email: email_paciente,
+                telefono: telefono_paciente,
+            }
+
+            if( id_paciente == '' )
             {
-                let url = "{{ route('asistente.paciente.modificar') }}";
+                valido = 0;
+                mensaje += 'Paciente Requerido\n';
+            }
+            if( nombre_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Nombre Paciente requerido\n';
+            }
+            if( apellido_uno_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Apellido Paterno de Pacientet requerido\n';
+            }
+            if( apellido_dos_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Apellido Materno de Pacientet requerido\n';
+            }
+            if( fecha_nacimiento == '' )
+            {
+                valido = 0;
+                mensaje += 'Fecha de Nacimiento del Pacientet requerido\n';
+            }
+            else
+            {
+                //fecha_nacimiento = formatDateDB(fecha_nacimiento);
+            }
+            if( sexo_paciente == '' )
+            {
+                valido = 0;
+                mensaje += 'Sexo del Pacientet requerido\n';
+            }
 
-                $.ajax({
+            if(valido == 1)
+            {
+                if(modificando == 1)
+                {
+                    let url = "{{ route('asistente.paciente.modificar') }}";
 
-                    url: url,
-                    type: "get",
-                    data: {
-                        id: id_paciente,
-                        nombre: nombre_paciente,
-                        apellido_uno: apellido_uno_paciente,
-                        apellido_dos: apellido_dos_paciente,
-                        fecha_nacimiento: fecha_nacimiento,
-                        sexo: sexo_paciente,
-                        email: email_paciente,
-                        telefono: telefono_paciente,
-                    },
-                })
-                .done(function(data) {
-                    console.log(data);
-                    if (data.estado == 1)
-                    {
+                    $.ajax({
+
+                        url: url,
+                        type: "get",
+                        data: {
+                            id: id_paciente,
+                            nombre: nombre_paciente,
+                            apellido_uno: apellido_uno_paciente,
+                            apellido_dos: apellido_dos_paciente,
+                            fecha_nacimiento: fecha_nacimiento,
+                            sexo: sexo_paciente,
+                            email: email_paciente,
+                            telefono: telefono_paciente,
+                        },
+                    })
+                    .done(function(data) {
+                        console.log(data);
                         if (data.estado == 1)
                         {
-                            $('#datos_consulta_nombre').text(nombre_paciente + ' ' + apellido_uno_paciente + ' ' + apellido_dos_paciente);
-                            $('#datos_consulta_edad').text(fecha_nacimiento);
-                            if (sexo_paciente == 'M') {
-                                $('#datos_consulta_sexo').text('Masculino');
-                            } else {
-                                $('#datos_consulta_sexo').text('Femenino');
+                            if (data.estado == 1)
+                            {
+                                $('#datos_consulta_nombre').text(nombre_paciente + ' ' + apellido_uno_paciente + ' ' + apellido_dos_paciente);
+                                $('#datos_consulta_edad').text(fecha_nacimiento);
+                                if (sexo_paciente == 'M') {
+                                    $('#datos_consulta_sexo').text('Masculino');
+                                } else {
+                                    $('#datos_consulta_sexo').text('Femenino');
+                                }
+                                $('#datos_consulta_email').text(email_paciente);
+                                $('#datos_consulta_telefono').text(telefono_paciente);
+
+                                $('.paciente_view_asistente').show();
+                                $('.paciente_edit_asistente').hide();
+                                $('#modificando_paciente_asistente').val(0);
+
+                                swal({
+                                    title: "Actualización de Paciente",
+                                    text: "Actualización Exitosa",
+                                    icon: "success",
+                                });
                             }
-                            $('#datos_consulta_email').text(email_paciente);
-                            $('#datos_consulta_telefono').text(telefono_paciente);
-
-                            $('.paciente_view_asistente').show();
-                            $('.paciente_edit_asistente').hide();
-                            $('#modificando_paciente_asistente').val(0);
-
-                            swal({
-                                title: "Actualización de Paciente",
-                                text: "Actualización Exitosa",
-                                icon: "success",
-                            });
+                            else
+                            {
+                                swal({
+                                    title: "Actualización de Paciente",
+                                    text: "Falla en Actualización.\nIntente de nuevo.",
+                                    icon: "error",
+                                });
+                            }
                         }
                         else
                         {
@@ -1877,39 +1886,30 @@
                                 icon: "error",
                             });
                         }
-                    }
-                    else
-                    {
-                        swal({
-                            title: "Actualización de Paciente",
-                            text: "Falla en Actualización.\nIntente de nuevo.",
-                            icon: "error",
-                        });
-                    }
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        console.log(jqXHR, ajaxOptions, thrownError)
+                    });
+                }
+                else
+                {
+                    swal({
+                        title: "Actualización de Paciente",
+                        text: "Esta actualizando al paciente sin haber inicado proceso de edición",
+                        icon: "error",
+                    });
+                }
             }
             else
             {
                 swal({
                     title: "Actualización de Paciente",
-                    text: "Esta actualizando al paciente sin haber inicado proceso de edición",
+                    text: "Campos requeridos.\n"+mensaje,
                     icon: "error",
+                    buttons: "Aceptar"
                 });
             }
         }
-        else
-        {
-            swal({
-                title: "Actualización de Paciente",
-                text: "Campos requeridos.\n"+mensaje,
-                icon: "error",
-                buttons: "Aceptar"
-            });
-        }
-    }
 
         function buscar_ciudad_general(input_region, input_ciudad, id_ciudad=0)
         {

@@ -1895,7 +1895,7 @@
                             </div>
 
                             <!-- Procedimientos -->
-                            <div class="col-md-4">
+                            <div class="col-md-8">
                                 <div class="card">
                                     <div class="card-header pt-3 pb-2 bg-light">
                                         <div class="row">
@@ -1917,6 +1917,7 @@
                                                             <th class="text-wrap text-left align-middle">Descripcion</th>
                                                             {{-- <th class="text-wrap text-left align-middle">minutos_bloque</th> --}}
                                                             <th class="text-wrap text-left align-middle">Cantidad Bloques</th>
+                                                            <th class="text-wrap text-left align-middle">Valor</th>
                                                             <th class="text-wrap text-left align-middle">Eliminar</th>
                                                         </tr>
                                                     </thead>
@@ -1927,6 +1928,7 @@
                                                             <td class="align-middle text-left">{{ $proced->descripcion }}</td>
                                                             {{-- <td class="align-middle text-left">{{ $proced->minutos_bloque }}</td> --}}
                                                             <td class="align-middle text-left">{{ $proced->cantidad_bloques }}</td>
+                                                            <td class="align-middle text-left">$ {{ empty($proced->valor)?0:number_format($proced->valor, 0, ",", ".") }}</td>
                                                             <td class="align-middle text-left">
                                                                 <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm({{ $proced->id }});"><i class="feather icon-trash"></i></button>
                                                             </td>
@@ -1946,63 +1948,8 @@
                     <!--SUCURSALES-->
                     <div class="tab-pane fade" id="sucursales" role="tabpanel" aria-labelledby="sucursales-tab">
 
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="card">
-                                    <div class="card-header pt-3 pb-2 bg-light">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <h6 class="f-18 d-inline mt-3 text-info">Sucursales</h6>
-                                                <div class="btn-group mb-2 mr-2 float-right">
-                                                    <button type="button" class="btn btn-info btn-sm" onclick="ag_sucursal();"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Añadir nueva</button>
-                                                    <button type="button" class="btn btn-outline-info  btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
-                                                    <div class="dropdown-menu">
-                                                        <button class="dropdown-item" type="button" class="btn  btn-primary" data-toggle="modal" data-target="#modal_agregar_lugar_existente">Desasociar o agregar<br> lugar de atención <br>existente</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-12 mb-3">
-                                            </div>
-                                        </div>
-                                        <table id="sucursales_cm" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center align-middle">Identificación</th>
-                                                    <th class="text-center align-middle">Dirección</th>
-                                                    <th class="text-center align-middle">Contacto</th>
-                                                    <th class="text-center align-middle">Acción</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="align-middle text-center"><strong>CEMICAL (CASA MATRIZ)</strong><br>00.000.000-0</td>
-                                                    <td class="align-middle text-center">
-                                                        <span>Arlegui, 23</span><br>
-                                                        <span>Viña del Mar</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <span>contacto@correo.cl</span><br>
-                                                        <span>2178218</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="ed_sucursal();" data-toggle="tooltip" data-placement="top" title="Editar"><i class="feather icon-edit"></i></button>
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="asis_sucursal();" data-toggle="tooltip" data-placement="top" title="Asistentes"><i class="feather icon-user"></i></button>
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="hor_sucursal();" data-toggle="tooltip" data-placement="top" title="Horario de sucursal"><i class="feather icon-watch"></i></button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @include('general.seccion_adm_institucion.sucursales')
+
                     </div>
                 </div>
             </div>
@@ -2470,7 +2417,14 @@
                                 <div class="form-group fill">
                                     <label class="floating-label">Cantidad Bloques</label>
                                     <div class="d-flex justify-content-between">
-                                        <input class="form-control form-control-sm" type="number" name="a_procedimeinto_cantidad_bloques" id="a_procedimeinto_cantidad_bloques" value="">
+                                        <input class="form-control form-control-sm" type="number" name="a_procedimeinto_cantidad_bloques" id="a_procedimeinto_cantidad_bloques" step="1" max="24" value="">
+                                    </div>
+                                </div>
+
+                                <div class="form-group fill">
+                                    <label class="floating-label">Valor $</label>
+                                    <div class="d-flex justify-content-between">
+                                        <input class="form-control form-control-sm" type="number" name="a_procedimeinto_valor" id="a_procedimeinto_valor" step="1"  value="0">
                                     </div>
                                 </div>
 
@@ -2827,27 +2781,6 @@
             .fail(function() {
                 console.log("error");
             });
-        }
-
-
-        /*-SUCURSALES-*/
-        /*-Agregar sucursal-*/
-        function ag_sucursal() {
-            $('#a_sucursal').modal('show');
-        }
-        /*-Editar sucursal-*/
-        function ed_sucursal() {
-            $('#e_sucursal').modal('show');
-        }
-
-        /*-Asistentes de sucursal-*/
-        function asis_sucursal() {
-            $('#asistentes_sucursal').modal('show');
-        }
-
-        /*-Horario sucursal -*/
-        function hor_sucursal() {
-            $('#horario_sucursal').modal('show');
         }
 
         /** PERFIL DE LA INSTITUCION */
@@ -4834,6 +4767,7 @@
         let nombre = $('#a_procedimeinto_nombre').val();
         let descripcion = $('#a_procedimeinto_descripcion').val();
         let cantidad_bloques = $('#a_procedimeinto_cantidad_bloques').val();
+        let valor = $('#a_procedimeinto_valor').val();
         let valido = 1;
         let mensaje = '';
         // validar campos
@@ -4862,6 +4796,7 @@
                 descripcion : descripcion,
                 minutos_bloque : 15,
                 cantidad_bloques : cantidad_bloques,
+                valor : valor,
                 otros : '',
                 _token: CSRF_TOKEN,
             }
@@ -4888,6 +4823,7 @@
                                 <td class="align-items-left text-left">${v.nombre}s</td>
                                 <td class="align-items-left text-left">${v.descripcion}</td>
                                 <td class="align-items-left text-left">${v.cantidad_bloques}</td>
+                                <td class="align-items-left text-left">${v.valor}</td>
                                 <td class="align-items-left text-left">
                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm(${v.id})"><i class="feather icon-trash"></i></button>
                                 </td>
@@ -4971,6 +4907,7 @@
                             <td class="align-items-left text-left">${v.nombre}s</td>
                             <td class="align-items-left text-left">${v.descripcion}</td>
                             <td class="align-items-left text-left">${v.cantidad_bloque}</td>
+                            <td class="align-items-left text-left">${v.valor}</td>
                             <td class="align-items-left text-left">
                                 <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm(${v.id})"><i class="feather icon-trash"></i></button>
                             </td>

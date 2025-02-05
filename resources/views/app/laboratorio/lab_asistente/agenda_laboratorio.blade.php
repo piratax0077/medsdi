@@ -1,5 +1,123 @@
 @extends('template.laboratorio.laboratorio_asistente.template')
+
+@section('page-styles')
+    <link href='{{ asset('js/fullcalendar-5.10.1/lib/main.css') }}' rel='stylesheet' />
+
+    <style>
+        #loading {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        #calendar {
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        /* kill the scrollbars and allow natural height */
+        .fc-scroller,
+        .fc-day-grid-container,
+        /* these divs might be assigned height, which we need to cleared */
+        .fc-time-grid-container {
+            /* */
+            overflow-x: hidden;
+            overflow-y: auto !important;
+            height: auto !important;
+        }
+
+        .fc-timegrid-event .fc-event-time{
+            font-size: 1rem!important;
+        }
+
+        .fc-v-event .fc-event-title{
+            font-size: 0.9rem!important;
+        }
+
+        /* kill the horizontal border/padding used to compensate for scrollbars */
+        .fc-row {
+            border: 0 !important;
+            margin: 0 !important;
+        }
+
+        .fc .fc-timegrid-slot {
+            height: 5em!important;
+        }
+
+        .fc-timegrid-event-harness > .fc-timegrid-event {
+          /* height:6em; */
+		}
+
+        .fc .fc-toolbar-title {
+            font-size: 1.4em;
+            margin: 0;
+        }
+
+        .fc .fc-toolbar.fc-header-toolbar {
+            margin-bottom: 0px!important;
+        }
+
+        .btn-group>.btn,
+        .btn-group-vertical>.btn {
+            position: relative;
+            flex: 1 1 auto;
+            padding: 5px 5px;
+            font-size: 0.8rem;
+        }
+
+        .fc-today-button{
+            padding: 5px 5px;
+            font-size: 0.8rem;
+        }
+
+         .btn.btn-agenda {
+            width: 38px !important;
+            height: 38px !important;
+            font-size: 22px !important;
+            padding: 0px;
+            border-radius: 50%!important;
+        }
+
+        @media (max-width: 767.98px) {
+
+            .t-lugar-aten{
+                font-size:0.9rem!important;
+            }
+
+            .t-tipo-agenda {
+                font-size:0.94rem!important;
+            }
+
+             .btn.btn-agenda {
+                width: 30px !important;
+                height: 30px !important;
+                font-size: 15px !important;
+                padding: 0px;
+                border-radius: 50%!important;
+            }
+
+            .fc .fc-toolbar-title {
+            font-size: 1rem!important;
+            margin: 0;
+            }
+
+             .btn-group>.btn,
+            .btn-group-vertical>.btn {
+                position: relative;
+                flex: 1 1 auto;
+                padding: 1px 5px;
+                font-size: 0.8rem;
+            }
+
+        }
+    </style>
+
+    <link href='{{ asset('css/estilos_boton_agen_examenes.css') }}' rel='stylesheet' />
+@endsection
+
 @section('content')
+
   <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -30,179 +148,8 @@
                                 </p>
                             </div>
                             <div class="card-body">
-                                <div class="row mt-3">
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                        <label class="floating-label-activo">Fecha</label>
-                                        <input type="date" class="form-control form-control-sm" name="nacimiento_paciente" id="nacimiento_paciente">
-                                    </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="form-group">
-                                            <label class="floating-label">Laboratorio</label>
-                                            <select id="comuna_paciente" name="comuna_paciente" class="form-control form-control-sm">
-                                                <option>Seleccione una opción</option>
-                                                <option>Centro Médico Santiago Centro</option>
-                                                <option>Centro Médico Rancagua</option>
-                                                <option>Centro Médico Viña del Mar</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <button type="button" class="btn btn-info btn-block btn-sm">Filtrar</button>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <table id="agenda_laboratorio" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-wrap text-center align-middle">Acción</th>
-                                                <th class="text-wrap text-center align-middle">Pago</th>
-                                                <th class="text-wrap text-center align-middle">Hora</th>
-                                                <th class="text-center align-middle">Sucursal</th>
-                                                <th class="text-wrap text-center align-middle">Paciente</th>
-                                                <th class="text-center align-middle">Contacto Paciente</th>
-                                                <th class="text-center align-middle">Estado</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="text-center align-middle">
-                                                    <button href="#!" class="btn btn-info btn-sm rounded-circle" data-toggle="tooltip" data-placement="top" title="Confirmar Hora"><i class="feather icon-check"></i></button>
-                                                    <button href="#!" class="btn btn-danger btn-sm rounded-circle" data-toggle="tooltip" data-placement="top" title="Anular Hora"><i class="feather icon-x"></i></button>
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                    <div class="btn-group">
-                                                        <button class="btn btn-info dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pago</button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal_venta_bonos_api" style="cursor: pointer;">Vender Bono</a>
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal_recepcion_bonos_api" style="cursor: pointer;">Recibir Bono o Programa</a>
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal_boleta_electronica" style="cursor: pointer;">Particular</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    13:00 hrs
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                    <span><strong>Centro Médico Santiago Centro</strong></span><br>
-                                                    <span>Portugal, Nº 571</span><br>
-                                                    <span>Santiago Centro</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    Pepita Silva Mora<br>
-                                                    19.243.455-1
-                                                </td>
-                                                <td class="text-center align-middle">paciente@gmail.com<br>+569 4324343</td>
-                                                <td class="align-middle text-center">
-                                                    <span class="badge badge-success">
-                                                    Hora confirmada</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center align-middle">
-                                                    <button class="btn btn-info btn-sm rounded-circle" data-toggle="tooltip" data-placement="top" title="Confirmar Hora"><i class="feather icon-check"></i></button>
-                                                    <button class="btn btn-danger btn-sm rounded-circle" data-toggle="tooltip" data-placement="top" title="Anular Hora"><i class="feather icon-x"></i></button>
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                    <div class="btn-group">
-                                                        <button class="btn btn-info dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pago</button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal_venta_bonos_api" style="cursor: pointer;">Vender Bono</a>
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal_recepcion_bonos_api" style="cursor: pointer;">Recibir Bono o Programa</a>
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal_boleta_electronica" style="cursor: pointer;">Particular</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    13:00 hrs
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                    <span><strong>Centro Médico Santiago Centro</strong></span><br>
-                                                    <span>Portugal, Nº 571</span><br>
-                                                    <span>Santiago Centro</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    Pepita Silva Mora<br>
-                                                    19.243.455-1
-                                                </td>
-                                                <td class="text-center align-middle">paciente@gmail.com<br>+569 4324343</td>
-                                                <td class="align-middle text-center">
-                                                    <span class="badge badge-warning">
-                                                    Hora pendiente</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center align-middle">
-                                                    <button class="btn btn-info btn-sm rounded-circle" data-toggle="tooltip" data-placement="top" title="Confirmar Hora"><i class="feather icon-check"></i></button>
-                                                    <button class="btn btn-danger btn-sm rounded-circle" data-toggle="tooltip" data-placement="top" title="Anular Hora"><i class="feather icon-x"></i></button>
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                    <div class="btn-group">
-                                                        <button class="btn btn-info dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pago</button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal_venta_bonos_api" style="cursor: pointer;">Vender Bono</a>
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal_recepcion_bonos_api" style="cursor: pointer;">Recibir Bono o Programa</a>
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal_boleta_electronica" style="cursor: pointer;">Particular</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    13:00 hrs
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                    <span><strong>Centro Médico Santiago Centro</strong></span><br>
-                                                    <span>Portugal, Nº 571</span><br>
-                                                    <span>Santiago Centro</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    Pepita Silva Mora<br>
-                                                    19.243.455-1
-                                                </td>
-                                                <td class="text-center align-middle">paciente@gmail.com<br>+569 4324343</td>
-                                                <td class="align-middle text-center">
-                                                    <span class="badge badge-danger">
-                                                    Hora cancelada</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center align-middle">
-                                                    <button class="btn btn-info btn-sm rounded-circle" data-toggle="tooltip" data-placement="top" title="Confirmar Hora"><i class="feather icon-check"></i></button>
-                                                    <button class="btn btn-danger btn-sm rounded-circle" data-toggle="tooltip" data-placement="top" title="Anular Hora"><i class="feather icon-x"></i></button>
-
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                    <div class="btn-group">
-                                                        <button class="btn btn-info dropdown-toggle btn-sm" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pago</button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal_venta_bonos_api" style="cursor: pointer;">Vender Bono</a>
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal_recepcion_bonos_api" style="cursor: pointer;">Recibir Bono o Programa</a>
-                                                            <a class="dropdown-item" data-toggle="modal" data-target="#modal_boleta_electronica" style="cursor: pointer;">Particular</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    13:00 hrs
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                    <span><strong>Centro Médico Santiago Centro</strong></span><br>
-                                                    <span>Portugal, Nº 571</span><br>
-                                                    <span>Santiago Centro</span>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    Pepita Silva Mora<br>
-                                                    19.243.455-1
-                                                </td>
-                                                <td class="text-center align-middle">paciente@gmail.com<br>+569 4324343</td>
-                                                <td class="align-middle text-center">
-                                                    <span class="badge badge-purple">
-                                                    Esperando atención</span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="col-md-12 mr-5 px-4 card">
+                                    <div id='agenda'></div>
                                 </div>
                             </div>
                         </div>
@@ -213,180 +160,187 @@
     </div>
     <!--Cierre: Container Completo-->
 
-<!--Modal Recepción de Bonos y programas-->
-   <div id="modal_recepcion_bonos_api" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Recepcion de bonos" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="modal_pago_consulta_title">Recepción de bonos y programas</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body pb-0">
-                    <form id="pago_atencion_medica">
-                        <div class="form-row">
-                            <div class="col-sm-12 mt-2">
-                                <div class="form-group">
-                                    <label class="floating-label">Rut</label>
-                                    <input type="person" class="form-control" name="rut" id="rut">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Nº de bono o programa</label>
-                                    <input type="text" class="form-control" name="bono" id="bono">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Nombre</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Profesional</label>
-                                    <input type="text" class="form-control" name="profesional" id="profesional">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Valor total</label>
-                                    <input name="valor_consulta" id="valor_consulta" type="number" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Convenio</label>
-                                    <select id="prevision" name="previsioon" class="form-control">
-                                        <option>Selecione una opción</option>
-                                        <option>Particular</option>
-                                        <option>Fonasa</option>
-                                        <option>Banmédica</option>
-                                        <option>Colmena</option>
-                                        <option>Cruz Blanca</option>
-                                        <option>Nueva Masvida</option>
-                                        <option>Consalud</option>
-                                        <option>Cruz del Norte</option>
-                                        <option>Vida Tres</option>
-                                        <option>Isalud</option>
-                                        <option value="control sin costo">Control sin costo</option>
-                                    </select>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <div class="switch switch-success d-inline m-r-10">
-                                        <input type="checkbox" id="recepcion_programa">
-                                        <label for="recepcion_programa" class="cr"></label>
-                                    </div>
-                                    <label>Recepción de programa</label>
-                                </div>
-                                <div class="form-group" id="sesiones_programa" style="display:none">
-                                    <label class="floating-label">Nº de Sesiones</label>
-                                    <input name="n_sesiones" id="n_sesiones" type="number" class="form-control">
-                                </div>
-                                <hr>
-                                <div class="form-group text-center my-2 pb-2">
-                                    <button type="submit" class="btn btn-success">Recepcionar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
 
-                </div>
-            </div>
-        </div>
-    </div>
+@endsection
 
-    <!--Modal Venta de Bonos API-->
-    <div id="modal_venta_bonos_api" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_pago_consulta_0" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white" id="modal_pago_consulta_title">Pago de Atención Médica</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body pb-0">
-                    <form id="pago_atencion_medica">
-                        <div class="form-row">
-                            <div class="col-sm-12 mt-2">
-                                <div class="form-group">
-                                    <label class="floating-label">Rut</label>
-                                    <input type="person" class="form-control" name="rut" id="rut">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Nº de serie</label>
-                                    <input type="text" class="form-control" name="serie" id="serie">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Nombre</label>
-                                    <input type="text" class="form-control" name="nombre" id="nombre">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Valor de la Consulta</label>
-                                    <input name="valor_consulta" id="valor_consulta" type="number" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Previsión</label>
-                                    <select id="prevision" name="previsioon" class="form-control"  >
-                                        <option value="0">Selecione una opción</option>
-                                        <option value="particular">Particular</option>
-                                        <option value="fonasa">Fonasa</option>
-                                        <option value="banmedica">Banmedica</option>
-                                        <option value="colmena">Colmena</option>
-                                        <option value="cruz verde">Cruz Verde</option>
-                                        <option value="nueva masvida">Nueva MasVida</option>
-                                        <option value="consalud">Consalud</option>
-                                        <option value="control sin costo">Control sin costo</option>
-                                    </select>
-                                </div>
+@section('page-script')
+    <script>
+        $(document).ready(function () {
+            // var calendarEl = document.getElementById('agenda');
+            // var CalendarEl = new FullCalendar.Calendar(calendarEl, {
+            //     droppable: false,
+            //     editable: false,
+            //     locale: "es",
+            //     timeZone: 'local',
+            //     initialDate: '2025-02-05',
+            //     initialView: 'timeGridWeek',
+            //     themeSystem: 'bootstrap',
+            //     slotDuration: '00:15:00',
+            //     headerToolbar: {
+            //         //start: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek', // will normally be on the left. if RTL, will be on the right
+            //         //center: 'title',
+            //         //end: 'today prev,next'
+            //         start: 'prev,next today',
+            //         center: 'title',
+            //         // right: 'timeGridWeek,listWeek'
+            //         right: 'timeGridWeek,listWeek'
+            //     },
+            //     weekends: true,
+            //     nowIndicator: true,
+            //     selectable: true,
+            //     //dayMaxEvents: true,
+            //     titleFormat: {
+            //         year: 'numeric',
+            //         month: 'numeric',
+            //         day: 'numeric'
+            //     },
+            //     allDaySlot: false,
+            //     expandRows: true,
+            //     slotEventOverlap: false,
 
-                                <div class="form-group mt-3">
-                                    <label class="floating-label">Folio</label>
-                                    <input type="number" class="form-control" name="folio" id="folio">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Valor Consulta</label>
-                                    <input type="number" class="form-control" name="valor_consulta" id="valor_consulta">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Valor Pagar</label>
-                                    <input type="number" class="form-control" name="valor_pagar" id="valor_pagar">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Valor Seguro</label>
-                                    <input type="number" class="form-control" name="valor_seguro" id="valor_seguro">
-                                </div>
-                                <div class="form-group">
-                                    <label class="floating-label">Valor Copago</label>
-                                    <input type="number" class="form-control" name="valor_copago" id="valor_copagp">
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="modal-footer py-1">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-info">Pagar Atención Médica</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+            //     selectConstraint: "businessHours",
+            //     slotLabelFormat: {
+            //         hour: 'numeric',
+            //         minute: '2-digit',
+            //         omitZeroMinute: false,
+            //         meridiem: 'medium'
+            //     },
+            //     eventDidMount: function(info) {
+            //         {{--   console.log(info.el);  --}}
+            //         $(info.el).tooltip({
+            //             title: info.event.extendedProps.description,
+            //             placement: "top",
+            //             trigger: "hover",
+            //             container: "body"
+            //         });
+            //     },
 
+            //     events: function(start, end, callback){
+            //             var arrayTemp = [];
+            //             arrayTemp.push({
+            //                 id: 1,
+            //                 title: 'Octavo Par',
+            //                 description: 'E - Johan Davila' ,
+            //                 start: '2025-02-05T13:00:01',
+            //                 end: '2025-02-05T14:00:00',
+            //                 // backgroundColor: element.estado.color
+            //             });
+            //             end(arrayTemp);
 
-    <!--Modal Boleta electronica-->
-    <div id="modal_boleta_electronica" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal_pago_consulta_0" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-info">
-                    <h5 class="modal-title text-white">Boleta electrónica (Servicios de Impuestos Internos)</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body pb-0">
-                </div>
-            </div>
-        </div>
-    </div>
+            //     },
 
+            //     eventClick: function(info) {
+            //         window.location.href = "{{ route('laboratorio.ver.ficha.atencion.orl') }}";
+            //     },
 
+            //     selectOverlap: function(event) {
+            //         {{--  console.log(event);  --}}
+            //         return event.rendering === 'background';
+            //     },
 
-    <script type="text/javascript">
-         $(document).ready(function()
-        {
-             $("#boton_pago").tooltip();
+            //     dateClick: function(date, jsEvent, view) {
+
+            //         swal({
+            //             title: "Toma de Hora",
+            //             text: "Horario no disponible con el Profesional",
+            //             icon: "error",
+            //             buttons: "Aceptar",
+            //             DangerMode: true,
+            //         });
+            //     },
+            //     eventDrop: function(info) {
+            //         {{--  console.log(info);  --}}
+            //         return false;
+            //     },
+            // });
+            // CalendarEl.render();
+
+            var Calendar = FullCalendar.Calendar;
+            var calendarEl = document.getElementById('agenda');
+            var calendar = new Calendar(calendarEl, {
+                droppable: false,
+                editable: false,
+                locale: "es",
+                timeZone: 'local',
+                // initialDate: '2025-02-05',
+                initialView: 'timeGridWeek',
+                themeSystem: 'bootstrap',
+                slotDuration: '00:30:00',
+                headerToolbar: {
+                    //start: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek', // will normally be on the left. if RTL, will be on the right
+                    //center: 'title',
+                    //end: 'today prev,next'
+                    start: 'prev,next today',
+                    center: 'title',
+                    // right: 'timeGridWeek,listWeek'
+                    right: 'timeGridWeek,listWeek'
+                },
+                weekends: true,
+                nowIndicator: true,
+                selectable: true,
+                dayMaxEvents: true,
+                titleFormat: {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                },
+                allDaySlot: false,
+                // expandRows: true,
+                // slotEventOverlap: false,
+
+                selectConstraint: "businessHours",
+                slotLabelFormat: {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    omitZeroMinute: false,
+                    meridiem: 'medium'
+                },
+                events:[
+                    {
+                    title: 'E - Johan Davila - Octavo Par',
+                    start: '2025-02-05T08:00:01.008',
+                    end: '2025-02-05T09:00:00.008'
+                    }
+                ],
+                eventClick: function(info) {
+                    window.location.href = "{{ route('laboratorio.ver.ficha.atencion.orl') }}";
+                },
+            });
+
+            // var data_businessHours = [];
+            // data_businessHours.push({
+            //     'daysOfWeek': 0 ,
+            //     'startTime': '08:00:01',
+            //     'endTime': '22:00:00'
+            // });
+            // data_businessHours.push({
+            //     'daysOfWeek': 2 ,
+            //     'startTime': '08:00:01',
+            //     'endTime': '22:00:00'
+            // });
+            // data_businessHours.push({
+            //     'daysOfWeek': 3 ,
+            //     'startTime': '08:00:01',
+            //     'endTime': '22:00:00'
+            // });
+            // data_businessHours.push({
+            //     'daysOfWeek': 4 ,
+            //     'startTime': '08:00:01',
+            //     'endTime': '22:00:00'
+            // });
+            // data_businessHours.push({
+            //     'daysOfWeek': 5 ,
+            //     'startTime': '08:00:01',
+            //     'endTime': '22:00:00'
+            // });
+
+            calendar.setOption('hiddenDays', '6' );
+            // calendar.setOption('businessHours', data_businessHours );
+
+            calendar.setOption('slotMinTime', '08:00:01' );
+            calendar.setOption('slotMaxTime', '22:00:00' );
+
+            calendar.render();
         });
-
     </script>
-
 @endsection

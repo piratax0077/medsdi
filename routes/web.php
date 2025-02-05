@@ -1346,6 +1346,12 @@ Route::group([
     // Route::post('dame_profesional_servicio', [App\Http\Controllers\LaboratorioController::class, 'dame_profesional'])->name('laboratorio.dame_profesional_cm');
     Route::post('agregar_laboratorio',[App\Http\Controllers\LaboratorioController::class, 'agregar_laboratorio'])->name('laboratorio.agregar_laboratorio');
     Route::post('eliminar_laboratorio',[App\Http\Controllers\LaboratorioController::class, 'eliminar_laboratorio'])->name('laboratorio.eliminar_laboratorio_cm');
+
+    Route::get('ver/ficha/atencion/lab/orl', function(){
+        return view('app.laboratorio.atencion_prof_laboratorio_especialidades');
+    })->name('laboratorio.ver.ficha.atencion.orl');
+
+
 });
 
 
@@ -2187,6 +2193,24 @@ Route::group([
     Route::post('/archivo/carga', [App\Http\Controllers\CargaArchivoController::class, 'cargaArchivoTemp'])->name('ministerio.archivo.carga');
 
 });
+
+Route::group([
+    'middleware' => ['role:Admin|Institucion|AsistenteAdm|Adm_Comercial|Profesional|AdministradorLaboratorio'],
+    'prefix' => 'sucursal',
+], function () {
+
+    Route::post('registrar', [App\Http\Controllers\SucursalController::class, 'registrar_r'])->name('sucursal.registrar');
+    Route::post('modificar', [App\Http\Controllers\SucursalController::class, 'modificar_r'])->name('sucursal.modificar');
+    Route::get('registros/ver', [App\Http\Controllers\SucursalController::class, 'verRegistros_r'])->name('sucursal.ver_registros');
+    Route::get('ver', [App\Http\Controllers\SucursalController::class, 'verRegistro_r'])->name('sucursal.ver_registro');
+
+    Route::post('horario/registrar', [App\Http\Controllers\SucursalHorarioController::class, 'registrar_r'])->name('sucursal.horario.registrar');
+    Route::post('horario/modificar', [App\Http\Controllers\SucursalHorarioController::class, 'modificar_r'])->name('sucursal.horario.modificar');
+    Route::get('horario/registros/ver', [App\Http\Controllers\SucursalHorarioController::class, 'verRegistros_r'])->name('sucursal.horario.ver_registros');
+    Route::get('horario/ver', [App\Http\Controllers\SucursalHorarioController::class, 'verRegistro_r'])->name('sucursal.horario.ver_registro');
+
+});
+
 
 /** web */
 Route::get('/profesional/especialidad', [App\Http\Controllers\EscritorioGeneral::class, 'cargar_especialidad'])->name('web.profesional.buscar_especialidad');

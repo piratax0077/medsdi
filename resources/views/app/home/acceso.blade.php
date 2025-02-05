@@ -230,7 +230,7 @@
                     <div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
 
-                            <a href="{{ ROUTE('app.laboratorio.adm_general.home') }}">
+                            <a href="{{ ROUTE('laboratorio.adm_general.home') }}">
                                 <div class="card-body pb-0 pt-0">
                                     <img class="wid-40 mt-3"
                                         src="{{ asset('images/iconos_ingreso/laboratorio.svg') }}" alt="">
@@ -241,7 +241,7 @@
                     </div>--}}
 					<div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
-                            <a href="{{ ROUTE('app.laboratorio.adm_general.home') }}">
+                            <a href="{{ ROUTE('laboratorio.adm_general.home') }}">
                                 <div class="card-body pb-0 pt-0">
                                     <img class="wid-40 mt-3"
                                         src="{{ asset('images/iconos_ingreso/laboratorio.svg') }}" alt="">
@@ -252,7 +252,7 @@
                     </div>
 					<div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
-                            <a href="{{ ROUTE('app.laboratorio.lab_profesional.escritorio_profesional_laboratorio') }}">
+                            <a href="{{ ROUTE('laboratorio.lab_profesional.escritorio_profesional_laboratorio') }}">
                                 <div class="card-body pb-0 pt-0">
                                     <img class="wid-40 mt-3"
                                         src="{{ asset('images/iconos_ingreso/laboratorio.svg') }}" alt="">

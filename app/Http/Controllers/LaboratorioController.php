@@ -41,6 +41,7 @@ use App\Models\TipoAdministrador;
 use App\Models\TipoConvenioInstitucion;
 use App\Models\TipoEspecialidad;
 use App\Models\SubTipoEspecialidad;
+use App\Models\Sucursal;
 use App\Models\TipoInstitucion;
 use App\Models\User;
 
@@ -1735,6 +1736,17 @@ class LaboratorioController extends Controller
         $filtro_prodce[]  = array('estado', 1);
         $procedimeintos = ProcedimientosCentro::where($filtro_prodce)->get();
 
+        $sucursales = Sucursal::where('id_institucion', $institucion->id)
+                        ->with('Direccion')
+                        ->get();
+        foreach ($sucursales as $key => $value)
+        {
+            $ciudad_suc = Ciudad::find($value->direccion->id_ciudad);
+            $region_suc = Region::find($ciudad_suc->id_region);
+            $sucursales[$key]->ciudadObj = $ciudad_suc;
+            $sucursales[$key]->regionObj = $region_suc;
+        }
+
         return view('app.laboratorio.configuracion')->with([
             'tipo_institucion' => $tipo_institucion,
             'institucion' => $institucion,
@@ -1756,6 +1768,8 @@ class LaboratorioController extends Controller
             'servicios' => $servicios,
             'servicios_internos' => $servicios_internos,
             'procedimeintos' => $procedimeintos,
+            'sucursales' => $sucursales,
+
         ]);
     }
 

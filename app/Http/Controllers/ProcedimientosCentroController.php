@@ -9,9 +9,9 @@ class ProcedimientosCentroController extends Controller
 {
     public function registrar_r(Request $request)
     {
-        return static::registrar( $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->otros );
+        return static::registrar( $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->otros, $request->valor );
     }
-    static public function registrar( $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $otros )
+    static public function registrar( $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $otros, $valor )
     {
         $datos = array();
         $error = array();
@@ -61,6 +61,7 @@ class ProcedimientosCentroController extends Controller
             $registro->descripcion = $descripcion;
             $registro->minutos_bloque = $minutos_bloque;
             $registro->cantidad_bloques = $cantidad_bloques;
+            $registro->valor = $valor;
             $registro->otros = $otros;
             $registro->estado = 1;
 
@@ -88,9 +89,9 @@ class ProcedimientosCentroController extends Controller
 
     public function modificar_r( Request $request)
     {
-        return static::modificar($request->id, $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->otros, $request->estado );
+        return static::modificar($request->id, $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->valor, $request->otros, $request->estado );
     }
-    static public function modificar($id, $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $otros, $estado )
+    static public function modificar($id, $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $valor, $otros, $estado )
     {
         $datos = array();
         $error = array();
@@ -115,6 +116,8 @@ class ProcedimientosCentroController extends Controller
                 $registro->minutos_bloque = $minutos_bloque;
             if(!empty($cantidad_bloques))
                 $registro->cantidad_bloques = $cantidad_bloques;
+            if(!empty($valor))
+                $registro->valor = $valor;
             if(!empty($otros))
                 $registro->otros = $otros;
             if( intval($estado) == 1 || intval($estado) == 0 )
@@ -186,10 +189,10 @@ class ProcedimientosCentroController extends Controller
 
     public function verRegistros_r(Request $request)
     {
-        return static::verRegistros($request->id, $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->otros, $request->estado);
+        return static::verRegistros($request->id, $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->valor, $request->otros, $request->estado);
 
     }
-    static public function verRegistros($id, $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $otros, $estado)
+    static public function verRegistros($id, $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $valor, $otros, $estado)
     {
         $datos = array();
         $error = array();
@@ -210,6 +213,8 @@ class ProcedimientosCentroController extends Controller
                 $filtro[] = array('minutos_bloque', $minutos_bloque);
             if(!empty($cantidad_bloques))
                 $filtro[] = array('cantidad_bloques', $cantidad_bloques);
+            if(!empty($valor))
+                $filtro[] = array('valor', $valor);
             if(!empty($otros))
                 $filtro[] = array('otros', $otros);
             if(!empty($estado))
