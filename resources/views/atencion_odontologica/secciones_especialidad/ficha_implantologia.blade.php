@@ -1568,7 +1568,7 @@
                                                                 <a class="nav-link-aten text-reset active" id="ant_med_dent_period_tab" data-toggle="tab" href="#ant_med_dent_period" role="tab" aria-controls="ant_med_dent_period" aria-selected="false">Antecedentes</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="hist_piezas_period_tab" data-toggle="tab" href="#hist_piezas_period" role="tab" aria-controls="hist_pieza_periods" aria-selected="true">Historia de la pieza</a>
+                                                                <a class="nav-link-aten text-reset" id="hist_piezas_period_hist_tab" data-toggle="tab" href="#hist_piezas_period_hist" role="tab" aria-controls="hist_pieza_period_hist" aria-selected="true">Historia de la pieza</a>
                                                             </li>
                                                             <li class="nav-item">
                                                                 <a class="nav-link-aten text-reset" id="estudio_rx_period_tab" data-toggle="tab" href="#estudio_rx_period" role="tab" aria-controls="estudio_rx_period" aria-selected="true">Estudio radiológico y periodontal</a>
@@ -1812,57 +1812,58 @@
                                                                 </div>
                                                             </div>
                                                             <!--HISTORIA-->
-                                                            <div class="tab-pane fade show " id="hist_piezas_period" role="tabpanel" aria-labelledby="hist_piezas_period_tab">
-                                                                @php $count_period = 1; @endphp
-                                                                @foreach ($examenes_period as $e)
-                                                                <div class="card-body mb-2">
-                                                                    <div class="row">
-                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <div class="form-row">
-                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                    <div class="form-group fill">
-                                                                                        <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                        <input type="text" class="form-control form-control-sm" name="historia_pza" id="historia_pza" value="{{ $e->numero_pieza }}">
+                                                            <div class="tab-pane fade show " id="hist_piezas_period_hist" role="tabpanel" aria-labelledby="hist_piezas_period_hist_tab">
+                                                                <div id="hist_piezas_period">
+                                                                    @php $count_period = 1; @endphp
+                                                                    @foreach ($examenes_period as $e)
+                                                                    <div class="card-body mb-2">
+                                                                        <div class="row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                        <div class="form-group fill">
+                                                                                            <label class="floating-label-activo-sm">Pieza N°</label>
+                                                                                            <input type="text" class="form-control form-control-sm" name="historia_pza" id="historia_pza" value="{{ $e->numero_pieza }}">
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
-                                                                                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                                                                    <div class="form-group fill">
-                                                                                        <label class="floating-label-activo-sm">Pérdida de la pieza</label>
-                                                                                        <input type="text" class="form-control form-control-sm" value="{{ $e->perdida }}">
+                                                                                    <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                                                                                        <div class="form-group fill">
+                                                                                            <label class="floating-label-activo-sm">Pérdida de la pieza</label>
+                                                                                            <input type="text" class="form-control form-control-sm" value="{{ $e->perdida }}">
+                                                                                        </div>
+                                                                                        <div class="form-group" id="div_perdida" style="display:none;">
+                                                                                            <label class="floating-label-activo-sm">Otro motivo</label>
+                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perdida" id="obs_perdida"></textarea>
+                                                                                        </div>
                                                                                     </div>
-                                                                                    <div class="form-group" id="div_perdida" style="display:none;">
-                                                                                        <label class="floating-label-activo-sm">Otro motivo</label>
-                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_perdida" id="obs_perdida"></textarea>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                                                                    <div class="form-group fill">
-                                                                                        <label class="floating-label-activo-sm">Años</label>
-                                                                                        <input type="text" class="form-control form-control-sm" value="{{ $e->tiempo }}">
-                                                                                    </div>
-                                                                                    <div class="form-group" id="div_anos_perd" style="display:none;">
-                                                                                        <label class="floating-label-activo-sm">Años</label>
-                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anos_perd" id="obs_anos_perd"></textarea>
+                                                                                    <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
+                                                                                        <div class="form-group fill">
+                                                                                            <label class="floating-label-activo-sm">Años</label>
+                                                                                            <input type="text" class="form-control form-control-sm" value="{{ $e->tiempo }}">
+                                                                                        </div>
+                                                                                        <div class="form-group" id="div_anos_perd" style="display:none;">
+                                                                                            <label class="floating-label-activo-sm">Años</label>
+                                                                                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anos_perd" id="obs_anos_perd"></textarea>
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Observaciones Pérdida</label>
+                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Oral" data-seccion="Examen Oral" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oral" id="obs_ex_oral">{{ $e->observaciones }}</textarea>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <div class="form-group">
-                                                                                <label class="floating-label-activo-sm">Observaciones Pérdida</label>
-                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Oral" data-seccion="Examen Oral" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oral" id="obs_ex_oral">{{ $e->observaciones }}</textarea>
+                                                                        <div class="row">
+                                                                            <div class="col-12">
+                                                                                <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_hist({{ $e->id }})">X</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="row">
-                                                                        <div class="col-12">
-                                                                            <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_hist({{ $e->id }})">X</button>
-                                                                        </div>
-                                                                    </div>
+                                                                    @php $count_period++; @endphp
+                                                                    @endforeach
                                                                 </div>
-                                                                @php $count_period++; @endphp
-                                                                @endforeach
-
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <div class="card">
