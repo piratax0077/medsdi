@@ -42,21 +42,21 @@
                     </div>
                 </div>
 				<div class="col-md-4">
-                    <div class="card subir py-auto d-none">
-                        <a href="#">
+                    <div class="card subir py-auto">
+                        <a href="{{ ROUTE('laboratorio.area_comercial') }}">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-50 text-center" src="{{ asset('images/iconos/adm_medica.png') }}">
-                                <h6 class="mt-2 mb-0">Administración médica</h6>
+                                <img class="wid-50 text-center" src="{{ asset('images/iconos/adm_comercial.png') }}">
+                                <h6 class="mt-2 mb-0">Administración comercial</h6>
                             </div>
                         </a>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card subir py-auto">
-                        <a href="{{ ROUTE('laboratorio.area_comercial') }}">
+                        <a href="#">
                             <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-50 text-center" src="{{ asset('images/iconos/adm_comercial.png') }}">
-                                <h6 class="mt-2 mb-0">Administración comercial</h6>
+                                <img class="wid-50 text-center" src="{{ asset('images/iconos/adm_medica.png') }}">
+                                <h6 class="mt-2 mb-0">Venta de Audifonos</h6>
                             </div>
                         </a>
                     </div>

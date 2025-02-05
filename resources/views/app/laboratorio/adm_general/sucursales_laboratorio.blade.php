@@ -100,7 +100,7 @@
                                 <td class="align-middle text-center">
                                     <!--Botón Modal-->
                                     <button type="button" class="btn btn-success btn-sm btn-icon accion_editar_valores" data-toggle="tooltip" data-placement="top" title="Configurar"><i class="fas fa-dollar-sign"></i></button>
-                                </td>                                                                        
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -637,7 +637,7 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="row">                                     
+                    <div class="row">
                         <div class="col-sm-12">
                             <h6 class="text-c-blue mb-2">Convenios</h6>
                         </div>
@@ -734,7 +734,7 @@ $('#sucursales_laboratorio').on('click', ".accion_editar_valores", function () {
     console.log("abrir modal accion_editar_valores");
     $('#modal_editar_valor_atencion').modal();
 });
- 
+
 </script>
 
 <!--Tabla-->
