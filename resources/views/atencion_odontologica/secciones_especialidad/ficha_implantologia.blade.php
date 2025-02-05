@@ -1813,7 +1813,8 @@
                                                             </div>
                                                             <!--HISTORIA-->
                                                             <div class="tab-pane fade show " id="hist_piezas_period" role="tabpanel" aria-labelledby="hist_piezas_period_tab">
-                                                                {{-- @foreach ($examenes_period as $e)
+                                                                @php $count_period = 1; @endphp
+                                                                @foreach ($examenes_period as $e)
                                                                 <div class="card-body mb-2">
                                                                     <div class="row">
                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -1821,17 +1822,13 @@
                                                                                 <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                     <div class="form-group fill">
                                                                                         <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                        <input type="text" class="form-control form-control-sm" name="historia_pza" id="historia_pza" value="3.2">
+                                                                                        <input type="text" class="form-control form-control-sm" name="historia_pza" id="historia_pza" value="{{ $e->numero_pieza }}">
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                                                                                     <div class="form-group fill">
                                                                                         <label class="floating-label-activo-sm">Pérdida de la pieza</label>
-                                                                                        <select name="perdida" id="perdida" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('perdida','div_perdida','obs_perdida',3);">
-                                                                                            <option selected="" value="1">Espontánea</option>
-                                                                                            <option value="2">Extracción por Urgencia</option>
-                                                                                            <option value="3">Otro describir</option>
-                                                                                        </select>
+                                                                                        <input type="text" class="form-control form-control-sm" value="{{ $e->perdida }}">
                                                                                     </div>
                                                                                     <div class="form-group" id="div_perdida" style="display:none;">
                                                                                         <label class="floating-label-activo-sm">Otro motivo</label>
@@ -1841,12 +1838,7 @@
                                                                                 <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
                                                                                     <div class="form-group fill">
                                                                                         <label class="floating-label-activo-sm">Años</label>
-                                                                                        <select name="anos_perd" id="anos_perd" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('anos_perd','div_anos_perd','obs_anos_perd',4);">
-                                                                                            <option selected="" value="1">< 1 año</option>
-                                                                                            <option value="2">2 años</option>
-                                                                                            <option value="3">3 años</option>
-                                                                                            <option value="4">Otro describir</option>
-                                                                                        </select>
+                                                                                        <input type="text" class="form-control form-control-sm" value="{{ $e->tiempo }}">
                                                                                     </div>
                                                                                     <div class="form-group" id="div_anos_perd" style="display:none;">
                                                                                         <label class="floating-label-activo-sm">Años</label>
@@ -1858,13 +1850,18 @@
                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                             <div class="form-group">
                                                                                 <label class="floating-label-activo-sm">Observaciones Pérdida</label>
-                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Oral" data-seccion="Examen Oral" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oral" id="obs_ex_oral"></textarea>
+                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Oral" data-seccion="Examen Oral" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oral" id="obs_ex_oral">{{ $e->observaciones }}</textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_hist({{ $e->id }})">X</button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-
-                                                                @endforeach --}}
+                                                                @php $count_period++; @endphp
+                                                                @endforeach
 
                                                                 <div class="row">
                                                                     <div class="col-md-12">
@@ -1872,7 +1869,7 @@
                                                                             <div class="card-body">
                                                                                 @php $count = 1; @endphp
                                                                                 <div id="contenedor_piezas_hist_period"></div>
-                                                                                <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nueva_pieza_dental_hist({{ $count }},'period')"><i class="fas fa-save"></i> Mostrar nueva pieza</button>
+                                                                                <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nueva_pieza_dental_hist({{ $count_period }},'period')"><i class="fas fa-save"></i> Mostrar nueva pieza</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -6034,8 +6031,15 @@ function confirmar_eliminar_pieza_dental_hist(id){
         success: function(resp){
             console.log(resp);
             if(resp.mensaje == 'OK'){
-                $('#hist_piezas').empty();
-                $('#hist_piezas').append(resp.v);
+                let seccion = resp.seccion;
+                if(seccion == 'impl'){
+                    $('#hist_piezas').empty();
+                    $('#hist_piezas').append(resp.v);
+                }else{
+                    $('#hist_piezas_period').empty();
+                    $('#hist_piezas_period').append(resp.v);
+                }
+
 
                 swal({
                     title:'Exito',

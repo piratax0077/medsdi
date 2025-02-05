@@ -108,6 +108,7 @@
                 tiempo: tiempo,
                 tiempo_texto: tiempo_texto,
                 observaciones: observaciones,
+                seccion:'impl',
                 _token: CSRF_TOKEN
             }
 
@@ -212,6 +213,7 @@
                 tiempo: tiempo,
                 tiempo_texto: tiempo_texto,
                 observaciones: observaciones,
+                seccion:'period',
                 _token: CSRF_TOKEN
             }
 
@@ -224,9 +226,9 @@
                 success: function(resp){
                     console.log(resp);
                     if(resp.mensaje == 'OK'){
-                        $('#hist_piezas').empty();
-                        $('#hist_piezas').append(resp.v);
-                        $('#contenedor_piezas_hist').empty();
+                        $('#hist_piezas_period').empty();
+                        $('#hist_piezas_period').append(resp.v);
+                        $('#contenedor_piezas_hist_period').empty();
                         swal({
                             title: "Pieza dental guardada",
                             text: "La pieza dental para examen ha sido guardada correctamente.",

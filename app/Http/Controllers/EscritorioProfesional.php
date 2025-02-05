@@ -2402,10 +2402,12 @@ class EscritorioProfesional extends Controller
         $examen->tiempo = $req->tiempo_texto;
         $examen->estado = 1;
         $examen->observaciones = $req->observaciones !== null ? $req->observaciones : '';
+        $examen->seccion = $req->seccion;
 
         if($examen->save()){
-            $examenes = $this->dameExamenesPiezaDentalPiezaHistoria($req->id_paciente, $profesional->id_tipo_especialidad);
-            $v = view('atencion_odontologica.include.examenes_dental_pieza_historial_todos',['examenes' => $examenes])->render();
+                $examenes = $this->dameExamenesPiezaDentalPiezaHistoria($req->id_paciente, $profesional->id_tipo_especialidad, $req->seccion);
+                $v = view('atencion_odontologica.include.examenes_dental_pieza_historial_todos',['examenes' => $examenes])->render();
+
         }
 
         return ['mensaje' => 'OK','v' => $v,'examenes' => $examenes];
@@ -2467,14 +2469,15 @@ class EscritorioProfesional extends Controller
     }
 
     public function eliminar_pieza_dental_examen_hist(Request $req){
+
         $examen = ExamenesDentalPiezaHistoria::find($req->id);
         $id_paciente = $examen->id_paciente;
-
+        $seccion = $examen->seccion;
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($examen->delete()){
-            $examenes = ExamenesDentalPiezaHistoria::where('id_paciente',$id_paciente)->get();
+            $examenes = $this->dameExamenesPiezaDentalPiezaHistoria($id_paciente, $profesional->id_tipo_especialidad, $seccion);
             $v = view('atencion_odontologica.include.examenes_dental_pieza_historial_todos',['examenes' => $examenes])->render();
-            return ['mensaje' => 'OK','v' => $v, 'examenes' => $examenes];
+            return ['mensaje' => 'OK','v' => $v, 'examenes' => $examenes,'seccion' => $seccion];
         }else{
             return ['mensaje' => 'error'];
         }
@@ -2685,9 +2688,10 @@ class EscritorioProfesional extends Controller
         return $examenes;
     }
 
-    public function dameExamenesPiezaDentalPiezaHistoria($id_paciente){
+    public function dameExamenesPiezaDentalPiezaHistoria($id_paciente,$tipo_especialidad, $seccion){
         $examenes = ExamenesDentalPiezaHistoria::where('id_paciente',$id_paciente)
         ->where('estado',1)
+        ->where('seccion', $seccion)
         ->get();
         return $examenes;
     }

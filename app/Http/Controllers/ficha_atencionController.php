@@ -1829,7 +1829,9 @@ class ficha_atencionController extends Controller
         /** EXAMEN OCTAVO PAR */
         $reg_octavo_par = OctavoPar::where('id_paciente', $paciente->id)->get();
         /** EXAMENES EVALUACION PRE IMPLANTE DENTAL  */
-        $examenes_preimplante = ExamenesDentalPiezaHistoria::where('id_paciente', $paciente->id)->get();
+        $examenes_preimplante = $this->dameHistorialDentalImpl($paciente->id,'impl');
+
+        $examenes_period = $this->dameHistorialDentalImpl($paciente->id,'period');
 
         return view($ruta_blade)->with(
             [
@@ -1841,6 +1843,7 @@ class ficha_atencionController extends Controller
                 'valores_piezas' => $valores_tratamientos[1],
                 'examenes_dental' => $examenes_dental,
                 'examenes_pre_implante' => $examenes_preimplante,
+                'examenes_period' => $examenes_period,
                 'examenes_dental_end' => $examenes_dental_end,
                 'examenes_dental_odontopediatria' => $examenes_dental_odontopediatria,
                 'examenes_rx_oral' => $examenes_rx_oral,
@@ -1976,6 +1979,11 @@ class ficha_atencionController extends Controller
 
             ]
         );
+    }
+
+    public function dameHistorialDentalImpl($id_paciente, $seccion){
+        $historial = ExamenesDentalPiezaHistoria::where('id_paciente', $id_paciente)->where('seccion',$seccion)->get();
+        return $historial;
     }
 
     public function damePresupuestosDental($id_paciente, $id_ficha_atencion, $id_lugar_atencion){
