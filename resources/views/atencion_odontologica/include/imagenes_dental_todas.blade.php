@@ -56,7 +56,7 @@
                                                 @if (isset($path['momento']) && $path['momento'] === 'Post')
                                                     <div>
                                                         <!-- Botón para ampliar imagen -->
-                                                        <a href="javascript:void(0)" onclick="amplificar_imagen('{{ json_encode($path) }}')">
+                                                        <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path['path'] }}')">
                                                             <img src="{{ asset('storage/' . ltrim($path['path'], '/')) }}"
                                                                 alt="Imagen del examen"
                                                                 class="img-fluid mx-2 imagen_rx">

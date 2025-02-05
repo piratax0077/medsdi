@@ -1350,6 +1350,14 @@ class EscritorioProfesional extends Controller
         return ['mensaje' => 'OK','v' => $v];
     }
 
+    public function mostrar_nueva_pieza_dental_tto(Request $req){
+
+        $idCounter = $req->counter ? $req->counter : 0;
+        $responsable = User::find(Auth::user()->id);
+        $v = view('atencion_odontologica.include.examenes_dental_tto',['counter' => $idCounter])->render();
+        return ['mensaje' => 'OK','v' => $v];
+    }
+
     public function guardar_examen_boca_general(Request $req){
 
         if($req->tipo_examen == "gral"){
@@ -1785,20 +1793,32 @@ class EscritorioProfesional extends Controller
     public function guardar_imagenes_dental_paciente(Request $req){
         try {
 
+            $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
             $rx = new ImagenesDentalPaciente;
             $rx->id_ficha_atencion = $req->id_ficha_atencion;
             $rx->id_paciente = $req->id_paciente;
             $rx->id_profesional = $req->id_profesional;
             $rx->id_lugar_atencion = $req->id_lugar_atencion;
             $rx->id_especialidad = $req->id_especialidad;
+            $rx->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+            $rx->seccion = $req->seccion;
             $rx->zona_y_motivo = $req->zona_motivo ? $req->zona_motivo : 'SIN ZONA NI MOTIVO';
             $rx->observaciones = $req->observaciones ? $req->observaciones : 'SIN OBSERVACIONES';
             $rx->biopsia = $req->biopsia ? 1 : 0;
             $rx->estado = 1;
             if($rx->save()){
-                $imagenes = $this->dameInfoImagenesDentalPaciente($req->id_paciente);
-                $v = view('atencion_odontologica.include.imagenes_dental_todas',['imagenes' => $imagenes])->render();
+                if($req->seccion == 'gral'){
+                    $imagenes = $this->dameInfoImagenesDentalPaciente($req->id_paciente,'gral');
+                    $v = view('atencion_odontologica.include.imagenes_dental_todas',['imagenes' => $imagenes])->render();
+                }elseif($req->seccion == 'implantologia'){
+                    $imagenes = $this->dameInfoImagenesDentalPaciente($req->id_paciente,'implantologia');
+                    $v = view('atencion_odontologica.include.imagenes_dental_preimplante_todas',['imagenes' => $imagenes])->render();
+                }else{
+                    $imagenes = $this->dameInfoImagenesDentalPaciente($req->id_paciente,'periodoncica');
+                    $v = view('atencion_odontologica.include.imagenes_dental_preimplante_todas',['imagenes' => $imagenes])->render();
+                }
                 return ['mensaje' => 'OK', 'v' => $v,'rx' => $rx];
+
             }else{
                 return ['mensaje' => 'error'];
             }
@@ -1809,18 +1829,25 @@ class EscritorioProfesional extends Controller
 
     public function mostrar_nuevas_imagenes_dental(Request $req){
 
-        $idCounter = $req->counter;
-        $opt = $req->tipo ? true : false;
+        $idCounter = $req->counter ? $req->counter : 0;
+
+        $opt = $req->tipo;
         $responsable = User::find(Auth::user()->id);
 
-        $v = view('atencion_odontologica.include.imagenes_dental',['counter' => $idCounter,'opt' => $opt])->render();
+        if(!$opt){
+            $v = view('atencion_odontologica.include.imagenes_dental',['counter' => $idCounter,'opt' => $opt])->render();
+        }elseif($opt == 'preimplante' || $opt == 'periodoncica'){
+
+            $v = view('atencion_odontologica.include.imagenes_preimplante',['count' => $idCounter,'opt' => $opt])->render();
+        }
+
         return ['mensaje' => 'OK','v' => $v];
     }
 
     public function eliminar_pieza_dental_imagenes_paciente(Request $req){
         $imagen_info = ImagenesDentalPaciente::find($req->id);
         if($imagen_info->delete()){
-            $imagenes = $this->dameInfoImagenesDentalPaciente($req->id_paciente);
+            $imagenes = $this->dameInfoImagenesDentalPaciente($req->id_paciente,'gral');
             $v = view('atencion_odontologica.include.imagenes_dental_todas',['imagenes' => $imagenes])->render();
             return ['mensaje' => 'OK', 'v' => $v];
         }else{
@@ -1841,7 +1868,7 @@ class EscritorioProfesional extends Controller
             $rx->observaciones = $req->obs ? $req->obs : 'SIN OBSERVACIONES';
             $rx->estado = 1; // por defecto
             if($rx->save()){
-                $imagenes = $this->dameInfoImagenesDentalPaciente($rx->id_paciente);
+                $imagenes = $this->dameInfoImagenesDentalPaciente($rx->id_paciente,'gral');
                 $v = view('atencion_odontologica.include.examenes_dental_oral_todos',['imagenes' => $imagenes])->render();
                 return ['mensaje' => 'OK','v' => $v,'rx' => $rx];
             }else{
@@ -2082,7 +2109,8 @@ class EscritorioProfesional extends Controller
     public function mostrar_nueva_pieza_dental_hist(Request $req){
         try {
             $idCounter = $req->count ? $req->count : 1;
-            $v = view('atencion_odontologica.include.pieza_dental_hist',['counter' => $idCounter])->render();
+            $seccion = $req->seccion;
+            $v = view('atencion_odontologica.include.pieza_dental_hist',['counter' => $idCounter,'seccion' => $seccion])->render();
             return ['mensaje' => 'OK', 'v' => $v];
 
 
@@ -2200,10 +2228,10 @@ class EscritorioProfesional extends Controller
         return $examenes;
     }
 
-    public function dameInfoImagenesDentalPaciente($id_paciente)
+    public function dameInfoImagenesDentalPaciente($id_paciente,$seccion)
     {
         // Obtén las imágenes del paciente
-        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)->get();
+        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)->where('seccion',$seccion)->get();
 
         // Itera sobre cada imagen para procesar `paths_imagenes`
         foreach ($imagenes as $imagen) {
@@ -2236,17 +2264,40 @@ class EscritorioProfesional extends Controller
 
     public function eliminar_imagen_dental_paciente(Request $req){
         $imagen = ImagenesDentalPaciente::find($req->id);
-        return $imagen;
-       // recibimos el path de la imagen
-       $path = $req->path;
-        return $path;
-        // eliminamos el archivo
-        $imagen->paths_imagenes = json_encode(array_diff(json_decode($imagen->paths_imagenes, true), [$path]));
-        // actualizamos el registro en la base de datos
+
+        $seccion = $imagen->seccion;
+        // recibimos el path de la imagen
+        $path = $req->path;
+
+        // Decodificamos el JSON de paths_imagenes
+        $paths = json_decode($imagen->paths_imagenes, true);
+
+        // Filtramos los paths para eliminar el que coincide con el path recibido
+        $filteredPaths = array_filter($paths, function($p) use ($path) {
+            $pArray = json_decode($p, true);
+            return $pArray['path'] !== $path;
+        });
+
+        // Reindexamos el array para evitar problemas con los índices
+        $filteredPaths = array_values($filteredPaths);
+
+        // Actualizamos el campo paths_imagenes con el nuevo array filtrado
+        $imagen->paths_imagenes = json_encode($filteredPaths);
+
+        // Guardamos los cambios en la base de datos
         if($imagen->save()){
-            $imagenes = $this->dameInfoImagenesDentalPaciente($req->id_paciente);
-            $v = view('atencion_odontologica.include.imagenes_dental_todas',['imagenes' => $imagenes])->render();
-            return ['mensaje' => 'OK','v' => $v];
+            if($seccion == 'gral'){
+                $imagenes = $this->dameInfoImagenesDentalPaciente($imagen->id_paciente,'gral');
+                $v = view('atencion_odontologica.include.imagenes_dental_todas',['imagenes' => $imagenes])->render();
+            }elseif($seccion == 'implantologia'){
+                $imagenes = $this->dameInfoImagenesDentalPaciente($imagen->id_paciente,'implantologia');
+                $v = view('atencion_odontologica.include.imagenes_dental_preimplante_todas',['imagenes' => $imagenes])->render();
+            }else{
+                $imagenes = $this->dameInfoImagenesDentalPaciente($imagen->id_paciente,'periodoncica');
+                $v = view('atencion_odontologica.include.imagenes_dental_preimplante_todas',['imagenes' => $imagenes])->render();
+            }
+
+            return ['mensaje' => 'OK','v' => $v,'seccion' => $seccion];
         }else{
             return ['mensaje' => 'error'];
         }
@@ -2410,6 +2461,20 @@ class EscritorioProfesional extends Controller
                 'tratamientos' => $tratamientos_dentales
                 ])->render();
             return ['mensaje' => 'OK','v' => $v,'tipo_examen' => $req->tipo, 'examenes' => $examenes, 'vista_presupuestos' => $vista_presupuestos];
+        }else{
+            return ['mensaje' => 'error'];
+        }
+    }
+
+    public function eliminar_pieza_dental_examen_hist(Request $req){
+        $examen = ExamenesDentalPiezaHistoria::find($req->id);
+        $id_paciente = $examen->id_paciente;
+
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        if($examen->delete()){
+            $examenes = ExamenesDentalPiezaHistoria::where('id_paciente',$id_paciente)->get();
+            $v = view('atencion_odontologica.include.examenes_dental_pieza_historial_todos',['examenes' => $examenes])->render();
+            return ['mensaje' => 'OK','v' => $v, 'examenes' => $examenes];
         }else{
             return ['mensaje' => 'error'];
         }

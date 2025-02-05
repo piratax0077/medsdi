@@ -1766,7 +1766,9 @@ class ficha_atencionController extends Controller
         $examenes_rx_oral = $this->dameExamenesPiezaDentalOraxRx($paciente->id, $profesional->id_tipo_especialidad);
         $examenes_rx_oral_endodoncia = $this->dameExamenesPiezaDentalOraxRxEnd($paciente->id, $profesional->id_tipo_especialidad);
         $examenes_rx_oral_odontop = $this->dameExamenesPiezaDentalOraxRxOdontop($paciente->id, $profesional->id_tipo_especialidad);
-        $imagenes = $this->dameInfoImagenesDentalPaciente($paciente->id, $id_ficha_atencion);
+        $imagenes = $this->dameInfoImagenesDentalPaciente($paciente->id,'gral', $id_ficha_atencion);
+        $imagenes_preimplante = $this->dameInfoImagenesDentalPaciente($paciente->id,'implantologia',$id_ficha_atencion);
+        $imagenes_periodoncia = $this->dameInfoImagenesDentalPaciente($paciente->id,'periodoncica',$id_ficha_atencion);
         $examenes_pieza = $this->dameExamenesPiezaDentalPieza($paciente->id, $profesional->id_tipo_especialidad);
         $examenes_pieza_end = $this->dameExamenesPiezaDentalPiezaEnd($paciente->id, $profesional->id_tipo_especialidad);
 
@@ -1882,6 +1884,8 @@ class ficha_atencionController extends Controller
                 'presupuesto' => $presupuesto_dental,
                 'biopsias' => $biopsias,
                 'imagenes' => $imagenes,
+                'imagenes_preimplante' => $imagenes_preimplante,
+                'imagenes_periodoncia' => $imagenes_periodoncia,
                 'contador_div_examenes' => $contador_div_examenes,
                 'controles_ciclo' => $controles_ciclo,
                 'procedimientos' => $procedimientos,
@@ -2451,10 +2455,10 @@ class ficha_atencionController extends Controller
         return $examenes;
     }
 
-    public function dameInfoImagenesDentalPaciente($id_paciente, $id_ficha_atencion = null)
+    public function dameInfoImagenesDentalPaciente($id_paciente,$seccion, $id_ficha_atencion = null)
     {
         // Obtén las imágenes del paciente
-        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)
+        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)->where('seccion',$seccion)
         ->when($id_ficha_atencion, function ($query, $id_ficha_atencion) {
             return $query->where('id_ficha_atencion', $id_ficha_atencion);
         })

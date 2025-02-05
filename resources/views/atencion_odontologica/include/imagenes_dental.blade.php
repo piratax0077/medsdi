@@ -1,4 +1,4 @@
-<div class="row mb-1">
+-<div class="row mb-1">
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div class="form-row">
             <div class="col-sm-4 mt-2">
@@ -51,13 +51,11 @@
         </div>
         <div class="form-row">
             <div class="col-sm-12 mt-2">
-                @if(!$opt)
+
                     <button type="button" class="btn btn-icon btn-primary-light-c" onclick="guardar_pieza_imagenes_rx({{ $counter }})" ><i class="fas fa-save"></i></button>
                     <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_imagenes_rx()">X</button>
-                @else
-                <button type="button" class="btn btn-icon btn-primary-light-c" onclick="guardar_pieza_imagenes_rx_estudio({{ $counter }})" ><i class="fas fa-save"></i></button>
-                <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_imagenes_rx_estudio()">X</button>
-                @endif
+
+
 
             </div>
         </div>
@@ -173,6 +171,7 @@
         let id_profesional = $('#id_profesional').val();
         let id_especialidad = $('#id_especialidad').val();
         let id_ficha_atencion = $('#id_fc').val();
+        let seccion = 'gral';
 
         let data = {
             _token: CSRF_TOKEN,
@@ -183,7 +182,8 @@
             id_lugar_atencion: id_lugar_atencion,
             id_profesional: id_profesional,
             id_especialidad: id_especialidad,
-            id_ficha_atencion: id_ficha_atencion
+            id_ficha_atencion: id_ficha_atencion,
+            seccion: seccion
         }
 
         let url = "{{ ROUTE('profesional.guardar_imagenes_dental_paciente') }}";
@@ -198,103 +198,6 @@
                     $('#contenedor_imagenes_dent').empty();
                     $('#contenedor_imagenes_dent').append(resp.v);
                     $('#contenedor_nueva_imagen_dent').empty();
-                    $('#id_imagenes_dental').val(resp.rx.id);
-
-                    // Una vez que el envío de datos ha sido exitoso, procesamos la cola de imágenes
-                    if (dropzone.getQueuedFiles().length > 0) {
-                        console.log("Iniciando carga de imágenes...");
-                        // Desvinculamos el evento "queuecomplete" antes de procesar la cola
-                        dropzone.off("queuecomplete");
-
-                        // Procesar la cola de imágenes
-                        dropzone.processQueue();  // Esto procesará la cola y subirá las imágenes
-
-                        // Usamos un evento para esperar a que se complete la carga de imágenes
-                        dropzone.on("queuecomplete", function() {
-                            // Una vez que la cola esté completa, podemos realizar más acciones si es necesario
-                            console.log("Carga de imágenes completada.");
-                        });
-                    } else {
-                        console.log("No hay imágenes para cargar.");
-                        alert("No has seleccionado imágenes para subir.");
-
-                        // Si el Dropzone no está funcionando correctamente, puedes destruirlo y volver a inicializarlo
-                        if (dropzone) {
-                            // Destruir la instancia actual de Dropzone
-                            dropzone.destroy();
-                        }
-                    }
-                    // Una vez que el envío de datos ha sido exitoso, procesamos la cola de imágenes
-                    if (dropzone_post.getQueuedFiles().length > 0) {
-                        console.log("Iniciando carga de imágenes...");
-                        // Desvinculamos el evento "queuecomplete" antes de procesar la cola
-                        dropzone_post.off("queuecomplete");
-
-                        // Procesar la cola de imágenes
-                        dropzone_post.processQueue();  // Esto procesará la cola y subirá las imágenes
-
-                        // Usamos un evento para esperar a que se complete la carga de imágenes
-                        dropzone_post.on("queuecomplete", function() {
-                            // Una vez que la cola esté completa, podemos realizar más acciones si es necesario
-                            console.log("Carga de imágenes completada.");
-                        });
-                    } else {
-                        console.log("No hay imágenes para cargar.");
-                        alert("No has seleccionado imágenes para subir.");
-
-                        // Si el Dropzone no está funcionando correctamente, puedes destruirlo y volver a inicializarlo
-                        if (dropzone_post) {
-                            // Destruir la instancia actual de Dropzone
-                            dropzone_post.destroy();
-                        }
-                    }
-
-                    // Re-inicializar el Dropzone nuevamente
-                    //init_dropzone_imagenes();  // Asegúrate de que la función initDropzone esté disponible
-                }
-            },
-            error: function(error){
-                console.log(error);
-            }
-        })
-
-
-    }
-
-    function guardar_pieza_imagenes_rx_estudio(counter){
-        let biopsia = $('#biopsia_check_odont'+counter).is(':checked');
-        let zona_motivo = $('#od_biop_zona'+counter).val();
-        let observaciones = $('#obs_result_biopsia'+counter).val();
-        let id_paciente = dame_id_paciente();
-        let id_lugar_atencion = $('#id_lugar_atencion').val();
-        let id_profesional = $('#id_profesional').val();
-        let id_especialidad = $('#id_especialidad').val();
-        let id_ficha_atencion = $('#id_fc').val();
-
-        let data = {
-            _token: CSRF_TOKEN,
-            biopsia: biopsia,
-            zona_motivo: zona_motivo,
-            observaciones:observaciones,
-            id_paciente: id_paciente,
-            id_lugar_atencion: id_lugar_atencion,
-            id_profesional: id_profesional,
-            id_especialidad: id_especialidad,
-            id_ficha_atencion: id_ficha_atencion
-        }
-
-        let url = "{{ ROUTE('profesional.guardar_imagenes_dental_paciente') }}";
-
-        $.ajax({
-            type:'post',
-            url: url,
-            data: data,
-            success: function(resp){
-                console.log(resp);
-                if(resp.mensaje == 'OK'){
-                    $('#contenedor_imagenes_dent_estudio').empty();
-                    $('#contenedor_imagenes_dent_estudio').append(resp.v);
-                    $('#contenedor_nueva_imagen_dent_estudio').empty();
                     $('#id_imagenes_dental').val(resp.rx.id);
 
                     // Una vez que el envío de datos ha sido exitoso, procesamos la cola de imágenes
