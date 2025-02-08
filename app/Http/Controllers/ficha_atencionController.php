@@ -23,6 +23,7 @@ use App\Models\ExamenesBocaGeneral;
 use App\Models\ExamenesDentalDolor;
 use App\Models\ExamenesDentalPieza;
 use App\Models\ExamenesDentalPiezaHistoria;
+use App\Models\ExamenesDentalPiezaPeriod;
 use App\Models\FormularioFaltante;
 use App\Models\Sugerencias;
 use App\Models\Ciudad;
@@ -224,6 +225,7 @@ class ficha_atencionController extends Controller
     public function index(Request $request)
     {
         $hora = HoraMedica::where('id', $request->id_hora_realizar)->first();
+
         $paciente = Paciente::where('id', $hora->id_paciente)->first();
 
         /* FMU CONTACTO EMERGENCIA */
@@ -1833,6 +1835,10 @@ class ficha_atencionController extends Controller
 
         $examenes_period = $this->dameHistorialDentalImpl($paciente->id,'period');
 
+        $examenes_period_period = $this->dameHistorialDentalPeriod($paciente->id);
+
+        $odontograma_especialidad = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1844,6 +1850,7 @@ class ficha_atencionController extends Controller
                 'examenes_dental' => $examenes_dental,
                 'examenes_pre_implante' => $examenes_preimplante,
                 'examenes_period' => $examenes_period,
+                'examenes_period_period' => $examenes_period_period,
                 'examenes_dental_end' => $examenes_dental_end,
                 'examenes_dental_odontopediatria' => $examenes_dental_odontopediatria,
                 'examenes_rx_oral' => $examenes_rx_oral,
@@ -1983,6 +1990,11 @@ class ficha_atencionController extends Controller
 
     public function dameHistorialDentalImpl($id_paciente, $seccion){
         $historial = ExamenesDentalPiezaHistoria::where('id_paciente', $id_paciente)->where('seccion',$seccion)->get();
+        return $historial;
+    }
+
+    public function dameHistorialDentalPeriod($id_paciente){
+        $historial = ExamenesDentalPiezaPeriod::where('id_paciente',$id_paciente)->get();
         return $historial;
     }
 

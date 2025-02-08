@@ -24,34 +24,51 @@
 
         </div>
     </div>
-    <div class="col-sm-4 mt-2" >
+    {{-- <div class="col-sm-4 mt-2" >
         <div class="form-group fill">
-            <div class="switch switch-success d-inline m-r-10">
-                <input type="checkbox" onchange="biopsia_check_implantologia({{ $count }})" id="biopsia_check_implantologia{{ $count }}" name="biopsia_check_implantologia{{ $count }}" value="" >
-                <label for="biopsia_check_implantologia{{ $count }}" class="cr"></label>
-            </div>
+            @if($opt == 'preimplante')
+                <div class="switch switch-success d-inline m-r-10">
+                    <input type="checkbox" onchange="biopsia_check_implantologia({{ $count }})" id="biopsia_check_implantologia{{ $count }}" name="biopsia_check_implantologia{{ $count }}" value=""  >
+                    <label for="biopsia_check_implantologia{{ $count }}" class="cr"></label>
+                </div>
+            @else
+                <div class="switch switch-success d-inline m-r-10">
+                    <input type="checkbox" onchange="biopsia_check_period({{ $count }})" id="biopsia_check_period{{ $count }}" name="biopsia_check_period{{ $count }}" value="" >
+                    <label for="biopsia_check_period{{ $count }}" class="cr"></label>
+                </div>
+            @endif
             <label>biopsia</label>
             <hr>
-            <div class="form-group fill">
-                <label id="" name="" class="floating-label-activo-sm">Zona y Motivo</label>
-                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="im_biop_zona{{ $count }}" id="im_biop_zona{{ $count }}"></textarea>
-            </div>
+            @if($opt == 'preimplante')
+                <div class="form-group fill">
+                    <label id="" name="" class="floating-label-activo-sm">Zona y Motivo</label>
+                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="im_biop_zona{{ $count }}" id="im_biop_zona{{ $count }}" disabled></textarea>
+                </div>
+            @else
+                <div class="form-group fill">
+                    <label id="" name="" class="floating-label-activo-sm">Zona y Motivo</label>
+                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="period_biop_zona{{ $count }}" id="period_biop_zona{{ $count }}" disabled></textarea>
+                </div>
+            @endif
+            @if($opt == 'preimplante')
+                <div class="form-group fill">
+                    <label id="" name="" class="floating-label-activo-sm">Observaciones y Resultado</label>
+                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="im_obs_result_biopsia{{ $count }}" id="im_obs_result_biopsia{{ $count }}" disabled></textarea>
+                </div>
+            @else
             <div class="form-group fill">
                 <label id="" name="" class="floating-label-activo-sm">Observaciones y Resultado</label>
-                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="im_obs_result_biopsia{{ $count }}" id="im_obs_result_biopsia{{ $count }}"></textarea>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="period_obs_result_biopsia{{ $count }}" id="period_obs_result_biopsia{{ $count }}" disabled></textarea>
             </div>
+            @endif
             <hr>
                 <h6 style="text-align: center;color:blue;">ESTADO GENERAL DEL PERIODONTO</h6>
             <hr>
             <div class="form-group fill m-50" >
                 <button type="button" class="btn btn-outline-success btn-sm " onclick="solicitar_ic_periodoncia()">SOLICITAR INTERCONSULTA PERIODÓNCIA</button>
             </div>
-            <div class="form-group fill">
-                <label id="" name="" class="floating-label-activo-sm">Observaciones y Resultado</label>
-                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_result_biopsia{{ $count }}" id="obs_result_biopsia{{ $count }}"></textarea>
-            </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 
 
@@ -300,6 +317,7 @@
             id_profesional: id_profesional,
             id_especialidad: id_especialidad,
             id_ficha_atencion: id_ficha_atencion,
+            counter: counter,
             seccion: seccion
         }
 

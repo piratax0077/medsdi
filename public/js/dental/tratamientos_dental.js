@@ -46,6 +46,7 @@ $('.tratamiento-autocomplete').each(function() {
                     search: request.term
                 },
                 success: function(data) {
+                    console.log(data);
                     if (data.length == 0) {
                         $('.diagnostico_activo').hide();
                         $('.diagnostico_inactivo').show();
@@ -148,6 +149,8 @@ $('#proc_seleccionado_endo_autocomplete').autocomplete({
         return false;
     }
 });
+
+
 $('#diag_seleccionado_max_inf_gral_autocomplete').autocomplete({
     source: function(request, response) {
         // Fetch data

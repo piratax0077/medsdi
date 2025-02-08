@@ -165,6 +165,7 @@
         $('#contenedor_piezas_hist_period').empty();
     }
 
+
     function guardar_pieza_hist_period(counter) {
         let pieza = $('#historia_pza'+counter).val();
         let perdida = $('#perdida'+counter).val(); // Obtiene el value del select

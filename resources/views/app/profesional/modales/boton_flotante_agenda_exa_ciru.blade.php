@@ -284,6 +284,7 @@
                                                         $('#hm_espera_paciente_hora').hide();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
+                                                        $('#hm_revisar_ficha').hide();
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
@@ -341,6 +342,7 @@
                                                         $('#hm_ver_hora').hide();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
+                                                        $('#hm_revisar_ficha').hide();
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
@@ -359,6 +361,7 @@
                                                         $('#hm_espera_paciente_hora').hide();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
+                                                        $('#hm_revisar_ficha').hide();
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
@@ -376,6 +379,7 @@
                                                         $('#hm_espera_paciente_hora').hide();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
+                                                        $('#hm_revisar_ficha').hide();
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
@@ -393,6 +397,7 @@
                                                         $('#hm_espera_paciente_hora').hide();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
+                                                        $('#hm_revisar_ficha').show();
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
@@ -410,6 +415,7 @@
                                                         $('#hm_espera_paciente_hora').hide();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
+                                                        $('#hm_revisar_ficha').hide();
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');

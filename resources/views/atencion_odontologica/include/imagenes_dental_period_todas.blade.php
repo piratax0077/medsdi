@@ -50,18 +50,18 @@
     <div class="col-sm-4 mt-2" >
         <div class="form-group fill">
             <div class="switch switch-success d-inline m-r-10">
-                <input type="checkbox" onchange="biopsia_check_implantologia({{ $count }})" id="biopsia_check_implantologia" name="biopsia_check_implantologia" value="" {{ $imagen->biopsia == 1 ? 'checked' : '' }} disabled>
+                <input type="checkbox" onchange="biopsia_check_implantologia({{ $count }})" id="biopsia_check_implantologia" name="biopsia_check_implantologia" value="" @if($imagen->biopsia == 1) checked @endif>
                 <label for="biopsia_check_implantologia" class="cr"></label>
             </div>
             <label>biopsia</label>
             <hr>
             <div class="form-group fill">
                 <label id="" name="" class="floating-label-activo-sm">Zona y Motivo</label>
-                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="im_biop_zona" id="im_biop_zona">{{ $imagen->zona_y_motivo }}</textarea>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="period_biop_zona" id="period_biop_zona">{{ $imagen->zona_y_motivo }}</textarea>
             </div>
             <div class="form-group fill">
                 <label id="" name="" class="floating-label-activo-sm">Observaciones y Resultado</label>
-                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="im_obs_result_biopsia" id="im_obs_result_biopsia">{{ $imagen->observaciones }}</textarea>
+                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="period_obs_result_biopsia" id="period_obs_result_biopsia">{{ $imagen->observaciones }}</textarea>
             </div>
             <hr>
                 <h6 style="text-align: center;color:blue;">ESTADO GENERAL DEL PERIODONTO</h6>
