@@ -17,6 +17,12 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
 
+        <!-- select2 selectbonito css -->
+        <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
     <!-- data tables css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">

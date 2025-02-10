@@ -7,24 +7,50 @@
             <div class="card-body">
                 <!-- Contenedor de Imágenes -->
                 <div class="form-row" id="contenedor_piezas_ex_oral">
-                    <div class="card">
-                        <div class="card text-center" id="img">
-                           <H6>Imagen</H6>
-                        </div>
+                    <div class="col-md-10">
+                        <div class="card">
+                            <div class="card text-center" id="img">
+                               <H6>Imagen</H6>
+                            </div>
 
-                        <div class="aten-a">
-                            <!-- [ Main Content ] start -->
-                            <div class="dropzone" id="mis-imagenes-dentales-preimplante" action="{{ route('profesional.imagen.carga') }}"></div>
-                            <!-- [ file-upload ] end -->
-                        </div>
+                            <div class="aten-a">
+                                <!-- [ Main Content ] start -->
+                                <div class="dropzone" id="mis-imagenes-dentales-preimplante" action="{{ route('profesional.imagen.carga') }}"></div>
+                                <!-- [ file-upload ] end -->
+                            </div>
 
+                        </div>
                     </div>
+                    @if($opt == 'preimplante')
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="numero_pieza_ex_impl{{ $count }}" class="floating-label-activo-sm">N° Pieza</label>
+                            <input type="text" class="form-control form-control-sm" id="numero_pieza_ex_impl{{ $count }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="observaciones_ex_impl" class="floating-label-activo-sm">Observaciones</label>
+                            <textarea class="form-control caja-texto form-control-sm mb-9" id="observaciones_ex_impl{{ $count }}" name="observaciones_ex_impl{{ $count }}" onfocus="this.rows=4" onblur="this.rows=1;"></textarea>
+                        </div>
+                    </div>
+                    @else
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="numero_pieza_ex_period" class="floating-label-activo-sm">N° Pieza</label>
+                            <input type="text" class="form-control form-control-sm" id="numero_pieza_ex_period{{ $count }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="observaciones_ex_period" class="floating-label-activo-sm">Observaciones</label>
+                            <textarea class="form-control caja-texto form-control-sm mb-9" name="observaciones_ex_period{{ $count }}" onfocus="this.rows=4" onblur="this.rows=1;"></textarea>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
 
         </div>
     </div>
-    {{-- <div class="col-sm-4 mt-2" >
+    @if($opt == 'preimplante' )
+    <div class="col-sm-4 mt-2" >
         <div class="form-group fill">
             @if($opt == 'preimplante')
                 <div class="switch switch-success d-inline m-r-10">
@@ -68,7 +94,8 @@
                 <button type="button" class="btn btn-outline-success btn-sm " onclick="solicitar_ic_periodoncia()">SOLICITAR INTERCONSULTA PERIODÓNCIA</button>
             </div>
         </div>
-    </div> --}}
+    </div>
+    @endif
 </div>
 
 
@@ -200,6 +227,8 @@
         let biopsia = $('#biopsia_check_implantologia'+counter).is(':checked');
         let zona_motivo = $('#im_biop_zona'+counter).val();
         let observaciones = $('#im_obs_result_biopsia'+counter).val();
+        let numero_pieza = $('#numero_pieza_ex_impl'+counter).val();
+        let observaciones_ex = $('#observaciones_ex_impl'+counter).val();
         let id_paciente = dame_id_paciente();
         let id_lugar_atencion = $('#id_lugar_atencion').val();
         let id_profesional = $('#id_profesional').val();
@@ -209,6 +238,8 @@
 
         let data = {
             _token: CSRF_TOKEN,
+            numero_pieza: numero_pieza,
+            observaciones_ex: observaciones_ex,
             biopsia: biopsia,
             zona_motivo: zona_motivo,
             observaciones:observaciones,
@@ -300,6 +331,8 @@
         let biopsia = $('#biopsia_check_period'+counter).is(':checked');
         let zona_motivo = $('#period_biop_zona'+counter).val();
         let observaciones = $('#period_obs_result_biopsia'+counter).val();
+        let numero_pieza = $('#numero_pieza_ex_period'+counter).val();
+        let observaciones_ex = $('#observaciones_ex_period'+counter).val();
         let id_paciente = dame_id_paciente();
         let id_lugar_atencion = $('#id_lugar_atencion').val();
         let id_profesional = $('#id_profesional').val();
@@ -309,6 +342,8 @@
 
         let data = {
             _token: CSRF_TOKEN,
+            numero_pieza: numero_pieza,
+            observaciones_ex: observaciones_ex,
             biopsia: biopsia,
             zona_motivo: zona_motivo,
             observaciones:observaciones,

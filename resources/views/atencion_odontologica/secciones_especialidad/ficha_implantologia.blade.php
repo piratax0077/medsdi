@@ -23,9 +23,9 @@
                     </li>
                 </ul>
             </div>
-           <!-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
-            </div>-->
+            </div>
             <div class="col-sm-12 col-md-12">
                 <form action="{{ route('dental.registrar_ficha_atencion_dental') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
@@ -1086,7 +1086,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--EVALUACION PERIODONCIA -->
+                            {{--  <!--EVALUACION PERIODONCIA -->
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="eval_period">
@@ -1143,7 +1143,7 @@
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Antecedentes Generales</label>
                                                                                                                 <div class="row">
-                                                                                                                    {{-- Tratamientos en curso --}}
+                                                                                                                    {{-- Tratamientos en curso 
                                                                                                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
                                                                                                                         <div class="card border-card-primary h-100">
                                                                                                                             <div class="card-body-aten-a">
@@ -1179,7 +1179,7 @@
                                                                                                                         </div>
                                                                                                                     </div>
 
-                                                                                                                    {{-- Medicamentos crónicos --}}
+                                                                                                                    {{-- Medicamentos crónicos 
                                                                                                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
                                                                                                                         <div class="card border-card-primary h-100">
                                                                                                                             <div class="card-body-aten-a">
@@ -1190,7 +1190,7 @@
                                                                                                                         </div>
                                                                                                                     </div>
 
-                                                                                                                    {{-- Cirugías recientes --}}
+                                                                                                                    {{-- Cirugías recientes 
                                                                                                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
                                                                                                                         <div class="card border-card-primary h-100">
                                                                                                                             <div class="card-body-aten-a">
@@ -1199,10 +1199,10 @@
                                                                                                                                     @if(isset($antecedentes))
                                                                                                                                     @foreach ($antecedentes as $data)
                                                                                                                                         @if($data->id_tipo_antecedente==3)
-                                                                                                                                            {{-- <li>{!! $data->antecedente_data->procedimiento.'<br/>&nbsp;&nbsp;&nbsp;- '.substr($data->comentario, 0, 30) !!}</li> --}}
+                                                                                                                                            {{-- <li>{!! $data->antecedente_data->procedimiento.'<br/>&nbsp;&nbsp;&nbsp;- '.substr($data->comentario, 0, 30) !!}</li> 
                                                                                                                                             <li> * {!! $data->antecedente_data->procedimiento.' - '.$data->comentario !!}</li>
                                                                                                                                         @else
-                                                                                                                                            {{-- <li>No hay registros</li> --}}
+                                                                                                                                            {{-- <li>No hay registros</li> 
                                                                                                                                         @endif
                                                                                                                                     @endforeach
                                                                                                                                     @endif
@@ -1223,7 +1223,7 @@
                                                                                                                         {{-- </div> --}}
                                                                                                                     {{-- </div> --}}
 
-                                                                                                                    {{-- Prótesis y ortesis --}}
+                                                                                                                    {{-- Prótesis y ortesis 
                                                                                                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 mb-3">
                                                                                                                         <div class="card border-card-primary h-100">
                                                                                                                             <div class="card-body-aten-a">
@@ -1349,9 +1349,9 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            </div>--}}
                                                             <!--HISTORIA-->
-                                                            <div class="tab-pane fade show " id="hist_piezas_period_hist" role="tabpanel" aria-labelledby="hist_piezas_period_hist_tab">
+                                                            {{--  <div class="tab-pane fade show " id="hist_piezas_period_hist" role="tabpanel" aria-labelledby="hist_piezas_period_hist_tab">
                                                                 <div id="hist_piezas_period">
                                                                     @php $count_period = 1; @endphp
                                                                     @foreach ($examenes_period as $e)
@@ -1417,9 +1417,9 @@
 
 
 
-                                                            </div>
+                                                            </div>  --}}
                                                             <!--EVALUACION PERIODONCICA-->
-                                                            <div class="tab-pane fade show " id="eval_periodonto" role="tabpanel" aria-labelledby="eval_periodonto_tab">
+                                                            {{--  <div class="tab-pane fade show " id="eval_periodonto" role="tabpanel" aria-labelledby="eval_periodonto_tab">
                                                                 <div id="contenedor_piezas_period_period">
                                                                     @foreach ($examenes_period_period as $e)
                                                                     <div class="card">
@@ -1510,9 +1510,9 @@
 
 
 
-                                                            </div>
+                                                            </div>  --}}
                                                             <!--ESTUDIO RADIOLÓGICO POR PIEZA-->
-                                                            <div class="tab-pane fade show" id="estudio_rx_period" role="tabpanel" aria-labelledby="estudio_rx_period_tab">
+                                                            {{--  <div class="tab-pane fade show" id="estudio_rx_period" role="tabpanel" aria-labelledby="estudio_rx_period_tab">
                                                                 <div id="contenedor_imagenes_dent_period">
                                                                     @php $count = 1; @endphp
                                                                     @foreach ($imagenes_periodoncia as $imagen)
@@ -1591,7 +1591,7 @@
                                                                                     <button type="button" class="btn btn-outline-success btn-sm " onclick="solicitar_ic_periodoncia()">SOLICITAR INTERCONSULTA PERIODÓNCIA</button>
                                                                                 </div>
                                                                             </div>
-                                                                        </div> --}}
+                                                                        </div> 
                                                                     </div>
                                                                     @php $count++; @endphp
                                                                     @endforeach
@@ -1609,9 +1609,9 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            </div>  --}}
                                                             <!--PLANIFICACION TRATAMIENTO-->
-                                                            <div class="tab-pane fade show" id="plan_tto_period" role="tabpanel" aria-labelledby="plan_tto_period_tab">
+                                                            {{--  <div class="tab-pane fade show" id="plan_tto_period" role="tabpanel" aria-labelledby="plan_tto_period_tab">
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <div class="card">
@@ -1691,7 +1691,7 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                    </div> --}}
+                                                                                    </div> 
                                                                                 </div>
                                                                                 <div class="row">
                                                                                     <div class="col-sm-12 col-md-12 col-xl-12">
@@ -1706,7 +1706,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            </div>  
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1714,9 +1714,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>--}}
                             <!--PROCEDIMIENTOS PERIODONCIA -->
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            {{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="tto_periodontal">
                                         <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#tto_periodontal_c" aria-expanded="false" aria-controls="tto_periodontal_c">
@@ -2084,7 +2084,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>    --}}
                             <!--CRONICOS / GES / CONFIDENCIAL -->
                             @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
                             <!--Diagnóstico-->
@@ -2923,11 +2923,9 @@
                     <div class="row">
                         <!--GUARDAR O IMPRIMIR FICHA-->
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-
-                                    <input type="button" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
-                                    <input type="button" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su agenda">
-                                </div>
-
+                            <input type="button" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
+                            <input type="button" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su agenda">
+                        </div>
                     </div>
                 </form>
             </div>
@@ -2980,6 +2978,7 @@
                 }
             });
         });
+        mostrar_nuevas_imagenes_dent_estudio();
     });
 
     function evaluar_para_carga_detalle(select, div, input, valor)
@@ -3770,18 +3769,18 @@
             });
         }
 
-var contador = 0;
-var piezas_buscadas = new Set();
+        var contador = 0;
+        var piezas_buscadas = new Set();
 
 function mostrar_nueva_pieza_dental_tto(pieza){
     // Verificar si la pieza ya fue buscada
-    if (piezas_buscadas.has(pieza)) {
-        console.log("La pieza ya ha sido buscada.");
-        return; // Salir de la función si la pieza ya está en el set
-    }
+    // if (piezas_buscadas.has(pieza)) {
+    //     console.log("La pieza ya ha sido buscada.");
+    //     return; // Salir de la función si la pieza ya está en el set
+    // }
 
     // Agregar la pieza al set de piezas buscadas
-    piezas_buscadas.add(pieza);
+    // piezas_buscadas.add(pieza);
 
     contador++;
     let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_tto') }}";
@@ -3796,7 +3795,7 @@ function mostrar_nueva_pieza_dental_tto(pieza){
         },
         success: function(resp) {
             console.log(resp);
-            // $('#contenedor_pieza_tto_implante').empty();
+             $('#contenedor_pieza_tto_implante').empty();
             $('#contenedor_pieza_tto_implante').append(resp.v);
         },
         error: function(error) {
@@ -4112,7 +4111,11 @@ swal({
     }
 })
 }
-
+$('#mensaje_ficha').html(' Para el mejor funcionamiento del sistema rogamos anotar cualquier tipo de incidente o antecedente nuevo del paciente esto aportará a usted o sus colegas mayor información  acerca del paciente a tratar ');
+$('#mensaje_ficha').show();
+setTimeout(function(){
+    $('#mensaje_ficha').hide();
+}, 8000);
 function confirmarEliminarExamenAgregado(id){
 let url = "{{ route('profesional.eliminar_nueva_pieza_dental') }}";
 var idPaciente = $('#id_paciente_fc').val();

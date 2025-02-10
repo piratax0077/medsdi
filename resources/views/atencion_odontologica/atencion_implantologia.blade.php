@@ -134,9 +134,9 @@
         @include("atencion_odontologica.formularios.Antecedentes_dentales.fracturas");
         @include('atencion_odontologica.include.modales.imagenes_paciente_dental');
         @include('atencion_odontologica.include.modales.imagen_paciente_dental')
-        @include('atencion_odontologica.generales.includes.modales.recomendaciones_generales_implan') 
-        @include('atencion_odontologica.generales.includes.modales.recomendaciones_especiales_implan') 
-     
+        @include('atencion_odontologica.generales.includes.modales.recomendaciones_generales_implan')
+        @include('atencion_odontologica.generales.includes.modales.recomendaciones_especiales_implan')
+
     </div>
 	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
     <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
@@ -158,6 +158,8 @@
                     "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }
             });
+
+
         });
     function cargar_a_presupuesto(id, tipo = null){
         let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";

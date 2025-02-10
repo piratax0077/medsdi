@@ -81,7 +81,7 @@
                     <div class="tab-content" id="at-od_impl">
                         <!--Atender paciente-->
                         <div class="tab-pane fade show active" id="atender" role="tabpanel" aria-labelledby="atender-tab">
-                            @include('atencion_odontologica.secciones_especialidad.ficha_implantologia')
+                            @include('atencion_odontologica.secciones_especialidad.ficha_periodoncia')
                         </div>
                         <!--Licencia-->
                         <!--Licencia-->

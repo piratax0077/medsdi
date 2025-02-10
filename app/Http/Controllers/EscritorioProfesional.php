@@ -1153,6 +1153,10 @@ class EscritorioProfesional extends Controller
         $paciente = Paciente::where('id', $hora_medica->id_paciente)->first();
         $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
 
+        $fecha_ultima_atencion = HoraMedica::where('id_paciente',$hora_medica->id_paciente)->orderBy('id','desc')->first();
+
+        $paciente->fecha_ultima_atencion = $fecha_ultima_atencion->fecha_consulta;
+
         $presupuestos_dentales = PresupuestosDental::where('id_paciente',$hora_medica->id_paciente)->get();
 
         $paciente->presupuestos = $presupuestos_dentales;
@@ -1168,6 +1172,7 @@ class EscritorioProfesional extends Controller
             else
                 $responsable = null;
         }
+
 
         // return json_encode($paciente);
         return array(
@@ -1795,7 +1800,7 @@ class EscritorioProfesional extends Controller
 
     public function guardar_imagenes_dental_paciente(Request $req){
         try {
-
+    
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
             $rx = new ImagenesDentalPaciente;
             $rx->id_ficha_atencion = $req->id_ficha_atencion;
@@ -1804,6 +1809,8 @@ class EscritorioProfesional extends Controller
             $rx->id_lugar_atencion = $req->id_lugar_atencion;
             $rx->id_especialidad = $req->id_especialidad;
             $rx->id_tipo_especialidad = $profesional->id_tipo_especialidad;
+            $rx->numero_pieza = $req->numero_pieza;
+            $rx->observaciones_ex = $req->observaciones_ex;
             $rx->seccion = $req->seccion;
             $rx->zona_y_motivo = $req->zona_motivo ? $req->zona_motivo : 'SIN ZONA NI MOTIVO';
             $rx->observaciones = $req->observaciones ? $req->observaciones : 'SIN OBSERVACIONES';

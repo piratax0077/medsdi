@@ -372,31 +372,43 @@
                                                                 <div class="row mb-1">
                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                         <div class="form-row">
-                                                                            @if (!empty($imagen->paths_imagenes) && is_array($imagen->paths_imagenes))
-                                                                                @foreach ($imagen->paths_imagenes as $path)
-                                                                                    @if (isset($path['momento']) && $path['momento'] === 'Pre')
-                                                                                        <div>
-                                                                                            <!-- Botón para ampliar imagen -->
-                                                                                            <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path['path'] }}')">
-                                                                                                <img src="{{ asset('storage/' . ltrim($path['path'], '/')) }}"
-                                                                                                    alt="Imagen del examen"
-                                                                                                    class="img-fluid mx-2 imagen_rx">
-                                                                                            </a>
+                                                                            <div class="col-md-10">
+                                                                                @if (!empty($imagen->paths_imagenes) && is_array($imagen->paths_imagenes))
+                                                                                    @foreach ($imagen->paths_imagenes as $path)
+                                                                                        @if (isset($path['momento']) && $path['momento'] === 'Pre')
+                                                                                            <div>
+                                                                                                <!-- Botón para ampliar imagen -->
+                                                                                                <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path['path'] }}')">
+                                                                                                    <img src="{{ asset('storage/' . ltrim($path['path'], '/')) }}"
+                                                                                                        alt="Imagen del examen"
+                                                                                                        class="img-fluid mx-2 imagen_rx">
+                                                                                                </a>
 
-                                                                                            <!-- Botón para eliminar imagen -->
-                                                                                            <button type="button"
-                                                                                                    class="btn btn-outline-danger btn-sm my-2"
-                                                                                                    onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
-                                                                                                <i class="fas fa-trash"></i>
-                                                                                            </button>
-                                                                                        </div>
-                                                                                    @else
+                                                                                                <!-- Botón para eliminar imagen -->
+                                                                                                <button type="button"
+                                                                                                        class="btn btn-outline-danger btn-sm my-2"
+                                                                                                        onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
+                                                                                                    <i class="fas fa-trash"></i>
+                                                                                                </button>
+                                                                                            </div>
+                                                                                        @else
+                                                                                        <p>No hay imágenes disponibles para este examen.</p>
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                @else
                                                                                     <p>No hay imágenes disponibles para este examen.</p>
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            @else
-                                                                                <p>No hay imágenes disponibles para este examen.</p>
-                                                                            @endif
+                                                                                @endif
+                                                                            </div>
+                                                                            <div class="col-md-2">
+                                                                                <div class="form-group">
+                                                                                    <label for="numero_pieza_ex_impl{{ $count }}" class="floating-label-activo-sm">N° Pieza</label>
+                                                                                    <input type="text" class="form-control form-control-sm" id="numero_pieza_ex_impl{{ $count }}" value="{{ $imagen->numero_pieza }}">
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                    <label for="observaciones_ex_impl{{$count}}" class="floating-label-activo-sm">Observaciones</label>
+                                                                                    <textarea class="form-control caja-texto form-control-sm mb-9" id="observaciones_ex_impl{{$count}}" name="observaciones_ex_impl{{ $count }}" onfocus="this.rows=4" onblur="this.rows=1;">{{ $imagen->observaciones_ex }}</textarea>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>

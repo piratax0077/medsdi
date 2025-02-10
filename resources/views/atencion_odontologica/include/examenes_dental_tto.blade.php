@@ -149,8 +149,8 @@
         }
     }
 </script> --}}
-<div class="row">
-    <div class="col-md-6">
+<div class="row" >
+    <div class="col-md-6" id="contenedor_pieza_tto_impl{{ $counter }}">
         <div class="card">
             <div class="card-body">
                 <div class="form-row">
@@ -180,7 +180,38 @@
         </div>
     </div>
     <div class="col-md-6">
-        <p>Grupos</p>
+        <label for="" class="floating-label-activo-sm">Grupos</label>
+        <select class="js-example-basic-multiple" name="paciente_piezas_dentales_ex" id="paciente_piezas_dentales_ex" multiple="multiple">
+            <option value="1.1">1.1</option>
+            <option value="1.2">1.2</option>
+            <option value="1.3">1.3</option>
+            <option value="1.4">1.4</option>
+            <option value="1.5">1.5</option>
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="2.1">2.1</option>
+            <option value="2.2">2.2</option>
+            <option value="2.3">2.3</option>
+            <option value="2.4">2.4</option>
+            <option value="2.5">2.5</option>
+            <option value="2.6">2.6</option>
+            <option value="2.7">2.7</option>
+
+            <option value="3.1">3.1</option>
+            <option value="3.2">3.2</option>
+            <option value="3.3">3.3</option>
+            <option value="3.4">3.4</option>
+            <option value="3.5">3.5</option>
+            <option value="3.6">3.6</option>
+            <option value="3.7">3.7</option>
+            <option value="4.1">4.1</option>
+            <option value="4.2">4.2</option>
+            <option value="4.3">4.3</option>
+            <option value="4.4">4.4</option>
+            <option value="4.5">4.5</option>
+            <option value="4.6">4.6</option>
+            <option value="4.7">4.7</option>
+        </select>
     </div>
 </div>
 
@@ -223,6 +254,7 @@
                 }
             });
         });
+        $('#paciente_piezas_dentales_ex').select2();
     });
 </script>
 
@@ -383,6 +415,7 @@ function cargar_a_presupuesto_impl(counter){
 
 function ocultar_pieza_impl(counter){
     console.log(counter);
+    $('#contenedor_pieza_tto_impl'+counter).empty();
 }
 
 </script>

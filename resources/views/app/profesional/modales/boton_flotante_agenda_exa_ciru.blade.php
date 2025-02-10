@@ -259,6 +259,7 @@
                                                         $('#input_reserva_hora_email_asistente').val(data.paciente.email);
                                                         $('#datos_consulta_telefono').text(data.paciente.telefono_uno);
                                                         $('#input_reserva_hora_telefono_asistente').val(data.paciente.telefono_uno);
+                                                        $('#datos_consulta_fecha_ultima').text(data.paciente.fecha_ultima_atencion);
 
                                                         if (data.paciente.sexo == 'M') {
                                                             $('#datos_consulta_sexo').text('Masculino');
