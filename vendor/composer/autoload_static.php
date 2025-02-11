@@ -1021,6 +1021,7 @@ class ComposerStaticInit602740cfabbf6d5d1707a7b161a4afcd
         'App\\Models\\ExamenesDentalOralRx' => __DIR__ . '/../..' . '/app/Models/ExamenesDentalOralRx.php',
         'App\\Models\\ExamenesDentalPieza' => __DIR__ . '/../..' . '/app/Models/ExamenesDentalPieza.php',
         'App\\Models\\ExamenesDentalPiezaHistoria' => __DIR__ . '/../..' . '/app/Models/ExamenesDentalPiezaHistoria.php',
+        'App\\Models\\ExamenesDentalPiezaPeriod' => __DIR__ . '/../..' . '/app/Models/ExamenesDentalPiezaPeriod.php',
         'App\\Models\\FichaAtencion' => __DIR__ . '/../..' . '/app/Models/FichaAtencion.php',
         'App\\Models\\FichaAtencionDental' => __DIR__ . '/../..' . '/app/Models/FichaAtencionDental.php',
         'App\\Models\\FichaCirugiaDigestiva' => __DIR__ . '/../..' . '/app/Models/FichaCirugiaDigestiva.php',

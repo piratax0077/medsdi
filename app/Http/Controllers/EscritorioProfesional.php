@@ -1153,9 +1153,12 @@ class EscritorioProfesional extends Controller
         $paciente = Paciente::where('id', $hora_medica->id_paciente)->first();
         $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
 
-        $fecha_ultima_atencion = HoraMedica::where('id_paciente',$hora_medica->id_paciente)->orderBy('id','desc')->first();
+        $fecha_ultima_atencion = FichaAtencion::where('id_paciente', $hora_medica->id_paciente)->orderBy('id','desc')->first();
 
-        $paciente->fecha_ultima_atencion = $fecha_ultima_atencion->fecha_consulta;
+        if ($fecha_ultima_atencion) {
+            $paciente->fecha_ultima_atencion = Carbon::parse($fecha_ultima_atencion->created_at)->toDateString(); // Solo la fecha (YYYY-MM-DD)
+            $paciente->hora_ultima_atencion = Carbon::parse($fecha_ultima_atencion->created_at)->toTimeString(); // Solo la hora (HH:MM:SS)
+        }
 
         $presupuestos_dentales = PresupuestosDental::where('id_paciente',$hora_medica->id_paciente)->get();
 
@@ -1800,7 +1803,7 @@ class EscritorioProfesional extends Controller
 
     public function guardar_imagenes_dental_paciente(Request $req){
         try {
-    
+
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
             $rx = new ImagenesDentalPaciente;
             $rx->id_ficha_atencion = $req->id_ficha_atencion;
@@ -3886,6 +3889,7 @@ class EscritorioProfesional extends Controller
 
     public function dame_tratamientos_presupuesto(Request $req){
         $presupuesto_dental = PresupuestosDental::find($req->id);
+
         if($presupuesto_dental){
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
             $tratamientos_piezas = $this->dameOdontogramaPaciente($presupuesto_dental->id_paciente, $presupuesto_dental->id_ficha_atencion, $presupuesto_dental->id_lugar_atencion,$profesional->id_tipo_especialidad, $presupuesto_dental->id);

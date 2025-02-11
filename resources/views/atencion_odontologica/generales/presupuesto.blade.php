@@ -213,8 +213,9 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${{ number_format($o->valor,0,',','.') }}" >
                                                 </div>
-                                                <div class="form-group col-md-2">
-                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                <div class="form-group col-md-2 d-flex">
+                                                    <button type="button" class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $o->id }},{{ $o->pieza }},'{{ $o->descripcion }}')">+ Insumos</button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -242,8 +243,9 @@
                                                         <label class="floating-label-activo-sm">Total prestación</label>
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                     </div>
-                                                    <div class="form-group col-md-2">
+                                                    <div class="form-group col-md-2 d-flex">
                                                         <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                        <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
                                                     </div>
                                                 @endif
                                             @endforeach
@@ -271,8 +273,9 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group col-md-2 d-flex">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -300,8 +303,9 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group col-md-2 d-flex">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -329,8 +333,9 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group col-md-2 d-flex">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -358,8 +363,9 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group col-md-2 d-flex">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -387,8 +393,9 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group col-md-2 d-flex">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -416,8 +423,9 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group col-md-2 d-flex">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -445,8 +453,9 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group col-md-2 d-flex">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -474,8 +483,9 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group col-md-2 d-flex">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -503,8 +513,9 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group col-md-2 d-flex">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -532,8 +543,9 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group col-md-2 d-flex">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -561,8 +573,9 @@
                                                     <label class="floating-label-activo-sm">Total Prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2">
+                                                <div class="form-group col-md-2 d-flex">
                                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)"> Ver Estado Trabajo</button>
+                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -873,3 +886,248 @@
         </div>
     </div>
 </div>
+
+<!-- MODAL INSUMOS -->
+<!-- Modal -->
+<div class="modal fade" id="insumosModal" tabindex="-1" aria-labelledby="insumosModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="insumosModalLabel">Insumos para el tratamiento</h5>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="" class="floating-label-activo-sm">Profesional</label>
+                            <input type="text" name="" id="" class="form-control form-control-sm" value="{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="" class="floating-label-activo-sm">Paciente</label>
+                            <input type="text" name="" id="" class="form-control form-control-sm" value="{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="" class="floating-label-activo-sm">N° Pieza</label>
+                            <input type="text" name="numero_pieza_tto_modal" id="numero_pieza_tto_modal" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label for="" class="floating-label-activo-sm">Tratamiento</label>
+                            <input type="text" name="tto_modal" id="tto_modal" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label for="" class="floating-label-activo-sm">Insumos</label>
+                            <input type="text" name="insumos_tto" id="insumos_tto" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="" class="floating-label-activo-sm">Cantidad</label>
+                            <input type="number" name="insumos_cantidad_tto" id="insumos_cantidad_tto" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="" class="floating-label-activo-sm">Valor</label>
+                            <input type="number" name="insumos_valor_tto" id="insumos_valor_tto" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="" class="floating-label-activo-sm">Observaciones</label>
+                            <textarea class="form-control caja-texto form-control-sm mb-9" name="insumos_obs_tto" id="insumos_obs_tto" cols="30" rows="1" onfocus="this.rows = 4" onblur="this.rows=1"></textarea>
+                        </div>
+
+                    </div>
+
+                    <button type="button" class="btn btn-outline-success btn-sm w-100 my-2" onclick="agregar_insumos_tto()"><i class="fas fa-check"></i> + Agregar</button>
+                </div>
+                <table class="table table-bordered table-xs w-100" id="table_insumos_tto">
+                    <thead>
+                        <th>insumo</th>
+                        <th>cantidad</th>
+                        <th>valor</th>
+                        <th>observaciones</th>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary">Solicitar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATOS DE VITAL IMPORTANCIA -->
+  <input type="hidden" id="id_pieza_tto">
+  <input type="hidden" id="tipo_tto">
+<script>
+    function verModalAgregarInsumos(id_tto, objetivo, tto, tipo = null){
+        dame_tratamientos_pieza(id_tto);
+        limpiar_formulario_insumo();
+        console.log(objetivo, tipo);
+        $('#insumosModal').modal('show');
+        $('#numero_pieza_tto_modal').val(objetivo);
+        $('#tto_modal').val(tto);
+        $('#id_pieza_tto').val(id_tto);
+        $('#tipo_tto').val(tipo);
+    }
+
+    function dame_tratamientos_pieza(id){
+        let url = '{{ ROUTE("dental.dame_insumos_tratamiento") }}';
+        let data = {
+            id: id,
+            id_paciente: dame_id_paciente(),
+            id_ficha_atencion: $('#id_fc').val(),
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                let insumos = resp.insumos;
+                console.log(insumos);
+                let table = $('#table_insumos_tto').DataTable();
+
+                // Limpiar la tabla sin perder la configuración de DataTables
+                table.clear();
+
+                // Recorrer el array de insumos y agregarlos a la tabla
+                insumos.forEach(insumo => {
+                    table.row.add([
+                        insumo.insumos,         // Nombre del insumo
+                        insumo.cantidad,       // Cantidad utilizada
+                        insumo.valor,         // Unidad de medida
+                        insumo.observaciones     // Descripción u observaciones
+                    ]);
+                });
+
+                // Dibujar la tabla nuevamente con los nuevos datos
+                table.draw();
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+    }
+
+    function agregar_insumos_tto(){
+        let insumos = $('#insumos_tto').val();
+        let cantidad = $('#insumos_cantidad_tto').val();
+        let valor = $('#insumos_valor_tto').val();
+        let observaciones = $('#insumos_obs_tto').val();
+        let id_tto = $('#id_pieza_tto').val();
+
+        let valido = 1;
+        let mensaje = '';
+
+        if(insumos == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar insumos </li>';
+        }
+
+        if(cantidad == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar cantidad </li>';
+        }
+
+        if(valor == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar valor </li>';
+        }
+
+        if(valido == 1){
+            let data = {
+                insumos: insumos,
+                cantidad: cantidad,
+                valor: valor,
+                id_tto: id_tto,
+                id_paciente: dame_id_paciente(),
+                id_ficha_atencion: $('#id_fc').val(),
+                tipo: $('#tipo_tto').val(),
+                _token: CSRF_TOKEN
+            }
+
+            console.log(data);
+
+            let url = '{{ ROUTE("dental.agregar_insumos_tto") }}';
+            $.ajax({
+                url: url,
+                type:'post',
+                data: data,
+                success: function(resp){
+                    console.log(resp);
+                    if(resp.mensaje == 'ok'){
+                        swal({
+                            icon:'success',
+                            text:'Se a agregado los insumos correctamente',
+                            title:'Exito'
+                        });
+                        limpiar_formulario_insumo();
+                        let insumos = resp.insumos;
+                        console.log(insumos);
+                        let table = $('#table_insumos_tto').DataTable();
+
+                        // Limpiar la tabla sin perder la configuración de DataTables
+                        table.clear();
+
+                        // Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            table.row.add([
+                                insumo.insumos,         // Nombre del insumo
+                                insumo.cantidad,       // Cantidad utilizada
+                                insumo.valor,         // Unidad de medida
+                                insumo.observaciones     // Descripción u observaciones
+                            ]);
+                        });
+
+                        // Dibujar la tabla nuevamente con los nuevos datos
+                        table.draw();
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+        }else{
+            swal({
+                    title: "Campos requeridos",
+                    content:{
+                        element: "div",
+                        attributes:{
+                            innerHTML: mensaje,
+                        },
+                    },
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+
+            return false;
+        }
+    }
+
+    function limpiar_formulario_insumo(){
+       $('#insumos_tto').val('');
+        $('#insumos_cantidad_tto').val('');
+        $('#insumos_valor_tto').val('');
+        $('#insumos_obs_tto').val('');
+    //    $('#id_pieza_tto').val('');
+    }
+</script>

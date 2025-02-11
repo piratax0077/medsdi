@@ -45,6 +45,7 @@ use App\Models\HoraMedica;
 use App\Models\InformeMedico;
 use App\Models\IngresoPacienteCirugia;
 use App\Models\Interconsulta;
+use App\Models\InsumosTratamientosDental;
 use App\Models\Laboratorio;
 use App\Models\LugarAtencion;
 use App\Models\MaterialesInsumosPaciente;
@@ -1709,68 +1710,72 @@ class DentalController extends Controller
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         $tratamiento = DiagnosticosDental::where('descripcion', $request->tto)->first();
 
-        $odontograma =  new OdontogramaPaciente();
-        $posicion_pieza = $request->posicion_pieza;
-        $cuadrante = $request->cuadrante;
+        if(!$request->piezas){
+            $odontograma =  new OdontogramaPaciente();
+            $posicion_pieza = $request->posicion_pieza;
+            $cuadrante = $request->cuadrante;
 
-        $value = $posicion_pieza .'_'. $cuadrante;
+            $value = $posicion_pieza .'_'. $cuadrante;
 
-        $caras = '';
-        if ($request->{'caraM'} == '1') {
-            $caras .= 'M' . '|';
-        }
-        if ($request->{'caraO'} == '1') {
-            $caras .= 'O' . '|';
-        }
-        if ($request->{'caraD'} == '1') {
-            $caras .= 'D' . '|';
-        }
-        if ($request->{'carav'} == '1') {
-            $caras .= 'V' . '|';
-        }
-        if ($request->{'caraP'} == '1') {
-            $caras .= 'P' . '|';
-        }
-
-        $request->fecha = Carbon::now();
-
-        $odontograma->diagnostico = 3; // Fractura
-        $odontograma->tratamiento = $request->tto;
-        $odontograma->caras = $caras;
-        $odontograma->pieza = $request->pieza;
-        $odontograma->id_paciente = $request->id_paciente;
-        $odontograma->id_profesional = $profesional->id;
-        $odontograma->id_ficha_atencion = $request->id_ficha_atencion;
-        $odontograma->id_lugar_atencion = $request->id_lugar_atencion;
-        $odontograma->tipo_especialidad = $profesional->id_tipo_especialidad;
-        $odontograma->presupuesto = 1;
-        if ($odontograma->save()) {
-            // crear el presupuesto si es que aun no se ha registrado
-            $presupuesto = PresupuestosDental::where('id_paciente', $odontograma->id_paciente)->where('id_lugar_atencion', $odontograma->id_lugar_atencion)->where('id_ficha_atencion', $odontograma->id_ficha_atencion)->first();
-            if(!$presupuesto){
-                $presupuesto = new PresupuestosDental;
-                $presupuesto->id_paciente = $odontograma->id_paciente;
-                $presupuesto->id_profesional = $profesional->id;
-                $presupuesto->id_ficha_atencion = $odontograma->id_ficha_atencion;
-                $presupuesto->id_lugar_atencion = $odontograma->id_lugar_atencion;
-                $presupuesto->datos_piezas_dentales = '{"key": "value"}'; // luego lo modificamos
-                $presupuesto->estado = 1;
-                $presupuesto->aprobado = 0;
-                $presupuesto->fecha_control = \Carbon\Carbon::parse($request->fecha)->format('Y-m-d');
-                $presupuesto->fecha = \Carbon\Carbon::parse($request->fecha)->format('Y-m-d');
-                $presupuesto->boca = 0;
-                $presupuesto->save();
+            $caras = '';
+            if ($request->{'caraM'} == '1') {
+                $caras .= 'M' . '|';
             }
-            $odontograma_paciente = $this->dame_odontograma_paciente($odontograma->id_paciente, $odontograma->id_ficha_atencion, $odontograma->id_lugar_atencion, $profesional->id_tipo_especialidad);
+            if ($request->{'caraO'} == '1') {
+                $caras .= 'O' . '|';
+            }
+            if ($request->{'caraD'} == '1') {
+                $caras .= 'D' . '|';
+            }
+            if ($request->{'carav'} == '1') {
+                $caras .= 'V' . '|';
+            }
+            if ($request->{'caraP'} == '1') {
+                $caras .= 'P' . '|';
+            }
 
-            $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
-            $valores = $this->dameValoresOdontograma($odontograma->id_paciente, $odontograma->id_ficha_atencion, $odontograma->id_lugar_atencion, $profesional->id_tipo_especialidad);
-            $valor_total = $valores[0] + $valores[1];
-            $presupuesto->valor_total = $valor_total;
-            $presupuesto->save();
-            return ['status' => 1, 'mensaje' => 'Pieza '.$odontograma->pieza.' agregada con éxito.', 'odontograma_paciente' => $odontograma_paciente, 'valores' => $valores,'presupuesto' => $presupuesto];
+            $request->fecha = Carbon::now();
+
+            $odontograma->diagnostico = 3; // Fractura
+            $odontograma->tratamiento = $request->tto;
+            $odontograma->caras = $caras;
+            $odontograma->pieza = $request->pieza;
+            $odontograma->id_paciente = $request->id_paciente;
+            $odontograma->id_profesional = $profesional->id;
+            $odontograma->id_ficha_atencion = $request->id_ficha_atencion;
+            $odontograma->id_lugar_atencion = $request->id_lugar_atencion;
+            $odontograma->tipo_especialidad = $profesional->id_tipo_especialidad;
+            $odontograma->presupuesto = 1;
+            if ($odontograma->save()) {
+                // crear el presupuesto si es que aun no se ha registrado
+                $presupuesto = PresupuestosDental::where('id_paciente', $odontograma->id_paciente)->where('id_lugar_atencion', $odontograma->id_lugar_atencion)->where('id_ficha_atencion', $odontograma->id_ficha_atencion)->first();
+                if(!$presupuesto){
+                    $presupuesto = new PresupuestosDental;
+                    $presupuesto->id_paciente = $odontograma->id_paciente;
+                    $presupuesto->id_profesional = $profesional->id;
+                    $presupuesto->id_ficha_atencion = $odontograma->id_ficha_atencion;
+                    $presupuesto->id_lugar_atencion = $odontograma->id_lugar_atencion;
+                    $presupuesto->datos_piezas_dentales = '{"key": "value"}'; // luego lo modificamos
+                    $presupuesto->estado = 1;
+                    $presupuesto->aprobado = 0;
+                    $presupuesto->fecha_control = \Carbon\Carbon::parse($request->fecha)->format('Y-m-d');
+                    $presupuesto->fecha = \Carbon\Carbon::parse($request->fecha)->format('Y-m-d');
+                    $presupuesto->boca = 0;
+                    $presupuesto->save();
+                }
+                $odontograma_paciente = $this->dame_odontograma_paciente($odontograma->id_paciente, $odontograma->id_ficha_atencion, $odontograma->id_lugar_atencion, $profesional->id_tipo_especialidad);
+
+                $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
+                $valores = $this->dameValoresOdontograma($odontograma->id_paciente, $odontograma->id_ficha_atencion, $odontograma->id_lugar_atencion, $profesional->id_tipo_especialidad);
+                $valor_total = $valores[0] + $valores[1];
+                $presupuesto->valor_total = $valor_total;
+                $presupuesto->save();
+                return ['status' => 1, 'mensaje' => 'Pieza '.$odontograma->pieza.' agregada con éxito.', 'odontograma_paciente' => $odontograma_paciente, 'valores' => $valores,'presupuesto' => $presupuesto];
+            }else{
+                return ['status' => 0, 'mensaje' => 'Ha ocurrido un error con la odontograma '.$odontograma->pieza.'.','presupuesto' => $presupuesto];
+            }
         }else{
-            return ['status' => 0, 'mensaje' => 'Ha ocurrido un error con la odontograma '.$odontograma->pieza.'.','presupuesto' => $presupuesto];
+            return 'son varias piezas';
         }
 
     }
@@ -1841,6 +1846,63 @@ class DentalController extends Controller
             }else{
                 return ['status' => 0, 'mensaje' => 'Ha ocurrido un error con la pieza '.$pieza->pieza.'.'];
             }
+        }
+
+    }
+
+    public function agregar_insumos_tratamiento(Request $req){
+
+        if($req->tipo == null){
+            $pieza = OdontogramaPaciente::find($req->id_tto);
+
+        }else{
+            $pieza = ExamenesBocaGeneral::find($req->id_tto);
+
+        }
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $insumos = new InsumosTratamientosDental;
+        $insumos->tipo = $req->tipo ? $req->tipo : null;
+        $insumos->id_paciente = $req->id_paciente;
+        $insumos->id_profesional = $profesional->id;
+        $insumos->id_ficha_atencion = $req->id_ficha_atencion;
+        $insumos->id_especialidad = $profesional->id_especialidad;
+        $insumos->id_tratamiento = $pieza->id;
+        $insumos->insumos = $req->insumos;
+        $insumos->cantidad = $req->cantidad;
+        $insumos->valor = $req->valor;
+        $insumos->estado = 1;
+        try {
+            if($insumos->save()){
+                $insumos = $this->dame_insumos_tratamiento_todos($req->id_paciente, $req->id_ficha_atencion,$req->id_tto, $req->tipo);
+                return ['mensaje'=>'ok','insumos'=>$insumos];
+            }else{
+                return ['mensaje'=>'error'];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return ['mensaje' => $e->getMessage()];
+        }
+
+    }
+
+    public function dame_insumos_tratamiento(Request $req){
+        $insumos = $this->dame_insumos_tratamiento_todos($req->id_paciente, $req->id_ficha_atencion, $req->id, null);
+        return ['mensaje' => 'ok', 'insumos' => $insumos];
+    }
+
+    public function dame_insumos_tratamiento_todos($id_paciente,$id_ficha_atencion,$id_tto, $tipo){
+        try {
+            if(!$tipo){
+                $pieza = OdontogramaPaciente::find($id_tto);
+
+            }else{
+                $pieza = ExamenesBocaGeneral::find($id_tto);
+            }
+            $insumos = InsumosTratamientosDental::where('id_paciente', $id_paciente)->where('id_ficha_atencion',$id_ficha_atencion)->where('id_tratamiento', $id_tto)->get();
+            return $insumos;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
         }
 
     }

@@ -56,6 +56,7 @@ use App\Models\GesRegistros;
 use App\Models\Hipertension;
 use App\Models\HoraMedica;
 use App\Models\InformeMedico;
+use App\Models\InsumosTratamientosDental;
 use App\Models\Interconsulta;
 use App\Models\ImagenesDentalRxPaciente;
 use App\Models\ImagenesDentalPaciente;
@@ -1839,11 +1840,14 @@ class ficha_atencionController extends Controller
 
         $odontograma_especialidad = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
 
+        $insumos_tratamientos = $this->dame_insumos_tratamiento($paciente->id, $id_ficha_atencion);
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
                 'tipos_receta' => $tipos_receta,
                 'recetas' => $recetas,
+                'insumos_tratamientos' => $insumos_tratamientos,
                 'contador_div_evaluaciones' => $contador_div_evaluaciones,
                 'valores' => $valores_tratamientos[0],
                 'valores_piezas' => $valores_tratamientos[1],
@@ -1986,6 +1990,23 @@ class ficha_atencionController extends Controller
 
             ]
         );
+    }
+
+    public function dame_insumos_tratamiento($id_paciente,$id_ficha_atencion,$tipo = null){
+        try {
+            if(!$tipo){
+                $pieza = OdontogramaPaciente::find($id_tto);
+
+            }else{
+                $pieza = ExamenesBocaGeneral::find($id_tto);
+            }
+            $insumos = InsumosTratamientosDental::where('id_paciente', $id_paciente)->where('id_ficha_atencion',$id_ficha_atencion)->get();
+            return $insumos;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
     }
 
     public function dameHistorialDentalImpl($id_paciente, $seccion){

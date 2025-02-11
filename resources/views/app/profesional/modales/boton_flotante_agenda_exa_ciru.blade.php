@@ -698,17 +698,16 @@
                     $('#contenedor_tratamientos_presupuesto').show();
                     $('#contenedor_tratamientos_presupuesto').empty();
                     tratamientos.forEach(t => {
-
+                        if(t.presupuesto == 1){
                         const checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
                         const disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked}>
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">N° Pieza ${t.pieza} - ${t.tratamiento}</label>
                             </div>`);
-
-
+                        }
                     });
                     maxilar_superior_gral_diagnosticos.forEach(t => {
                         if(t.presupuesto == 1){
@@ -717,10 +716,11 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            }
+                            
+                        }
                     });
                     maxilar_superior_gral_tratamientos.forEach(t => {
                         if(t.presupuesto == 1){
@@ -729,10 +729,11 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            }
+                            
+                        }
                     });
                     maxilar_superior_gral_diagnosticos_endo.forEach(t => {
                         if(t.presupuesto == 1){
@@ -741,10 +742,11 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            }
+                            
+                        }
                     });
                     maxilar_superior_gral_tratamientos_endo.forEach(t => {
                         if(t.presupuesto == 1){
@@ -753,10 +755,11 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            }
+                            
+                        }
                     });
                     maxilar_inferior_gral_diagnosticos.forEach(t => {
                         if(t.presupuesto == 1){
@@ -765,9 +768,10 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
+                            
                             }
                     });
                     maxilar_inferior_gral_tratamientos.forEach(t => {
@@ -777,9 +781,10 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
+                            
                             }
                     });
                     maxilar_inferior_gral_diagnosticos_endo.forEach(t => {
@@ -789,9 +794,10 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
+                            
                             }
                     });
                     maxilar_inferior_gral_tratamientos_endo.forEach(t => {
@@ -801,9 +807,10 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
+                            
                             }
                     });
                     $('#contenedor_tratamientos_presupuesto').append('Se utilizan <span id="cantidad_bloques_atencion">'+bloques+'</span> bloques de atención.');

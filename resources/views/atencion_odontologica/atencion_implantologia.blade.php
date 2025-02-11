@@ -125,7 +125,7 @@
 
         <!-- SIDE BAR IMPLANTOLOGIA -->
         @include("atencion_odontologica.modales"){{-- base de botones de sidebar --}}
-        @include("atencion_odontologica.include.sidebar_derecho_od_gral"){{-- modales y data de sidebar especialidad --}}
+        @include("atencion_odontologica.include.sidebar_derecho_odonto_impl"){{-- modales y data de sidebar especialidad --}}
 
 
         <!--Modals de especialidad -->
@@ -158,8 +158,11 @@
                     "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }
             });
-
-
+            $('#table_insumos_tto').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
         });
     function cargar_a_presupuesto(id, tipo = null){
         let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";

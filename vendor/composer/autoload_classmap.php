@@ -328,6 +328,7 @@ return array(
     'App\\Models\\ExamenesDentalOralRx' => $baseDir . '/app/Models/ExamenesDentalOralRx.php',
     'App\\Models\\ExamenesDentalPieza' => $baseDir . '/app/Models/ExamenesDentalPieza.php',
     'App\\Models\\ExamenesDentalPiezaHistoria' => $baseDir . '/app/Models/ExamenesDentalPiezaHistoria.php',
+    'App\\Models\\ExamenesDentalPiezaPeriod' => $baseDir . '/app/Models/ExamenesDentalPiezaPeriod.php',
     'App\\Models\\FichaAtencion' => $baseDir . '/app/Models/FichaAtencion.php',
     'App\\Models\\FichaAtencionDental' => $baseDir . '/app/Models/FichaAtencionDental.php',
     'App\\Models\\FichaCirugiaDigestiva' => $baseDir . '/app/Models/FichaCirugiaDigestiva.php',

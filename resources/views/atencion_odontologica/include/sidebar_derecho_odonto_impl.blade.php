@@ -19,7 +19,7 @@
                         </h2>
                     </div>
                     <div id="collapse_nom_odonto" class="collapse" aria-labelledby="heading_nom_od"
-                        data-parent="#accordion_formularios_atencion">
+                        data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <img src="{{ asset('img_dental/sano.png') }}">
                              Diente Sano
@@ -76,7 +76,7 @@
                     </div>
                     <div id="collapse_consentimientos_informados1" class="collapse"
                         aria-labelledby="heading_consentimientos_informados1"
-                        data-parent="#accordion_formularios_atencion">
+                        data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button"
                                 class="btn btn-sm btn-info btn-block accion_modal_examenradiologico">Orden
@@ -99,7 +99,7 @@
                     </div>
                     <div id="collapse_consentimientos_informados2" class="collapse"
                         aria-labelledby="heading_consentimientos_informados2"
-                        data-parent="#accordion_formularios_atencion">
+                        data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button"
                                 class="btn btn-sm btn-info btn-block accion_modal_orden_trabajo">ORDEN DE TRABAJO
@@ -143,7 +143,7 @@
                         </h2>
                     </div>
                     <div id="collapse_ayudante" class="collapse" aria-labelledby="heading_ayudante"
-                        data-parent="#accordion_formularios_atencion">
+                        data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button"
                                 class="btn btn-sm btn-info btn-block accion_modal_gastosmaterial_gen">GASTO
@@ -167,7 +167,7 @@
                         </h2>
                     </div>
                     <div id="collapse_recom" class="collapse" aria-labelledby="heading_recom"
-                        data-parent="#accordion_formularios_atencion">
+                        data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <a href="documentos/consejosodontopediatría.pdf" target="_blank"><button type="button"
                                     class="btn btn-sm btn-info btn-block " style="margin-bottom:5px">La Dentición

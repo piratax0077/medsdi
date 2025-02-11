@@ -476,7 +476,95 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div id="contenedor_pieza_tto_implante">
+                                                        <div class="row" >
+                                                            <div class="col-md-6" id="contenedor_pieza_tto_impl0">
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-2 col-md-4 col-lg-4 col-xl-2">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Pieza N°</label>
+                                                                                    <input type="text" class="form-control form-control-sm" id="numero_pieza_tto_imp0" value="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-6 col-md-6">
+                                                                                <label class="floating-label-activo-sm">Tratamiento</label>
+                                                                                <input type="text" name="diag_presupuesto_pieza0" id="diag_presupuesto_pieza0" class="form-control form-control-sm tratamiento-autocomplete ui-autocomplete-input" autocomplete="off">
+                                                                            </div>
+                                                                            <div class="col-sm-3 col-md-3">
+                                                                                <label class="floating-label-activo-sm">Valor</label>
+                                                                                <input type="text" name="valor_presupuesto_pieza0" id="valor_presupuesto_pieza0" class="form-control form-control-sm">
+                                                                            </div>
+                                                                            <div class="col-sm-1-col-md-1">
+                                                                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_impl(0)"><i class="fas fa-save"></i> </button>
+                                                                            </div>
 
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card-footer">
+                                                                        <button type="button" class="btn btn-danger btn-icon btn-sm" onclick="ocultar_pieza_impl(0)">X</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <div class="row">
+                                                                            <div class="col-md-11">
+                                                                                <div class="form-group">
+                                                                                    <label for="" class="floating-label-activo-sm">Grupos</label>
+                                                                                    <select class="js-example-basic-multiple" name="paciente_piezas_dentales_ex" id="paciente_piezas_dentales_ex" multiple="multiple">
+                                                                                        <option value="1.1">1.1</option>
+                                                                                        <option value="1.2">1.2</option>
+                                                                                        <option value="1.3">1.3</option>
+                                                                                        <option value="1.4">1.4</option>
+                                                                                        <option value="1.5">1.5</option>
+                                                                                        <option value="1.6">1.6</option>
+                                                                                        <option value="1.7">1.7</option>
+                                                                                        <option value="2.1">2.1</option>
+                                                                                        <option value="2.2">2.2</option>
+                                                                                        <option value="2.3">2.3</option>
+                                                                                        <option value="2.4">2.4</option>
+                                                                                        <option value="2.5">2.5</option>
+                                                                                        <option value="2.6">2.6</option>
+                                                                                        <option value="2.7">2.7</option>
+
+                                                                                        <option value="3.1">3.1</option>
+                                                                                        <option value="3.2">3.2</option>
+                                                                                        <option value="3.3">3.3</option>
+                                                                                        <option value="3.4">3.4</option>
+                                                                                        <option value="3.5">3.5</option>
+                                                                                        <option value="3.6">3.6</option>
+                                                                                        <option value="3.7">3.7</option>
+                                                                                        <option value="4.1">4.1</option>
+                                                                                        <option value="4.2">4.2</option>
+                                                                                        <option value="4.3">4.3</option>
+                                                                                        <option value="4.4">4.4</option>
+                                                                                        <option value="4.5">4.5</option>
+                                                                                        <option value="4.6">4.6</option>
+                                                                                        <option value="4.7">4.7</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-sm-1-col-md-1">
+                                                                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_impl_g()"><i class="fas fa-save"></i> </button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row">
+                                                                            <div class="col-sm-12 col-md-12">
+                                                                                <div class="form-group">
+                                                                                    <label class="floating-label-activo-sm">Tratamiento</label>
+                                                                                    <input type="text" name="diag_presupuesto_pieza_g" id="diag_presupuesto_pieza_g" class="form-control form-control-sm tratamiento-autocomplete ui-autocomplete-input" autocomplete="off">
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
