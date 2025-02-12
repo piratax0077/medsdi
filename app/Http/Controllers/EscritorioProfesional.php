@@ -1153,11 +1153,17 @@ class EscritorioProfesional extends Controller
         $paciente = Paciente::where('id', $hora_medica->id_paciente)->first();
         $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
 
-        $fecha_ultima_atencion = FichaAtencion::where('id_paciente', $hora_medica->id_paciente)->orderBy('id','desc')->first();
+        $fecha_ultima_atencion = HoraMedica::select('horas_medicas.fecha_consulta','fichas_atenciones.*')
+        ->join('fichas_atenciones','horas_medicas.id_ficha_atencion','fichas_atenciones.id')
+        ->where('horas_medicas.id_paciente', $hora_medica->id_paciente)
+        ->where('fichas_atenciones.finalizada',1)
+        ->where('horas_medicas.id_lugar_atencion', $hora_medica->id_lugar_atencion)
+        ->orderBy('horas_medicas.id','desc')
+        ->first();
 
         if ($fecha_ultima_atencion) {
-            $paciente->fecha_ultima_atencion = Carbon::parse($fecha_ultima_atencion->created_at)->toDateString(); // Solo la fecha (YYYY-MM-DD)
-            $paciente->hora_ultima_atencion = Carbon::parse($fecha_ultima_atencion->created_at)->toTimeString(); // Solo la hora (HH:MM:SS)
+            $paciente->fecha_ultima_atencion = Carbon::parse($fecha_ultima_atencion->fecha_consulta)->toDateString(); // Solo la fecha (YYYY-MM-DD)
+            //$paciente->hora_ultima_atencion = Carbon::parse($fecha_ultima_atencion->created_at)->toTimeString(); // Solo la hora (HH:MM:SS)
         }
 
         $presupuestos_dentales = PresupuestosDental::where('id_paciente',$hora_medica->id_paciente)->get();
@@ -3356,13 +3362,13 @@ class EscritorioProfesional extends Controller
         }
 
         // Agregar el atributo 'laboratorio' a los trabajos
-        foreach ($trabajos as $trabajo) {
-            if (isset($mis_trabajos_profesional_map[$trabajo->id])) {
-                $trabajo->laboratorio = $mis_trabajos_profesional_map[$trabajo->id];
-            } else {
-                $trabajo->laboratorio = 0; // O el valor por defecto que prefieras
-            }
-        }
+        // foreach ($trabajos as $trabajo) {
+        //     if (isset($mis_trabajos_profesional_map[$trabajo->id])) {
+        //         $trabajo->laboratorio = $mis_trabajos_profesional_map[$trabajo->id];
+        //     } else {
+        //         $trabajo->laboratorio = 0; // O el valor por defecto que prefieras
+        //     }
+        // }
 
         $mis_trabajos_agregados = DiagnosticosDental::where('id_responsable', $profesional->id)->get();
 

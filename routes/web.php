@@ -2403,4 +2403,5 @@ Route::post('/cargar/tratamiento',[App\Http\Controllers\DentalController::class,
 Route::post('/cargar/tratamiento/period',[App\Http\Controllers\DentalController::class, 'cargar_tratamiento_presupuesto_period'])->name('dental.cargar_tratamiento_presupuesto_period');
 Route::post('/sacar/tratamiento',[App\Http\Controllers\DentalController::class, 'sacar_tratamiento_presupuesto'])->name('dental.sacar_tratamiento_presupuesto');
 Route::post('/agregar/insumos/tratamiento',[App\Http\Controllers\DentalController::class, 'agregar_insumos_tratamiento'])->name('dental.agregar_insumos_tto');
+Route::post('/eliminar/insumos/tratamiento',[App\Http\Controllers\DentalController::class, 'eliminar_insumos_tratamiento'])->name('dental.eliminar_insumos_tto');
 Route::post('/dame/insumos/tratamiento',[App\Http\Controllers\DentalController::class, 'dame_insumos_tratamiento'])->name('dental.dame_insumos_tratamiento');

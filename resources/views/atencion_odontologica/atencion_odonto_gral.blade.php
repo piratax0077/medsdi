@@ -151,6 +151,9 @@
                 text: 'Esta página se encuentra en desarrollo.',
                 confirmButtonText: 'Aceptar'
             });
+            mostrar_pieza_dental_examen_odontop();
+            mostrar_nueva_pieza_oral_rx_odontop();
+            mostrar_pieza_dental_examen_odontop_(1);
         });
     function cargar_a_presupuesto(id, tipo = null){
         let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";

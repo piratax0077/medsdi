@@ -957,11 +957,13 @@
                         <th>cantidad</th>
                         <th>valor</th>
                         <th>observaciones</th>
+                        <th>Acciones</th>
                     </thead>
                     <tbody>
 
                     </tbody>
                 </table>
+                 <span style="font-weight: bold;" id="total_insumos">Aqui va el total de insumos</span>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -1014,12 +1016,15 @@
                         insumo.insumos,         // Nombre del insumo
                         insumo.cantidad,       // Cantidad utilizada
                         insumo.valor,         // Unidad de medida
-                        insumo.observaciones     // Descripción u observaciones
+                        insumo.observaciones,     // Descripción u observaciones
+                        `<button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="editar_insumo_tto(${insumo.id})" data-insumo-id="${insumo.id}"><i class="fas fa-edit"></i></button>
+                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo_tto(${insumo.id})" data-insumo-id="${insumo.id}"><i class="fas fa-trash"></i></button>`
                     ]);
                 });
 
                 // Dibujar la tabla nuevamente con los nuevos datos
                 table.draw();
+                $('#total_insumos').html('El total de insumos es de $'+resp.total_insumos);
             },
             error: function(error){
                 console.log(error);
@@ -1061,6 +1066,7 @@
                 id_paciente: dame_id_paciente(),
                 id_ficha_atencion: $('#id_fc').val(),
                 tipo: $('#tipo_tto').val(),
+                observaciones: observaciones,
                 _token: CSRF_TOKEN
             }
 
@@ -1093,12 +1099,15 @@
                                 insumo.insumos,         // Nombre del insumo
                                 insumo.cantidad,       // Cantidad utilizada
                                 insumo.valor,         // Unidad de medida
-                                insumo.observaciones     // Descripción u observaciones
+                                insumo.observaciones,     // Descripción u observaciones
+                                `<button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="editar_insumo_tto(${insumo.id})" data-insumo-id="${insumo.id}"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo_tto(${insumo.id})" data-insumo-id="${insumo.id}"><i class="fas fa-trash"></i></button>`
                             ]);
                         });
 
                         // Dibujar la tabla nuevamente con los nuevos datos
                         table.draw();
+                        $('#total_insumos').html('El total de insumos es de $'+resp.total_insumos);
                     }
                 },
                 error: function(error){
@@ -1129,5 +1138,70 @@
         $('#insumos_valor_tto').val('');
         $('#insumos_obs_tto').val('');
     //    $('#id_pieza_tto').val('');
+    }
+
+    function eliminar_insumo_tto(id){
+        swal({
+            title: "¿Esta seguro que desea ELIMINAR el insumo?",
+            text: "Favor confirme o cancele la solicitud",
+            icon: "warning",
+            buttons: ["Cancelar", "Solicitar"],
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                eliminar_insumo_tto_confirmar(id);
+            }
+        });
+    }
+
+    function eliminar_insumo_tto_confirmar(id){
+        let url = "{{ ROUTE('dental.eliminar_insumos_tto') }}";
+        let data = {
+            id: id,
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            data: data,
+            url: url,
+            success: function(resp){
+                console.log(resp);
+                    if(resp.mensaje == 'ok'){
+                        swal({
+                            icon:'success',
+                            text:'Se a agregado los insumos correctamente',
+                            title:'Exito'
+                        });
+                        let insumos = resp.insumos;
+                        console.log(insumos);
+                        let table = $('#table_insumos_tto').DataTable();
+
+                        // Limpiar la tabla sin perder la configuración de DataTables
+                        table.clear();
+
+                        // Recorrer el array de insumos y agregarlos a la tabla
+                        // Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            table.row.add([
+                                insumo.insumos,         // Nombre del insumo
+                                insumo.cantidad,       // Cantidad utilizada
+                                insumo.valor,         // Unidad de medida
+                                insumo.observaciones,     // Descripción u observaciones
+                                `<button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="editar_insumo_tto(${insumo.id})" data-insumo-id="${insumo.id}"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo_tto(${insumo.id})" data-insumo-id="${insumo.id}"><i class="fas fa-trash"></i></button>`
+                            ]);
+                        });
+
+                        // Dibujar la tabla nuevamente con los nuevos datos
+                        table.draw();
+                        $('#total_insumos').html('El total de insumos es de $'+resp.total_insumos);
+                    }
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        })
     }
 </script>

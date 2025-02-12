@@ -719,7 +719,7 @@
                                 <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
+
                         }
                     });
                     maxilar_superior_gral_tratamientos.forEach(t => {
@@ -732,7 +732,7 @@
                                 <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
+
                         }
                     });
                     maxilar_superior_gral_diagnosticos_endo.forEach(t => {
@@ -745,7 +745,7 @@
                                 <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
+
                         }
                     });
                     maxilar_superior_gral_tratamientos_endo.forEach(t => {
@@ -758,7 +758,7 @@
                                 <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
+
                         }
                     });
                     maxilar_inferior_gral_diagnosticos.forEach(t => {
@@ -771,7 +771,7 @@
                                 <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
+
                             }
                     });
                     maxilar_inferior_gral_tratamientos.forEach(t => {
@@ -784,7 +784,7 @@
                                 <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
+
                             }
                     });
                     maxilar_inferior_gral_diagnosticos_endo.forEach(t => {
@@ -797,7 +797,7 @@
                                 <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
+
                             }
                     });
                     maxilar_inferior_gral_tratamientos_endo.forEach(t => {
@@ -810,7 +810,7 @@
                                 <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
+
                             }
                     });
                     $('#contenedor_tratamientos_presupuesto').append('Se utilizan <span id="cantidad_bloques_atencion">'+bloques+'</span> bloques de atención.');

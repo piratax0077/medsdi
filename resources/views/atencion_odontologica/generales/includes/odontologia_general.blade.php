@@ -1043,3 +1043,26 @@
         </div>
     </div>
 </div>
+
+<script>
+
+     function mostrar_nueva_pieza_dental(counter){
+            let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental') }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    counter: counter,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(resp) {
+                    console.log(resp);
+                    $('#nueva_pieza_dental_odontodolor').empty();
+                    $('#nueva_pieza_dental_odontodolor').append(resp.v);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+</script>
