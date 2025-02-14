@@ -66,6 +66,7 @@ use App\Models\PacienteContactoEmergencia;
 use App\Models\Prevision;
 use App\Models\Profesional;
 use App\Models\PresupuestosDental;
+use App\Models\ProcedimientosImplantes;
 use App\Models\ProfesionalAntecedenteAcademico;
 use App\Models\ProfesionalAsistente;
 use App\Models\ProfesionalConvenio;
@@ -997,6 +998,7 @@ class EscritorioProfesional extends Controller
 
         $asistentes = $profesional->Asistentes()->get();
         $asistentes_lugar_atencion = AsistenteLugarAtencion::where('id_profesional', $profesional->id)->get();
+
         // dd($asistentes_lugar_atencion);
 
         return view('app.profesional.mis_asistentes')->with(['asistentes' => $asistentes, 'region' => $region, 'asistentes_lugar_atencion' => $asistentes_lugar_atencion]);
@@ -1302,6 +1304,52 @@ class EscritorioProfesional extends Controller
         }
     }
 
+
+    public function guardar_pieza_dental_tto_impl(Request $request){
+        try {
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            $tto = new ProcedimientosImplantes;
+            $tto->id_paciente = $request->id_paciente;
+            $tto->id_profesional = $profesional->id;
+            $tto->id_ficha_atencion = $request->id_ficha_atencion;
+            $tto->id_especialidad = $profesional->id_especialidad;
+            $tto->numero_pieza = $request->numero_pieza;
+            $tto->fecha = Carbon::now()->format('Y-m-d');
+            $tto->id_tipo_procedimiento = $request->tipo_tto;
+            $tto->tipo_procedimiento = $request->tipo_tto_text;
+            $tto->id_tipo_anestesia = $request->anestesia_tto;
+            $tto->anestesia = $request->anestesia_tto_text;
+            $tto->numero_tubos = $request->numero_tubos;
+            $tto->id_tecnica_anestesia = $request->tenica_anestesia;
+            $tto->tecnica_anestesia = $request->tecnica_anestesia_text;
+            $tto->id_anestesico = $request->anestesico_tto;
+            $tto->anestesico = $request->anestesico_tto_text;
+            $tto->id_incidentes = $request->incidente_tto;
+            $tto->incidentes = $request->incidente_tto_text;
+            $tto->id_mat_injerto_oseo = $request->material_injerto_tto;
+            $tto->material_injerto_oseo = $request->material_injerto_tto_text;
+            $tto->metodo_injerto_oseo = $request->tipo_injerto_tto;
+            $tto->id_suturas = $request->suturas_tto;
+            $tto->suturas = $request->suturas_tto_text;
+            $tto->tiempo_quirurgico = $request->tiempo_quirurgico_tto;
+            $tto->estado = 1;
+
+            if($tto->save()){
+                $examenes = $this->dameProcedimientosImplantes($request->id_paciente, $profesional->id);
+                $v = view('atencion_odontologica.include.procedimientos_implantes_todos',['examenes' => $examenes])->render();
+                return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function dameProcedimientosImplantes($id_paciente, $id_profesional){
+        $procedimientos = ProcedimientosImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+        return $procedimientos;
+    }
+
     public function guardar_pieza_dental_end_dolor(Request $request){
         try {
             $dolor = new ExamenesDentalDolor;
@@ -1372,6 +1420,14 @@ class EscritorioProfesional extends Controller
         $responsable = User::find(Auth::user()->id);
         $seccion = $req->seccion;
         $v = view('atencion_odontologica.include.examenes_dental_tto',['counter' => $idCounter,'seccion' => $seccion,'pieza' => $pieza])->render();
+        return ['mensaje' => 'OK','v' => $v];
+    }
+
+    public function mostrar_nueva_pieza_dental_tto_impl(Request $req){
+
+        $idCounter = $req->counter;
+        $responsable = User::find(Auth::user()->id);
+        $v = view('atencion_odontologica.include.piezas_dental_tto_impl',['counter' => $idCounter])->render();
         return ['mensaje' => 'OK','v' => $v];
     }
 
@@ -1881,6 +1937,19 @@ class EscritorioProfesional extends Controller
             return ['mensaje' => 'OK', 'v' => $v,'seccion' => $seccion];
         }else{
             return ['mensaje' => 'error'];
+        }
+    }
+
+    public function eliminar_pieza_dental_tto_impl(Request $req){
+
+        $procedimiento = ProcedimientosImplantes::find($req->id);
+
+        $id_paciente = $procedimiento->id_paciente;
+        $id_profesional = $procedimiento->id_profesional;
+        if($procedimiento->delete()){
+            $examenes = $this->dameProcedimientosImplantes($id_paciente, $id_profesional);
+            $v = view('atencion_odontologica.include.procedimientos_implantes_todos',['examenes' => $examenes])->render();
+                return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
         }
     }
 
@@ -3594,7 +3663,9 @@ class EscritorioProfesional extends Controller
         }
     }
 
-
+public function insumosDental(){
+    return 'jhola';
+}
 
     public function config_profesional()
     {

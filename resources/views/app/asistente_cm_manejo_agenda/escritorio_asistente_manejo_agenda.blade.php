@@ -560,6 +560,16 @@
                                 $('.btn-agenda-'+tipo_agenda).css('background-color','#1cbebe');
                                 $('#id_tipo_agenda').val(tipo_agenda);
 
+                                if (data.profesional.id_especialidad == 2) {
+                                    console.log('dentista');
+                                    $('#link_pago_presupuesto_dental').removeClass('d-none');
+
+                                } else {
+                                    console.log('general');
+                                    $('#link_pago_presupuesto_dental').addClass('d-none');
+                                    $('#pills-venta-dental').removeClass('show active');
+                                }
+
                                 switch (parseInt(tipo_agenda)) {
                                     case 1://consulta
                                         $('#titulo_tipo_agenda').html('AGENDA DE CONSULTA');
@@ -794,6 +804,18 @@
                                                         $('#input_reserva_sexo_asistente').val('F');
                                                     }
 
+                                                    let tratamientos = data.paciente.presupuestos;
+                                                    $('#tratamientos_dentales').empty();
+                                                    if(tratamientos.length > 0){
+                                                        tratamientos.forEach(t => {
+                                                            $('#tratamientos_dentales').append('<option>'+t.id+') de fecha '+t.fecha+' </option>');
+                                                        });
+                                                    }else{
+                                                        $('#tratamientos_dentales').append('<option>Primera consulta </option>');
+                                                        $('#tratamientos_dentales').append('<option>Urgencia </option>');
+                                                    }
+
+
                                                     $('#estado_id_profesional').val(data.profesional.id);
                                                     $('#estado_id_paciente').val(data.paciente.id);
                                                     $('#id_hora_medica').val(id_hora_medica);
@@ -835,9 +857,13 @@
 
                                                         /** PESTAÑA DE RECIBIR PAGO */
                                                         $('#bono_paciente_rut').val(data.paciente.rut);
+                                                        $('#bono_paciente_rut_dental').val(data.paciente.rut);
                                                         $('#bono_paciente_nombre').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
+                                                        $('#bono_paciente_nombre_dental').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
                                                         $('#bono_profesional_nombre').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
+                                                        $('#bono_profesional_nombre_dental').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
                                                         $('#bono_profesional_rut').val( data.profesional.rut);
+                                                        $('#bono_profesional_rut_dental').val( data.profesional.rut);
                                                         $('#bono_hora_medica').val(info.event.id);
                                                         $('#bono_id_profesional').val(data.profesional.id);
                                                         $('#bono_id_paciente').val(data.paciente.id);

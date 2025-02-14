@@ -105,6 +105,7 @@ use App\Models\Instituciones;
 use App\Models\LogUsersDevices;
 use App\Models\NotificacionConfirmacion;
 use App\Models\PacientesDependientes;
+use App\Models\ProcedimientosImplantes;
 use App\Models\RecetaAudifono;
 use App\Models\RecetaControl;
 use App\Models\Recomendacion;
@@ -1842,6 +1843,8 @@ class ficha_atencionController extends Controller
 
         $insumos_tratamientos = $this->dame_insumos_tratamiento($paciente->id, $id_ficha_atencion);
 
+        $examanes_tto_implantes = $this->dameProcedimientosImplantes($paciente->id, $profesional->id);
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1851,6 +1854,7 @@ class ficha_atencionController extends Controller
                 'contador_div_evaluaciones' => $contador_div_evaluaciones,
                 'valores' => $valores_tratamientos[0],
                 'valores_piezas' => $valores_tratamientos[1],
+                'examenes_tto_implantes' => $examanes_tto_implantes,
                 'examenes_dental' => $examenes_dental,
                 'examenes_pre_implante' => $examenes_preimplante,
                 'examenes_period' => $examenes_period,
@@ -11586,6 +11590,11 @@ class ficha_atencionController extends Controller
 
 
         return (object)$datos;
+    }
+
+    public function dameProcedimientosImplantes($id_paciente, $id_profesional){
+        $procedimientos = ProcedimientosImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+        return $procedimientos;
     }
 
 }

@@ -1117,6 +1117,7 @@ class ComposerStaticInit602740cfabbf6d5d1707a7b161a4afcd
         'App\\Models\\InformeMedico' => __DIR__ . '/../..' . '/app/Models/InformeMedico.php',
         'App\\Models\\IngresoPacienteCirugia' => __DIR__ . '/../..' . '/app/Models/IngresoPacienteCirugia.php',
         'App\\Models\\Instituciones' => __DIR__ . '/../..' . '/app/Models/Instituciones.php',
+        'App\\Models\\InsumosTratamientosDental' => __DIR__ . '/../..' . '/app/Models/InsumosTratamientosDental.php',
         'App\\Models\\Interconsulta' => __DIR__ . '/../..' . '/app/Models/Interconsulta.php',
         'App\\Models\\Invitacion' => __DIR__ . '/../..' . '/app/Models/Invitacion.php',
         'App\\Models\\JitsiVideo' => __DIR__ . '/../..' . '/app/Models/JitsiVideo.php',

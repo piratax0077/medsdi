@@ -424,6 +424,7 @@ return array(
     'App\\Models\\InformeMedico' => $baseDir . '/app/Models/InformeMedico.php',
     'App\\Models\\IngresoPacienteCirugia' => $baseDir . '/app/Models/IngresoPacienteCirugia.php',
     'App\\Models\\Instituciones' => $baseDir . '/app/Models/Instituciones.php',
+    'App\\Models\\InsumosTratamientosDental' => $baseDir . '/app/Models/InsumosTratamientosDental.php',
     'App\\Models\\Interconsulta' => $baseDir . '/app/Models/Interconsulta.php',
     'App\\Models\\Invitacion' => $baseDir . '/app/Models/Invitacion.php',
     'App\\Models\\JitsiVideo' => $baseDir . '/app/Models/JitsiVideo.php',
