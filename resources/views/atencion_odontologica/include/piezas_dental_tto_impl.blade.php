@@ -225,6 +225,35 @@
 
         let tiempo_quirurgico_tto = $('#tiempo_quir_impl'+counter).val();
 
+        let valido = 1;
+        let mensaje = '';
+
+        if(numero_pieza == ''){
+            valido = 0;
+            mensaje += '<li>Campo requerido N° Pieza </li>';
+        }
+
+        if(numero_tubos == ''){
+            valido = 0;
+            mensaje += '<li>Campo requerido N° Tubos </li>';
+        }
+
+        if(valido == 0){
+            swal({
+                    title: "Campos requeridos",
+                    content:{
+                        element: "div",
+                        attributes:{
+                            innerHTML: mensaje,
+                        },
+                    },
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            return false;
+        }
+
         let data = {
             numero_pieza: numero_pieza,
             tipo_tto: tipo_tto,
@@ -263,6 +292,7 @@
                 if(resp.mensaje == 'OK'){
                     $('#contenedor_tto_implantologia').empty();
                     $('#contenedor_tto_implantologia').append(resp.v);
+                    $('#pieza_dental_tto_impl').empty();
                 }
             },
             error: function(error){

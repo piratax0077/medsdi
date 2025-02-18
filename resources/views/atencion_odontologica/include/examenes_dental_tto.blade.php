@@ -186,7 +186,7 @@
                     <div class="col-md-11">
                         <div class="form-group">
                             <label for="" class="floating-label-activo-sm">Grupos</label>
-                            <select class="js-example-basic-multiple" name="paciente_piezas_dentales_ex" id="paciente_piezas_dentales_ex" multiple="multiple">
+                            <select class="js-example-basic-multiple" name="paciente_piezas_dentales_ex_" id="paciente_piezas_dentales_ex" multiple="multiple">
                                 <option value="1.1">1.1</option>
                                 <option value="1.2">1.2</option>
                                 <option value="1.3">1.3</option>

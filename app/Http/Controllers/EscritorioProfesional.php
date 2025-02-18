@@ -67,6 +67,7 @@ use App\Models\Prevision;
 use App\Models\Profesional;
 use App\Models\PresupuestosDental;
 use App\Models\ProcedimientosImplantes;
+use App\Models\ProcedimientosPostImplantes;
 use App\Models\ProfesionalAntecedenteAcademico;
 use App\Models\ProfesionalAsistente;
 use App\Models\ProfesionalConvenio;
@@ -1307,6 +1308,7 @@ class EscritorioProfesional extends Controller
 
     public function guardar_pieza_dental_tto_impl(Request $request){
         try {
+
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
             $tto = new ProcedimientosImplantes;
             $tto->id_paciente = $request->id_paciente;
@@ -1345,8 +1347,49 @@ class EscritorioProfesional extends Controller
         }
     }
 
-    public function dameProcedimientosImplantes($id_paciente, $id_profesional){
-        $procedimientos = ProcedimientosImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+    public function guardar_pieza_dental_post_impl(Request $request){
+        try {
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            $ppi = new ProcedimientosPostImplantes;
+            $ppi->id_paciente = $request->id_paciente;
+            $ppi->id_profesional = $profesional->id;
+            $ppi->id_ficha_atencion = $request->id_ficha_atencion;
+            $ppi->id_especialidad = $profesional->id_especialidad;
+            $ppi->numero_pieza = $request->numero_pieza;
+            $ppi->fecha = Carbon::now()->format('Y-m-d');
+            $ppi->id_movil = $request->estab_post_implante;
+            $ppi->movil = $request->estab_post_implante_text;
+            $ppi->id_posicion = $request->posc_post_impl;
+            $ppi->posicion = $request->posc_post_impl_text;
+            $ppi->id_exp_esp = $request->exp_esp_post_impl;
+            $ppi->exp_esp = $request->exp_esp_post_impl_text;
+            $ppi->id_sup = $request->sut_post_impl;
+            $ppi->supuracion = $request->sut_post_impl_text;
+            $ppi->id_est_encia = $request->est_encia_post_impl;
+            $ppi->estado_encia = $request->est_encia_post_impl_text;
+            $ppi->perdida_osea_marginal = $request->perd_osea_marg_post_impl;
+            $ppi->observaciones = $request->obs_control_post_implante;
+
+            if($ppi->save()){
+                $examenes = $this->dameProcedimientosImplantes($request->id_paciente, $profesional->id,'post');
+                $v = view('atencion_odontologica.include.procedimientos_post_implantes_todos',['examenes' => $examenes])->render();
+                return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
+            }else{
+                return 'error';
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function dameProcedimientosImplantes($id_paciente, $id_profesional, $tipo = null){
+        if($tipo == null){
+            $procedimientos = ProcedimientosImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+        }else{
+            $procedimientos = ProcedimientosPostImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+        }
+
         return $procedimientos;
     }
 
@@ -1953,6 +1996,18 @@ class EscritorioProfesional extends Controller
         }
     }
 
+    public function eliminar_pieza_dental_post_impl(Request $req){
+        $procedimiento = ProcedimientosPostImplantes::find($req->id);
+
+        $id_paciente = $procedimiento->id_paciente;
+        $id_profesional = $procedimiento->id_profesional;
+        if($procedimiento->delete()){
+            $examenes = $this->dameProcedimientosImplantes($id_paciente, $id_profesional,'post');
+            $v = view('atencion_odontologica.include.procedimientos_post_implantes_todos',['examenes' => $examenes])->render();
+                return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
+        }
+    }
+
     public function guardar_pieza_dental_examen_oral_imagenes(Request $req){
         try {
 
@@ -2248,6 +2303,21 @@ class EscritorioProfesional extends Controller
         try {
             $idCounter = $req->count ? $req->count : 1;
             $v = view('atencion_odontologica.include.pieza_dental_period',['counter' => $idCounter])->render();
+            return ['mensaje' => 'OK', 'v' => $v];
+
+
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+
+    public function mostrar_nueva_pieza_dental_post_impl(Request $req){
+        try {
+
+            $idCounter = $req->count ? $req->count : 1;
+            $v = view('atencion_odontologica.include.pieza_dental_post_impl',['counter' => $idCounter])->render();
             return ['mensaje' => 'OK', 'v' => $v];
 
 

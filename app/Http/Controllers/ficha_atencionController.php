@@ -69,6 +69,7 @@ use App\Models\Presentacion;
 use App\Models\PresupuestosDental;
 use App\Models\Prevision;
 use App\Models\Producto;
+use App\Models\ProcedimientosPostImplantes;
 use App\Models\Profesional;
 use App\Models\Region;
 use App\Models\SolicitudPabellonQuirurgico;
@@ -1845,6 +1846,8 @@ class ficha_atencionController extends Controller
 
         $examanes_tto_implantes = $this->dameProcedimientosImplantes($paciente->id, $profesional->id);
 
+        $examenes_post_implantes = $this->dameProcedimientosImplantes($paciente->id, $profesional->id,'post');
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1855,6 +1858,7 @@ class ficha_atencionController extends Controller
                 'valores' => $valores_tratamientos[0],
                 'valores_piezas' => $valores_tratamientos[1],
                 'examenes_tto_implantes' => $examanes_tto_implantes,
+                'examenes_post_implantes' => $examenes_post_implantes,
                 'examenes_dental' => $examenes_dental,
                 'examenes_pre_implante' => $examenes_preimplante,
                 'examenes_period' => $examenes_period,
@@ -11592,8 +11596,13 @@ class ficha_atencionController extends Controller
         return (object)$datos;
     }
 
-    public function dameProcedimientosImplantes($id_paciente, $id_profesional){
-        $procedimientos = ProcedimientosImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+    public function dameProcedimientosImplantes($id_paciente, $id_profesional, $tipo = null){
+        if($tipo == null){
+            $procedimientos = ProcedimientosImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+        }else{
+            $procedimientos = ProcedimientosPostImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+        }
+
         return $procedimientos;
     }
 

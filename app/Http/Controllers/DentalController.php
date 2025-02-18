@@ -1972,6 +1972,37 @@ class DentalController extends Controller
         return ['mensaje' => 'ok', 'insumos' => $insumos['insumos'],'total_insumos' => $insumos['total']];
     }
 
+    public function generar_pdf_prot_impl(Request $req){
+try {
+     // Recibir los datos desde el request
+     $data = $req->all();
+     $id_paciente = $req->id_paciente;
+     $nombre_cir = $req->nombre_cir;
+     $nombre_anest = $req->nombre_anest;
+     $implantes = $req->implantes;
+     $marca_impl = $req->marca_impl;
+     $forma_mat_impl = $req->forma_mat_impl;
+     $prot_prot_corona = $req->prot_prot_corona;
+     $det_cir = $req->det_cir;
+     $nombre_tons = $req->nombre_tons;
+     $prot_pieza_imp = $req->prot_pieza_imp;
+    //code...
+    // Renderizar la vista del presupuesto dental
+    $pdf = Pdf::loadView('atencion_odontologica.PDF.protocolo_implantes_dental',compact('id_paciente','nombre_cir','nombre_anest','implantes','marca_impl','forma_mat_impl','prot_prot_corona','det_cir','nombre_tons','prot_pieza_imp'));
+    // Guardar el PDF en la carpeta public
+    $fileName = 'presupuesto_dental_' . $req->id_paciente . '.pdf';
+    $filePath = public_path('reportes/' . $fileName);
+    file_put_contents($filePath, $pdf->output());
+
+    // Devolver la ruta accesible del archivo PDF
+    return response()->json(['ruta' => asset('reportes/' . $fileName)]);
+} catch (\Exception $e) {
+    //throw $th;
+    return $e->getMessage();
+}
+
+    }
+
     public function dame_insumos_tratamiento_todos($id_paciente,$id_ficha_atencion,$id_tto, $tipo){
         try {
             if(!$tipo){
