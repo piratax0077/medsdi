@@ -70,6 +70,7 @@ use App\Models\PresupuestosDental;
 use App\Models\Prevision;
 use App\Models\Producto;
 use App\Models\ProcedimientosPostImplantes;
+use App\Models\ProcedimientosGruposPostImplantes;
 use App\Models\Profesional;
 use App\Models\Region;
 use App\Models\SolicitudPabellonQuirurgico;
@@ -1848,6 +1849,10 @@ class ficha_atencionController extends Controller
 
         $examenes_post_implantes = $this->dameProcedimientosImplantes($paciente->id, $profesional->id,'post');
 
+        $examenes_post_implantes_grupos = $this->dameProcedimientosGruposImplantes($paciente->id, $profesional->id,'post');
+
+        //return $examenes_post_implantes_grupos;
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1859,6 +1864,7 @@ class ficha_atencionController extends Controller
                 'valores_piezas' => $valores_tratamientos[1],
                 'examenes_tto_implantes' => $examanes_tto_implantes,
                 'examenes_post_implantes' => $examenes_post_implantes,
+                'examenes_post_implantes_grupos' => $examenes_post_implantes_grupos,
                 'examenes_dental' => $examenes_dental,
                 'examenes_pre_implante' => $examenes_preimplante,
                 'examenes_period' => $examenes_period,
@@ -11601,6 +11607,19 @@ class ficha_atencionController extends Controller
             $procedimientos = ProcedimientosImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
         }else{
             $procedimientos = ProcedimientosPostImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+        }
+
+        return $procedimientos;
+    }
+
+    public function dameProcedimientosGruposImplantes($id_paciente, $id_profesional, $tipo = null){
+        if($tipo == null){
+            $procedimientos = ProcedimientosGruposImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+        }else{
+            $procedimientos = ProcedimientosGruposPostImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+            foreach($procedimientos as $p){
+                $p->grupo_piezas = json_decode($p->grupo_piezas);
+            }
         }
 
         return $procedimientos;

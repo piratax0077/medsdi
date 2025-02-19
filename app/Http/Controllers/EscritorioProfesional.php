@@ -68,6 +68,7 @@ use App\Models\Profesional;
 use App\Models\PresupuestosDental;
 use App\Models\ProcedimientosImplantes;
 use App\Models\ProcedimientosPostImplantes;
+use App\Models\ProcedimientosGruposPostImplantes;
 use App\Models\ProfesionalAntecedenteAcademico;
 use App\Models\ProfesionalAsistente;
 use App\Models\ProfesionalConvenio;
@@ -1347,6 +1348,54 @@ class EscritorioProfesional extends Controller
         }
     }
 
+    public function guardar_grupo_dental_post_impl(Request $req){
+        try {
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            $grupo_dental = new ProcedimientosGruposPostImplantes;
+            $grupo_dental->id_paciente = $req->id_paciente;
+
+            $grupo_dental->id_profesional = $profesional->id;
+            $grupo_dental->id_ficha_atencion = $req->id_ficha_atencion;
+            $grupo_dental->id_especialidad = $profesional->id_especialidad;
+            $grupo_dental->fecha = Carbon::now()->format('Y-m-d');
+            $grupo_dental->grupo_piezas = json_encode($req->piezas);
+            $grupo_dental->id_estabilidad = $req->estabilidad;
+            $grupo_dental->estabilidad = $req->estabilidad_text;
+            $grupo_dental->id_posicion = $req->posicion;
+            $grupo_dental->posicion = $req->posicion_text ? $req->posicion_text : '';
+            $grupo_dental->altura = $req->altura;
+            $grupo_dental->dpa = $req->dpa;
+            $grupo_dental->id_desgaste = $req->desgaste;
+            $grupo_dental->desgaste = $req->desgaste_text;
+            $grupo_dental->id_estado_encia = $req->estado_encia;
+            $grupo_dental->estado_encia = $req->estado_encia_text;
+            $grupo_dental->id_hueso_circundante = $req->hueso_circundante;
+            $grupo_dental->hueso_circundante = $req->hueso_circundante_text;
+            $grupo_dental->id_eva_cp = $req->ev_corona_prot;
+            $grupo_dental->eva_cp = $req->ev_corona_prot_text;
+            $grupo_dental->observaciones = $req->observaciones;
+            if($grupo_dental->save()){
+                $examenes = $this->dameProcedimientosGruposImplantes($req->id_paciente, $profesional->id,'post');
+                $v = view('atencion_odontologica.include.procedimientos_grupos_post_impl_todos',['examenes' => $examenes])->render();
+                return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
+    public function dameProcedimientosGruposImplantes($id_paciente, $id_profesional, $tipo = null){
+        if($tipo == null){
+            $procedimientos = ProcedimientosGruposImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+        }else{
+            $procedimientos = ProcedimientosGruposPostImplantes::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+        }
+
+        return $procedimientos;
+    }
+
     public function guardar_pieza_dental_post_impl(Request $request){
         try {
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
@@ -1381,6 +1430,12 @@ class EscritorioProfesional extends Controller
             //throw $th;
             return $e->getMessage();
         }
+    }
+
+    public function mostrar_nuevo_grupo_post_impl(Request $req){
+        $idCounter = $req->counter ? $req->counter : 0;
+        $v = view('atencion_odontologica.include.grupos_dentales_post_impl',['counter' => $idCounter])->render();
+        return ['mensaje' => 'OK','v' => $v];
     }
 
     public function dameProcedimientosImplantes($id_paciente, $id_profesional, $tipo = null){
@@ -2005,6 +2060,19 @@ class EscritorioProfesional extends Controller
             $examenes = $this->dameProcedimientosImplantes($id_paciente, $id_profesional,'post');
             $v = view('atencion_odontologica.include.procedimientos_post_implantes_todos',['examenes' => $examenes])->render();
                 return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
+        }
+    }
+
+    public function eliminar_grupo_dental_post_impl(Request $req){
+        $grupo_piezas = ProcedimientosGruposPostImplantes::find($req->id);
+        $id_paciente = $grupo_piezas->id_paciente;
+        $id_profesional = $grupo_piezas->id_profesional;
+        if($grupo_piezas->delete()){
+            $examenes = $this->dameProcedimientosGruposImplantes($id_paciente, $id_profesional,'post');
+            $v = view('atencion_odontologica.include.procedimientos_grupos_post_impl_todos',['examenes' => $examenes])->render();
+                return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
+        }else{
+            return ['mensaje' => 'error'];
         }
     }
 
