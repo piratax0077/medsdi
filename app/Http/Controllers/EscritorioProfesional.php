@@ -3802,7 +3802,8 @@ class EscritorioProfesional extends Controller
     }
 
 public function insumosDental(){
-    return 'jhola';
+    $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+    return view('app.dental.insumos_dental',['profesional' => $profesional]);
 }
 
     public function config_profesional()
