@@ -3027,62 +3027,56 @@ try {
 
 
     public function registrar_orden_trabajo_menor(Request $request)
-
     {
+        try {
+            //code...
+            $user = Auth::user()->id;
+            $profesional = Profesional::where('id_usuario', $user)->first();
+            // verificar si no existe la orden de trabajo menor
+            $orden_trabajo_menor = OrdenTrabajoMenor::where('nro_orden', $request->nro_orden_trabajo_menor)->first();
+            if ($orden_trabajo_menor) {
+                return ['mensaje' => 'ERROR', 'msj' => 'Ya existe una orden de trabajo menor con el número de orden ingresado'];
+            }
+            $trabajo_menor  = new OrdenTrabajoMenor();
+            $trabajo_menor->nro_orden = $request->nro_orden_trabajo_menor;
+            $trabajo_menor->clinica_doctor = $request->clinica_doctor;
+            $trabajo_menor->rut_profesional = $request->rut_profesional;
+            $trabajo_menor->guia = $request->guia;
+            $trabajo_menor->color = $request->color;
+            $trabajo_menor->urgencia = $request->urgencia;
+            $trabajo_menor->material = $request->material;
+            $trabajo_menor->trabajo_realizar = $request->trabajo_realizar;
+            $trabajo_menor->comentarios = $request->comentarios_trabajo_menor;
+            $trabajo_menor->id_paciente = $request->id_paciente;
+            $trabajo_menor->id_profesional = $profesional->id;
 
+            if (!$trabajo_menor->save()) {
+                return 'error';
+            }
+            $mensaje = 'Se ha agregado Orden de trabajo menos de forma exitosa';
 
-
-        $user = Auth::user()->id;
-
-        $profesional = Profesional::where('id_usuario', $user)->first();
-
-
-
-        $trabajo_menor  = new OrdenTrabajoMenor();
-
-
-
-        $trabajo_menor->nro_orden = $request->nro_orden_trabajo_menor;
-
-        $trabajo_menor->clinica_doctor = $request->clinica_doctor;
-
-        $trabajo_menor->rut_profesional = $request->rut_profesional;
-
-        $trabajo_menor->guia = $request->guia;
-
-        $trabajo_menor->color = $request->color;
-
-        $trabajo_menor->urgencia = $request->urgencia;
-
-        $trabajo_menor->material = $request->material;
-
-        $trabajo_menor->trabajo_realizar = $request->trabajo_realizar;
-
-        $trabajo_menor->comentarios = $request->comentarios_trabajo_menor;
-
-        $trabajo_menor->id_paciente = $request->paciente_trabajo_menor;
-
-        $trabajo_menor->id_profesional = $profesional->id;
-
-
-
-        if (!$trabajo_menor->save()) {
-
-            return 'error';
-
+            return ['mensaje' => 'OK', 'msj' => $mensaje];
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
         }
 
 
-
-        $mensaje = 'Se ha agregado Orden de trabajo menos de forma exitosa';
-
-
-
-        return redirect()->back()->with('mensaje', $mensaje);
-
     }
 
+public function generar_pdf_trabajo_menor(Request $req){
+    $datos = $req;
 
+    // Renderizar la vista del presupuesto dental
+    $pdf = Pdf::loadView('atencion_odontologica.PDF.trabajo_menor_dental',compact('datos'));
+    // Guardar el PDF en la carpeta public
+    $fileName = 'trabajo_menor_dental_' . $req->id_paciente . '.pdf';
+    $filePath = public_path('reportes/' . $fileName);
+    file_put_contents($filePath, $pdf->output());
+
+    // Devolver la ruta accesible del archivo PDF
+    return response()->json(['ruta' => asset('reportes/' . $fileName)]);
+}
 
     public function registrar_orden_trabajo_mayor(Request $request)
 
