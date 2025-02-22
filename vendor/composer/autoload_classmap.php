@@ -502,6 +502,7 @@ return array(
     'App\\Models\\ProcedimientoServicio' => $baseDir . '/app/Models/ProcedimientoServicio.php',
     'App\\Models\\ProcedimientosCentro' => $baseDir . '/app/Models/ProcedimientosCentro.php',
     'App\\Models\\ProcedimientosCentroLugarAtencionProfesional' => $baseDir . '/app/Models/ProcedimientosCentroLugarAtencionProfesional.php',
+    'App\\Models\\ProcedimientosGruposPostImplantes' => $baseDir . '/app/Models/ProcedimientosGruposPostImplantes.php',
     'App\\Models\\ProcedimientosImplantes' => $baseDir . '/app/Models/ProcedimientosImplantes.php',
     'App\\Models\\ProcedimientosPostImplantes' => $baseDir . '/app/Models/ProcedimientosPostImplantes.php',
     'App\\Models\\Producto' => $baseDir . '/app/Models/Producto.php',

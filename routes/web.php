@@ -552,6 +552,8 @@ Route::group([
     Route::get('Administracion/Aranceles', [App\Http\Controllers\EscritorioProfesional::class, 'ver_adm_dental_misaranceles'])->name('profesional.adm_dental.misaranceles');
     Route::post('Paciente/guardar_pieza_dental_dolor',[App\Http\Controllers\EscritorioProfesional::class, 'guardar_pieza_dental_dolor'])->name('profesional.adm_dental.guardar_pieza_dental_dolor');
     Route::post('Paciente/guardar_pieza_dental_tto_impl',[App\Http\Controllers\EscritorioProfesional::class, 'guardar_pieza_dental_tto_impl'])->name('profesional.adm_dental.guardar_pieza_dental_tto_impl');
+    Route::post('Paciente/guardar_pieza_dental_pfu',[App\Http\Controllers\EscritorioProfesional::class, 'guardar_pieza_dental_pfu'])->name('profesional.adm_dental.guardar_pieza_dental_pfu');
+    Route::post('Paciente/guardar_pieza_dental_pfp',[App\Http\Controllers\EscritorioProfesional::class, 'guardar_pieza_dental_pfp'])->name('profesional.adm_dental.guardar_pieza_dental_pfp');
     Route::post('Paciente/guardar_pieza_dental_post_impl',[App\Http\Controllers\EscritorioProfesional::class, 'guardar_pieza_dental_post_impl'])->name('profesional.adm_dental.guardar_pieza_dental_post_impl');
     Route::post('Paciente/guardar_grupo_dental_post_impl',[App\Http\Controllers\EscritorioProfesional::class, 'guardar_grupo_dental_post_impl'])->name('profesional.adm_dental.guardar_grupo_dental_post_impl');
     Route::post('Paciente/guardar_pieza_dental_end_dolor',[App\Http\Controllers\EscritorioProfesional::class, 'guardar_pieza_dental_end_dolor'])->name('profesional.adm_dental.guardar_pieza_dental_end_dolor');
@@ -559,6 +561,7 @@ Route::group([
     Route::post('/mostrar_nueva_pieza_dental_paciente', [App\Http\Controllers\EscritorioProfesional::class, 'mostrar_nueva_pieza_dental'])->name('profesional.mostrar_nueva_pieza_dental');
     Route::post('/mostrar_nueva_pieza_dental_paciente_tto', [App\Http\Controllers\EscritorioProfesional::class, 'mostrar_nueva_pieza_dental_tto'])->name('profesional.mostrar_nueva_pieza_dental_tto');
     Route::post('/mostrar_nueva_pieza_dental_paciente_tto_impl', [App\Http\Controllers\EscritorioProfesional::class, 'mostrar_nueva_pieza_dental_tto_impl'])->name('profesional.mostrar_nueva_pieza_dental_tto_impl');
+    Route::post('/mostrar_nueva_pieza_dental_paciente_pfu',[App\Http\Controllers\EscritorioProfesional::class, 'mostrar_nueva_pieza_dental_pfu'])->name('profesional.mostrar_nueva_pieza_pfu');
     Route::post('/mostrar_nuevas_imagenes_dental', [App\Http\Controllers\EscritorioProfesional::class, 'mostrar_nuevas_imagenes_dental'])->name('profesional.mostrar_nuevas_imagenes_dental');
     Route::post('/eliminar_pieza_dental_imagenes_paciente', [App\Http\Controllers\EscritorioProfesional::class, 'eliminar_pieza_dental_imagenes_paciente'])->name('profesional.eliminar_pieza_dental_imagenes_paciente');
     Route::post('/eliminar_pieza_dental_tto_impl',[App\Http\Controllers\EscritorioProfesional::class, 'eliminar_pieza_dental_tto_impl'])->name('profesional.eliminar_pieza_dental_tto_impl');
@@ -2242,6 +2245,8 @@ Route::post('/editar/procedimiento',[App\Http\Controllers\EscritorioProfesional:
 Route::post('/mostrar/procedimiento/dental',[App\Http\Controllers\EscritorioProfesional::class, 'mostrarProcedimientoDental'])->name('profesional.mostrar_procedimiento');
 Route::post('/guardar/procedimiento/propio',[App\Http\Controllers\EscritorioProfesional::class, 'guardarProcedimientoPropio'])->name('profesional.guardar_procedimiento_propio');
 Route::get('/insumos/dental',[App\Http\Controllers\EscritorioProfesional::class, 'insumosDental'])->name('profesional.insumos');
+Route::post('/eliminar/pieza/corona_protesis',[App\Http\Controllers\EscritorioProfesional::class, 'eliminarPiezaCoronaProtesis'])->name('profesional.eliminar_pieza_dental_corona_protesis');
+
 /** envio de correo prueba */
 Route::get('/correo/envio', [App\Http\Controllers\SendMailController::class, 'envioCorreoR'])->name('correo.envio');
 Route::get('/correo/envio_test', [App\Http\Controllers\SendMailController::class, 'envioCorreoTest'])->name('correo.envio.test');

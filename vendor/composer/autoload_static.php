@@ -1195,6 +1195,7 @@ class ComposerStaticInit602740cfabbf6d5d1707a7b161a4afcd
         'App\\Models\\ProcedimientoServicio' => __DIR__ . '/../..' . '/app/Models/ProcedimientoServicio.php',
         'App\\Models\\ProcedimientosCentro' => __DIR__ . '/../..' . '/app/Models/ProcedimientosCentro.php',
         'App\\Models\\ProcedimientosCentroLugarAtencionProfesional' => __DIR__ . '/../..' . '/app/Models/ProcedimientosCentroLugarAtencionProfesional.php',
+        'App\\Models\\ProcedimientosGruposPostImplantes' => __DIR__ . '/../..' . '/app/Models/ProcedimientosGruposPostImplantes.php',
         'App\\Models\\ProcedimientosImplantes' => __DIR__ . '/../..' . '/app/Models/ProcedimientosImplantes.php',
         'App\\Models\\ProcedimientosPostImplantes' => __DIR__ . '/../..' . '/app/Models/ProcedimientosPostImplantes.php',
         'App\\Models\\Producto' => __DIR__ . '/../..' . '/app/Models/Producto.php',

@@ -65,6 +65,7 @@ use App\Models\LicenciaPPF;
 use App\Models\LugarAtencion;
 use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
+use App\Models\PiezasDentalCoronaProtesis;
 use App\Models\Presentacion;
 use App\Models\PresupuestosDental;
 use App\Models\Prevision;
@@ -1853,6 +1854,10 @@ class ficha_atencionController extends Controller
 
         //return $examenes_post_implantes_grupos;
 
+        $examenes_piezas_pfu = $this->dameProcedimientosCoronaProtesis($paciente->id, $profesional->id, 'pfu');
+
+        $examenes_piezas_pfp = $this->dameProcedimientosCoronaProtesis($paciente->id, $profesional->id, 'pfp');
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1865,6 +1870,8 @@ class ficha_atencionController extends Controller
                 'examenes_tto_implantes' => $examanes_tto_implantes,
                 'examenes_post_implantes' => $examenes_post_implantes,
                 'examenes_post_implantes_grupos' => $examenes_post_implantes_grupos,
+                'examenes_piezas_pfu' => $examenes_piezas_pfu,
+                'examenes_piezas_pfp' => $examenes_piezas_pfp,
                 'examenes_dental' => $examenes_dental,
                 'examenes_pre_implante' => $examenes_preimplante,
                 'examenes_period' => $examenes_period,
@@ -2004,6 +2011,16 @@ class ficha_atencionController extends Controller
 
             ]
         );
+    }
+
+    public function dameProcedimientosCoronaProtesis($id_paciente, $id_profesional, $seccion = null){
+        if($seccion == 'pfu'){
+            $procedimientos = PiezasDentalCoronaProtesis::where('id_paciente', $id_paciente)->where('id_profesional',$id_profesional)->where('seccion','pfu')->get();
+        }else{
+            $procedimientos = PiezasDentalCoronaProtesis::where('id_paciente', $id_paciente)->where('id_profesional',$id_profesional)->where('seccion','pfp')->get();
+        }
+
+        return $procedimientos;
     }
 
     public function dame_insumos_tratamiento($id_paciente,$id_ficha_atencion,$tipo = null){

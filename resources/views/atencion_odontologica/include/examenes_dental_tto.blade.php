@@ -332,7 +332,8 @@ function cargar_a_presupuesto_impl(counter){
                     html += '</td>';
                     html += '</tr>';
                 });
-
+                $('#contenedor_examenes_grupos_dentales').empty();
+                $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
                 $('#table_odontograma tbody').html(html);
                 $('#contenedor_piezas_dentales_presupuesto').empty();
                 $('#table_trabajos_presupuesto tbody').empty();

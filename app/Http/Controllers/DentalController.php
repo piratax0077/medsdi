@@ -1770,6 +1770,7 @@ class DentalController extends Controller
                 $valor_total = $valores[0] + $valores[1];
                 $presupuesto->valor_total = $valor_total;
                 $presupuesto->save();
+
                 return ['status' => 1, 'mensaje' => 'Pieza '.$odontograma->pieza.' agregada con éxito.', 'odontograma_paciente' => $odontograma_paciente, 'valores' => $valores,'presupuesto' => $presupuesto];
             }else{
                 return ['status' => 0, 'mensaje' => 'Ha ocurrido un error con la odontograma '.$odontograma->pieza.'.','presupuesto' => $presupuesto];
@@ -1839,8 +1840,43 @@ class DentalController extends Controller
                 $presupuesto->save();
                 }
 
+                $prof_controller = new EscritorioProfesional;
+                $primer_cuadrante = $prof_controller->dameExamenesPiezaDentalPiezaPrimerCuadrante($odontograma->id_paciente,'adulto',$profesional->id_tipo_especialidad);
+                $segundo_cuadrante = $prof_controller->dameExamenesPiezaDentalPiezaSegundoCuadrante($odontograma->id_paciente,'adulto',$profesional->id_tipo_especialidad);
+                $tercer_cuadrante = $prof_controller->dameExamenesPiezaDentalPiezaTercerCuadrante($odontograma->id_paciente,'adulto',$profesional->id_tipo_especialidad);
+                $cuarto_cuadrante = $prof_controller->dameExamenesPiezaDentalPiezaCuartoCuadrante($odontograma->id_paciente,'adulto',$profesional->id_tipo_especialidad);
+                $quinto_cuadrante = $prof_controller->dameExamenesPiezaDentalPiezaQuintoCuadrante($odontograma->id_paciente,'adulto',$profesional->id_tipo_especialidad);
+                $sexto_cuadrante = $prof_controller->dameExamenesPiezaDentalPiezaSextoCuadrante($odontograma->id_paciente,'adulto',$profesional->id_tipo_especialidad);
 
-            return ['status' => 1, 'mensaje' => 'Piezas agregada con éxito.', 'odontograma_paciente' => $odontograma_paciente, 'valores' => $valores,'presupuesto' => $presupuesto];
+                $primer_cuadrante_endodoncia = $prof_controller->dameExamenesPiezaDentalPiezaPrimerCuadrante($odontograma->id_paciente,'endodoncia', $profesional->id_tipo_especialidad);
+                $segundo_cuadrante_endodoncia = $prof_controller->dameExamenesPiezaDentalPiezaSegundoCuadrante($odontograma->id_paciente,'endodoncia', $profesional->id_tipo_especialidad);
+                $tercer_cuadrante_endodoncia = $prof_controller->dameExamenesPiezaDentalPiezaTercerCuadrante($odontograma->id_paciente,'endodoncia', $profesional->id_tipo_especialidad);
+                $cuarto_cuadrante_endodoncia = $prof_controller->dameExamenesPiezaDentalPiezaCuartoCuadrante($odontograma->id_paciente,'endodoncia', $profesional->id_tipo_especialidad);
+                $quinto_cuadrante_endodoncia = $prof_controller->dameExamenesPiezaDentalPiezaQuintoCuadrante($odontograma->id_paciente,'endodoncia', $profesional->id_tipo_especialidad);
+                $sexto_cuadrante_endodoncia = $prof_controller->dameExamenesPiezaDentalPiezaSextoCuadrante($odontograma->id_paciente,'endodoncia', $profesional->id_tipo_especialidad);
+
+                $paciente = Paciente::where('id', $odontograma->id_paciente)->first();
+                $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();
+                $vista_presupuestos = view('atencion_odontologica.include.cuadrantes',[
+                    'primer_cuadrante' => $primer_cuadrante,
+                    'segundo_cuadrante' => $segundo_cuadrante,
+                    'tercer_cuadrante' => $tercer_cuadrante,
+                    'cuarto_cuadrante' => $cuarto_cuadrante,
+                    'quinto_cuadrante' => $quinto_cuadrante,
+                    'sexto_cuadrante' => $sexto_cuadrante,
+                    'primer_cuadrante_endodoncia' => $primer_cuadrante_endodoncia,
+                    'segundo_cuadrante_endodoncia' => $segundo_cuadrante_endodoncia,
+                    'tercer_cuadrante_endodoncia' => $tercer_cuadrante_endodoncia,
+                    'cuarto_cuadrante_endodoncia' => $cuarto_cuadrante_endodoncia,
+                    'quinto_cuadrante_endodoncia' => $quinto_cuadrante_endodoncia,
+                    'sexto_cuadrante_endodoncia' => $sexto_cuadrante_endodoncia,
+                    'paciente' => $paciente,
+                    'id_ficha_atencion' => $odontograma->id_ficha_atencion,
+                    'id_lugar_atencion' => $odontograma->id_lugar_atencion,
+                    'tratamientos' => $tratamientos_dentales
+                    ])->render();
+
+            return ['status' => 1, 'mensaje' => 'Piezas agregada con éxito.', 'odontograma_paciente' => $odontograma_paciente, 'valores' => $valores,'presupuesto' => $presupuesto,'vista_presupuestos' => $vista_presupuestos];
         }
 
     }

@@ -63,6 +63,7 @@ use App\Models\NotificacionConfirmacion;
 use App\Models\OdontogramaPaciente;
 use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
+use App\Models\PiezasDentalCoronaProtesis;
 use App\Models\Prevision;
 use App\Models\Profesional;
 use App\Models\PresupuestosDental;
@@ -1346,6 +1347,80 @@ class EscritorioProfesional extends Controller
             //throw $th;
             return $e->getMessage();
         }
+    }
+
+    public function guardar_pieza_dental_pfu(Request $req){
+        try {
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            $pieza = new PiezasDentalCoronaProtesis;
+            $pieza->id_paciente = $req->id_paciente;
+            $pieza->id_ficha_atencion = $req->id_ficha_atencion;
+            $pieza->id_profesional = $profesional->id;
+            $pieza->id_especialidad = $profesional->id_especialidad;
+            $pieza->numero_pieza = $req->n_pieza_pfu;
+            $pieza->fecha = Carbon::now()->format('Y-m-d');
+            $pieza->id_toma_medida = $req->corona_toma_imp_pfu;
+            $pieza->nombre_paciente = $req->nombre_paciente_pfu;
+            $pieza->nombre_laboratorio = $req->lab_pfu;
+            $pieza->numero_orden = $req->n_orden_pfu;
+            $pieza->id_prueba_ajuste = $req->prueba_ajuste_cor_pfu;
+            $pieza->prueba_ajuste = $req->prueba_ajuste_cor_pfu_text;
+            $pieza->id_pulido = $req->pulido_ajuste_pfu;
+            $pieza->pulido = $req->pulido_ajuste_pfu_text;
+            $pieza->observaciones = $req->obs_prueba_ajuste_cor_pfu;
+            if($pieza->save()){
+                $examenes = $this->dameProcedimientosCoronaProtesis($req->id_paciente, $profesional->id);
+                $v = view('atencion_odontologica.include.procedimientos_corona_protesis_todos',['examenes' => $examenes, 'seccion' => 'pfu'])->render();
+                return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function guardar_pieza_dental_pfp(Request $req){
+        try {
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            $pieza = new PiezasDentalCoronaProtesis;
+            $pieza->id_paciente = $req->id_paciente;
+            $pieza->id_ficha_atencion = $req->id_ficha_atencion;
+            $pieza->id_profesional = $profesional->id;
+            $pieza->id_especialidad = $profesional->id_especialidad;
+            $pieza->numero_pieza = $req->n_pieza_pfp;
+            $pieza->id_tipo_anclaje = $req->tipo_anclaje_pfp;
+            $pieza->tipo_anclaje = $req->tipo_anclaje_pfp_text;
+            $pieza->fecha = Carbon::now()->format('Y-m-d');
+            $pieza->id_toma_medida = $req->corona_toma_imp_pfp;
+            $pieza->nombre_paciente = $req->nombre_paciente_pfp;
+            $pieza->nombre_laboratorio = $req->lab_pfp;
+            $pieza->numero_orden = $req->n_orden_pfp;
+            $pieza->id_prueba_ajuste = $req->prueba_ajuste_cor_pfp;
+            $pieza->prueba_ajuste = $req->prueba_ajuste_cor_pfp_text;
+            $pieza->id_pulido = $req->pulido_ajuste_pfp;
+            $pieza->pulido = $req->pulido_ajuste_pfp_text;
+            $pieza->observaciones = $req->aprec_pfp;
+            $pieza->seccion = "pfp";
+
+            if($pieza->save()){
+                $examenes = $this->dameProcedimientosCoronaProtesis($req->id_paciente, $profesional->id,'pfp');
+                $v = view('atencion_odontologica.include.procedimientos_corona_protesis_todos',['examenes' => $examenes,'seccion' => 'pfp'])->render();
+                return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+    }
+
+    public function dameProcedimientosCoronaProtesis($id_paciente, $id_profesional, $seccion = null){
+        if($seccion == null){
+            $procedimientos = PiezasDentalCoronaProtesis::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->get();
+        }else{
+            $procedimientos = PiezasDentalCoronaProtesis::where('id_paciente',$id_paciente)->where('id_profesional', $id_profesional)->where('seccion',$seccion)->get();
+        }
+
+        return $procedimientos;
     }
 
     public function guardar_grupo_dental_post_impl(Request $req){
@@ -3801,9 +3876,35 @@ class EscritorioProfesional extends Controller
         }
     }
 
+    public function mostrar_nueva_pieza_dental_pfu(Request $req){
+
+        $idCounter = $req->counter ? $req->counter : 0;
+
+        $responsable = User::find(Auth::user()->id);
+        if($req->seccion == 'pfu'){
+            $v = view('atencion_odontologica.include.piezas_dental_pfu',['counter' => $idCounter])->render();
+        }else{
+            $v = view('atencion_odontologica.include.piezas_dental_pfp',['counter' => $idCounter])->render();
+        }
+
+        return ['mensaje' => 'OK','v' => $v];
+    }
+
 public function insumosDental(){
     $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
     return view('app.dental.insumos_dental',['profesional' => $profesional]);
+}
+
+public function eliminarPiezaCoronaProtesis(Request $req){
+    $pieza = PiezasDentalCoronaProtesis::find($req->id);
+    $id_paciente = $pieza->id_paciente;
+    $id_profesional = $pieza->id_profesional;
+    if($pieza->delete()){
+        $examenes = $this->dameProcedimientosCoronaProtesis($id_paciente, $id_profesional);
+        $v = view('atencion_odontologica.include.procedimientos_corona_protesis_todos',['examenes' => $examenes,'seccion' => 'pfu'])->render();
+        return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
+    }
+    return $pieza;
 }
 
     public function config_profesional()
