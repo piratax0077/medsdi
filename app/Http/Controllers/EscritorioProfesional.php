@@ -1368,9 +1368,11 @@ class EscritorioProfesional extends Controller
             $pieza->id_pulido = $req->pulido_ajuste_pfu;
             $pieza->pulido = $req->pulido_ajuste_pfu_text;
             $pieza->observaciones = $req->obs_prueba_ajuste_cor_pfu;
+            // en la bd se guarda como pfu por defecto
             if($pieza->save()){
-                $examenes = $this->dameProcedimientosCoronaProtesis($req->id_paciente, $profesional->id);
-                $v = view('atencion_odontologica.include.procedimientos_corona_protesis_todos',['examenes' => $examenes, 'seccion' => 'pfu'])->render();
+                $seccion = 'pfu';
+                $examenes = $this->dameProcedimientosCoronaProtesis($req->id_paciente, $profesional->id, $seccion);
+                $v = view('atencion_odontologica.include.procedimientos_corona_protesis_todos',['examenes' => $examenes, 'seccion' =>$seccion])->render();
                 return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
             }
         } catch (\Exception $e) {
@@ -3899,9 +3901,10 @@ public function eliminarPiezaCoronaProtesis(Request $req){
     $pieza = PiezasDentalCoronaProtesis::find($req->id);
     $id_paciente = $pieza->id_paciente;
     $id_profesional = $pieza->id_profesional;
+    $seccion = $pieza->seccion;
     if($pieza->delete()){
-        $examenes = $this->dameProcedimientosCoronaProtesis($id_paciente, $id_profesional);
-        $v = view('atencion_odontologica.include.procedimientos_corona_protesis_todos',['examenes' => $examenes,'seccion' => 'pfu'])->render();
+        $examenes = $this->dameProcedimientosCoronaProtesis($id_paciente, $id_profesional, $seccion);
+        $v = view('atencion_odontologica.include.procedimientos_corona_protesis_todos',['examenes' => $examenes,'seccion' => $seccion])->render();
         return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
     }
     return $pieza;

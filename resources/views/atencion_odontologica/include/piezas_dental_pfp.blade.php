@@ -36,14 +36,14 @@
                 </div>
                 <div class="form-group"   id="div_corona_toma_imp_pfp{{ $counter }}" style="display:none">
                     <label class="floating-label-activo-sm">Nombre Paciente</label>
-                    <input type="text" class="form-control form-control-sm" name="nombre_paciente_pfp" id="nombre_paciente_pfp">
+                    <input type="text" class="form-control form-control-sm" name="nombre_paciente_pfp{{ $counter }}" id="nombre_paciente_pfp{{ $counter }}">
                     <div class="form-group mt-3">
                         <label class="floating-label-activo-sm">Laboratorio</label>
-                        <input type="text" class="form-control form-control-sm" name="lab_pfp" id="lab_pfp">
+                        <input type="text" class="form-control form-control-sm" name="lab_pfp{{ $counter }}" id="lab_pfp{{ $counter }}">
                     </div>
                     <div class="form-group mt-3">
                         <label class="floating-label-activo-sm">Numero de orden</label>
-                        <input type="text" class="form-control form-control-sm" name="numero_orden_pfp" id="numero_orden_pfp">
+                        <input type="text" class="form-control form-control-sm" name="numero_orden_pfp{{ $counter }}" id="numero_orden_pfp{{ $counter }}">
                     </div>
                 </div>
             </div>
@@ -181,7 +181,7 @@
         }
 
         if(pulido_ajuste_pfp == 2){
-            if(det_pulido_ajuste_pfp == ''){
+            if(pulido_ajuste_pfp_text == ''){
                 mensaje += '<li>Debe ingresar el detalle del pulido</li>';
                 valido = 0;
             }

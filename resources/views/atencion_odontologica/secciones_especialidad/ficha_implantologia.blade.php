@@ -919,7 +919,7 @@
                                                                                                                                             <select name="corona_toma_imp_pfu{{ $counter }}" id="corona_toma_imp_pfu{{ $counter }}"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('corona_toma_imp_pfu{{ $counter }}','div_corona_toma_imp_pfu{{ $counter }}','det_corona_toma_imp_pfu{{ $counter }}',2)">
                                                                                                                                                 <option @if($examen->id_toma_medida == 0) selected @endif value="0">Seleccione</option>
                                                                                                                                                 <option @if($examen->id_toma_medida == 1) selected @endif value="1">No</option>
-                                                                                                                                                <option @if($examen->id_toma_medida == 1) selected @endif value="2">Si</option>
+                                                                                                                                                <option @if($examen->id_toma_medida == 2) selected @endif value="2">Si</option>
 
                                                                                                                                             </select>
                                                                                                                                         </div>
@@ -948,7 +948,7 @@
                                                                                                                                         </div>
                                                                                                                                         <div class="form-group" id="div_prueba_ajuste_cor_pfu{{ $counter }}" @if($examen->id_prueba_ajuste !== 2) style="display:none;" @endif>
                                                                                                                                             <label class="floating-label-activo-sm">Otro describa</label>
-                                                                                                                                            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_prueba_ajuste_cor_pfu{{ $counter }}" id="obs_prueba_ajuste_cor_pfu{{ $counter }}"></textarea>
+                                                                                                                                            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_prueba_ajuste_cor_pfu{{ $counter }}" id="obs_prueba_ajuste_cor_pfu{{ $counter }}">{{ $examen->prueba_ajuste }}</textarea>
                                                                                                                                         </div>
                                                                                                                                     </div>
 
@@ -1016,15 +1016,15 @@
                                                                                                                                 <div class="form-group">
                                                                                                                                     <label class="floating-label-activo-sm">Tipo de anclaje</label>
                                                                                                                                     <select name="tipo_anc_impl_pfp{{ $counter }}" id="tipo_anc_impl_pfp{{ $counter }}"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tipo_anc_impl_pfp{{ $counter }}','div_tipo_anc_impl_pfp{{ $counter }}','det_tipo_anc_impl_pfp{{ $counter }}',3)">
-                                                                                                                                        <option value="0">Seleccione</option>
-                                                                                                                                        <option value="1">Ferulizada Atornillada </option>
-                                                                                                                                        <option value="2">Ferulizada Cementada </option>
-                                                                                                                                        <option value="3">Otra</option>
+                                                                                                                                        <option @if($examen->id_tipo_anclaje == 0) selected @endif value="0">Seleccione</option>
+                                                                                                                                        <option @if($examen->id_tipo_anclaje == 1) selected @endif value="1">Ferulizada Atornillada </option>
+                                                                                                                                        <option @if($examen->id_tipo_anclaje == 2) selected @endif value="2">Ferulizada Cementada </option>
+                                                                                                                                        <option @if($examen->id_tipo_anclaje == 3) selected @endif value="3">Otra</option>
                                                                                                                                     </select>
                                                                                                                                 </div>
-                                                                                                                                <div class="form-group"   id="div_tipo_anc_impl_pfp{{ $counter }}" style="display:none">
+                                                                                                                                <div class="form-group"   id="div_tipo_anc_impl_pfp{{ $counter }}" @if($examen->id_tipo_anclaje !== 3) style="display:none" @endif>
                                                                                                                                     <label class="floating-label-activo-sm">Observaciones</label>
-                                                                                                                                    <input type="text" class="form-control form-control-sm" name="det_tipo_anc_impl_pfp{{ $counter }}" id="det_tipo_anc_impl_pfp{{ $counter }}">
+                                                                                                                                    <input type="text" class="form-control form-control-sm" name="det_tipo_anc_impl_pfp{{ $counter }}" id="det_tipo_anc_impl_pfp{{ $counter }}" value="{{ $examen->tipo_anclaje }}">
 
                                                                                                                                 </div>
                                                                                                                             </div>
@@ -1032,22 +1032,22 @@
                                                                                                                                 <div class="form-group">
                                                                                                                                     <label class="floating-label-activo-sm">Toma de medida y envío a laboratorio</label>
                                                                                                                                     <select name="corona_toma_imp_pfp{{ $counter }}" id="corona_toma_imp_pfp{{ $counter }}"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('corona_toma_imp_pfp{{ $counter }}','div_corona_toma_imp_pfp{{ $counter }}','det_corona_toma_imp_pfp{{ $counter }}',2)">
-                                                                                                                                        <option value="0">Seleccione</option>
-                                                                                                                                        <option value="1">No</option>
-                                                                                                                                        <option value="2">Si</option>
+                                                                                                                                        <option @if($examen->id_toma_medida == 0) selected @endif value="0">Seleccione</option>
+                                                                                                                                        <option @if($examen->id_toma_medida == 1) selected @endif value="1">No</option>
+                                                                                                                                        <option @if($examen->id_toma_medida == 2) selected @endif value="2">Si</option>
 
                                                                                                                                     </select>
                                                                                                                                 </div>
-                                                                                                                                <div class="form-group"   id="div_corona_toma_imp_pfp{{ $counter }}" style="display:none">
+                                                                                                                                <div class="form-group"   id="div_corona_toma_imp_pfp{{ $counter }}" @if($examen->id_toma_medida !== 2) style="display:none" @endif>
                                                                                                                                     <label class="floating-label-activo-sm">Nombre Paciente</label>
-                                                                                                                                    <input type="text" class="form-control form-control-sm" name="nombre_paciente_pfp" id="nombre_paciente_pfp">
+                                                                                                                                    <input type="text" class="form-control form-control-sm" name="nombre_paciente_pfp" id="nombre_paciente_pfp" value="{{ $examen->nombre_paciente }}">
                                                                                                                                     <div class="form-group mt-3">
                                                                                                                                         <label class="floating-label-activo-sm">Laboratorio</label>
-                                                                                                                                        <input type="text" class="form-control form-control-sm" name="lab_pfp" id="lab_pfp">
+                                                                                                                                        <input type="text" class="form-control form-control-sm" name="lab_pfp" id="lab_pfp" value="{{ $examen->nombre_laboratorio }}">
                                                                                                                                     </div>
                                                                                                                                     <div class="form-group mt-3">
                                                                                                                                         <label class="floating-label-activo-sm">Numero de orden</label>
-                                                                                                                                        <input type="text" class="form-control form-control-sm" name="numero_orden_pfp" id="numero_orden_pfp">
+                                                                                                                                        <input type="text" class="form-control form-control-sm" name="numero_orden_pfp" id="numero_orden_pfp" value="{{ $examen->numero_orden }}">
                                                                                                                                     </div>
                                                                                                                                 </div>
                                                                                                                             </div>
@@ -1056,14 +1056,14 @@
                                                                                                                                 <div class="form-group">
                                                                                                                                     <label class="floating-label-activo-sm">Prueba de ajuste</label>
                                                                                                                                     <select name="prueba_ajuste_cor_pfp{{ $counter }}"  id="prueba_ajuste_cor_pfp{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prueba_ajuste_cor_pfp{{ $counter }}','div_prueba_ajuste_cor_pfp{{ $counter }}','obs_prueba_ajuste_cor_pfp{{ $counter }}',2);">
-                                                                                                                                        <option selected  value="1">Buena </option>
-                                                                                                                                        <option value="2">No devuelta a laboratorio</option>
+                                                                                                                                        <option @if($examen->id_prueba_ajuste == 1) selected @endif value="1">Buena </option>
+                                                                                                                                        <option @if($examen->id_prueba_ajuste == 2) selected @endif value="2">No devuelta a laboratorio</option>
 
                                                                                                                                     </select>
                                                                                                                                 </div>
-                                                                                                                                <div class="form-group" id="div_prueba_ajuste_cor_pfp{{ $counter }}" style="display:none;">
+                                                                                                                                <div class="form-group" id="div_prueba_ajuste_cor_pfp{{ $counter }}" @if($examen->id_prueba_ajuste !== 2) style="display:none;" @endif>
                                                                                                                                     <label class="floating-label-activo-sm">Otro describa</label>
-                                                                                                                                    <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_prueba_ajuste_cor_pfp{{ $counter }}" id="obs_prueba_ajuste_cor_pfp{{ $counter }}"></textarea>
+                                                                                                                                    <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_prueba_ajuste_cor_pfp{{ $counter }}" id="obs_prueba_ajuste_cor_pfp{{ $counter }}">{{ $examen->prueba_ajuste }}</textarea>
                                                                                                                                 </div>
                                                                                                                             </div>
 
@@ -1071,15 +1071,15 @@
                                                                                                                                 <div class="form-group">
                                                                                                                                     <label class="floating-label-activo-sm">Pulido</label>
                                                                                                                                     <select name="pulido_ajuste_pfp{{ $counter }}" id="pulido_ajuste_pfp{{ $counter }}"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('pulido_ajuste_pfp{{ $counter }}','div_pulido_ajuste_pfp{{ $counter }}','det_pulido_ajuste_pfp{{ $counter }}',2)">
-                                                                                                                                        <option value="0">Seleccione</option>
-                                                                                                                                        <option value="1">Satisfactorio</option>
-                                                                                                                                        <option value="2">Deficiente se cita a control</option>
+                                                                                                                                        <option @if($examen->id_pulido == 0) selected @endif value="0">Seleccione</option>
+                                                                                                                                        <option @if($examen->id_pulido == 1) selected @endif value="1">Satisfactorio</option>
+                                                                                                                                        <option @if($examen->id_pulido == 2) selected @endif value="2">Deficiente se cita a control</option>
 
                                                                                                                                     </select>
                                                                                                                                 </div>
-                                                                                                                                <div class="form-group"   id="div_pulido_ajuste_pfp{{ $counter }}" style="display:none">
+                                                                                                                                <div class="form-group" id="div_pulido_ajuste_pfp{{ $counter }}" @if($examen->id_pulido !== 2) style="display:none" @endif>
                                                                                                                                     <label class="floating-label-activo-sm">Detalle <i>(describir)</i></label>
-                                                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_pulido_ajuste_pfp{{ $counter }}" id="det_pulido_ajuste_pfp{{ $counter }}"></textarea>
+                                                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_pulido_ajuste_pfp{{ $counter }}" id="det_pulido_ajuste_pfp{{ $counter }}">{{ $examen->pulido }}</textarea>
                                                                                                                                 </div>
                                                                                                                             </div>
 
@@ -6737,6 +6737,48 @@ function mostrar_nuevo_pieza_pfp(){
             console.log(error);
         }
     });
+}
+
+function eliminar_pieza_dental_pfp(id){
+    // preguntar si desea eliminar
+    swal({
+        title: "Eliminar Pieza",
+        text: "¿Está seguro que desea eliminar la pieza?",
+        icon: "warning",
+        buttons: ["Cancelar", "Aceptar"],
+        DangerMode: true,
+    })
+    .then((willDelete) => {
+        if (willDelete) {
+            confirmar_eliminar_pieza_dental_pfp(id);
+        }
+    });
+}
+
+function confirmar_eliminar_pieza_dental_pfp(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_corona_protesis') }}";
+    let id_paciente = dame_id_paciente();
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data:{
+            id: id,
+            id_paciente: id_paciente,
+            _token: CSRF_TOKEN
+        },
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_piezas_dentales_pfp').empty();
+                $('#contenedor_piezas_dentales_pfp').append(resp.v);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+
 }
 </script>
 

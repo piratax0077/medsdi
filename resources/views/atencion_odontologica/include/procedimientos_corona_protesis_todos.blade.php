@@ -69,7 +69,7 @@
                                         @if ($examen->id_prueba_ajuste !== 2) style="display:none;" @endif>
                                         <label class="floating-label-activo-sm">Otro describa</label>
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
-                                            name="obs_prueba_ajuste_cor_pfu{{ $counter }}" id="obs_prueba_ajuste_cor_pfu{{ $counter }}"></textarea>
+                                            name="obs_prueba_ajuste_cor_pfu{{ $counter }}" id="obs_prueba_ajuste_cor_pfu{{ $counter }}">{{ $examen->prueba_ajuste }}</textarea>
                                     </div>
                                 </div>
 
@@ -138,15 +138,15 @@
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Tipo de anclaje</label>
                                         <select name="tipo_anc_impl_pfp0" id="tipo_anc_impl_pfp0" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tipo_anc_impl_pfp{{ $counter }}','div_tipo_anc_impl_pfp{{ $counter }}','det_tipo_anc_impl_pfp{{ $counter }}',3)">
-                                            <option value="0">Seleccione</option>
-                                            <option value="1">Ferulizada Atornillada </option>
-                                            <option value="2">Ferulizada Cementada </option>
-                                            <option value="3">Otra</option>
+                                            <option @if($examen->id_tipo_anclaje == 0) selected @endif value="0">Seleccione</option>
+                                            <option @if($examen->id_tipo_anclaje == 1) selected @endif value="1">Ferulizada Atornillada </option>
+                                            <option @if($examen->id_tipo_anclaje == 2) selected @endif value="2">Ferulizada Cementada </option>
+                                            <option @if($examen->id_tipo_anclaje == 3) selected @endif value="3">Otra</option>
                                         </select>
                                     </div>
-                                    <div class="form-group" id="div_tipo_anc_impl_pfp{{ $counter }}" style="display:none">
+                                    <div class="form-group" id="div_tipo_anc_impl_pfp{{ $counter }}" @if($examen->id_tipo_anclaje !== 3) style="display:none" @endif>
                                         <label class="floating-label-activo-sm">Observaciones</label>
-                                        <input type="text" class="form-control form-control-sm" name="det_tipo_anc_impl_pfp{{ $counter }}" id="det_tipo_anc_impl_pfp{{ $counter }}">
+                                        <input type="text" class="form-control form-control-sm" name="det_tipo_anc_impl_pfp{{ $counter }}" id="det_tipo_anc_impl_pfp{{ $counter }}" value="{{ $examen->tipo_anclaje }}">
 
                                     </div>
                                 </div>
@@ -203,7 +203,7 @@
                                         @if ($examen->id_prueba_ajuste !== 2) style="display:none;" @endif>
                                         <label class="floating-label-activo-sm">Otro describa</label>
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"
-                                            name="obs_prueba_ajuste_cor_pfu{{ $counter }}" id="obs_prueba_ajuste_cor_pfu{{ $counter }}"></textarea>
+                                            name="obs_prueba_ajuste_cor_pfu{{ $counter }}" id="obs_prueba_ajuste_cor_pfu{{ $counter }}">{{ $examen->prueba_ajuste }}</textarea>
                                     </div>
                                 </div>
 
