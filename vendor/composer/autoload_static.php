@@ -1185,6 +1185,7 @@ class ComposerStaticInit602740cfabbf6d5d1707a7b161a4afcd
         'App\\Models\\PedidoMateriales' => __DIR__ . '/../..' . '/app/Models/PedidoMateriales.php',
         'App\\Models\\Permission' => __DIR__ . '/../..' . '/app/Models/Permission.php',
         'App\\Models\\Personas' => __DIR__ . '/../..' . '/app/Models/Personas.php',
+        'App\\Models\\PiezasDentalCoronaProtesis' => __DIR__ . '/../..' . '/app/Models/PiezasDentalCoronaProtesis.php',
         'App\\Models\\PlanTratamientoTerapiaSicologica' => __DIR__ . '/../..' . '/app/Models/PlanTratamientoTerapiaSicologica.php',
         'App\\Models\\Premium' => __DIR__ . '/../..' . '/app/Models/Premium.php',
         'App\\Models\\Presentacion' => __DIR__ . '/../..' . '/app/Models/Presentacion.php',

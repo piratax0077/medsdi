@@ -277,6 +277,7 @@ Route::group([
     Route::post('/Registrar_examen_radiologico', [DentalController::class, 'registrar_examen_radiologico'])->name('dental.registrar_examen_radiologico');
     Route::post('/Registrar_biopsia', [DentalController::class, 'registrar_biopsia'])->name('dental.registrar_biopsia');
     Route::post('/Registrar_orden_trabajo_menor', [DentalController::class, 'registrar_orden_trabajo_menor'])->name('dental.registrar_orden_trabajo_menor');
+    Route::post('/Eliminar_orden_trabajo_menor', [DentalController::class, 'eliminar_orden_trabajo_menor'])->name('dental.eliminar_trabajo_menor');
     Route::post('/Generar_pdf_trabajo_menor',[DentalController::class, 'generar_pdf_trabajo_menor'])->name('dental.generar_pdf_trabajo_menor');
     Route::post('/Registrar_orden_trabajo_mayor', [DentalController::class, 'registrar_orden_trabajo_mayor'])->name('dental.registrar_orden_trabajo_mayor');
 

@@ -16,6 +16,7 @@ use App\Models\ArticuloFaltante;
 use App\Models\Biopsia;
 use App\Models\CertificadoReposo;
 use App\Models\ConsentimientoFaltante;
+use App\Models\Correlativos;
 use App\Models\DiagnosticosDental;
 use App\Models\EvolucionPacienteHospital;
 use App\Models\EvolucionUrgencia;
@@ -127,6 +128,7 @@ use App\Models\OftalmoExamenMovOculares;
 use App\Models\OftalmoExamenNeurologico;
 use App\Models\OftalmoExamenPresionOcular;
 use App\Models\OftalmoExamenVisionColores;
+use App\Models\OrdenTrabajoMenor;
 use App\Models\RecomendacionDetalle;
 use App\Models\VideoConsultaInfo;
 use App\Models\TiposReceta;
@@ -1858,6 +1860,10 @@ class ficha_atencionController extends Controller
 
         $examenes_piezas_pfp = $this->dameProcedimientosCoronaProtesis($paciente->id, $profesional->id, 'pfp');
 
+        $ordenes_tm = $this->dameOrdenesTrabajoMenor($paciente->id, $profesional->id);
+
+        $correlativo_otm = $this->dame_correlativo('Orden Trabajo Menor');
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1872,6 +1878,8 @@ class ficha_atencionController extends Controller
                 'examenes_post_implantes_grupos' => $examenes_post_implantes_grupos,
                 'examenes_piezas_pfu' => $examenes_piezas_pfu,
                 'examenes_piezas_pfp' => $examenes_piezas_pfp,
+                'ordenes_tm' => $ordenes_tm,
+                'correlativo_otm' => $correlativo_otm,
                 'examenes_dental' => $examenes_dental,
                 'examenes_pre_implante' => $examenes_preimplante,
                 'examenes_period' => $examenes_period,
@@ -2011,6 +2019,29 @@ class ficha_atencionController extends Controller
 
             ]
         );
+    }
+
+    private function dame_correlativo($tip_doc)
+    {
+        $fila=Correlativos::where('documento', $tip_doc)
+                        ->first();
+
+        if(!is_null($fila))
+        {
+            $corr=$fila->correlativo;
+            $el_siguiente=$corr+1;
+            $num=$el_siguiente;
+            //FALTA:VERIFICAR EN LA TABLA RESPECTIVA (boletas o facturas) si hay existe ese número
+            //esto debido a que A VECES en un determinado instante COINCIDE la elección del siguiente correlativo.
+
+        }
+
+        return $num;
+    }
+
+    public function dameOrdenesTrabajoMenor($id_paciente, $id_profesional){
+        $ordenes = OrdenTrabajoMenor::where('id_paciente', $id_paciente)->where('id_profesional',$id_profesional)->get();
+        return $ordenes;
     }
 
     public function dameProcedimientosCoronaProtesis($id_paciente, $id_profesional, $seccion = null){

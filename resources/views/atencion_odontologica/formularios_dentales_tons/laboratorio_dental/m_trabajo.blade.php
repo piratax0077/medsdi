@@ -34,7 +34,7 @@
                              <label class="floating-label">N° Orden</label>
                              <!--correlativo-->
                              <input type="text" class="form-control form-control-sm" name="nro_orden_trabajo_menor"
-                                 id="nro_orden_trabajo_menor">
+                                 id="nro_orden_trabajo_menor" value="{{ $correlativo_otm }}" disabled>
                          </div>
 
                          <div class="form-group col-sm-6 col-md-6">
@@ -104,6 +104,37 @@
                          <button type="button" class="btn btn-info" onclick="guardar_trabajo_menor_dental()">Guardar</button>
                      </div>
                  </form>
+                 <table class="table table-responsive w-100" id="table_trabajos_menores_dental">
+                    <thead>
+                        <tr>
+                            <th>N° Orden</th>
+                            <th>Apellido</th>
+                            <th>Guia</th>
+                            <th>Color</th>
+                            <th>Urgencia</th>
+                            <th>Material</th>
+                            <th>Trabajo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         @foreach ($ordenes_tm as $orden)
+                             <tr>
+                                <td>{{ $orden->nro_orden }}</td>
+                                <td>{{ $paciente->nombre }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}</td>
+                                <td>{{ $orden->guia }}</td>
+                                <td>{{ $orden->color }}</td>
+                                <td>{{ $orden->urgencia }}</td>
+                                <td>{{ $orden->material }}</td>
+                                <td>{{ $orden->trabajo_realizar }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_menor_dental()">Ver PDF</button>
+                                    <button type="button" class="btn btn-sm btn-danger btn-icon" onclick="eliminar_trabajo_menor_dental({{ $orden->id }})"><i class="fas fa-trash"></i></button>
+                                </td>
+                             </tr>
+                         @endforeach
+                    </tbody>
+                 </table>
              </div>
 
          </div>
@@ -219,14 +250,37 @@
                     if(response.mensaje == 'OK'){
                         swal({
                             title:'Orden de trabajo menor',
-                            text:resp.msj,
+                            text:response.msj,
                             icon:'success'
                         });
                         $('#modal_orden_trabajo').modal('hide');
+                        let ordenes_trabajo = response.ordenes_trabajo;
+                        $('#table_trabajos_menores_dental').DataTable();
+
+                        $('#table_trabajos_menores_dental').DataTable().destroy();
+                        $('#table_trabajos_menores_dental tbody').empty();
+                        ordenes_trabajo.forEach(orden => {
+                            $('#table_trabajos_menores_dental tbody').append(`
+                                <tr>
+                                    <td>${orden.nro_orden}</td>
+                                    <td>${orden.paciente}</td>
+                                    <td>${orden.guia}</td>
+                                    <td>${orden.color}</td>
+                                    <td>${orden.urgencia}</td>
+                                    <td>${orden.material}</td>
+                                    <td>${orden.trabajo_realizar}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_menor_dental()">Ver PDF</button>
+                                        <button type="button" class="btn btn-sm btn-danger btn-icon" onclick="eliminar_trabajo_menor_dental(${orden.id})"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                        $('#table_trabajos_menores_dental').DataTable();
                     }else{
                         swal({
                             title:'Error',
-                            text:resp.msj,
+                            text:response.msj,
                             icon:'error'
                         });
                     }
@@ -371,5 +425,71 @@
                 }
             })
         }
+    }
+
+    function eliminar_trabajo_menor_dental(id){
+        swal({
+            title: "¿Está seguro de eliminar la orden de trabajo menor?",
+            text: "Una vez eliminada no podrá recuperarla",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                confirmar_eliminar_trabajo_menor_dental(id);
+            }
+        })
+    }
+
+    function confirmar_eliminar_trabajo_menor_dental(id){
+        let data = {
+            id: id,
+            _token: CSRF_TOKEN
+        }
+        let url = "{{ route('dental.eliminar_trabajo_menor') }}";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            success: function(response){
+                console.log(response);
+                if(response.mensaje == 'OK'){
+                    swal({
+                        title:'Orden de trabajo menor',
+                        text:response.msj,
+                        icon:'success'
+                    });
+                    let ordenes_trabajo = response.ordenes_trabajo;
+                    $('#table_trabajos_menores_dental').DataTable();
+
+                    $('#table_trabajos_menores_dental').DataTable().destroy();
+                    $('#table_trabajos_menores_dental tbody').empty();
+                    ordenes_trabajo.forEach(orden => {
+                        $('#table_trabajos_menores_dental tbody').append(`
+                            <tr>
+                                <td>${orden.nro_orden}</td>
+                                <td>${orden.paciente}</td>
+                                <td>${orden.guia}</td>
+                                <td>${orden.color}</td>
+                                <td>${orden.urgencia}</td>
+                                <td>${orden.material}</td>
+                                <td>${orden.trabajo_realizar}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_menor_dental()">Ver PDF</button>
+                                    <button type="button" class="btn btn-sm btn-danger btn-icon" onclick="eliminar_trabajo_menor_dental(${orden.id})"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                    $('#table_trabajos_menores_dental').DataTable();
+                }else{
+                    swal({
+                        title:'Error',
+                        text:response.msj,
+                        icon:'error'
+                    });
+                }
+            }
+        })
     }
 </script>

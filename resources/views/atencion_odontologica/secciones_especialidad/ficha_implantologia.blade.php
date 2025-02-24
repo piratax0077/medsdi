@@ -1115,13 +1115,13 @@
                                                                                                                 <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                                                     <div class="form-group">
                                                                                                                         <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                                                        <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp" id="n_pieza_ex_pp">
+                                                                                                                        <input type="text" class="form-control form-control-sm" name="n_pieza_protesis" id="n_pieza_protesis">
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                                 <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                                                     <div class="form-group">
                                                                                                                         <label class="floating-label-activo-sm">Tipo de Prótesis Superior</label>
-                                                                                                                        <select name="protesis_imp_sup" id="protesis_imp_sup"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('protesis_imp_sup','div_protesis_imp_sup','det_protesis_imp_sup',2)">
+                                                                                                                        <select name="protesis_imp_sup" id="protesis_imp_sup"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('protesis_imp_sup','div_protesis_imp_sup','obs_protesis_imp_sup',2)">
                                                                                                                             <option value="0">Seleccione</option>
                                                                                                                             <option value="1">Total superior</option>
                                                                                                                             <option value="2">Parcial superior</option>
@@ -1129,45 +1129,29 @@
                                                                                                                         </select>
                                                                                                                     </div>
                                                                                                                     <div class="form-group"   id="div_protesis_imp_sup" style="display:none">
-                                                                                                                        <label class="floating-label-activo-sm">Nombre Paciente</label>
-                                                                                                                        <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp" id="n_pieza_ex_pp">
-                                                                                                                        <div class="form-group mt-3">
-                                                                                                                            <label class="floating-label-activo-sm">Laboratorio</label>
-                                                                                                                            <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp" id="n_pieza_ex_pp">
-                                                                                                                        </div>
-                                                                                                                        <div class="form-group mt-3">
-                                                                                                                            <label class="floating-label-activo-sm">Numero de orden</label>
-                                                                                                                            <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp" id="n_pieza_ex_pp">
-                                                                                                                        </div>
+                                                                                                                        <label class="floating-label-activo-sm">Observaciones</label>
+                                                                                                                        <input type="text" class="form-control form-control-sm" name="obs_protesis_imp_sup" id="obs_protesis_imp_sup">
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                                 <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                                                     <div class="form-group">
                                                                                                                         <label class="floating-label-activo-sm">Tipo de Prótesis Inferior</label>
-                                                                                                                        <select name="protesis_imp_inf" id="protesis_imp_inf"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('protesis_imp_inf','div_protesis_imp_inf','det_protesis_imp_inf',2)">
+                                                                                                                        <select name="protesis_imp_inf" id="protesis_imp_inf"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('protesis_imp_inf','div_protesis_imp_inf','obs_protesis_imp_inf',2)">
                                                                                                                             <option value="0">Seleccione</option>
-                                                                                                                            <option value="1">Total Inferior</option>
+                                                                                                                            <option value="1">Total Infeirior</option>
                                                                                                                             <option value="2">Parcial Inferior</option>
 
                                                                                                                         </select>
                                                                                                                     </div>
-                                                                                                                    <div class="form-group"   id="div_protesis_imp_inf" style="display:none">
-                                                                                                                        <label class="floating-label-activo-sm">Nombre Paciente</label>
-                                                                                                                        <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp" id="n_pieza_ex_pp">
-                                                                                                                        <div class="form-group mt-3">
-                                                                                                                            <label class="floating-label-activo-sm">Laboratorio</label>
-                                                                                                                            <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp" id="n_pieza_ex_pp">
-                                                                                                                        </div>
-                                                                                                                        <div class="form-group mt-3">
-                                                                                                                            <label class="floating-label-activo-sm">Numero de orden</label>
-                                                                                                                            <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp" id="n_pieza_ex_pp">
-                                                                                                                        </div>
+                                                                                                                    <div class="form-group" id="div_protesis_imp_inf" style="display:none">
+                                                                                                                        <label class="floating-label-activo-sm">Observaciones</label>
+                                                                                                                        <input type="text" class="form-control form-control-sm" name="obs_protesis_imp_inf" id="obs_protesis_imp_inf">
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                                     <div class="form-group">
                                                                                                                         <label class="floating-label-activo-sm">Toma de impresión y envío a laboratorio</label>
-                                                                                                                        <select name="protesis_toma_imp" id="protesis_toma_imp"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('protesis_toma_imp','div_protesis_toma_imp','det_protesis_imp_sup',2)">
+                                                                                                                        <select name="protesis_toma_imp" id="protesis_toma_imp"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('protesis_toma_imp','div_protesis_toma_imp','obs_protesis_toma_imp_inf',2)">
                                                                                                                             <option value="0">Seleccione</option>
                                                                                                                             <option value="1">No</option>
                                                                                                                             <option value="2">Si</option>
@@ -1175,16 +1159,8 @@
                                                                                                                         </select>
                                                                                                                     </div>
                                                                                                                     <div class="form-group"   id="div_protesis_toma_imp" style="display:none">
-                                                                                                                        <label class="floating-label-activo-sm">Nombre Paciente</label>
-                                                                                                                        <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp" id="n_pieza_ex_pp">
-                                                                                                                        <div class="form-group mt-3">
-                                                                                                                            <label class="floating-label-activo-sm">Laboratorio</label>
-                                                                                                                            <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp" id="n_pieza_ex_pp">
-                                                                                                                        </div>
-                                                                                                                        <div class="form-group mt-3">
-                                                                                                                            <label class="floating-label-activo-sm">Numero de orden</label>
-                                                                                                                            <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp" id="n_pieza_ex_pp">
-                                                                                                                        </div>
+                                                                                                                        <label class="floating-label-activo-sm">Observaciones</label>
+                                                                                                                        <input type="text" class="form-control form-control-sm" name="obs_protesis_toma_imp_inf" id="obs_protesis_toma_imp_inf">
                                                                                                                     </div>
                                                                                                                 </div>
 
@@ -1219,6 +1195,14 @@
                                                                                                                     </div>
                                                                                                                 </div>  --}}
 
+
+                                                                                                            </div>
+                                                                                                            <div class="form-row">
+                                                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xm">
+                                                                                                                    <div class="form-group">
+                                                                                                                        <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-pieza1 has-ripple" onclick="solicitar_protesis()">Solicitar Prótesis<span class="ripple ripple-animate" ></span></button>
+                                                                                                                    </div>
+                                                                                                                </div>
 
                                                                                                             </div>
                                                                                                         </div>
@@ -3271,6 +3255,8 @@ $('[id^="pzas_grupo_impl"]').select2();
         mostrar_nueva_pieza_dental_tto_impl(random);
         mostrar_nueva_pieza_post_impl(random);
         mostrar_nuevo_grupo_post_impl(random);
+        mostrar_nuevo_pieza_pfu(random);
+        mostrar_nuevo_pieza_pfp(random);
     });
 
     function evaluar_para_carga_detalle(select, div, input, valor)
@@ -6779,6 +6765,112 @@ function confirmar_eliminar_pieza_dental_pfp(id){
         }
     });
 
+}
+
+function solicitar_protesis(){
+    var numero_pieza = $('#n_pieza_protesis').val();
+    var tipo_protesis = $('#protesis_imp_sup').val();
+    var tipo_protesis_text = $('#protesis_imp_sup option:selected').text();
+    if(tipo_protesis == 2){
+        tipo_protesis_text = $('#obs_protesis_imp_sup').val();
+    }
+    var tipo_protesis_inf = $('#protesis_imp_inf').val();
+    var tipo_protesis_inf_text = $('#protesis_imp_inf option:selected').text();
+    if(tipo_protesis_inf == 2){
+        tipo_protesis_inf_text = $('#obs_protesis_imp_inf').val();
+    }
+    var protesis_toma_imp = $('#protesis_toma_imp').val();
+    var protesis_toma_imp_text = $('#protesis_toma_imp option:selected').text();
+    if(protesis_toma_imp == 2){
+        protesis_toma_imp_text = $('#obs_protesis_toma_imp_inf').val();
+    }
+    var prueba_ajuste = $('#prueba_ajuste_protesis').val();
+    var prueba_ajuste_text = $('#prueba_ajuste_protesis option:selected').text();
+    if(prueba_ajuste == 2){
+        prueba_ajuste_text = $('#obs_prueba_ajuste_protesis').val();
+    }
+
+    var valido = 1;
+    var mensaje = '';
+
+    if(numero_pieza == ''){
+        valido = 0;
+        mensaje += '<li>Número de pieza</li>';
+    }
+
+    if(tipo_protesis == 0){
+        valido = 0;
+        mensaje += '<li>Tipo de prótesis superior</li>';
+    }
+
+    if(tipo_protesis == 2){
+        if(tipo_protesis_text == ''){
+            valido = 0;
+            mensaje += '<li>Observación tipo de prótesis superior</li>';
+        }
+    }
+
+    if(tipo_protesis_inf == 0){
+        valido = 0;
+        mensaje += '<li>Tipo de prótesis inferior</li>';
+    }
+
+    if(tipo_protesis_inf == 2){
+        if(tipo_protesis_inf_text == ''){
+            valido = 0;
+            mensaje += '<li>Observación tipo de prótesis inferior</li>';
+        }
+    }
+
+    if(protesis_toma_imp == 0){
+        valido = 0;
+        mensaje += '<li>Prótesis toma impresión</li>';
+    }
+
+    if(protesis_toma_imp == 2){
+        if(protesis_toma_imp_text == ''){
+            valido = 0;
+            mensaje += '<li>Observación prótesis toma impresión</li>';
+        }
+    }
+
+    if(prueba_ajuste == 0){
+        valido = 0;
+        mensaje += '<li>Prueba de ajuste</li>';
+    }
+
+    if(valido == 0){
+        swal({
+            title: "Campos requeridos",
+            content:{
+                element: "div",
+                attributes:{
+                    innerHTML: mensaje,
+                },
+            },
+            icon: "error",
+            buttons: "Aceptar",
+            DangerMode: true,
+        });
+
+        return false;
+    }
+
+    var data = {
+        numero_pieza: numero_pieza,
+        tipo_protesis: tipo_protesis,
+        tipo_protesis_text: tipo_protesis_text,
+        tipo_protesis_inf: tipo_protesis_inf,
+        tipo_protesis_inf_text: tipo_protesis_inf_text,
+        protesis_toma_imp: protesis_toma_imp,
+        protesis_toma_imp_text: protesis_toma_imp_text,
+        prueba_ajuste: prueba_ajuste,
+        prueba_ajuste_text: prueba_ajuste_text,
+        id_paciente: dame_id_paciente(),
+        _token: CSRF_TOKEN
+    }
+
+    return console.log(data);
 }
 </script>
 

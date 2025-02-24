@@ -3071,7 +3071,7 @@ try {
             // verificar si no existe la orden de trabajo menor
             $orden_trabajo_menor = OrdenTrabajoMenor::where('nro_orden', $request->nro_orden_trabajo_menor)->first();
             if ($orden_trabajo_menor) {
-                return ['mensaje' => 'ERROR', 'msj' => 'Ya existe una orden de trabajo menor con el número de orden ingresado'];
+                //return ['mensaje' => 'ERROR', 'msj' => 'Ya existe una orden de trabajo menor con el número de orden ingresado'];
             }
             $trabajo_menor  = new OrdenTrabajoMenor();
             $trabajo_menor->nro_orden = $request->nro_orden_trabajo_menor;
@@ -3085,19 +3085,38 @@ try {
             $trabajo_menor->comentarios = $request->comentarios_trabajo_menor;
             $trabajo_menor->id_paciente = $request->id_paciente;
             $trabajo_menor->id_profesional = $profesional->id;
-
+            $trabajo_menor->id_ficha_atencion = $request->id_ficha_atencion;
+            $trabajo_menor->id_lugar_atencion = $request->id_lugar_atencion;
             if (!$trabajo_menor->save()) {
                 return 'error';
             }
             $mensaje = 'Se ha agregado Orden de trabajo menos de forma exitosa';
 
-            return ['mensaje' => 'OK', 'msj' => $mensaje];
+            $ordenes_trabajo = OrdenTrabajoMenor::where('nro_orden', $request->nro_orden_trabajo_menor)->get();
+
+            return ['mensaje' => 'OK', 'msj' => $mensaje, 'ordenes_trabajo' => $ordenes_trabajo];
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();
         }
 
 
+    }
+
+    public function eliminar_orden_trabajo_menor(Request $req){
+        try {
+            $orden_trabajo_menor = OrdenTrabajoMenor::where('id', $req->id)->first();
+
+            $nro_orden = $orden_trabajo_menor->nro_orden;
+            if ($orden_trabajo_menor->delete()) {
+                $ordenes_trabajo = OrdenTrabajoMenor::where('nro_orden', $nro_orden)->get();
+                return ['mensaje' => 'OK', 'msj' => 'Orden de trabajo menor eliminada correctamente', 'ordenes_trabajo' => $ordenes_trabajo];
+            } else {
+                return ['mensaje' => 'ERROR', 'msj' => 'No se encontró la orden de trabajo menor'];
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
 public function generar_pdf_trabajo_menor(Request $req){
