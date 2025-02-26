@@ -1351,6 +1351,7 @@ class EscritorioProfesional extends Controller
 
     public function guardar_pieza_dental_pfu(Request $req){
         try {
+
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
             $pieza = new PiezasDentalCoronaProtesis;
             $pieza->id_paciente = $req->id_paciente;
@@ -1358,16 +1359,16 @@ class EscritorioProfesional extends Controller
             $pieza->id_profesional = $profesional->id;
             $pieza->id_especialidad = $profesional->id_especialidad;
             $pieza->numero_pieza = $req->n_pieza_pfu;
+            $pieza->id_movil = $req->movil_pfu;
+            $pieza->movil = $req->movil_pfu_text;
             $pieza->fecha = Carbon::now()->format('Y-m-d');
-            $pieza->id_toma_medida = $req->corona_toma_imp_pfu;
-            $pieza->nombre_paciente = $req->nombre_paciente_pfu;
-            $pieza->nombre_laboratorio = $req->lab_pfu;
-            $pieza->numero_orden = $req->n_orden_pfu;
             $pieza->id_prueba_ajuste = $req->prueba_ajuste_cor_pfu;
             $pieza->prueba_ajuste = $req->prueba_ajuste_cor_pfu_text;
+            $pieza->id_tornillo = $req->tornillo_cor_pfu;
+            $pieza->tornillo = $req->tornillo_cor_pfu_text;
             $pieza->id_pulido = $req->pulido_ajuste_pfu;
             $pieza->pulido = $req->pulido_ajuste_pfu_text;
-            $pieza->observaciones = $req->obs_prueba_ajuste_cor_pfu;
+            $pieza->observaciones = $req->aprec_pfu;
             // en la bd se guarda como pfu por defecto
             if($pieza->save()){
                 $seccion = 'pfu';

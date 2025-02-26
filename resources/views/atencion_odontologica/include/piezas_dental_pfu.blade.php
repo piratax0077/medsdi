@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-12">
                 <div class="form-row">
-                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                    <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Pieza N°</label>
                             <input type="text" class="form-control form-control-sm" name="n_pieza_pfu{{ $counter }}" id="n_pieza_pfu{{ $counter }}">
@@ -11,27 +11,18 @@
                     </div>
 
 
-                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                        <div class="form-group">
-                            <label class="floating-label-activo-sm">Toma de medida y envío a laboratorio</label>
-                            <select name="corona_toma_imp_pfu{{ $counter }}" id="corona_toma_imp_pfu{{ $counter }}"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('corona_toma_imp_pfu{{ $counter }}','div_corona_toma_imp_pfu{{ $counter }}','det_corona_toma_imp_pfu{{ $counter }}',2)">
+                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                        <div class="form-group fill">
+                            <label class="floating-label-activo-sm">Móvil</label>
+                            <select name="movil_pfu{{ $counter }}" id="movil_pfu{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('movil_pfu{{ $counter }}','div_movil_pfu{{ $counter }}','obs_movil_pfu{{ $counter }}',2);">
                                 <option value="0">Seleccione</option>
                                 <option value="1">No</option>
-                                <option value="2">Si</option>
-
+                                <option value="2">Sí</option>
                             </select>
                         </div>
-                        <div class="form-group"   id="div_corona_toma_imp_pfu{{ $counter }}" style="display:none">
-                            <label class="floating-label-activo-sm">Nombre Paciente</label>
-                            <input type="text" class="form-control form-control-sm" name="nombre_paciente_pfu{{ $counter }}" id="nombre_paciente_pfu{{ $counter }}">
-                            <div class="form-group mt-3">
-                                <label class="floating-label-activo-sm">Laboratorio</label>
-                                <input type="text" class="form-control form-control-sm" name="lab_pfu{{ $counter }}" id="lab_pfu{{ $counter }}">
-                            </div>
-                            <div class="form-group mt-3">
-                                <label class="floating-label-activo-sm">Numero de orden</label>
-                                <input type="text" class="form-control form-control-sm" name="n_orden_pfu{{ $counter }}" id="n_orden_pfu{{ $counter }}">
-                            </div>
+                        <div class="form-group" id="div_movil_pfu{{ $counter }}" style="display: none">
+                            <label class="floating-label-activo-sm">Describa</label>
+                            <textarea class="form-control form-control-sm" data-titulo="" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_movil_pfu{{ $counter }}" id="obs_movil_pfu{{ $counter }}"></textarea>
                         </div>
                     </div>
 
@@ -47,6 +38,21 @@
                         <div class="form-group" id="div_prueba_ajuste_cor_pfu{{ $counter }}" style="display:none;">
                             <label class="floating-label-activo-sm">Otro describa</label>
                             <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_prueba_ajuste_cor_pfu{{ $counter }}" id="obs_prueba_ajuste_cor_pfu{{ $counter }}"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <div class="form-group fill">
+                            <label for="tornillo_cor_pfu{{ $counter }}" class="floating-label-activo-sm">Tornillo</label>
+                            <select class="form-control form-control-sm" name="tornillo_cor_pfu{{ $counter }}" id="tornillo_cor_pfu{{ $counter }}" onchange="evaluar_para_carga_detalle('tornillo_cor_pfu{{ $counter }}','div_tornillo_cor_pfu{{ $counter }}','obs_tornillo_cor_pfu{{ $counter }}',3);">
+                                <option value="1">Tornillo rodado</option>
+                                <option value="2">Fractura de tornillo</option>
+                                <option value="3">Otra</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="div_tornillo_cor_pfu{{ $counter }}" style="display:none;">
+                            <label class="floating-label-activo-sm">Otro describa</label>
+                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tornillo_cor_pfu{{ $counter }}" id="obs_tornillo_cor_pfu{{ $counter }}"></textarea>
                         </div>
                     </div>
 
@@ -94,22 +100,25 @@
 
     function guardar_pieza_dental_pfu(counter){
         var n_pieza_pfu = $('#n_pieza_pfu'+counter).val();
-        var corona_toma_imp_pfu = $('#corona_toma_imp_pfu'+counter).val();
-        var corona_toma_imp_pfu_text = $('#corona_toma_imp_pfu'+counter+' option:selected').text();
-        if(corona_toma_imp_pfu == 2){
-            var nombre_paciente_pfu = $('#nombre_paciente_pfu'+counter).val();
-            var lab_pfu = $('#lab_pfu'+counter).val();
-            var n_orden_pfu = $('#n_orden_pfu'+counter).val();
+        var movil_pfu = $('#movil_pfu'+counter).val();
+        var movil_pfu_text = $('#movil_pfu'+counter+' option:selected').text();
+        if(movil_pfu == 2){
+            var movil_pfu_text = $('#obs_movil_pfu'+counter).val();
+        }
+        var tornillo_cor_pfu = $('#tornillo_cor_pfu'+counter).val();
+        var tornillo_cor_pfu_text = $('#tornillo_cor_pfu'+counter+' option:selected').text();
+        if(tornillo_cor_pfu == 3){
+            var tornillo_cor_pfu_text = $('#obs_tornillo_cor_pfu'+counter).val();
         }
         var prueba_ajuste_cor_pfu = $('#prueba_ajuste_cor_pfu'+counter).val();
         var prueba_ajuste_cor_pfu_text = $('#prueba_ajuste_cor_pfu'+counter+' option:selected').text();
         if(prueba_ajuste_cor_pfu == 2){
-            var obs_prueba_ajuste_cor_pfu = $('#obs_prueba_ajuste_cor_pfu'+counter).val();
+            var prueba_ajuste_cor_pfu_text = $('#obs_prueba_ajuste_cor_pfu'+counter).val();
         }
         var pulido_ajuste_pfu = $('#pulido_ajuste_pfu'+counter).val();
         var pulido_ajuste_pfu_text = $('#pulido_ajuste_pfu'+counter+' option:selected').text();
         if(pulido_ajuste_pfu == 2){
-            var det_pulido_ajuste_pfu = $('#det_pulido_ajuste_pfu'+counter).val();
+            var pulido_ajuste_pfu_text = $('#det_pulido_ajuste_pfu'+counter).val();
         }
         var aprec_pfu = $('#aprec_pfu'+counter).val();
 
@@ -121,24 +130,26 @@
             valido = 0;
         }
 
-        if(corona_toma_imp_pfu == 0){
-            mensaje += '<li>Debe seleccionar si se tomo la corona o no</li>';
+        if(movil_pfu == 0){
+            mensaje += '<li>Debe seleccionar el móvil</li>';
             valido = 0;
         }
 
-        if(corona_toma_imp_pfu == 2){
-            if(nombre_paciente_pfu == ''){
-                mensaje += '<li>Debe ingresar el nombre del paciente</li>';
+        if(movil_pfu == 2){
+            if(movil_pfu_text == ''){
+                mensaje += '<li>Debe ingresar la observación del móvil</li>';
                 valido = 0;
             }
+        }
 
-            if(lab_pfu == ''){
-                mensaje += '<li>Debe ingresar el laboratorio</li>';
-                valido = 0;
-            }
+        if(tornillo_cor_pfu == 0){
+            mensaje += '<li>Debe seleccionar el tornillo</li>';
+            valido = 0;
+        }
 
-            if(n_orden_pfu == ''){
-                mensaje += '<li>Debe ingresar el número de orden</li>';
+        if(tornillo_cor_pfu == 3){
+            if(tornillo_cor_pfu_text == ''){
+                mensaje += '<li>Debe ingresar la observación del tornillo</li>';
                 valido = 0;
             }
         }
@@ -149,7 +160,7 @@
         }
 
         if(prueba_ajuste_cor_pfu == 2){
-            if(obs_prueba_ajuste_cor_pfu == ''){
+            if(prueba_ajuste_cor_pfu_text == ''){
                 mensaje += '<li>Debe ingresar la observación de la prueba de ajuste</li>';
                 valido = 0;
             }
@@ -161,7 +172,7 @@
         }
 
         if(pulido_ajuste_pfu == 2){
-            if(det_pulido_ajuste_pfu == ''){
+            if(pulido_ajuste_pfu_text == ''){
                 mensaje += '<li>Debe ingresar el detalle del pulido</li>';
                 valido = 0;
             }
@@ -190,17 +201,14 @@
             id_paciente: dame_id_paciente(),
             id_ficha_atencion: $('#id_fc').val(),
             n_pieza_pfu: n_pieza_pfu,
-            corona_toma_imp_pfu: corona_toma_imp_pfu,
-            corona_toma_imp_pfu_text: corona_toma_imp_pfu_text,
-            nombre_paciente_pfu: nombre_paciente_pfu,
-            lab_pfu: lab_pfu,
-            n_orden_pfu: n_orden_pfu,
+            movil_pfu: movil_pfu,
+            movil_pfu_text: movil_pfu_text,
+            tornillo_cor_pfu: tornillo_cor_pfu,
+            tornillo_cor_pfu_text: tornillo_cor_pfu_text,
             prueba_ajuste_cor_pfu: prueba_ajuste_cor_pfu,
             prueba_ajuste_cor_pfu_text: prueba_ajuste_cor_pfu_text,
-            obs_prueba_ajuste_cor_pfu: obs_prueba_ajuste_cor_pfu,
             pulido_ajuste_pfu: pulido_ajuste_pfu,
             pulido_ajuste_pfu_text: pulido_ajuste_pfu_text,
-            det_pulido_ajuste_pfu: det_pulido_ajuste_pfu,
             aprec_pfu: aprec_pfu,
             _token: CSRF_TOKEN
         }

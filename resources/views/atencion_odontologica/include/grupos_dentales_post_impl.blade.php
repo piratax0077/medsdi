@@ -28,7 +28,7 @@
 
 
             </div>
-            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+            {{-- <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Estabilidad (ISQ)</label>
                     <select name="estab_grupo_implante{{ $counter }}"    id="estab_grupo_implante{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('estab_grupo_implante{{ $counter }}','div_estab_grupo_implante{{ $counter }}','obs_estab_grupo_implante{{ $counter }}',8);">
@@ -46,7 +46,7 @@
                     <label class="floating-label-activo-sm">Describa otra observación</label>
                     <textarea class="form-control form-control-sm" data-titulo="General_endodoncia"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_estab_grupo_implante{{ $counter }}" id="obs_estab_grupo_implante{{ $counter }}"></textarea>
                 </div>
-            </div>
+            </div> --}}
             <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Posición</label>
@@ -110,7 +110,7 @@
                     <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_est_encia_gpo_impl{{ $counter }}" id="obs_est_encia_gpo_impl{{ $counter }}"></textarea>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Hueso circundante</label>
                     <select name="hueso_cont_gpo_impl{{ $counter }}"  id="hueso_cont_gpo_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('hueso_cont_gpo_impl{{ $counter }}','div_hueso_cont_gpo_impl{{ $counter }}','obs_hueso_cont_gpo_impl{{ $counter }}',2);">

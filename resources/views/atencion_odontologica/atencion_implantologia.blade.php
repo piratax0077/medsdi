@@ -129,10 +129,10 @@
 
 
         <!--Modals de especialidad -->
-        @include("atencion_odontologica.formularios.Antecedentes_dentales.anestesia");
-        @include("atencion_odontologica.formularios.Antecedentes_dentales.hemorragias");
-        @include("atencion_odontologica.formularios.Antecedentes_dentales.fracturas");
-        @include('atencion_odontologica.include.modales.imagenes_paciente_dental');
+        @include("atencion_odontologica.formularios.Antecedentes_dentales.anestesia")
+        @include("atencion_odontologica.formularios.Antecedentes_dentales.hemorragias")
+        @include("atencion_odontologica.formularios.Antecedentes_dentales.fracturas")
+        @include('atencion_odontologica.include.modales.imagenes_paciente_dental')
         @include('atencion_odontologica.include.modales.imagen_paciente_dental')
         @include('atencion_odontologica.generales.includes.modales.recomendaciones_generales_implan')
         @include('atencion_odontologica.generales.includes.modales.recomendaciones_especiales_implan')
