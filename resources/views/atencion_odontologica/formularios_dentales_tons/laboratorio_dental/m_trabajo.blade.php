@@ -121,13 +121,14 @@
                          @foreach ($ordenes_tm as $orden)
                              <tr>
                                 <td>{{ $orden->nro_orden }}</td>
-                                <td>{{ $paciente->nombre }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}</td>
+                                <td>{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}</td>
                                 <td>{{ $orden->guia }}</td>
                                 <td>{{ $orden->color }}</td>
                                 <td>{{ $orden->urgencia }}</td>
                                 <td>{{ $orden->material }}</td>
                                 <td>{{ $orden->trabajo_realizar }}</td>
                                 <td>
+                                    <button type="button" class="btn btn-sm btn-success" onclick="solicitar_permisos()"><i class="fas fa-user"></i>Solicitar permisos</button>
                                     <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_menor_dental()">Ver PDF</button>
                                     <button type="button" class="btn btn-sm btn-danger btn-icon" onclick="eliminar_trabajo_menor_dental({{ $orden->id }})"><i class="fas fa-trash"></i></button>
                                 </td>
@@ -270,6 +271,7 @@
                                     <td>${orden.material}</td>
                                     <td>${orden.trabajo_realizar}</td>
                                     <td>
+                                                                            <button type="button" class="btn btn-sm btn-success" onclick="solicitar_permisos(${orden.id})"><i class="fas fa-user"></i>Solicitar permisos</button>
                                         <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_menor_dental()">Ver PDF</button>
                                         <button type="button" class="btn btn-sm btn-danger btn-icon" onclick="eliminar_trabajo_menor_dental(${orden.id})"><i class="fas fa-trash"></i></button>
                                     </td>
@@ -475,7 +477,9 @@
                                 <td>${orden.material}</td>
                                 <td>${orden.trabajo_realizar}</td>
                                 <td>
+                                    <button type="button" class="btn btn-sm btn-success" onclick="solicitar_permisos()"><i class="fas fa-user"></i>Solicitar permisos</button>
                                     <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_menor_dental()">Ver PDF</button>
+
                                     <button type="button" class="btn btn-sm btn-danger btn-icon" onclick="eliminar_trabajo_menor_dental(${orden.id})"><i class="fas fa-trash"></i></button>
                                 </td>
                             </tr>

@@ -114,12 +114,12 @@
                     <div class="card-header-sidebar" id="heading_materiales">
                         <h2 class="mb-0">
                             <button class="btn btn-light btn-block text-left collapsed" type="button"
-                                data-toggle="collapse" data-target="#collapse_materiales" aria-expanded="false" aria-controls="collapse_materiales"><iclass="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                                data-toggle="collapse" data-target="#collapse_materiales" aria-expanded="false" aria-controls="collapse_materiales"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
                                 PEDIDOS MATERIAL DE TRABAJO
                             </button>
                         </h2>
                     </div>
-                    <div id="collapse_materiales" class="collapse" aria-labelledby="heading_materiales"  data-parent="#accordion_formularios_atencion">
+                    <div id="collapse_materiales" class="collapse" aria-labelledby="heading_materiales"  data-parent="#accordion_side_bar">
 
                         <div class="card-body-sidebar">
                             <button type="button"

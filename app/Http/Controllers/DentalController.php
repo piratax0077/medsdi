@@ -39,6 +39,7 @@ use App\Models\ExamenRadiologico;
 use App\Models\ExamenesDentalPieza;
 use App\Models\ficha_dentalAtencion;
 use App\Models\FichaAtencionDental;
+use App\Models\FichaAtencion;
 use App\Models\GastoMedico;
 use App\Models\Hipertension;
 use App\Models\HoraMedica;
@@ -2545,20 +2546,244 @@ try {
     public function registrar_ficha_atencion_dental(Request $request)
     {
         try {
-            return $request;
-            $motivoConsulta = new MotivoConsultas;
-            $motivoConsulta->id_profesional = $request->id_profesional_fc;
-            $motivoConsulta->id_lugar_atencion = $request->id_lugar_atencion;
-            $motivoConsulta->id_paciente = $request->id_paciente_fc;
-            $motivoConsulta->id_especialidad = $request->id_especialidad;
-            $motivoConsulta->motivo = $request->motivo;
-            $motivoConsulta->antecedentes = $request->antecedentes;
-            $motivoConsulta->examen_fisico = $request->examen_fisico;
-            // if ($motivoConsulta->save()) {
-            //     // return redirect()->back()->with('success', 'El motivo de consulta se ha guardado con éxito.');
-            // } else {
-            //     return redirect()->back()->with('error', 'Algo salió mal al guardar el motivo de consulta.');
-            // }
+            $campos_requeridos = 0;
+            $mensaje = '';
+            if(empty( trim($request->descripcion_hipotesis)))
+            {
+                //$campos_requeridos = 1;
+                $mensaje = 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
+            }
+            else
+            {
+                if(empty($request->diag_endos))
+                {
+                    // $campos_requeridos = 1;
+                    // $mensaje = 'El Diagnóstico Endoscópico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún.\n';
+                }
+                else
+                {
+
+                }
+            }
+
+            //return $campos_requeridos;
+            if($campos_requeridos == 0)
+            {
+                $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
+                $ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
+                $id_profesional = $request->id_profesional_fc;
+                $id_paciente = $request->id_paciente_fc;
+
+                $ficha->motivo = $request->motivo;
+                $ficha->antecedentes = $request->antecedentes;
+                $ficha->examen_fisico = $request->examen_fisico;
+
+                $ges = 0;
+                // if ($request->modal_ges == 'on' || $request->modal_ges == '1') {
+                if ($request->has('modal_ges')) {
+                    $ges = 1;
+                }
+
+                $cronico = 0;
+                // if ($request->enf_cronico == 'on' || $request->enf_cronico == '1') {
+                if ($request->has('enf_cronico')) {
+                    $cronico = 1;
+                }
+
+                $confidencial = 0;
+                // if ($request->confidencial == 'on' || $request->confidencial == '1') {
+                if ($request->has('confidencial')) {
+                    $confidencial = 1;
+                }
+
+                $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
+                $ficha->diagnostico_ce10 = $request->descripcion_cie;
+                $ficha->indicaciones = $request->indicaciones;
+
+                $ficha->cronico = $cronico;
+                $ficha->ges = $ges;
+                $ficha->confidencial = $confidencial;
+                $ficha->id_paciente = $id_paciente;
+                $ficha->id_profesional = $id_profesional;
+                $ficha->finalizada = 1;
+
+                if (!$ficha->save())
+                {
+                    return back()->with('error', 'Ficha Clínica con problema al guardar')->withInput();
+                }
+                else
+                {
+                    $tipo_mensaje = 'success';
+                    $mensaje = 'Ficha Clínica guardada de forma correcta\n';
+
+                    //  finalizar hora medica
+                    $hora_medica->id_estado = 6;
+                    $mensaje_estado_hora_medica = '';
+                    if (!$hora_medica->save()) {
+                        $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
+                    }
+                    else
+                    {
+                        $mensaje_estado_hora_medica .= 'Hora medica Finalizada con Exito.\n';
+                    }
+                    $mensaje .= $mensaje_estado_hora_medica;
+
+
+
+                    /** registro examen especialidad Rinofibrolaringoscopía */
+                    $parametro = $request->all();
+                    $examen_json = ExamenEspecialidadController::estructuraJson(1,$parametro);
+                    // return json_encode($examen_json);
+                    if($examen_json['estado'] == 1)
+                    {
+                        $examen = '';
+                        /** VALIDAR INFORMACION */
+                        if($examen_json['cant_datos'] > 0)
+                        {
+                            $profesional = Profesional::find($id_profesional);
+
+                            $examen = new ExamenEspecialidad();
+                            $examen->id_tipo = '1';
+                            $examen->id_template = '1';
+                            $examen->id_examen_tipo = '1';
+                            $examen->id_sub_tipo_especialidad = $profesional->id_sub_tipo_especialidada;
+                            $examen->id_ficha_atencion = $ficha->id;
+                            $examen->id_ficha_especialidad = $ficha_orl->id;
+                            $examen->id_paciente = $id_paciente;
+                            $examen->id_profesional = $id_profesional;
+                            $examen->nombre = 'Rinofibrolaringoscopía';
+                            $examen->cuerpo = $examen_json['json'];
+                            $examen->estado = '1';
+
+                            // if($registro_rfl->save())
+                            if($examen->save())
+                            {
+                                $datos['examen']['estado'] = 1;
+                                $datos['examen']['msj'] = 'registro exitoso';
+                                $mensaje .= 'Ficha Otorrino Rinofibrolaringoscopía guardada de forma correcta\n';
+
+                                /** registro de imagenes  */
+                                if(!empty($request->input_lista_imagenes))
+                                {
+                                    $array_imagenes = json_decode($request->input_lista_imagenes);
+
+                                    $resulto_img = array();
+                                    foreach ($array_imagenes as $key => $value)
+                                    {
+                                        $paciente = Paciente::find($id_paciente);
+                                        // echo json_encode($value);
+                                        $ruta_temp = $value[0];
+                                        $nombre_real = $value[1];
+                                        $nombre_temp = $value[2];
+                                        $file_extension = $value[3];
+                                        $nombre_final = $paciente->rut.'_'.$examen->id.'_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+
+                                        $resulto_img[$key] = CargaImagenController::moverImagen($nombre_temp, 'img_examen', $nombre_final);
+                                        $registro_img = new ExamenEspecialidadImg();
+                                        $registro_img->id_examen = $examen->id;
+                                        $registro_img->url = $resulto_img[$key]['proceso']['url'];
+                                        $registro_img->nombre = $nombre_final;
+                                        $registro_img->otro = '';
+                                        $registro_img->estado = 1;
+
+                                        if($registro_img->save())
+                                        {
+                                            $resulto_img[$key]['estado'] = 1;
+                                            $resulto_img[$key]['msj'] = 'imagen registrada';
+                                        }
+                                        else
+                                        {
+                                            $resulto_img[$key]['estado'] = 0;
+                                            $resulto_img[$key]['msj'] = 'falla en registro de imagen';
+                                        }
+
+                                    }
+                                    $datos['examen']['resulto_img'] = $resulto_img;
+
+                                }
+
+                                /** registro de porfesional provisorio */
+                                if(empty($request->solicitado_id_profesional_rfl))
+                                {
+                                    $profesional_provisorio = ProfesionalProvisorioController::registrar( $request->solicitado_nombre_rfl, $request->solicitado_apellido_rfl, '', '', $request->solicitado_rut_rfl, $request->solicitado_email_rfl, $request->solicitado_telefono_rfl, '', '', '', '', '', '', '', '', '', 1);
+
+                                    if($profesional_provisorio['estado'] == 1)
+                                    {
+                                        $datos['registro_prof_provi']['estado'] = 1;
+                                        $datos['registro_prof_provi']['msj'] = 'registro exitoso';
+                                        $datos['registro_prof_provi']['result'] = $profesional_provisorio;
+
+                                        $mensaje .= 'Profesional Prvisorio creado\n';
+                                    }
+                                    else
+                                    {
+                                        $datos['registro_prof_provi']['estado'] = 0;
+                                        $datos['registro_prof_provi']['msj'] = 'falla en registro';
+                                        $datos['registro_prof_provi']['result'] = $profesional_provisorio;
+                                        $mensaje .= 'Profesional Prvisorio creado\n';
+                                    }
+
+                                }
+
+                            }
+                            else
+                            {
+                                $datos['examen']['estado'] = 0;
+                                $datos['examen']['msj'] = 'registro NO exitoso';
+                                $mensaje .= 'Ficha Otorrino Rinofibrolaringoscopía No guardada \n';
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $mensaje .= 'Problema al registrar Examen Espacial';
+                    }
+
+                    if($request->cerrarsession == 0 || $request->cerrarsession =='')
+                    {
+                        // if($request->mostrarpdf == 0 || $request->mostrarpdf =='')
+                        // {
+                        //     return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+                        // }
+                        // else
+                        {
+                            /** redireccion Redirect funciona correcto */
+                            if(!empty($examen))
+                            {
+                                $array_tem = array(
+                                    'lugares_atencion' => $request->id_lugar_atencion,
+                                    'pdf' => $request->mostrarpdf,
+                                    'tipo' => $request->tipopdf,
+                                    'id_examen' => $examen->id,
+                                );
+                            }
+                            else
+                            {
+                                $array_tem = array(
+                                    'lugares_atencion' => $request->id_lugar_atencion,
+                                    'pdf' => $request->mostrarpdf,
+                                    'tipo' => $request->tipopdf,
+                                    'id_examen' => 0,
+                                );
+                            }
+                            return \Redirect::route('profesional.mi_agenda',$array_tem)->with($tipo_mensaje, $mensaje);
+                        }
+                    }
+                    else if($request->cerrarsession == 1)
+                    {
+                    //si funciona
+                        $request->session()->invalidate();
+                        $request->session()->regenerateToken();
+                        return \Redirect::route('home.ingreso');
+
+                    }
+
+                }
+            }
+            else
+            {
+                return back()->with('error', $mensaje)->withInput();
+            }
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
         }
@@ -3101,6 +3326,24 @@ try {
         }
 
 
+    }
+
+    public function registrar_insumos_pedido(Request $req){
+        return $req;
+    }
+
+    public function generar_pdf_insumos_dental_sidebar(Request $req){
+        $datos = $req;
+
+        // Renderizar la vista del presupuesto dental
+        $pdf = Pdf::loadView('atencion_odontologica.PDF.insumos_dental',compact('datos'));
+        // Guardar el PDF en la carpeta public
+        $fileName = 'insumos_dental_' . $req->id_paciente . '.pdf';
+        $filePath = public_path('reportes/' . $fileName);
+        file_put_contents($filePath, $pdf->output());
+
+        // Devolver la ruta accesible del archivo PDF
+        return response()->json(['ruta' => asset('reportes/' . $fileName)]);
     }
 
     public function eliminar_orden_trabajo_menor(Request $req){

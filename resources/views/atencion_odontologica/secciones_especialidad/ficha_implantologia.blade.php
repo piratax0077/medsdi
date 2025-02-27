@@ -2381,6 +2381,13 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <!--GUARDAR O IMPRIMIR FICHA-->
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                    <button type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">Guardar ficha y finalizar su consulta </button>
+                                    <input type="button" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su agenda">
+                                </div>
+                            </div>
                             <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
                         </div>
                         <!-- ODONTOGRAMA-->
@@ -3171,13 +3178,7 @@
                         </div>
                         <!--CIERRE: PRESUPUESTO--->
                     </div>
-                    <div class="row">
-                        <!--GUARDAR O IMPRIMIR FICHA-->
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
-                            <input type="button" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
-                            <input type="button" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su agenda">
-                        </div>
-                    </div>
+
                 </form>
             </div>
         </div>
@@ -6872,6 +6873,49 @@ function solicitar_protesis(){
 
     return console.log(data);
 }
+
+function agregar_medicamentos_ficha() {
+
+
+var rows1 = [];
+$('#tabla_medicamento_cirugia tr').each(function(i, n) {
+    if (i > 0) {
+        rol = {};
+        var data = $(this).find("td");
+        rol["id_producto"] = $.trim($(data[0]).text().split("\n").join(""));
+        rol["uso_cronico"] = $.trim($(data[1]).text().split("\n").join(""));
+        rol["medicamento"] = $.trim($(data[2]).text().split("\n").join(""));
+        rol["presentacion"] = $.trim($(data[3]).text().split("\n").join(""));
+        rol["posologia"] = $.trim($(data[4]).text().split("\n").join(""));
+        rol["via_administracion"] = $.trim($(data[5]).text().split("\n").join(""));
+        rol["periodo"] = $.trim($(data[6]).text().split("\n").join(""));
+        rol["compra"] = $.trim($(data[7]).text().split("\n").join(""));
+        rows1.push(rol);
+    }
+});
+
+$('#medicamentos').val(JSON.stringify(rows1));
+
+
+}
+
+function agregar_examenes_ficha() {
+            var rows = [];
+            $('#tabla_examen_cirugia tr').each(function(i, n) {
+                if (i > 0) {
+                    console.log(i);
+                    rol = {};
+                    var data = $(this).find("td");
+                    rol["nombre_examen"] = $.trim($(data[0]).text().split("\n").join(""));
+                    rol["tipo"] = $.trim($(data[1]).text().split("\n").join(""));
+                    // rol["subtipo"] = $.trim($(data[2]).text().split("\n").join(""));
+                    rol["prioridad"] = $.trim($(data[2]).text().split("\n").join(""));
+                    rol["con_contraste"] = $.trim($(data[3]).text().split("\n").join(""));
+                    rows.push(rol);
+                }
+            });
+            $('#examenes').val(JSON.stringify(rows));
+        }
 </script>
 
 

@@ -279,7 +279,8 @@ Route::group([
     Route::post('/Registrar_orden_trabajo_menor', [DentalController::class, 'registrar_orden_trabajo_menor'])->name('dental.registrar_orden_trabajo_menor');
     Route::post('/Eliminar_orden_trabajo_menor', [DentalController::class, 'eliminar_orden_trabajo_menor'])->name('dental.eliminar_trabajo_menor');
     Route::post('/Generar_pdf_trabajo_menor',[DentalController::class, 'generar_pdf_trabajo_menor'])->name('dental.generar_pdf_trabajo_menor');
-    Route::post('/Registrar_orden_trabajo_mayor', [DentalController::class, 'registrar_orden_trabajo_mayor'])->name('dental.registrar_orden_trabajo_mayor');
+    Route::post('/Generar_pdf_insumos_dental_sidebar', [DentalController::class, 'generar_pdf_insumos_dental_sidebar'])->name('dental.generar_pdf_insumos_dental_sidebar');
+    Route::post('/Registrar_insumos_pedido',[DentalController::class, 'registrar_insumos_pedido'])->name('dental.agregar_insumo_pedido');
 
     Route::get('/periodontograma/ver', function () {
         return view('atencion_odontologica.modals.periodontograma.index');
@@ -2411,6 +2412,9 @@ Route::post('/editar/procedimiento/dental',[App\Http\Controllers\EscritorioProfe
 Route::post('/mostrar/procedimiento/dental',[App\Http\Controllers\EscritorioProfesional::class, 'mostrarProcedimientoDental'])->name('profesional.mostrar_procedimiento');
 Route::post('/guardar/procedimiento/propio',[App\Http\Controllers\EscritorioProfesional::class, 'guardarProcedimientoPropio'])->name('profesional.guardar_procedimiento_propio');
 Route::get('/insumos/dental',[App\Http\Controllers\EscritorioProfesional::class, 'insumosDental'])->name('profesional.insumos');
+
+Route::post('/generar/pdf/insumos/dental',[App\Http\Controllers\DentalController::class, 'generar_pdf_insumos_dental'])->name('dental.generar_pdf_insumos_dental');
+Route::get('/insumos/dental',[App\Http\Controllers\EscritorioProfesional::class, 'insumosDental'])->name('dental.insumos');
 /** RUTAS PROVISORIAS  */
 Route::get('periodontograma_prueba',[App\Http\Controllers\DentalController::class,'periodontograma_prueba'])->name('periodontograma_prueba');
 

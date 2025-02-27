@@ -14,6 +14,7 @@ use App\Models\AntecedentesPaciente;
 use App\Models\Articulo;
 use App\Models\ArticuloFaltante;
 use App\Models\Biopsia;
+use App\Models\Bodega;
 use App\Models\CertificadoReposo;
 use App\Models\ConsentimientoFaltante;
 use App\Models\Correlativos;
@@ -110,6 +111,7 @@ use App\Models\LogUsersDevices;
 use App\Models\NotificacionConfirmacion;
 use App\Models\PacientesDependientes;
 use App\Models\ProcedimientosImplantes;
+use App\Models\Proveedor;
 use App\Models\RecetaAudifono;
 use App\Models\RecetaControl;
 use App\Models\Recomendacion;
@@ -1864,6 +1866,10 @@ class ficha_atencionController extends Controller
 
         $correlativo_otm = $this->dame_correlativo('Orden Trabajo Menor');
 
+        $proveedores = $this->dame_proveedores($request->lugar_atencion_id);
+
+        $bodegas = $this->dame_bodegas($request->lugar_atencion_id);
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1880,6 +1886,8 @@ class ficha_atencionController extends Controller
                 'examenes_piezas_pfp' => $examenes_piezas_pfp,
                 'ordenes_tm' => $ordenes_tm,
                 'correlativo_otm' => $correlativo_otm,
+                'proveedores' => $proveedores,
+                'bodegas' => $bodegas,
                 'examenes_dental' => $examenes_dental,
                 'examenes_pre_implante' => $examenes_preimplante,
                 'examenes_period' => $examenes_period,
@@ -2019,6 +2027,20 @@ class ficha_atencionController extends Controller
 
             ]
         );
+    }
+
+    private function dame_bodegas($id_lugar_atencion)
+    {
+        $bodegas = Bodega::all();
+
+        return $bodegas;
+    }
+
+    private function dame_proveedores($id_lugar_atencion)
+    {
+        $proveedores = Proveedor::where('estado', 1)->get();
+
+        return $proveedores;
     }
 
     private function dame_correlativo($tip_doc)

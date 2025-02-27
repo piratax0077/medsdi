@@ -54,8 +54,8 @@
                     </div>
                 </div>
 
-                        
-               
+
+
 
                 <!--DIAGNÓSTICO-->
                 <div class="row mt-2">
@@ -112,7 +112,7 @@
                         </div>
                     </div>
                 </div>
-            
+
 
                 <!--<div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -279,7 +279,7 @@
         var profesional_id_tipo_especialidad = data.profesional.id_tipo_especialidad;
         var profesional_tipo_especialidad_nombre = data.profesional.tipo_especialidad.nombre;
         var profesional_id_sub_tipo_especialidad = data.profesional.id_sub_tipo_especialidad;
-        var profesional_sub_tipo_especialidad_nombre = data.profesional.sub_tipo_especialidad.nombre;
+        var profesional_sub_tipo_especialidad_nombre = data.profesional.sub_tipo_especialidad ? data.profesional.sub_tipo_especialidad.nombre : '';
 
         // FICHA DE ATENCION
         $('#texto_ficha').html('');
