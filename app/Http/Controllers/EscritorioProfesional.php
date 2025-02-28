@@ -1877,6 +1877,58 @@ class EscritorioProfesional extends Controller
 
     }
 
+    public function generar_pdf_presupuesto_hist(Request $req){
+        $ficha_atencionController = new ficha_atencionController();
+        $ficha = FichaAtencion::find($req->id_ficha_atencion);
+
+        $paciente = Paciente::find($req->id_paciente);
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $maxilar_superior_gral_tratamiento = $ficha_atencionController->dameMaxilarSuperiorGeneralTratamiento($paciente->id, $profesional->id_tipo_especialidad, $ficha->id);
+        $maxilar_superior_gral_diagnostico = $ficha_atencionController->dameMaxilarSuperiorGeneralDiagnostico($paciente->id, $profesional->id_tipo_especialidad, $ficha->id);
+        $maxilar_inferior_gral_tratamiento = $ficha_atencionController->dameMaxilarInferiorGeneralTratamiento($paciente->id, $profesional->id_tipo_especialidad, $ficha->id);
+        $maxilar_inferior_gral_diagnostico = $ficha_atencionController->dameMaxilarInferiorGeneralDiagnostico($paciente->id, $profesional->id_tipo_especialidad, $ficha->id);
+        $boca_completa_gral_tratamiento = $ficha_atencionController->dameBocaCompletaGeneralTratamiento($paciente->id, $profesional->id_tipo_especialidad, $ficha->id);
+        $boca_completa_gral_diagnostico = $ficha_atencionController->dameBocaCompletaGeneralDiagnostico($paciente->id, $profesional->id_tipo_especialidad, $ficha->id);
+        $maxilar_inferior_gral_tratamientos_endo = $ficha_atencionController->dameMaxilarInferiorGeneralTratamientoEndodoncia($paciente->id, $profesional->id_tipo_especialidad, $ficha->id);
+        $maxilar_inferior_gral_diagnosticos_endo = $ficha_atencionController->dameMaxilarInferiorGeneralDiagnosticoEndodoncia($paciente->id, $profesional->id_tipo_especialidad, $ficha->id);
+        $maxilar_superior_gral_tratamientos_endo = $ficha_atencionController->dameMaxilarSuperiorGeneralTratamientoEndodoncia($paciente->id, $profesional->id_tipo_especialidad, $ficha->id);
+        $maxilar_superior_gral_diagnosticos_endo = $ficha_atencionController->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($paciente->id, $profesional->id_tipo_especialidad, $ficha->id);
+        $boca_completa_gral_tratamiento_endo = $ficha_atencionController->dameCompletaEndoTratamiento($paciente->id, $profesional->id_tipo_especialidad, $ficha->id);
+        $boca_completa_gral_diagnostico_endo = $ficha_atencionController->dameCompletaEndoDiagnostico($paciente->id, $profesional->id_tipo_especialidad, $ficha->id);
+        $odontograma = $ficha_atencionController->dameOdontogramaPaciente($paciente->id, $ficha->id, $ficha->id_lugar_atencion, $profesional->id_tipo_especialidad);
+
+        $valores_odontograma = $this->dameValoresOdontograma($paciente->id, $ficha->id, $ficha->id_lugar_atencion, $profesional->id_tipo_especialidad);
+
+
+
+        // Renderizar la vista del presupuesto dental
+        $pdf = Pdf::loadView('atencion_odontologica.PDF.presupuesto_dental', compact(
+            'odontograma',
+            'paciente',
+            'valores_odontograma',
+            'maxilar_superior_gral_tratamiento',
+            'maxilar_superior_gral_diagnostico',
+            'maxilar_inferior_gral_tratamiento',
+            'maxilar_inferior_gral_diagnostico',
+            'boca_completa_gral_tratamiento',
+            'boca_completa_gral_diagnostico',
+            'maxilar_inferior_gral_tratamientos_endo',
+            'maxilar_inferior_gral_diagnosticos_endo',
+            'maxilar_superior_gral_tratamientos_endo',
+            'maxilar_superior_gral_diagnosticos_endo',
+            'boca_completa_gral_tratamiento_endo',
+            'boca_completa_gral_diagnostico_endo'
+        ));
+        $timestamp = time();
+        // Guardar el PDF en la carpeta public
+        $fileName = 'presupuesto_dental_' . $req->id_paciente . '_'. $timestamp .'.pdf';
+        $filePath = public_path('reportes/' . $fileName);
+        file_put_contents($filePath, $pdf->output());
+
+        // Devolver la ruta accesible del archivo PDF
+        return response()->json(['ruta' => asset('reportes/' . $fileName)]);
+    }
+
     public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $id_tipo_especialidad,$id_presupuesto = null){
         $query = OdontogramaPaciente::select(
             'odontogramas_pacientes.*',
@@ -1887,9 +1939,13 @@ class EscritorioProfesional extends Controller
             ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
             ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
             ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-            // ->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion)
+
             ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
             ->where('odontogramas_pacientes.tipo_especialidad', $id_tipo_especialidad);
+
+            if(!is_null($id_ficha_atencion)){
+                $query->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion);
+            }
 
             // Verificar si el parámetro $id_presupuesto no es nulo
             if (!is_null($id_presupuesto)) {

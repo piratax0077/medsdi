@@ -1135,6 +1135,56 @@
 
         }
 
+        function generar_pdf_historial(id_ficha_clinica){
+            let url = "{{ route('profesional.generar_pdf_presupuesto_dental_hist') }}";
+            let id_paciente = dame_id_paciente();
+            let data = {
+                id_paciente: id_paciente,
+                id_ficha_atencion: id_ficha_clinica,
+                _token: "{{ csrf_token() }}"
+            }
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function(data){
+                    console.log(data);
+                    if(data == 'error'){
+                        swal({
+                            title:'Error',
+                            text:'Primero debe generar la liquidación.',
+                            icon:'error',
+                            button:"Aceptar"
+                        });
+                        return false;
+                    }
+                    if(data.ruta){
+                        swal({
+                            title: "Reporte generado",
+                            text: "El reporte se ha generado correctamente",
+                            icon: "success",
+                            button: "Aceptar"
+                        }).then(() => {
+                            // Abrir el PDF en una ventana emergente
+                            var width = 800;
+                            var height = 600;
+                            var left = (screen.width - width) / 2;
+                            var top = (screen.height - height) / 2;
+                            window.open(data.ruta, 'Presupuesto dental', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                        });
+                    }else{
+                        swal({
+                            title: "Error",
+                            text: "Ha ocurrido un error al generar el reporte",
+                            icon: "error",
+                            button: "Aceptar"
+                        });
+                    }
+                }
+            })
+        }
+
         function buscar_receta_ficha(id) {
             console.log(id);
         };

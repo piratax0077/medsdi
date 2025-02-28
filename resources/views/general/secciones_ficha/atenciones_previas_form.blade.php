@@ -24,8 +24,9 @@
                                                 <th>Ficha clínica</th>
                                                 <th>Exámenes</th>
                                                 <th>Recetas</th>
-                                                <th>Documentos </th>
                                                 @if($profesional->id_especialidad == 2)<th>Presupuestos</th> @endif
+                                                @if($profesional->id_especialidad == 2)<th>Tratamientos </th> @endif
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -49,12 +50,14 @@
                                                         <td>
                                                             <button type="button" class="btn btn-xxs btn-warning-light-c"  @if (isset($f->id)) onclick="buscar_receta({{ $f->id }});" @endif><i class="feather icon-file-plus"></i> Ver</button>
                                                         </td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-xxs btn-purple-light-c" @if (isset($f->id)) onclick="buscar_archivos({{ $f->id }});" @endif><i class="feather icon-folder"></i> Ver</button>
-                                                        </td>
                                                         @if($profesional->id_especialidad == 2)
                                                             <td>
-                                                                <button type="button" class="btn btn-xxs btn-success-light-c" @if(isset($f->id)) onclick="buscar_trabajos({{ $f->id }});" @endif> Ver trabajos </button>
+                                                                <button type="button" class="btn btn-xxs btn-purple-light-c" @if (isset($f->id)) onclick="generar_pdf_historial({{ $f->id }});" @endif><i class="feather icon-folder"></i> PDF</button>
+                                                            </td>
+                                                        @endif
+                                                        @if($profesional->id_especialidad == 2)
+                                                            <td>
+                                                                <button type="button" class="btn btn-xxs btn-success-light-c" @if(isset($f->id)) onclick="buscar_trabajos({{ $f->id }});" @endif> Tratamientos </button>
                                                             </td>
                                                         @endif
                                                     </tr>

@@ -277,6 +277,7 @@ Route::group([
     Route::post('/Registrar_examen_radiologico', [DentalController::class, 'registrar_examen_radiologico'])->name('dental.registrar_examen_radiologico');
     Route::post('/Registrar_biopsia', [DentalController::class, 'registrar_biopsia'])->name('dental.registrar_biopsia');
     Route::post('/Registrar_orden_trabajo_menor', [DentalController::class, 'registrar_orden_trabajo_menor'])->name('dental.registrar_orden_trabajo_menor');
+    Route::post('/Registrar_orden_trabajo_mayor', [DentalController::class, 'registrar_orden_trabajo_mayor'])->name('dental.registrar_orden_trabajo_mayor');
     Route::post('/Eliminar_orden_trabajo_menor', [DentalController::class, 'eliminar_orden_trabajo_menor'])->name('dental.eliminar_trabajo_menor');
     Route::post('/Generar_pdf_trabajo_menor',[DentalController::class, 'generar_pdf_trabajo_menor'])->name('dental.generar_pdf_trabajo_menor');
     Route::post('/Generar_pdf_insumos_dental_sidebar', [DentalController::class, 'generar_pdf_insumos_dental_sidebar'])->name('dental.generar_pdf_insumos_dental_sidebar');
@@ -287,6 +288,8 @@ Route::group([
     }) ->name('periodontograma.ver');
 
 });
+
+
 
 Route::group([
     'middleware' => ['role:Admin|Paciente|Asistente|Profesional'],
@@ -578,6 +581,7 @@ Route::group([
     Route::post('/eliminar_tratamiento_dental',[App\Http\Controllers\EscritorioProfesional::class, 'eliminar_tratamiento_dental'])->name('profesional.eliminar_tratamiento_dental');
     Route::post('/actualizar_tratamiento_dental',[App\Http\Controllers\EscritorioProfesional::class, 'actualizar_tratamiento_dental'])->name('profesional.actualizar_tratamiento_dental');
     Route::post('/generar_pdf_presupuesto',[App\Http\Controllers\EscritorioProfesional::class, 'generar_pdf_presupuesto'])->name('profesional.generar_pdf_presupuesto_dental');
+    Route::post('/generar_pdf_presupuesto_hist',[App\Http\Controllers\EscritorioProfesional::class, 'generar_pdf_presupuesto_hist'])->name('profesional.generar_pdf_presupuesto_dental_hist');
     Route::post('/registrar_presupuesto_dental',[App\Http\Controllers\EscritorioProfesional::class, 'registrar_presupuesto_dental'])->name('profesional.registrar_presupuesto_dental');
 
     Route::get('FIcha_medica_unica/{id}', [App\Http\Controllers\EscritorioPaciente::class, 'miFichaMedica'])->name('profesional.ficha_medica_unica');

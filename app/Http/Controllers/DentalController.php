@@ -2548,17 +2548,22 @@ try {
         try {
             $campos_requeridos = 0;
             $mensaje = '';
+            if(empty(trim($request->motivo)))
+            {
+                $campos_requeridos = 1;
+                $mensaje .= 'El Motivo de la Consulta es Requerido.<br> Su Ficha Clínica NO ha sido Guardada aún.<br>';
+            }
             if(empty( trim($request->descripcion_hipotesis)))
             {
-                //$campos_requeridos = 1;
-                $mensaje = 'El Diagnóstico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún. \n Si es solo Control, indicar Control de Patología.';
+                $campos_requeridos = 1;
+                $mensaje .= 'El Diagnóstico es Requerido.<br> Su Ficha Clínica NO ha sido Guardada aún. <br> Si es solo Control, indicar Control de Patología.';
             }
             else
             {
                 if(empty($request->diag_endos))
                 {
-                    // $campos_requeridos = 1;
-                    // $mensaje = 'El Diagnóstico Endoscópico es Requerido.\n Su Ficha Clínica NO ha sido Guardada aún.\n';
+                    $campos_requeridos = 1;
+                    $mensaje .= 'El Diagnóstico Endoscópico es Requerido.<br> Su Ficha Clínica NO ha sido Guardada aún.<br>';
                 }
                 else
                 {
