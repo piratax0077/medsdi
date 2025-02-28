@@ -25,6 +25,7 @@
                                                 <th>Exámenes</th>
                                                 <th>Recetas</th>
                                                 <th>Documentos </th>
+                                                <th>Presupuestos</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -51,7 +52,11 @@
                                                         <td>
                                                             <button type="button" class="btn btn-xxs btn-purple-light-c" @if (isset($f->id)) onclick="buscar_archivos({{ $f->id }});" @endif><i class="feather icon-folder"></i> Ver</button>
                                                         </td>
-
+                                                        @if($profesional->id_especialidad == 2)
+                                                            <td>
+                                                                <button type="button" class="btn btn-xxs btn-success-light-c" @if(isset($f->id)) onclick="buscar_trabajos({{ $f->id }});" @endif> Ver trabajos </button>
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                 @endforeach
                                             @else
@@ -72,6 +77,7 @@
 @include('general.secciones_ficha.modal_atencion_previa.hist_cons_receta')
 @include('general.secciones_ficha.modal_atencion_previa.hist_cons_examen')
 @include('general.secciones_ficha.modal_atencion_previa.hist_cons_archivo')
+@include('general.secciones_ficha.modal_atencion_previa.hist_trabajos_dental')
 @include('general.secciones_ficha.modal_atencion_previa.hist_cons')
 <script>
     $(document).ready(function() {

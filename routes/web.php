@@ -1999,6 +1999,9 @@ Route::get('hora_medica/ver_registros', [HoraMedicaController::class, 'verHorasM
 /** ARCHIVOS DE CONSULTA */
 Route::get('ficha_atencion/ver_archivos', [App\Http\Controllers\ficha_atencionController::class, 'getArchivosFicha'])->name('ficha_atencion.ver_archivos');
 
+/** TRABAJOS DENTALES */
+Route::get('trabajos_dentales/ver', [App\Http\Controllers\ficha_atencionController::class, 'getTrabajosDentales'])->name('ficha_atencion.ver_trabajos');
+
 /** ALERGIAS */
 Route::get('alergias/ver', [App\Http\Controllers\AlergiasController::class, 'getAlergias'])->name('alergias.ver');
 Route::get('alergias/ver_autocomplete', [App\Http\Controllers\AlergiasController::class, 'getAlergiasAutocomplete'])->name('alergias.ver_autocomplete');
