@@ -57,13 +57,22 @@
 
 @endsection
 
+        @if($profesional->id_especialidad == 2)
+            @if(!empty(session('lic_token')) && session('lic_estado') == 1)
+                <button class="btn btn-agenda-autorizacion btn-info btn-sm shadow-sm" style="top: 410px;" type="button" onclick="abrir_tons();"><i class="feather feather icon-lock f-12"></i> ABRIR TONS</button>
+            @else
+                <button class="btn btn-agenda-autorizacion btn-danger btn-sm shadow-sm" style="top: 410px;" type="button" onclick="abrir_tons();"><i class="feather feather icon-lock f-12"></i> ABRIR TONS</button>
+            @endif
+            {{-- no mostrar nada  --}}
+        @endif
+
 <!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION LICENCIA) -->
 
    @if ($profesional->id_especialidad == 1 || $profesional->id_especialidad == 2)
 		@if(!empty(session('lic_token')) && session('lic_estado') == 1)
-			<button class="btn btn-agenda-autorizacion btn-info btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ABRIR TALONARIOS</button>
+			<button class="btn btn-agenda-autorizacion btn-info btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ABRIR TALONARIOS</button>
 		@else
-			<button class="btn btn-agenda-autorizacion btn-danger btn-sm shadow-sm" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ABRIR TALONARIOS</button>
+			<button class="btn btn-agenda-autorizacion btn-danger btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion();"><i class="feather feather icon-lock f-12"></i> ABRIR TALONARIOS</button>
 		@endif
 	@else
 		{{-- no mostrar nada  --}}
@@ -77,6 +86,7 @@
         @else
             <button class="btn btn-agenda-autorizacion-fmu btn-danger btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-file f-12"></i> FMU</button>
         @endif
+
 
 
 
@@ -165,6 +175,48 @@
     </div>
 </div>
 
+<div id="modal_tons_dental" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Registro de Tons" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_autorizacion_fmuLabel">Registro de tons</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion_fmu();"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-xs btn-success" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();" disabled>Solicitar Autorización para ver FMU</button>
+                        </div>
+                        <div class="col-md-12 text-center mt-3">
+                            <button class="btn btn-xs btn-danger" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" >Cerrar Autorización para ver FMU</button>
+                        </div>
+                    @else
+                        <div class="col-md-12 text-center ">
+                            <button class="btn btn-xs btn-success" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();">Solicitar Autorización para ver FMU</button>
+                        </div>
+                        <div class="col-md-12 text-center mt-3">
+                            <button class="btn btn-xs btn-danger" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" disabled>Cerrar Autorización para ver FMU</button>
+                        </div>
+                    @endif
+                </div>
+                <div class="row">
+                    <div class="col-md-6" id="modal_autorizacion_fmu_imagen">
+                        {{--  --}}
+                    </div>
+                    <div class="col-md-6" id="modal_autorizacion_fmu_mensaje">
+                        {{--  --}}
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-body">
+                <button class="btn btn-sm btn-danger" onclick="cerrar_autorizacion_fmu();">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--SCRIPT (DEJARLO EN JS CON JOHAN)-->
 @section('page-script-btn-autorizacion')
     <script type="text/javascript">
@@ -172,6 +224,10 @@
         /** seccion licencia */
         var lic_token = '{{  session('lic_token') }}';
         var lic_estado = '{{  session('lic_estado') }}';
+
+        function abrir_tons(){
+            $('#modal_tons_dental').modal('show');
+        }
 
         function  abrir_autorizacion()
         {

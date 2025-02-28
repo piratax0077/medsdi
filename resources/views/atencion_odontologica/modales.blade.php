@@ -1104,7 +1104,7 @@
                                 $('#table_atenciones_previas_trabajos tbody').append(fila);
 
                             });
-
+                            $('#valor_odontograma_hist').html('Total Odontograma: '+formatoMoneda(data.valores_odontograma[1]));
                         }
                         else
                         {

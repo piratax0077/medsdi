@@ -23,6 +23,9 @@
                 </table>
                 <!--fin autollenado-->
             </div>
+            <div  class="d-flex container">
+                <p id="valor_odontograma_hist"></p>
+            </div>
         </div>
     </div>
 </div>

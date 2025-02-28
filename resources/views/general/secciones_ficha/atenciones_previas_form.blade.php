@@ -25,7 +25,7 @@
                                                 <th>Exámenes</th>
                                                 <th>Recetas</th>
                                                 <th>Documentos </th>
-                                                <th>Presupuestos</th>
+                                                @if($profesional->id_especialidad == 2)<th>Presupuestos</th> @endif
                                             </tr>
                                         </thead>
                                         <tbody>

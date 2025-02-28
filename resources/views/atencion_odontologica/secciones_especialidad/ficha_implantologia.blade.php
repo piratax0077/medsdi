@@ -2385,7 +2385,7 @@
                                 <!--GUARDAR O IMPRIMIR FICHA-->
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
                                     <button type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">Guardar ficha y finalizar su consulta </button>
-                                    <input type="button" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su agenda">
+                                    <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su agenda">
                                 </div>
                             </div>
                             <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
