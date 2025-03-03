@@ -1310,7 +1310,6 @@ class EscritorioProfesional extends Controller
 
     public function guardar_pieza_dental_tto_impl(Request $request){
         try {
-
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
             $tto = new ProcedimientosImplantes;
             $tto->id_paciente = $request->id_paciente;
@@ -1324,7 +1323,7 @@ class EscritorioProfesional extends Controller
             $tto->id_tipo_anestesia = $request->anestesia_tto;
             $tto->anestesia = $request->anestesia_tto_text;
             $tto->numero_tubos = $request->numero_tubos;
-            $tto->id_tecnica_anestesia = $request->tenica_anestesia;
+            $tto->id_tecnica_anestesia = $request->tecnica_anestesia;
             $tto->tecnica_anestesia = $request->tecnica_anestesia_text;
             $tto->id_anestesico = $request->anestesico_tto;
             $tto->anestesico = $request->anestesico_tto_text;
@@ -1335,6 +1334,7 @@ class EscritorioProfesional extends Controller
             $tto->metodo_injerto_oseo = $request->tipo_injerto_tto;
             $tto->id_suturas = $request->suturas_tto;
             $tto->suturas = $request->suturas_tto_text;
+            $tto->grosor_nylon = intval($request->grosor_nylon);
             $tto->tiempo_quirurgico = $request->tiempo_quirurgico_tto;
             $tto->estado = 1;
 
@@ -1600,10 +1600,11 @@ class EscritorioProfesional extends Controller
     }
 
     public function mostrar_nueva_pieza_dental_tto_impl(Request $req){
-
+        // generar numero random entre el 20 y el 30
+        $random = rand(20,30);
         $idCounter = $req->counter;
         $responsable = User::find(Auth::user()->id);
-        $v = view('atencion_odontologica.include.piezas_dental_tto_impl',['counter' => $idCounter])->render();
+        $v = view('atencion_odontologica.include.piezas_dental_tto_impl',['counter' => $random])->render();
         return ['mensaje' => 'OK','v' => $v];
     }
 
@@ -2050,10 +2051,17 @@ class EscritorioProfesional extends Controller
 
             if($tratamiento->save()){
                 $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+
                 $odontograma_paciente = $this->dameOdontogramaPaciente($tratamiento->id_paciente, $tratamiento->id_ficha_atencion, $tratamiento->id_lugar_atencion, $profesional->id_tipo_especialidad);
-                $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
+                $odontograma = [];
+                foreach($odontograma_paciente as $o){
+                    if($o->presupuesto == 1){
+                        $odontograma[] = $o;
+                    }
+                }
+                $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma])->render();
                 $valores = $this->dameValoresOdontograma($tratamiento->id_paciente, $tratamiento->id_ficha_atencion, $tratamiento->id_lugar_atencion, $profesional->id_tipo_especialidad);
-                return ['status' => 1 ,'mensaje' => 'Se ha actualizado correctamente', 'odontograma_paciente' => $odontograma_paciente,'valores' => $valores,'odontograma_paciente_vista' => $odontograma_paciente_vista];
+                return ['status' => 1 ,'mensaje' => 'Se ha actualizado correctamente', 'odontograma_paciente' => $odontograma_paciente,'odontograma' => $odontograma, 'valores' => $valores,'odontograma_paciente_vista' => $odontograma_paciente_vista];
             }else{
                 return ['status' => 0, 'mensaje' => 'Ha ocurrido un error'];
             }

@@ -1870,6 +1870,8 @@ class ficha_atencionController extends Controller
 
         $bodegas = $this->dame_bodegas($request->lugar_atencion_id);
 
+        // return $presupuesto_dental;
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,

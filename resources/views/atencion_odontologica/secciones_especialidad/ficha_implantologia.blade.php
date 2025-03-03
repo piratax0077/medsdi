@@ -45,12 +45,14 @@
                     <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
                     <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
                     <input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">
+                    <input type="hidden" name="ficha_id_atencion_dental_odon" value="{{ $id_ficha_atencion }}" id="ficha_id_atencion_dental_odon">
                     <input type="hidden" name="id_paciente_fc" value="{{ $paciente->id }}" id="id_paciente_fc">
                     <input type="hidden" name="rut_paciente_fc" value="{{ $paciente->rut }}" id="rut_paciente_fc">
                     <input type="hidden" name="prevision_paciente_fc" value="{{ $paciente->prevision->id }}" id="prevision_paciente_fc">
                     <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
                     <input type="hidden" name="id_especialidad" id="id_especialidad" value="{{ $profesional->id_especialidad }}">
                     <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
+                    <input type="hidden" name="ficha_id_lugar_atencion" value="{{ $id_lugar_atencion }}" id="ficha_id_lugar_atencion">
                     <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
                     <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
                     <input type="hidden" name="tipo_examen_especial" id="tipo_examen_especial" value="{{ $lista_examen_especial }}">
@@ -131,7 +133,7 @@
                                                                                                             </div>
                                                                                                             <div class="form-group" id="div_tpo_proc_imp{{ $counter }}" style="display:none;">
                                                                                                                 <label class="floating-label-activo-sm">Otro tipo de Procedimiento</label>
-                                                                                                                <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_proc_imp{{ $counter }}" id="obs_tpo_proc_imp{{ $counter }}"></textarea>
+                                                                                                                <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_proc_imp{{ $counter }}" id="obs_tpo_proc_imp{{ $counter }}">{{ $e->tipo_procedimiento }}</textarea>
                                                                                                                 <div class="form-group mt-3">
                                                                                                                     <label class="floating-label-activo-sm">UCO?</label>
                                                                                                                     <input type="text"class="form-control form-control-sm" id="uco_tto{{ $counter }}">
@@ -154,7 +156,7 @@
                                                                                                             </div>
                                                                                                             <div class="form-group" id="div_anestesia_impl{{ $counter }}" @if($e->id_tipo_anestesia !== 4) style="display:none;"  @endif >
                                                                                                                 <label class="floating-label-activo-sm">Otra anestesia</label>
-                                                                                                                <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesia_impl{{ $counter }}" id="obs_anestesia_impl{{ $counter }}"></textarea>
+                                                                                                                <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesia_impl{{ $counter }}" id="obs_anestesia_impl{{ $counter }}">{{ $e->anestesia }}</textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -179,9 +181,9 @@
                                                                                                                     <option @if($e->id_tecnica_anestesia == 10) selected @endif value="10">Otro describir</option>
                                                                                                                 </select>
                                                                                                             </div>
-                                                                                                            <div class="form-group" id="div_tec_anestesia_impl{{ $counter }}" @if($e->id_tecnica_anestesia !== 4) style="display:none;" @endif>
+                                                                                                            <div class="form-group" id="div_tec_anestesia_impl{{ $counter }}" @if($e->id_tecnica_anestesia !== 10) style="display:none;" @endif>
                                                                                                                 <label class="floating-label-activo-sm">Otra anestesia</label>
-                                                                                                                <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tec_anestesia_impl{{ $counter }}" id="obs_tec_anestesia_impl{{ $counter }}"></textarea>
+                                                                                                                <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tec_anestesia_impl{{ $counter }}" id="obs_tec_anestesia_impl{{ $counter }}">{{ $e->tecnica_anestesia }}</textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -198,21 +200,21 @@
                                                                                                             </div>
                                                                                                             <div class="form-group" id="div_anestesico_impl{{ $counter }}" @if($e->id_anestesico !== 6) style="display:none;" @endif>
                                                                                                                 <label class="floating-label-activo-sm">Otro anestesico</label>
-                                                                                                                <textarea class="form-control form-control-sm" data-titulo="anestisico_dental_title"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesico_impl{{ $counter }}" id="obs_anestesico_impl{{ $counter }}"></textarea>
+                                                                                                                <textarea class="form-control form-control-sm" data-titulo="anestisico_dental_title"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesico_impl{{ $counter }}" id="obs_anestesico_impl{{ $counter }}">{{ $e->anestesico }}</textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Incidentes</label>
                                                                                                                 <select name="incid_col_impl{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="incid_col_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('incid_col_impl{{ $counter }}','div_incid_col_impl{{ $counter }}','obs_incid_col_impl{{ $counter }}',2);">
-                                                                                                                    <option @if($e->id_incidente == 1) selected @endif  value="1">Sin incidentes</option>
-                                                                                                                    <option @if($e->id_incidente == 2) selected @endif  value="2">Con Incidentes</option>
+                                                                                                                    <option @if($e->id_incidentes == 1) selected @endif  value="1">Sin incidentes</option>
+                                                                                                                    <option @if($e->id_incidentes == 2) selected @endif  value="2">Con Incidentes</option>
 
                                                                                                                 </select>
                                                                                                             </div>
-                                                                                                            <div class="form-group" id="div_incid_col_impl{{ $counter }}" @if($e->id_incidente !== 2) style="display:none;" @endif>
-                                                                                                                <label class="floating-label-activo-sm">Describa Incidente</label>
-                                                                                                                <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl" id="obs_incid_col_impl"></textarea>
+                                                                                                            <div class="form-group" id="div_incid_col_impl{{ $counter }}" @if($e->id_incidentes !== 2) style="display:none;" @endif>
+                                                                                                                <label class="floating-label-activo-sm">Obs</label>
+                                                                                                                <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl{{ $counter }}" id="obs_incid_col_impl{{ $counter }}">{{ $e->incidentes }}</textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -229,7 +231,7 @@
                                                                                                             </div>
                                                                                                             <div class="form-group" id="div_mat_inj_oseo{{ $counter }}" @if($e->id_mat_injerto_oseo !== 6) style="display:none;" @endif>
                                                                                                                 <label class="floating-label-activo-sm">Otro tipo de injerto</label>
-                                                                                                                <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mat_inj_oseo{{ $counter }}" id="obs_mat_inj_oseo{{ $counter }}"></textarea>
+                                                                                                                <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mat_inj_oseo{{ $counter }}" id="obs_mat_inj_oseo{{ $counter }}">{{ $e->material_injerto_oseo }}</textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -251,7 +253,17 @@
                                                                                                             </div>
                                                                                                             <div class="form-group" id="div_suturas{{ $counter }}" @if($e->id_suturas !== 5) style="display:none;" @endif>
                                                                                                                 <label class="floating-label-activo-sm">Describa</label>
-                                                                                                                <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_suturas{{ $counter }}" id="obs_suturas{{ $counter }}"></textarea>
+                                                                                                                <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_suturas{{ $counter }}" id="obs_suturas{{ $counter }}">{{ $e->suturas }}</textarea>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" @if($e->id_suturas !== 3) style="display:none;" @endif>
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="floating-label-activo-sm">Grosor Nylon</label>
+                                                                                                                <input type="text" name="grosor_nylon{{ $counter }}" id="grosor_nylon{{ $counter }}" class="form-control form-control-sm" value="{{ $e->grosor_nylon }}">
+                                                                                                            </div>
+                                                                                                            <div class="form-group" id="div_grosor_nylon{{ $counter }}" style="display:none;">
+                                                                                                                <label class="floating-label-activo-sm">Describa</label>
+                                                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_grosor_nylon{{ $counter }}" id="obs_grosor_nylon{{ $counter }}">{{ $e->grosor_nylon }}</textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -311,7 +323,7 @@
                                                                                             <div class="tab-pane fade show active" id="prot_impl" role="tabpanel" aria-labelledby="prot_impl_tab">
                                                                                                 <div class="col-sm-12 col-md-12">
                                                                                                     <div class="form-row">
-                                                                                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Equipo Cirujanos</label>
 
@@ -331,17 +343,23 @@
                                                                                                             </div>
                                                                                                         </div>
 
-                                                                                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Anestesista</label>
                                                                                                                 <input class="form-control form-control-sm" type="text" name="prot_anestesista_imp"id="prot_anestesista_imp">
                                                                                                             </div>
                                                                                                         </div>
 
-                                                                                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Tons</label>
                                                                                                                 <input class="form-control form-control-sm" type="text" name="prot_tons_imp"id="prot_tons_imp">
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="floating-label-activo-sm">Arsenalera</label>
+                                                                                                                <input class="form-control form-control-sm" type="text" name="prot_ars_imp"id="prot_ars_imp">
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
@@ -446,7 +464,14 @@
                                                                                                         <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Detalle Cirugía</label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="det_cir" id="det_cir"></textarea>
+                                                                                                                @php
+                                                                                                                    $detalleCirugia = [];
+                                                                                                                    foreach ($examenes_tto_implantes as $examen) {
+                                                                                                                        $detalleCirugia[] = "La pieza {$examen->numero_pieza} se ha realizado {$examen->tipo_procedimiento} usando {$examen->anestesia} con {$examen->numero_tubos} tubos, con la técnica {$examen->tecnica_anestesia}";
+                                                                                                                    }
+                                                                                                                    $detallesCirugiaTexto = implode("\n", $detalleCirugia);
+                                                                                                                @endphp
+                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="det_cir" id="det_cir">{{ $detallesCirugiaTexto }}</textarea>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>
@@ -2363,15 +2388,15 @@
                                             <div class="form-row">
                                                 <div class="form-group col-md-4">
                                                     <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" >
+                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" value="{{ $fichaAtencion->hipotesis_diagnostico}}">
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                     <label class="floating-label-activo-sm">Indicaciones</label>
-                                                    <input type="text" class="form-control form-control-sm" name="ind_oft" id="ind_oft">
+                                                    <input type="text" class="form-control form-control-sm" name="ind_oft" id="ind_oft" value="{{ $fichaAtencion->indicaciones }}">
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                     <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
-                                                    <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie" name="descripcion_cie" id="descripcion_cie" value="" onchange="cargarIgual('descripcion_cie')">
+                                                    <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie" name="descripcion_cie" id="descripcion_cie" value="{{ $fichaAtencion->descripcion_ce10 }}" onchange="cargarIgual('descripcion_cie')">
                                                     <input type="hidden" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="" onchange="cargarIgual('id_descripcion_cie')">
                                                 </div>
                                             </div>
@@ -2404,267 +2429,7 @@
                         </div>
                         <!-- ODONTOGRAMA-->
                         <div class="tab-pane fade" id="odonto_adulto" role="tabpanel" aria-labelledby="odonto_adulto-tab">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="col-sm-12">
-                                                <h5 class="text-c-blue mt-1 mb-1 f-16">Odontograma</h5>
-                                                <hr>
-                                            </div>
-                                            <hr>
-                                            <div class="col-md-12">
-                                                <div class="dt-responsive table-responsive table-borderless">
-                                                    <table id="odontograma_adulto" class="display table dt-responsive nowrap"
-                                                        style="width:100%">
-                                                        <!-- ADULTO SUPERIOR -->
-                                                        <tbody>
-                                                            <tr>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t18">
-                                                                        <img src="{{ asset('images/dental/dientes/d18.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma(1-8);">
-                                                                    </div>
-                                                                    <label data-ndiente="18" class="nav-label-dent">1.8</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto px-0 py-0" id="t17">
-                                                                        <img src="{{ asset('images/dental/dientes/d17.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma(1-7);">
-                                                                    </div>
-                                                                    <label data-ndiente="17" class="nav-label-dent">1.7</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t16">
-                                                                        <img src="{{ asset('images/dental/dientes/d16.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma(1-5);">
-                                                                    </div>
-                                                                    <label data-ndiente="16" class="nav-label-dent">1.6</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t15">
-                                                                        <img src="{{ asset('images/dental/dientes/d15.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="15" class="nav-label-dent">1.5</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t14">
-                                                                        <img src="{{ asset('images/dental/dientes/d14.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="14" class="nav-label-dent">1.4</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t13">
-                                                                        <img src="{{ asset('images/dental/dientes/d13.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="13" class="nav-label-dent">1.3</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t12">
-                                                                        <img src="{{ asset('images/dental/dientes/d12.png') }}"
-                                                                            class="wid-40 img-fluid" role="button"
-                                                                            onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="12" class="nav-label-dent">1.2</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t11">
-                                                                        <img src="{{ asset('images/dental/dientes/d11.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="11" class="nav-label-dent">1.1</label>
-                                                                </td>
-                                                                <!--nnnn-->
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t21">
-                                                                        <img src="{{ asset('images/dental/dientes/d21.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="21" class="nav-label-dent">2.1</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto px-1 py-1" id="t22">
-                                                                        <img src="{{ asset('images/dental/dientes/d22.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="22" class="nav-label-dent">2.2</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t23">
-                                                                        <img src="{{ asset('images/dental/dientes/d23.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="23" class="nav-label-dent">2.3</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t24">
-                                                                        <img src="{{ asset('images/dental/dientes/d24.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="24" class="nav-label-dent">2.4</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t25">
-                                                                        <img src="{{ asset('images/dental/dientes/d25.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="25" class="nav-label-dent">2.5</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t26">
-                                                                        <img src="{{ asset('images/dental/dientes/d26.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="26" class="nav-label-dent">2.6</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t27">
-                                                                        <img src="{{ asset('images/dental/dientes/d27.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="27" class="nav-label-dent">2.7</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t28">
-                                                                        <img src="{{ asset('images/dental/dientes/d28.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="28" class="nav-label-dent">2.8</label>
-                                                                </td>
-                                                            </tr>
-                                                            <!-- ADULTO INFERIOR -->
-                                                            <tr>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="#" id="t48">
-                                                                        <img src="{{ asset('images/dental/dientes/d48.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndente="48" class="nav-label-dent">4.8</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="#" id="t47">
-                                                                        <img src="{{ asset('images/dental/dientes/d47.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="47" class="nav-label-dent">4.7</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t46">
-                                                                        <img src="{{ asset('images/dental/dientes/d46.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="46" class="nav-label-dent">4.6</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t45">
-                                                                        <img src="{{ asset('images/dental/dientes/d45.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="45" class="nav-label-dent">4.5</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t44">
-                                                                        <img src="{{ asset('images/dental/dientes/d44.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="44" class="nav-label-dent">4.4</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t43">
-                                                                        <img src="{{ asset('images/dental/dientes/d43.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="43" class="nav-label-dent">4.3</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t42">
-                                                                        <img src="{{ asset('images/dental/dientes/d42.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="42" class="nav-label-dent">4.2</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t41">
-                                                                        <img src="{{ asset('images/dental/dientes/d41.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="41" class="nav-label-dent">4.1</label>
-                                                                </td>
-                                                                <!--nnnn-->
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t31">
-                                                                        <img src="{{ asset('images/dental/dientes/d31.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="31" class="nav-label-dent">3.1</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t32">
-                                                                        <img src="{{ asset('images/dental/dientes/d32.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="32" class="nav-label-dent">3.2</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t33">
-                                                                        <img src="{{ asset('images/dental/dientes/d33.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="33" class="nav-label-dent">3.3</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="diente_adulto" id="t34">
-                                                                        <img src="{{ asset('images/dental/dientes/d34.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="34" class="nav-label-dent">3.4</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t35">
-                                                                        <img src="{{ asset('images/dental/dientes/d35.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="35" class="nav-label-dent">3.5</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t36">
-                                                                        <img src="{{ asset('images/dental/dientes/d36.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="36" class="nav-label-dent">3.6</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t37">
-                                                                        <img src="{{ asset('images/dental/dientes/d37.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="37" class="nav-label-dent">3.7</label>
-                                                                </td>
-                                                                <td class="text-center px-0 py-0">
-                                                                    <div class="relative diente_adulto" id="t38">
-                                                                        <img src="{{ asset('images/dental/dientes/d38.png') }}"
-                                                                            class="wid-40" role="button" onclick="info_odontograma();">
-                                                                    </div>
-                                                                    <label data-ndiente="38" class="nav-label-dent">3.8</label>
-                                                                </td>
-                                                            </tr>
-                                                        <tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @include('atencion_odontologica.generales.odontograma_adulto')
                         </div>
                         <!--CIERRE: ODONTOGRAMA--->
                         <!-- PERIIMPLANTE -->
@@ -3247,7 +3012,9 @@
         $('#paciente_piezas_dentales_ex_').select2();
         $('#tpo_proc_imp').select2();
         $('#prot_pieza_imp').select2();
-        let random =  Math.floor(Math.random() * 10);
+
+        // generar numero random entre el 10 y el 20
+        var random = Math.floor(Math.random() * (20 - 10 + 1) + 10);
 
 // Inicializar select2 en todos los select cuyo id comience con "pzas_grupo_impl"
 $('[id^="pzas_grupo_impl"]').select2();
@@ -6403,6 +6170,7 @@ function generar_pdf_protocolo_dental(){
 
     let nombre_anest = $('#prot_anestesista_imp').val();
     let nombre_tons = $('#prot_tons_imp').val();
+    let nombre_arsenalera = $('#prot_ars_imp').val();
     let id_forma_mat_impl = $('#prot_forma_mat').val();
     let forma_mat_impl = $('#prot_forma_mat option:selected').text();
     let valido = 1;
@@ -6450,6 +6218,11 @@ function generar_pdf_protocolo_dental(){
         mensaje += '<li>Anestesista </li>';
     }
 
+    if(nombre_arsenalera == ''){
+        valido = 0;
+        mensaje += '<li>Arsenalera </li>';
+    }
+
     if(nombre_tons == ''){
         valido = 0;
         mensaje += '<li>Tons </li>';
@@ -6468,6 +6241,7 @@ function generar_pdf_protocolo_dental(){
             nombre_cir: nombre_cir,
             nombre_anest: nombre_anest,
             nombre_tons: nombre_tons,
+            nombre_arsenalera: nombre_arsenalera,
             id_forma_mat_impl: id_forma_mat_impl,
             forma_mat_impl: forma_mat_impl,
             id_marca_impl: id_marca_impl,

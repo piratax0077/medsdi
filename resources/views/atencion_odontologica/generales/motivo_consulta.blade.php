@@ -10,11 +10,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label class="floating-label-activo-sm">Motivo de consulta</label>
-                        <input type="text" class="form-control form-control-sm" name="motivo" id="motivo">
+                        <input type="text" class="form-control form-control-sm" name="motivo" id="motivo" value="{{ $fichaAtencion->motivo }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label class="floating-label-activo-sm">Antecedentes Especialidad</label>
-                        <input type="text" class="form-control form-control-sm" name="antecedentes" id="antecedentes">
+                        <input type="text" class="form-control form-control-sm" name="antecedentes" id="antecedentes" value="{{ $fichaAtencion->antecedentes }}">
                     </div>
                 </div>
                 <div class="form-row" >
@@ -29,10 +29,10 @@
                         <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="anestesia_local_dental();">Anestesia local</button>
                     </div>
                     <div class="form-group col-md-4">
-                        <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="hemorragia_dental();"<i class="feather icon-save"></i> Hemorragias</button>
+                        <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="hemorragia_dental();"><i class="feather icon-save"></i> Hemorragias</button>
                     </div>
                     <div class="form-group col-md-4">
-                        <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="fractura_dental();"<i class="feather icon-save"></i> Fracturas</button>
+                        <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="fractura_dental();"><i class="feather icon-save"></i> Fracturas</button>
                     </div>
                 </div>
                 <br>

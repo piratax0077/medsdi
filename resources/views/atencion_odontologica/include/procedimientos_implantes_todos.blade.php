@@ -76,9 +76,9 @@
                                 <option @if($e->id_tecnica_anestesia == 10) selected @endif value="10">Otro describir</option>
                             </select>
                         </div>
-                        <div class="form-group" id="div_tec_anestesia_impl{{ $counter }}" @if($e->id_tecnica_anestesia !== 4) style="display:none;" @endif>
+                        <div class="form-group" id="div_tec_anestesia_impl{{ $counter }}" @if($e->id_tecnica_anestesia !== 10) style="display:none;" @endif>
                             <label class="floating-label-activo-sm">Otra anestesia</label>
-                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tec_anestesia_impl{{ $counter }}" id="obs_tec_anestesia_impl{{ $counter }}"></textarea>
+                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tec_anestesia_impl{{ $counter }}" id="obs_tec_anestesia_impl{{ $counter }}">{{ $e->tecnica_anestesia }}</textarea>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -95,21 +95,21 @@
                         </div>
                         <div class="form-group" id="div_anestesico_impl{{ $counter }}" @if($e->id_anestesico !== 6) style="display:none;" @endif>
                             <label class="floating-label-activo-sm">Otro anestesico</label>
-                            <textarea class="form-control form-control-sm" data-titulo="anestisico_dental_title"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesico_impl{{ $counter }}" id="obs_anestesico_impl{{ $counter }}"></textarea>
+                            <textarea class="form-control form-control-sm" data-titulo="anestisico_dental_title"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesico_impl{{ $counter }}" id="obs_anestesico_impl{{ $counter }}">{{ $e->anestesico }}</textarea>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Incidentes</label>
                             <select name="incid_col_impl{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="incid_col_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('incid_col_impl{{ $counter }}','div_incid_col_impl{{ $counter }}','obs_incid_col_impl{{ $counter }}',2);">
-                                <option @if($e->id_incidente == 1) selected @endif  value="1">Sin incidentes</option>
-                                <option @if($e->id_incidente == 2) selected @endif  value="2">Con Incidentes</option>
+                                <option @if($e->id_incidentes == 1) selected @endif  value="1">Sin incidentes</option>
+                                <option @if($e->id_incidentes == 2) selected @endif  value="2">Con Incidentes</option>
 
                             </select>
                         </div>
-                        <div class="form-group" id="div_incid_col_impl{{ $counter }}" @if($e->id_incidente !== 2) style="display:none;" @endif>
+                        <div class="form-group" id="div_incid_col_impl{{ $counter }}" @if($e->id_incidentes !== 2) style="display:none;" @endif>
                             <label class="floating-label-activo-sm">Describa Incidente</label>
-                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl" id="obs_incid_col_impl"></textarea>
+                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl" id="obs_incid_col_impl">{{ $e->incidentes }}</textarea>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -126,7 +126,7 @@
                         </div>
                         <div class="form-group" id="div_mat_inj_oseo{{ $counter }}" @if($e->id_mat_injerto_oseo !== 6) style="display:none;" @endif>
                             <label class="floating-label-activo-sm">Otro tipo de injerto</label>
-                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mat_inj_oseo{{ $counter }}" id="obs_mat_inj_oseo{{ $counter }}"></textarea>
+                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mat_inj_oseo{{ $counter }}" id="obs_mat_inj_oseo{{ $counter }}">{{ $e->material_injerto_oseo }}</textarea>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -148,7 +148,13 @@
                         </div>
                         <div class="form-group" id="div_suturas{{ $counter }}" @if($e->id_suturas !== 5) style="display:none;" @endif>
                             <label class="floating-label-activo-sm">Describa</label>
-                            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_suturas{{ $counter }}" id="obs_suturas{{ $counter }}"></textarea>
+                            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_suturas{{ $counter }}" id="obs_suturas{{ $counter }}">{{ $e->suturas }}</textarea>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" id="grosor_nylon{{ $counter }}" @if($e->id_suturas !== 3) style="display: none" @endif>
+                        <div class="form-group">
+                            <label class="floating-label-activo-sm">Grosor Nylon</label>
+                            <input type="text" name="grosor_nylon_input{{ $counter }}" id="grosor_nylon_input{{ $counter }}" class="form-control form-control-sm" value="{{ $e->grosor_nylon }}">
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">

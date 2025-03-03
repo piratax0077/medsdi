@@ -11,6 +11,7 @@
     <p><strong>Paciente ID:</strong> {{ $id_paciente }}</p>
     <p><strong>Cirujano:</strong> {{ $nombre_cir }}</p>
     <p><strong>Anestesista:</strong> {{ $nombre_anest }}</p>
+    <p><strong>Arsenalera:</strong> {{ $nombre_ars }}</p>
     <p><strong>Implantes:</strong> {{ $implantes }}</p>
     <p><strong>Marca del Implante:</strong> {{ $marca_impl }}</p>
     <p><strong>Forma del Material:</strong> {{ $forma_mat_impl }}</p>

@@ -168,10 +168,12 @@
                     "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }
             });
-            mostrar_nueva_pieza_dental(1);
-            mostrar_nueva_pieza_ex_radio(1);
-            mostrar_nuevas_imagenes_dent(1);
-            mostrar_pieza_dental_examen(1);
+            // declarar una variable integer random entre el 10 y el 20
+            var random = Math.floor(Math.random() * (20 - 10 + 1)) + 10;
+            mostrar_nueva_pieza_dental(random);
+            mostrar_nueva_pieza_ex_radio(random);
+            mostrar_nuevas_imagenes_dent(random);
+            mostrar_pieza_dental_examen(random);
         });
     function cargar_a_presupuesto(id, tipo = null){
         let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";
@@ -257,7 +259,7 @@
                                             <td>${odonto.valor} </td>
                                             <td> </td>
                                             <td>
-                                                <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                                <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Cargar</button>
                                             </td>
                                         </tr>
                                     `);
@@ -971,7 +973,7 @@
                                             <td>${odonto.valor} </td>
                                             <td> </td>
                                             <td>
-                                                <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                                <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Cargar</button>
                                             </td>
                                         </tr>
                                     `);

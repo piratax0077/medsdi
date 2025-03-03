@@ -1469,6 +1469,7 @@ class DentalController extends Controller
             $odontograma->id_ficha_atencion = $request->id_ficha_atencion;
             $odontograma->id_lugar_atencion = $request->id_lugar_atencion;
             $odontograma->tipo_especialidad = $profesional->id_tipo_especialidad;
+            $odontograma->estado = 0;
 
             if (!$odontograma->save()) {
                 return ['mensaje', 'error'];
@@ -1492,16 +1493,34 @@ class DentalController extends Controller
         return $valores;
     }
 
-    public function dame_odontograma_paciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $id_tipo_especialidad){
-        $odontogramas = OdontogramaPaciente::select('odontogramas_pacientes.*','diagnosticos_dental.descripcion','diagnosticos_dental.valor','tratamientos_dental.descripcion as diagnostico')
+    public function dame_odontograma_paciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null){
+        $query = OdontogramaPaciente::select(
+            'odontogramas_pacientes.*',
+            'diagnosticos_dental.descripcion',
+            'diagnosticos_dental.cantidad_bloques',
+            'diagnosticos_dental.valor',
+            'tratamientos_dental.descripcion as diagnostico')
             ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
-            ->join('tratamientos_dental','odontogramas_pacientes.diagnostico','=','tratamientos_dental.id')
+            ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
             ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-            // ->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion)
+
             ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
-            ->where('odontogramas_pacientes.tipo_especialidad', $id_tipo_especialidad)
-            ->get();
-        return $odontogramas;
+            ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
+
+            // verificar si trae ficha de atencion
+            if (!is_null($id_ficha_atencion)) {
+                $query->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion);
+            }
+
+            // Verificar si el parámetro $id_presupuesto no es nulo
+            if (!is_null($id_presupuesto)) {
+                $query->where('odontogramas_pacientes.id_presupuesto', $id_presupuesto);
+            }
+
+            // Obtener los resultados
+            $odontogramas = $query->get();
+
+            return $odontogramas;
     }
 
     public function eliminar_odontograma(Request $request){
@@ -2016,6 +2035,7 @@ try {
      $id_paciente = $req->id_paciente;
      $nombre_cir = $req->nombre_cir;
      $nombre_anest = $req->nombre_anest;
+     $nombre_ars = $req->nombre_arsenalera;
      $implantes = $req->implantes;
      $marca_impl = $req->marca_impl;
      $forma_mat_impl = $req->forma_mat_impl;
@@ -2025,7 +2045,7 @@ try {
      $prot_pieza_imp = $req->prot_pieza_imp;
     //code...
     // Renderizar la vista del presupuesto dental
-    $pdf = Pdf::loadView('atencion_odontologica.PDF.protocolo_implantes_dental',compact('id_paciente','nombre_cir','nombre_anest','implantes','marca_impl','forma_mat_impl','prot_prot_corona','det_cir','nombre_tons','prot_pieza_imp'));
+    $pdf = Pdf::loadView('atencion_odontologica.PDF.protocolo_implantes_dental',compact('id_paciente','nombre_cir','nombre_anest','nombre_ars','implantes','marca_impl','forma_mat_impl','prot_prot_corona','det_cir','nombre_tons','prot_pieza_imp'));
     // Guardar el PDF en la carpeta public
     $fileName = 'presupuesto_dental_' . $req->id_paciente . '.pdf';
     $filePath = public_path('reportes/' . $fileName);
@@ -2562,7 +2582,7 @@ try {
             {
                 if(empty($request->diag_endos))
                 {
-                    $campos_requeridos = 1;
+                    //$campos_requeridos = 1;
                     $mensaje .= 'El Diagnóstico Endoscópico es Requerido.<br> Su Ficha Clínica NO ha sido Guardada aún.<br>';
                 }
                 else

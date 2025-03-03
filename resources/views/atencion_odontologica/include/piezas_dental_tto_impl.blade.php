@@ -107,14 +107,14 @@
                         </div>
                         <div class="form-group" id="div_incid_col_impl{{ $counter }}" style="display:none;">
                             <label class="floating-label-activo-sm">Describa Incidente</label>
-                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl" id="obs_incid_col_impl"></textarea>
+                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl{{ $counter }}" id="obs_incid_col_impl{{ $counter }}"></textarea>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Material de injerto óseo</label>
                             <select name="mat_inj_oseo_impl{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="mat_inj_oseo_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mat_inj_oseo{{ $counter }}','div_mat_inj_oseo{{ $counter }}','obs_mat_inj_oseo{{ $counter }}',6);">
-                                <option selected  value="1">Sin Injerto Óseo</option>
+                                <option value="1">Sin Injerto Óseo</option>
                                 <option value="2">autoinjerto</option>
                                 <option value="3">aloinjerto</option>
                                 <option value="4">xenoinjerto</option>
@@ -136,7 +136,7 @@
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Suturas</label>
-                            <select name="suturas_impl{{ $counter }}" data-titulo="suturas_impl{{ $counter }}" data-seccion="suturas"  id="suturas_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('suturas_impl{{ $counter }}','div_suturas{{ $counter }}','obs_suturas{{ $counter }}',5);">
+                            <select name="suturas_impl{{ $counter }}" data-titulo="suturas_impl{{ $counter }}" data-seccion="suturas"  id="suturas_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('suturas_impl{{ $counter }}','div_suturas{{ $counter }}','obs_suturas{{ $counter }}',5); evaluar_para_carga_nylon('suturas_impl{{ $counter }}','grosor_nylon{{ $counter }}',3);">
                                 <option selected  value="1">Catgut</option>
                                 <option value="2">Seda</option>
                                 <option value="3">Nylon</option>
@@ -147,6 +147,12 @@
                         <div class="form-group" id="div_suturas{{ $counter }}" style="display:none;">
                             <label class="floating-label-activo-sm">Describa</label>
                             <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_suturas{{ $counter }}" id="obs_suturas{{ $counter }}"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" id="grosor_nylon{{ $counter }}" style="display: none">
+                        <div class="form-group">
+                            <label class="floating-label-activo-sm">Grosor Nylon</label>
+                            <input type="text" name="grosor_nylon_input{{ $counter }}" id="grosor_nylon_input{{ $counter }}" class="form-control form-control-sm">
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -219,8 +225,12 @@
 
         let suturas_tto = $('#suturas_impl'+counter).val();
         let suturas_tto_text = $('#suturas_impl'+counter+' option:selected').text();
+        let grosor_nylon = '';
         if(suturas_tto == 5){
             suturas_tto_text = $('#obs_suturas'+counter).val();
+        }
+        if(suturas_tto == 3){
+            grosor_nylon = $('#grosor_nylon_input'+counter).val();
         }
 
         let tiempo_quirurgico_tto = $('#tiempo_quir_impl'+counter).val();
@@ -236,6 +246,11 @@
         if(numero_tubos == ''){
             valido = 0;
             mensaje += '<li>Campo requerido N° Tubos </li>';
+        }
+
+        if(suturas_tto == 3 && grosor_nylon == ''){
+            valido = 0;
+            mensaje += '<li>Campo requerido Grosor Nylon </li>';
         }
 
         if(valido == 0){
@@ -272,6 +287,7 @@
             tipo_injerto_tto: tipo_injerto_tto,
             suturas_tto: suturas_tto,
             suturas_tto_text: suturas_tto_text,
+            grosor_nylon: grosor_nylon ? grosor_nylon : '',
             tiempo_quirurgico_tto: tiempo_quirurgico_tto,
             id_paciente: dame_id_paciente(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
@@ -300,5 +316,14 @@
             }
         })
 
+    }
+
+    function evaluar_para_carga_nylon(id_select, id_div, value){
+        let valor = $('#'+id_select).val();
+        if(valor == value){
+            $('#'+id_div).show();
+        }else{
+            $('#'+id_div).hide();
+        }
     }
 </script>
