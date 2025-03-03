@@ -20,7 +20,7 @@
                 <div class="form-row" >
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
                         <label class="floating-label-activo-sm">Observaciones al Examen de la Especialidad</label>
-                        <textarea class="form-control caja-texto form-control-sm mb-9"  rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="examen_fisico" id="examen_fisico" placeholder="OBSERVACIONES DE LA CONSULTA Y EXAMEN FISICO RELEVANTE"></textarea>
+                        <textarea class="form-control caja-texto form-control-sm mb-9"  rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="examen_fisico" id="examen_fisico" placeholder="OBSERVACIONES DE LA CONSULTA Y EXAMEN FISICO RELEVANTE">{{ $fichaAtencion->examen_fisico }}</textarea>
                     </div>
                 </div>
                 <hr>

@@ -27,6 +27,14 @@
                 <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
             </div>
             <div class="container">
+                @if (session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {!! nl2br(e(session('success'))) !!}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                 @if (session('error'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         {!! session('error') !!}
@@ -2423,6 +2431,7 @@
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
                                     <button type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">Guardar ficha y finalizar su consulta </button>
                                     <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su agenda">
+                                    <input type="submit" class="btn btn-primary mt-1" onclick="$('#cerrarsession').val('2');agregar_medicamentos_ficha(); agregar_examenes_ficha();" value="Guardar y continuar en ficha">
                                 </div>
                             </div>
                             <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->

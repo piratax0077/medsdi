@@ -106,7 +106,7 @@
                             </select>
                         </div>
                         <div class="form-group" id="div_incid_col_impl{{ $counter }}" style="display:none;">
-                            <label class="floating-label-activo-sm">Describa Incidente</label>
+                            <label class="floating-label-activo-sm">Obs</label>
                             <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl{{ $counter }}" id="obs_incid_col_impl{{ $counter }}"></textarea>
                         </div>
                     </div>

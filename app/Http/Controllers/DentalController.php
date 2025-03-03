@@ -2641,8 +2641,12 @@ try {
                     $tipo_mensaje = 'success';
                     $mensaje = 'Ficha Clínica guardada de forma correcta\n';
 
-                    //  finalizar hora medica
-                    $hora_medica->id_estado = 6;
+                    //  si cerrarsesion es 2, no se cambia el estado de la hora medica
+                    if($request->cerrarsession !== 2)
+                    {
+                        $hora_medica->id_estado = 6;
+                    }
+
                     $mensaje_estado_hora_medica = '';
                     if (!$hora_medica->save()) {
                         $mensaje_estado_hora_medica .= 'Hora Medica con Problemas para finalizar.\n';
@@ -2801,6 +2805,11 @@ try {
                         $request->session()->regenerateToken();
                         return \Redirect::route('home.ingreso');
 
+                    }else{
+                        // se mantiene en la vista actual
+                        $tipo_mensaje = 'success';
+                        $mensaje = 'Ficha Clínica guardada de forma correcta\n';
+                        return back()->with($tipo_mensaje, $mensaje);
                     }
 
                 }

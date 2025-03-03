@@ -108,7 +108,7 @@
                             </select>
                         </div>
                         <div class="form-group" id="div_incid_col_impl{{ $counter }}" @if($e->id_incidentes !== 2) style="display:none;" @endif>
-                            <label class="floating-label-activo-sm">Describa Incidente</label>
+                            <label class="floating-label-activo-sm">Obs</label>
                             <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl" id="obs_incid_col_impl">{{ $e->incidentes }}</textarea>
                         </div>
                     </div>
