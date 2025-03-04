@@ -546,7 +546,7 @@ class EscritorioProfesional extends Controller
                 // preguntamos si esta asociada a algun servicio de hospital
 
                 $direccion_escritorio = 'app.profesional.escritorio_profesional';
-                if($profesional->id_especialidad == 4)
+                if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
                 {
                     /** profesional de laboratorio */
                     $direccion_escritorio = 'app.laboratorio.lab_profesional.escritorio_profesional_laboratorio';
@@ -1151,6 +1151,19 @@ class EscritorioProfesional extends Controller
         $hora_medica = HoraMedica::where('id', $request->id_hora_medica)->first();
         $paciente = Paciente::where('id', $hora_medica->id_paciente)->first();
         $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
+
+		$fecha_ultima_atencion = HoraMedica::select('horas_medicas.fecha_consulta','fichas_atenciones.*')
+        ->join('fichas_atenciones','horas_medicas.id_ficha_atencion','fichas_atenciones.id')
+        ->where('horas_medicas.id_paciente', $hora_medica->id_paciente)
+        ->where('fichas_atenciones.finalizada',1)
+        ->where('horas_medicas.id_lugar_atencion', $hora_medica->id_lugar_atencion)
+        ->orderBy('horas_medicas.id','desc')
+        ->first();
+
+        if ($fecha_ultima_atencion) {
+            $paciente->fecha_ultima_atencion = Carbon::parse($fecha_ultima_atencion->fecha_consulta)->toDateString(); // Solo la fecha (YYYY-MM-DD)
+            //$paciente->hora_ultima_atencion = Carbon::parse($fecha_ultima_atencion->created_at)->toTimeString(); // Solo la hora (HH:MM:SS)
+        }
 
         $presupuestos_dentales = PresupuestosDental::where('id_paciente',$hora_medica->id_paciente)->get();
 
@@ -5190,18 +5203,33 @@ class EscritorioProfesional extends Controller
         $cc = array();
         $bcc = array();
         $asunto = 'MED-SDI - Reserva de Hora Confirmada';
-        $body = array(
-            'nombre_paciente'=> mb_strtoupper($paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
-            'fecha'=> $hora_medica->fecha_consulta,
-            'hora'=> $hora_medica->hora_inicio,
-            'profesional_nombre'=> mb_strtoupper($profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos),
-            'profesional_especialidad'=> mb_strtoupper($profesional->Especialidad()->first()->nombre),
-            'profesional_tipo_especialidad'=> ($profesional->TipoEspecialidad()->first()?mb_strtoupper($profesional->TipoEspecialidad()->first()->nombre):''),
-            'profesional_sub_tipo_especialidad'=> $profesional->SubTipoEspecialidad()->first()?mb_strtoupper($profesional->SubTipoEspecialidad()->first()->nombre):'',
-            // 'institucion'=> $nombre_institucion,
-            'lugar_atencion'=> mb_strtoupper($lugar_atencion->nombre),
-            'direccion'=> mb_strtoupper($lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre),
-        );
+        if($profesional)
+        {
+            $body = array(
+                'nombre_paciente'=> mb_strtoupper($paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+                'fecha'=> $hora_medica->fecha_consulta,
+                'hora'=> $hora_medica->hora_inicio,
+                'profesional_nombre'=> mb_strtoupper($profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos),
+                'profesional_especialidad'=> mb_strtoupper($profesional->Especialidad()->first()->nombre),
+                'profesional_tipo_especialidad'=> ($profesional->TipoEspecialidad()->first()?mb_strtoupper($profesional->TipoEspecialidad()->first()->nombre):''),
+                'profesional_sub_tipo_especialidad'=> $profesional->SubTipoEspecialidad()->first()?mb_strtoupper($profesional->SubTipoEspecialidad()->first()->nombre):'',
+                // 'institucion'=> $nombre_institucion,
+                'lugar_atencion'=> mb_strtoupper($lugar_atencion->nombre),
+                'direccion'=> mb_strtoupper($lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre),
+            );
+        }
+        else
+        {
+            $body = array(
+                'nombre_paciente'=> mb_strtoupper($paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+                'fecha'=> $hora_medica->fecha_consulta,
+                'hora'=> $hora_medica->hora_inicio,
+                // 'institucion'=> $nombre_institucion,
+                'lugar_atencion'=> mb_strtoupper($lugar_atencion->nombre),
+                'direccion'=> mb_strtoupper($lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre),
+            );
+        }
+
         $archivo = '';/** pendiente */
         $id_institucion = '';
 
@@ -5590,19 +5618,33 @@ class EscritorioProfesional extends Controller
         $cc = array();
         $bcc = array();
         $asunto = 'MED-SDI - Reserva de Hora Cancelada';
-        $body = array(
-            'nombre_paciente'=> mb_strtoupper($paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
-            'fecha'=> $hora_medica->fecha_evento,
-            'hora'=> $hora_medica->hora_evento,
-            'profesional_nombre'=> mb_strtoupper($profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos),
-            'profesional_especialidad'=> mb_strtoupper($profesional->Especialidad()->first()->nombre),
-            'profesional_tipo_especialidad'=> mb_strtoupper($profesional->TipoEspecialidad()->first()->nombre),
-            'profesional_sub_tipo_especialidad'=> mb_strtoupper($profesional->SubTipoEspecialidad()->first()->nombre),
-            // 'institucion'=> $nombre_institucion,
-            'lugar_atencion'=> mb_strtoupper($lugar_atencion->nombre),
-            'direccion'=> mb_strtoupper($lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre),
+        if(!empty($profesional))
+        {
+            $body = array(
+                'nombre_paciente'=> mb_strtoupper($paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+                'fecha'=> $hora_medica->fecha_evento,
+                'hora'=> $hora_medica->hora_evento,
+                'profesional_nombre'=> mb_strtoupper($profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos),
+                'profesional_especialidad'=> mb_strtoupper($profesional->Especialidad()->first()->nombre),
+                'profesional_tipo_especialidad'=> mb_strtoupper($profesional->TipoEspecialidad()->first()->nombre),
+                'profesional_sub_tipo_especialidad'=> mb_strtoupper($profesional->SubTipoEspecialidad()->first()->nombre),
+                // 'institucion'=> $nombre_institucion,
+                'lugar_atencion'=> mb_strtoupper($lugar_atencion->nombre),
+                'direccion'=> mb_strtoupper($lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre),
+            );
+        }
+        else
+        {
+            $body = array(
+                'nombre_paciente'=> mb_strtoupper($paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+                'fecha'=> $hora_medica->fecha_evento,
+                'hora'=> $hora_medica->hora_evento,
+                // 'institucion'=> $nombre_institucion,
+                'lugar_atencion'=> mb_strtoupper($lugar_atencion->nombre),
+                'direccion'=> mb_strtoupper($lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre),
+            );
+        }
 
-        );
         $archivo = '';/** pendiente */
         $id_institucion = '';
 

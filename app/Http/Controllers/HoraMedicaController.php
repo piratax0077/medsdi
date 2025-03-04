@@ -40,6 +40,10 @@ class HoraMedicaController extends Controller
         {
             $filtro[] = array('id_estado',$request->id_estado);
         }
+        if(!empty($request->id_box))
+        {
+            $filtro[] = array('id_box',$request->id_box);
+        }
 
         // # ESTADO HORA ATENCION
         // 1. RESERVADA

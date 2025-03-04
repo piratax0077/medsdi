@@ -81,7 +81,16 @@ class HomeController extends Controller
                 return redirect()->route('paciente.home');
                 break;
             case 'Profesional':
-                return redirect()->route('profesional.home');
+                $profesional = Profesional::where('id_usuario', $usuario->id)->first();
+                if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
+                {
+                    // $prof_lug_at = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->where()->get();
+                    return redirect()->route('laboratorio.lab_profesional.escritorio_profesional_laboratorio');
+                }
+                else
+                {
+                    return redirect()->route('profesional.home');
+                }
                 break;
             case 'Servicio':
                 return redirect()->route('servicio.home');
@@ -159,7 +168,16 @@ class HomeController extends Controller
                 return redirect()->route('paciente.home');
                 break;
             case 'Profesional':
-                return redirect()->route('profesional.home');
+                $profesional = Profesional::where('id_usuario', $usuario->id)->first();
+                if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
+                {
+                    // $prof_lug_at = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->where()->get();
+                    return redirect()->route('laboratorio.lab_profesional.escritorio_profesional_laboratorio');
+                }
+                else
+                {
+                    return redirect()->route('profesional.home');
+                }
                 break;
 			case 'Servicio':
                 return redirect()->route('servicio.home');

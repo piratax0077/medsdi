@@ -10,7 +10,6 @@ use App\Models\Asistente;
 use App\Models\AsistenteLugarAtencion;
 use App\Models\AsistenteTipo;
 use App\Models\Bancos;
-use App\Models\BoxesCm;
 use App\Models\TipoAreasCm;
 use Illuminate\Http\Request;
 use App\Models\Region;
@@ -21,8 +20,6 @@ use App\Models\ContratoConvenioProfesional;
 use App\Models\Direccion;
 use App\Models\Especialidad;
 use App\Models\EspecialidadesCm;
-use App\Models\ExamenMedico;
-use App\Models\HoraMedica;
 use App\Models\Instituciones;
 use App\Models\Laboratorio;
 use App\Models\LiquidacionRecibo;
@@ -31,13 +28,11 @@ use App\Models\MensajesDifusion;
 use App\Models\MensajesProfesional;
 use App\Models\Mensajes;
 use App\Models\Paciente;
-use App\Models\Prevision;
 use App\Models\ProcedimientosCentro;
 use App\Models\Profesional;
 use App\Models\ProfesionalConvenio;
 use App\Models\ProfesionalesLugaresAtencion;
 use App\Models\ProfesionalInstitucionConvenio;
-use App\Models\RegistroConfirmacionHoraAgenda;
 use App\Models\Remuneraciones;
 use App\Models\Roles;
 use App\Models\Servicios;
@@ -47,8 +42,6 @@ use App\Models\TipoConvenioInstitucion;
 use App\Models\TipoEspecialidad;
 use App\Models\SubTipoEspecialidad;
 use App\Models\Sucursal;
-use App\Models\SucursalHorario;
-use App\Models\TipoBono;
 use App\Models\TipoInstitucion;
 use App\Models\User;
 
@@ -157,76 +150,8 @@ class LaboratorioController extends Controller
     public function perfil_asistente(){
         return view('app.laboratorio.lab_asistente.perfil');
     }
-
-    public function agenda_laboratorio()
-    {
-        $array_id_lugare = array();
-
-        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-        $array_id_lugare = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)
-                                                                                    ->pluck('id_lugar_atencion')
-                                                                                    ->toArray();
-
-        $array_institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare)
-                                        ->where('id_tipo_institucion', 3)
-                                        ->pluck('id')
-                                        ->toArray();
-
-        $institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare)
-                                        ->where('id_tipo_institucion', 3)
-                                        ->get();
-
-        if($institucion)
-        {
-            $sucursales = Sucursal::with('Horario')
-                                ->whereIn('id_institucion', $array_institucion)
-                                ->get();
-
-            foreach ($sucursales as $key => $value) {
-                // $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $value->id_lugar_atencion)->get();
-                $inst_tem = Instituciones::find($value->id_institucion);
-                $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $inst_tem->id_lugar_atencion)->get();
-                $sucursales[$key]->procedimiento = $procedimientos;
-            }
-        }
-        else
-        {
-            $array_id_lug = Sucursal::whereIn('id_lugar_atencion', $array_id_lugare)
-                            ->pluck('id_institucion')
-                            ->toArray();
-
-            $array_institucion = Instituciones::whereIn($array_id_lug)->where('id_tipo_institucion', 3)
-                                                ->pluck('id')
-                                                ->toArray();
-            $institucion = Instituciones::whereIn($array_id_lug)->where('id_tipo_institucion', 3)->get();
-
-
-            $sucursales = Sucursal::with('Horario')
-                                ->whereIn('id_institucion', $array_institucion)
-                                ->get();
-
-            foreach ($sucursales as $key => $value) {
-                // $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $value->id_lugar_atencion)->get();
-                $inst_tem = Instituciones::find($value->id_institucion);
-                $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $inst_tem->id_lugar_atencion)->get();
-                $sucursales[$key]->procedimiento = $procedimientos;
-            }
-        }
-
-        $prevision = Prevision::all();
-        $tipo_bonos = TipoBono::where('estado', 1)->get();
-        $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
-
-        return view('app.laboratorio.agenda_laboratorio')->with([
-            'profesional' => $profesional,
-            'institucion' => $institucion,
-            'sucursales' => $sucursales,
-            'procedimientos' => $procedimientos,
-
-            'prevision' => $prevision,
-            'tipo_bonos' => $tipo_bonos,
-            'reg_confirmacion_hora' => $reg_confirmacion_hora,
-        ]);
+    public function agenda_laboratorio(){
+        return view('app.laboratorio.lab_asistente.agenda_laboratorio');
     }
     public function cotizar_laboratorio(){
         return view('app.laboratorio.lab_asistente.cotizar_laboratorio');
@@ -284,37 +209,7 @@ class LaboratorioController extends Controller
 
     public function registrar_resultados_examenes_laboratorio_subir_examan(Request $request)
     {
-        // return ResultadoExamenController::registrar($request->id_lugar_atencion,
-        // $request->id_institucion,
-        // $request->tipo_examen,
-        // $request->id_paciente,
-        // $request->rut,
-        // $request->nombre,
-        // $request->apellido_paterno,
-        // $request->apellido_materno,
-        // $request->email,
-        // $request->observacion,
-        // '',
-        // $request->lista_examen,
-        //  '',
-        // '',
-        // '');
-        return ResultadoExamenController::registrar($request->id_lugar_atencion,
-                                        $request->id_institucion,
-                                        $request->tipo_examen,
-                                        $request->nombre_examen,
-                                        $request->id_paciente,
-                                        $request->rut,
-                                        $request->nombre,
-                                        $request->apellido_paterno,
-                                        $request->apellido_materno,
-                                        $request->email,
-                                        $request->observacion,
-                                        $request->fecha_regsitro,
-                                        $request->lista_archivo,
-                                        $request->id_profesional,
-                                        $request->profesional_rut,
-                                        $request->profesional_nombre);
+        return ResultadoExamenController::registrar($request->id_lugar_atencion, $request->id_institucion, $request->tipo_examen, $request->id_paciente, $request->rut, $request->nombre, $request->apellido_paterno, $request->apellido_materno, $request->email, $request->observacion, '', $request->lista_examen,  '', '', '');
     }
 
     public function resultados_lab_subir_examan(){
@@ -330,7 +225,6 @@ class LaboratorioController extends Controller
     public function perfil_profesional(){
         return view('app.laboratorio.lab_profesional.perfil');
     }
-
     public function escritorio_profesional_laboratorio(){
         return view('app.laboratorio.lab_profesional.escritorio_profesional_laboratorio');
     }
@@ -1840,7 +1734,7 @@ class LaboratorioController extends Controller
         $filtro_prodce  = array();
         $filtro_prodce[]  = array('id_lugar_atencion', $institucion->id_lugar_atencion);
         $filtro_prodce[]  = array('estado', 1);
-        $procedimientos = ProcedimientosCentro::where($filtro_prodce)->get();
+        $procedimeintos = ProcedimientosCentro::where($filtro_prodce)->get();
 
         $sucursales = Sucursal::where('id_institucion', $institucion->id)
                         ->with('Direccion')
@@ -1873,7 +1767,7 @@ class LaboratorioController extends Controller
             'areas_cm' => $areas_cm,
             'servicios' => $servicios,
             'servicios_internos' => $servicios_internos,
-            'procedimientos' => $procedimientos,
+            'procedimeintos' => $procedimeintos,
             'sucursales' => $sucursales,
 
         ]);
@@ -2365,275 +2259,5 @@ class LaboratorioController extends Controller
     public function dame_profesional(Request $req){
         $profesional = Profesional::where('id', $req->id)->first();
         return ['estado' => 1, 'profesional' => $profesional];
-    }
-
-    public function cargarBox(Request $request)
-    {
-        $datos = array();
-        $valido = 1;
-
-        if( empty($request->id_lugar_atencion) )
-        {
-            $error['id_lugar_atencion'] = 'campo requerido';
-            $valido = 0;
-        }
-
-        if($valido)
-        {
-            $registros = BoxesCm::where('id_lugar_atencion', $request->id_lugar_atencion)->get();
-
-            if($registros)
-            {
-                $datos['estado'] = 1;
-                $datos['msj'] = 'registros';
-                $datos['registros'] = $registros;
-            }
-            else
-            {
-                $datos['estado'] = 0;
-                $datos['msj'] = 'sin registros';
-            }
-        }
-        else
-        {
-            $datos['estado'] = 0;
-            $datos['msj'] = 'campos requeridos';
-            $datos['error'] = $error;
-        }
-
-        return $datos;
-    }
-
-    public function cargarAgendaSucursalBox(Request $request)
-    {
-        $datos = array();
-        $error = array();
-        $valido = 1;
-
-        if($valido)
-        {
-            $sucursal = Sucursal::find($request->id_sucursal);
-            $horario_suc = SucursalHorario::where('id_sucursal', $request->id_sucursal)
-                                            ->where('id_lugar_atencion', $request->id_lugar_atencion)
-                                            ->get();
-
-            if($horario_suc)
-            {
-                $horario_data = array();
-                $horario_agenda = '0,1,2,3,4,5,6';
-                $periodo_agenda = '';
-                $periodo_agenda_temp = '01:00';
-                $hora_inicio_agenda = '';
-                $hora_inicio_agenda_temp = '24:00';
-                $hora_termino_agenda = '';
-                $hora_termino_agenda_temp = 0;
-                foreach ($horario_suc as $hor)
-                {
-                    $ho = explode(',', $hor->dia);
-                    // dd($ho);
-                    foreach ($ho as $h)
-                    {
-                        if ($h == '0')
-                        {
-                            $horario_agenda = str_replace($h, '', $horario_agenda);
-                        }
-                        else
-                        {
-                            $horario_agenda = str_replace(',' . $h, '', $horario_agenda);
-                        }
-                    }
-                    if(strtotime($hor->duracion_consulta) < strtotime($periodo_agenda_temp))
-                        $periodo_agenda_temp = $hor->duracion_consulta;
-
-                    if(strtotime($hor->hora_inicio) < strtotime($hora_inicio_agenda_temp))
-                        $hora_inicio_agenda_temp = $hor->hora_inicio;
-
-                    if(strtotime($hor->hora_termino) > strtotime($hora_termino_agenda_temp))
-                        $hora_termino_agenda_temp = $hor->hora_termino;
-                }
-                $horario_agenda = ltrim($horario_agenda, ',');
-                $periodo_agenda = $periodo_agenda_temp;
-                $hora_inicio_agenda = $hora_inicio_agenda_temp;
-                $hora_termino_agenda = $hora_termino_agenda_temp;
-
-                $horario_data['horario_agenda'] = $horario_agenda;
-                $horario_data['periodo_agenda'] = $periodo_agenda;
-                $horario_data['hora_inicio_agenda'] = $hora_inicio_agenda;
-                $horario_data['hora_termino_agenda'] = $hora_termino_agenda;
-
-
-                $id_institucion = $sucursal->id_institucion;
-
-                $institucion = Instituciones::find($id_institucion);
-
-
-                $procedimientos = ProcedimientosCentro::where('id_lugar_atencion', $institucion->id_lugar_atencion)->get();
-
-                // dd($procedimientos);
-
-                $datos['estado'] = 1;
-                $datos['msj'] = 'horario';
-                $datos['horario'] = $horario_suc;
-                $datos['horario_data'] = $horario_data;
-                $datos['procedimientos'] = $procedimientos;
-                // $datos['tipo_agendas'] = $tipo_agendas;
-                $datos['request'] = $request->all();
-            }
-            else
-            {
-                $datos['estado'] = 0;
-                $datos['msj'] = 'sin horario';
-                $datos['request'] = $request->all();
-            }
-        }
-        else
-        {
-            $datos['estado'] = 0;
-            $datos['msj'] = 'campos requeridos';
-            $datos['error'] = $error;
-        }
-
-        return $datos;
-    }
-    public function agendar_horas(Request $request)
-    {
-
-        $paciente = paciente::where('id', $request->reserva_hora_id)->first();
-        // $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-
-        // var_dump( static::tipoHorario($profesional->id, $request->fecha_consulta) );
-        // die();
-
-        $filtro_tipo_hora_medica = array(1);
-        $texto_alias_examen = '';
-        # TIPO HORA MEDICA
-        switch ($request->tipo_hora_medica) {
-            case 'C': // 1
-                // $filtro_tipo_hora_medica = array(1);
-                $filtro_tipo_hora_medica = array('C');
-                $texto_alias_examen = 'Consulta';
-                break;
-            case 'D': // 2
-                // $filtro_tipo_hora_medica = array(2);
-                $filtro_tipo_hora_medica = array('D');
-                $texto_alias_examen = 'Consulta Dental';
-                break;
-            case 'T': // 3
-                // $filtro_tipo_hora_medica = array(3);
-                $filtro_tipo_hora_medica = array('T');
-                $texto_alias_examen = 'Consulta Telemedicina';
-                break;
-            case 'E': // 4
-                // $filtro_tipo_hora_medica = array(4);
-                $filtro_tipo_hora_medica = array('E');
-                $texto_alias_examen = 'Consulta Examen';
-                break;
-        }
-
-
-        # ESTADOS DE HORA DE ATENCION
-        // 1.  Reservada -> celeste
-        // 2.  CONFIRMADO -> verde
-        // 3.  Rechazada -> Rojo
-        // 4.  Espera -> morado
-        // 5.  Realizando-> rosa
-        // 6.  Realizada -> Azul
-        // 7.  Inasistida -> naranjo
-        // 8.  Llamando -> morado (monitor sala espera)
-        // validar si paciente tiene otra consulta
-        // var_dump($paciente->id);
-        // var_dump($profesional->id);
-        // var_dump($filtro_tipo_hora_medica);
-        // var_dump(\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'));
-        $validar = HoraMedica::where('id_paciente', $paciente->id)
-                                ->whereIn('id_estado',[1,2,4,5,6,8])
-                                ->where('id_box',$request->id_box)
-                                ->whereIn('tipo_hora_medica',$filtro_tipo_hora_medica)
-                                ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
-                                ->first();
-        // var_dump($validar);
-        // exit();
-        if($validar)
-        {
-            return json_encode(array(
-                    'estado' => 'error',
-                    'msj' => 'PACIENTE TIENE HORA AGENDADA PARA ESTE DIA'
-                    ));
-        }
-        else
-        {
-
-            $hora_cunsulta = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
-
-            // DB::enableQueryLog(); // Habilitar el registro de consultas
-
-            $validar = HoraMedica::where('id_paciente', $paciente->id)
-                                ->whereIn('id_estado',[1,2,4,5,6,8])
-                                ->where('fecha_consulta',\Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
-                                ->where(function($query) use ($hora_cunsulta) {
-                                    $query->whereTime('hora_inicio','>=', $hora_cunsulta)
-                                        ->whereTime('hora_termino','<=', $hora_cunsulta);
-                                })
-                                ->first();
-
-            // $queries = DB::getQueryLog();
-            // dd($queries);
-
-            if($validar)
-            {
-                return json_encode(array(
-                        'estado' => 'error',
-                        'msj' => 'PACIENTE TIENE HORA AGENDADA PARA ESTE DÍA EN OTRO LUGAR DE ATENCIÓN'
-                        ));
-            }
-
-        }
-
-        $tiempo_consulta = 15;
-        $procedimiento = '';
-
-        $procedimiento = $request->procedimiento;
-        $proc_bloque = ( !empty($request->proc_bloque)?intval($request->proc_bloque):1 );
-        $tiempo_consulta = intval($proc_bloque) * 15;
-
-        $hora_medica = new HoraMedica();
-
-        $hora_medica->id_paciente = $request->reserva_hora_id;
-        // $hora_medica->id_profesional = '';
-        $hora_medica->id_estado = '1';
-        $hora_medica->fecha_consulta = \Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d');
-
-        $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
-        $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->subSecond()->format('H:i:s');
-
-        $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
-        $hora_medica->alias_examen = $texto_alias_examen;
-
-        $hora_medica->id_box = $request->id_box;
-        $hora_medica->id_procedimiento = $procedimiento;
-
-        $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
-        $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
-
-        if (!$hora_medica->save()) {
-            return 'error';
-        }
-
-        $procedimiento_centro = ProcedimientosCentro::find($procedimiento);
-
-        $details = [
-            'title' => 'Hora medica Reservada',
-            'body' => 'Estimado/a ' . $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos . ',<br>
-                    Junto con saludar, por medio de este correo le informamos que se ha reservado su hora medida <br>' .
-                'Fecha: ' . $hora_medica->fecha_consulta . '<br>' .
-                'Hora : ' . $hora_medica->hora_inicio . '<br>' .
-                'Procedimiento: '.$procedimiento_centro->nombre.'<br><br>' .
-                'Que tenga un excelente día. </br></br>' .
-                'Saludos.',
-        ];
-
-        //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
-
-        return json_encode($hora_medica);
     }
 }

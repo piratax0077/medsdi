@@ -1236,7 +1236,8 @@ class ficha_atencionController extends Controller
             {
                 if($profesional->id_tipo_especialidad == 55)
                 {
-                    $ruta_blade = 'atencion_otros_prof.atencion_fono_octavopar';
+                    // $ruta_blade = 'atencion_otros_prof.atencion_fono_octavopar';
+                    $ruta_blade = 'app.laboratorio.atencion_fono_octavopar';
 
                     $fichaTipo = '';
                     $examen = '';
@@ -10443,6 +10444,12 @@ class ficha_atencionController extends Controller
         {
 
             $profesional = Profesional::find($hora->id_profesional);
+
+            if(!$profesional)
+            {
+                $user = Auth::user()->id;
+                $profesional = Profesional::where('id_usuario', $user)->first();
+            }
 
             $paciente = Paciente::find($hora->id_paciente);
 

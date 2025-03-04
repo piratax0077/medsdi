@@ -72,7 +72,7 @@
                     $('#titulo_tipo_agenda').html('AGENDA DE EXAMEN');
                     break;
                 case 5:
-                    $('#titulo_tipo_agenda').html('AGENDA  MODULAR');
+                    $('#titulo_tipo_agenda').html('AGENDA DE MODULAR');
                     break;
                 default:
                     $('#titulo_tipo_agenda').html('AGENDA DE CONSULTA');
@@ -259,7 +259,6 @@
                                                         $('#input_reserva_hora_email_asistente').val(data.paciente.email);
                                                         $('#datos_consulta_telefono').text(data.paciente.telefono_uno);
                                                         $('#input_reserva_hora_telefono_asistente').val(data.paciente.telefono_uno);
-                                                        $('#datos_consulta_fecha_ultima').text(data.paciente.fecha_ultima_atencion);
 
                                                         if (data.paciente.sexo == 'M') {
                                                             $('#datos_consulta_sexo').text('Masculino');
@@ -285,7 +284,6 @@
                                                         $('#hm_espera_paciente_hora').hide();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
-                                                        $('#hm_revisar_ficha').hide();
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
@@ -343,7 +341,6 @@
                                                         $('#hm_ver_hora').hide();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
-                                                        $('#hm_revisar_ficha').hide();
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
@@ -362,7 +359,6 @@
                                                         $('#hm_espera_paciente_hora').hide();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
-                                                        $('#hm_revisar_ficha').hide();
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
@@ -380,7 +376,6 @@
                                                         $('#hm_espera_paciente_hora').hide();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
-                                                        $('#hm_revisar_ficha').hide();
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
@@ -398,7 +393,6 @@
                                                         $('#hm_espera_paciente_hora').hide();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
-                                                        $('#hm_revisar_ficha').show();
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
@@ -416,7 +410,6 @@
                                                         $('#hm_espera_paciente_hora').hide();
                                                         $('#confirmar_anulacion_hora').hide();
                                                         $('#confirmacion_hora').hide();
-                                                        $('#hm_revisar_ficha').hide();
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
@@ -698,16 +691,17 @@
                     $('#contenedor_tratamientos_presupuesto').show();
                     $('#contenedor_tratamientos_presupuesto').empty();
                     tratamientos.forEach(t => {
-                        if(t.presupuesto == 1){
+
                         const checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
                         const disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked}>
                                 <label class="form-check-label" for="tratamiento${t.id}">N° Pieza ${t.pieza} - ${t.tratamiento}</label>
                             </div>`);
-                        }
+
+
                     });
                     maxilar_superior_gral_diagnosticos.forEach(t => {
                         if(t.presupuesto == 1){
@@ -716,11 +710,10 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
-                        }
+                            }
                     });
                     maxilar_superior_gral_tratamientos.forEach(t => {
                         if(t.presupuesto == 1){
@@ -729,11 +722,10 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
-                        }
+                            }
                     });
                     maxilar_superior_gral_diagnosticos_endo.forEach(t => {
                         if(t.presupuesto == 1){
@@ -742,11 +734,10 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
-                        }
+                            }
                     });
                     maxilar_superior_gral_tratamientos_endo.forEach(t => {
                         if(t.presupuesto == 1){
@@ -755,11 +746,10 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
-                        }
+                            }
                     });
                     maxilar_inferior_gral_diagnosticos.forEach(t => {
                         if(t.presupuesto == 1){
@@ -768,10 +758,9 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
                             }
                     });
                     maxilar_inferior_gral_tratamientos.forEach(t => {
@@ -781,10 +770,9 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
                             }
                     });
                     maxilar_inferior_gral_diagnosticos_endo.forEach(t => {
@@ -794,10 +782,9 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
                             }
                     });
                     maxilar_inferior_gral_tratamientos_endo.forEach(t => {
@@ -807,10 +794,9 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
-                            
                             }
                     });
                     $('#contenedor_tratamientos_presupuesto').append('Se utilizan <span id="cantidad_bloques_atencion">'+bloques+'</span> bloques de atención.');

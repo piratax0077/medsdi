@@ -14,4 +14,11 @@ class Sucursal extends Model
     {
         return $this->hasOne(Direccion::class, 'id', 'id_direccion');
     }
+
+    public function Horario()
+    {
+        return $this->hasOne(SucursalHorario::class, 'id', 'id_sucursal');
+    }
+
+
 }
