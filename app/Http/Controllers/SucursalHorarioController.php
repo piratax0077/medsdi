@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class SucursalHorarioController extends Controller
 {
+
     public function registrar_r( Request $request )
     {
         return $this->registrar( $request->id_institucion, $request->id_sucursal, $request->id_lugar_atencion, $request->hora_inicio, $request->hora_termino, $request->dia, $request->duracion_consulta, $request->tipo_agenda, $request->otro, $request->estado );
@@ -15,7 +16,7 @@ class SucursalHorarioController extends Controller
     {
         $datos = array();
         $error = array();
-        $valido = 0;
+        $valido = 1;
 
         if($valido)
         {
@@ -47,7 +48,7 @@ class SucursalHorarioController extends Controller
         }
         else
         {
-            $datos['estado'] = 1;
+            $datos['estado'] = 0;
             $datos['msj'] = 'campos requeridos';
             $datos['error'] = $error;
         }
@@ -63,7 +64,7 @@ class SucursalHorarioController extends Controller
     {
         $datos = array();
         $error = array();
-        $valido = 0;
+        $valido = 1;
 
         if(empty($id))
         {
@@ -95,7 +96,7 @@ class SucursalHorarioController extends Controller
                     $registro->tipo_agenda = $tipo_agenda;
                 if(!empty($otro))
                     $registro->otro = $otro;
-                if(!empty($estado))
+                if( $estado != '')
                     $registro->estado = $estado;
 
 
@@ -119,7 +120,7 @@ class SucursalHorarioController extends Controller
         }
         else
         {
-            $datos['estado'] = 1;
+            $datos['estado'] = 0;
             $datos['msj'] = 'campos requeridos';
             $datos['error'] = $error;
         }
@@ -136,7 +137,7 @@ class SucursalHorarioController extends Controller
         $datos = array();
         $filtro = array();
         $error = array();
-        $valido = 0;
+        $valido = 1;
 
         if(!empty($id_institucion))
             $filtro[] = array('id_institucion', $id_institucion);
@@ -187,7 +188,7 @@ class SucursalHorarioController extends Controller
         $datos = array();
         $filtro = array();
         $error = array();
-        $valido = 0;
+        $valido = 1;
 
         if(empty($id))
         {
@@ -244,4 +245,5 @@ class SucursalHorarioController extends Controller
 
         return $datos;
     }
+
 }

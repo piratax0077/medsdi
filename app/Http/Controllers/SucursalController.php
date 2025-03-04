@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ciudad;
 use App\Models\Direccion;
 use App\Models\LugarAtencion;
+use App\Models\Region;
 use App\Models\Sucursal;
 use Illuminate\Http\Request;
 
@@ -80,7 +82,7 @@ class SucursalController extends Controller
     {
         $datos = array();
         $error = array();
-        $valido = 0;
+        $valido = 1;
 
         if(empty($id))
         {
@@ -154,7 +156,7 @@ class SucursalController extends Controller
         }
         else
         {
-            $datos['estado'] = 1;
+            $datos['estado'] = 0;
             $datos['msj'] = 'campos requeridos';
             $datos['error'] = $error;
         }
@@ -171,7 +173,7 @@ class SucursalController extends Controller
         $datos = array();
         $filtro = array();
         $error = array();
-        $valido = 0;
+        $valido = 1;
 
         if(!empty($id_institucion))
             $filtro[] = array('id_institucion', $id_institucion);
@@ -186,7 +188,14 @@ class SucursalController extends Controller
         if(!empty($telefono))
             $filtro[] = array('telefono', $telefono);
 
-        $registro = Sucursal::where($filtro)->get();
+        $registro = Sucursal::where($filtro)->with('Direccion')->get();
+        foreach ($registro as $key => $value)
+        {
+            $ciudad_suc = Ciudad::find($value->direccion->id_ciudad);
+            $region_suc = Region::find($ciudad_suc->id_region);
+            $registro[$key]->ciudadObj = $ciudad_suc;
+            $registro[$key]->regionObj = $region_suc;
+        }
 
         if($registro)
         {
@@ -213,7 +222,7 @@ class SucursalController extends Controller
         $datos = array();
         $filtro = array();
         $error = array();
-        $valido = 0;
+        $valido = 1;
 
         if(empty($id))
         {
@@ -238,7 +247,12 @@ class SucursalController extends Controller
             if(!empty($telefono))
                 $filtro[] = array('telefono', $telefono);
 
-            $registro = Sucursal::where($filtro)->get()->first();
+            $registro = Sucursal::where($filtro)->with('Direccion')->get()->first();
+
+            $ciudad_suc = Ciudad::find($registro->direccion->id_ciudad);
+            $region_suc = Region::find($ciudad_suc->id_region);
+            $registro->ciudadObj = $ciudad_suc;
+            $registro->regionObj = $region_suc;
 
             if($registro)
             {

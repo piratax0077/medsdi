@@ -47,11 +47,13 @@
                             <tr>
                                 <td style="background-color: #f2f2f2; padding: 0px 11px 0px 0px; margin-bottom: 20px;" align="center">
                                     <p style="font-family: Helvetica, Arial, sans-serif; font-size: 18px; line-height: 25px; text-align: left; color: #424242; margin-left: 20px;">
-                                        <b>Profesional:</b> {{ $detalle['body']['profesional_nombre'] }}<br>
-                                        <b>Profesión:</b> {{ $detalle['body']['profesional_especialidad'] }} <br>
-                                        <b>Especialidad:</b> {{ $detalle['body']['profesional_tipo_especialidad'] }} <br>
-                                        @if(isset($detalle['body']['profesional_sub_tipo_especialidad']))
-                                        <b>Tipo Especialidad:</b> {{ $detalle['body']['profesional_sub_tipo_especialidad'] }}<br>
+                                        @if (isset($detalle['body']['profesional_nombre']))
+                                            <b>Profesional:</b> {{ $detalle['body']['profesional_nombre'] }}<br>
+                                            <b>Profesión:</b> {{ $detalle['body']['profesional_especialidad'] }} <br>
+                                            <b>Especialidad:</b> {{ $detalle['body']['profesional_tipo_especialidad'] }} <br>
+                                            @if(isset($detalle['body']['profesional_sub_tipo_especialidad']))
+                                                <b>Tipo Especialidad:</b> {{ $detalle['body']['profesional_sub_tipo_especialidad'] }}<br>
+                                            @endif
                                         @endif
                                         <b>Lugar de Atención:</b> {{ $detalle['body']['lugar_atencion'] }}<br>
                                         <b>Dirección:</b> {{ $detalle['body']['direccion'] }}

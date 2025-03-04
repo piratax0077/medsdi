@@ -2257,7 +2257,7 @@ class FichaAtencionOtrosProfController extends Controller
                     if($request->cerrarsession == 0 || $request->cerrarsession =='')
                     {
                         /** redireccion Redirect funciona correcto */
-                        return \Redirect::route('profesional.mi_agenda','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
+                        return \Redirect::route('laboratorio.agenda_laboratorio','lugares_atencion='.$request->id_lugar_atencion)->with($tipo_mensaje, $mensaje);
                     }
                     else if($request->cerrarsession == 1)
                     {
