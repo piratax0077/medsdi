@@ -1453,7 +1453,7 @@ class DentalController extends Controller
             if ($request->{'caraD'} == '1') {
                 $caras .= 'D' . '|';
             }
-            if ($request->{'carav'} == '1') {
+            if ($request->{'caraV'} == '1') {
                 $caras .= 'V' . '|';
             }
             if ($request->{'caraP'} == '1') {

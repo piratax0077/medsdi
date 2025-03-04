@@ -1,4 +1,3 @@
-
 /**======================================================================
 =========================================================================
 Template Name: Able pro Bootstrap Admin Template
@@ -2394,11 +2393,13 @@ select.form-control:focus::-ms-value {
 }
 
 .input-dental {
-    height: calc(0.9em + 0.7rem + 2px)!important;
+    height: calc(1rem + 0.7rem + 2px)!important;
+    border: 1px solid #ced4da!important;
+    border-radius: 3px!important;
 }
 .form-control-xs {
-    height: calc(0.9em + 0.7rem + 2px);
-    padding: 0.1rem 0.5rem 0.1rem 0.5rem;
+    height: calc(1rem + 0.8rem + 2px);
+    padding: 0.4rem 0.5rem 0.1rem 0.5rem;
     font-size: 0.9rem;
     line-height: 1.5;
     border-radius: 3px;
@@ -35311,4 +35312,189 @@ margin-bottom: 0px;
     background-image: none;
 }
 
+/**GRUPOS DE DIENTES ODONTOGRAMA**/
+.nav-tabs-aten {
+    border-bottom: none;
+}
 
+/**AZUL**/
+    .nl-blue.active {
+    background-color: #d0e0ff!important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 1px 3px!important;
+    color: #1a49a3!important;
+    border: 1px solid #a2c0f0;
+    transition: 0.2s!important;
+}
+
+.nl-blue {
+    background-color: #f3f7fb !important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #738192 !important;
+    padding: 1px 3px!important;
+    margin-right: 3px!important;
+    border-radius: 3px;
+    margin-bottom: 2px!important;
+    margin-top: 2px!important;
+    border: 1px solid #e2e5e8;
+    transition: 0.2s!important;
+}
+
+.nl-blue:hover { 
+    background-color: #d0e0ff!important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 1px 3px!important;
+    color: #1a49a3!important;
+    margin-bottom: 2px!important;
+    margin-top: 2px!important;
+    border: 1px solid #a2c0f0;
+    transition: 0.2s!important;
+}
+
+
+/**PURPURA**/
+.nl-purple.active {
+    background-color: #986cac!important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 1px 3px!important;
+    color: #fff!important;
+    margin-bottom: 2px!important;
+    margin-top: 2px!important;
+transition: 0.2s!important;
+}
+
+.nl-purple {
+background-color: #f1eaf2!important;
+font-size: 0.85rem;
+font-weight: 600;
+color: #986cac!important;
+padding: 1px 3px!important;
+margin-right: 3px!important;
+border-radius: 3px;
+margin-bottom: 2px!important;
+margin-top: 2px!important;
+transition: 0.2s!important;
+}
+
+.nl-purple:hover { 
+background-color: #986cac!important;
+font-size: 0.85rem;
+font-weight: 600;
+padding: 1px 3px!important;
+color: #fff!important;
+margin-bottom: 2px!important;
+margin-top: 2px!important;
+transition: 0.2s!important;
+}
+
+/**VERDE**/
+.nl-verde.active {
+    background-color: #319e6a!important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 1px 3px!important;
+    color: #fff!important;
+    margin-bottom: 2px!important;
+    margin-top: 2px!important;
+    transition: 0.2s!important;
+}
+
+.nl-verde {
+background-color: #e9f6ef!important;
+font-size: 0.85rem;
+font-weight: 600;
+color: #319e6a!important;
+padding: 1px 3px!important;
+margin-right: 3px!important;
+border-radius: 3px;
+margin-bottom: 2px!important;
+margin-top: 2px!important;
+transition: 0.2s!important;
+}
+
+.nl-verde:hover { 
+background-color: #319e6a!important;
+font-size: 0.85rem;
+font-weight: 600;
+padding: 1px 3px!important;
+color: #fff!important;
+margin-bottom: 2px!important;
+margin-top: 2px!important;
+transition: 0.2s!important;
+}
+
+/**NARANJO**/
+.nl-naranjo.active {
+    background-color: #e68a48!important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 1px 3px!important;
+    color: #fff!important;
+    margin-bottom: 2px!important;
+    margin-top: 2px!important;
+    transition: 0.2s!important;
+}
+
+.nl-naranjo {
+background-color: #f8ece0!important;
+font-size: 0.85rem;
+font-weight: 600;
+color: #e68a48!important;
+padding: 1px 3px!important;
+margin-right: 3px!important;
+border-radius: 3px;
+margin-bottom: 2px!important;
+margin-top: 2px!important;
+transition: 0.2s!important;
+}
+
+.nl-naranjo:hover { 
+background-color: #e68a48!important;
+font-size: 0.85rem;
+font-weight: 600;
+padding: 1px 3px!important;
+color: #fff!important;
+margin-bottom: 2px!important;
+margin-top: 2px!important;
+transition: 0.2s!important;
+}
+
+/**INFO**/
+.nl-info.active {
+    background-color: #34a7b2!important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 1px 3px!important;
+    color: #fff!important;
+    margin-bottom: 2px!important;
+    margin-top: 2px!important;
+    transition: 0.2s!important;
+}
+
+.nl-info {
+background-color: #e9f6f5!important;
+font-size: 0.85rem;
+font-weight: 600;
+color: #34a7b2!important;
+padding: 1px 3px!important;
+margin-right: 3px!important;
+border-radius: 3px;
+margin-bottom: 2px!important;
+margin-top: 2px!important;
+transition: 0.2s!important;
+}
+
+.nl-info:hover { 
+background-color: #34a7b2!important;
+font-size: 0.85rem;
+font-weight: 600;
+padding: 1px 3px!important;
+color: #fff!important;
+margin-bottom: 2px!important;
+margin-top: 2px!important;
+transition: 0.2s!important;
+}

@@ -126,17 +126,9 @@
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Tipo de Procedimiento</label>
                                                                                                                 <select name="tpo_proc_imp{{ $counter }}" data-titulo="tpo_proc_imp" data-seccion="Implante"  id="tpo_proc_imp{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tpo_proc_imp{{ $counter }}','div_tpo_proc_imp{{ $counter }}','obs_tpo_proc_impo{{ $counter }}',10);">
-                                                                                                                    <option @if($e->id_tipo_procedimiento == 1) selected @endif value="1">Anclaje de precisión s/implantes</option>
-                                                                                                                    <option @if($e->id_tipo_procedimiento == 2) selected @endif value="2">Anclaje de presición sobre Implante</option>
-                                                                                                                    <option @if($e->id_tipo_procedimiento == 3) selected @endif value="3">Barra para prótesis sobre Implante</option>
-                                                                                                                    <option @if($e->id_tipo_procedimiento == 4) selected @endif value="4">Cirugía Periimplantaria de manejo de tejidos blandos, por sitio</option>
-                                                                                                                    <option @if($e->id_tipo_procedimiento == 5) selected @endif value="5">Cirugía Periimplantaria de tejidos blandos (no incluye insumos)</option>
-                                                                                                                    <option @if($e->id_tipo_procedimiento == 6) selected @endif value="6">Conexión de Implante (No incluye valor aditamientos)</option>
-                                                                                                                    <option @if($e->id_tipo_procedimiento == 7) selected @endif value="7">Corona de cerámica s/metal sobre implante cementada</option>
-                                                                                                                    <option @if($e->id_tipo_procedimiento == 8) selected @endif value="8">Cirugía Periimplantaria de tejidos blandos (no incluye insumos)</option>
-                                                                                                                    <option @if($e->id_tipo_procedimiento == 9) selected @endif value="9"> Corona provisional s/implante</option>
-                                                                                                                    <option @if($e->id_tipo_procedimiento == 10) selected @endif value="10">  Corona Temporal Sobre Implantes</option>
-                                                                                                                    <option @if($e->id_tipo_procedimiento == 11) selected @endif value="11">  Otro proc Implantes</option>
+                                                                                                                    @foreach ($tratamientos_implantologia as $t)
+                                                                                                                        <option value="{{ $t->id }}" @if($e->id_tipo_procedimiento == $t->id) selected @endif>{{ $t->descripcion }}</option>
+                                                                                                                    @endforeach
                                                                                                                 </select>
                                                                                                             </div>
                                                                                                             <div class="form-group" id="div_tpo_proc_imp{{ $counter }}" style="display:none;">
@@ -264,9 +256,9 @@
                                                                                                                 <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_suturas{{ $counter }}" id="obs_suturas{{ $counter }}">{{ $e->suturas }}</textarea>
                                                                                                             </div>
                                                                                                         </div>
-                                                                                                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" @if($e->id_suturas !== 3) style="display:none;" @endif>
+                                                                                                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" >
                                                                                                             <div class="form-group">
-                                                                                                                <label class="floating-label-activo-sm">Grosor Nylon</label>
+                                                                                                                <label class="floating-label-activo-sm">Grosor</label>
                                                                                                                 <input type="text" name="grosor_nylon{{ $counter }}" id="grosor_nylon{{ $counter }}" class="form-control form-control-sm" value="{{ $e->grosor_nylon }}">
                                                                                                             </div>
                                                                                                             <div class="form-group" id="div_grosor_nylon{{ $counter }}" style="display:none;">
@@ -2450,108 +2442,7 @@
                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                     <div class="row">
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <ul class="nav nav-tabs-aten nav-fill" id="gral_od_adulto" role="tablist">
-
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset active" id="eval_18_tab" data-toggle="tab" href="#eval_18" role="tab" aria-controls="eval_18" aria-selected="true">1.8</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_17_tab" data-toggle="tab" href="#eval_17" role="tab" aria-controls="eval_17" aria-selected="false">1.7</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_16_tab" data-toggle="tab" href="#eval_16" role="tab" aria-controls="eval_16" aria-selected="false">1.6</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_15_tab" data-toggle="tab" href="#eval_15" role="tab" aria-controls="eval_15" aria-selected="false">1.5</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_14_tab" data-toggle="tab" href="#eval_14" role="tab" aria-controls="eval_14" aria-selected="false">1.4</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_13_tab" data-toggle="tab" href="#eval_13" role="tab" aria-controls="eval_13" aria-selected="false">1.3</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_12_tab" data-toggle="tab" href="#eval_12" role="tab" aria-controls="eval_12" aria-selected="false">1.2</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_11_tab" data-toggle="tab" href="#eval_11" role="tab" aria-controls="eval_11" aria-selected="false">1.1</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_21_tab" data-toggle="tab" href="#eval_21" role="tab" aria-controls="eval_21" aria-selected="true">2.1</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_22_tab" data-toggle="tab" href="#eval_22" role="tab" aria-controls="eval_22" aria-selected="false">2.2</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_23_tab" data-toggle="tab" href="#eval_23" role="tab" aria-controls="eval_23" aria-selected="false">2.3</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_24_tab" data-toggle="tab" href="#eval_24" role="tab" aria-controls="eval_24" aria-selected="false">2.4</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_25_tab" data-toggle="tab" href="#eval_25" role="tab" aria-controls="eval_25" aria-selected="false">2.5</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_26_tab" data-toggle="tab" href="#eval_26" role="tab" aria-controls="eval_26" aria-selected="false">2.6</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_27_tab" data-toggle="tab" href="#eval_27" role="tab" aria-controls="eval_27" aria-selected="false">2.7</a>
-                                                                </li>
-                                                                <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="eval_28_tab" data-toggle="tab" href="#eval_28" role="tab" aria-controls="eval_28" aria-selected="false">2.8</a>
-                                                                </li>
-
-
-
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_48_tab" data-toggle="tab" href="#eval_48" role="tab" aria-controls="eval_48" aria-selected="true">4.8</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_47_tab" data-toggle="tab" href="#eval_47" role="tab" aria-controls="eval_47" aria-selected="false">4.7</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_46_tab" data-toggle="tab" href="#eval_46" role="tab" aria-controls="eval_46" aria-selected="false">4.6</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_45_tab" data-toggle="tab" href="#eval_45" role="tab" aria-controls="eval_45" aria-selected="false">4.5</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_44_tab" data-toggle="tab" href="#eval_44" role="tab" aria-controls="eval_44" aria-selected="false">4.4</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_43_tab" data-toggle="tab" href="#eval_43" role="tab" aria-controls="eval_43" aria-selected="false">4.3</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_42_tab" data-toggle="tab" href="#eval_42" role="tab" aria-controls="eval_42" aria-selected="false">4.2</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_41_tab" data-toggle="tab" href="#eval_41" role="tab" aria-controls="eval_41" aria-selected="false">4.1</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_31_tab" data-toggle="tab" href="#eval_31" role="tab" aria-controls="eval_31" aria-selected="true">3.1</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_32_tab" data-toggle="tab" href="#eval_32" role="tab" aria-controls="eval_32" aria-selected="false">3.2</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_33_tab" data-toggle="tab" href="#eval_33" role="tab" aria-controls="eval_33" aria-selected="false">3.3</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_34_tab" data-toggle="tab" href="#eval_34" role="tab" aria-controls="eval_34" aria-selected="false">3.4</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_35_tab" data-toggle="tab" href="#eval_35" role="tab" aria-controls="eval_35" aria-selected="false">3.5</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_36_tab" data-toggle="tab" href="#eval_36" role="tab" aria-controls="eval_36" aria-selected="false">3.6</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_37_tab" data-toggle="tab" href="#eval_37" role="tab" aria-controls="eval_37" aria-selected="false">3.7</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="eval_38_tab" data-toggle="tab" href="#eval_38" role="tab" aria-controls="eval_38" aria-selected="false">3.8</a>
-                                                            </li>
-                                                            </ul>
+                                                            @include('atencion_odontologica.generales.periodontograma_general')
                                                         </div>
                                                     </div>
                                                    <!-- <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -6029,6 +5920,25 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                 $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                 $('#subtotal_clinico').val(formatoMoneda(total_general));
                 $('#total_clinico').val(formatoMoneda(total_general));
+                let table = $('#presup_estado_pago').DataTable();
+
+                    // Limpiar la tabla antes de agregar nuevas filas
+                    table.clear().draw();
+
+                    // Recorrer el odontograma y agregar nuevas filas
+                    odontograma.forEach(function(odonto) {
+                        // Agregar una nueva fila a la tabla
+                        table.row.add([
+                            odonto.fecha,
+                            odonto.diagnostico,
+                            odonto.caras,
+                            odonto.pieza,
+                            odonto.tratamiento,
+                            odonto.valor,
+                            '', // Columna vacía
+                            `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i>Pagar</button>`
+                        ]).draw(false);
+                    });
                 limpiar_formulario_cargar_presupuesto_g();
             }else{
                 swal({
@@ -6135,6 +6045,31 @@ function confirmar_eliminar_pieza_dental_tto_impl(id){
             if(resp.mensaje == 'OK'){
                 $('#contenedor_tto_implantologia').empty();
                 $('#contenedor_tto_implantologia').append(resp.v);
+                // Verificar si existen exámenes en la respuesta
+                if (resp.examenes && resp.examenes.length > 0) {
+                        let detalleCirugia = resp.examenes.map(examen =>
+                            `La pieza ${examen.numero_pieza} se ha realizado ${examen.tipo_procedimiento} ` +
+                            `usando ${examen.anestesia} con ${examen.numero_tubos} tubos, ` +
+                            `con la técnica ${examen.tecnica_anestesia}`
+                        ).join("\n");
+
+                        $('#det_cir').val(detalleCirugia);
+
+                         // Poblar el select2 con las piezas únicas
+                        let piezasUnicas = [...new Set(resp.examenes.map(examen => examen.numero_pieza))];
+
+                        let selectPieza = $('#prot_pieza_imp');
+                        selectPieza.empty(); // Limpiamos el select antes de agregar nuevas opciones
+
+                        piezasUnicas.forEach(pieza => {
+                            let option = new Option(pieza, pieza, false, false); // Solo el número
+                            selectPieza.append(option);
+                        });
+
+                        selectPieza.trigger('change'); // Refrescar select2
+                    } else {
+                        $('#det_cir').val('No hay detalles de cirugía disponibles.');
+                    }
             }
         },
         error: function(error){
@@ -6818,6 +6753,26 @@ function agregar_examenes_ficha() {
                     $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                     $('#subtotal_clinico').val(formatoMoneda(total_general));
                     $('#total_clinico').val(formatoMoneda(total_general));
+
+                    let table = $('#presup_estado_pago').DataTable();
+
+                    // Limpiar la tabla antes de agregar nuevas filas
+                    table.clear().draw();
+
+                    // Recorrer el odontograma y agregar nuevas filas
+                    odontograma.forEach(function(odonto) {
+                        // Agregar una nueva fila a la tabla
+                        table.row.add([
+                            odonto.fecha,
+                            odonto.diagnostico,
+                            odonto.caras,
+                            odonto.pieza,
+                            odonto.tratamiento,
+                            odonto.valor,
+                            '', // Columna vacía
+                            `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i>Pagar</button>`
+                        ]).draw(false);
+                    });
             }else{
                 swal({
                     icon:'error',

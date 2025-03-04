@@ -11,17 +11,9 @@
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Tipo de Procedimiento</label>
                             <select name="tpo_proc_imp{{ $counter }}" data-titulo="tpo_proc_imp" data-seccion="Implante"  id="tpo_proc_imp{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tpo_proc_imp{{ $counter }}','div_tpo_proc_imp{{ $counter }}','obs_tpo_proc_impo{{ $counter }}',10);">
-                                <option selected  value="1">Anclaje de precisión s/implantes</option>
-                                <option value="2">Anclaje de presición sobre Implante</option>
-                                <option value="3">Barra para prótesis sobre Implante</option>
-                                <option value="4">Cirugía Periimplantaria de manejo de tejidos blandos, por sitio</option>
-                                <option value="5">Cirugía Periimplantaria de tejidos blandos (no incluye insumos)</option>
-                                <option value="6">Conexión de Implante (No incluye valor aditamientos)</option>
-                                <option value="7">Corona de cerámica s/metal sobre implante cementada</option>
-                                <option value="8">Cirugía Periimplantaria de tejidos blandos (no incluye insumos)</option>
-                                <option value="9"> Corona provisional s/implante</option>
-                                <option value="10">  Corona Temporal Sobre Implantes</option>
-                                <option value="10">  Otro proc Implantes</option>
+                                @foreach ($tratamientos_implantologia as $t)
+                                    <option value="{{ $t->id }}">{{ $t->descripcion }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group" id="div_tpo_proc_imp{{ $counter }}" style="display:none;">
@@ -114,12 +106,9 @@
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Material de injerto óseo</label>
                             <select name="mat_inj_oseo_impl{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="mat_inj_oseo_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mat_inj_oseo{{ $counter }}','div_mat_inj_oseo{{ $counter }}','obs_mat_inj_oseo{{ $counter }}',6);">
-                                <option value="1">Sin Injerto Óseo</option>
-                                <option value="2">autoinjerto</option>
-                                <option value="3">aloinjerto</option>
-                                <option value="4">xenoinjerto</option>
-                                <option value="5">aloplástico</option>
-                                <option value="6">Otro (describir)</option>
+                                @foreach ($materiales_implantologia as $m)
+                                    <option value="{{ $m->id }}">{{ $m->descripcion }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group" id="div_mat_inj_oseo{{ $counter }}" style="display:none;">
@@ -136,7 +125,7 @@
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Suturas</label>
-                            <select name="suturas_impl{{ $counter }}" data-titulo="suturas_impl{{ $counter }}" data-seccion="suturas"  id="suturas_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('suturas_impl{{ $counter }}','div_suturas{{ $counter }}','obs_suturas{{ $counter }}',5); evaluar_para_carga_nylon('suturas_impl{{ $counter }}','grosor_nylon{{ $counter }}',3);">
+                            <select name="suturas_impl{{ $counter }}" data-titulo="suturas_impl{{ $counter }}" data-seccion="suturas"  id="suturas_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('suturas_impl{{ $counter }}','div_suturas{{ $counter }}','obs_suturas{{ $counter }}',5);">
                                 <option selected  value="1">Catgut</option>
                                 <option value="2">Seda</option>
                                 <option value="3">Nylon</option>
@@ -149,9 +138,9 @@
                             <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_suturas{{ $counter }}" id="obs_suturas{{ $counter }}"></textarea>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" id="grosor_nylon{{ $counter }}" style="display: none">
+                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" id="grosor_nylon{{ $counter }}" >
                         <div class="form-group">
-                            <label class="floating-label-activo-sm">Grosor Nylon</label>
+                            <label class="floating-label-activo-sm">Grosor</label>
                             <input type="text" name="grosor_nylon_input{{ $counter }}" id="grosor_nylon_input{{ $counter }}" class="form-control form-control-sm">
                         </div>
                     </div>
@@ -225,12 +214,9 @@
 
         let suturas_tto = $('#suturas_impl'+counter).val();
         let suturas_tto_text = $('#suturas_impl'+counter+' option:selected').text();
-        let grosor_nylon = '';
+        let grosor_nylon = $('#grosor_nylon_input'+counter).val();
         if(suturas_tto == 5){
             suturas_tto_text = $('#obs_suturas'+counter).val();
-        }
-        if(suturas_tto == 3){
-            grosor_nylon = $('#grosor_nylon_input'+counter).val();
         }
 
         let tiempo_quirurgico_tto = $('#tiempo_quir_impl'+counter).val();
@@ -248,9 +234,9 @@
             mensaje += '<li>Campo requerido N° Tubos </li>';
         }
 
-        if(suturas_tto == 3 && grosor_nylon == ''){
+        if(grosor_nylon == ''){
             valido = 0;
-            mensaje += '<li>Campo requerido Grosor Nylon </li>';
+            mensaje += '<li>Campo requerido Grosor </li>';
         }
 
         if(valido == 0){
@@ -309,6 +295,30 @@
                     $('#contenedor_tto_implantologia').empty();
                     $('#contenedor_tto_implantologia').append(resp.v);
                     $('#pieza_dental_tto_impl').empty();
+                    // Verificar si existen exámenes en la respuesta
+                    if (resp.examenes && resp.examenes.length > 0) {
+                        let detalleCirugia = resp.examenes.map(examen =>
+                            `La pieza ${examen.numero_pieza} se ha realizado ${examen.tipo_procedimiento} ` +
+                            `usando ${examen.anestesia} con ${examen.numero_tubos} tubos, ` +
+                            `con la técnica ${examen.tecnica_anestesia}`
+                        ).join("\n");
+
+                        $('#det_cir').val(detalleCirugia);
+                        // Poblar el select2 con las piezas únicas
+                        let piezasUnicas = [...new Set(resp.examenes.map(examen => examen.numero_pieza))];
+
+                        let selectPieza = $('#prot_pieza_imp');
+                        selectPieza.empty(); // Limpiamos el select antes de agregar nuevas opciones
+
+                        piezasUnicas.forEach(pieza => {
+                            let option = new Option(pieza, pieza, false, false); // Solo el número
+                            selectPieza.append(option);
+                        });
+
+                        selectPieza.trigger('change'); // Refrescar select2
+                    } else {
+                        $('#det_cir').val('No hay detalles de cirugía disponibles.');
+                    }
                 }
             },
             error: function(error){

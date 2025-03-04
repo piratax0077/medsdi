@@ -133,7 +133,9 @@ use App\Models\OftalmoExamenVisionColores;
 use App\Models\OrdenTrabajoMenor;
 use App\Models\RecomendacionDetalle;
 use App\Models\VideoConsultaInfo;
+use App\Models\TratamientosImplantologia;
 use App\Models\TiposReceta;
+use App\Models\MaterialesImplantologia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -1872,6 +1874,10 @@ class ficha_atencionController extends Controller
 
         // return $presupuesto_dental;
 
+        $tratamientos_implantologia = TratamientosImplantologia::orderBy('descripcion','asc')->get();
+
+        $materiales_implantologia = MaterialesImplantologia::orderBy('descripcion','asc')->get();
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1890,6 +1896,8 @@ class ficha_atencionController extends Controller
                 'correlativo_otm' => $correlativo_otm,
                 'proveedores' => $proveedores,
                 'bodegas' => $bodegas,
+                'tratamientos_implantologia' => $tratamientos_implantologia,
+                'materiales_implantologia' => $materiales_implantologia,
                 'examenes_dental' => $examenes_dental,
                 'examenes_pre_implante' => $examenes_preimplante,
                 'examenes_period' => $examenes_period,

@@ -60,6 +60,7 @@ use App\Models\MensajesProfesional;
 use App\Models\MensajesDifusion;
 use App\Models\Mensajes;
 use App\Models\NotificacionConfirmacion;
+use App\Models\MaterialesImplantologia;
 use App\Models\OdontogramaPaciente;
 use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
@@ -87,6 +88,7 @@ use App\Models\ServiciosInternosSalas;
 use App\Models\SolicitudPabellonQuirurgico;
 use App\Models\TipoAntecedenteAcademico;
 use App\Models\TipoEspecialidad;
+use App\Models\TratamientosImplantologia;
 use App\Models\SubTipoEspecialidad;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -1340,7 +1342,13 @@ class EscritorioProfesional extends Controller
 
             if($tto->save()){
                 $examenes = $this->dameProcedimientosImplantes($request->id_paciente, $profesional->id);
-                $v = view('atencion_odontologica.include.procedimientos_implantes_todos',['examenes' => $examenes])->render();
+                $tratamientos_implantologia = TratamientosImplantologia::orderBy('descripcion','asc')->get();
+                $materiales_implantologia = MaterialesImplantologia::orderBy('descripcion','asc')->get();
+                $v = view('atencion_odontologica.include.procedimientos_implantes_todos',[
+                    'examenes' => $examenes,
+                    'tratamientos_implantologia' => $tratamientos_implantologia,
+                    'materiales_implantologia' => $materiales_implantologia,
+                    ])->render();
                 return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
             }
         } catch (\Exception $e) {
@@ -1604,7 +1612,13 @@ class EscritorioProfesional extends Controller
         $random = rand(20,30);
         $idCounter = $req->counter;
         $responsable = User::find(Auth::user()->id);
-        $v = view('atencion_odontologica.include.piezas_dental_tto_impl',['counter' => $random])->render();
+        $tratamientos_implantologia = TratamientosImplantologia::orderBy('descripcion','asc')->get();
+        $materiales_implantologia = MaterialesImplantologia::orderBy('descripcion','asc')->get();
+        $v = view('atencion_odontologica.include.piezas_dental_tto_impl',[
+            'counter' => $random,
+            'tratamientos_implantologia' => $tratamientos_implantologia,
+            'materiales_implantologia' => $materiales_implantologia,
+            ])->render();
         return ['mensaje' => 'OK','v' => $v];
     }
 
@@ -2188,7 +2202,13 @@ class EscritorioProfesional extends Controller
         $id_profesional = $procedimiento->id_profesional;
         if($procedimiento->delete()){
             $examenes = $this->dameProcedimientosImplantes($id_paciente, $id_profesional);
-            $v = view('atencion_odontologica.include.procedimientos_implantes_todos',['examenes' => $examenes])->render();
+            $tratamientos_implantologia = TratamientosImplantologia::orderBy('descripcion','asc')->get();
+            $materiales_implantologia = MaterialesImplantologia::orderBy('descripcion','asc')->get();
+            $v = view('atencion_odontologica.include.procedimientos_implantes_todos',[
+                'examenes' => $examenes,
+                'tratamientos_implantologia' => $tratamientos_implantologia,
+                'materiales_implantologia' => $materiales_implantologia,
+                ])->render();
                 return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
         }
     }
