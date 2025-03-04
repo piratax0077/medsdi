@@ -12,8 +12,9 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <ul class="nav nav-tabs-aten nav-fill mb-10" id="orl_adulto" role="tablist">
+
                                     <li class="nav-item">
-                                        <a class="nav-link-aten text-reset active" id="examen_general_tab" data-toggle="tab" href="#examen_general" role="tab" aria-controls="examen_general" aria-selected="true">Dolor</a>
+                                        <a class="nav-link-aten text-reset active" id="endo_boca_gral-tab" data-toggle="tab" href="#endo_boca_gral" role="tab" aria-controls="endo_boca_gral" aria-selected="true">Examen Boca General</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link-aten text-reset" id="ex_oral-tab" data-toggle="tab" href="#ex_oral" role="tab" aria-controls="ex_oral" aria-selected="true">Examen Oral</a>
@@ -22,7 +23,7 @@
                                         <a class="nav-link-aten text-reset" id="endo_pieza-tab" data-toggle="tab" href="#endo_pieza" role="tab" aria-controls="orl_flaringe" aria-selected="true">Examen Por Pieza</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link-aten text-reset" id="endo_boca_gral-tab" data-toggle="tab" href="#endo_boca_gral" role="tab" aria-controls="endo_boca_gral" aria-selected="true">Examen Boca General</a>
+                                        <a class="nav-link-aten text-reset" id="examen_general_tab" data-toggle="tab" href="#examen_general" role="tab" aria-controls="examen_general" aria-selected="true">Dolor</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link-aten text-reset" id="plan_endo-tab" data-toggle="tab" href="#plan_endo" role="tab" aria-controls="cuello" aria-selected="true">Planificación de tratamiento</a>
@@ -1043,3 +1044,26 @@
         </div>
     </div>
 </div>
+
+<script>
+
+     function mostrar_nueva_pieza_dental(counter){
+            let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental') }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    counter: counter,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(resp) {
+                    console.log(resp);
+                    $('#nueva_pieza_dental_odontodolor').empty();
+                    $('#nueva_pieza_dental_odontodolor').append(resp.v);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+</script>

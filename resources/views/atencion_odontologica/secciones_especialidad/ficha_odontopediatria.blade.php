@@ -1099,9 +1099,6 @@
                                 </div>
                             </div>
 
-                            <!--FORMULARIO / SIGNOS VITALES Y OTROS-->
-                            @include('general.secciones_ficha.signos_vitales')
-
 
                             <!--CRONICOS / GES / CONFIDENCIAL -->
                             @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')

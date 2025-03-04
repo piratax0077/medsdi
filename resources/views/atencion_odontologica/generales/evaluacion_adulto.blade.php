@@ -1708,6 +1708,8 @@
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                     $('#odon_adults').empty();
                     $('#odon_adults').append(response.odontograma_paciente_vista);
+                    $('#odonto_adulto').empty();
+                    $('#odonto_adulto').append(response.odontograma_paciente_vista);
                 }
             }
         })
@@ -1849,6 +1851,8 @@
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                     $('#odon_adults').empty();
                     $('#odon_adults').append(response.odontograma_paciente_vista);
+                    $('#odonto_adulto').empty();
+                    $('#odonto_adulto').append(response.odontograma_paciente_vista);
                 }
             }
         });
@@ -1991,6 +1995,8 @@
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                     $('#odon_adults').empty();
                     $('#odon_adults').append(response.odontograma_paciente_vista);
+                    $('#odonto_adulto').empty();
+                    $('#odonto_adulto').append(response.odontograma_paciente_vista);
                 }
             }
         });
@@ -2133,6 +2139,8 @@
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                     $('#odon_adults').empty();
                     $('#odon_adults').append(response.odontograma_paciente_vista);
+                    $('#odonto_adulto').empty();
+                    $('#odonto_adulto').append(response.odontograma_paciente_vista);
                 }
             }
         });
@@ -2275,6 +2283,8 @@
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                     $('#odon_adults').empty();
                     $('#odon_adults').append(response.odontograma_paciente_vista);
+                    $('#odonto_adulto').empty();
+                    $('#odonto_adulto').append(response.odontograma_paciente_vista);
                 }
             }
         });
@@ -2418,6 +2428,8 @@
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                     $('#odon_adults').empty();
                     $('#odon_adults').append(response.odontograma_paciente_vista);
+                    $('#odonto_adulto').empty();
+                    $('#odonto_adulto').append(response.odontograma_paciente_vista);
                 }
             }
         });

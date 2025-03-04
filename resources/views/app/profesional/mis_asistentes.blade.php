@@ -42,7 +42,9 @@
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-1">
                                     <h4 class="text-white f-20 d-inline ">Mis asistentes</h4>
-                                     <a class="btn d-inline btn-xs btn-light float-md-right" href="busq_secretaria.php" role="button"><i class="feather icon-user"></i> Contratar asistente</a>
+                                    {{-- <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_contratoprofesional">
+                                        <i class="feather icon-plus"></i> Registrar Contrato Profesional </button> --}}
+                                        <button type="button" class="btn btn-sm btn-outline-light d-inline has-ripple" onclick="asociar_profesional();">Asociar Otros profesionales<span class="ripple ripple-animate"></span></button>
                                 </div>
                             </div>
                         </div>
@@ -156,3 +158,4 @@
     </div>
 @endsection
 @include('app.profesional.modales.nuevo_asistente')
+{{-- @include('app.contabilidad.modals.datos_profesional') --}}

@@ -17,6 +17,12 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
 
+        <!-- select2 selectbonito css -->
+        <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
     <!-- data tables css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
@@ -121,6 +127,8 @@
 
     <!--Formularios Modals-->
     <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
+    <!--Formularios Modals-->
+    <script src="{{ asset('js/modals_atencion_implantologia.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!--Form wizard-->
     <script src="{{ asset('js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
@@ -179,6 +187,7 @@
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         $(document).ready(function () {
+            $('#table_trabajos_menores_dental').DataTable();
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
                 swal({
@@ -223,6 +232,7 @@
 			@endif
 
             $('#table_antecedentes_unificada').DataTable();
+
         });
 
 
@@ -490,7 +500,8 @@
     @yield('js-sidebar') {{-- seccion js side bar --}}
     @yield('js-lic') {{-- seccion js side bar --}}
 	@yield('page-script-btn-autorizacion')
-
+    @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajo')
+    @include('atencion_odontologica.formularios_dentales_tons.pedido_material_trabajo.pedido_insumos_materiales')
 </body>
 
 </html>

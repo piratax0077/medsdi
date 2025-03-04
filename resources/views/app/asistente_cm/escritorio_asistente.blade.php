@@ -582,6 +582,15 @@
                                 $('.btn-agenda-'+tipo_agenda).css('background-color','#1cbebe');
                                 $('#id_tipo_agenda').val(tipo_agenda);
 
+                                if (data.profesional.id_especialidad == 2) {
+                                    console.log('dentista');
+                                    $('#link_pago_presupuesto_dental').removeClass('d-none');
+                                } else {
+                                    console.log('general');
+                                    $('#link_pago_presupuesto_dental').addClass('d-none');
+                                    $('#pills-venta-dental').removeClass('show active');
+                                }
+
                                 switch (parseInt(tipo_agenda)) {
                                     case 1://consulta
                                         $('#titulo_tipo_agenda').html('AGENDA DE CONSULTA');

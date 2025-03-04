@@ -125,18 +125,18 @@
 
         <!-- SIDE BAR IMPLANTOLOGIA -->
         @include("atencion_odontologica.modales"){{-- base de botones de sidebar --}}
-        @include("atencion_odontologica.include.sidebar_derecho_od_gral"){{-- modales y data de sidebar especialidad --}}
+        @include("atencion_odontologica.include.sidebar_derecho_odonto_impl"){{-- modales y data de sidebar especialidad --}}
 
 
         <!--Modals de especialidad -->
-        @include("atencion_odontologica.formularios.Antecedentes_dentales.anestesia");
-        @include("atencion_odontologica.formularios.Antecedentes_dentales.hemorragias");
-        @include("atencion_odontologica.formularios.Antecedentes_dentales.fracturas");
-        @include('atencion_odontologica.include.modales.imagenes_paciente_dental');
+        @include("atencion_odontologica.formularios.Antecedentes_dentales.anestesia")
+        @include("atencion_odontologica.formularios.Antecedentes_dentales.hemorragias")
+        @include("atencion_odontologica.formularios.Antecedentes_dentales.fracturas")
+        @include('atencion_odontologica.include.modales.imagenes_paciente_dental')
         @include('atencion_odontologica.include.modales.imagen_paciente_dental')
-        @include('atencion_odontologica.generales.includes.modales.recomendaciones_generales_implan') 
-        @include('atencion_odontologica.generales.includes.modales.recomendaciones_especiales_implan') 
-     
+        @include('atencion_odontologica.generales.includes.modales.recomendaciones_generales_implan')
+        @include('atencion_odontologica.generales.includes.modales.recomendaciones_especiales_implan')
+
     </div>
 	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
     <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
@@ -153,11 +153,27 @@
                 text: 'Esta página se encuentra en desarrollo.',
                 confirmButtonText: 'Aceptar'
             });
+            $('#table_atenciones_previas_trabajos').DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                    }
+                });
             $('#tabla_antecedentes_paciente').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }
             });
+            $('#table_insumos_tto').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+            // declarar una variable integer random entre el 10 y el 20
+            var random = Math.floor(Math.random() * (20 - 10 + 1)) + 10;
+            mostrar_nueva_pieza_dental(random);
+            mostrar_nueva_pieza_ex_radio(random);
+            mostrar_nuevas_imagenes_dent(random);
+            mostrar_pieza_dental_examen(random);
         });
     function cargar_a_presupuesto(id, tipo = null){
         let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";
@@ -228,8 +244,9 @@
                                             <label class="floating-label-activo-sm">Total prestación</label>
                                             <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
                                         </div>
-                                        <div class="form-group col-md-2">
+                                        <div class="form-group col-md-2 d-flex">
                                             <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                            <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${odonto.id},'${odonto.pieza}','${odonto.descripcion}')">+ Insumos</button>
                                         </div>
                                     `);
                                     $('#table_trabajos_presupuesto tbody').append(`
@@ -242,7 +259,7 @@
                                             <td>${odonto.valor} </td>
                                             <td> </td>
                                             <td>
-                                                <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                                <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Cargar</button>
                                             </td>
                                         </tr>
                                     `);
@@ -295,8 +312,9 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                 </div>
                             `);
                         }
@@ -339,8 +357,9 @@
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-2 d-flex">
                                 <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                             </div>
                         `);
                     }
@@ -383,8 +402,9 @@
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-2 d-flex">
                                 <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                             </div>
                         `);
                     }
@@ -476,8 +496,9 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                 </div>
                             `);
                         }
@@ -520,8 +541,9 @@
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-2 d-flex">
                                 <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                             </div>
                         `);
                     }
@@ -565,8 +587,9 @@
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-2 d-flex">
                                 <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                            <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                             </div>
                         `);
                     }
@@ -612,8 +635,9 @@
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-2 d-flex">
                                 <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                             </div>
                         `);
                     }
@@ -661,8 +685,9 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                 </div>
                             `);
                         }
@@ -705,8 +730,9 @@
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-2 d-flex">
                                 <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                             </div>
                         `);
                     }
@@ -749,8 +775,9 @@
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-2 d-flex">
                                 <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                             </div>
                         `);
                     }
@@ -794,8 +821,9 @@
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-2 d-flex">
                                 <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                             </div>
                         `);
                     }
@@ -930,8 +958,9 @@
                                             <label class="floating-label-activo-sm">Total prestación</label>
                                             <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
                                         </div>
-                                        <div class="form-group col-md-2">
+                                        <div class="form-group col-md-2 d-flex">
                                             <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                            <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${odonto.id},'${odonto.pieza}','${odonto.descripcion}')">+ Insumos</button>
                                         </div>
                                     `);
                                     $('#table_trabajos_presupuesto tbody').append(`
@@ -944,7 +973,7 @@
                                             <td>${odonto.valor} </td>
                                             <td> </td>
                                             <td>
-                                                <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                                <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Cargar</button>
                                             </td>
                                         </tr>
                                     `);
@@ -993,8 +1022,9 @@
                                         <label class="floating-label-activo-sm">Total prestación</label>
                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                     </div>
-                                    <div class="form-group col-md-2">
+                                    <div class="form-group col-md-2 d-flex">
                                         <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                        <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                     </div>
                                 `);
                             }
@@ -1037,8 +1067,9 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                 </div>
                             `);
                         }
@@ -1083,8 +1114,9 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                 </div>
                             `);
                         }
@@ -1129,8 +1161,9 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                 </div>
                             `);
                         }
@@ -1176,8 +1209,9 @@
                                         <label class="floating-label-activo-sm">Total prestación</label>
                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                     </div>
-                                    <div class="form-group col-md-2">
+                                    <div class="form-group col-md-2 d-flex">
                                         <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                        <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                     </div>
                                 `);
                             }
@@ -1220,8 +1254,9 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                 </div>
                             `);
                         }
@@ -1265,8 +1300,9 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                 </div>
                             `);
                         }
@@ -1312,8 +1348,9 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                 </div>
                             `);
                         }
@@ -1360,8 +1397,9 @@
                                         <label class="floating-label-activo-sm">Total prestación</label>
                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                     </div>
-                                    <div class="form-group col-md-2">
+                                    <div class="form-group col-md-2 d-flex">
                                         <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                        <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                     </div>
                                 `);
                             }
@@ -1404,8 +1442,9 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                 </div>
                             `);
                         }
@@ -1448,8 +1487,9 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                 </div>
                             `);
                         }
@@ -1493,8 +1533,9 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${diagnostico.id},'${diagnostico.localizacion}','${diagnostico.diagnostico_tratamiento}','gral')">+ Insumos</button>
                                 </div>
                             `);
                         }

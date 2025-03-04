@@ -151,6 +151,9 @@
                 text: 'Esta página se encuentra en desarrollo.',
                 confirmButtonText: 'Aceptar'
             });
+            mostrar_pieza_dental_examen_odontop();
+            mostrar_nueva_pieza_oral_rx_odontop();
+            mostrar_pieza_dental_examen_odontop_(1);
         });
     function cargar_a_presupuesto(id, tipo = null){
         let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";
@@ -221,8 +224,9 @@
                                             <label class="floating-label-activo-sm">Total prestación</label>
                                             <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
                                         </div>
-                                        <div class="form-group col-md-2">
+                                        <div class="form-group col-md-2 d-flex">
                                             <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                            <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${odonto.id},'${odonto.pieza}','${odonto.descripcion}')">+ Insumos</button>
                                         </div>
                                     `);
                                     $('#table_trabajos_presupuesto tbody').append(`
@@ -923,8 +927,9 @@
                                             <label class="floating-label-activo-sm">Total prestación</label>
                                             <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
                                         </div>
-                                        <div class="form-group col-md-2">
+                                        <div class="form-group col-md-2 d-flex">
                                             <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                        <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${odonto.id},'${odonto.pieza}','${odonto.descripcion}')">+ Insumos</button>
                                         </div>
                                     `);
                                     $('#table_trabajos_presupuesto tbody').append(`

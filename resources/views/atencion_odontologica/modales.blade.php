@@ -1058,6 +1058,133 @@
 
         }
 
+        function buscar_trabajos(id_ficha_clinica){
+
+            let url = "{{ route('ficha_atencion.ver_trabajos') }}";
+            let id_ficha = id_ficha_clinica;
+            $('#table_atenciones_previas_trabajos tbody').html('');
+
+            $.ajax({
+                    url: url,
+                    type: "get",
+                    data: {
+                        id_ficha_atencion_soli: id_ficha
+                    },
+                    dataType: "json",
+                })
+                .done(function(data) {
+                    console.log(data);
+                    if (data != null) {
+
+                        $('#m_cons_trabajosLabel').text('Trabajos Realizados en esta consulta del Paciente: ' + data.paciente.nombres);
+                        if(data.estado == 1)
+                        {
+                            $('#table_atenciones_previas_trabajos tbody').html('');
+                            var j = 1; //contador para asignar id al boton que borrara la fila
+                            $.each(data.odontograma, function(index, value)
+                            {
+                                var fecha = formatDate(value.fecha);
+                                var trabajo = value.tratamiento;
+                                var diagnostico = value.diagnostico;
+                                var n_pieza = value.pieza;
+                                var id = value.id;
+                                var id_ficha_trabajo = value.id_ficha;
+                                var url = value.url;
+
+                                var fila = '';
+                                fila += '<tr class="tr_examen" id="row' + j + '">';
+                                fila += '    <td class="text-center align-middle">' + fecha + '</td>';
+                                fila += '    <td class="text-center align-middle">' + n_pieza + '</td>';
+                                fila += '    <td class="text-center align-middle">' + diagnostico + '</td>';
+                                fila += '    <td class="text-center align-middle">' + trabajo + '</td>';
+                                fila += '</tr>';
+
+                                j++;
+
+                                $('#table_atenciones_previas_trabajos tbody').append(fila);
+
+                            });
+                            $('#valor_odontograma_hist').html('Total Odontograma: '+formatoMoneda(data.valores_odontograma[1]));
+                        }
+                        else
+                        {
+                            $('#table_atenciones_previas_trabajos tbody').html('');
+                            var fila = '<tr><td colspan="2"><span><h5>no existen registros</h5></span></td></tr>';
+                            $('#table_atenciones_previas_trabajos tbody').append(fila);
+                        }
+
+                    }
+                    else
+                    {
+                        $('#table_atenciones_previas_trabajos tbody').html('');
+                        var fila = '<tr><td colspan="2"><span><h5>no existen registros</h5></span></td></tr>'
+                        $('#table_atenciones_previas_trabajos tbody').append(fila);
+                    }
+
+                    $('#m_cons_trabajos').modal('show');
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+
+                $('#table_atenciones_previas_trabajos').dataTable().fnClearTable();
+                $('#table_atenciones_previas_trabajos').dataTable().fnDestroy();
+                $('#table_atenciones_previas_trabajos').DataTable({
+                    responsive: true,
+                });
+
+        }
+
+        function generar_pdf_historial(id_ficha_clinica){
+            let url = "{{ route('profesional.generar_pdf_presupuesto_dental_hist') }}";
+            let id_paciente = dame_id_paciente();
+            let data = {
+                id_paciente: id_paciente,
+                id_ficha_atencion: id_ficha_clinica,
+                _token: "{{ csrf_token() }}"
+            }
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function(data){
+                    console.log(data);
+                    if(data == 'error'){
+                        swal({
+                            title:'Error',
+                            text:'Primero debe generar la liquidación.',
+                            icon:'error',
+                            button:"Aceptar"
+                        });
+                        return false;
+                    }
+                    if(data.ruta){
+                        swal({
+                            title: "Reporte generado",
+                            text: "El reporte se ha generado correctamente",
+                            icon: "success",
+                            button: "Aceptar"
+                        }).then(() => {
+                            // Abrir el PDF en una ventana emergente
+                            var width = 800;
+                            var height = 600;
+                            var left = (screen.width - width) / 2;
+                            var top = (screen.height - height) / 2;
+                            window.open(data.ruta, 'Presupuesto dental', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                        });
+                    }else{
+                        swal({
+                            title: "Error",
+                            text: "Ha ocurrido un error al generar el reporte",
+                            icon: "error",
+                            button: "Aceptar"
+                        });
+                    }
+                }
+            })
+        }
+
         function buscar_receta_ficha(id) {
             console.log(id);
         };

@@ -646,6 +646,15 @@
                             }
                         }
 
+                        if (data.profesional.id_especialidad == 2) {
+                                    console.log('dentista');
+                                    $('#link_pago_presupuesto_dental').removeClass('d-none');
+                                } else {
+                                    console.log('general');
+                                    $('#link_pago_presupuesto_dental').addClass('d-none');
+                                    $('#pills-venta-dental').removeClass('show active');
+                                }
+
                         if(data.estado == 1 && data.horario.length!=0)
                         {
                             $('#tabla_info_profesional').show();

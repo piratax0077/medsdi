@@ -22,7 +22,7 @@
                              </script>
                          </div>
                          <div class="form-group col-sm-12 col-md-12">
-                             <label class="floating-label">Tipo de Artículo :</label>
+                             <label class="floating-label-activo-sm">Tipo de Artículo :</label>
                              <select id="tipo_insumo_material" name="tipo_insumo_material"
                                  class="form-control form-control-sm">
                                  <option value="0">Seleccione una opción </option>
@@ -32,52 +32,71 @@
                              </select>
                          </div>
                          <div class="form-group col-sm-12 col-md-12">
-                             <label class="floating-label">Nombre Insumo o Material</label>
+                             <label class="floating-label-activo-sm">Nombre Insumo o Material</label>
                              <input type="text" class="form-control form-control-sm" name="nombre_insumo_material"
                                  id="nombre_insumo_material">
                          </div>
                          <div class="form-group col-sm-12 col-md-12">
-                             <label class="floating-label">Pedir a :</label>
+                             <label class="floating-label-activo-sm">Pedir a :</label>
                              <select id="lugar_pedido_insumo_material" name="lugar_pedido_insumo_material"
                                  class="form-control form-control-sm">
                                  <option value="0">Seleccione una opción </option>
-                                 <option value="1">Bodega del Centro</option>
-                                 <option value="2">Proveedor</option>
-                                 <option value="3">Otro</option>
+                                 @if(isset($bodegas))
+                                    @foreach ($bodegas as $bodega)
+                                        <option value="{{ $bodega->id }}">{{ $bodega->nombre }}</option>
+                                    @endforeach
+                                @endif
+
                              </select>
                          </div>
 
                          <div class="form-group col-sm-12 col-md-12">
-                             <label class="floating-label">Cantidad</label>
+                             <label class="floating-label-activo-sm">Cantidad</label>
                              <input type="number" class="form-control form-control-sm" name="cantidad_insumo_material"
                                  id="cantidad_insumo_material">
                          </div>
                          <div class="form-group col-sm-12 col-md-12">
-                             <label class="floating-label">Uso en:</label>
+                             <label class="floating-label-activo-sm">Uso en:</label>
                              <input type="text" class="form-control form-control-sm" name="uso_cantidad_insumo_material"
                                  id="uso_cantidad_insumo_material">
                          </div>
 
-                         <div class="form-group col-sm-12 col-md-12">
-                             <label class="floating-label">Nombre Proveedor</label>
-                             <input type="text" class="form-control form-control-sm"
-                                 name="nombre_proveedor_cantidad_insumo_material"
-                                 id="nombre_proveedor_cantidad_insumo_material">
+                         <div class="form-group col-sm-12 col-md-12 d-flex">
+                            <div>
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Seleccione Proveedor</label>
+                                    <select name="nombre_proveedor_cantidad_insumo_material" id="nombre_proveedor_cantidad_insumo_material" class="form-control form-control-sm">
+                                        @if(isset($proveedores))
+                                        <option value="0">Seleccione una opción </option>
+                                        @foreach ($proveedores as $proveedor)
+                                            <option value="{{ $proveedor->id }}">{{ $proveedor->nombre }}</option>
+                                        @endforeach
+                                        <option value="">Nuevo</option>
+                                        @endif
+                                    </select>
+                                </div>
+
+                            </div>
+                             <div>
+                                <button type="button" class="btn btn-success btn-sm">+</button>
+                             </div>
+
                          </div>
                          <div class="form-group col-sm-12 col-md-12">
-                             <label class="floating-label">Dirección</label>
+                             <label class="floating-label-activo-sm">Dirección</label>
                              <input type="text" class="form-control form-control-sm"
                                  name="direccion_proveedor_cantidad_insumo_material"
                                  id="direccion_proveedor_cantidad_insumo_material">
                          </div>
                          <div class="form-group col-sm-12 col-md-12">
-                             <label class="floating-label">Email</label>
+                             <label class="floating-label-activo-sm">Email</label>
                              <input type="email" class="form-control form-control-sm"
                                  name="email_proveedor_cantidad_insumo_material"
                                  id="email_proveedor_cantidad_insumo_material">
                          </div>
                          <div class="col-sm-12 col-md-12 text-center mb-2">
-                             <button type="button" class="btn btn-sm btn-primary">Ver documento en
+                            <button type="button" class="btn btn-sm btn-success" onclick="agregar_insumo_pedido()">+</button>
+                             <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_insumos_dental()">Ver documento en
                                  PDF</button>
                          </div>
 
@@ -97,7 +116,36 @@
                      </li>
                  </ul>
                 -->
-
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Artículo</th>
+                            <th>Nombre Insumo o Material</th>
+                            <th>Pedir a</th>
+                            <th>Cantidad</th>
+                            <th>Uso en</th>
+                            <th>Proveedor</th>
+                            <th>Dirección</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(isset($insumos))
+                            @foreach ($insumos as $insumo)
+                                <tr>
+                                    <td>{{ $insumo->tipo_insumo_material }}</td>
+                                    <td>{{ $insumo->nombre_insumo_material }}</td>
+                                    <td>{{ $insumo->lugar_pedido_insumo_material }}</td>
+                                    <td>{{ $insumo->cantidad_insumo_material }}</td>
+                                    <td>{{ $insumo->uso_cantidad_insumo_material }}</td>
+                                    <td>{{ $insumo->nombre_proveedor_cantidad_insumo_material }}</td>
+                                    <td>{{ $insumo->direccion_proveedor_cantidad_insumo_material }}</td>
+                                    <td>{{ $insumo->email_proveedor_cantidad_insumo_material }}</td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    </tbody>
+                </table>
              </div>
          </div>
      </div>
@@ -106,5 +154,249 @@
     function ped_materiales()
     {
         $('#modal_pedido_insumos').modal('show');
+    }
+
+    function agregar_insumo_pedido(){
+        var tipo_insumo_material = $('#tipo_insumo_material').val();
+        var nombre_insumo_material = $('#nombre_insumo_material').val();
+        var lugar_pedido_insumo_material = $('#lugar_pedido_insumo_material').val();
+        var cantidad_insumo_material = $('#cantidad_insumo_material').val();
+        var uso_cantidad_insumo_material = $('#uso_cantidad_insumo_material').val();
+        var nombre_proveedor_cantidad_insumo_material = $('#nombre_proveedor_cantidad_insumo_material').val();
+        var direccion_proveedor_cantidad_insumo_material = $('#direccion_proveedor_cantidad_insumo_material').val();
+        var email_proveedor_cantidad_insumo_material = $('#email_proveedor_cantidad_insumo_material').val();
+
+        var valido = 1;
+        var mensaje = '';
+
+        if(tipo_insumo_material == 0){
+            mensaje += '<li>Tipo de insumo o material </li>';
+            valido = 0;
+        }
+
+        if(nombre_insumo_material == ''){
+            mensaje += '<li>Nombre del insumo o material </li>';
+            valido = 0;
+        }
+
+        if(lugar_pedido_insumo_material == 0){
+            mensaje += '<li>Lugar de pedido </li>';
+            valido = 0;
+        }
+
+        if(cantidad_insumo_material == ''){
+            mensaje += '<li>Cantidad </li>';
+            valido = 0;
+        }
+
+        if(uso_cantidad_insumo_material == ''){
+            mensaje += '<li>Uso </li>';
+            valido = 0;
+        }
+
+        if(nombre_proveedor_cantidad_insumo_material == 0){
+            mensaje += '<li>Proveedor </li>';
+            valido = 0;
+        }
+
+        if(direccion_proveedor_cantidad_insumo_material == ''){
+            mensaje += '<li>Dirección del proveedor </li>';
+            valido = 0;
+        }
+
+        if(email_proveedor_cantidad_insumo_material == ''){
+            mensaje += '<li>Email del proveedor </li>';
+            valido = 0;
+        }
+
+        if(valido == 0){
+            swal({
+                title:'Campos requeridos',
+                content:{
+                    element:'ul',
+                    attributes:{
+                        innerHTML:mensaje
+                    }
+                },
+                icon:'error',
+                button:false
+            });
+            return false;
+        }
+
+        var data = {
+            id_paciente: dame_id_paciente(),
+            tipo_insumo_material: tipo_insumo_material,
+            nombre_insumo_material: nombre_insumo_material,
+            lugar_pedido_insumo_material: lugar_pedido_insumo_material,
+            cantidad_insumo_material: cantidad_insumo_material,
+            uso_cantidad_insumo_material: uso_cantidad_insumo_material,
+            nombre_proveedor_cantidad_insumo_material: nombre_proveedor_cantidad_insumo_material,
+            direccion_proveedor_cantidad_insumo_material: direccion_proveedor_cantidad_insumo_material,
+            email_proveedor_cantidad_insumo_material: email_proveedor_cantidad_insumo_material,
+            _token: CSRF_TOKEN
+        };
+
+        console.log(data);
+
+        $.ajax({
+            url: "{{ route('dental.agregar_insumo_pedido') }}",
+            type: 'POST',
+            data: data,
+            success: function(data){
+                console.log(data);
+                if(data == 'error'){
+                    swal({
+                        title:'Error',
+                        text:'Primero debe generar la liquidación.',
+                        icon:'error',
+                        button:"Aceptar"
+                    });
+                    return false;
+                }
+                if(data == 'ok'){
+                    swal({
+                        title: "Insumo agregado",
+                        text: "El insumo se ha agregado correctamente",
+                        icon: "success",
+                        button: "Aceptar"
+                    });
+                }else{
+                    swal({
+                        title: "Error",
+                        text: "Ha ocurrido un error al agregar el insumo",
+                        icon: "error",
+                        button: "Aceptar"
+                    });
+                }
+
+            }
+        });
+    }
+
+    function generar_pdf_insumos_dental(){
+        var tipo_insumo_material = $('#tipo_insumo_material').val();
+        var nombre_insumo_material = $('#nombre_insumo_material').val();
+        var lugar_pedido_insumo_material = $('#lugar_pedido_insumo_material').val();
+        var cantidad_insumo_material = $('#cantidad_insumo_material').val();
+        var uso_cantidad_insumo_material = $('#uso_cantidad_insumo_material').val();
+        var nombre_proveedor_cantidad_insumo_material = $('#nombre_proveedor_cantidad_insumo_material').val();
+        var direccion_proveedor_cantidad_insumo_material = $('#direccion_proveedor_cantidad_insumo_material').val();
+        var email_proveedor_cantidad_insumo_material = $('#email_proveedor_cantidad_insumo_material').val();
+
+        var valido = 1;
+        var mensaje = '';
+
+        if(tipo_insumo_material == 0){
+            mensaje += '<li>Tipo de insumo o material </li>';
+            valido = 0;
+        }
+
+        if(nombre_insumo_material == ''){
+            mensaje += '<li>Nombre del insumo o material </li>';
+            valido = 0;
+        }
+
+        if(lugar_pedido_insumo_material == 0){
+            mensaje += '<li>Lugar de pedido </li>';
+            valido = 0;
+        }
+
+        if(cantidad_insumo_material == ''){
+            mensaje += '<li>Cantidad </li>';
+            valido = 0;
+        }
+
+        if(uso_cantidad_insumo_material == ''){
+            mensaje += '<li>Uso </li>';
+            valido = 0;
+        }
+
+        if(nombre_proveedor_cantidad_insumo_material == 0){
+            mensaje += '<li>Proveedor </li>';
+            valido = 0;
+        }
+
+        if(direccion_proveedor_cantidad_insumo_material == ''){
+            mensaje += '<li>Dirección del proveedor </li>';
+            valido = 0;
+        }
+
+        if(email_proveedor_cantidad_insumo_material == ''){
+            mensaje += '<li>Email del proveedor </li>';
+            valido = 0;
+        }
+
+        if(valido == 0){
+            swal({
+                title:'Campos requeridos',
+                content:{
+                    element:'ul',
+                    attributes:{
+                        innerHTML:mensaje
+                    }
+                },
+                icon:'error',
+                button:false
+            });
+            return false;
+        }
+
+        var data = {
+            id_paciente: dame_id_paciente(),
+            tipo_insumo_material: tipo_insumo_material,
+            nombre_insumo_material: nombre_insumo_material,
+            lugar_pedido_insumo_material: lugar_pedido_insumo_material,
+            cantidad_insumo_material: cantidad_insumo_material,
+            uso_cantidad_insumo_material: uso_cantidad_insumo_material,
+            nombre_proveedor_cantidad_insumo_material: nombre_proveedor_cantidad_insumo_material,
+            direccion_proveedor_cantidad_insumo_material: direccion_proveedor_cantidad_insumo_material,
+            email_proveedor_cantidad_insumo_material: email_proveedor_cantidad_insumo_material,
+            _token: CSRF_TOKEN
+        };
+
+        console.log(data);
+
+        $.ajax({
+            url: "{{ route('dental.generar_pdf_insumos_dental_sidebar') }}",
+            type: 'POST',
+            data: data,
+            success: function(data){
+                console.log(data);
+                    if(data == 'error'){
+                        swal({
+                            title:'Error',
+                            text:'Primero debe generar la liquidación.',
+                            icon:'error',
+                            button:"Aceptar"
+                        });
+                        return false;
+                    }
+                    if(data.ruta){
+                        swal({
+                            title: "Reporte generado",
+                            text: "El reporte se ha generado correctamente",
+                            icon: "success",
+                            button: "Aceptar"
+                        }).then(() => {
+                            // Abrir el PDF en una ventana emergente
+                            var width = 800;
+                            var height = 600;
+                            var left = (screen.width - width) / 2;
+                            var top = (screen.height - height) / 2;
+                            window.open(data.ruta, 'Presupuesto dental', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                        });
+                    }else{
+                        swal({
+                            title: "Error",
+                            text: "Ha ocurrido un error al generar el reporte",
+                            icon: "error",
+                            button: "Aceptar"
+                        });
+                    }
+
+            }
+        });
+
     }
 </script>

@@ -198,6 +198,8 @@
     </div>
     <!--Cierre: Container Completo-->
 
+    <!-- DATOS DE VITAL IMPORTANCIA -->
+    <input type="hidden" name="id_especialidad_profesional" id="id_especialidad_profesional" value="">
 @endsection
 
 @section('modales')
@@ -610,6 +612,15 @@
                                 $('.boton').css('background-color','#8b52c2');
                                 $('.btn-agenda-'+tipo_agenda).css('background-color','#1cbebe');
                                 $('#id_tipo_agenda').val(tipo_agenda);
+                                $('#id_especialidad_profesional').val(data.profesional.id_especialidad);
+
+                                if (data.profesional.id_especialidad == 2) {
+                                    console.log('dentista');
+                                    $('#link_pago_presupuesto_dental').removeClass('d-none');
+                                } else {
+                                    console.log('general');
+                                    $('#link_pago_presupuesto_dental').addClass('d-none');
+                                }
 
                                 switch (parseInt(tipo_agenda)) {
                                     case 1://consulta
@@ -892,9 +903,13 @@
 
                                                             /** PESTAÑA DE RECIBIR PAGO */
                                                             $('#bono_paciente_rut').val(data.paciente.rut);
+                                                            $('#bono_paciente_rut_dental').val(data.paciente.rut);
                                                             $('#bono_paciente_nombre').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
+                                                            $('#bono_paciente_nombre_dental').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
                                                             $('#bono_profesional_nombre').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
+                                                            $('#bono_profesional_nombre_dental').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
                                                             $('#bono_profesional_rut').val( data.profesional.rut);
+                                                            $('#bono_profesional_rut_dental').val( data.profesional.rut);
                                                             $('#bono_hora_medica').val(info.event.id);
                                                             $('#bono_id_profesional').val(data.profesional.id);
                                                             $('#bono_id_paciente').val(data.paciente.id);

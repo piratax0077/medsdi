@@ -148,6 +148,23 @@
                             </div>
                         </div>
                         @endif
+                        @if($profesional->id_especialidad == 2)
+                        <div class="col-md-3">
+                            <div class="card subir py-3">
+                                <a href="{{ route('profesional.insumos') }}">
+                                    <div class="card-body text-center" style="cursor:pointer">
+                                        <img class="wid-90 text-center mb-3"
+                                        src="{{ asset('images/iconos/adm_comercial.png') }}"
+
+                                        alt="Profesional">
+                                        <h5 class="f-16">
+                                            Configuracion de insumos
+                                        </h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -284,29 +284,29 @@
                                         @endforeach --}}
                                         @if(isset($odontograma))
                                 @foreach ($odontograma as $odonto)
-                                @php
-                                    if($odonto->estado == 0) $estado = 'PENDIENTE';
-                                    else if($odonto->estado == 1) $estado = 'TERMINADO';
-                                    else if($odonto->estado == 3) $estado = 'EN ESPERA DE LAB';
-                                    else $estado = '';
-                                @endphp
-                                @if($odonto->presupuesto == 1)
-                                <tr>
-                                    <td>{{ $odonto->fecha }}</td>
-                                    <td>{{ $odonto->tratamiento }}</td>
-                                    <td>{{ $odonto->caras }}</td>
-                                    <td>{{ $odonto->pieza }}</td>
-                                    <td>{{ $odonto->diagnostico }}</td>
-                                    <td>{{ number_format($odonto->valor,0,',','.') }}</td>
-                                    <td>{{ $estado }}</td>
+                                    @php
+                                        if($odonto->estado == 0) $estado = 'PENDIENTE';
+                                        else if($odonto->estado == 1) $estado = 'TERMINADO';
+                                        else if($odonto->estado == 3) $estado = 'EN ESPERA DE LAB';
+                                        else $estado = '';
+                                    @endphp
+                                    @if($odonto->presupuesto == 1)
+                                    <tr>
+                                        <td>{{ $odonto->fecha }}</td>
+                                        <td>{{ $odonto->tratamiento }}</td>
+                                        <td>{{ $odonto->caras }}</td>
+                                        <td>{{ $odonto->pieza }}</td>
+                                        <td>{{ $odonto->diagnostico }}</td>
+                                        <td>{{ number_format($odonto->valor,0,',','.') }}</td>
+                                        <td>{{ $estado }}</td>
 
-                                    <td>
+                                        <td>
 
-                                        <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento({{ $odonto->id }},'{{ $odonto->descripcion }}',{{ $odonto->pieza }})"><i class="fas fa-check"></i>Atender</button>
+                                            <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento({{ $odonto->id }},'{{ $odonto->descripcion }}',{{ $odonto->pieza }})"><i class="fas fa-check"></i>Cargar</button>
 
-                                    </td>
-                                </tr>
-                                @endif
+                                        </td>
+                                    </tr>
+                                    @endif
                                 @endforeach
                                 @endif
                                     </tbody>
@@ -539,6 +539,7 @@
                 fecha_control: fecha_control,
                 hora_control: hora_control,
                 trabajo_terminado: trabajo_terminado,
+                id_ficha_atencion: $('#id_fc').val(),
                 _token: "{{ csrf_token() }}"
             }
 
@@ -570,7 +571,11 @@
                             html += '<td>'+odonto.valor+'</td>';
                             html += '<td>';
                             html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
-                            html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                            if(odonto.presupuesto == 0){
+                                html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                            }else{
+                                html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                            }
                             html += '</td>';
                             html += '</tr>';
                         });
@@ -579,53 +584,57 @@
                         $('#contenedor_piezas_dentales_presupuesto').empty();
                         $('#table_trabajos_presupuesto tbody').empty();
                         odontograma.forEach(function(odonto){
-                            if(odonto.estado == 0){
-                                var estado_ = 'PENDIENTE';
-                            }else if(odonto.estado == 1){
-                                var estado_ = 'TERMINADO';
-                            }else if(odonto.estado == 3){
-                                var estado_ = 'EN ESPERA DE LAB';
+
+                                if(odonto.estado == 0){
+                                    var estado_ = 'PENDIENTE';
+                                }else if(odonto.estado == 1){
+                                    var estado_ = 'TERMINADO';
+                                }else if(odonto.estado == 3){
+                                    var estado_ = 'EN ESPERA DE LAB';
+                                }
+                                console.log(estado_);
+                                $('#contenedor_piezas_dentales_presupuesto').append(`
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Pieza</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="floating-label-activo-sm">Prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="floating-label-activo-sm">Descuento</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Total prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    </div>
+                                    <div class="form-group col-md-2 d-flex">
+                                        <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                        <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${odonto.id},'${odonto.pieza}','${odonto.descripcion}')">+ Insumos</button>
+                                    </div>
+                                `);
+                                if(odonto.presupuesto == 1){
+                                $('#table_trabajos_presupuesto tbody').append(`
+                                    <tr>
+                                        <td>${odonto.fecha}</td>
+                                        <td>${odonto.tratamiento} </td>
+                                        <td>${odonto.caras} </td>
+                                        <td>${odonto.pieza} </td>
+                                        <td>${odonto.diagnostico} </td>
+                                        <td>${odonto.valor} </td>
+                                        <td>${estado_} </td>
+                                        <td>
+                                            <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Cargar</button>
+                                        </td>
+                                    </tr>
+                                `);
                             }
-                            console.log(estado_);
-                            $('#contenedor_piezas_dentales_presupuesto').append(`
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Pieza</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label class="floating-label-activo-sm">Prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label class="floating-label-activo-sm">Descuento</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                </div>
-                            `);
-                            $('#table_trabajos_presupuesto tbody').append(`
-                                <tr>
-                                    <td>${odonto.fecha}</td>
-                                    <td>${odonto.tratamiento} </td>
-                                    <td>${odonto.caras} </td>
-                                    <td>${odonto.pieza} </td>
-                                    <td>${odonto.diagnostico} </td>
-                                    <td>${odonto.valor} </td>
-                                    <td>${estado_} </td>
-                                    <td>
-                                        <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
-                                    </td>
-                                </tr>
-                            `);
                         });
 
                         let valores = response.valores;

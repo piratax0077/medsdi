@@ -241,8 +241,12 @@
                 </div>
 
                 <div>
+                    <button type="submit" onclick="opcion_revisar_ficha()" id="hm_revisar_ficha" class="btn btn-success btn-sm"><i class="feather icon-check"></i> Revisar ficha
+                        Hora
+                    </button>
                     <button type="button" id="cerrarModal" class="btn btn-secondary btn-sm" data-dismiss="modal"> <i class="feather icon-x"></i> Cerrar
                     </button>
+
                 </div>
                 <div>
                     <button type="button" id="confirmar_anulacion_hora" onclick="cancelar_hora();"
@@ -260,3 +264,18 @@
         </div>
     </div>
 </div>
+
+<script>
+    function opcion_revisar_ficha() {
+        let id_hora_medica = $('#id_hora_medica').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+        let csrfToken = $('meta[name="csrf-token"]').attr('content'); // Obtener el token CSRF
+
+        // Construir la URL con los parámetros
+        let url = `/Profesional/Paciente/Ficha_consulta?_token=${csrfToken}&id_hora_realizar=${id_hora_medica}&lugar_atencion_id=${id_lugar_atencion}`;
+
+        // Redirigir a la URL
+        window.location.href = url;
+    }
+
+</script>
