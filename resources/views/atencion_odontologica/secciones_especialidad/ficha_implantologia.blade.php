@@ -159,7 +159,7 @@
                                                                                                                 <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesia_impl{{ $counter }}" id="obs_anestesia_impl{{ $counter }}">{{ $e->anestesia }}</textarea>
                                                                                                             </div>
                                                                                                         </div>
-                                                                                                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                                        <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
                                                                                                             <div class="form-group">
                                                                                                                 <label for="" class="floating-label-activo-sm">N° de tubos</label>
                                                                                                                 <input type="text" class="form-control form-control-sm" name="numero_tubos_impl{{ $counter }}" id="numero_tubos_impl{{ $counter }}" value="{{ $e->numero_tubos }}">
@@ -203,7 +203,7 @@
                                                                                                                 <textarea class="form-control form-control-sm" data-titulo="anestisico_dental_title"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesico_impl{{ $counter }}" id="obs_anestesico_impl{{ $counter }}">{{ $e->anestesico }}</textarea>
                                                                                                             </div>
                                                                                                         </div>
-                                                                                                        <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
+                                                                                                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Incidentes</label>
                                                                                                                 <select name="incid_col_impl{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="incid_col_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('incid_col_impl{{ $counter }}','div_incid_col_impl{{ $counter }}','obs_incid_col_impl{{ $counter }}',2);">
@@ -217,7 +217,7 @@
                                                                                                                 <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl{{ $counter }}" id="obs_incid_col_impl{{ $counter }}">{{ $e->incidentes }}</textarea>
                                                                                                             </div>
                                                                                                         </div>
-                                                                                                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Material de injerto óseo</label>
                                                                                                                 <select name="mat_inj_oseo_impl{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="mat_inj_oseo_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mat_inj_oseo{{ $counter }}','div_mat_inj_oseo{{ $counter }}','obs_mat_inj_oseo{{ $counter }}',6);">
@@ -5819,7 +5819,7 @@ function cargar_a_presupuesto_impl_g_confirmar(){
     let valido = 1;
     let mensaje = '';
 
-    console.log(piezasSeleccionadas, ttoPiezas);
+    return console.log(piezasSeleccionadas, ttoPiezas);
     let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto_period') }}";
     let data = {
         piezas: piezasSeleccionadas,

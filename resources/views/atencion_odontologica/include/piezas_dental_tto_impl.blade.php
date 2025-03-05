@@ -102,7 +102,7 @@
                             <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl{{ $counter }}" id="obs_incid_col_impl{{ $counter }}"></textarea>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Material de injerto óseo</label>
                             <select name="mat_inj_oseo_impl{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="mat_inj_oseo_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mat_inj_oseo{{ $counter }}','div_mat_inj_oseo{{ $counter }}','obs_mat_inj_oseo{{ $counter }}',6);">

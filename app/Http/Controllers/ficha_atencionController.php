@@ -2089,12 +2089,7 @@ class ficha_atencionController extends Controller
 
     public function dame_insumos_tratamiento($id_paciente,$id_ficha_atencion,$tipo = null){
         try {
-            if(!$tipo){
-                $pieza = OdontogramaPaciente::find($id_tto);
 
-            }else{
-                $pieza = ExamenesBocaGeneral::find($id_tto);
-            }
             $insumos = InsumosTratamientosDental::where('id_paciente', $id_paciente)->where('id_ficha_atencion',$id_ficha_atencion)->get();
             return $insumos;
         } catch (\Exception $e) {

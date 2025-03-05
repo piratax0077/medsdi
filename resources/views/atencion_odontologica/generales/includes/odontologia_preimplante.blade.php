@@ -500,6 +500,22 @@
                                                                             </div>
 
                                                                         </div>
+                                                                        <hr>
+                                                                        <button type="button" class="btn btn-outline-primary btn-sm w-100 mt-3" onclick="abrir_modal_insumos()"><i class="fas fa-plus"></i> Insumos</button>
+                                                                        <table class="display table table-striped table-hover dt-responsive nowrap table-sm dataTable no-footer dtr-inline">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <td>Id</td>
+                                                                                    <td>Insumo</td>
+                                                                                    <td>Cantidad</td>
+                                                                                    <td>Valor</td>
+                                                                                    <td>Total</td>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+
+                                                                            </tbody>
+                                                                        </table>
                                                                     </div>
                                                                     <div class="card-footer">
                                                                         <button type="button" class="btn btn-danger btn-icon btn-sm" onclick="ocultar_pieza_impl(0)">X</button>
@@ -560,6 +576,36 @@
 
                                                                             </div>
                                                                         </div>
+                                                                        <hr>
+                                                                        <button type="button" class="btn btn-outline-primary btn-sm w-100 my-3"  onclick="abrir_modal_insumos()"><i class="fas fa-plus"></i> Insumos</button>
+                                                                        <table id="table_insumos_preimplante" class="display table table-striped table-hover dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <td>Id</td>
+                                                                                    <td>Insumo</td>
+                                                                                    <td>Cantidad</td>
+                                                                                    <td>Valor</td>
+                                                                                    <td>Total</td>
+                                                                                    <td>Acciones</td>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach ($insumos_tratamientos as $t)
+                                                                                    @php $total = $t->cantidad * $t->valor @endphp
+                                                                                    <tr>
+                                                                                        <td>{{ $t->id }}</td>
+                                                                                        <td>{{ $t->insumos }}</td>
+                                                                                        <td>{{ $t->cantidad }}</td>
+                                                                                        <td>{{ number_format($t->valor)  }}</td>
+                                                                                        <td>{{ number_format($total)  }}</td>
+                                                                                        <td>
+                                                                                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo({{ $t->id }})"><i class="fas fa-save"></i></button>
+                                                                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo({{ $t->id }})"><i class="fas fa-trash"></i></button>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                @endforeach
+                                                                            </tbody>
+                                                                        </table>
                                                                     </div>
                                                                 </div>
 
@@ -579,3 +625,298 @@
         </div>
     </div>
 </div>
+<!-- MODAL INSUMOS -->
+<div class="modal fade" tabindex="-1" id="modal_insumos">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="insumosModalLabel">Insumos para el tratamiento</h5>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+                  <div class="form-row">
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="" class="floating-label-activo-sm">Profesional</label>
+                              <input type="text" name="" id="" class="form-control form-control-sm" value="{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}">
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="" class="floating-label-activo-sm">Paciente</label>
+                              <input type="text" name="" id="" class="form-control form-control-sm" value="{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}">
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="" class="floating-label-activo-sm">Insumos</label>
+                              <input type="text" name="nombreInsumo" id="nombreInsumo" class="form-control form-control-sm">
+                          </div>
+                      </div>
+                      <div class="col-md-2">
+                          <div class="form-group">
+                              <label for="" class="floating-label-activo-sm">Cantidad</label>
+                              <input type="number" name="cantidad" id="cantidad" class="form-control form-control-sm">
+                          </div>
+                      </div>
+                      <div class="col-md-2">
+                          <div class="form-group">
+                              <label for="" class="floating-label-activo-sm">Valor</label>
+                              <input type="number" name="precio" id="precio" class="form-control form-control-sm">
+                          </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="" class="floating-label-activo-sm">Total</label>
+                            <input type="text" name="total" id="total" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                      <div class="col-12">
+                          <div class="form-group">
+                              <label for="" class="floating-label-activo-sm">Observaciones</label>
+                              <textarea class="form-control caja-texto form-control-sm mb-9" name="insumos_obs_tto" id="insumos_obs_tto" cols="30" rows="1" onfocus="this.rows = 4" onblur="this.rows=1"></textarea>
+                          </div>
+
+                      </div>
+
+                      <button type="button" class="btn btn-outline-success btn-sm w-100 my-2" onclick="guardar_insumo()"><i class="fas fa-check"></i> + Agregar</button>
+                  </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary">Solicitar</button>
+          </div>
+        </div>
+    </div>
+</div>
+<script>
+    function abrir_modal_insumos(){
+        $('#modal_insumos').modal('show');
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const cantidadInput = document.getElementById("cantidad");
+        const precioInput = document.getElementById("precio");
+        const totalInput = document.getElementById("total");
+
+        // Calcula el total automáticamente cuando se ingresan datos
+        function calcularTotal() {
+            const cantidad = parseFloat(cantidadInput.value) || 0;
+            const precio = parseFloat(precioInput.value) || 0;
+            totalInput.value = (cantidad * precio).toFixed(2);
+        }
+
+        cantidadInput.addEventListener("input", calcularTotal);
+        precioInput.addEventListener("input", calcularTotal);
+
+    });
+
+    function guardar_insumo(){
+        let nombreInsumo = $('#nombreInsumo').val();
+        let cantidad = $('#cantidad').val();
+        let precio = $('#precio').val();
+        let total = $('#total').val();
+
+        let mensaje = '';
+        let valido = 1;
+
+        if(nombreInsumo == ''){
+            valido = 0;
+            mensaje += '<li>Nombre insumo </li>';
+        }
+        if(cantidad == '' || cantidad <= 0){
+            valido = 0;
+            mensaje += '<li>Cantidad </li>';
+        }
+        if(precio == '' || cantidad <= 0){
+            valido = 0;
+            mensaje += '<li>Precio </li>';
+        }
+
+        if(valido == 1){
+            let data = {
+                insumos: nombreInsumo,
+                cantidad: cantidad,
+                valor: precio,
+                total: total,
+                id_paciente: dame_id_paciente(),
+                id_ficha_atencion: $('#id_fc').val(),
+                _token: CSRF_TOKEN
+            }
+
+            console.log(data);
+            let url = '{{ ROUTE("dental.agregar_insumos_tto") }}';
+            $.ajax({
+                url: url,
+                type:'post',
+                data: data,
+                success: function(resp){
+                    console.log(resp);
+                    if(resp.mensaje == 'ok'){
+                        swal({
+                            icon:'success',
+                            text:'Se a agregado los insumos correctamente',
+                            title:'Exito'
+                        });
+                        //limpiar_formulario_insumo();
+                        let insumos = resp.insumos;
+                        console.log(insumos);
+                        let table = $('#table_insumos_preimplante').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table.clear();
+
+
+
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                                                 // Botones de acción
+                            let botones = `
+                            <td>
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>`;
+                            table.row.add([
+                                insumo.id,
+                                insumo.insumos,         // Nombre del insumo
+                                insumo.cantidad,       // Cantidad utilizada
+                                insumo.valor,         // Unidad de medida
+                                total,
+                                botones
+                            ]);
+                        });
+
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table.draw();
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+        }else{
+            swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+        }
+
+
+
+    }
+
+
+    function eliminar_insumo(id){
+        swal({
+            title: "¿Esta seguro que desea ELIMINAR el insumo dental?",
+            text: "Favor confirme o cancele la solicitud",
+            icon: "warning",
+            buttons: ["Cancelar", "Solicitar"],
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if(willDelete){
+                confirmar_eliminar_insumo(id);
+            }
+        });
+    }
+
+    function confirmar_eliminar_insumo(id){
+        console.log(id);
+        let data = {
+            id: id,
+            _token: CSRF_TOKEN
+        }
+        let url = '{{ ROUTE("dental.eliminar_insumos_tto") }}';
+        $.ajax({
+            url: url,
+            type:'post',
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.mensaje == 'ok'){
+                    swal({
+                        icon:'success',
+                        text:'Se a eliminado insumos correctamente',
+                        title:'Exito'
+                    });
+                    let insumos = resp.insumos;
+                        console.log(insumos);
+                        let table = $('#table_insumos_preimplante').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table.clear();
+
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            let botones = `
+                            <td>
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>`;
+                            table.row.add([
+                                insumo.id,
+                                insumo.insumos,         // Nombre del insumo
+                                insumo.cantidad,       // Cantidad utilizada
+                                insumo.valor,         // Unidad de medida
+                                total,
+                                botones
+                            ]);
+                        });
+
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table.draw();
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+    }
+
+    function cargar_a_presupuesto_insumo(id){
+        let data = {
+            id: id,
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            id_paciente: dame_id_paciente(),
+            tipo:'insumo',
+            _token: CSRF_TOKEN
+        }
+
+        let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+
+
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        });
+    }
+</script>

@@ -173,6 +173,8 @@
                     "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }
             });
+            $('#table_odontograma').DataTable();
+            $('#table_insumos_preimplante').DataTable();
             // declarar una variable integer random entre el 10 y el 20
             var random = Math.floor(Math.random() * (20 - 10 + 1)) + 10;
             mostrar_nueva_pieza_dental(random);

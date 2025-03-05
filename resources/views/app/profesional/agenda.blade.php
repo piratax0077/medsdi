@@ -124,8 +124,9 @@
                 <div class="page-block">
                     <div class="row align-items-center text-center">
                         <div class="page-header-title">
-                            <h5 class="text-white f-18 t-lugar-aten"><a href="#" data-toggle="tooltip" data-placement="top"
-                                    title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
+
+                            <h5 class="text-white f-18 t-lugar-aten">
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a>
                                 <strong>AGENDA: </strong> {{ strtoupper($lugar_atencion_nombre) }}
                             </h5>
                         </div>
@@ -211,16 +212,16 @@
                             </div>
                         @endif
 
-                        @if ($profesional->id_especialidad == 2 )
-                        <div class="col-sm-12" id="div_procedimiento" style="display:  none;">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Nº de presupuesto</label>
-                                <select class="form-control form-control-sm" name="presupuesto_numero"
-                                    id="presupuesto_numero" onchange="updateTotalValue()">
-                                </select>
+                        @if($profesional->id_especialidad == 2 )
+                            <div class="col-sm-12" id="div_procedimiento" name="div_procedimiento" style="display: none;">
+                                <div class="form-group">
+                                    <label class="floating-label-activo-sm">Nº de presupuesto</label>
+                                    <select class="form-control form-control-sm" name="presupuesto_numero" id="presupuesto_numero" onchange="updateTotalValue()">
+                                        <option value="">Seleccione</option>
+                                    </select>
+                                </div>
+                                <div id="contenedor_tratamientos_presupuesto"></div>
                             </div>
-                            <div id="contenedor_tratamientos_presupuesto"></div>
-                        </div>
 
                         @endif
 
