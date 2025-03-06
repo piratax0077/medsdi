@@ -1156,7 +1156,13 @@ class EscritorioProfesional extends Controller
     {
         $hora_medica = HoraMedica::where('id', $request->id_hora_medica)->first();
         $paciente = Paciente::where('id', $hora_medica->id_paciente)->first();
-        $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
+        if(!empty($hora_medica->id_profesional))
+            $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
+        else
+        {
+            $user = Auth::user()->id;
+            $profesional = Profesional::where('id_usuario', $user)->first();
+        }
 
 		$fecha_ultima_atencion = HoraMedica::select('horas_medicas.fecha_consulta','fichas_atenciones.*')
         ->join('fichas_atenciones','horas_medicas.id_ficha_atencion','fichas_atenciones.id')
@@ -5706,7 +5712,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         //     $valido = 0;
         // }
 
-        if(empty($request->valor_atencion))
+        if($request->valor_atencion == '')
         {
             $error['valor_atencion'] = 'campo requerido';
             $valido = 0;
@@ -5757,7 +5763,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             // $bono->convenio = $request->convenio_nombre;
             $bono->numero_bono = $request->numero_bono;
             $bono->fecha_atencion = date('Y-m-d H:i:s');
-            $bono->valor_atencion = $request->valor_atencion;
+            $bono->valor_atencion = $request->valor_atencion==''?'0':$request->valor_atencion;
             $bono->glosa = empty($request->glosa)?'0':$request->glosa;
             $bono->rendido = 0;
             $bono->id_profesional = $request->id_profesional;
