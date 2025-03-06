@@ -13,22 +13,14 @@
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Tipo de Procedimiento</label>
                             <select name="tpo_proc_imp{{ $counter }}" data-titulo="tpo_proc_imp" data-seccion="Implante"  id="tpo_proc_imp{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tpo_proc_imp{{ $counter }}','div_tpo_proc_imp{{ $counter }}','obs_tpo_proc_impo{{ $counter }}',10);">
-                                <option @if($e->id_tipo_procedimiento == 1) selected @endif value="1">Anclaje de precisión s/implantes</option>
-                                <option @if($e->id_tipo_procedimiento == 2) selected @endif value="2">Anclaje de presición sobre Implante</option>
-                                <option @if($e->id_tipo_procedimiento == 3) selected @endif value="3">Barra para prótesis sobre Implante</option>
-                                <option @if($e->id_tipo_procedimiento == 4) selected @endif value="4">Cirugía Periimplantaria de manejo de tejidos blandos, por sitio</option>
-                                <option @if($e->id_tipo_procedimiento == 5) selected @endif value="5">Cirugía Periimplantaria de tejidos blandos (no incluye insumos)</option>
-                                <option @if($e->id_tipo_procedimiento == 6) selected @endif value="6">Conexión de Implante (No incluye valor aditamientos)</option>
-                                <option @if($e->id_tipo_procedimiento == 7) selected @endif value="7">Corona de cerámica s/metal sobre implante cementada</option>
-                                <option @if($e->id_tipo_procedimiento == 8) selected @endif value="8">Cirugía Periimplantaria de tejidos blandos (no incluye insumos)</option>
-                                <option @if($e->id_tipo_procedimiento == 9) selected @endif value="9"> Corona provisional s/implante</option>
-                                <option @if($e->id_tipo_procedimiento == 10) selected @endif value="10">  Corona Temporal Sobre Implantes</option>
-                                <option @if($e->id_tipo_procedimiento == 11) selected @endif value="11">  Otro proc Implantes</option>
+                                @foreach ($tratamientos_implantologia as $t)
+                                    <option value="{{ $t->id }}" @if($e->id_tipo_procedimiento == $t->id) selected @endif>{{ $t->descripcion }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group" id="div_tpo_proc_imp{{ $counter }}" style="display:none;">
                             <label class="floating-label-activo-sm">Otro tipo de Procedimiento</label>
-                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_proc_imp{{ $counter }}" id="obs_tpo_proc_imp{{ $counter }}"></textarea>
+                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_proc_imp{{ $counter }}" id="obs_tpo_proc_imp{{ $counter }}">{{ $e->tipo_procedimiento }}</textarea>
                             <div class="form-group mt-3">
                                 <label class="floating-label-activo-sm">UCO?</label>
                                 <input type="text"class="form-control form-control-sm" id="uco_tto{{ $counter }}">
@@ -51,7 +43,7 @@
                         </div>
                         <div class="form-group" id="div_anestesia_impl{{ $counter }}" @if($e->id_tipo_anestesia !== 4) style="display:none;"  @endif >
                             <label class="floating-label-activo-sm">Otra anestesia</label>
-                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesia_impl{{ $counter }}" id="obs_anestesia_impl{{ $counter }}"></textarea>
+                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesia_impl{{ $counter }}" id="obs_anestesia_impl{{ $counter }}">{{ $e->anestesia }}</textarea>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
@@ -109,19 +101,16 @@
                         </div>
                         <div class="form-group" id="div_incid_col_impl{{ $counter }}" @if($e->id_incidentes !== 2) style="display:none;" @endif>
                             <label class="floating-label-activo-sm">Obs</label>
-                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl" id="obs_incid_col_impl">{{ $e->incidentes }}</textarea>
+                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl{{ $counter }}" id="obs_incid_col_impl{{ $counter }}">{{ $e->incidentes }}</textarea>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Material de injerto óseo</label>
                             <select name="mat_inj_oseo_impl{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="mat_inj_oseo_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mat_inj_oseo{{ $counter }}','div_mat_inj_oseo{{ $counter }}','obs_mat_inj_oseo{{ $counter }}',6);">
-                                <option @if($e->id_mat_injerto_oseo == 1) selected @endif value="1">Sin Injerto Óseo</option>
-                                <option @if($e->id_mat_injerto_oseo == 2) selected @endif value="2">autoinjerto</option>
-                                <option @if($e->id_mat_injerto_oseo == 3) selected @endif value="3">aloinjerto</option>
-                                <option @if($e->id_mat_injerto_oseo == 4) selected @endif value="4">xenoinjerto</option>
-                                <option @if($e->id_mat_injerto_oseo == 5) selected @endif value="5">aloplástico</option>
-                                <option @if($e->id_mat_injerto_oseo == 6) selected @endif value="6">Otro (describir)</option>
+                                @foreach ($materiales_implantologia as $m)
+                                    <option value="{{ $m->id }}" @if($m->id == $e->id_mat_injerto_oseo) selected @endif>{{ $m->descripcion }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group" id="div_mat_inj_oseo{{ $counter }}" @if($e->id_mat_injerto_oseo !== 6) style="display:none;" @endif>
@@ -151,10 +140,14 @@
                             <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_suturas{{ $counter }}" id="obs_suturas{{ $counter }}">{{ $e->suturas }}</textarea>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" id="grosor_nylon{{ $counter }}" @if($e->id_suturas !== 3) style="display: none" @endif>
+                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" >
                         <div class="form-group">
-                            <label class="floating-label-activo-sm">Grosor Nylon</label>
-                            <input type="text" name="grosor_nylon_input{{ $counter }}" id="grosor_nylon_input{{ $counter }}" class="form-control form-control-sm" value="{{ $e->grosor_nylon }}">
+                            <label class="floating-label-activo-sm">Grosor</label>
+                            <input type="text" name="grosor_nylon{{ $counter }}" id="grosor_nylon{{ $counter }}" class="form-control form-control-sm" value="{{ $e->grosor_nylon }}">
+                        </div>
+                        <div class="form-group" id="div_grosor_nylon{{ $counter }}" style="display:none;">
+                            <label class="floating-label-activo-sm">Describa</label>
+                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_grosor_nylon{{ $counter }}" id="obs_grosor_nylon{{ $counter }}">{{ $e->grosor_nylon }}</textarea>
                         </div>
                     </div>
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">

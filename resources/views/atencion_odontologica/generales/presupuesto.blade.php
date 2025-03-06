@@ -826,7 +826,7 @@
                                             <form>
                                                 <div class="form-row">
                                                     <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Laboratorio</label>
+                                                        <label class="floating-label-activo-sm">Presupuesto N°</label>
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
@@ -837,41 +837,55 @@
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
                                                     </div>
                                                     <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Total Laboratorio</label>
+                                                        <label class="floating-label-activo-sm">Total</label>
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
                                                     </div>
-                                                    <div class="form-group col-md-4">
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Abonos</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                    </div>
+                                                    <div class="form-group col-md-2">
                                                         <button type="button" class="btn btn-success btn-block btn-sm"
-                                                        onclick="respon_pago_dent();"><i class="fa fa-plus"></i>Boton 1</button>
+                                                        onclick="respon_pago_dent();"><i class="fa fa-plus"></i>Ingresar Abono</button>
                                                     </div>
                                                 </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Clínico</label>
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Sub-Total</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Descuento</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="   pieza">
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Total Clínico</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <button type="button" class="btn btn-success btn-block btn-sm" onclick="respon_pago_dent();"><i class="fa fa-plus"></i>Boton 2</button>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Valor final</label>
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Total presupuesto</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+
+                                                        <div class="col-sm-12">
+                                                            <div class="dt-responsive table-responsive pb-4">
+                                                                <table id="presup_estado_pago"
+                                                                    class="display table table-striped table-hover dt-responsive nowrap table-sm"
+                                                                    style="width:100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="text-center align-middle">Prestación</th>
+                                                                            <th class="text-center align-middle">Pieza</th>
+                                                                            <th class="text-center align-middle">Valor total</th>
+                                                                            <th class="text-center align-middle">Descuento</th>
+                                                                            <th class="text-center align-middle">Valor a pagar</th>
+                                                                            <th class="text-center align-middle">Aprobado</th>
+                                                                            <th class="text-center align-middle">Estado</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach ($odontograma as $o)
+                                                                        <tr>
+                                                                            <td class="text-center align-middle">{{ $o->descripcion }}</td>
+                                                                            <td class="text-center align-middle">{{ $o->pieza }}</td>
+                                                                            <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
+                                                                            <td class="text-center align-middle">0</td>
+                                                                            <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
+                                                                            <td class="text-center align-middle"></td>
+                                                                            <td class="text-center align-middle">
+
+                                                                            </td>
+                                                                        </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -957,13 +971,11 @@
                         <th>cantidad</th>
                         <th>valor</th>
                         <th>observaciones</th>
-                        <th>Acciones</th>
                     </thead>
                     <tbody>
 
                     </tbody>
                 </table>
-                 <span style="font-weight: bold;" id="total_insumos">Aqui va el total de insumos</span>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -1016,15 +1028,12 @@
                         insumo.insumos,         // Nombre del insumo
                         insumo.cantidad,       // Cantidad utilizada
                         insumo.valor,         // Unidad de medida
-                        insumo.observaciones,     // Descripción u observaciones
-                        `<button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="editar_insumo_tto(${insumo.id})" data-insumo-id="${insumo.id}"><i class="fas fa-edit"></i></button>
-                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo_tto(${insumo.id})" data-insumo-id="${insumo.id}"><i class="fas fa-trash"></i></button>`
+                        insumo.observaciones     // Descripción u observaciones
                     ]);
                 });
 
                 // Dibujar la tabla nuevamente con los nuevos datos
                 table.draw();
-                $('#total_insumos').html('El total de insumos es de $'+resp.total_insumos);
             },
             error: function(error){
                 console.log(error);
@@ -1066,7 +1075,6 @@
                 id_paciente: dame_id_paciente(),
                 id_ficha_atencion: $('#id_fc').val(),
                 tipo: $('#tipo_tto').val(),
-                observaciones: observaciones,
                 _token: CSRF_TOKEN
             }
 
@@ -1099,15 +1107,12 @@
                                 insumo.insumos,         // Nombre del insumo
                                 insumo.cantidad,       // Cantidad utilizada
                                 insumo.valor,         // Unidad de medida
-                                insumo.observaciones,     // Descripción u observaciones
-                                `<button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="editar_insumo_tto(${insumo.id})" data-insumo-id="${insumo.id}"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo_tto(${insumo.id})" data-insumo-id="${insumo.id}"><i class="fas fa-trash"></i></button>`
+                                insumo.observaciones     // Descripción u observaciones
                             ]);
                         });
 
                         // Dibujar la tabla nuevamente con los nuevos datos
                         table.draw();
-                        $('#total_insumos').html('El total de insumos es de $'+resp.total_insumos);
                     }
                 },
                 error: function(error){
@@ -1138,70 +1143,5 @@
         $('#insumos_valor_tto').val('');
         $('#insumos_obs_tto').val('');
     //    $('#id_pieza_tto').val('');
-    }
-
-    function eliminar_insumo_tto(id){
-        swal({
-            title: "¿Esta seguro que desea ELIMINAR el insumo?",
-            text: "Favor confirme o cancele la solicitud",
-            icon: "warning",
-            buttons: ["Cancelar", "Solicitar"],
-            dangerMode: true,
-        })
-        .then((willDelete) => {
-            if (willDelete) {
-                eliminar_insumo_tto_confirmar(id);
-            }
-        });
-    }
-
-    function eliminar_insumo_tto_confirmar(id){
-        let url = "{{ ROUTE('dental.eliminar_insumos_tto') }}";
-        let data = {
-            id: id,
-            _token: CSRF_TOKEN
-        }
-
-        $.ajax({
-            type:'post',
-            data: data,
-            url: url,
-            success: function(resp){
-                console.log(resp);
-                    if(resp.mensaje == 'ok'){
-                        swal({
-                            icon:'success',
-                            text:'Se a agregado los insumos correctamente',
-                            title:'Exito'
-                        });
-                        let insumos = resp.insumos;
-                        console.log(insumos);
-                        let table = $('#table_insumos_tto').DataTable();
-
-                        // Limpiar la tabla sin perder la configuración de DataTables
-                        table.clear();
-
-                        // Recorrer el array de insumos y agregarlos a la tabla
-                        // Recorrer el array de insumos y agregarlos a la tabla
-                        insumos.forEach(insumo => {
-                            table.row.add([
-                                insumo.insumos,         // Nombre del insumo
-                                insumo.cantidad,       // Cantidad utilizada
-                                insumo.valor,         // Unidad de medida
-                                insumo.observaciones,     // Descripción u observaciones
-                                `<button type="button" class="btn btn-outline-warning btn-sm btn-icon" onclick="editar_insumo_tto(${insumo.id})" data-insumo-id="${insumo.id}"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo_tto(${insumo.id})" data-insumo-id="${insumo.id}"><i class="fas fa-trash"></i></button>`
-                            ]);
-                        });
-
-                        // Dibujar la tabla nuevamente con los nuevos datos
-                        table.draw();
-                        $('#total_insumos').html('El total de insumos es de $'+resp.total_insumos);
-                    }
-            },
-            error: function(error){
-                console.log(error.responseText);
-            }
-        })
     }
 </script>

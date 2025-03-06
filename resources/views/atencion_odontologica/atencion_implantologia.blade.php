@@ -168,6 +168,13 @@
                     "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
                 }
             });
+            $('#presup_estado_pago').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+            $('#table_odontograma').DataTable();
+            $('#table_insumos_preimplante').DataTable();
             // declarar una variable integer random entre el 10 y el 20
             var random = Math.floor(Math.random() * (20 - 10 + 1)) + 10;
             mostrar_nueva_pieza_dental(random);
@@ -1687,7 +1694,27 @@
                         $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                         $('#odon_adults').empty();
-                    $('#odon_adults').append(response.odontograma_paciente_vista);
+                        $('#odon_adults').append(response.odontograma_paciente_vista);
+
+                        let table = $('#presup_estado_pago').DataTable();
+
+                        // Limpiar la tabla antes de agregar nuevas filas
+                        table.clear().draw();
+
+                        // Recorrer el odontograma y agregar nuevas filas
+                        odontograma.forEach(function(odonto) {
+                            // Agregar una nueva fila a la tabla
+                            table.row.add([
+                                odonto.descripcion,
+                                odonto.pieza,
+                                odonto.valor,
+                                0,
+                                odonto.valor,
+                                '',
+                                '', // Columna vacía
+                                `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
+                            ]).draw(false);
+                        });
                     }
                 },
                 error: function(error){

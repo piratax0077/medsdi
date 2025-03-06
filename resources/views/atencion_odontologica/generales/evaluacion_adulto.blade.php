@@ -1710,6 +1710,26 @@
                     $('#odon_adults').append(response.odontograma_paciente_vista);
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(response.odontograma_paciente_vista);
+
+                    let table = $('#presup_estado_pago').DataTable();
+
+                    // Limpiar la tabla antes de agregar nuevas filas
+                    table.clear().draw();
+
+                    // Recorrer el odontograma y agregar nuevas filas
+                    odontograma.forEach(function(odonto) {
+                            // Agregar una nueva fila a la tabla
+                            table.row.add([
+                                odonto.descripcion,
+                                odonto.pieza,
+                                odonto.valor,
+                                0,
+                                odonto.valor,
+                                '',
+                                '', // Columna vacía
+                                `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
+                            ]).draw(false);
+                        });
                 }
             }
         })
@@ -1853,6 +1873,27 @@
                     $('#odon_adults').append(response.odontograma_paciente_vista);
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(response.odontograma_paciente_vista);
+
+                    let table = $('#presup_estado_pago').DataTable();
+
+                    // Limpiar la tabla antes de agregar nuevas filas
+                    table.clear().draw();
+
+                    // Recorrer el odontograma y agregar nuevas filas
+                    odontograma.forEach(function(odonto) {
+                            // Agregar una nueva fila a la tabla
+                            table.row.add([
+                                odonto.descripcion,
+                                odonto.pieza,
+                                odonto.valor,
+                                0,
+                                odonto.valor,
+                                '',
+                                '', // Columna vacía
+                                `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
+                            ]).draw(false);
+                        });
+                    //table.draw();
                 }
             }
         });
@@ -1997,6 +2038,26 @@
                     $('#odon_adults').append(response.odontograma_paciente_vista);
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(response.odontograma_paciente_vista);
+
+                    let table = $('#presup_estado_pago').DataTable();
+
+                    // Limpiar la tabla antes de agregar nuevas filas
+                    table.clear().draw();
+
+                    // Recorrer el odontograma y agregar nuevas filas
+                    odontograma.forEach(function(odonto) {
+                            // Agregar una nueva fila a la tabla
+                            table.row.add([
+                                odonto.descripcion,
+                                odonto.pieza,
+                                odonto.valor,
+                                0,
+                                odonto.valor,
+                                '',
+                                '', // Columna vacía
+                                `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
+                            ]).draw(false);
+                        });
                 }
             }
         });
@@ -2141,6 +2202,26 @@
                     $('#odon_adults').append(response.odontograma_paciente_vista);
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(response.odontograma_paciente_vista);
+
+                    let table = $('#presup_estado_pago').DataTable();
+
+                    // Limpiar la tabla antes de agregar nuevas filas
+                    table.clear().draw();
+
+                    // Recorrer el odontograma y agregar nuevas filas
+                    odontograma.forEach(function(odonto) {
+                            // Agregar una nueva fila a la tabla
+                            table.row.add([
+                                odonto.descripcion,
+                                odonto.pieza,
+                                odonto.valor,
+                                0,
+                                odonto.valor,
+                                '',
+                                '', // Columna vacía
+                                `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
+                            ]).draw(false);
+                        });
                 }
             }
         });
@@ -2285,6 +2366,26 @@
                     $('#odon_adults').append(response.odontograma_paciente_vista);
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(response.odontograma_paciente_vista);
+
+                    let table = $('#presup_estado_pago').DataTable();
+
+                    // Limpiar la tabla antes de agregar nuevas filas
+                    table.clear().draw();
+
+                    // Recorrer el odontograma y agregar nuevas filas
+                    odontograma.forEach(function(odonto) {
+                            // Agregar una nueva fila a la tabla
+                            table.row.add([
+                                odonto.descripcion,
+                                odonto.pieza,
+                                odonto.valor,
+                                0,
+                                odonto.valor,
+                                '',
+                                '', // Columna vacía
+                                `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
+                            ]).draw(false);
+                        });
                 }
             }
         });
@@ -2430,6 +2531,25 @@
                     $('#odon_adults').append(response.odontograma_paciente_vista);
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(response.odontograma_paciente_vista);
+                    let table = $('#presup_estado_pago').DataTable();
+
+                    // Limpiar la tabla antes de agregar nuevas filas
+                    table.clear().draw();
+
+                    // Recorrer el odontograma y agregar nuevas filas
+                    odontograma.forEach(function(odonto) {
+                            // Agregar una nueva fila a la tabla
+                            table.row.add([
+                                odonto.descripcion,
+                                odonto.pieza,
+                                odonto.valor,
+                                0,
+                                odonto.valor,
+                                '',
+                                '', // Columna vacía
+                                `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
+                            ]).draw(false);
+                        });
                 }
             }
         });

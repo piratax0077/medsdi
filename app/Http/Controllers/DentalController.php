@@ -1453,7 +1453,7 @@ class DentalController extends Controller
             if ($request->{'caraD'} == '1') {
                 $caras .= 'D' . '|';
             }
-            if ($request->{'carav'} == '1') {
+            if ($request->{'caraV'} == '1') {
                 $caras .= 'V' . '|';
             }
             if ($request->{'caraP'} == '1') {
@@ -1625,6 +1625,7 @@ class DentalController extends Controller
     }
 
     public function cargar_tratamiento_presupuesto(Request $request){
+        return $request;
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         // Si $request->tipo es null, significa que se busca en odontograma
         if($request->tipo == null){
@@ -1661,7 +1662,7 @@ class DentalController extends Controller
             }else{
                 return ['status' => 0, 'mensaje' => 'Ha ocurrido un error con la pieza '.$pieza->pieza.'.','presupuesto' => $presupuesto];
             }
-        }else{
+        }else if($request->tipo == 'gral'){
             $pieza = ExamenesBocaGeneral::find($request->id);
             $pieza->presupuesto = 1;
             if($pieza->save()){
@@ -1722,6 +1723,8 @@ class DentalController extends Controller
             }else{
                 return ['status' => 0, 'mensaje' => 'Ha ocurrido un error con la pieza '.$pieza->pieza.'.'];
             }
+        }else{
+            return 'es insumo';
         }
     }
 
@@ -1987,7 +1990,7 @@ class DentalController extends Controller
         $insumos->id_profesional = $profesional->id;
         $insumos->id_ficha_atencion = $req->id_ficha_atencion;
         $insumos->id_especialidad = $profesional->id_especialidad;
-        $insumos->id_tratamiento = $pieza->id;
+        $insumos->id_tratamiento = $pieza ? $pieza->id : null;
         $insumos->insumos = $req->insumos;
         $insumos->cantidad = $req->cantidad;
         $insumos->valor = $req->valor;
@@ -2008,13 +2011,15 @@ class DentalController extends Controller
     }
 
     public function eliminar_insumos_tratamiento(Request $req){
+
         $insumo = InsumosTratamientosDental::find($req->id);
+
         $id_paciente = $insumo->id_paciente;
         $id_ficha_atencion = $insumo->id_ficha_atencion;
         $id_tto = $insumo->id_tratamiento;
         if($insumo->delete()){
             try {
-                $insumos = $this->dame_insumos_tratamiento_todos($id_paciente, $id_ficha_atencion,$id_tto, null);
+                $insumos = $this->dame_insumos_tratamiento_todos($id_paciente, $id_ficha_atencion,null, null);
                 return ['mensaje'=>'ok','insumos'=>$insumos['insumos'],'total_insumos' => $insumos['total']];
             }catch (\Exception $e) {
                 //throw $th;
@@ -2062,18 +2067,28 @@ try {
 
     public function dame_insumos_tratamiento_todos($id_paciente,$id_ficha_atencion,$id_tto, $tipo){
         try {
-            if(!$tipo){
-                $pieza = OdontogramaPaciente::find($id_tto);
+            if($id_tto){
+                if(!$tipo){
+                    $pieza = OdontogramaPaciente::find($id_tto);
 
+                }else{
+                    $pieza = ExamenesBocaGeneral::find($id_tto);
+                }
+                $insumos = InsumosTratamientosDental::where('id_paciente', $id_paciente)->where('id_ficha_atencion',$id_ficha_atencion)->where('id_tratamiento', $id_tto)->get();
+                $suma = 0;
+                foreach($insumos as $i){
+                    $suma += $i->valor;
+                }
+                return ['mensaje' => 'ok','insumos' =>$insumos,'total' => $suma];
             }else{
-                $pieza = ExamenesBocaGeneral::find($id_tto);
+                $insumos = InsumosTratamientosDental::where('id_paciente', $id_paciente)->where('id_ficha_atencion',$id_ficha_atencion)->get();
+                $suma = 0;
+                foreach($insumos as $i){
+                    $suma += $i->valor;
+                }
+                return ['mensaje' => 'ok','insumos' =>$insumos,'total' => $suma];
             }
-            $insumos = InsumosTratamientosDental::where('id_paciente', $id_paciente)->where('id_ficha_atencion',$id_ficha_atencion)->where('id_tratamiento', $id_tto)->get();
-            $suma = 0;
-            foreach($insumos as $i){
-                $suma += $i->valor;
-            }
-            return ['insumos' =>$insumos,'total' => $suma];
+
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();
