@@ -652,7 +652,22 @@
                               <input type="text" name="" id="" class="form-control form-control-sm" value="{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}">
                           </div>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="tipoInsumo" class="floating-label-activo-sm">Tipo de Insumo</label>
+                            <select name="tipoInsumo" id="tipoInsumo" class="form-control form-control-sm">
+                                <option value="0">Seleccione</option>
+                                <option value="1">Implantes y componentes</option>
+                                <option value="2">Biomateriales</option>
+                                <option value="3">Adhesivos y cementos</option>
+                                <option value="4">Instrumental Quirúrgico y Protésico</option>
+                                <option value="5">Material de Sutura y Regeneración</option>
+                                <option value="6">Insumos Descartables y Bioseguridad</option>
+                                <option value="7">Otros Insumos</option>
+                            </select>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
                           <div class="form-group">
                               <label for="" class="floating-label-activo-sm">Insumos</label>
                               <input type="text" name="nombreInsumo" id="nombreInsumo" class="form-control form-control-sm">
@@ -719,9 +734,13 @@
 
     function guardar_insumo(){
         let nombreInsumo = $('#nombreInsumo').val();
+        let tipoInsumo = $('#tipoInsumo').val();
+        let tipoInsumo_text = $('#tipoInsumo option:selected').text();
         let cantidad = $('#cantidad').val();
         let precio = $('#precio').val();
         let total = $('#total').val();
+
+        console.log(tipoInsumo);
 
         let mensaje = '';
         let valido = 1;
@@ -729,6 +748,10 @@
         if(nombreInsumo == ''){
             valido = 0;
             mensaje += '<li>Nombre insumo </li>';
+        }
+        if(tipoInsumo == 0){
+            valido = 0;
+            mensaje += '<li>Tipo de Insumo </li>';
         }
         if(cantidad == '' || cantidad <= 0){
             valido = 0;
@@ -742,6 +765,7 @@
         if(valido == 1){
             let data = {
                 insumos: nombreInsumo,
+                tipoInsumo: tipoInsumo_text,
                 cantidad: cantidad,
                 valor: precio,
                 total: total,

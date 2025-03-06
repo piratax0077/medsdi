@@ -673,14 +673,9 @@
                                                     <div class="tab-content" id="v-pills-tabContent">
                                                         <div class="tab-pane fade show active" id="od_laboratorio_trab" role="tabpanel" aria-labelledby="od_laboratorio_trab-tab">
                                                             <div class="col-sm-12 col-md-12">
+
                                                                 <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">ESTADO TRABAJOS</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-row">
+
                                                                     <div class="form-group col-md-2">
                                                                         <label class="floating-label-activo-sm">Nombre Laboratorio</label>
                                                                         <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom">
@@ -705,24 +700,6 @@
                                                                         <label class="floating-label-activo-sm">N° Identificación</label>
                                                                         <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab">
                                                                     </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm"> Valor Total</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_cost_tot" id="lab_cost_tot">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm"> Abonos</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_abon" id="lab_abon">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm"> Valor Pendiente</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_val_pend" id="lab_val_pend">
-                                                                    </div>
-                                                                    <div class="form-group col-md-3">
-                                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2"onclick="info_lab();"><i class="fa fa-plus"></i>  Info Laboratorio</button>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3">
-                                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2"onclick="info_lab();"><i class="fa fa-plus"></i>  Ingresar abono</button><!--este boton hace el calculo del abono y lo anota-->
-                                                                    </div>
                                                                 </div>
                                                                 <div class="form-row">
                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -732,28 +709,50 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="tab-pane fade show active" id="costo_presupuesto_trab" role="tabpanel" aria-labelledby="costo_presupuesto_trab-tab">
+                                                        <div class="tab-pane fade show" id="costo_presupuesto_trab" role="tabpanel" aria-labelledby="costo_presupuesto_trab-tab">
                                                             <div class="col-sm-12 col-md-12">
                                                                 <div class="form-row">
                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Costo Presupuesto Laboratorio</label>
+                                                                        <div class="form-row">
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm">N° Identificación</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm"> Valor Total</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_cost_tot" id="lab_cost_tot">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm"> Abonos</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_abon" id="lab_abon">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm"> Valor Pendiente</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_val_pend" id="lab_val_pend">
+                                                                            </div>
+                                                                            <div class="form-group col-md-3">
+                                                                                <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2"onclick="info_lab();"><i class="fa fa-plus"></i>  Info Laboratorio</button>
+                                                                            </div>
+                                                                            {{-- <div class="form-group col-md-3">
+                                                                                <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2"onclick="info_lab();"><i class="fa fa-plus"></i>  Ingresar abono</button><!--este boton hace el calculo del abono y lo anota-->
+                                                                            </div> --}}
                                                                         </div>
                                                                     </div>
                                                                 </div>
 
                                                             </div>
+
                                                         </div>
                                                         <div class="tab-pane fade show " id="od_lab_estadopago" role="tabpanel" aria-labelledby="od_lab_estadopago-tab">
                                                             <div class="col-sm-12 col-md-12">
+
                                                                 <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">ESTADOS DE PAGOS A LABORATORIO</label>
-                                                                        </div>
+                                                                    <div class="form-group col-md-2">
+                                                                        <label class="floating-label-activo-sm">N° de presupuesto</label>
+                                                                        <select name="n_presupuesto" id="n_presupuesto" class="form-control form-control-sm">
+                                                                            <option value="0">Seleccione</option>
+                                                                        </select>
                                                                     </div>
-                                                                </div>
-                                                                <div class="form-row">
                                                                     <div class="form-group col-md-2">
                                                                         <label class="floating-label-activo-sm">Nombre Laboratorio</label>
                                                                         <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom">
@@ -778,9 +777,7 @@
                                                                         <label class="floating-label-activo-sm"> Valor Pendiente</label>
                                                                         <input type="text" class="form-control form-control-sm" name="lab_cost_tot" id="lab_cost_tot">
                                                                     </div>
-                                                                </div>
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
                                                                         <label class="floating-label-activo-sm">Observaciones</label>
                                                                         <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
                                                                     </div>
@@ -835,6 +832,24 @@
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Total Clínico</label>
                                                         <input type="text" class="form-control form-control-sm" name="total_clinico" id="total_clinico" value="{{ number_format($valores + $valores_piezas + $valores_insumos,0,',','.') }}">
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Insumos no incluidos</label>
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="subtotal_insumos" id="subtotal_insumos" value="{{ number_format($valores_insumos,0,',','.') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="descuento_insumos" id="descuento_insumos" value="0">
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Total Clínico</label>
+                                                        <input type="text" class="form-control form-control-sm" name="total_insumos" id="total_insumos" value="{{ number_format($valores + $valores_piezas + $valores_insumos,0,',','.') }}">
                                                     </div>
 
                                                 </div>

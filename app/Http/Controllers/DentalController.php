@@ -2030,6 +2030,7 @@ class DentalController extends Controller
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $insumos = new InsumosTratamientosDental;
         $insumos->tipo = $req->tipo ? $req->tipo : null;
+        $insumos->tipo_insumo = $req->tipoInsumo;
         $insumos->id_paciente = $req->id_paciente;
         $insumos->id_profesional = $profesional->id;
         $insumos->id_ficha_atencion = $req->id_ficha_atencion;

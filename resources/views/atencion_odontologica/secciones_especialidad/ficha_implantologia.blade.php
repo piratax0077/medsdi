@@ -5819,7 +5819,29 @@ function cargar_a_presupuesto_impl_g_confirmar(){
     let valido = 1;
     let mensaje = '';
 
-    return console.log(piezasSeleccionadas, ttoPiezas);
+    if(piezasSeleccionadas.length == 0){
+        valido = 0;
+        mensaje += '<li>Piezas seleccionadas </li>'
+    }
+    if(ttoPiezas == ''){
+        valido = 0;
+        mensaje += '<li>Tratamiento </li>';
+    }
+
+    if(valido == 0){
+        swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "ul",
+                    attributes: {
+                        innerHTML: mensaje
+                    }
+                },
+                icon: "error",
+            });
+            return false;
+    }
+
     let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto_period') }}";
     let data = {
         piezas: piezasSeleccionadas,
@@ -5914,7 +5936,8 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                 });
                 let valores_boca_general = resp.valores[0];
                 let valores_odontograma = resp.valores[1];
-                let total_general = valores_boca_general + valores_odontograma;
+                let valores_insumos = resp.valores[2];
+                let total_general = valores_boca_general + valores_odontograma + valores_insumos;
                 $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
                 $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
                 $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
@@ -6747,7 +6770,8 @@ function agregar_examenes_ficha() {
                     });
                     let valores_boca_general = resp.valores[0];
                     let valores_odontograma = resp.valores[1];
-                    let total_general = valores_boca_general + valores_odontograma;
+                    let valores_insumos = resp.valores[2];
+                    let total_general = valores_boca_general + valores_odontograma + valores_insumos;
                     $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
                     $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
                     $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
