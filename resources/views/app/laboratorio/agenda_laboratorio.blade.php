@@ -1,6 +1,6 @@
 @extends('template.laboratorio.laboratorio_asistente.template')
 
-@section('page-styles')
+@section('page-style')
     <link href='{{ asset('js/fullcalendar-5.10.1/lib/main.css') }}' rel='stylesheet' />
 
     <style>
@@ -1452,6 +1452,8 @@
                                     else if(data.estado_hora == 2)//if (info.event.backgroundColor == '#94BF61')
                                     {
                                         console.log(data.paciente);
+                                        console.log(info.event.id);
+
                                         $('#modal_recepcion_bonos_api').modal('show');
 
                                         /** PESTAÑA DE RECIBIR PAGO */
@@ -1918,6 +1920,7 @@
                             {{--  console.log(data);  --}}
                             $('#reserva_datos_paciente').show();
                             $('#reserva_hora_id_paciente').val(data.id);
+                            $('#bono_id_paciente').val(data.id);
                             $('#reserva_rut_paciente').text(data.rut);
 
                             $('#reserva_hora_nombre').text(data.nombres + ' ' + data.apellido_uno + ' ' + data.apellido_dos);
@@ -2667,7 +2670,7 @@
                 url: url,
                 type: "post",
                 data: {
-                    _token: CSRF_TOKEN,
+                    _token: $('#_token').val(),
                     id_paciente: paciente,
                     id_prevision: prevision,
                 },

@@ -26,9 +26,10 @@ use App\Models\KineInforme;
 use App\Models\KinePlanificacion;
 use App\Models\OctavoPar;
 use App\Models\OtrosProfesionalesSeccionAntecedentes;
+use App\Models\Paciente;
 use App\Models\Profesional;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
 
 class FichaAtencionOtrosProfController extends Controller
 {
@@ -2113,9 +2114,6 @@ class FichaAtencionOtrosProfController extends Controller
 
     public function store_fono_octa_par(Request $request)
     {
-
-        // dd($request->all());
-
         $campos_requeridos = 1;
         $tipo_mensaje = 'success';
         $mensaje = '';
@@ -2174,6 +2172,46 @@ class FichaAtencionOtrosProfController extends Controller
             $ficha->id_paciente = $id_paciente;
             $ficha->id_profesional = $id_profesional;
             $ficha->finalizada = 1;
+
+
+            $registro_archivo = array();
+            if(!empty($request->input_lista_archivo))
+            {
+                $paciente = Paciente::find($request->id_paciente_fc);
+                $array_archivo = json_decode($request->input_lista_archivo);
+
+                $resulto_img = array();
+                foreach ($array_archivo as $key => $value)
+                {
+                    $ruta_temp = $value[0];
+                    $nombre_real = $value[1];
+                    $nombre_temp = $value[2];
+                    $file_extension = $value[3];
+                    $nombre_final = $paciente->rut.'_examen_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+
+                    $resulto_archivo[$key] = CargaArchivoController::moverArchivo($nombre_temp, 'archivo_archivo', $nombre_final);
+                    $url = $resulto_archivo[$key]['proceso']['url'];
+
+                    $url_temp = Storage::disk('archivo_archivo')->url($nombre_final);
+                    $archivo_correo[] = array('url' => $url_temp, 'nombre' => $nombre_final);
+
+                    array_push($registro_archivo, array(
+                        'nombre' => $nombre_final,
+                        'url' => $url
+                    ));
+                }
+
+                $registro_archivo = json_encode($registro_archivo);
+            }
+
+            if(!empty($registro_archivo))
+                $ficha->estado_archivo = 1;
+            else
+                $ficha->estado_archivo = 0;
+
+            $ficha->archivo = $registro_archivo;
+
+
             if ($ficha->save())
             {
                 //  finalizar hora medica

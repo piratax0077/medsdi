@@ -1,35 +1,36 @@
-@extends('template.otros_profesionales.template_fono')
+{{-- @extends('template.otros_profesionales.template_fono') --}}
+@extends('template.laboratorio.laboratorio_asistente.template')
 
 @section('page-style')
-<style type="text/css">
-    .ng_esp {
-        /* Common */
-    font : 13px 'Wingdings 3';
-        color : #0000ff;
-        width: 60px; background-color: #f6faf9; color: #FF0000;text-align:center; font-weight: bold; font-size: x-large;
-        background-color: #f6faf9;
-        text-align:center;
-        font-weight: bold;
-        display: block;
-        width: 100%;
-        padding: 0.4rem 0.5rem 0.3rem 0.5rem!important;
-        font-size: 1.0rem;
-        font-weight: 400;
-        line-height: 1.5;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 1px solid #ced4da;
-        border-radius: 3px;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    }
+    <style type="text/css">
+        .ng_esp {
+            /* Common */
+        font : 13px 'Wingdings 3';
+            color : #0000ff;
+            width: 60px; background-color: #f6faf9; color: #FF0000;text-align:center; font-weight: bold; font-size: x-large;
+            background-color: #f6faf9;
+            text-align:center;
+            font-weight: bold;
+            display: block;
+            width: 100%;
+            padding: 0.4rem 0.5rem 0.3rem 0.5rem!important;
+            font-size: 1.0rem;
+            font-weight: 400;
+            line-height: 1.5;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 3px;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
 
-    @font-face {
-        font-family: 'Wingdings 3';
-    }
-</style>
+        @font-face {
+            font-family: 'Wingdings 3';
+        }
+    </style>
 @endsection
 
-@section('Content')
+@section('content')
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -1535,6 +1536,16 @@
                 </div>
 
                 <div class="row">
+                    <input type="hidden" name="input_lista_archivo" id="input_lista_archivo" value="">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <!-- [ Main Content ] start -->
+                        <div class="dropzone" id="mis-archivos" action="{{ route('profesional.archivo.carga') }}">
+                        </div>
+                        <!-- [ file-upload ] end -->
+                    </div>
+                </div>
+
+                <div class="row">
                     <!--GUARDAR O IMPRIMIR FICHA-->
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div class="row mb-3">
@@ -1549,8 +1560,10 @@
         </div>
     </div>
     <!-- SIDE BAR FONO -->
-    @include("atencion_otros_prof.modales"){{-- base de botones de sidebar --}}
-    @include("atencion_otros_prof.include.sidebar_derecho_fono"){{-- modales y data de sidebar especialidad --}}
+    {{-- base de botones de sidebar --}}
+    {{-- @include("atencion_otros_prof.modales") --}}
+    {{-- modales y data de sidebar especialidad --}}
+    {{-- @include("atencion_otros_prof.include.sidebar_derecho_fono") --}}
 
 @endsection
 
@@ -1658,6 +1671,134 @@
                 $('#'+input_solitado_por).val();
             }
         }
+
+        /************** ARCHIVO **************/
+        var myDropzone_Archivo ;
+        Dropzone.options.misArchivos = {
+            init:function()
+            {
+                myDropzone_Archivo = this;
+            },
+            url: "{{ route('profesional.archivo.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+            },
+
+            acceptedFiles: "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*",
+            maxFilesize: 4,
+            maxFiles: 4,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre Archivo al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+            dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_archivo();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_archivo(myDropzone_Archivo,'');
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_archivo(myDropzone_Archivo,'');
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_archivo(myDropzone_Archivo,'');
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+        var lista_archivo = {};
+        function cargar_lista_archivo(obj_dropzone, alias_archivo)
+        {
+            // console.log('--------------cargar_lista_archivo----------------------');
+            lista_archivo = [];
+            let temp  = obj_dropzone.getAcceptedFiles();
+            $.each(temp, function( index, value )
+            {
+                if(value.status == "success")
+                {
+                    if(value.xhr !== undefined)
+                    {
+                        var archivo_temp = JSON.parse(value.xhr.response);
+                        lista_archivo[index] = [
+                            url = archivo_temp.archivo.url,
+                            nombre_original = archivo_temp.archivo.original_file_name,
+                            nombre_archivo = archivo_temp.archivo.nombre_archivo,
+                            file_extension = archivo_temp.archivo.file_extension,
+                        ];
+                        $('#input_lista_archivo').val('');
+                        $('#input_lista_archivo').val(JSON.stringify(lista_archivo));
+                    }
+                }
+            });
+        }
+        /************** ARCHIVO **************/
     </script>
 @endsection
 

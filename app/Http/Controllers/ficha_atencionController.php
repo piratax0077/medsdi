@@ -131,6 +131,7 @@ use App\Models\OftalmoExamenNeurologico;
 use App\Models\OftalmoExamenPresionOcular;
 use App\Models\OftalmoExamenVisionColores;
 use App\Models\OrdenTrabajoMenor;
+use App\Models\ProcedimientosCentro;
 use App\Models\RecomendacionDetalle;
 use App\Models\VideoConsultaInfo;
 use App\Models\TratamientosImplantologia;
@@ -1249,8 +1250,16 @@ class ficha_atencionController extends Controller
             {
                 if($profesional->id_tipo_especialidad == 55)
                 {
-                    // $ruta_blade = 'atencion_otros_prof.atencion_fono_octavopar';
-                    $ruta_blade = 'app.laboratorio.atencion_fono_octavopar';
+                    $procedimientoCentroTem = ProcedimientosCentro::find($hora->id_procedimiento);
+                    if($procedimientoCentroTem->otros == 2)
+                    {
+                        // $ruta_blade = 'atencion_otros_prof.atencion_fono_octavopar';
+                        $ruta_blade = 'app.laboratorio.atencion_fono_octavopar';
+                    }
+                    else
+                    {
+                        $ruta_blade = 'app.laboratorio.atencion_prof_laboratorio_especialidades';
+                    }
 
                     $fichaTipo = '';
                     $examen = '';
@@ -1261,6 +1270,9 @@ class ficha_atencionController extends Controller
 
                     /** examenes radiologicos */
                     $examenes_radiologicos = '';
+
+                    $hora->id_profesional = $profesional->id;
+                    $hora->save();
                 }
                 else
                 {
