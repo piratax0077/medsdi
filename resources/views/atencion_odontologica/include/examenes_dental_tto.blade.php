@@ -383,12 +383,33 @@ function cargar_a_presupuesto_impl(counter){
                     });
                     let valores_boca_general = resp.valores[0];
                     let valores_odontograma = resp.valores[1];
-                    let total_general = valores_boca_general + valores_odontograma;
+                    let valores_insumos = resp.valores[2];
+                    let total_general = valores_boca_general + valores_odontograma + valores_insumos;
                     $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
                     $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
                     $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                     $('#subtotal_clinico').val(formatoMoneda(total_general));
                     $('#total_clinico').val(formatoMoneda(total_general));
+
+                    let table = $('#presup_estado_pago').DataTable();
+
+                    // Limpiar la tabla antes de agregar nuevas filas
+                    table.clear().draw();
+
+                    // Recorrer el odontograma y agregar nuevas filas
+                    odontograma.forEach(function(odonto) {
+                        // Agregar una nueva fila a la tabla
+                        table.row.add([
+                            odonto.fecha,
+                            odonto.diagnostico,
+                            odonto.caras,
+                            odonto.pieza,
+                            odonto.tratamiento,
+                            odonto.valor,
+                            '', // Columna vacía
+                            `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i>Pagar</button>`
+                        ]).draw(false);
+                    });
             }else{
                 swal({
                     icon:'error',

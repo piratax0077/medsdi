@@ -580,7 +580,36 @@
                                                 @endif
                                             @endforeach
                                         </div>
-
+                                        <div class="form row" id="contenedor_insumos">
+                                            @foreach ($insumos_tratamientos as $diagnostico)
+                                                @if($diagnostico->presupuesto == 1)
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Insumo</label>
+                                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="{{ $diagnostico->insumos }}">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label class="floating-label-activo-sm">Cantidad</label>
+                                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="{{ $diagnostico->cantidad }}">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ $diagnostico->descuento }}">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Total Prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                </div>
+                                                <div class="form-group col-md-2 d-flex">
+                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)"> Ver Estado Trabajo</button>
+                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
+                                                </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
                                     </form>
                                     <div id="valores">
                                          </br>
@@ -589,27 +618,33 @@
                                     <div class="container mt-4">
                                         <div class="row bg-light border p-3 text-center">
                                             <!-- Total -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <h5>Total Grupo/Boca</h5>
                                                 <p id="valores_examenes_presupuesto">$ {{ number_format($valores,0,',','.') }}</p>
                                             </div>
 
                                             <!-- Total Piezas -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <h5>Total Piezas</h5>
                                                 <p id="valores_piezas_presupuesto">$ {{ number_format($valores_piezas,0,',','.') }}</p>
                                             </div>
 
                                             <!-- Descuentos -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <h5>Descuentos</h5>
                                                 <p id="valores_descuentos_presupuesto">$0.00</p>
                                             </div>
 
+                                            <!-- Insumos -->
+                                            <div class="col-md-2">
+                                                <h5>Insumos</h5>
+                                                <p id="valores_insumos_presupuesto">$ {{ number_format($valores_insumos,0,',','.') }}</p>
+                                            </div>
+
                                             <!-- Total Final -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <h5>Total Final</h5>
-                                                <p id="valores_total_final_presupuesto">$ {{ number_format($valores + $valores_piezas,0,',','.') }}</p>
+                                                <p id="valores_total_final_presupuesto">$ {{ number_format($valores + $valores_piezas + $valores_insumos,0,',','.') }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -791,7 +826,7 @@
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
-                                                        <input type="text" class="form-control form-control-sm" name="subtotal_clinico" id="subtotal_clinico" value="{{ number_format($valores + $valores_piezas,0,',','.') }}">
+                                                        <input type="text" class="form-control form-control-sm" name="subtotal_clinico" id="subtotal_clinico" value="{{ number_format($valores + $valores_piezas + $valores_insumos,0,',','.') }}">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Descuento</label>
@@ -799,7 +834,7 @@
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Total Clínico</label>
-                                                        <input type="text" class="form-control form-control-sm" name="total_clinico" id="total_clinico" value="{{ number_format($valores + $valores_piezas,0,',','.') }}">
+                                                        <input type="text" class="form-control form-control-sm" name="total_clinico" id="total_clinico" value="{{ number_format($valores + $valores_piezas + $valores_insumos,0,',','.') }}">
                                                     </div>
 
                                                 </div>
