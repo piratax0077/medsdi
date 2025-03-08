@@ -62,6 +62,7 @@ use App\Models\InsumosTratamientosDental;
 use App\Models\Interconsulta;
 use App\Models\ImagenesDentalRxPaciente;
 use App\Models\ImagenesDentalPaciente;
+use App\Models\Laboratorio;
 use App\Models\Licencia;
 use App\Models\LicenciaPPF;
 use App\Models\LugarAtencion;
@@ -1890,6 +1891,8 @@ class ficha_atencionController extends Controller
         $tratamientos_implantologia = TratamientosImplantologia::orderBy('descripcion','asc')->get();
 
         $materiales_implantologia = MaterialesImplantologia::orderBy('descripcion','asc')->get();
+
+        $laboratorios = Laboratorio::where('id_lugar_atencion', $request->lugar_atencion_id)->get();
 
         return view($ruta_blade)->with(
             [

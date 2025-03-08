@@ -31,26 +31,26 @@
                          </div>
 
                          <div class="form-group col-sm-6 col-md-6">
-                             <label class="floating-label">N° Orden</label>
+                             <label class="floating-label-activo-sm">N° Orden</label>
                              <!--correlativo-->
                              <input type="text" class="form-control form-control-sm" name="nro_orden_trabajo_menor"
                                  id="nro_orden_trabajo_menor" value="{{ $correlativo_otm }}" disabled>
                          </div>
 
                          <div class="form-group col-sm-6 col-md-6">
-                             <label class="floating-label">Clinica/Dr./Dra</label>
+                             <label class="floating-label-activo-sm">Clinica/Dr./Dra</label>
                              <input type="text" class="form-control form-control-sm" name="clinica_doctor"
                                  id="clinica_doctor" value="{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}">
                          </div>
                          <div class="form-group col-sm-6 col-md-6">
-                             <label class="floating-label">Rut Profesional</label>
+                             <label class="floating-label-activo-sm">Rut Profesional</label>
                              <input type="text" class="form-control form-control-sm" name="rut_profesional_trabajo_menor"
                                  id="rut_profesional_trabajo_menor" value="{{ $profesional->rut }}">
                          </div>
                      </div>
                      <div class="form-row">
                          <div class="form-group col-sm-6 col-md-6">
-                             <label class="floating-label">Nombre Paciente</label>
+                             <label class="floating-label-activo-sm">Nombre Paciente</label>
                              <!--correlativo-->
                              <input type="text" class="form-control form-control-sm" name="paciente_trabajo_menor_"
                                  id="paciente_trabajo_menor_"
@@ -62,33 +62,49 @@
                              <input type="text" class="form-control form-control-sm" name="paciente_trabajo_mayor"
                                  id="paciente_trabajo_mayor" value="{{ $paciente->rut }}" disabled>
                          </div>
+                         <div class="form-group col-sm-12 col-md-12">
+                            <label class="floating-label-activo-sm">Laboratorios</label>
+                            <select name="" id="" class="form-control form-control-sm">
+                                @if(isset($laboratorios))
+                                    @foreach ($laboratorios as $lab)
+                                        <option value="{{ $lab->id }}">{{ $lab->nombre }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="1">Laboratorio1</option>
+                                    <option value="2">Laboratorio2</option>
+                                    <option value="3">Laboratorio3</option>
+                                    <option value="4">Laboratorio4</option>
+                                @endif
+
+                            </select>
+                        </div>
                          <div class="form-group col-sm-6 col-md-6">
-                             <label class="floating-label">Guia</label>
+                             <label class="floating-label-activo-sm">Guia</label>
                              <input type="text" class="form-control form-control-sm" name="guia" id="guia">
                          </div>
                          <div class="form-group col-sm-6 col-md-6">
-                             <label class="floating-label">Color</label>
+                             <label class="floating-label-activo-sm">Color</label>
                              <input type="text" class="form-control form-control-sm" name="color" id="color">
                          </div>
                      </div>
                      <div class="form-row">
                          <div class="form-group col-sm-6 col-md-6">
-                             <label class="floating-label">Urgencia</label>
+                             <label class="floating-label-activo-sm">Urgencia</label>
                              <input type="text" class="form-control form-control-sm" name="urgencia" id="urgencia">
                          </div>
                          <div class="form-group col-sm-6 col-md-6">
-                             <label class="floating-label">Material</label>
+                             <label class="floating-label-activo-sm">Material</label>
                              <input type="text" class="form-control form-control-sm" name="material" id="material">
                          </div>
                      </div>
                      <div class="form-row">
-                         <div class="form-group col-sm-12 col-md-12">
-                             <label class="floating-label">Trabajo a realizar</label>
+                         <div class="form-group col-sm-6 col-md-6">
+                             <label class="floating-label-activo-sm">Trabajo a realizar</label>
                              <input type="text" class="form-control form-control-sm" name="trabajo_realizar"
                                  id="trabajo_realizar">
                          </div>
-                         <div class="form-group col-sm-12 col-md-12">
-                             <label class="floating-label">Comentarios</label>
+                         <div class="form-group col-sm-6 col-md-6">
+                             <label class="floating-label-activo-sm">Comentarios</label>
                              <input type="" class="form-control form-control-sm" name="comentarios_trabajo_menor"
                                  id="comentarios_trabajo_menor">
                          </div>
