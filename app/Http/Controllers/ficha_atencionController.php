@@ -2123,7 +2123,7 @@ class ficha_atencionController extends Controller
     }
 
     public function damePresupuestosDental($id_paciente, $id_ficha_atencion, $id_lugar_atencion){
-        $presupuestos = PresupuestosDental::where('id_paciente',$id_paciente)->where('id_lugar_atencion',$id_lugar_atencion)->where('estado',1)->first();
+        $presupuestos = PresupuestosDental::where('id_ficha_atencion',$id_ficha_atencion)->first();
         return $presupuestos;
     }
 

@@ -37,7 +37,7 @@
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="tab-content" id="odogeneral">
                                     <!--DOLOR-->
-                                    <div class="tab-pane fade show active" id="examen_general" role="tabpanel" aria-labelledby="examen_general_tab">
+                                    <div class="tab-pane fade show " id="examen_general" role="tabpanel" aria-labelledby="examen_general_tab">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="card">
@@ -726,7 +726,7 @@
                                         </div>
                                     </div>
                                     <!--EXAMEN  BOCA GENERAL-->
-                                    <div class="tab-pane fade show" id="endo_boca_gral" role="tabpanel" aria-labelledby="endo_boca_gral-tab">
+                                    <div class="tab-pane fade show active" id="endo_boca_gral" role="tabpanel" aria-labelledby="endo_boca_gral-tab">
                                         <div class="container my-3">
                                             <div class="row mb-3">
                                                 <div class="col-md-4 px-1 py-1">

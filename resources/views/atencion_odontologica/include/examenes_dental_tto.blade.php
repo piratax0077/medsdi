@@ -361,8 +361,8 @@ function cargar_a_presupuesto_impl(counter){
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(${odonto.id},'${odonto.pieza}','${odonto.descripcion}')">+ Insumos</button>
+
+
                                 </div>
                             `);
                             $('#table_trabajos_presupuesto tbody').append(`
@@ -387,7 +387,9 @@ function cargar_a_presupuesto_impl(counter){
                     let total_general = valores_boca_general + valores_odontograma + valores_insumos;
                     $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
                     $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                    $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
                     $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                    $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
                     $('#subtotal_clinico').val(formatoMoneda(total_general));
                     $('#total_clinico').val(formatoMoneda(total_general));
 

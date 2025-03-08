@@ -1719,16 +1719,18 @@ class DentalController extends Controller
                     'boca_completa_gral_tratamientos' => $boca_completa_gral_tratamiento,
                     'boca_completa_gral_diagnosticos' => $boca_completa_gral_diagnostico,
                     'presupuesto' => $presupuesto,
+                    'todos' => $this->dameTratamientosBocaGeneral($pieza->id_ficha_atencion)
                 ];
             }else{
                 return ['status' => 0, 'mensaje' => 'Ha ocurrido un error con la pieza '.$pieza->pieza.'.'];
             }
         }else{
             $presupuesto = PresupuestosDental::where('id_paciente', $request->id_paciente)->where('id_lugar_atencion', $request->id_lugar_atencion)->where('id_ficha_atencion', $request->id_ficha_atencion)->first();
+
                 if(!$presupuesto){
                     $presupuesto = new PresupuestosDental;
                     $presupuesto->id_paciente = $request->id_paciente;
-                    $presupuesto->id_profesional = $request->id_profesional;
+                    $presupuesto->id_profesional = $profesional->id;
                     $presupuesto->id_ficha_atencion = $request->id_ficha_atencion;
                     $presupuesto->id_lugar_atencion = $request->id_lugar_atencion;
                     $presupuesto->datos_piezas_dentales = '{"key": "value"}'; // luego lo modificamos
@@ -1995,6 +1997,7 @@ class DentalController extends Controller
                     'boca_completa_gral_diagnostico_endo' => $boca_completa_gral_diagnostico_endo,
                     'boca_completa_gral_tratamientos' => $boca_completa_gral_tratamiento,
                     'boca_completa_gral_diagnosticos' => $boca_completa_gral_diagnostico,
+                    'todos' => $this->dameTratamientosBocaGeneral($pieza->id_ficha_atencion)
                 ];
             }else{
                 return ['status' => 0, 'mensaje' => 'Ha ocurrido un error con la pieza '.$pieza->pieza.'.'];
@@ -2016,6 +2019,17 @@ class DentalController extends Controller
             }
         }
 
+    }
+
+    public function dameTratamientosBocaGeneral($id_ficha_atencion){
+        $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
+
+        ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
+
+        ->where('examenes_boca_general.id_ficha_atencion',$id_ficha_atencion)
+        ->get();
+
+        return $examenes;
     }
 
     public function agregar_insumos_tratamiento(Request $req){

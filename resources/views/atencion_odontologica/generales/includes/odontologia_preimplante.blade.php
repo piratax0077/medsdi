@@ -950,9 +950,13 @@
                         let valores_insumos = resp.valores[2];
                         let total_general = valores_boca_general + valores_odontograma + valores_insumos;
                         $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                        $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
                         $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
                         $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
+                        $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
                         $('#subtotal_clinico').val(formatoMoneda(total_general));
                         $('#total_clinico').val(formatoMoneda(total_general));
 
@@ -1028,13 +1032,67 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${insumo.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)"> Ver Estado Trabajo</button>
-                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(15,'','','gral')">+ Insumos</button>
+
+
                                 </div>
                             `);
                             }
 
                         });
+
+                        let table_insumos = $('#presup_insumos_pago').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table_insumos.clear();
+
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 1){
+                                let rowNode = table_insumos.row.add([
+                                insumo.insumos,
+                                insumo.cantidad,         // Nombre del insumo
+                                formatoMoneda(insumo.valor),       // Cantidad utilizada
+                                0,         // Unidad de medida
+                                formatoMoneda(total),
+                                '',
+                                ''
+                            ]).draw(false).node();
+                             // Agregar clases a la fila
+                             $(rowNode).addClass('text-center align-middle');
+                            }
+
+                        })
+
+                        $('#tratamiento_presupuesto tbody').empty();
+                        let presupuesto = resp.presupuesto;
+                        console.log(presupuesto);
+                        $('#tratamiento_presupuesto tbody').append(`
+                        <tr>
+                            <td class="text-center align-middle">${presupuesto.fecha}</td>
+                            <td class="text-center align-middle">${presupuesto.id}</td>
+                            <td class="text-center align-middle">${presupuesto.aprobado}</td>
+                            <td class="text-center align-middle">Sector I</td>
+                            <td class="text-center align-middle">${presupuesto.boca}</td>
+
+                            <td class="text-center align-middle">
+                                <div class="form-group col-md-4">
+                                    <div class="switch switch-success d-inline m-r-2">
+                                        <input type="checkbox" id="info_finalizado" checked="">
+                                        <label for="info_finalizado" class="cr"></label>
+                                    </div>
+                                    <label>Realizado?</label>
+                                </div>
+                            </td>
+                            <td class="text-center align-middle">
+                            ${presupuesto.fecha}
+                            </td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-info btn-sm" onclick="presupuesto()" ;="">
+                                    <i class="fa fa-plus"></i> Trabajar en pieza
+                                </button>
+                            </td>
+                        </tr>
+                        `);
                     }
             },
             error: function(error){
@@ -1072,12 +1130,15 @@
                         let valores_insumos = resp.valores[2];
                         let total_general = valores_boca_general + valores_odontograma + valores_insumos;
                         $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                        $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
                         $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
                         $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
+                        $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
                         $('#subtotal_clinico').val(formatoMoneda(total_general));
                         $('#total_clinico').val(formatoMoneda(total_general));
-
                                 //limpiar_formulario_insumo();
 
                         let insumos = resp.insumos;
@@ -1152,13 +1213,41 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${insumo.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)"> Ver Estado Trabajo</button>
-                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos(15,'','','gral')">+ Insumos</button>
+
+
                                 </div>
                             `);
                             }
 
                         });
+
+                        console.log(insumos);
+                        let table_insumos = $('#presup_insumos_pago').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table_insumos.clear();
+
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 1){
+                                let rowNode = table_insumos.row.add([
+                                insumo.insumos,
+                                insumo.cantidad,         // Nombre del insumo
+                                formatoMoneda(insumo.valor),       // Cantidad utilizada
+                                0,         // Unidad de medida
+                                formatoMoneda(total),
+                                '',
+                                ''
+                            ]).draw(false).node();
+
+                            // Agregar clases a la fila
+                            $(rowNode).addClass('text-center align-middle');
+                            }
+
+                        });
+
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table_insumos.draw();
                     }else{
                         swal({
                             icon:'error',

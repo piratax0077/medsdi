@@ -1865,7 +1865,7 @@ class EscritorioProfesional extends Controller
             $odontograma = $this->dameOdontogramaPaciente($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
             $valores_odontograma = $this->dameValoresOdontograma($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
 
-
+            $insumos = $ficha_atencionController->dame_insumos_tratamiento($req->id_paciente, $req->id_ficha_atencion);
 
             // Renderizar la vista del presupuesto dental
             $pdf = Pdf::loadView('atencion_odontologica.PDF.presupuesto_dental', compact(
@@ -1883,7 +1883,8 @@ class EscritorioProfesional extends Controller
                 'maxilar_superior_gral_tratamientos_endo',
                 'maxilar_superior_gral_diagnosticos_endo',
                 'boca_completa_gral_tratamiento_endo',
-                'boca_completa_gral_diagnostico_endo'
+                'boca_completa_gral_diagnostico_endo',
+                'insumos'
             ));
             // Guardar el PDF en la carpeta public
             $fileName = 'presupuesto_dental_' . $req->id_paciente . '.pdf';
