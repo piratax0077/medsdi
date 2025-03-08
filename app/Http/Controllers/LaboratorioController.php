@@ -22,6 +22,7 @@ use App\Models\Direccion;
 use App\Models\Especialidad;
 use App\Models\EspecialidadesCm;
 use App\Models\ExamenMedico;
+use App\Models\FichaOtrosProfesionales;
 use App\Models\HoraMedica;
 use App\Models\Instituciones;
 use App\Models\Laboratorio;
@@ -58,6 +59,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class LaboratorioController extends Controller
 {
@@ -2495,6 +2497,7 @@ class LaboratorioController extends Controller
 
         return $datos;
     }
+
     public function agendar_horas(Request $request)
     {
 
@@ -2635,5 +2638,226 @@ class LaboratorioController extends Controller
         //Mail::to($paciente->email)->send(new \App\Mail\RegistroPacienteMail($details));
 
         return json_encode($hora_medica);
+    }
+
+    public function cargarResultado(Request $request)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $array_id_lugare_prof = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)
+                                                                                    ->pluck('id_lugar_atencion')
+                                                                                    ->toArray();
+
+        $array_institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare_prof)
+                                        ->where('id_tipo_institucion', 3)
+                                        ->pluck('id')
+                                        ->toArray();
+
+        if($array_institucion)
+        {
+            $array_id_lugar_suc = Sucursal::whereIn('id_institucion', $array_institucion)
+                                ->pluck('id_lugar_atencion')
+                                ->toArray();
+        }
+        else
+        {
+            $array_id_lug = Sucursal::whereIn('id_lugar_atencion', $array_id_lugare_prof)
+                            ->pluck('id_institucion')
+                            ->toArray();
+
+            $array_institucion = Instituciones::whereIn($array_id_lug)->where('id_tipo_institucion', 3)
+                                                ->pluck('id')
+                                                ->toArray();
+
+            $array_id_lugar_suc = Sucursal::whereIn('id_institucion', $array_institucion)
+                                                ->pluck('id_lugar_atencion')
+                                                ->toArray();
+        }
+
+        $horas_medicas = HoraMedica::select('horas_medicas.id','horas_medicas.fecha_consulta','horas_medicas.hora_inicio',
+                                            'horas_medicas.hora_termino', 'horas_medicas.tipo_hora_medica', 'horas_medicas.alias_examen',
+                                            'horas_medicas.id_box', 'horas_medicas.id_procedimiento', 'horas_medicas.id_jitsi_video_consulta',
+                                            'horas_medicas.descripcion','horas_medicas.comentarios_confirmacion','horas_medicas.fecha_confirmacion',
+                                            'horas_medicas.comentarios_cancelacion','horas_medicas.fecha_cancelacion','horas_medicas.fecha_realizacion_consulta',
+                                            'horas_medicas.id_ficha_atencion','horas_medicas.id_ficha_otros_prof','horas_medicas.id_profesional',
+                                            'horas_medicas.id_lugar_atencion','horas_medicas.id_asistente','horas_medicas.id_paciente',
+                                            'horas_medicas.acomp_representante','horas_medicas.acomp_acompanante','horas_medicas.acomp_lista',
+                                            'horas_medicas.autorizacion_atencion','horas_medicas.id_log_users_devices','horas_medicas.id_estado',
+                                            'horas_medicas.created_at','horas_medicas.updated_at')
+                                    ->with('Estado')
+                                    ->with('Paciente')
+                                    ->with('Profesional')
+                                    ->with('LugarAtencion')
+                                    ->with('ProcedimientoCentro')
+                                    ->with(['FichaOtrosProfesionales' => function($query){
+                                        $query->where('estado_archivo', 0);
+                                    }])
+                                    ->join('ficha_otros_profesionales', function($join){
+                                        $join->on('ficha_otros_profesionales.id', '=', 'horas_medicas.id_ficha_otros_prof');
+                                        $join->where('ficha_otros_profesionales.estado_archivo',0);
+                                    })
+                                    ->whereIn('horas_medicas.id_lugar_atencion', $array_id_lugar_suc)
+                                    ->where('horas_medicas.id_estado', 6)// realizadas
+                                    ->get();
+
+        // echo json_encode($horas_medicas);
+        // die();
+
+
+
+        return view('app.laboratorio.subir_examenes')->with([
+            'horas_medicas' => $horas_medicas,
+            'array_lugares' => implode(",", $array_id_lugar_suc),
+        ]);
+    }
+
+    public function cargarTablaResultado(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $rut = $request->rut;
+            $nombre = $request->nombre;
+            $apellido = $request->apellido;
+
+            $horas_medicas = HoraMedica::select('horas_medicas.id','horas_medicas.fecha_consulta','horas_medicas.hora_inicio',
+                    'horas_medicas.hora_termino', 'horas_medicas.tipo_hora_medica', 'horas_medicas.alias_examen',
+                    'horas_medicas.id_box', 'horas_medicas.id_procedimiento', 'horas_medicas.id_jitsi_video_consulta',
+                    'horas_medicas.descripcion','horas_medicas.comentarios_confirmacion','horas_medicas.fecha_confirmacion',
+                    'horas_medicas.comentarios_cancelacion','horas_medicas.fecha_cancelacion','horas_medicas.fecha_realizacion_consulta',
+                    'horas_medicas.id_ficha_atencion','horas_medicas.id_ficha_otros_prof','horas_medicas.id_profesional',
+                    'horas_medicas.id_lugar_atencion','horas_medicas.id_asistente','horas_medicas.id_paciente',
+                    'horas_medicas.acomp_representante','horas_medicas.acomp_acompanante','horas_medicas.acomp_lista',
+                    'horas_medicas.autorizacion_atencion','horas_medicas.id_log_users_devices','horas_medicas.id_estado',
+                    'horas_medicas.created_at','horas_medicas.updated_at')
+            ->with('Estado')
+            ->with('Paciente')
+            ->with('Profesional')
+            ->with('LugarAtencion')
+            ->with('ProcedimientoCentro')
+            ->with(['FichaOtrosProfesionales' => function($query){
+                $query->where('estado_archivo', 0);
+            }])
+            ->join('ficha_otros_profesionales', function($join){
+                $join->on('ficha_otros_profesionales.id', '=', 'horas_medicas.id_ficha_otros_prof');
+                $join->where('ficha_otros_profesionales.estado_archivo',0);
+            })
+            ->join('pacientes', function($join) use ( $rut, $nombre, $apellido ) {
+                $join->on('pacientes.id', '=', 'horas_medicas.id_paciente');
+            } )
+            ->whereIn('horas_medicas.id_lugar_atencion', explode(",",$request->lista_array))
+            ->where('horas_medicas.id_estado', 6)// realizadas
+            ->where(function ($query) use ($rut, $nombre, $apellido) {
+                if (!empty($rut)) {
+                    $query->where('pacientes.rut', 'like', '%' . $rut . '%');
+                }
+                if (!empty($nombre)) {
+                    $query->where('pacientes.nombres', 'like', '%' . $nombre . '%');
+                }
+                if (!empty($apellido)) {
+                    $query->where('pacientes.apellido_uno', 'like', '%' . $apellido . '%')->whereOr('pacientes.apellido_dos', 'like', '%' . $apellido . '%');
+                }
+            })
+            ->get();
+
+            if($horas_medicas)
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'registros';
+                $datos['registros'] = $horas_medicas;
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'campos requeridos';
+                $datos['error'] = $error;
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function subirResultado(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            $registro = FichaOtrosProfesionales::find($request->id_ficha_otros_profesionales);
+
+            if($registro)
+            {
+                $registro_archivo = array();
+                if(!empty($request->lista_archivos))
+                {
+                    $paciente = Paciente::find($request->id_paciente);
+                    $array_archivo = json_decode($request->lista_archivos);
+
+                    $resulto_img = array();
+                    foreach ($array_archivo as $key => $value)
+                    {
+                        $ruta_temp = $value[0];
+                        $nombre_real = $value[1];
+                        $nombre_temp = $value[2];
+                        $file_extension = $value[3];
+                        $nombre_final = $paciente->rut.'_examen_'.date('YmdHis').'_'.uniqid().'.'.$file_extension;
+
+                        $resulto_archivo[$key] = CargaArchivoController::moverArchivo($nombre_temp, 'archivo_archivo', $nombre_final);
+                        $url = $resulto_archivo[$key]['proceso']['url'];
+
+                        $url_temp = Storage::disk('archivo_archivo')->url($nombre_final);
+                        $archivo_correo[] = array('url' => $url_temp, 'nombre' => $nombre_final);
+
+                        array_push($registro_archivo, array(
+                            'nombre' => $nombre_final,
+                            'url' => $url
+                        ));
+                    }
+
+                    $registro_archivo = json_encode($registro_archivo);
+                }
+
+                if(!empty($registro_archivo))
+                    $registro->estado_archivo = 1;
+                else
+                    $registro->estado_archivo = 0;
+
+                $registro->archivo = $registro_archivo;
+
+                if($registro->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'exito';
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'falla en registro';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'registro no encontrado';
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
     }
 }

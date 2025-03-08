@@ -1529,21 +1529,36 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-a">
+                                            <div class="card-header-a" id="sec_carga_archivo">
+                                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#sec_carga_archivo_c" aria-expanded="false" aria-controls="sec_carga_archivo_c">
+                                                    CARGA DE ARCHIVOS
+                                                </button>
+                                            </div>
+                                            <div id="sec_carga_archivo_c" class="collapse show" aria-labelledby="sec_carga_archivo" data-parent="#sec_carga_archivo">
+                                                <div class="card-body-aten-a">
+                                                    <div class="row">
+                                                        <input type="hidden" name="input_lista_archivo" id="input_lista_archivo" value="">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <!-- [ Main Content ] start -->
+                                                            <div class="dropzone" id="mis-archivos" action="{{ route('profesional.archivo.carga') }}">
+                                                            </div>
+                                                            <!-- [ file-upload ] end -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <input type="hidden" name="input_lista_archivo" id="input_lista_archivo" value="">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <!-- [ Main Content ] start -->
-                        <div class="dropzone" id="mis-archivos" action="{{ route('profesional.archivo.carga') }}">
-                        </div>
-                        <!-- [ file-upload ] end -->
-                    </div>
-                </div>
+
 
                 <div class="row">
                     <!--GUARDAR O IMPRIMIR FICHA-->
@@ -1773,11 +1788,13 @@
             },
         };
 
+
         var lista_archivo = {};
         function cargar_lista_archivo(obj_dropzone, alias_archivo)
         {
             // console.log('--------------cargar_lista_archivo----------------------');
             lista_archivo = [];
+            $('#input_lista_archivo').val('');
             let temp  = obj_dropzone.getAcceptedFiles();
             $.each(temp, function( index, value )
             {

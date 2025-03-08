@@ -115,13 +115,11 @@
             <div class="col-md-12">
                 <div class="card-deck">
                     <div class="card subir">
-                        {{-- <a href="{{ route('laboratorio.lab_asistente.agenda_laboratorio') }}"> --}}
                         <div class="card-body text-center px-2" onclick="seleccionar_lugar_atencion();"
                             style="cursor:pointer">
                             <img class="wid-40 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
                             <h6 class="mt-1">Mi <br>agenda</h6>
                         </div>
-                        {{-- </a> --}}
                     </div>
                     <div class="card subir">
                         <a href="{{ route('profesional.pacientes') }}">
@@ -149,7 +147,11 @@
                         </a>
                     </div>  --}}
                     <div class="card subir">
-                        <a href="{{ route('profesional.index_transcripcion_examen') }}">
+                        {{-- <a href="{{ route('profesional.index_transcripcion_examen') }}"> --}}
+
+                        {{-- buscar resultados de pacientes --}}
+                        {{-- <a href="{{ route('laboratorio.lab_asistente.resultados_examenes_laboratorio') }}"> --}}
+                        <a href="{{ route('laboratorio.cargar.resultados') }}">
                             <div class="card-body text-center px-2" style="cursor:pointer">
                                 <img class="wid-40 text-center" src="{{ asset('images/iconos/examenes-ro.svg') }}">
                                 <h6 class="mt-1 f-13">Subir <br>exámenes</h6>
