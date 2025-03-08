@@ -62,6 +62,7 @@ use App\Models\InsumosTratamientosDental;
 use App\Models\Interconsulta;
 use App\Models\ImagenesDentalRxPaciente;
 use App\Models\ImagenesDentalPaciente;
+use App\Models\Laboratorio;
 use App\Models\Licencia;
 use App\Models\LicenciaPPF;
 use App\Models\LugarAtencion;
@@ -1891,6 +1892,8 @@ class ficha_atencionController extends Controller
 
         $materiales_implantologia = MaterialesImplantologia::orderBy('descripcion','asc')->get();
 
+        $laboratorios = Laboratorio::where('id_lugar_atencion', $request->lugar_atencion_id)->get();
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1900,6 +1903,7 @@ class ficha_atencionController extends Controller
                 'contador_div_evaluaciones' => $contador_div_evaluaciones,
                 'valores' => $valores_tratamientos[0],
                 'valores_piezas' => $valores_tratamientos[1],
+                'valores_insumos' => $valores_tratamientos[2],
                 'examenes_tto_implantes' => $examanes_tto_implantes,
                 'examenes_post_implantes' => $examenes_post_implantes,
                 'examenes_post_implantes_grupos' => $examenes_post_implantes_grupos,
@@ -2122,7 +2126,7 @@ class ficha_atencionController extends Controller
     }
 
     public function damePresupuestosDental($id_paciente, $id_ficha_atencion, $id_lugar_atencion){
-        $presupuestos = PresupuestosDental::where('id_paciente',$id_paciente)->where('id_lugar_atencion',$id_lugar_atencion)->where('estado',1)->first();
+        $presupuestos = PresupuestosDental::where('id_ficha_atencion',$id_ficha_atencion)->first();
         return $presupuestos;
     }
 
@@ -2171,8 +2175,22 @@ class ficha_atencionController extends Controller
 
         }
 
-        return [$total_general, $total_odontograma];
+        $total_insumos = 0;
+
+        $insumos = $this->dame_insumos_tratamiento($id_paciente, $id_ficha_atencion, null);
+
+        // Iterar y sumar valores
+        foreach ($insumos as $item) {
+            if($item['presupuesto'] == 1){
+                if (isset($item['valor'])) {
+                    $total_insumos += $item['valor'];
+                }
+            }
+
+        }
+        return [$total_general, $total_odontograma, $total_insumos];
     }
+
 
     public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null){
         $query = OdontogramaPaciente::select(

@@ -53,7 +53,7 @@
         <div class="text-center mx-1">
 
             <div class="diente_adulto" id="t{{ $codigoPieza }}">
-                <img src="{{ asset($imagen) }}" class="wid-40 img-fluid" role="button"
+                <img src="{{ asset($imagen) }}" class="wid-60 img-fluid" role="button"
                     onclick="info_odontograma('{{ $codigoPieza }}');">
             </div>
             <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2">{{ $codigoPieza }}</label>
@@ -86,7 +86,7 @@
         <div class="text-center mx-1">
 
             <div class="diente_adulto" id="t{{ $codigoPieza }}">
-                <img src="{{ asset($imagen) }}" class="wid-40 img-fluid" role="button"
+                <img src="{{ asset($imagen) }}" class="wid-60 img-fluid" role="button"
                     onclick="info_odontograma('{{ $codigoPieza }}');">
             </div>
             <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2">{{ $codigoPieza }}</label>
@@ -121,7 +121,7 @@
         <div class="text-center mx-1">
             <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2">{{ $codigoPieza }}</label>
             <div class="diente_adulto" id="t{{ $codigoPieza }}">
-                <img src="{{ asset($imagen) }}" class="wid-40 img-fluid" role="button"
+                <img src="{{ asset($imagen) }}" class="wid-60 img-fluid" role="button"
                     onclick="info_odontograma('{{ $codigoPieza }}');">
             </div>
 
@@ -153,7 +153,7 @@
     <div class="text-center mx-1">
         <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2">{{ $codigoPieza }}</label>
         <div class="diente_adulto" id="t{{ $codigoPieza }}">
-            <img src="{{ asset($imagen) }}" class="wid-40 img-fluid" role="button"
+            <img src="{{ asset($imagen) }}" class="wid-60 img-fluid" role="button"
                 onclick="info_odontograma('{{ $codigoPieza }}');">
         </div>
     </div>

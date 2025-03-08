@@ -1681,7 +1681,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
                                 </div>
                             `);
                             $('#table_trabajos_presupuesto tbody').append(`
@@ -1711,25 +1711,6 @@
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(response.odontograma_paciente_vista);
 
-                    let table = $('#presup_estado_pago').DataTable();
-
-                    // Limpiar la tabla antes de agregar nuevas filas
-                    table.clear().draw();
-
-                    // Recorrer el odontograma y agregar nuevas filas
-                    odontograma.forEach(function(odonto) {
-                            // Agregar una nueva fila a la tabla
-                            table.row.add([
-                                odonto.descripcion,
-                                odonto.pieza,
-                                odonto.valor,
-                                0,
-                                odonto.valor,
-                                '',
-                                '', // Columna vacía
-                                `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
-                            ]).draw(false);
-                        });
                 }
             }
         })
@@ -1846,7 +1827,7 @@
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
                             </div>
                             <div class="form-group col-md-2">
-                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
                             </div>
                         `);
                         $('#table_trabajos_presupuesto tbody').append(`
@@ -1874,26 +1855,6 @@
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(response.odontograma_paciente_vista);
 
-                    let table = $('#presup_estado_pago').DataTable();
-
-                    // Limpiar la tabla antes de agregar nuevas filas
-                    table.clear().draw();
-
-                    // Recorrer el odontograma y agregar nuevas filas
-                    odontograma.forEach(function(odonto) {
-                            // Agregar una nueva fila a la tabla
-                            table.row.add([
-                                odonto.descripcion,
-                                odonto.pieza,
-                                odonto.valor,
-                                0,
-                                odonto.valor,
-                                '',
-                                '', // Columna vacía
-                                `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
-                            ]).draw(false);
-                        });
-                    //table.draw();
                 }
             }
         });
@@ -2010,7 +1971,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
                                 </div>
                             `);
                             $('#table_trabajos_presupuesto tbody').append(`
@@ -2039,25 +2000,6 @@
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(response.odontograma_paciente_vista);
 
-                    let table = $('#presup_estado_pago').DataTable();
-
-                    // Limpiar la tabla antes de agregar nuevas filas
-                    table.clear().draw();
-
-                    // Recorrer el odontograma y agregar nuevas filas
-                    odontograma.forEach(function(odonto) {
-                            // Agregar una nueva fila a la tabla
-                            table.row.add([
-                                odonto.descripcion,
-                                odonto.pieza,
-                                odonto.valor,
-                                0,
-                                odonto.valor,
-                                '',
-                                '', // Columna vacía
-                                `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
-                            ]).draw(false);
-                        });
                 }
             }
         });
@@ -2174,7 +2116,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
                                 </div>
                             `);
                             $('#table_trabajos_presupuesto tbody').append(`
@@ -2203,25 +2145,7 @@
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(response.odontograma_paciente_vista);
 
-                    let table = $('#presup_estado_pago').DataTable();
 
-                    // Limpiar la tabla antes de agregar nuevas filas
-                    table.clear().draw();
-
-                    // Recorrer el odontograma y agregar nuevas filas
-                    odontograma.forEach(function(odonto) {
-                            // Agregar una nueva fila a la tabla
-                            table.row.add([
-                                odonto.descripcion,
-                                odonto.pieza,
-                                odonto.valor,
-                                0,
-                                odonto.valor,
-                                '',
-                                '', // Columna vacía
-                                `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
-                            ]).draw(false);
-                        });
                 }
             }
         });
@@ -2338,7 +2262,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
                                 </div>
                             `);
                             $('#table_trabajos_presupuesto tbody').append(`
@@ -2367,25 +2291,7 @@
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(response.odontograma_paciente_vista);
 
-                    let table = $('#presup_estado_pago').DataTable();
 
-                    // Limpiar la tabla antes de agregar nuevas filas
-                    table.clear().draw();
-
-                    // Recorrer el odontograma y agregar nuevas filas
-                    odontograma.forEach(function(odonto) {
-                            // Agregar una nueva fila a la tabla
-                            table.row.add([
-                                odonto.descripcion,
-                                odonto.pieza,
-                                odonto.valor,
-                                0,
-                                odonto.valor,
-                                '',
-                                '', // Columna vacía
-                                `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
-                            ]).draw(false);
-                        });
                 }
             }
         });
@@ -2502,7 +2408,7 @@
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
                             </div>
                             <div class="form-group col-md-2">
-                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
                             </div>
                         `);
                         $('#table_trabajos_presupuesto tbody').append(`
@@ -2531,25 +2437,7 @@
                     $('#odon_adults').append(response.odontograma_paciente_vista);
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(response.odontograma_paciente_vista);
-                    let table = $('#presup_estado_pago').DataTable();
 
-                    // Limpiar la tabla antes de agregar nuevas filas
-                    table.clear().draw();
-
-                    // Recorrer el odontograma y agregar nuevas filas
-                    odontograma.forEach(function(odonto) {
-                            // Agregar una nueva fila a la tabla
-                            table.row.add([
-                                odonto.descripcion,
-                                odonto.pieza,
-                                odonto.valor,
-                                0,
-                                odonto.valor,
-                                '',
-                                '', // Columna vacía
-                                `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
-                            ]).draw(false);
-                        });
                 }
             }
         });

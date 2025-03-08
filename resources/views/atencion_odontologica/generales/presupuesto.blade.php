@@ -214,8 +214,8 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${{ number_format($o->valor,0,',','.') }}" >
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-                                                    <button type="button" class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $o->id }},{{ $o->pieza }},'{{ $o->descripcion }}')">+ Insumos</button>
+
+
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -244,8 +244,8 @@
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                     </div>
                                                     <div class="form-group col-md-2 d-flex">
-                                                        <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                                        <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
+
+
                                                     </div>
                                                 @endif
                                             @endforeach
@@ -274,8 +274,8 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
+
+
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -304,8 +304,8 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
+
+
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -334,8 +334,8 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
+
+
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -364,8 +364,8 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
+
+
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -394,8 +394,8 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
+
+
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -424,8 +424,8 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
+
+
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -454,8 +454,8 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
+
+
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -484,8 +484,8 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
+
+
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -514,8 +514,8 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
+
+
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -544,8 +544,8 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
-                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
+
+
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -574,13 +574,42 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-                                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)"> Ver Estado Trabajo</button>
-                                                    <button type="button" class="btn btn-primary btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregarInsumos({{ $diagnostico->id }},'{{ $diagnostico->localizacion }}','{{ $diagnostico->diagnostico_tratamiento }}','gral')">+ Insumos</button>
+
+
                                                 </div>
                                                 @endif
                                             @endforeach
                                         </div>
+                                        <div class="form row" id="contenedor_insumos">
+                                            @foreach ($insumos_tratamientos as $diagnostico)
+                                                @if($diagnostico->presupuesto == 1)
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Insumo</label>
+                                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="{{ $diagnostico->insumos }}">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label class="floating-label-activo-sm">Cantidad</label>
+                                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="{{ $diagnostico->cantidad }}">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ $diagnostico->descuento }}">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Total Prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                </div>
+                                                <div class="form-group col-md-2 d-flex">
 
+
+                                                </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
                                     </form>
                                     <div id="valores">
                                          </br>
@@ -589,27 +618,33 @@
                                     <div class="container mt-4">
                                         <div class="row bg-light border p-3 text-center">
                                             <!-- Total -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <h5>Total Grupo/Boca</h5>
                                                 <p id="valores_examenes_presupuesto">$ {{ number_format($valores,0,',','.') }}</p>
                                             </div>
 
                                             <!-- Total Piezas -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <h5>Total Piezas</h5>
                                                 <p id="valores_piezas_presupuesto">$ {{ number_format($valores_piezas,0,',','.') }}</p>
                                             </div>
 
                                             <!-- Descuentos -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <h5>Descuentos</h5>
                                                 <p id="valores_descuentos_presupuesto">$0.00</p>
                                             </div>
 
+                                            <!-- Insumos -->
+                                            <div class="col-md-2">
+                                                <h5>Insumos</h5>
+                                                <p id="valores_insumos_presupuesto">$ {{ number_format($valores_insumos,0,',','.') }}</p>
+                                            </div>
+
                                             <!-- Total Final -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-4">
                                                 <h5>Total Final</h5>
-                                                <p id="valores_total_final_presupuesto">$ {{ number_format($valores + $valores_piezas,0,',','.') }}</p>
+                                                <p id="valores_total_final_presupuesto">$ {{ number_format($valores + $valores_piezas + $valores_insumos,0,',','.') }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -638,14 +673,9 @@
                                                     <div class="tab-content" id="v-pills-tabContent">
                                                         <div class="tab-pane fade show active" id="od_laboratorio_trab" role="tabpanel" aria-labelledby="od_laboratorio_trab-tab">
                                                             <div class="col-sm-12 col-md-12">
+
                                                                 <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">ESTADO TRABAJOS</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="form-row">
+
                                                                     <div class="form-group col-md-2">
                                                                         <label class="floating-label-activo-sm">Nombre Laboratorio</label>
                                                                         <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom">
@@ -670,23 +700,9 @@
                                                                         <label class="floating-label-activo-sm">N° Identificación</label>
                                                                         <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab">
                                                                     </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm"> Valor Total</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_cost_tot" id="lab_cost_tot">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm"> Abonos</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_abon" id="lab_abon">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm"> Valor Pendiente</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_val_pend" id="lab_val_pend">
-                                                                    </div>
-                                                                    <div class="form-group col-md-3">
-                                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2"onclick="info_lab();"><i class="fa fa-plus"></i>  Info Laboratorio</button>
-                                                                    </div>
-                                                                    <div class="form-group col-md-3">
-                                                                        <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2"onclick="info_lab();"><i class="fa fa-plus"></i>  Ingresar abono</button><!--este boton hace el calculo del abono y lo anota-->
+                                                                    <div class="form-group col-md-2 d-flex">
+
+
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-row">
@@ -695,30 +711,56 @@
                                                                         <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
                                                                     </div>
                                                                 </div>
+                                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo<span class="ripple ripple-animate" ></span></button>
                                                             </div>
                                                         </div>
-                                                        <div class="tab-pane fade show active" id="costo_presupuesto_trab" role="tabpanel" aria-labelledby="costo_presupuesto_trab-tab">
+                                                        <div class="tab-pane fade show" id="costo_presupuesto_trab" role="tabpanel" aria-labelledby="costo_presupuesto_trab-tab">
                                                             <div class="col-sm-12 col-md-12">
                                                                 <div class="form-row">
                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">Costo Presupuesto Laboratorio</label>
+                                                                        <div class="form-row">
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm">N° Identificación</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm"> Valor Total</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_cost_tot" id="lab_cost_tot">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm"> Abonos</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_abon" id="lab_abon">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm"> Valor Pendiente</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_val_pend" id="lab_val_pend">
+                                                                            </div>
+                                                                            <div class="form-group col-md-3">
+                                                                                <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2"onclick="info_lab();"><i class="fa fa-plus"></i>  Info Laboratorio</button>
+                                                                            </div>
+                                                                            {{-- <div class="form-group col-md-3">
+                                                                                <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2"onclick="info_lab();"><i class="fa fa-plus"></i>  Ingresar abono</button><!--este boton hace el calculo del abono y lo anota-->
+                                                                            </div> --}}
                                                                         </div>
                                                                     </div>
                                                                 </div>
 
                                                             </div>
+
                                                         </div>
                                                         <div class="tab-pane fade show " id="od_lab_estadopago" role="tabpanel" aria-labelledby="od_lab_estadopago-tab">
                                                             <div class="col-sm-12 col-md-12">
+
                                                                 <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <div class="form-group">
-                                                                            <label class="floating-label-activo-sm">ESTADOS DE PAGOS A LABORATORIO</label>
-                                                                        </div>
+                                                                    <div class="form-group col-md-2">
+                                                                        <label class="floating-label-activo-sm">N° de presupuesto</label>
+                                                                        <select name="n_presupuesto" id="n_presupuesto" class="form-control form-control-sm">
+                                                                            <option value="0">Seleccione</option>
+                                                                            @if(isset($presupuesto))
+                                                                            <option value="{{ $presupuesto->id }}">{{ $presupuesto->id }}</option>
+                                                                            @endif
+                                                                        </select>
                                                                     </div>
-                                                                </div>
-                                                                <div class="form-row">
                                                                     <div class="form-group col-md-2">
                                                                         <label class="floating-label-activo-sm">Nombre Laboratorio</label>
                                                                         <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom">
@@ -743,9 +785,7 @@
                                                                         <label class="floating-label-activo-sm"> Valor Pendiente</label>
                                                                         <input type="text" class="form-control form-control-sm" name="lab_cost_tot" id="lab_cost_tot">
                                                                     </div>
-                                                                </div>
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
                                                                         <label class="floating-label-activo-sm">Observaciones</label>
                                                                         <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
                                                                     </div>
@@ -805,11 +845,30 @@
                                                 </div>
                                                 <div class="form-row">
                                                     <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Insumos no incluidos</label>
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="subtotal_insumos" id="subtotal_insumos" value="{{ number_format($valores_insumos,0,',','.') }}">
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="descuento_insumos" id="descuento_insumos" value="0">
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Total Insumos</label>
+                                                        <input type="text" class="form-control form-control-sm" name="total_insumos" id="total_insumos" value="{{ number_format($valores_insumos,0,',','.') }}">
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Valor final</label>
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Total presupuesto</label>
-                                                        <input type="text" class="form-control form-control-sm" name="total_presupuesto" id="total_presupuesto">
+                                                        @php $suma = $valores + $valores_piezas + $valores_insumos; @endphp
+                                                        <input type="text" class="form-control form-control-sm" name="total_presupuesto" id="total_presupuesto" value="{{ number_format($suma,0,',','.') }}">
                                                     </div>
                                                 </div>
                                             </form>
@@ -827,6 +886,7 @@
                                                 <div class="form-row">
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Presupuesto N°</label>
+                                                        <input type="text" class="form-control form-control-sm" name="" id="" value="{{ $presupuesto ? $presupuesto->id : ''}}">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
@@ -851,41 +911,316 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-12">
+                                                        <h2 style="font-size: 25px; text-align: center;">Presupuesto por pieza</h2>
+                                                        <div class="dt-responsive table-responsive pb-4">
+                                                            <table id="presup_estado_pago"
+                                                                class="display table table-striped table-hover dt-responsive nowrap table-sm"
+                                                                style="width:100%">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-center align-middle">Prestación</th>
+                                                                        <th class="text-center align-middle">Pieza</th>
+                                                                        <th class="text-center align-middle">Valor total</th>
+                                                                        <th class="text-center align-middle">Descuento</th>
+                                                                        <th class="text-center align-middle">Valor a pagar</th>
+                                                                        <th class="text-center align-middle">Aprobado</th>
+                                                                        <th class="text-center align-middle">Estado</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach ($odontograma as $o)
+                                                                        @if($o->presupuesto == 1)
+                                                                            @php
+                                                                            if($o->estado == 0) {
+                                                                                $estado = 'PENDIENTE';
+                                                                            }elseif($o->estado == 1){
+                                                                                $estado = 'TERMINADO';
+                                                                                # code...
+                                                                            }
+                                                                            @endphp
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $o->descripcion }}</td>
+                                                                                <td class="text-center align-middle">{{ $o->pieza }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle"></td>
+                                                                                <td class="text-center align-middle">
+                                                                                    {{ $estado }}
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
 
-                                                        <div class="col-sm-12">
-                                                            <div class="dt-responsive table-responsive pb-4">
-                                                                <table id="presup_estado_pago"
-                                                                    class="display table table-striped table-hover dt-responsive nowrap table-sm"
-                                                                    style="width:100%">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th class="text-center align-middle">Prestación</th>
-                                                                            <th class="text-center align-middle">Pieza</th>
-                                                                            <th class="text-center align-middle">Valor total</th>
-                                                                            <th class="text-center align-middle">Descuento</th>
-                                                                            <th class="text-center align-middle">Valor a pagar</th>
-                                                                            <th class="text-center align-middle">Aprobado</th>
-                                                                            <th class="text-center align-middle">Estado</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        @foreach ($odontograma as $o)
-                                                                        <tr>
-                                                                            <td class="text-center align-middle">{{ $o->descripcion }}</td>
-                                                                            <td class="text-center align-middle">{{ $o->pieza }}</td>
-                                                                            <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
-                                                                            <td class="text-center align-middle">0</td>
-                                                                            <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
-                                                                            <td class="text-center align-middle"></td>
-                                                                            <td class="text-center align-middle">
-
-                                                                            </td>
-                                                                        </tr>
-                                                                        @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
+                                                                </tbody>
+                                                            </table>
                                                         </div>
+                                                    </div>
+                                                    <div class="col-md-12 mt-3">
+                                                        <h2 style="font-size: 25px; text-align: center;">Presupuesto por grupos</h2>
+                                                        <div class="dt-responsive table-responsive pb-4">
+                                                            <table id="presup_estado_pago_gral" class="display table table-striped table-hover dt-responsive nowrap table-sm w-100">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-center align-middle">Prestación</th>
+                                                                        <th class="text-center align-middle">Grupo</th>
+                                                                        <th class="text-center align-middle">Valor total</th>
+                                                                        <th class="text-center align-middle">Descuento</th>
+                                                                        <th class="text-center align-middle">Valor a pagar</th>
+                                                                        <th class="text-center align-middle">Aprobado</th>
+                                                                        <th class="text-center align-middle">Estado</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach ($maxilar_superior_gral_diagnosticos as $diagnostico)
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle"></td>
+                                                                                <td class="text-center align-middle">
+
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                    @foreach ($maxilar_superior_gral_tratamientos as $diagnostico)
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle"></td>
+                                                                                <td class="text-center align-middle">
+
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                    @foreach ($maxilar_superior_gral_tratamientos_endo as $diagnostico)
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle"></td>
+                                                                                <td class="text-center align-middle">
+
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                    @foreach ($maxilar_superior_gral_diagnosticos_endo as $diagnostico)
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle"></td>
+                                                                                <td class="text-center align-middle">
+
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                    @foreach ($maxilar_inferior_gral_diagnosticos as $diagnostico)
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle"></td>
+                                                                                <td class="text-center align-middle">
+
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                    @foreach ($maxilar_inferior_gral_tratamientos as $diagnostico)
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle"></td>
+                                                                                <td class="text-center align-middle">
+
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                    @foreach ($maxilar_inferior_gral_diagnosticos_endo as $diagnostico)
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle"></td>
+                                                                                <td class="text-center align-middle">
+
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                    @foreach ($maxilar_inferior_gral_tratamientos_endo as $diagnostico)
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle"></td>
+                                                                                <td class="text-center align-middle">
+
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                    @foreach ($boca_completa_gral_tratamientos as $diagnostico)
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle"></td>
+                                                                                <td class="text-center align-middle">
+
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                    @foreach ($boca_completa_gral_diagnosticos as $diagnostico)
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle"></td>
+                                                                                <td class="text-center align-middle">
+
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                    @foreach ($boca_completa_gral_tratamiento_endo as $diagnostico)
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle"></td>
+                                                                                <td class="text-center align-middle">
+
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                    @foreach ($boca_completa_gral_diagnostico_endo as $diagnostico)
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle"></td>
+                                                                                <td class="text-center align-middle">
+
+                                                                                </td>
+                                                                            </tr>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 mt-3">
+                                                        <h2 style="font-size: 25px; text-align: center;">Insumos y gastos generales</h2>
+                                                        <table id="presup_insumos_pago" class="display table table-striped table-hover dt-responsive nowrap table-sm w-100">
+                                                            <thead>
+                                                                <tr>
+                                                                    <td class="text-center align-middle">Insumo</td>
+                                                                    <td class="text-center align-middle">Cantidad</td>
+                                                                    <td class="text-center align-middle">Sub-total</td>
+                                                                    <td class="text-center align-middle">Descuento</td>
+                                                                    <td class="text-center align-middle">Total</td>
+                                                                    <td class="text-center align-middle">Aprobado</td>
+                                                                    <td class="text-center align-middle">Estado</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($insumos_tratamientos as $t)
+                                                                    @if($t->presupuesto == 1)
+                                                                    @php $total = $t->cantidad * $t->valor @endphp
+                                                                    <tr>
+                                                                        <td class="text-center align-middle">{{ $t->insumos }}</td>
+                                                                        <td class="text-center align-middle">{{ $t->cantidad }}</td>
+                                                                        <td class="text-center align-middle">{{ number_format($t->valor)  }}</td>
+                                                                        <td class="text-center align-middle">0</td>
+                                                                        <td class="text-center align-middle">{{ number_format($total)  }}</td>
+                                                                        <td class="text-center align-middle"></td>
+                                                                        <td class="text-center align-middle"></td>
+                                                                    </tr>
+                                                                    @endif
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3 bg-light border p-3 text-center">
+                                                    <!-- Total -->
+                                                    <div class="col-md-2">
+                                                        <h5>Total Grupo/Boca</h5>
+                                                        <p id="valores_examenes_presupuesto_conf">$ {{ number_format($valores,0,',','.') }}</p>
+                                                    </div>
+
+                                                    <!-- Total Piezas -->
+                                                    <div class="col-md-2">
+                                                        <h5>Total Piezas</h5>
+                                                        <p id="valores_piezas_presupuesto_conf">$ {{ number_format($valores_piezas,0,',','.') }}</p>
+                                                    </div>
+
+                                                    <!-- Descuentos -->
+                                                    <div class="col-md-2">
+                                                        <h5>Descuentos</h5>
+                                                        <p id="valores_descuentos_presupuesto_conf">$0.00</p>
+                                                    </div>
+
+                                                    <!-- Insumos -->
+                                                    <div class="col-md-2">
+                                                        <h5>Insumos</h5>
+                                                        <p id="valores_insumos_presupuesto_conf">$ {{ number_format($valores_insumos,0,',','.') }}</p>
+                                                    </div>
+
+                                                    <!-- Total Final -->
+                                                    <div class="col-md-4 d-flex justify-content-between">
+                                                        <div>
+                                                            <h5>Total Final</h5>
+                                                            <p id="valores_total_final_presupuesto_conf">$ {{ number_format($valores + $valores_piezas + $valores_insumos,0,',','.') }}</p>
+                                                        </div>
+                                                        <button type="button" class="btn btn-outline-success btn-sm">Pagar</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -989,6 +1324,185 @@
   <input type="hidden" id="id_pieza_tto">
   <input type="hidden" id="tipo_tto">
 <script>
+    const verModalAgregar = (fun,tipo,id)=>{
+
+        $('#agregar-antecedente').show();
+        $('#modificar-antecedente').hide();
+
+        var html = '';
+
+        switch(tipo){
+            case 1:
+                html+=`
+                    <table>
+                        <tr>
+                            <td>Procedimiento</td>
+                            <td><input class="form-control" type="text" id="procedimiento"></td>
+                        </tr>
+                        <tr>
+                            <td>Incidente</td>
+                            <td><textarea class="form-control" id="comentario"></textarea></td>
+                        </tr>
+                    </table>
+                `;
+            break;
+
+            case 2:
+                html+=`
+                    <table>
+                        <tr>
+                            <td>Nombre</td>
+                            <td><input class="form-control" type="text" id="nombre"></td>
+                        </tr>
+                        <tr>
+                            <td>Comentario</td>
+                            <td><textarea class="form-control" id="comentario"></textarea></td>
+                        </tr>
+                    </table>
+                `;
+            break;
+
+            case 3:
+                html+=`
+                    <table>
+                        <tr>
+                            <td>Fecha Cirugía</td>
+                            <td><input class="form-control" type="date" id="fecha"></td>
+                        </tr>
+                        <tr>
+                            <td>Procedimiento</td>
+                            <td><input class="form-control" type="text" id="procedimiento"></td>
+                        </tr>
+                        <tr>
+                            <td>Incidente</td>
+                            <td><textarea class="form-control" id="comentario"></textarea></td>
+                        </tr>
+                    </table>
+                `;
+            break;
+
+            case 4:
+                html+=`
+                    <table>
+                        <tr>
+                            <td>Procedimiento</td>
+                            <td><input class="form-control" type="text" id="procedimiento"></td>
+                        </tr>
+                        <tr>
+                            <td>Detalle</td>
+                            <td><textarea class="form-control" id="comentario"></textarea></td>
+                        </tr>
+                    </table>
+                `;
+            break;
+
+
+            case 5:
+
+                html+=`
+                    <table>
+                        <tr>
+                            <td>Nombre antecedente</td>
+                            <td><input class="form-control form-control-sm" type="text" id="procedimiento"></td>
+                        </tr>
+                        <tr>
+                            <td>Institución</td>
+                            <td><textarea class="form-control form-control-sm" id="institucion"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td>Fecha Evento</td>
+                            <td><input class="form-control" type="date" id="fecha"></td>
+                        </tr>
+                    </table>
+                `;
+            break;
+
+            case 6:
+                html+=`
+                    <table>
+                        <tr>
+                            <td>Nombre alergia</td>
+                            <td><input class="form-control form-control-sm" type="text" id="nombre"></td>
+                        </tr>
+                        <tr>
+                            <td>Detalle</td>
+                            <td><textarea class="form-control form-control-sm" id="comentario"></textarea></td>
+                        </tr>
+                    </table>
+                `;
+            break;
+
+            case 7:
+                html+=`
+                    <table>
+                        <tr>
+                            <td>Nombre Medicamento</td>
+                            <td>
+                                <div class="form-group">
+                                    <input class="form-control form-control-sm" type="text" id="nombre_medicamento_cronico">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Dosis</td>
+                            <td><textarea class="form-control" id="dosis"></textarea></td>
+                        </tr>
+
+                    </table>
+                `;
+            break;
+            case 8:
+                html+=`
+                    <table>
+                        <tr>
+                            <td>Tipo de Discapacidad</td>
+                            <td>
+                                <select class="form-control form-control-sm" name="discapacidad_tipo" id="discapacidad_tipo">
+                                    <option value="Auditíva">Auditíva</option>
+                                    <option value="Visual">Visual</option>
+                                    <option value="Locomotora">Locomotora </option>
+                                    <option value="Neurológica">Neurológica</option>
+                                    <option value="Fonoarticulatoria">Fonoarticulatoria</option>
+                                    <option value="Cognitiva">Cognitiva</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Grado</td>
+                            <td>
+                                <input class="form-control form-control-sm" type="text" id="discapacidad_grado">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Permanente</td>
+                            <td>
+                                <select class="form-control form-control-sm" name="discapacidad_permanente" id="discapacidad_permanente">
+                                    <option value="si">SI</option>
+                                    <option value="no">NO</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                    </table>
+                `;
+            break;
+        }
+
+        $('#body-modal-inputs').html(html);
+        if( tipo == 7)
+            activarMedicamentos('nombre_medicamento_cronico');
+        $('#tipo-antecedente-m').val(tipo);
+        $('#modal-ingreso').modal(fun);
+
+        if(id!=0)
+        {
+            $('#agregar-antecedente').hide();
+            $('#modificar-antecedente').show();
+            $('#id-antecedente-m').val(id);
+            cargarDatosAntecedente(id);
+        }
+
+    }
     function verModalAgregarInsumos(id_tto, objetivo, tto, tipo = null){
         dame_tratamientos_pieza(id_tto);
         limpiar_formulario_insumo();

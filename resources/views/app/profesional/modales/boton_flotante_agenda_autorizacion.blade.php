@@ -183,34 +183,19 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cerrar_autorizacion_fmu();"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
-                        <div class="col-md-12 text-center">
-                            <button class="btn btn-xs btn-success" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();" disabled>Solicitar Autorización para ver FMU</button>
+                <div class="form-row">
+                    <div class="col-12">
+                        <div class="form-group fill">
+                            <label for="rut_tons" class="floating-label-activo-sm">Rut de tons</label>
+                            <input type="text" name="rut_tons" id="rut_tons" class="form-control form-control-sm">
                         </div>
-                        <div class="col-md-12 text-center mt-3">
-                            <button class="btn btn-xs btn-danger" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" >Cerrar Autorización para ver FMU</button>
-                        </div>
-                    @else
-                        <div class="col-md-12 text-center ">
-                            <button class="btn btn-xs btn-success" id="modal_autorizacion_fmu_btn_solicitar" onclick="solicitar_autorizacion_fmu();">Solicitar Autorización para ver FMU</button>
-                        </div>
-                        <div class="col-md-12 text-center mt-3">
-                            <button class="btn btn-xs btn-danger" id="modal_autorizacion_fmu_btn_cancelar" onclick="cancelar_autorizacion_fmu();" disabled>Cerrar Autorización para ver FMU</button>
-                        </div>
-                    @endif
-                </div>
-                <div class="row">
-                    <div class="col-md-6" id="modal_autorizacion_fmu_imagen">
-                        {{--  --}}
                     </div>
-                    <div class="col-md-6" id="modal_autorizacion_fmu_mensaje">
-                        {{--  --}}
-                    </div>
+
                 </div>
+                <button type="button" class="btn btn-outline-success btn-sm w-100 my-3"><i class="fas fa-search"></i> Buscar</button>
 
             </div>
-            <div class="modal-body">
+            <div class="modal-footer">
                 <button class="btn btn-sm btn-danger" onclick="cerrar_autorizacion_fmu();">Cerrar</button>
             </div>
         </div>

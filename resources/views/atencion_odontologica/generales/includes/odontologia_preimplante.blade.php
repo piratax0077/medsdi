@@ -599,7 +599,11 @@
                                                                                         <td>{{ number_format($t->valor)  }}</td>
                                                                                         <td>{{ number_format($total)  }}</td>
                                                                                         <td>
+                                                                                            @if($t->presupuesto == 0 || $t->presupuesto == null)
                                                                                             <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo({{ $t->id }})"><i class="fas fa-save"></i></button>
+                                                                                            @else
+                                                                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo({{ $t->id }})"><i class="fas fa-save"></i></button>
+                                                                                            @endif
                                                                                             <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo({{ $t->id }})"><i class="fas fa-trash"></i></button>
                                                                                         </td>
                                                                                     </tr>
@@ -648,7 +652,22 @@
                               <input type="text" name="" id="" class="form-control form-control-sm" value="{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}">
                           </div>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-2">
+                        <div class="form-group">
+                            <label for="tipoInsumo" class="floating-label-activo-sm">Tipo de Insumo</label>
+                            <select name="tipoInsumo" id="tipoInsumo" class="form-control form-control-sm">
+                                <option value="0">Seleccione</option>
+                                <option value="1">Implantes y componentes</option>
+                                <option value="2">Biomateriales</option>
+                                <option value="3">Adhesivos y cementos</option>
+                                <option value="4">Instrumental Quirúrgico y Protésico</option>
+                                <option value="5">Material de Sutura y Regeneración</option>
+                                <option value="6">Insumos Descartables y Bioseguridad</option>
+                                <option value="7">Otros Insumos</option>
+                            </select>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
                           <div class="form-group">
                               <label for="" class="floating-label-activo-sm">Insumos</label>
                               <input type="text" name="nombreInsumo" id="nombreInsumo" class="form-control form-control-sm">
@@ -715,9 +734,13 @@
 
     function guardar_insumo(){
         let nombreInsumo = $('#nombreInsumo').val();
+        let tipoInsumo = $('#tipoInsumo').val();
+        let tipoInsumo_text = $('#tipoInsumo option:selected').text();
         let cantidad = $('#cantidad').val();
         let precio = $('#precio').val();
         let total = $('#total').val();
+
+        console.log(tipoInsumo);
 
         let mensaje = '';
         let valido = 1;
@@ -725,6 +748,10 @@
         if(nombreInsumo == ''){
             valido = 0;
             mensaje += '<li>Nombre insumo </li>';
+        }
+        if(tipoInsumo == 0){
+            valido = 0;
+            mensaje += '<li>Tipo de Insumo </li>';
         }
         if(cantidad == '' || cantidad <= 0){
             valido = 0;
@@ -738,6 +765,7 @@
         if(valido == 1){
             let data = {
                 insumos: nombreInsumo,
+                tipoInsumo: tipoInsumo_text,
                 cantidad: cantidad,
                 valor: precio,
                 total: total,
@@ -911,6 +939,322 @@
             data: data,
             success: function(resp){
                 console.log(resp);
+                if(resp.status == 1){
+                        swal({
+                            icon:'success',
+                            title:'Info',
+                            text: resp.mensaje
+                        });
+                        let valores_boca_general = resp.valores[0];
+                        let valores_odontograma = resp.valores[1];
+                        let valores_insumos = resp.valores[2];
+                        let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                        $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                        $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
+                        $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
+                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                        $('#subtotal_clinico').val(formatoMoneda(total_general));
+                        $('#total_clinico').val(formatoMoneda(total_general));
+
+                            //limpiar_formulario_insumo();
+                        let insumos = resp.insumos;
+                        console.log(insumos);
+                        let table = $('#table_insumos_preimplante').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table.clear();
+
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                    // Botones de acción
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>`;
+                            }else{
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>`;
+                            }
+
+                            table.row.add([
+                                insumo.id,
+                                insumo.insumos,         // Nombre del insumo
+                                insumo.cantidad,       // Cantidad utilizada
+                                insumo.valor,         // Unidad de medida
+                                total,
+                                botones
+                            ]);
+                        });
+
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table.draw();
+
+                        $('#contenedor_insumos').empty();
+                        insumos.forEach(insumo => {
+                            if(insumo.presupuesto == 1){
+                                $('#contenedor_insumos').append(`
+                                <div class="form-group col-md-2 fill">
+                                    <label class="floating-label-activo-sm">Insumo</label>
+                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos}">
+                                </div>
+                                <div class="form-group col-md-3 fill">
+                                    <label class="floating-label-activo-sm">Cantidad</label>
+                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                </div>
+                                <div class="form-group col-md-2 fill">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${insumo.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                </div>
+                                <div class="form-group col-md-2 fill">
+                                    <label class="floating-label-activo-sm">Total Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${insumo.valor}">
+                                </div>
+                                <div class="form-group col-md-2 d-flex">
+
+
+                                </div>
+                            `);
+                            }
+
+                        });
+
+                        let table_insumos = $('#presup_insumos_pago').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table_insumos.clear();
+
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 1){
+                                let rowNode = table_insumos.row.add([
+                                insumo.insumos,
+                                insumo.cantidad,         // Nombre del insumo
+                                formatoMoneda(insumo.valor),       // Cantidad utilizada
+                                0,         // Unidad de medida
+                                formatoMoneda(total),
+                                '',
+                                ''
+                            ]).draw(false).node();
+                             // Agregar clases a la fila
+                             $(rowNode).addClass('text-center align-middle');
+                            }
+
+                        })
+
+                        $('#tratamiento_presupuesto tbody').empty();
+                        let presupuesto = resp.presupuesto;
+                        console.log(presupuesto);
+                        $('#tratamiento_presupuesto tbody').append(`
+                        <tr>
+                            <td class="text-center align-middle">${presupuesto.fecha}</td>
+                            <td class="text-center align-middle">${presupuesto.id}</td>
+                            <td class="text-center align-middle">${presupuesto.aprobado}</td>
+                            <td class="text-center align-middle">Sector I</td>
+                            <td class="text-center align-middle">${presupuesto.boca}</td>
+
+                            <td class="text-center align-middle">
+                                <div class="form-group col-md-4">
+                                    <div class="switch switch-success d-inline m-r-2">
+                                        <input type="checkbox" id="info_finalizado" checked="">
+                                        <label for="info_finalizado" class="cr"></label>
+                                    </div>
+                                    <label>Realizado?</label>
+                                </div>
+                            </td>
+                            <td class="text-center align-middle">
+                            ${presupuesto.fecha}
+                            </td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-info btn-sm" onclick="presupuesto()" ;="">
+                                    <i class="fa fa-plus"></i> Trabajar en pieza
+                                </button>
+                            </td>
+                        </tr>
+                        `);
+                    }
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        });
+    }
+
+    function sacar_de_presupuesto_insumo(id){
+        let url = "{{ ROUTE('dental.sacar_tratamiento_presupuesto') }}";
+        let data = {
+            id: id,
+            tipo:'insumo',
+            id_paciente: dame_id_paciente(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+             _token: "{{ csrf_token() }}"
+        }
+        console.log(data);
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                    if(resp.status == 1){
+                        swal({
+                            icon:'success',
+                            title:'Info',
+                            text: resp.mensaje
+                        });
+
+                        let valores_boca_general = resp.valores[0];
+                        let valores_odontograma = resp.valores[1];
+                        let valores_insumos = resp.valores[2];
+                        let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                        $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                        $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
+                        $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
+                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                        $('#subtotal_clinico').val(formatoMoneda(total_general));
+                        $('#total_clinico').val(formatoMoneda(total_general));
+                                //limpiar_formulario_insumo();
+
+                        let insumos = resp.insumos;
+                        console.log(insumos);
+                        let table = $('#table_insumos_preimplante').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table.clear();
+
+
+
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                            // Botones de acción
+                            var botones = `
+                            <td>
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>`;
+                            }else{
+                                var botones = `
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>`;
+                            }
+                            table.row.add([
+                                insumo.id,
+                                insumo.insumos,         // Nombre del insumo
+                                insumo.cantidad,       // Cantidad utilizada
+                                insumo.valor,         // Unidad de medida
+                                total,
+                                botones
+                            ]);
+                        });
+
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table.draw();
+
+                        $('#contenedor_insumos').empty();
+                        insumos.forEach(insumo => {
+                            if(insumo.presupuesto == 1){
+                                $('#contenedor_insumos').append(`
+                                <div class="form-group col-md-2 fill">
+                                    <label class="floating-label-activo-sm">Insumo</label>
+                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos}">
+                                </div>
+                                <div class="form-group col-md-3 fill">
+                                    <label class="floating-label-activo-sm">Cantidad</label>
+                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                </div>
+                                <div class="form-group col-md-2 fill">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${insumo.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                </div>
+                                <div class="form-group col-md-2 fill">
+                                    <label class="floating-label-activo-sm">Total Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${insumo.valor}">
+                                </div>
+                                <div class="form-group col-md-2 d-flex">
+
+
+                                </div>
+                            `);
+                            }
+
+                        });
+
+                        console.log(insumos);
+                        let table_insumos = $('#presup_insumos_pago').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table_insumos.clear();
+
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 1){
+                                let rowNode = table_insumos.row.add([
+                                insumo.insumos,
+                                insumo.cantidad,         // Nombre del insumo
+                                formatoMoneda(insumo.valor),       // Cantidad utilizada
+                                0,         // Unidad de medida
+                                formatoMoneda(total),
+                                '',
+                                ''
+                            ]).draw(false).node();
+
+                            // Agregar clases a la fila
+                            $(rowNode).addClass('text-center align-middle');
+                            }
+
+                        });
+
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table_insumos.draw();
+                    }else{
+                        swal({
+                            icon:'error',
+                            title:'info',
+                            text: resp.mensaje
+                        });
+                    }
 
 
             },

@@ -16,7 +16,7 @@
         </div>
         <div class="card-body">
           <p><strong>Paciente:</strong> {{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}</p>
-          <p><strong>Total a pagar:</strong> {{number_format($valores_odontograma[0] + $valores_odontograma[1],0,',','.')  }}</p>
+          <p><strong>Total a pagar:</strong> {{number_format($valores_odontograma[0] + $valores_odontograma[1] + $valores_odontograma[2],0,',','.')  }}</p>
           <p><strong>Fecha:</strong> {{ date('Y-m-d') }}</p>
         </div>
       </div>
@@ -191,6 +191,18 @@
                     <td></td>
                 </tr>
                 @endif
+            @endforeach
+            @foreach ($insumos as $i)
+            @if($i->presupuesto == 1)
+                <tr>
+                    <td>{{ $i->insumos }}</td>
+                    <td>{{ $i->cantidad }}</td>
+                    <td>{{ $i->tipo_insumo }}</td>
+                    <td>-</td>
+                    <td>${{ number_format($i->valor * $i->cantidad,0) }}</td>
+                </tr>
+            @endif
+
             @endforeach
         </tbody>
       </table>
