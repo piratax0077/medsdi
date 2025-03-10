@@ -41,4 +41,14 @@ class HoraMedica extends Model
     {
         return $this->hasOne(NotificacionConfirmacion::class, 'id_evento', 'id')->where('tipo_notificacion',1);
     }
+
+    public function FichaOtrosProfesionales()
+    {
+        return $this->hasOne(FichaOtrosProfesionales::class,'id','id_ficha_otros_prof');
+    }
+
+    public function ProcedimientoCentro()
+    {
+        return $this->hasOne(ProcedimientosCentro::class,'id','id_procedimiento');
+    }
 }

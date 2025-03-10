@@ -1358,6 +1358,11 @@ Route::group([
     Route::get('agenda/hora', [App\Http\Controllers\LaboratorioController::class, 'agendar_horas'])->name('laboratorio.agendar_hora');
 
 
+    Route::get('resultado/cargar', [App\Http\Controllers\LaboratorioController::class, 'cargarResultado'])->name('laboratorio.cargar.resultados');
+    Route::post('resultado/subir', [App\Http\Controllers\LaboratorioController::class, 'subirResultado'])->name('laboratorio.subir.examen');
+    Route::get('resultado/cargar/tabla', [App\Http\Controllers\LaboratorioController::class, 'cargarTablaResultado'])->name('laboratorio.cargar.tabla.resultados');
+
+
 });
 
 
