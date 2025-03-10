@@ -2423,7 +2423,7 @@
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
                                     <button type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">Guardar ficha y finalizar su consulta </button>
                                     <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su agenda">
-                                    <input type="submit" class="btn btn-primary mt-1" onclick="$('#cerrarsession').val('2');agregar_medicamentos_ficha(); agregar_examenes_ficha();" value="Guardar y continuar en ficha">
+                                    <input type="button" class="btn btn-primary mt-1" onclick="$('#cerrarsession').val('2');agregar_medicamentos_ficha(); agregar_examenes_ficha(); guardar_ficha()" value="Guardar y continuar en ficha">
                                 </div>
                             </div>
                             <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
@@ -6841,6 +6841,81 @@ function agregar_examenes_ficha() {
             console.log(error.responseText);
         }
     });
+}
+
+function guardar_ficha(){
+    let motivo = $('#motivo').val();
+    let antecedentes = $('#antecedentes').val();
+    let examen_fisico = $('#examen_fisico').val();
+
+    let valido = 1;
+    let mensaje = '';
+
+    if(motivo == ''){
+        valido = 0;
+        mensaje += '<li>Motivo</li>';
+    }
+
+    if(antecedentes == ''){
+        valido = 0;
+        mensaje += '<li>Antecedentes</li>';
+    }
+
+    if(examen_fisico == ''){
+        valido = 0;
+        mensaje += '<li>Examen fisico</li>';
+    }
+
+    if(valido == 0){
+        swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+
+            return false;
+    }
+
+    let data = {
+        motivo: motivo,
+        antecedentes: antecedentes,
+        examen_fisico: examen_fisico,
+        descripcion_hipotesis: '',
+        hipotesis_diagnostico: '',
+        descripcion_hipotesis:'',
+        id_profesional_fc: $('#id_profesional').val(),
+        id_paciente_fc: $('#id_paciente').val(),
+        hora_medica: $('#hora_medica').val(),
+        cerrarsession: 2,
+        _token: CSRF_TOKEN
+    }
+
+    $.ajax({
+        type:'post',
+        url:'{{ ROUTE("dental.registrar_ficha_atencion_dental") }}',
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.estado == 'ok'){
+                swal({
+                    title:'exito',
+                    text: resp.mensaje,
+                    icon:'success'
+                });
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+
 }
 
 
