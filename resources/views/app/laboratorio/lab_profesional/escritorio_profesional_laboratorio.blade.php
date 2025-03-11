@@ -78,6 +78,7 @@
         }
     </script>
 @endsection
+
 @section('content')
     <!--Container Completo-->
     <div class="pcoded-main-container">
@@ -122,7 +123,7 @@
                         </div>
                     </div>
                     <div class="card subir">
-                        <a href="{{ route('profesional.pacientes') }}">
+                        <a href="{{ route('laboratorio.pacientes.profesional.asistente') }}">
                             <div class="card-body text-center px-2" style="cursor:pointer">
                                 <img class="wid-40 text-center" src="{{ asset('images/iconos/pacientes.svg') }}">
                                 <h6 class="mt-1">Mis <br>pacientes</h6>
@@ -180,7 +181,7 @@
                 <div class="row">
                  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="card mb-3 subir">
-                        <a href="{{ ROUTE('laboratorio.lab_profesional.pacientes_laboratorio') }}">
+                        <a href="{{ ROUTE('laboratorio.pacientes.profesional.asistente') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center" src="{{ asset('images/iconos/pacientes-lab.png') }}">
                                 <h6 class="mt-1">Pacientes del Lab.</h6>

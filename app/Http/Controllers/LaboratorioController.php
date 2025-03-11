@@ -59,6 +59,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class LaboratorioController extends Controller
@@ -1411,23 +1412,22 @@ class LaboratorioController extends Controller
             $sql_val[] = '%'.$apellido.'%';
         }
 
-        $registro = Paciente::with(['FichaAtencion' => function($query) use ($id_lugar_atencion){
-                                $query->select('id','id_lugar_atencion','id_paciente')->where('id_lugar_atencion',$id_lugar_atencion);
-                            }])
-                            ->with(['Prevision' =>function($query){
-                                $query->select('id','nombre');
-                            }])
-                            ->with(['Direccion' =>function($query){
-                                $query->select('id','direccion','numero_dir','id_ciudad')
-                                            ->with(['Ciudad' => function($query2){
-                                                $query2->select('id','nombre','id_region')
-                                                    // ->Region()
-                                                    ;
-                                            }]);
-                            }])
-                            /** PERMITE FILTRAR POR LUGAR ATENCION, RUT, NOMBRE, APELLIDO  */
-                            ->porLuAt_Rut_Nom_Ape($id_lugar_atencion, $rut, $nombre, $apellido)
-                            ->get();
+        $registro = Paciente::with(['FichaAtencionOtrosProfesionales' => function($query) use ($id_lugar_atencion){
+                                    $query->select('id','id_lugar_atencion','id_paciente')->where('id_lugar_atencion',$id_lugar_atencion);
+                                }])
+                                ->with(['Prevision' =>function($query){
+                                    $query->select('id','nombre');
+                                }])
+                                ->with(['Direccion' =>function($query){
+                                    $query->select('id','direccion','numero_dir','id_ciudad')
+                                                ->with(['Ciudad' => function($query2){
+                                                    $query2->select('id','nombre','id_region');
+                                                }]);
+                                }])
+                                /** PERMITE FILTRAR POR LUGAR ATENCION, RUT, NOMBRE, APELLIDO  */
+                                ->porLuAt_Rut_Nom_Ape($id_lugar_atencion, $rut, $nombre, $apellido)
+                                ->get();
+
         if($registro)
         {
             $datos['estado'] = 1;
@@ -2860,4 +2860,88 @@ class LaboratorioController extends Controller
 
         return $datos;
     }
+
+    public function buscar_pacientes_profesional_asistente(Request $request)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+
+
+        if($profesional)
+        {
+            $array_id_lugare_prof = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)
+            ->pluck('id_lugar_atencion')
+            ->toArray();
+
+            $array_institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugare_prof)
+                                            ->where('id_tipo_institucion', 3)
+                                            ->pluck('id')
+                                            ->toArray();
+
+            if($array_institucion)
+            {
+                $array_id_lugar_suc = Sucursal::whereIn('id_institucion', $array_institucion)
+                                    ->pluck('id_lugar_atencion')
+                                    ->toArray();
+            }
+            else
+            {
+                $array_id_lug = Sucursal::whereIn('id_lugar_atencion', $array_id_lugare_prof)
+                                ->pluck('id_institucion')
+                                ->toArray();
+
+                $array_institucion = Instituciones::whereIn($array_id_lug)->where('id_tipo_institucion', 3)
+                                                    ->pluck('id')
+                                                    ->toArray();
+
+                $array_id_lugar_suc = Sucursal::whereIn('id_institucion', $array_institucion)
+                                                    ->pluck('id_lugar_atencion')
+                                                    ->toArray();
+            }
+        }
+        else
+        {
+            $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+
+            if($asistente)
+            {
+                $array_id_lugres_asis = Asistente::where('id_asistente',$asistente->id)
+                ->pluck('id_lugar_atencion')
+                ->toArray();
+
+                $array_institucion = Instituciones::whereIn('id_lugar_atencion', $array_id_lugres_asis)
+                                            ->where('id_tipo_institucion', 3)
+                                            ->pluck('id')
+                                            ->toArray();
+
+                if($array_institucion)
+                {
+                    $array_id_lugar_suc = Sucursal::whereIn('id_institucion', $array_institucion)
+                                        ->pluck('id_lugar_atencion')
+                                        ->toArray();
+                }
+                else
+                {
+                    $array_id_lug = Sucursal::whereIn('id_lugar_atencion', $array_id_lugres_asis)
+                                    ->pluck('id_institucion')
+                                    ->toArray();
+
+                    $array_institucion = Instituciones::whereIn($array_id_lug)->where('id_tipo_institucion', 3)
+                                                        ->pluck('id')
+                                                        ->toArray();
+
+                    $array_id_lugar_suc = Sucursal::whereIn('id_institucion', $array_institucion)
+                                                        ->pluck('id_lugar_atencion')
+                                                        ->toArray();
+                }
+            }
+        }
+
+        $url = 'app.laboratorio.pacientes_prof_asis';
+        $array_data = array(
+            'lugares_atencion' => implode(',',$array_id_lugar_suc),
+        );
+        return view($url, $array_data);
+    }
+
 }
