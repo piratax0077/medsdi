@@ -197,9 +197,109 @@
         $('#modal_orden_trabajoM').modal('show');
     }
 
-    function generar_pdf_trabajo_mayor_dental(){
-        console.log('pdf orden trabajo mayor');
-        let numero_orden = $('#nro_orden_trabajo_mayor').val();
+    function generar_pdf_trabajo_mayor_dental() {
+    console.log('pdf orden trabajo mayor');
+    let campos = [
+        { id: '#nro_orden_trabajo_mayor', nombre: 'N° orden' },
+        { id: '#id_profesional_fc', nombre: 'ID Profesional' },
+        { id: '#id_paciente', nombre: 'ID Paciente' },
+        { id: '#guia_trabajo_mayor', nombre: 'Guía' },
+        { id: '#color_trabajo_mayor', nombre: 'Color' },
+        { id: '#urgencia_trabajo_mayor', nombre: 'Urgencia' },
+        { id: '#material_trabajo_mayor', nombre: 'Material' },
+        { id: '#trabajo_realizar_trabajo_mayor', nombre: 'Trabajo a realizar' },
+        { id: '#comentarios_trabajo_mayor', nombre: 'Comentarios' },
+        { id: '#marca_implante_trabajo_mayor', nombre: 'Marca implante' },
+        { id: '#medida_implante_trabajo_mayor', nombre: 'Medida implante' },
+        { id: '#nro_replicas_trabajo_mayor', nombre: 'N° Réplicas' },
+        { id: '#nro_tornillos_trabajo_mayor', nombre: 'N° Tornillos' },
+        { id: '#otros_trabajo_mayor', nombre: 'Otros' },
+        { id: '#cubetas_trabajo_mayor', nombre: 'Cubetas' },
+        { id: '#p_articulacion_trabajo_mayor', nombre: 'Prueba articulación' },
+        { id: '#p_dientes_trabajo_mayor', nombre: 'Prueba dientes' },
+        { id: '#p_metal_trabajo_mayor', nombre: 'Prueba metal' },
+        { id: '#bizcocho_trabajo_mayor', nombre: 'Bizcocho' },
+        { id: '#terminacion_trabajo_mayor', nombre: 'Terminación' },
+        { id: '#compostura_trabajo_mayor', nombre: 'Compostura' }
+    ];
 
+    let valido = 1;
+    let mensaje = '';
+    let data = {};
+
+    campos.forEach(campo => {
+        let valor = $(campo.id).val().trim();
+        if (valor === '') {
+            valido = 0;
+            mensaje += `<li>${campo.nombre}</li>`;
+        } else {
+            data[campo.clave] = valor;
+        }
+    });
+
+    if (!valido) {
+        swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+    } else {
+        let url = "{{ ROUTE('dental.registrar_orden_trabajo_mayor') }}";
+       let data = {
+        nro_orden_trabajo_mayor: $('#nro_orden_trabajo_mayor').val(),
+        clinica_doctor_trabajo_mayor: $('#clinica_doctor_trabajo_mayor').val(),
+        rut_profesional_trabajo_mayor: $('#rut_profesional_trabajo_mayor').val(),
+        id_profesional: $('#id_profesional_fc').val(),
+        paciente_trabajo_mayor: $('#id_paciente').val(),
+        guia_trabajo_mayor: $('#guia_trabajo_mayor').val(),
+        color_trabajo_mayor: $('#color_trabajo_mayor').val(),
+        urgencia_trabajo_mayor: $('#urgencia_trabajo_mayor').val(),
+        material_trabajo_mayor: $('#material_trabajo_mayor').val(),
+        trabajo_realizar_trabajo_mayor: $('#trabajo_realizar_trabajo_mayor').val(),
+        comentarios_trabajo_mayor: $('#comentarios_trabajo_mayor').val(),
+        marca_implante_trabajo_mayor: $('#marca_implante_trabajo_mayor').val(),
+        _medida_implantetrabajo_mayor: $('#medida_implante_trabajo_mayor').val(),
+        nro_replicas_trabajo_mayor: $('#nro_replicas_trabajo_mayor').val(),
+        nro_tornillos_trabajo_mayor: $('#nro_tornillos_trabajo_mayor').val(),
+        otros_trabajo_mayor: $('#otros_trabajo_mayor').val(),
+        cubetas_trabajo_mayor: $('#cubetas_trabajo_mayor').val(),
+        p_articulacion_trabajo_mayor: $('#p_articulacion_trabajo_mayor').val(),
+        p_dientes_trabajo_mayor: $('#p_dientes_trabajo_mayor').val(),
+        p_metal_trabajo_mayor: $('#p_metal_trabajo_mayor').val(),
+        bizcocho_trabajo_mayor: $('#bizcocho_trabajo_mayor').val(),
+        terminacion_trabajo_mayor: $('#terminacion_trabajo_mayor').val(),
+        compostura_trabajo_mayor: $('#compostura_trabajo_mayor').val(),
+        id_ficha_atencion: $('#id_fc').val(),
+        id_lugar_atencion: $('#id_lugar_atencion').val(),
+        _token: CSRF_TOKEN
+       }
+
+       $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.estado == 'ok'){
+                    swal({
+                        icon:'success',
+                        title:'Exito',
+                        text: resp.mensaje
+                    });
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+       });
     }
+}
+
 </script>

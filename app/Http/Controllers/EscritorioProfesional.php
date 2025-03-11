@@ -53,6 +53,7 @@ use App\Models\ImagenesDentalPaciente;
 use App\Models\InformeMedico;
 use App\Models\Interconsulta;
 use App\Models\Instituciones;
+use App\Models\InsumosTratamientosDental;
 use App\Models\LugarAtencion;
 use App\Models\LiquidacionRecibo;
 use App\Models\LogUsersDevices;
@@ -1609,8 +1610,21 @@ class EscritorioProfesional extends Controller
         $pieza = $req->pieza;
         $responsable = User::find(Auth::user()->id);
         $seccion = $req->seccion;
-        $v = view('atencion_odontologica.include.examenes_dental_tto',['counter' => $idCounter,'seccion' => $seccion,'pieza' => $pieza])->render();
+        $insumos_tratamientos = $this->dame_insumos_tratamiento($req->id_paciente, $req->id_ficha_atencion, null);
+        $v = view('atencion_odontologica.include.examenes_dental_tto',['counter' => $idCounter,'seccion' => $seccion,'pieza' => $pieza, 'insumos_tratamientos' => $insumos_tratamientos])->render();
         return ['mensaje' => 'OK','v' => $v];
+    }
+
+    public function dame_insumos_tratamiento($id_paciente,$id_ficha_atencion,$tipo = null){
+        try {
+
+            $insumos = InsumosTratamientosDental::where('id_paciente', $id_paciente)->where('id_ficha_atencion',$id_ficha_atencion)->get();
+            return $insumos;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
     }
 
     public function mostrar_nueva_pieza_dental_tto_impl(Request $req){

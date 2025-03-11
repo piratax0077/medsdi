@@ -2881,7 +2881,7 @@
                 source: function(request, response) {
                     // Fetch data
                     $.ajax({
-                        url: "{{ route('dental.getDiagnosticoDental') }}",
+                        url: "{{ route('dental.getTratamientoImplantologia') }}",
                         type: 'post',
                         dataType: "json",
                         data: {
@@ -2912,6 +2912,36 @@
         $('#paciente_piezas_dentales_ex_').select2();
         $('#tpo_proc_imp').select2();
         $('#prot_pieza_imp').select2();
+
+        const piezasSelect = $('#paciente_piezas_dentales_ex');
+
+        // Inicializar Select2
+        piezasSelect.select2({
+            placeholder: "Seleccione las piezas",
+            allowClear: true
+        });
+
+        // Control de selección de piezas en el odontograma
+        $('.pieza').on('click', function () {
+            const piezaNumero = $(this).data('pieza').toString(); // Convertir a string por seguridad
+
+            if ($(this).hasClass('seleccionada')) {
+                // Si ya está seleccionada, deseleccionarla
+                $(this).removeClass('seleccionada');
+                const options = piezasSelect.val().filter(item => item !== piezaNumero); // Filtra el elemento a eliminar
+                piezasSelect.val(options).trigger('change');
+            } else {
+                // Si no está seleccionada, agregarla
+                $(this).addClass('seleccionada');
+
+                let opcionesSeleccionadas = piezasSelect.val() || [];
+                if (!opcionesSeleccionadas.includes(piezaNumero)) {
+                    opcionesSeleccionadas.push(piezaNumero);
+                }
+
+                piezasSelect.val(opcionesSeleccionadas).trigger('change');
+            }
+        });
 
         // generar numero random entre el 10 y el 20
         var random = Math.floor(Math.random() * (20 - 10 + 1) + 10);
@@ -3736,6 +3766,8 @@ function mostrar_nueva_pieza_dental_tto(pieza){
             pieza: pieza,
             seccion:'impl',
             counter: contador,
+            id_paciente: $('#id_paciente').val(),
+            id_ficha_atencion: $('#id_fc').val(),
             _token: '{{ csrf_token() }}'
         },
         success: function(resp) {
@@ -6889,7 +6921,6 @@ function guardar_ficha(){
         examen_fisico: examen_fisico,
         descripcion_hipotesis: '',
         hipotesis_diagnostico: '',
-        descripcion_hipotesis:'',
         id_profesional_fc: $('#id_profesional').val(),
         id_paciente_fc: $('#id_paciente').val(),
         hora_medica: $('#hora_medica').val(),

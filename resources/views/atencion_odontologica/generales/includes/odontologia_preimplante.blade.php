@@ -475,9 +475,9 @@
                                         <div class="col-md-12">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <div id="contenedor_pieza_tto_implante">
+                                                    <div >
                                                         <div class="row" >
-                                                            <div class="col-md-6" id="contenedor_pieza_tto_impl0">
+                                                            <div class="col-md-6" id="contenedor_pieza_tto_implante">
                                                                 <div class="card">
                                                                     <div class="card-body">
                                                                         <div class="form-row">
@@ -526,6 +526,11 @@
                                                                 <div class="card">
                                                                     <div class="card-body">
                                                                         <div class="row">
+                                                                            <div class="col-12">
+                                                                                @include('atencion_odontologica.generales.odontograma_adulto_grupos')
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
                                                                             <div class="col-md-11">
                                                                                 <div class="form-group">
                                                                                     <label for="" class="floating-label-activo-sm">Grupos</label>
@@ -537,6 +542,7 @@
                                                                                         <option value="1.5">1.5</option>
                                                                                         <option value="1.6">1.6</option>
                                                                                         <option value="1.7">1.7</option>
+                                                                                        <option value="1.8">1.8</option>
                                                                                         <option value="2.1">2.1</option>
                                                                                         <option value="2.2">2.2</option>
                                                                                         <option value="2.3">2.3</option>
@@ -544,7 +550,7 @@
                                                                                         <option value="2.5">2.5</option>
                                                                                         <option value="2.6">2.6</option>
                                                                                         <option value="2.7">2.7</option>
-
+                                                                                        <option value="2.8">2.8</option>
                                                                                         <option value="3.1">3.1</option>
                                                                                         <option value="3.2">3.2</option>
                                                                                         <option value="3.3">3.3</option>
@@ -552,6 +558,7 @@
                                                                                         <option value="3.5">3.5</option>
                                                                                         <option value="3.6">3.6</option>
                                                                                         <option value="3.7">3.7</option>
+                                                                                        <option value="3.8">3.8</option>
                                                                                         <option value="4.1">4.1</option>
                                                                                         <option value="4.2">4.2</option>
                                                                                         <option value="4.3">4.3</option>
@@ -559,6 +566,7 @@
                                                                                         <option value="4.5">4.5</option>
                                                                                         <option value="4.6">4.6</option>
                                                                                         <option value="4.7">4.7</option>
+                                                                                        <option value="4.8">4.8</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
@@ -655,9 +663,7 @@
                             <label for="tipoInsumo" class="floating-label-activo-sm">Tipo de Insumo</label>
                             <select name="tipoInsumo" id="tipoInsumo" class="form-control form-control-sm">
                                 <option value="0">Seleccione</option>
-                                <option value="1">Implantes y componentes</option>
-                                <option value="2">Biomateriales</option>
-                                <option value="3">Adhesivos y cementos</option>
+                                <option value="1">Implantes</option>
                                 <option value="4">Instrumental Quirúrgico y Protésico</option>
                                 <option value="5">Material de Sutura y Regeneración</option>
                                 <option value="6">Insumos Descartables y Bioseguridad</option>

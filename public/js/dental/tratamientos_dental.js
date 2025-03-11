@@ -1,4 +1,5 @@
 const getDiagnosticoDentalUrl = window.getDiagnosticoDentalUrl;
+const getTratamientoDentalImplantologiaUrl = window.getTratamientoDentalImplantologiaUrl;
 $('#diag_seleccionado_gral_autocomplete').autocomplete({
     source: function(request, response) {
         // Fetch data

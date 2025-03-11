@@ -179,6 +179,7 @@
 
     <script>
         window.getDiagnosticoDentalUrl = "{{ route('dental.getDiagnosticoDental') }}";
+        window.getTratamientoDentalImplantologiaUrl = "{{ route('dental.getTratamientoImplantologia') }}";
     </script>
     @routes
     <script src="{{asset('js/dental/tratamientos_dental.js')}}"></script>

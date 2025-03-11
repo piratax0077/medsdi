@@ -151,6 +151,12 @@
                             <button type="button"
                                 class="btn btn-sm btn-info btn-block accion_modal_control_trabajo">CONTROL DE ENVIOS A
                                 LABORATORIO</button>
+                                <button type="button"
+                                class="btn btn-sm btn-info btn-block accion_modal_pedido_insumos">PEDIDO
+                                INSUMOS</button>
+                            <button type="button"
+                                class="btn btn-sm btn-info btn-block accion_modal_pedido_materiales">PEDIDO
+                                MATERIALES</button>
                         </div>
                     </div>
                 </div>

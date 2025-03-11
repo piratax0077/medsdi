@@ -68,6 +68,7 @@ use App\Models\RecetaDosis;
 use App\Models\RecetaPresentacion;
 use App\Models\Region;
 use App\Models\SolicitudPabellonQuirurgico;
+use App\Models\TratamientosImplantologia;
 use App\Models\User;
 
 use Carbon\Carbon;
@@ -1494,18 +1495,34 @@ class DentalController extends Controller
     }
 
     public function dame_odontograma_paciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null){
-        $query = OdontogramaPaciente::select(
-            'odontogramas_pacientes.*',
-            'diagnosticos_dental.descripcion',
-            'diagnosticos_dental.cantidad_bloques',
-            'diagnosticos_dental.valor',
-            'tratamientos_dental.descripcion as diagnostico')
-            ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
-            ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
-            ->where('odontogramas_pacientes.id_paciente', $id_paciente)
+        if($tipo_especialidad == 16){
+            $query = OdontogramaPaciente::select(
+                'odontogramas_pacientes.*',
+                'tratamientos_implantologia.descripcion',
+                'tratamientos_implantologia.cantidad_bloques',
+                'tratamientos_implantologia.valor',
+                'tratamientos_dental.descripcion as diagnostico')
+                ->join('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
+                ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
+                ->where('odontogramas_pacientes.id_paciente', $id_paciente)
 
-            ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
-            ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
+                ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
+                ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
+        }else{
+            $query = OdontogramaPaciente::select(
+                'odontogramas_pacientes.*',
+                'diagnosticos_dental.descripcion',
+                'diagnosticos_dental.cantidad_bloques',
+                'diagnosticos_dental.valor',
+                'tratamientos_dental.descripcion as diagnostico')
+                ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
+                ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
+                ->where('odontogramas_pacientes.id_paciente', $id_paciente)
+
+                ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
+                ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
+        }
+
 
             // verificar si trae ficha de atencion
             if (!is_null($id_ficha_atencion)) {
@@ -1799,6 +1816,7 @@ class DentalController extends Controller
             $odontograma->id_lugar_atencion = $request->id_lugar_atencion;
             $odontograma->tipo_especialidad = $profesional->id_tipo_especialidad;
             $odontograma->presupuesto = 1;
+            $odontograma->estado = 0;
             if ($odontograma->save()) {
                 // crear el presupuesto si es que aun no se ha registrado
                 $presupuesto = PresupuestosDental::where('id_paciente', $odontograma->id_paciente)->where('id_lugar_atencion', $odontograma->id_lugar_atencion)->where('id_ficha_atencion', $odontograma->id_ficha_atencion)->first();
@@ -3484,20 +3502,11 @@ public function generar_pdf_trabajo_menor(Request $req){
 }
 
     public function registrar_orden_trabajo_mayor(Request $request)
-
     {
 
-
-
         $user = Auth::user()->id;
-
         $profesional = Profesional::where('id_usuario', $user)->first();
-
-
-
         $trabajo_mayor  = new OrdenTrabajoMayor();
-
-
 
         $trabajo_mayor->nro_orden = $request->nro_orden_trabajo_mayor;
 
@@ -3547,8 +3556,10 @@ public function generar_pdf_trabajo_menor(Request $req){
 
         $trabajo_mayor->id_profesional = $profesional->id;
 
+        $trabajo_mayor->id_ficha_atencion = $request->id_ficha_atencion;
+        $trabajo_mayor->id_lugar_atencion = $request->id_lugar_atencion;
 
-
+        return $trabajo_mayor;
         if (!$trabajo_mayor->save()) {
 
             return 'error';
@@ -3561,7 +3572,7 @@ public function generar_pdf_trabajo_menor(Request $req){
 
 
 
-        return redirect()->back()->with('mensaje', $mensaje);
+        return ['estado' => 'ok','mensaje' => $mensaje];
 
     }
 
@@ -4223,6 +4234,27 @@ public function generar_pdf_trabajo_menor(Request $req){
 
         return response()->json($response);
 
+    }
+
+    public function getTratamientoImplantologia(Request $request){
+        $search = $request->search;
+        if ($search == '') {
+            $employees = TratamientosImplantologia::orderby('descripcion', 'asc')->select('id', 'descripcion', 'valor')->limit(15)->get();
+        } else {
+           //  $employees = DiagnosticoDental::orderby('descripcion', 'asc')->select('id', 'descripcion')->where('descripcion', 'like', '%' . $search . '%')->limit(15)->get();
+            $employees = TratamientosImplantologia::orderby('descripcion', 'asc')->select('id', 'descripcion', 'valor')->where('descripcion', 'like', $search . '%')->limit(15)->get();
+        }
+        $response = array();
+
+        foreach ($employees as $employee) {
+
+            $response[] = array("value" => $employee->id, "label" => $employee->descripcion,"descripcion" => $employee->descripcion, "control" => $employee->tipo_examen,'valor' => $employee->valor);
+
+        }
+
+
+
+        return response()->json($response);
     }
 
 

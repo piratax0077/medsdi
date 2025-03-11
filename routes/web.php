@@ -233,6 +233,7 @@ Route::group([
     Route::get('/autocomplete', [DentalController::class, 'autocomplete'])->name('dental.autocompletar_medicamento');
     Route::post('/getArticulo', [DentalController::class, 'getArticulo'])->name('dental.getArticulo');
     Route::post('/getDiagnosticoDental', [DentalController::class, 'getDiagnosticoDental'])->name('dental.getDiagnosticoDental');
+    Route::post('/getTratamientoImpl',[DentalController::class, 'getTratamientoImplantologia'])->name('dental.getTratamientoImplantologia');
 
     Route::get('/getDosis', [DentalController::class, 'getDosis'])->name('dental.getDosis');
     Route::get('/getFrecuencia', [DentalController::class, 'getFrecuencia'])->name('dental.getFrecuencia');

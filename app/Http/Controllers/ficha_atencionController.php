@@ -1839,8 +1839,8 @@ class ficha_atencionController extends Controller
 
         $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();
 
-        $odontograma = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id, $profesional->id_tipo_especialidad);
-
+        $odontograma = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id, $profesional->id_tipo_especialidad,null);
+        
         $paciente->edad = Carbon::parse($paciente->fecha_nac)->age;
 
         if($paciente->edad >= 18){
@@ -2193,18 +2193,34 @@ class ficha_atencionController extends Controller
 
 
     public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null){
-        $query = OdontogramaPaciente::select(
-            'odontogramas_pacientes.*',
-            'diagnosticos_dental.descripcion',
-            'diagnosticos_dental.cantidad_bloques',
-            'diagnosticos_dental.valor',
-            'tratamientos_dental.descripcion as diagnostico')
-            ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
-            ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
-            ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-
-            ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
-            ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
+        if($tipo_especialidad == 16){
+            $query = OdontogramaPaciente::select(
+                'odontogramas_pacientes.*',
+                'tratamientos_implantologia.descripcion',
+                'tratamientos_implantologia.cantidad_bloques',
+                'tratamientos_implantologia.valor',
+                'tratamientos_dental.descripcion as diagnostico')
+                ->join('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
+                ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
+                ->where('odontogramas_pacientes.id_paciente', $id_paciente)
+    
+                ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
+                ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
+        }else{
+            $query = OdontogramaPaciente::select(
+                'odontogramas_pacientes.*',
+                'diagnosticos_dental.descripcion',
+                'diagnosticos_dental.cantidad_bloques',
+                'diagnosticos_dental.valor',
+                'tratamientos_dental.descripcion as diagnostico')
+                ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
+                ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
+                ->where('odontogramas_pacientes.id_paciente', $id_paciente)
+    
+                ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
+                ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
+        }
+       
 
             // verificar si trae ficha de atencion
             if (!is_null($id_ficha_atencion)) {
