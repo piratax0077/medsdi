@@ -658,23 +658,34 @@
                               <input type="text" name="" id="" class="form-control form-control-sm" value="{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}">
                           </div>
                       </div>
-                      <div class="col-md-2">
+                      <div class="col-md-2" id="tipo_insumo_select">
                         <div class="form-group">
                             <label for="tipoInsumo" class="floating-label-activo-sm">Tipo de Insumo</label>
-                            <select name="tipoInsumo" id="tipoInsumo" class="form-control form-control-sm">
+                            <select name="tipoInsumo" id="tipoInsumo" class="form-control form-control-sm" onchange="dame_marcas_implantes(this)">
                                 <option value="0">Seleccione</option>
                                 <option value="1">Implantes</option>
-                                <option value="4">Instrumental Quirúrgico y Protésico</option>
-                                <option value="5">Material de Sutura y Regeneración</option>
-                                <option value="6">Insumos Descartables y Bioseguridad</option>
-                                <option value="7">Injerto óseo</option>
-                                <option value="8">Membranas</option>
-                                <option value="9">Tornillos de fijación</option>
-                                <option value="10">Otros Insumos</option>
+                                <option value="2">Instrumental Quirúrgico y Protésico</option>
+                                <option value="3">Material de Sutura y Regeneración</option>
+                                <option value="4">Insumos Descartables y Bioseguridad</option>
+                                <option value="5">Injerto óseo</option>
+                                <option value="6">Membranas</option>
+                                <option value="7">Tornillos de fijación</option>
+                                <option value="8">Otros Insumos</option>
                             </select>
                         </div>
                       </div>
-                      <div class="col-md-4">
+                      <div class="col-md-4 d-none" id="marcas_implantes_select">
+                        <div class="form-group">
+                            <label for="marcasImplantes" class="floating-label-activo-sm">Marcas Implantes</label>
+                            <select name="marcasImplantes" id="marcasImplantes" class="form-control form-control-sm">
+                                <option value="0">Seleccione</option>
+                                @foreach ($marcas_implantes as $marca)
+                                    <option value="{{ $marca->id }}">{{ $marca->descripcion }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                      </div>
+                      <div class="col-md-4" id="insumos_select">
                           <div class="form-group">
                               <label for="" class="floating-label-activo-sm">Insumos</label>
                               <select name="nombreInsumo" data-titulo="Ex_cuello" data-seccion="Cuello"  id="nombreInsumo" class="form-control form-control-sm" >
@@ -1269,5 +1280,18 @@
                 console.log(error.responseText);
             }
         });
+    }
+
+    function dame_marcas_implantes(value){
+        let id_tipo_insumo = value.value;
+        if(id_tipo_insumo == 1){
+            // quitar la clase d-none al select de marcas
+            $('#marcas_implantes_select').removeClass('d-none');
+            $('#insumos_select').addClass('d-none');
+        }else{
+            // quitar la clase d-none al select de marcas
+            $('#marcas_implantes_select').addClass('d-none');
+            $('#insumos_select').removeClass('d-none');
+        }
     }
 </script>

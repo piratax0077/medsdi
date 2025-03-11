@@ -1884,6 +1884,7 @@ class DentalController extends Controller
                 $odontograma->id_lugar_atencion = $request->id_lugar_atencion;
                 $odontograma->tipo_especialidad = $profesional->id_tipo_especialidad;
                 $odontograma->presupuesto = 1;
+                $odontograma->estado = 0;
                 $odontograma->save();
 
                 // crear el presupuesto si es que aun no se ha registrado

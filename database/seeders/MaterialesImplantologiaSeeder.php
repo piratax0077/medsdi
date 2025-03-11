@@ -10,34 +10,31 @@ class MaterialesImplantologiaSeeder extends Seeder
     public function run()
     {
         $materiales = [
-            'Sin injerto',
-            'Aloinjerto puros cortical particulado 0.5 cc',
-            'Aloinjerto puros cortical particulado 1.0 cc',
-            'Aloinjerto puros cortical particulado 2.0 cc',
-            'Aloinjerto puros esponjoso particulado 0.5 cc',
-            'Aloinjerto puros esponjoso particulado 1.0 cc',
-            'Aloinjerto puros esponjoso particulado 2.0 cc',
-            'Aloinjerto puros mixto particulado 0.5 cc',
-            'Aloinjerto puros mixto particulado 1.0 cc',
-            'Aloinjerto puros mixto particulado 2.0 cc',
-            'Xenoinjerto 250-1000 UM 0.5 cc',
-            'Xenoinjerto 250-1000 UM 1.0 cc',
-            'Xenoinjerto 250-1000 UM 2.0 cc',
-            'Autoinjerto',
-            'Injerto aloplástico',
-            'Maxgraft cancellous 0.5-2.0 mm 0.5 cc',
-            'Maxgraft cancellous 0.5-2.0 mm 1.0 cc',
-            'Maxgraft cancellous 0.5-2.0 mm 2.0 cc',
-            'REGENEROSS GRAFT PLUG 10MM X 20MM',
-            'REGENEROSS GRAFT PLUG 6MM X 25MM'
+            'Tornillo de fijación 1.5 D, 3.5 MM',
+            'Tornillo de fijación 1.5 D, 7 MM',
+            'Tornillo de fijación 1.5 D, 9 MM',
+            'Tornillo de fijación 1.5 D, 11 MM',
+            'Tornillo FIXING SCREW 1.6 MM, 3 L',
+            'Tornillo FIXING SCREW 1.6 MM, 5 L',
+            'Tornillo FIXING SCREW 1.6 MM, 7 L',
+            'Tornillo TENT SCREW 2 MM, 7 L',
+            'Tornillo TENT SCREW 2 MM, 10 L',
+            'Tornillo TENT SCREW 2 MM, 13 L',
+            'Tornillo TENT SCREW 2 MM, 15 L',
+            'Tornillo autoperforante 1.2 MM',
+            'Tornillo autoperforante 1.5 MM',
+            'Chincheta 3 MM BMK',
+            'Chincheta TRUTACK ø 2.5 MM, 3L, 10U',
+            'Chincheta TRUTACK ø 2.5 MM, 5L, 10U'
         ];
 
         foreach ($materiales as $material) {
             DB::table('materiales_implantologia')->insert([
                 'descripcion' => $material,
-                'valor' => null,
-                'estado' => 1,
-                'observaciones' => null,
+                'valor' => null, // Aquí puedes asignar un valor si es necesario
+                'estado' => 1, // Aquí puedes cambiar el estado si es necesario
+                'observaciones' => null, // Aquí puedes agregar observaciones si es necesario
+                'id_tipo_insumo' => 7, // Asignamos el valor 7 para el campo id_tipo_insumo
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

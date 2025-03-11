@@ -66,6 +66,7 @@ use App\Models\Laboratorio;
 use App\Models\Licencia;
 use App\Models\LicenciaPPF;
 use App\Models\LugarAtencion;
+use App\Models\MarcasImplantes;
 use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
 use App\Models\PiezasDentalCoronaProtesis;
@@ -1840,7 +1841,7 @@ class ficha_atencionController extends Controller
         $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();
 
         $odontograma = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $request->lugar_atencion_id, $profesional->id_tipo_especialidad,null);
-        
+
         $paciente->edad = Carbon::parse($paciente->fecha_nac)->age;
 
         if($paciente->edad >= 18){
@@ -1894,6 +1895,8 @@ class ficha_atencionController extends Controller
 
         $laboratorios = Laboratorio::where('id_lugar_atencion', $request->lugar_atencion_id)->get();
 
+        $marcas_implantes = MarcasImplantes::all();
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1915,6 +1918,7 @@ class ficha_atencionController extends Controller
                 'bodegas' => $bodegas,
                 'tratamientos_implantologia' => $tratamientos_implantologia,
                 'materiales_implantologia' => $materiales_implantologia,
+                'marcas_implantes' => $marcas_implantes,
                 'examenes_dental' => $examenes_dental,
                 'examenes_pre_implante' => $examenes_preimplante,
                 'examenes_period' => $examenes_period,
@@ -2203,7 +2207,7 @@ class ficha_atencionController extends Controller
                 ->join('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
                 ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
                 ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-    
+
                 ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
                 ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
         }else{
@@ -2216,11 +2220,11 @@ class ficha_atencionController extends Controller
                 ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
                 ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
                 ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-    
+
                 ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
                 ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
         }
-       
+
 
             // verificar si trae ficha de atencion
             if (!is_null($id_ficha_atencion)) {

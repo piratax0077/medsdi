@@ -6044,7 +6044,7 @@ function cargar_a_presupuesto_impl_g_confirmar(){
 function limpiar_formulario_cargar_presupuesto_g(){
     $('#diag_presupuesto_pieza_g').val('');
     $('#paciente_piezas_dentales_ex').empty();
-    $('#paciente_piezas_dentales_ex').selectpicker('refresh');
+    //$('#paciente_piezas_dentales_ex').selectpicker('refresh');
 }
 
 function mostrar_nueva_pieza_dental_tto_impl(counter){
