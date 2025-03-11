@@ -673,45 +673,52 @@
                                                     <div class="tab-content" id="v-pills-tabContent">
                                                         <div class="tab-pane fade show active" id="od_laboratorio_trab" role="tabpanel" aria-labelledby="od_laboratorio_trab-tab">
                                                             <div class="col-sm-12 col-md-12">
+                                                                @foreach ($ordenes_tm as $o)
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <div class="form-row">
 
-                                                                <div class="form-row">
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm">Nombre Laboratorio</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm">Trabajo Requerido</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_ord_trab" id="lab_ord_trab">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm">F.envío</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm">F.entrega</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm">Estado</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_est" id="lab_est">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2">
+                                                                                <label class="floating-label-activo-sm">N° Identificación</label>
+                                                                                <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab">
+                                                                            </div>
+                                                                            <div class="form-group col-md-2 d-flex">
 
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm">Nombre Laboratorio</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm">Trabajo Requerido</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_ord_trab" id="lab_ord_trab">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm">F.envío</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm">F.entrega</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm">Estado</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_est" id="lab_est">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm">N° Identificación</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2 d-flex">
-
-
+                                                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo<span class="ripple ripple-animate" ></span></button>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
+
+                                                                @endforeach
+
                                                                 <div class="form-row">
                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                         <label class="floating-label-activo-sm">Observaciones </label>
                                                                         <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
                                                                     </div>
                                                                 </div>
-                                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo<span class="ripple ripple-animate" ></span></button>
+
                                                             </div>
                                                         </div>
                                                         <div class="tab-pane fade show" id="costo_presupuesto_trab" role="tabpanel" aria-labelledby="costo_presupuesto_trab-tab">

@@ -1921,6 +1921,7 @@ class EscritorioProfesional extends Controller
 
         $valores_odontograma = $this->dameValoresOdontograma($paciente->id, $ficha->id, $ficha->id_lugar_atencion, $profesional->id_tipo_especialidad);
 
+        $insumos = $ficha_atencionController->dame_insumos_tratamiento($paciente->id, $ficha->id);
 
 
         // Renderizar la vista del presupuesto dental
@@ -1939,7 +1940,8 @@ class EscritorioProfesional extends Controller
             'maxilar_superior_gral_tratamientos_endo',
             'maxilar_superior_gral_diagnosticos_endo',
             'boca_completa_gral_tratamiento_endo',
-            'boca_completa_gral_diagnostico_endo'
+            'boca_completa_gral_diagnostico_endo',
+            'insumos'
         ));
         $timestamp = time();
         // Guardar el PDF en la carpeta public

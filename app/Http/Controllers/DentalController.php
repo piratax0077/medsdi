@@ -2649,7 +2649,7 @@ try {
             }
             if(empty( trim($request->descripcion_hipotesis)))
             {
-                $campos_requeridos = 1;
+                //$campos_requeridos = 1;
                 $mensaje .= 'El Diagnóstico es Requerido.<br> Su Ficha Clínica NO ha sido Guardada aún. <br> Si es solo Control, indicar Control de Patología.';
             }
             else
@@ -2664,7 +2664,6 @@ try {
 
                 }
             }
-
             //return $campos_requeridos;
             if($campos_requeridos == 0)
             {
@@ -2695,9 +2694,9 @@ try {
                     $confidencial = 1;
                 }
 
-                $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis;
-                $ficha->diagnostico_ce10 = $request->descripcion_cie;
-                $ficha->indicaciones = $request->indicaciones;
+                $ficha->hipotesis_diagnostico = $request->descripcion_hipotesis ? $request->descripcion_hipotesis : '';
+                $ficha->diagnostico_ce10 = $request->descripcion_cie ? $request->descripcion_cie : '';
+                $ficha->indicaciones = $request->indicaciones ? $request->indicaciones : '';
 
                 $ficha->cronico = $cronico;
                 $ficha->ges = $ges;
@@ -2883,7 +2882,7 @@ try {
                         // se mantiene en la vista actual
                         $tipo_mensaje = 'success';
                         $mensaje = 'Ficha Clínica guardada de forma correcta\n';
-                        return back()->with($tipo_mensaje, $mensaje);
+                        return ['estado' => 'ok','mensaje' => $mensaje];
                     }
 
                 }

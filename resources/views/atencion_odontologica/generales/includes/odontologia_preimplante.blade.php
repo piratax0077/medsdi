@@ -581,7 +581,6 @@
                                                                         <table id="table_insumos_preimplante" class="display table table-striped table-hover dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
                                                                             <thead>
                                                                                 <tr>
-                                                                                    <td>Id</td>
                                                                                     <td>Insumo</td>
                                                                                     <td>Cantidad</td>
                                                                                     <td>Valor</td>
@@ -593,7 +592,6 @@
                                                                                 @foreach ($insumos_tratamientos as $t)
                                                                                     @php $total = $t->cantidad * $t->valor @endphp
                                                                                     <tr>
-                                                                                        <td>{{ $t->id }}</td>
                                                                                         <td>{{ $t->insumos }}</td>
                                                                                         <td>{{ $t->cantidad }}</td>
                                                                                         <td>{{ number_format($t->valor)  }}</td>
@@ -663,14 +661,21 @@
                                 <option value="4">Instrumental Quirúrgico y Protésico</option>
                                 <option value="5">Material de Sutura y Regeneración</option>
                                 <option value="6">Insumos Descartables y Bioseguridad</option>
-                                <option value="7">Otros Insumos</option>
+                                <option value="7">Injerto óseo</option>
+                                <option value="8">Membranas</option>
+                                <option value="9">Tornillos de fijación</option>
+                                <option value="10">Otros Insumos</option>
                             </select>
                         </div>
                       </div>
                       <div class="col-md-4">
                           <div class="form-group">
                               <label for="" class="floating-label-activo-sm">Insumos</label>
-                              <input type="text" name="nombreInsumo" id="nombreInsumo" class="form-control form-control-sm">
+                              <select name="nombreInsumo" data-titulo="Ex_cuello" data-seccion="Cuello"  id="nombreInsumo" class="form-control form-control-sm" >
+                                @foreach ($materiales_implantologia as $m)
+                                    <option value="{{ $m->id }}">{{ $m->descripcion }}</option>
+                                @endforeach
+                            </select>
                           </div>
                       </div>
                       <div class="col-md-2">
@@ -733,7 +738,7 @@
     });
 
     function guardar_insumo(){
-        let nombreInsumo = $('#nombreInsumo').val();
+        let nombreInsumo = $('#nombreInsumo option:selected').text();
         let tipoInsumo = $('#tipoInsumo').val();
         let tipoInsumo_text = $('#tipoInsumo option:selected').text();
         let cantidad = $('#cantidad').val();
@@ -812,7 +817,6 @@
                                 </button>
                             </td>`;
                             table.row.add([
-                                insumo.id,
                                 insumo.insumos,         // Nombre del insumo
                                 insumo.cantidad,       // Cantidad utilizada
                                 insumo.valor,         // Unidad de medida
@@ -903,7 +907,6 @@
                                 </button>
                             </td>`;
                             table.row.add([
-                                insumo.id,
                                 insumo.insumos,         // Nombre del insumo
                                 insumo.cantidad,       // Cantidad utilizada
                                 insumo.valor,         // Unidad de medida
@@ -995,7 +998,6 @@
                             }
 
                             table.row.add([
-                                insumo.id,
                                 insumo.insumos,         // Nombre del insumo
                                 insumo.cantidad,       // Cantidad utilizada
                                 insumo.valor,         // Unidad de medida
@@ -1176,7 +1178,6 @@
                                 </td>`;
                             }
                             table.row.add([
-                                insumo.id,
                                 insumo.insumos,         // Nombre del insumo
                                 insumo.cantidad,       // Cantidad utilizada
                                 insumo.valor,         // Unidad de medida
