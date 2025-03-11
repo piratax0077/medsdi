@@ -2,47 +2,61 @@
 <html lang="es">
 
 <head>
-    <title>Prof_laboratorio</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="" />
-    <meta name="keywords" content="">
-    <meta name="author" content="Redmedichile" />
-    <link rel="icon" href="{{ asset('/images/favicon.ico') }}" type="image/x-icon">
-    <link rel="stylesheet" href="{{ asset('/css/style.css') }}?t={{ time() }}">
-    <link rel="stylesheet" href="{{ asset('css/style_index.css') }}?t={{ time() }}">
-    <link rel="stylesheet" href="{{ asset('css/escritorio_laboratorio.css') }}?t={{ time() }}">
-    <!-- Rating css -->
-    <link rel="stylesheet" href='{{ asset('css/plugins/bars-1to10.css') }}'/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>sdi</title>
 
-    <link rel="stylesheet" href='{{ asset('css/boton-flotante.css') }}'/>
-    <!--Estilos base-->
-    <link rel="stylesheet" href='{{ asset('css/style.css') }}'/>
-    <!--Estilos escritorios-->
-    <link rel="stylesheet" href='{{ asset('css/escritorios.css') }}'/>
-    <!--Estilos formularios sm-->
-    <link rel="stylesheet" href='{{ asset('css/formulario_sm.css') }}'/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+    <!-- Styles -->
+    <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon" />
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/escritorio_profesional.css') }}">
+
+    <!-- select2 selectbonito css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
+
     <!-- data tables css -->
-    <link rel="stylesheet" href='{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}'/>
-    <link rel="stylesheet" href='{{ asset('css/plugins/responsive.bootstrap4.min.css') }}'/>
-    <!--Estilo tab secciones -->
-    <link rel="stylesheet" type="text/css" href='{{ asset('css/tabs-secciones.css') }}'/>
-    <!--Tags-->
-    <link rel="stylesheet" href='{{ asset('css/plugins/bootstrap-tagsinput.css') }}'/>
-    <link rel="stylesheet" href='{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}'/>
+    <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
+
     <!-- fileupload-custom css -->
-    <link rel="stylesheet" href='{{ asset('css/plugins/dropzone.min.css') }}'/>
-    <!--Accordion-->
-    <link rel="stylesheet" type="text/css" href='{{ asset('css/accordion.css') }}'/>
-    <!--Card Sidebar-->
-    <link rel="stylesheet" type="text/css" href='{{ asset('css/card_sidebar.css') }}'/>
-    <!--Pills Modals-->
-    <link rel="stylesheet" type="text/css" href='{{ asset('css/pills_modals.css') }}'/>
-    <!--Tab wizard_formularios-->
-    <link rel="stylesheet" type="text/css" href='{{ asset('css/tab_wizard_formularios.css') }}'/>
-    <!--Bs-Canvas-->
-    <link rel="stylesheet" href='{{ asset('css/bs_canvas.css') }}'/>
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
+
+    <link rel="stylesheet" href="{{ asset('css/bs_canvas.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}">
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> --}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+
+    <!--boton azul-->
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
+
+    <!--Estilo tab secciones -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/tabs-secciones.css') }}">
+
+    <!-- flatpickr -->
+    <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
+
 
 </head>
 
@@ -60,69 +74,57 @@
 
     @yield('content')
 
+    @include('template.include.nocomplatible')
+
+
+    <!-- Scripts -->
     <script src="{{ asset('js/vendor-all.min.js') }}"></script>
     <script src="{{ asset('js/plugins/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/ripple.js') }}"></script>
     <script src="{{ asset('js/pcoded.min.js') }}"></script>
 
-    <!-- datatable Js -->
+
     <script src="{{ asset('js/plugins/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/plugins/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/plugins/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('js/pages/data-responsive-custom.js') }}"></script>
-    <script src="{{ asset('js/modals_dental.js') }}"></script>
+    {{-- <script src="{{ asset('js/pages/data-responsive-custom.js') }}"></script> --}}
+    <script src="{{ asset('js/pages/data-basic-custom.js') }}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-    <!-- bootstrap-tagsinput-latest Js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
-    <script src="{{ asset('js/plugins/bootstrap-tagsinput.min.js') }}"></script>
+    <!-- fancy box -->
+    <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
+    <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
 
-    <!-- form-advance custom js -->
-    <script src="{{ asset('js/pages/form-advance-custom.js') }}"></script>
+    <script src="{{ asset('js/sidebar.js') }}"></script>
 
-    <!--Accordion-->
-    <script src="{{ asset('js/accordion.js') }}"></script>
+    <!-- momnent -->
+    <script src="{{ asset('js/moment.min.js') }}"></script>
 
-    <!--Sidebars-->
-    <script src="{{ asset('js/bs_canvas.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+
+    <!--full calendar 5-->
+    <script src='{{ asset('js/fullcalendar-5.10.1/lib/main.js') }}'></script>
+    <script src='{{ asset('js/fullcalendar-5.10.1/lib/locales/es.js') }}'></script>
+
+    <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+    <script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
+
+    {{-- autocomplete --}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <!-- file-upload Js -->
+    <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
+
+    <!-- rut -->
+    <script src="{{ asset('js/rut.js') }}"></script>
+
+    <!-- funciones generales -->
+    <script src="{{ asset('js/funciones.js') }}"></script>
+
+    <!-- flatpickr -->
+    <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
 
 
-    <!--Form wizard-->
-    <script src="{{ asset('js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
-    <script src="{{ asset('js/formularios_wizard.js') }}"></script>
-
-    <!-- datepicker js -->
-    <script src="{{ asset('js/plugins/moment.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/daterangepicker.js') }}"></script>
-    <script src="{{ asset('js/pages/ac-datepicker.js') }}"></script>
-
-    <!--Modals-->
-    <script src="{{ asset('js/modals_admin_cm.js') }}"></script>
-    <script src="{{ asset('js/modals_centro_medico.js') }}"></script>
-    <!--Tablas-->
-    <script src="{{ asset('js/tablas_admin_cm.js') }}"></script>
-    <script src="{{ asset('js/tablas_centro_medico.js') }}"></script>
-
-    <!--Gráficos-->
-    <!-- Rating Js -->
-    <script src="{{ asset('js/plugins/jquery.barrating.min.js') }}"></script>
-    <!-- Apex Chart -->
-    <script src="{{ asset('js/plugins/apexcharts.min.js') }}"></script>
-    <!-- peity chart js -->
-    <script src="{{ asset('js/plugins/jquery.peity.min.js') }}"></script>
-
-    <!--Gráficos-->
-    {{--  <script src="{{ asset('js/graficos/sf-prof-admin-cm.js') }}"></script>
-    <script src="{{ asset('js/graficos/rech-horas-prof-admin-cm.js') }}"></script>  --}}
-
-    <script src="{{ asset('js/graficos/sf-lab-admin-cm.js') }}"></script>
-    <script src="{{ asset('js/graficos/rech-horas-lab-admin-cm.js') }}"></script>
-
-    <!--Graficos-->
-    <!-- sweet alert Js -->
-    <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('js/alerta_suscripcion.js') }}"></script>
-     <!-- Tablas -->
-    <script src="{{ asset('js/facturacion.js') }}"></script>
 	<script>
         // function cuenta_corriente() {
         //     $('#dat_bancarios').modal('show');

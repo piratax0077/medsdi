@@ -1361,6 +1361,8 @@ Route::group([
     Route::get('resultado/cargar', [App\Http\Controllers\LaboratorioController::class, 'cargarResultado'])->name('laboratorio.cargar.resultados');
     Route::post('resultado/subir', [App\Http\Controllers\LaboratorioController::class, 'subirResultado'])->name('laboratorio.subir.examen');
     Route::get('resultado/cargar/tabla', [App\Http\Controllers\LaboratorioController::class, 'cargarTablaResultado'])->name('laboratorio.cargar.tabla.resultados');
+    Route::get('/Pacientes', [App\Http\Controllers\LaboratorioController::class, 'buscar_pacientes_profesional_asistente'])->name('laboratorio.pacientes.profesional.asistente');
+    Route::get('/pacientes/buscar/rut', [App\Http\Controllers\LaboratorioController::class, 'buscar_paciente_rut'])->name('laboratorio.buscar_paciente_rut');
 
 
 });

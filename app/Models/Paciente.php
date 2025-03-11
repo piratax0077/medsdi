@@ -65,6 +65,11 @@ class Paciente extends Model
             ->orderBy('prioridad');
     }
 
+    public function FichaAtencionOtrosProfesionales()
+    {
+        return $this->belongsTo(FichaOtrosProfesionales::class, 'id', 'id_paciente');
+    }
+
     public function FichaAtencion()
     {
         return $this->belongsTo(FichaAtencion::class, 'id', 'id_paciente');
@@ -135,12 +140,30 @@ class Paciente extends Model
     {
         if (!empty($id_lugar_atencion))
         {
-            $fichas = FichaAtencion::select('id_paciente')->where('id_lugar_atencion', $id_lugar_atencion)->get();
-            $array_ficha = array();
-            foreach ($fichas as $key => $value)
+
+            $array_temp = array();
+            if(is_array($id_lugar_atencion))
             {
-                array_push($array_ficha, $value->id_paciente);
+                $array_temp = $id_lugar_atencion;
             }
+            else
+            {
+                $array_temp = explode(',', $id_lugar_atencion);
+            }
+
+
+            $fichas = FichaAtencion::select('id_paciente')->whereIn('id_lugar_atencion', $array_temp);
+            $fichas_otros = FichaOtrosProfesionales::select('id_paciente')->whereIn('id_lugar_atencion', $array_temp)
+                ->union($fichas)
+                ->pluck('id_paciente')
+                ->toArray();;
+            $array_ficha = array();
+            // foreach ($fichas as $key => $value)
+            // {
+            //     array_push($array_ficha, $value->id_paciente);
+            // }
+            $array_ficha = $fichas_otros;
+
             return $query->whereIn('id', $array_ficha)
                 ->where(function ($query) use ($rut, $nombre, $apellido) {
                     if (!empty($rut) && !empty($nombre) && !empty($apellido)) // rut, nombre, apellido
