@@ -904,6 +904,20 @@
                         text:'Se a eliminado insumos correctamente',
                         title:'Exito'
                     });
+                    let valores_boca_general = resp.valores[0];
+                    let valores_odontograma = resp.valores[1];
+                    let valores_insumos = resp.valores[2];
+                    let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+                    $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                    $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                    $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                    $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                    $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
+                    $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
+                    $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                    $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                    $('#subtotal_clinico').val(formatoMoneda(total_general));
+                    $('#total_clinico').val(formatoMoneda(total_general));
                     let insumos = resp.insumos;
                         console.log(insumos);
                         let table = $('#table_insumos_preimplante').DataTable();
@@ -934,6 +948,39 @@
 
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table.draw();
+
+                        $('#contenedor_insumos').empty();
+                        insumos.forEach(insumo => {
+                            if(insumo.presupuesto == 1){
+                                $('#contenedor_insumos').append(`
+                                <div class="form-group col-md-2 fill">
+                                    <label class="floating-label-activo-sm">Insumo</label>
+                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos}">
+                                </div>
+                                <div class="form-group col-md-3 fill">
+                                    <label class="floating-label-activo-sm">Cantidad</label>
+                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                </div>
+                                <div class="form-group col-md-2 fill">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${insumo.valor}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                </div>
+                                <div class="form-group col-md-2 fill">
+                                    <label class="floating-label-activo-sm">Total Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${insumo.valor}">
+                                </div>
+                                <div class="form-group col-md-2 d-flex">
+
+
+                                </div>
+                            `);
+                            }
+
+                        });
                 }
             },
             error: function(error){
@@ -1293,5 +1340,29 @@
             $('#marcas_implantes_select').addClass('d-none');
             $('#insumos_select').removeClass('d-none');
         }
+        let url = '{{ ROUTE("dental.dame_implantes_dental") }}';
+        let data = {
+            id_tipo_insumo: id_tipo_insumo,
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                $('#nombreInsumo').empty();
+                let insumos = resp;
+                insumos.forEach(e => {
+                    $('#nombreInsumo').append(`
+                    <option value="${e.id}"> ${e.descripcion} </option>
+                    `);
+                });
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        })
     }
 </script>

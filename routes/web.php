@@ -2443,6 +2443,7 @@ Route::get('periodontograma_prueba',[App\Http\Controllers\DentalController::clas
 
 
 Route::post('/dental/eliminar_insumos_tto',[App\Http\Controllers\DentalController::class, 'eliminar_insumos_tratamiento'])->name('dental.eliminar_insumos_tto');
+Route::post('/dental/dame_insumos',[App\Http\Controllers\DentalController::class, 'dame_insumos_tipo'])->name('dental.dame_implantes_dental');
 Route::post('/dental/nueva_pieza_post_impl',[App\Http\Controllers\EscritorioProfesional::class, 'mostrar_nueva_pieza_dental_pfu'])->name('profesional.mostrar_nueva_pieza_pfu');
 Route::post('/dental/eliminar_pieza_corona_protesis',[App\Http\Controllers\EscritorioProfesional::class, 'eliminarPiezaCoronaProtesis'])->name('profesional.eliminar_pieza_dental_corona_protesis');
 Route::post('/dental/guardar_pieza_dental',[App\Http\Controllers\EscritorioProfesional::class, 'guardar_pieza_dental_pfp'])->name('profesional.adm_dental.guardar_pieza_dental_pfp');

@@ -49,6 +49,7 @@ use App\Models\Interconsulta;
 use App\Models\InsumosTratamientosDental;
 use App\Models\Laboratorio;
 use App\Models\LugarAtencion;
+use App\Models\MaterialesImplantologia;
 use App\Models\MaterialesInsumosPaciente;
 use App\Models\MedicamentoUsoCronicoExterno;
 use App\Models\MotivoConsultas;
@@ -2094,15 +2095,34 @@ class DentalController extends Controller
 
         $id_paciente = $insumo->id_paciente;
         $id_ficha_atencion = $insumo->id_ficha_atencion;
+        $id_lugar_atencion = $insumo->id_lugar_atencion;
         $id_tto = $insumo->id_tratamiento;
+        $presupuesto = PresupuestosDental::where('id_paciente', $id_paciente)->where('id_ficha_atencion', $id_ficha_atencion)->first();
+
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($insumo->delete()){
             try {
                 $insumos = $this->dame_insumos_tratamiento_todos($id_paciente, $id_ficha_atencion,null, null);
-                return ['mensaje'=>'ok','insumos'=>$insumos['insumos'],'total_insumos' => $insumos['total']];
+                $valores = $this->dameValoresOdontograma($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $profesional->id_tipo_especialidad);
+                $valor_total = $valores[0] + $valores[1];
+
+                $presupuesto->valor_total = $valor_total;
+                $presupuesto->save();
+                return ['mensaje'=>'ok','insumos'=>$insumos['insumos'],'total_insumos' => $insumos['total'],'valores' => $valores];
             }catch (\Exception $e) {
                 //throw $th;
                 return ['mensaje' => $e->getMessage()];
             }
+        }
+    }
+
+    public function dame_insumos_tipo(Request $req){
+        $insumos = MaterialesImplantologia::where('id_tipo_insumo',$req->id_tipo_insumo)->get();
+        if(count($insumos) > 0){
+            return $insumos;
+        }else{
+            $insumos = MaterialesImplantologia::all();
+            return $insumos;
         }
     }
 
