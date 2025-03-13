@@ -943,7 +943,6 @@
                                                                         <th class="text-center align-middle">Valor a pagar</th>
                                                                         <th class="text-center align-middle">Aprobado</th>
                                                                         <th class="text-center align-middle">Estado</th>
-                                                                        <th class="text-center align-middle"></th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -963,13 +962,13 @@
                                                                                 <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
                                                                                 <td class="text-center align-middle">0</td>
                                                                                 <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
-                                                                                <td class="text-center align-middle"></td>
-                                                                                <td class="text-center align-middle">
-                                                                                    {{ $estado }}
-                                                                                </td>
                                                                                 <td class="text-center align-middle status-circle">
                                                                                     <div class="circle"></div>
                                                                                 </td>
+                                                                                <td class="text-center align-middle">
+                                                                                    {{ $estado }}
+                                                                                </td>
+
                                                                             </tr>
                                                                         @endif
                                                                     @endforeach
@@ -1193,8 +1192,6 @@
                                                                     <td class="text-center align-middle">Descuento</td>
                                                                     <td class="text-center align-middle">Total</td>
                                                                     <td class="text-center align-middle">Aprobado</td>
-                                                                    <td class="text-center align-middle">Estado</td>
-                                                                    <td class="text-center align-middle"></td>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -1207,11 +1204,10 @@
                                                                         <td class="text-center align-middle">{{ number_format($t->valor)  }}</td>
                                                                         <td class="text-center align-middle">0</td>
                                                                         <td class="text-center align-middle">{{ number_format($total)  }}</td>
-                                                                        <td class="text-center align-middle"></td>
-                                                                        <td class="text-center align-middle"></td>
                                                                         <td class="text-center align-middle status-circle">
                                                                             <div class="circle"></div>
                                                                         </td>
+
                                                                     </tr>
                                                                     @endif
                                                                 @endforeach
