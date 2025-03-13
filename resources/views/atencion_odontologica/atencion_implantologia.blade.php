@@ -320,9 +320,9 @@
                                         formatoMoneda(formatoMoneda(odonto.valor)),
                                         0,
                                         formatoMoneda(formatoMoneda(odonto.valor)),
-                                        '',
-                                        '', // Columna vacía
                                         '<div class="circle"></div>',
+                                        '', // Columna vacía
+
                                     ]).draw(false).node(); // Obtener el nodo de la fila
 
                                     // Agregar clases a la fila
@@ -1109,9 +1109,9 @@
                                         formatoMoneda(formatoMoneda(odonto.valor)),
                                         0,
                                         formatoMoneda(formatoMoneda(odonto.valor)),
-                                        '',
-                                        '', // Columna vacía
                                         '<div class="circle"></div>',
+                                        '', // Columna vacía
+
                                     ]).draw(false).node(); // Obtener el nodo de la fila
 
                                     // Agregar clases a la fila

@@ -1185,9 +1185,8 @@
                                 formatoMoneda(insumo.valor),       // Cantidad utilizada
                                 0,         // Unidad de medida
                                 formatoMoneda(total),
-                                '',
-                                '',
                                 '<div class="circle"></div>',
+
                             ]).draw(false).node();
                              // Agregar clases a la fila
                              $(rowNode).addClass('text-center align-middle status-circle');
@@ -1369,9 +1368,8 @@
                                 formatoMoneda(insumo.valor),       // Cantidad utilizada
                                 0,         // Unidad de medida
                                 formatoMoneda(total),
-                                '',
-                                '',
                                 ' <div class="circle"></div>',
+
                             ]).draw(false).node();
 
                             // Agregar clases a la fila
