@@ -13,6 +13,7 @@ use App\Models\AntecedenteFracturaPaciente;
 use App\Models\AntecedenteHemorragiaPaciente;
 use App\Models\Articulo;
 use App\Models\Biopsia;
+use App\Models\Bono;
 use App\Models\CertificadoReposo;
 use App\Models\Ciudad;
 use App\Models\ConstanciaGes;
@@ -1543,15 +1544,18 @@ class DentalController extends Controller
 
     public function eliminar_odontograma(Request $request){
         try {
+            $ids = $request->ids;
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-            $odontograma = OdontogramaPaciente::find($request->id);
-            $id_paciente = $odontograma->id_paciente;
-            $id_ficha_atencion = $odontograma->id_ficha_atencion;
-            $id_lugar_atencion = $odontograma->id_lugar_atencion;
-            if (!$odontograma->delete()) {
-                return back()->with('messagge', 'error');
+
+            $id_paciente = $request->id_paciente;
+            $id_ficha_atencion = $request->id_ficha_atencion;
+            $id_lugar_atencion = $request->id_lugar_atencion;
+            foreach($ids as $id){
+                $odontograma = OdontogramaPaciente::find($id);
+                $odontograma->delete();
             }
-            $mensaje = 'Se ha eliminado Odontograma a pieza '.$odontograma->pieza.' de forma exitosa';
+
+            $mensaje = 'Se ha eliminado Odontograma a pieza de forma exitosa';
             $odontograma_paciente = $this->dame_odontograma_paciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $profesional->id_tipo_especialidad);
             $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
             $valores = $this->dameValoresOdontograma($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $profesional->id_tipo_especialidad);
@@ -2070,7 +2074,8 @@ class DentalController extends Controller
         $insumos->id_ficha_atencion = $req->id_ficha_atencion;
         $insumos->id_especialidad = $profesional->id_especialidad;
         $insumos->id_tratamiento = $pieza ? $pieza->id : null;
-        $insumos->insumos = $req->insumos;
+        $insumos->id_marca = $req->idMarcaInsumo;
+        $insumos->insumos = $req->idTipoInsumo == 1 ? 'Implante' : $req->insumos;
         $insumos->cantidad = $req->cantidad;
         $insumos->valor = $req->valor;
         $insumos->observaciones = $req->observaciones;
@@ -2087,6 +2092,11 @@ class DentalController extends Controller
             return ['mensaje' => $e->getMessage()];
         }
 
+    }
+
+    public function dame_bono_pago(Request $req){
+        $bono = Bono::where('id_referencia',$req->id_hora_medica)->first();
+        return $bono;
     }
 
     public function eliminar_insumos_tratamiento(Request $req){

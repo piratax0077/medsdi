@@ -265,15 +265,32 @@ function cargar_a_presupuesto_impl(counter){
                     html += '<td>'+odonto.caras+'</td>';
                     html += '<td>'+odonto.pieza+'</td>';
                     html += '<td>'+odonto.diagnostico+'</td>';
-                    html += '<td>'+odonto.valor+'</td>';
-                    html += '<td>';
-                    html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
-                    if(odonto.presupuesto == 0){
-                        html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
-                    }else{
-                        html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
-                    }
+                    html += '<td>'+formatoMoneda(odonto.valor)+'</td>';
+                    // html += '<td>';
+                    // html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                    // if(odonto.presupuesto == 0){
+                    //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                    // }else{
+                    //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                    // }
 
+                    // html += '</td>';
+                     // Checkbox para seleccionar el odontograma
+                    html += '<td>';
+                    html += '<div class="form-check">';
+                    html += '<input class="form-check-input" type="checkbox" value="' + odonto.id + '" '
+                    html += odonto.presupuesto == 1 ? 'checked ' : '';
+                    html += 'onchange="togglePresupuesto(' + odonto.id + ', this.checked)">';
+                    html += '<label class="form-check-label"></label>';
+                    html += '</div>';
+                    html += '</td>';
+                    html += '<td>';
+                    html += '<div class="form-check">';
+                    html += '<input class="form-check-input checkbox-seleccion" type="checkbox" value="' + odonto.id + '" ';
+                    html += 'id="seleccionCheck' + odonto.id + '" ';
+                    html += 'onchange="toggleSeleccion(' + odonto.id + ', this.checked)">';
+                    html += '<label class="form-check-label" for="seleccionCheck' + odonto.id + '"></label>';
+                    html += '</div>';
                     html += '</td>';
                     html += '</tr>';
                 });
@@ -295,7 +312,7 @@ function cargar_a_presupuesto_impl(counter){
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                 </div>
                                 <div class="form-group col-md-1">
                                     <label class="floating-label-activo-sm">Descuento</label>
@@ -303,7 +320,7 @@ function cargar_a_presupuesto_impl(counter){
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">Total prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
 
@@ -317,7 +334,7 @@ function cargar_a_presupuesto_impl(counter){
                                     <td>${odonto.caras} </td>
                                     <td>${odonto.pieza} </td>
                                     <td>${odonto.tratamiento} </td>
-                                    <td>${odonto.valor} </td>
+                                    <td>${formatoMoneda(odonto.valor)} </td>
                                     <td> </td>
                                     <td>
                                         <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
@@ -337,25 +354,30 @@ function cargar_a_presupuesto_impl(counter){
                     $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
                     $('#subtotal_clinico').val(formatoMoneda(total_general));
                     $('#total_clinico').val(formatoMoneda(total_general));
+                    $('#total_presupuesto_dental').val(total_general);
+
 
                     let table = $('#presup_estado_pago').DataTable();
-
-                    // Limpiar la tabla antes de agregar nuevas filas
                     table.clear().draw();
 
                     // Recorrer el odontograma y agregar nuevas filas
                     odontograma.forEach(function(odonto) {
-                        // Agregar una nueva fila a la tabla
-                        table.row.add([
-                            odonto.fecha,
-                            odonto.diagnostico,
-                            odonto.caras,
-                            odonto.pieza,
-                            odonto.tratamiento,
-                            odonto.valor,
-                            '', // Columna vacía
-                            `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i>Pagar</button>`
-                        ]).draw(false);
+                        if (odonto.presupuesto == 1) {
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table.row.add([
+                                odonto.descripcion,
+                                odonto.pieza,
+                                formatoMoneda(odonto.valor),
+                                0,
+                                formatoMoneda(odonto.valor),
+                                '',
+                                '', // Columna vacía
+                                '',
+                            ]).draw(false).node(); // Obtener el nodo de la fila
+
+                            // Agregar clases a la fila
+                            $(rowNode).addClass('text-center align-middle');
+                        }
                     });
             }else{
                 swal({

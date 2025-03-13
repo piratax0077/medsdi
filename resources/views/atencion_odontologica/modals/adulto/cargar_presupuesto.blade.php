@@ -569,13 +569,30 @@
                             html += '<td>'+odonto.pieza+'</td>';
                             html += '<td>'+odonto.diagnostico+'</td>';
                             html += '<td>'+odonto.valor+'</td>';
+                            // html += '<td>';
+                            // html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                            // if(odonto.presupuesto == 0){
+                            //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                            // }else{
+                            //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                            // }
+                            // html += '</td>';
+                             // Checkbox para seleccionar el odontograma
                             html += '<td>';
-                            html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
-                            if(odonto.presupuesto == 0){
-                                html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
-                            }else{
-                                html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
-                            }
+                            html += '<div class="form-check">';
+                            html += '<input class="form-check-input" type="checkbox" value="' + odonto.id + '" '
+                            html += odonto.presupuesto == 1 ? 'checked ' : '';
+                            html += 'onchange="togglePresupuesto(' + odonto.id + ', this.checked)">';
+                            html += '<label class="form-check-label"></label>';
+                            html += '</div>';
+                            html += '</td>';
+                            html += '<td>';
+                            html += '<div class="form-check">';
+                            html += '<input class="form-check-input checkbox-seleccion" type="checkbox" value="' + odonto.id + '" ';
+                            html += 'id="seleccionCheck' + odonto.id + '" ';
+                            html += 'onchange="toggleSeleccion(' + odonto.id + ', this.checked)">';
+                            html += '<label class="form-check-label" for="seleccionCheck' + odonto.id + '"></label>';
+                            html += '</div>';
                             html += '</td>';
                             html += '</tr>';
                         });
