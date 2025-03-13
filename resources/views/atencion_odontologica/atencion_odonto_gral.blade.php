@@ -952,10 +952,14 @@
                             });
                             let valores_boca_general = resp.valores[0];
                             let valores_odontograma = resp.valores[1];
-                            let total_general = valores_boca_general + valores_odontograma;
+                            let valores_insumos = resp.valores[2];
+                            let total_general = valores_boca_general + valores_odontograma + valores_insumos;
                             $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                            $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
                             $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                            $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
                             $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                            $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
                             $('#subtotal_clinico').val(formatoMoneda(total_general));
                             $('#total_clinico').val(formatoMoneda(total_general));
                             $('#total_presupuesto_dental').val(total_general);
