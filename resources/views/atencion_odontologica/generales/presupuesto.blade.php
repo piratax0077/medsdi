@@ -1,3 +1,14 @@
+<style>
+    .status-circle .circle {
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+    border: 2px solid #fff; /* Opcional: Borde blanco para mejor visibilidad */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Opcional: Sombra suave */
+}
+</style>
 <div class="card">
     <div class="card-body">
         <div id="form-presup_dent">
@@ -601,7 +612,7 @@
                                                 </div>
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">Total Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor * $diagnostico->cantidad,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
 
@@ -932,6 +943,7 @@
                                                                         <th class="text-center align-middle">Valor a pagar</th>
                                                                         <th class="text-center align-middle">Aprobado</th>
                                                                         <th class="text-center align-middle">Estado</th>
+                                                                        <th class="text-center align-middle"></th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -955,6 +967,9 @@
                                                                                 <td class="text-center align-middle">
                                                                                     {{ $estado }}
                                                                                 </td>
+                                                                                <td class="text-center align-middle status-circle">
+                                                                                    <div class="circle"></div>
+                                                                                </td>
                                                                             </tr>
                                                                         @endif
                                                                     @endforeach
@@ -976,6 +991,7 @@
                                                                         <th class="text-center align-middle">Valor a pagar</th>
                                                                         <th class="text-center align-middle">Aprobado</th>
                                                                         <th class="text-center align-middle">Estado</th>
+                                                                        <th class="text-center align-middle"></th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -990,6 +1006,9 @@
                                                                                 <td class="text-center align-middle"></td>
                                                                                 <td class="text-center align-middle">
 
+                                                                                </td>
+                                                                                <td class="text-center align-middle status-circle">
+                                                                                    <div class="circle"></div>
                                                                                 </td>
                                                                             </tr>
                                                                         @endif
@@ -1175,6 +1194,7 @@
                                                                     <td class="text-center align-middle">Total</td>
                                                                     <td class="text-center align-middle">Aprobado</td>
                                                                     <td class="text-center align-middle">Estado</td>
+                                                                    <td class="text-center align-middle"></td>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -1189,6 +1209,9 @@
                                                                         <td class="text-center align-middle">{{ number_format($total)  }}</td>
                                                                         <td class="text-center align-middle"></td>
                                                                         <td class="text-center align-middle"></td>
+                                                                        <td class="text-center align-middle status-circle">
+                                                                            <div class="circle"></div>
+                                                                        </td>
                                                                     </tr>
                                                                     @endif
                                                                 @endforeach
@@ -1227,7 +1250,8 @@
                                                             <h5>Total Final</h5>
                                                             <p id="valores_total_final_presupuesto_conf">$ {{ number_format($valores + $valores_piezas + $valores_insumos,0,',','.') }}</p>
                                                         </div>
-                                                        <button type="button" class="btn btn-outline-success btn-sm">Pagar</button>
+                                                        @php $total_pago = $valores + $valores_piezas + $valores_insumos; @endphp
+                                                        <button type="button" class="btn btn-outline-success btn-sm" onclick="pagar_presupuesto()">Pagar</button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -1242,6 +1266,8 @@
         </div>
     </div>
 </div>
+
+<input type="hidden" id="total_presupuesto_dental" value="{{ $valores + $valores_piezas + $valores_insumos }}">
 
 <!-- MODAL INSUMOS -->
 <!-- Modal -->
@@ -1322,6 +1348,74 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
           <button type="button" class="btn btn-primary">Solicitar</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Pago</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-body">
+                <p class="badge badge-warning">Pendiente</p>
+                <form id="pagoForm" class="mt-4">
+                    <!-- Total a pagar (deshabilitado) -->
+                    <div class="mb-3">
+                        <div class="form-group fill">
+                            <label for="total" class="floating-label-activo-sm">Total a pagar</label>
+                            <input type="text" class="form-control form-control-sm" id="total_pago" value="" readonly>
+                        </div>
+
+                    </div>
+
+                    <!-- Monto del pago -->
+                    <div class="mb-3">
+                        <div class="form-group fill">
+                            <label for="montoPago" class="floating-label-activo-sm">Monto del Pago</label>
+                            <input type="text" class="form-control form-control-sm" id="montoPago"  required>
+                        </div>
+
+                    </div>
+
+                    <!-- Monto abonado -->
+                    <div class="mb-3">
+                        <div class="form-group fill">
+                            <label for="montoAbonado" class="floating-label-activo-sm">Monto Abonado</label>
+                            <input type="text" class="form-control form-control-sm" id="montoAbonado"  required>
+                        </div>
+
+                    </div>
+
+                    <!-- Método de pago -->
+                    <div class="mb-3">
+                        <div class="form-group fill">
+                            <label for="metodoPago" class="floating-label-activo-sm">Método de Pago</label>
+                            <select class="form-control form-control-sm" id="metodoPago" required>
+                                <option value="" selected disabled>Seleccione un método</option>
+                                <option value="efectivo">Efectivo</option>
+                                <option value="tarjeta">Tarjeta</option>
+                                <option value="transferencia">Transferencia Bancaria</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <!-- Botón de envío -->
+                    <div class="d-grid">
+                        <button type="button" class="btn btn-success" onclick="confirmar_pago()">Confirmar Pago</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>
@@ -1664,5 +1758,33 @@
         $('#insumos_valor_tto').val('');
         $('#insumos_obs_tto').val('');
     //    $('#id_pieza_tto').val('');
+    }
+
+    function pagar_presupuesto(){
+        total = $('#total_presupuesto_dental').val();
+
+        // abrir modal
+        $('#exampleModal').modal('show');
+        $('#total_pago').val(formatoMoneda(total));
+        let id_hora_medica = $('#hora_medica').val();
+        console.log(id_hora_medica);
+        let url = "{{ ROUTE('dental.dame_bono_pago') }}";
+        let data = {
+            id_hora_medica: id_hora_medica,
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                $('#montoAbonado').val(formatoMoneda(resp.valor_atencion));
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        })
     }
 </script>

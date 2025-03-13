@@ -2187,7 +2187,7 @@ class ficha_atencionController extends Controller
         foreach ($insumos as $item) {
             if($item['presupuesto'] == 1){
                 if (isset($item['valor'])) {
-                    $total_insumos += $item['valor'];
+                    $total_insumos += $item['valor'] * $item['cantidad'];
                 }
             }
 

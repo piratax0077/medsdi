@@ -1538,7 +1538,8 @@
                                     <th>Pieza</th>
                                     <th>Diagnóstico</th>
                                     <th>Valor</th>
-                                    <th>Acción</th>
+                                    <th>Presupuesto</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1552,19 +1553,44 @@
                                     <td>{{ $odonto->pieza }}</td>
                                     <td>{{ $odonto->diagnostico }}</td>
                                     <td>{{ number_format($odonto->valor,0,',','.') }}</td>
-                                    <td>
+                                    {{-- <td>
                                         <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma({{ $odonto->id }})"><i class="feather icon-x"></i>Eliminar</button>
                                         @if($odonto->presupuesto == 0)
                                             <button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto({{ $odonto->id }})"><i class="fas fa-save"></i>Cargar a presupuesto</button>
                                         @else
                                             <button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto({{ $odonto->id }})"><i class="fas fa-trash"></i>Sacar de presupuesto</button>
                                         @endif
+                                    </td> --}}
+                                    <td>
+                                        <div class="form-check">
+                                            <input
+                                                class="form-check-input checkbox-presupuesto"
+                                                type="checkbox"
+                                                value="{{ $odonto->id }}"
+                                                id="presupuestoCheck{{ $odonto->id }}"
+                                                {{ $odonto->presupuesto == 1 ? 'checked' : '' }}
+                                                onchange="togglePresupuesto({{ $odonto->id }}, this.checked)">
+                                            <label class="form-check-label" for="presupuestoCheck{{ $odonto->id }}"></label>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="form-check">
+                                            <input
+                                                class="form-check-input checkbox-seleccion"
+                                                type="checkbox"
+                                                value="{{ $odonto->id }}"
+                                                id="seleccionCheck{{ $odonto->id }}"
+                                                onchange="toggleSeleccion({{ $odonto->id }}, this.checked)">
+                                            <label class="form-check-label" for="seleccionCheck{{ $odonto->id }}"></label>
+                                        </div>
                                     </td>
                                 </tr>
                                 @endforeach
                                 @endif
                             </tbody>
                         </table>
+                        <button type="button" class="btn btn-outline-danger btn-icon" onclick="eliminar_seleccionados()"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
             </div>
@@ -1642,14 +1668,31 @@
                         html += '<td>'+odonto.caras+'</td>';
                         html += '<td>'+odonto.pieza+'</td>';
                         html += '<td>'+odonto.diagnostico+'</td>';
-                        html += '<td>'+odonto.valor+'</td>';
+                        html += '<td>'+formatoMoneda(formatoMoneda(odonto.valor))+'</td>';
                         html += '<td>';
-                        html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
-                        if(odonto.presupuesto == 0){
-                            html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
-                        }else{
-                            html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
-                        }
+                        // html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                        // if(odonto.presupuesto == 0){
+                        //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                        // }else{
+                        //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                        // }
+                        // html += '</td>';
+                         // Checkbox para seleccionar el odontograma
+                        html += '<td>';
+                        html += '<div class="form-check">';
+                        html += '<input class="form-check-input" type="checkbox" value="' + odonto.id + '" '
+                        html += odonto.presupuesto == 1 ? 'checked ' : '';
+                        html += 'onchange="togglePresupuesto(' + odonto.id + ',this.checked)">';
+                        html += '<label class="form-check-label"></label>';
+                        html += '</div>';
+                        html += '</td>';
+                        html += '<td>';
+                        html += '<div class="form-check">';
+                        html += '<input class="form-check-input checkbox-seleccion" type="checkbox" value="' + odonto.id + '" ';
+                        html += 'id="seleccionCheck' + odonto.id + '" ';
+                        html += 'onchange="toggleSeleccion(' + odonto.id + ', this.checked)">';
+                        html += '<label class="form-check-label" for="seleccionCheck' + odonto.id + '"></label>';
+                        html += '</div>';
                         html += '</td>';
                         html += '</tr>';
                     });
@@ -1670,7 +1713,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                 </div>
                                 <div class="form-group col-md-1">
                                     <label class="floating-label-activo-sm">Descuento</label>
@@ -1678,7 +1721,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">Total prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                 </div>
                                 <div class="form-group col-md-2">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
@@ -1691,7 +1734,7 @@
                                     <td>${odonto.caras} </td>
                                     <td>${odonto.pieza} </td>
                                     <td>${odonto.tratamiento} </td>
-                                    <td>${odonto.valor} </td>
+                                    <td>${formatoMoneda(formatoMoneda(odonto.valor))} </td>
                                     <td> </td>
                                     <td>
                                         <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
@@ -1789,14 +1832,31 @@
                         html += '<td>'+odonto.caras+'</td>';
                         html += '<td>'+odonto.pieza+'</td>';
                         html += '<td>'+odonto.diagnostico+'</td>';
-                        html += '<td>'+odonto.valor+'</td>';
+                        html += '<td>'+formatoMoneda(formatoMoneda(odonto.valor))+'</td>';
+                        // html += '<td>';
+                        // html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                        // if(odonto.presupuesto == 0){
+                        //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                        // }else{
+                        //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                        // }
+                        // html += '</td>';
+                         // Checkbox para seleccionar el odontograma
                         html += '<td>';
-                        html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
-                        if(odonto.presupuesto == 0){
-                            html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
-                        }else{
-                            html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
-                        }
+                        html += '<div class="form-check">';
+                        html += '<input class="form-check-input" type="checkbox" value="' + odonto.id + '" '
+                        html += odonto.presupuesto == 1 ? 'checked ' : '';
+                        html += 'onchange="togglePresupuesto(' + odonto.id + ',this.checked)">';
+                        html += '<label class="form-check-label"></label>';
+                        html += '</div>';
+                        html += '</td>';
+                        html += '<td>';
+                        html += '<div class="form-check">';
+                        html += '<input class="form-check-input checkbox-seleccion" type="checkbox" value="' + odonto.id + '" ';
+                        html += 'id="seleccionCheck' + odonto.id + '" ';
+                        html += 'onchange="toggleSeleccion(' + odonto.id + ', this.checked)">';
+                        html += '<label class="form-check-label" for="seleccionCheck' + odonto.id + '"></label>';
+                        html += '</div>';
                         html += '</td>';
                         html += '</tr>';
                     });
@@ -1816,7 +1876,7 @@
                             </div>
                             <div class="form-group col-md-2">
                                 <label class="floating-label-activo-sm">Sub-Total</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                             </div>
                             <div class="form-group col-md-1">
                                 <label class="floating-label-activo-sm">Descuento</label>
@@ -1824,7 +1884,7 @@
                             </div>
                             <div class="form-group col-md-2">
                                 <label class="floating-label-activo-sm">Total prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                             </div>
                             <div class="form-group col-md-2">
                                 <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
@@ -1837,7 +1897,7 @@
                                 <td>${odonto.caras} </td>
                                 <td>${odonto.pieza} </td>
                                 <td>${odonto.tratamiento} </td>
-                                <td>${odonto.valor} </td>
+                                <td>${formatoMoneda(formatoMoneda(odonto.valor))} </td>
                                 <td> </td>
                                 <td>
                                     <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
@@ -1932,14 +1992,31 @@
                         html += '<td>'+odonto.caras+'</td>';
                         html += '<td>'+odonto.pieza+'</td>';
                         html += '<td>'+odonto.diagnostico+'</td>';
-                        html += '<td>'+odonto.valor+'</td>';
+                        html += '<td>'+formatoMoneda(formatoMoneda(odonto.valor))+'</td>';
+                        // html += '<td>';
+                        // html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                        // if(odonto.presupuesto == 0){
+                        //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                        // }else{
+                        //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                        // }
+                        // html += '</td>';
+                         // Checkbox para seleccionar el odontograma
                         html += '<td>';
-                        html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
-                        if(odonto.presupuesto == 0){
-                            html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
-                        }else{
-                            html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
-                        }
+                        html += '<div class="form-check">';
+                        html += '<input class="form-check-input" type="checkbox" value="' + odonto.id + '" '
+                        html += odonto.presupuesto == 1 ? 'checked ' : '';
+                        html += 'onchange="togglePresupuesto(' + odonto.id + ',this.checked)">';
+                        html += '<label class="form-check-label"></label>';
+                        html += '</div>';
+                        html += '</td>';
+                        html += '<td>';
+                        html += '<div class="form-check">';
+                        html += '<input class="form-check-input checkbox-seleccion" type="checkbox" value="' + odonto.id + '" ';
+                        html += 'id="seleccionCheck' + odonto.id + '" ';
+                        html += 'onchange="toggleSeleccion(' + odonto.id + ', this.checked)">';
+                        html += '<label class="form-check-label" for="seleccionCheck' + odonto.id + '"></label>';
+                        html += '</div>';
                         html += '</td>';
                         html += '</tr>';
                     });
@@ -1960,7 +2037,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                 </div>
                                 <div class="form-group col-md-1">
                                     <label class="floating-label-activo-sm">Descuento</label>
@@ -1968,7 +2045,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">Total prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                 </div>
                                 <div class="form-group col-md-2">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
@@ -1981,7 +2058,7 @@
                                     <td>${odonto.caras} </td>
                                     <td>${odonto.pieza} </td>
                                     <td>${odonto.tratamiento} </td>
-                                    <td>${odonto.valor} </td>
+                                    <td>${formatoMoneda(formatoMoneda(odonto.valor))} </td>
                                     <td> </td>
                                     <td>
                                         <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
@@ -2077,14 +2154,31 @@
                         html += '<td>'+odonto.caras+'</td>';
                         html += '<td>'+odonto.pieza+'</td>';
                         html += '<td>'+odonto.diagnostico+'</td>';
-                        html += '<td>'+odonto.valor+'</td>';
+                        html += '<td>'+formatoMoneda(formatoMoneda(odonto.valor))+'</td>';
+                        // html += '<td>';
+                        // html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                        // if(odonto.presupuesto == 0){
+                        //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                        // }else{
+                        //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                        // }
+                        // html += '</td>';
+                         // Checkbox para seleccionar el odontograma
                         html += '<td>';
-                        html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
-                        if(odonto.presupuesto == 0){
-                            html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
-                        }else{
-                            html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
-                        }
+                        html += '<div class="form-check">';
+                        html += '<input class="form-check-input" type="checkbox" value="' + odonto.id + '" '
+                        html += odonto.presupuesto == 1 ? 'checked ' : '';
+                        html += 'onchange="togglePresupuesto(' + odonto.id + ', this.checked)">';
+                        html += '<label class="form-check-label"></label>';
+                        html += '</div>';
+                        html += '</td>';
+                        html += '<td>';
+                        html += '<div class="form-check">';
+                        html += '<input class="form-check-input checkbox-seleccion" type="checkbox" value="' + odonto.id + '" ';
+                        html += 'id="seleccionCheck' + odonto.id + '" ';
+                        html += 'onchange="toggleSeleccion(' + odonto.id + ', this.checked)">';
+                        html += '<label class="form-check-label" for="seleccionCheck' + odonto.id + '"></label>';
+                        html += '</div>';
                         html += '</td>';
                         html += '</tr>';
                     });
@@ -2105,7 +2199,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                 </div>
                                 <div class="form-group col-md-1">
                                     <label class="floating-label-activo-sm">Descuento</label>
@@ -2113,7 +2207,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">Total prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                 </div>
                                 <div class="form-group col-md-2">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
@@ -2126,7 +2220,7 @@
                                     <td>${odonto.caras} </td>
                                     <td>${odonto.pieza} </td>
                                     <td>${odonto.tratamiento} </td>
-                                    <td>${odonto.valor} </td>
+                                    <td>${formatoMoneda(formatoMoneda(odonto.valor))} </td>
                                     <td> </td>
                                     <td>
                                         <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
@@ -2223,14 +2317,31 @@
                         html += '<td>'+odonto.caras+'</td>';
                         html += '<td>'+odonto.pieza+'</td>';
                         html += '<td>'+odonto.diagnostico+'</td>';
-                        html += '<td>'+odonto.valor+'</td>';
+                        html += '<td>'+formatoMoneda(formatoMoneda(odonto.valor))+'</td>';
+                        // html += '<td>';
+                        // html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                        // if(odonto.presupuesto == 0){
+                        //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                        // }else{
+                        //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                        // }
+                        // html += '</td>';
+                         // Checkbox para seleccionar el odontograma
                         html += '<td>';
-                        html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
-                        if(odonto.presupuesto == 0){
-                            html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
-                        }else{
-                            html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
-                        }
+                        html += '<div class="form-check">';
+                        html += '<input class="form-check-input" type="checkbox" value="' + odonto.id + '" '
+                        html += odonto.presupuesto == 1 ? 'checked ' : '';
+                        html += 'onchange="togglePresupuesto(' + odonto.id + ', this.checked)">';
+                        html += '<label class="form-check-label"></label>';
+                        html += '</div>';
+                        html += '</td>';
+                        html += '<td>';
+                        html += '<div class="form-check">';
+                        html += '<input class="form-check-input checkbox-seleccion" type="checkbox" value="' + odonto.id + '" ';
+                        html += 'id="seleccionCheck' + odonto.id + '" ';
+                        html += 'onchange="toggleSeleccion(' + odonto.id + ', this.checked)">';
+                        html += '<label class="form-check-label" for="seleccionCheck' + odonto.id + '"></label>';
+                        html += '</div>';
                         html += '</td>';
                         html += '</tr>';
                     });
@@ -2251,7 +2362,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                 </div>
                                 <div class="form-group col-md-1">
                                     <label class="floating-label-activo-sm">Descuento</label>
@@ -2259,7 +2370,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label class="floating-label-activo-sm">Total prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                 </div>
                                 <div class="form-group col-md-2">
                                     <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
@@ -2272,7 +2383,7 @@
                                     <td>${odonto.caras} </td>
                                     <td>${odonto.pieza} </td>
                                     <td>${odonto.tratamiento} </td>
-                                    <td>${odonto.valor} </td>
+                                    <td>${formatoMoneda(odonto.valor)} </td>
                                     <td> </td>
                                     <td>
                                         <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
@@ -2369,14 +2480,31 @@
                         html += '<td>'+odonto.caras+'</td>';
                         html += '<td>'+odonto.pieza+'</td>';
                         html += '<td>'+odonto.diagnostico+'</td>';
-                        html += '<td>'+odonto.valor+'</td>';
+                        html += '<td>'+formatoMoneda(odonto.valor)+'</td>';
+                        // html += '<td>';
+                        // html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                        // if(odonto.presupuesto == 0){
+                        //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                        // }else{
+                        //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                        // }
+                        // html += '</td>';
+                         // Checkbox para seleccionar el odontograma
                         html += '<td>';
-                        html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
-                        if(odonto.presupuesto == 0){
-                            html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
-                        }else{
-                            html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
-                        }
+                        html += '<div class="form-check">';
+                        html += '<input class="form-check-input" type="checkbox" value="' + odonto.id + '" '
+                        html += odonto.presupuesto == 1 ? 'checked ' : '';
+                        html += 'onchange="togglePresupuesto(' + odonto.id + ', this.checked)">';
+                        html += '<label class="form-check-label"></label>';
+                        html += '</div>';
+                        html += '</td>';
+                        html += '<td>';
+                        html += '<div class="form-check">';
+                        html += '<input class="form-check-input checkbox-seleccion" type="checkbox" value="' + odonto.id + '" ';
+                        html += 'id="seleccionCheck' + odonto.id + '" ';
+                        html += 'onchange="toggleSeleccion(' + odonto.id + ', this.checked)">';
+                        html += '<label class="form-check-label" for="seleccionCheck' + odonto.id + '"></label>';
+                        html += '</div>';
                         html += '</td>';
                         html += '</tr>';
                     });
@@ -2397,7 +2525,7 @@
                             </div>
                             <div class="form-group col-md-2">
                                 <label class="floating-label-activo-sm">Sub-Total</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                             </div>
                             <div class="form-group col-md-1">
                                 <label class="floating-label-activo-sm">Descuento</label>
@@ -2405,7 +2533,7 @@
                             </div>
                             <div class="form-group col-md-2">
                                 <label class="floating-label-activo-sm">Total prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                             </div>
                             <div class="form-group col-md-2">
                                 <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
@@ -2418,7 +2546,7 @@
                                 <td>${odonto.caras} </td>
                                 <td>${odonto.pieza} </td>
                                 <td>${odonto.tratamiento} </td>
-                                <td>${odonto.valor} </td>
+                                <td>${formatoMoneda(odonto.valor)} </td>
                                 <td> </td>
                                 <td>
                                     <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
@@ -2442,4 +2570,188 @@
             }
         });
     }
+
+    function togglePresupuesto(id, estaSeleccionado) {
+        if (estaSeleccionado) {
+            cargar_a_presupuesto(id);
+        } else {
+            sacar_de_presupuesto(id);
+        }
+    }
+
+    function toggleSeleccion(id, estaSeleccionado) {
+        if (estaSeleccionado) {
+            console.log(`Odontograma ${id} seleccionado para acción en bloque.`);
+        } else {
+            console.log(`Odontograma ${id} deseleccionado.`);
+        }
+    }
+
+    function eliminar_seleccionados() {
+    // Obtener todos los checkboxes seleccionados
+    const seleccionados = [];
+    document.querySelectorAll('.checkbox-seleccion:checked').forEach((checkbox) => {
+        seleccionados.push(checkbox.value);
+    });
+
+    // Validar que haya elementos seleccionados
+    if (seleccionados.length === 0) {
+        alert("Por favor, seleccione al menos un odontograma para eliminar.");
+        return;
+    }
+
+    // Confirmación antes de proceder
+    if (!confirm("¿Está seguro de que desea eliminar los elementos seleccionados?")) {
+        return;
+    }
+
+    // Enviar los IDs por AJAX
+    $.ajax({
+        type: 'POST',
+        url: "{{ route('dental.eliminar_odontograma') }}",  // Ruta del backend para eliminar
+        data: {
+            ids: seleccionados,  // Array de IDs seleccionados
+            id_paciente: dame_id_paciente(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            _token: "{{ csrf_token() }}"  // CSRF token para seguridad
+        },
+        success: function (response) {
+            console.log(response);
+                    if(response.status == 1){
+                        swal({
+                            title: 'Odontograma',
+                            text: response.mensaje,
+                            icon: 'success'
+                        });
+
+                        let odontograma = response.odontograma_paciente;
+                        let html = '';
+                        odontograma.forEach(function(odonto){
+                            html += '<tr>';
+                            html += '<td>'+odonto.fecha+'</td>';
+                            html += '<td>'+odonto.tratamiento+'</td>';
+                            html += '<td>'+odonto.caras+'</td>';
+                            html += '<td>'+odonto.pieza+'</td>';
+                            html += '<td>'+odonto.diagnostico+'</td>';
+                            html += '<td>'+formatoMoneda(odonto.valor)+'</td>';
+                            // html += '<td>';
+                            // html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                            // if(odonto.presupuesto == 0){
+                            //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                            // }else{
+                            //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                            // }
+                            // html += '</td>';
+                             // Checkbox para seleccionar el odontograma
+                            html += '<td>';
+                            html += '<div class="form-check">';
+                            html += '<input class="form-check-input" type="checkbox" value="' + odonto.id + '" '
+                            html += odonto.presupuesto == 1 ? 'checked ' : '';
+                            html += 'onchange="togglePresupuesto(' + odonto.id + ',this.checked)">';
+                            html += '<label class="form-check-label"></label>';
+                            html += '</div>';
+                            html += '</td>';
+                            html += '<td>';
+                            html += '<div class="form-check">';
+                            html += '<input class="form-check-input checkbox-seleccion" type="checkbox" value="' + odonto.id + '" ';
+                            html += 'id="seleccionCheck' + odonto.id + '" ';
+                            html += 'onchange="toggleSeleccion(' + odonto.id + ', this.checked)">';
+                            html += '<label class="form-check-label" for="seleccionCheck' + odonto.id + '"></label>';
+                            html += '</div>';
+                            html += '</td>';
+                            html += '</tr>';
+                        });
+
+                        $('#table_odontograma tbody').html(html);
+                        $('#contenedor_piezas_dentales_presupuesto').empty();
+                        $('#table_trabajos_presupuesto tbody').empty();
+                        odontograma.forEach(function(odonto){
+                            if(odonto.presupuesto == 1){
+                                $('#contenedor_piezas_dentales_presupuesto').append(`
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Pieza</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="floating-label-activo-sm">Prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label class="floating-label-activo-sm">Descuento</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">Total prestación</label>
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                    </div>
+                                    <div class="form-group col-md-2">
+
+                                    </div>
+                                `);
+                                $('#table_trabajos_presupuesto tbody').append(`
+                                    <tr>
+                                        <td>${odonto.fecha}</td>
+                                        <td>${odonto.diagnostico} </td>
+                                        <td>${odonto.caras} </td>
+                                        <td>${odonto.pieza} </td>
+                                        <td>${odonto.tratamiento} </td>
+                                        <td>${formatoMoneda(formatoMoneda(odonto.valor))} </td>
+                                        <td> </td>
+                                        <td>
+                                            <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                        </td>
+                                    </tr>
+                                `);
+                            }
+                        });
+                        let valores_boca_general = response.valores[0];
+                        let valores_odontograma = response.valores[1];
+                        let total_general = valores_boca_general + valores_odontograma;
+                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                        $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                        $('#odon_adults').empty();
+                        $('#odon_adults').append(response.odontograma_paciente_vista);
+                        let table = $('#presup_estado_pago').DataTable();
+
+                            // Limpiar la tabla antes de agregar nuevas filas
+                            table.clear().draw();
+
+                            // Recorrer el odontograma y agregar nuevas filas
+                            odontograma.forEach(function(odonto) {
+                                if (odonto.presupuesto == 1) {
+                                    // Agregar una nueva fila a la tabla
+                                    let rowNode = table.row.add([
+                                        odonto.descripcion,
+                                        odonto.pieza,
+                                        formatoMoneda(formatoMoneda(odonto.valor)),
+                                        0,
+                                        formatoMoneda(formatoMoneda(odonto.valor)),
+                                        '',
+                                        '', // Columna vacía
+                                        `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
+                                    ]).draw(false).node(); // Obtener el nodo de la fila
+
+                                    // Agregar clases a la fila
+                                    $(rowNode).addClass('text-center align-middle');
+                                }
+                            });
+                    }
+        },
+        error: function (error) {
+            alert("Hubo un error al eliminar los elementos.");
+            console.error(error);
+        }
+    });
+}
+
+
 </script>

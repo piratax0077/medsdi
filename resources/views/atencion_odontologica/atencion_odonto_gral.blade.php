@@ -185,7 +185,7 @@
                             html += '<td>'+odonto.caras+'</td>';
                             html += '<td>'+odonto.pieza+'</td>';
                             html += '<td>'+odonto.diagnostico+'</td>';
-                            html += '<td>'+odonto.valor+'</td>';
+                            html += '<td>'+formatoMoneda(odonto.valor)+'</td>';
                             html += '<td>';
                             html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
                             if(odonto.presupuesto == 0){
@@ -214,7 +214,7 @@
                                         </div>
                                         <div class="form-group col-md-2">
                                             <label class="floating-label-activo-sm">Sub-Total</label>
-                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                         </div>
                                         <div class="form-group col-md-1">
                                             <label class="floating-label-activo-sm">Descuento</label>
@@ -222,7 +222,7 @@
                                         </div>
                                         <div class="form-group col-md-2">
                                             <label class="floating-label-activo-sm">Total prestación</label>
-                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                         </div>
                                         <div class="form-group col-md-2 d-flex">
 
@@ -236,7 +236,7 @@
                                             <td>${odonto.caras} </td>
                                             <td>${odonto.pieza} </td>
                                             <td>${odonto.tratamiento} </td>
-                                            <td>${odonto.valor} </td>
+                                            <td>${formatoMoneda(odonto.valor)} </td>
                                             <td> </td>
                                             <td>
                                                 <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
@@ -254,6 +254,7 @@
                             $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                             $('#subtotal_clinico').val(formatoMoneda(total_general));
                             $('#total_clinico').val(formatoMoneda(total_general));
+                            $('#total_presupuesto_dental').val(total_general);
                     }else{
                         swal({
                             icon:'error',
@@ -889,7 +890,7 @@
                             html += '<td>'+odonto.caras+'</td>';
                             html += '<td>'+odonto.pieza+'</td>';
                             html += '<td>'+odonto.diagnostico+'</td>';
-                            html += '<td>'+odonto.valor+'</td>';
+                            html += '<td>'+formatoMoneda(odonto.valor)+'</td>';
                             html += '<td>';
                             html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
                             if(odonto.presupuesto == 0){
@@ -918,7 +919,7 @@
                                         </div>
                                         <div class="form-group col-md-2">
                                             <label class="floating-label-activo-sm">Sub-Total</label>
-                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                         </div>
                                         <div class="form-group col-md-1">
                                             <label class="floating-label-activo-sm">Descuento</label>
@@ -926,7 +927,7 @@
                                         </div>
                                         <div class="form-group col-md-2">
                                             <label class="floating-label-activo-sm">Total prestación</label>
-                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                         </div>
                                         <div class="form-group col-md-2 d-flex">
 
@@ -940,7 +941,7 @@
                                             <td>${odonto.caras} </td>
                                             <td>${odonto.pieza} </td>
                                             <td>${odonto.tratamiento} </td>
-                                            <td>${odonto.valor} </td>
+                                            <td>${formatoMoneda(odonto.valor)} </td>
                                             <td> </td>
                                             <td>
                                                 <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
@@ -957,6 +958,7 @@
                             $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                             $('#subtotal_clinico').val(formatoMoneda(total_general));
                             $('#total_clinico').val(formatoMoneda(total_general));
+                            $('#total_presupuesto_dental').val(total_general);
                     }else{
                         swal({
                             icon:'error',
@@ -1580,7 +1582,7 @@
                             html += '<td>'+odonto.caras+'</td>';
                             html += '<td>'+odonto.pieza+'</td>';
                             html += '<td>'+odonto.diagnostico+'</td>';
-                            html += '<td>'+odonto.valor+'</td>';
+                            html += '<td>'+formatoMoneda(odonto.valor)+'</td>';
                             html += '<td>';
                             html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
                             if(odonto.presupuesto == 0){
@@ -1608,7 +1610,7 @@
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label class="floating-label-activo-sm">Sub-Total</label>
-                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                     </div>
                                     <div class="form-group col-md-1">
                                         <label class="floating-label-activo-sm">Descuento</label>
@@ -1616,7 +1618,7 @@
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label class="floating-label-activo-sm">Total prestación</label>
-                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.valor}" >
+                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                     </div>
 
                                 `);
@@ -1627,7 +1629,7 @@
                                         <td>${odonto.caras} </td>
                                         <td>${odonto.pieza} </td>
                                         <td>${odonto.tratamiento} </td>
-                                        <td>${odonto.valor} </td>
+                                        <td>${formatoMoneda(odonto.valor)} </td>
                                         <td> </td>
                                         <td>
                                             <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
