@@ -908,7 +908,7 @@
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($presupuesto->valor_total,0,',','.') }}">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Descuento</label>
@@ -941,8 +941,8 @@
                                                                         <th class="text-center align-middle">Valor total</th>
                                                                         <th class="text-center align-middle">Descuento</th>
                                                                         <th class="text-center align-middle">Valor a pagar</th>
-                                                                        <th class="text-center align-middle">Aprobado</th>
-                                                                        <th class="text-center align-middle">Estado</th>
+                                                                        <th class="text-center align-middle">Estado de pago</th>
+                                                                        <th class="text-center align-middle">Estado Prestación</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -963,7 +963,16 @@
                                                                                 <td class="text-center align-middle">0</td>
                                                                                 <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
                                                                                 <td class="text-center align-middle status-circle">
-                                                                                    <div class="circle"></div>
+                                                                                    @php
+                                                                                        if($o->estado_pago == 'ok'){
+                                                                                            $clase = 'bg-success';
+                                                                                        }else if($o->estado_pago == 'incompleto'){
+                                                                                            $clase = 'bg-warning';
+                                                                                        }else{
+                                                                                            $clase = 'bg-danger';
+                                                                                        }
+                                                                                    @endphp
+                                                                                    <div class="circle {{ $clase }}"></div>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
                                                                                     {{ $estado }}
@@ -1191,7 +1200,7 @@
                                                                     <td class="text-center align-middle">Sub-total</td>
                                                                     <td class="text-center align-middle">Descuento</td>
                                                                     <td class="text-center align-middle">Total</td>
-                                                                    <td class="text-center align-middle">Aprobado</td>
+                                                                    <td class="text-center align-middle">Estado de pago</td>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -1205,7 +1214,7 @@
                                                                         <td class="text-center align-middle">0</td>
                                                                         <td class="text-center align-middle">{{ number_format($total)  }}</td>
                                                                         <td class="text-center align-middle status-circle">
-                                                                            <div class="circle"></div>
+                                                                            <div class="circle {{ $t->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
                                                                         </td>
 
                                                                     </tr>
@@ -1402,11 +1411,59 @@
 
                     </div>
 
+                    <div class="mb-3">
+                        <div class="form-group fill">
+                            <label class="floating-label-activo-sm">Convenio</label>
+                            <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm"  >
+                                <option value="0">Selecione una opción</option>
+                                @foreach ($prevision as $prev)
+                                    <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
+                                @endforeach
+                            </select>
+                            {{-- <div class="input-group-append">
+                                <button class="btn btn-outline-primary btn-sm" type="button" onclick="$('#bono_prevision_txt').hide();$('#bono_prevision').show();"><i class="feather icon-edit"></i></button>
+                            </div> --}}
+                        </div>
+                    </div>
+
                     <!-- Botón de envío -->
                     <div class="d-grid">
                         <button type="button" class="btn btn-success" onclick="confirmar_pago()">Confirmar Pago</button>
                     </div>
                 </form>
+                <div class="row">
+                    <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-responsive table-xs" id="table_pagos_presupuesto">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Metodo de pago</th>
+                                            <th>Pago</th>
+                                            <th>Acciones</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($pagos_tratamientos_dentales as $pago)
+                                            <tr>
+                                                <td>{{ $pago->fecha_pago }}</td>
+                                                <td>{{ $pago->metodo_pago }}</td>
+                                                <td>{{ number_format($pago->total,0,',','.') }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
+                                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_pago_dental({{ $pago->id }})"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                    </div>
+                </div>
+
+
+
             </div>
 
         </div>
@@ -1421,6 +1478,9 @@
   <input type="hidden" id="id_pieza_tto">
   <input type="hidden" id="tipo_tto">
 <script>
+    $(document).ready(function(){
+        $('#table_pagos_presupuesto').DataTable();
+    })
     const verModalAgregar = (fun,tipo,id)=>{
 
         $('#agregar-antecedente').show();
@@ -1758,15 +1818,16 @@
 
     function pagar_presupuesto(){
         total = $('#total_presupuesto_dental').val();
-
+        console.log(formatoMoneda(parseInt(total)));
         // abrir modal
         $('#exampleModal').modal('show');
-        $('#total_pago').val(formatoMoneda(total));
+        $('#total_pago').val(formatoMoneda(parseInt(total)));
         let id_hora_medica = $('#hora_medica').val();
         console.log(id_hora_medica);
         let url = "{{ ROUTE('dental.dame_bono_pago') }}";
         let data = {
             id_hora_medica: id_hora_medica,
+            id_ficha_atencion: $('#id_fc').val(),
             _token: CSRF_TOKEN
         }
 
@@ -1776,11 +1837,150 @@
             data: data,
             success: function(resp){
                 console.log(resp);
+                $('#bono_prevision').val(resp.convenio);
                 $('#montoAbonado').val(formatoMoneda(resp.valor_atencion));
             },
             error: function(error){
                 console.log(error.responseText);
             }
         })
+    }
+
+    function confirmar_pago() {
+        // Obtener valores del formulario
+        const total_pago = $('#total_pago').val().replace(/[^0-9]/g, '');
+        const montoPago = $('#montoPago').val().replace(/[^0-9]/g, '');
+        const montoAbonado = $('#montoAbonado').val().replace(/[^0-9]/g, '');
+        const metodoPago = $('#metodoPago').val();
+        const bonoPrevision = $('#bono_prevision').val();
+
+        // Verificar que todos los campos requeridos estén completos
+        if (!montoPago || !montoAbonado || !metodoPago) {
+            console.error('Por favor complete todos los campos obligatorios.');
+            return;
+        }
+
+
+        // Crear objeto JSON con los datos del formulario
+        const data = {
+            _token: '{{ csrf_token() }}',  // Token CSRF
+            total_pago: total_pago,
+            monto_pago: montoPago,
+            monto_abonado: montoAbonado,
+            metodo_pago: metodoPago,
+            bono_prevision: bonoPrevision,
+            id_ficha_atencion: $('#id_fc').val(),
+            id_paciente: $('#id_paciente').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+        };
+
+        // Enviar los datos por AJAX
+        $.ajax({
+            url: '{{ ROUTE("dental.confirmar_pago_presupuesto_dental") }}', // Reemplaza con la URL de tu endpoint en el controlador
+            method: 'POST',
+            data: data,
+            success: function(response) {
+                console.log('Éxito:', response);
+                if(response.estado == 1){
+                    swal({
+                        title:'Exito',
+                        text: response.mensaje,
+                        icon:'success'
+                    });
+                    let pagos = response.pagos;
+                    let table = $('#table_pagos_presupuesto').DataTable();
+                     // Limpiar la tabla antes de agregar nuevas filas
+                     table.clear().draw();
+                     pagos.forEach(function(pago){
+                        let rowNode = table.row.add([
+                            pago.fecha_pago,
+                            pago.metodo_pago,
+                            formatoMoneda(pago.total),
+                            `<td>
+                                <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_pago_dental(${pago.id})"><i class="fas fa-trash"></i></button>
+                            </td>`
+                        ]).draw(false).node();
+
+                        // Agregar clases a la fila
+                        $(rowNode).addClass('text-center align-middle status-circle');
+                     });
+                     $('#montoAbonado').val(formatoMoneda(parseInt(response.suma_pagado)));
+                }else{
+                    swal({
+                        title:'error',
+                        text: response.mensaje,
+                        icon:'error'
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', xhr.responseText);
+            }
+        });
+    }
+
+    function eliminar_pago_dental(id){
+        swal({
+            title: "¿Esta seguro que desea ELIMINAR el Pago?",
+            text: "Favor confirme o cancele la solicitud",
+            icon: "warning",
+            buttons: ["Cancelar", "Solicitar"],
+            dangerMode: true,
+        }).then((willDelete) => {
+            if(willDelete){
+                confirmar_eliminar_pago_dental(id);
+            }
+        });
+    }
+
+    function confirmar_eliminar_pago_dental(id){
+        let url = "{{ ROUTE('dental.eliminar_pago_presupuesto_dental') }}";
+        let data = {
+            id: id,
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            id_paciente: $('#id_paciente').val(),
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.estado == 'ok'){
+                    swal({
+                        title:'Exito',
+                        text: resp.mensaje,
+                        icon:'success'
+                    });
+                    let pagos = resp.pagos;
+                    let table = $('#table_pagos_presupuesto').DataTable();
+                     // Limpiar la tabla antes de agregar nuevas filas
+                     table.clear().draw();
+                     pagos.forEach(function(pago){
+                        let rowNode = table.row.add([
+                            pago.fecha_pago,
+                            pago.metodo_pago,
+                            formatoMoneda(pago.total),
+                            `<td>
+                                <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-search"></i></button>
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_pago_dental(${pago.id})"><i class="fas fa-trash"></i></button>
+                            </td>`
+                        ]).draw(false).node();
+
+                        // Agregar clases a la fila
+                        $(rowNode).addClass('text-center align-middle status-circle');
+
+                        $('#montoAbonado').val(formatoMoneda(parseInt(resp.suma_pagado)));
+                     });
+                }
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        });
     }
 </script>

@@ -59,6 +59,7 @@ use App\Models\OrdenTrabajoMayor;
 use App\Models\OrdenTrabajoMenor;
 use App\Models\Paciente;
 use App\Models\PacienteExterno;
+use App\Models\PagosPresupuestoDental;
 use App\Models\PedidoInsumos;
 use App\Models\PedidoMateriales;
 use App\Models\PresupuestosDental;
@@ -1677,7 +1678,7 @@ class DentalController extends Controller
 
                 $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
                 $valores = $this->dameValoresOdontograma($pieza->id_paciente, $pieza->id_ficha_atencion, $pieza->id_lugar_atencion, $profesional->id_tipo_especialidad);
-                $valor_total = $valores[0] + $valores[1];
+                $valor_total = $valores[0] + $valores[1] + $valores[2];
                 $presupuesto->valor_total = $valor_total;
                 $presupuesto->save();
                 return ['status' => 1, 'mensaje' => 'Pieza '.$pieza->pieza.' agregada con éxito.', 'odontograma_paciente' => $odontograma_paciente, 'valores' => $valores,'presupuesto' => $presupuesto];
@@ -1721,7 +1722,7 @@ class DentalController extends Controller
                 $boca_completa_gral_diagnostico_endo = $ficha_atencionController->dameCompletaEndoDiagnostico($paciente->id, $profesional->id_tipo_especialidad);
                 $odontograma_paciente = $this->dame_odontograma_paciente($pieza->id_paciente, $pieza->id_ficha_atencion, $pieza->id_lugar_atencion,$profesional->id_tipo_especialidad);
                 $valores = $this->dameValoresOdontograma($pieza->id_paciente, $pieza->id_ficha_atencion, $pieza->id_lugar_atencion,$profesional->id_tipo_especialidad);
-                $valor_total = $valores[0] + $valores[1];
+                $valor_total = $valores[0] + $valores[1] + $valores[2];
                 $presupuesto->valor_total = $valor_total;
                 $presupuesto->save();
                 return [
@@ -1773,7 +1774,7 @@ class DentalController extends Controller
                 $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
                 $valores = $this->dameValoresOdontograma($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
                 $insumos = InsumosTratamientosDental::where('id_ficha_atencion',$request->id_ficha_atencion)->get();
-                $valor_total = $valores[0] + $valores[1];
+                $valor_total = $valores[0] + $valores[1] + $valores[2];
                 $presupuesto->valor_total = $valor_total;
                 $presupuesto->save();
                 return ['status' => 1, 'mensaje' => 'Insumo '.$insumo->descripcion.' agregada con éxito.', 'odontograma_paciente' => $odontograma_paciente, 'valores' => $valores,'presupuesto' => $presupuesto,'insumos' => $insumos];
@@ -1843,7 +1844,7 @@ class DentalController extends Controller
 
                 $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
                 $valores = $this->dameValoresOdontograma($odontograma->id_paciente, $odontograma->id_ficha_atencion, $odontograma->id_lugar_atencion, $profesional->id_tipo_especialidad);
-                $valor_total = $valores[0] + $valores[1];
+                $valor_total = $valores[0] + $valores[1] + $valores[2];
                 $presupuesto->valor_total = $valor_total;
                 $presupuesto->save();
 
@@ -1912,7 +1913,7 @@ class DentalController extends Controller
 
                 $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
                 $valores = $this->dameValoresOdontograma($odontograma->id_paciente, $odontograma->id_ficha_atencion, $odontograma->id_lugar_atencion, $profesional->id_tipo_especialidad);
-                $valor_total = $valores[0] + $valores[1];
+                $valor_total = $valores[0] + $valores[1] + $valores[2];
                 $presupuesto->valor_total = $valor_total;
                 $presupuesto->save();
                 }
@@ -1972,7 +1973,7 @@ class DentalController extends Controller
                 $odontograma_paciente = $this->dame_odontograma_paciente($pieza->id_paciente, $pieza->id_ficha_atencion, $pieza->id_lugar_atencion, $profesional->id_tipo_especialidad);
                 $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
                 $valores = $this->dameValoresOdontograma($pieza->id_paciente, $pieza->id_ficha_atencion, $pieza->id_lugar_atencion, $profesional->id_tipo_especialidad);
-                $valor_total = $valores[0] + $valores[1];
+                $valor_total = $valores[0] + $valores[1] + $valores[2];
                 $presupuesto->valor_total = $valor_total;
                 $presupuesto->save();
                 return ['status' => 1, 'mensaje' => 'Pieza '.$pieza->pieza.' sacada con éxito.', 'odontograma_paciente' => $odontograma_paciente, 'valores' => $valores];
@@ -2002,7 +2003,7 @@ class DentalController extends Controller
                 $boca_completa_gral_diagnostico_endo = $ficha_atencionController->dameCompletaEndoDiagnostico($paciente->id, $profesional->id_tipo_especialidad);
                 $odontograma_paciente = $this->dame_odontograma_paciente($pieza->id_paciente, $pieza->id_ficha_atencion, $pieza->id_lugar_atencion, $profesional->id_tipo_especialidad);
                 $valores = $this->dameValoresOdontograma($pieza->id_paciente, $pieza->id_ficha_atencion, $pieza->id_lugar_atencion, $profesional->id_tipo_especialidad);
-                $valor_total = $valores[0] + $valores[1];
+                $valor_total = $valores[0] + $valores[1] + $valores[2];
                 $presupuesto->valor_total = $valor_total;
                 $presupuesto->save();
                 return [
@@ -2036,7 +2037,7 @@ class DentalController extends Controller
                 $odontograma_paciente = $this->dame_odontograma_paciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
                 $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
                 $valores = $this->dameValoresOdontograma($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
-                $valor_total = $valores[0] + $valores[1];
+                $valor_total = $valores[0] + $valores[1] + $valores[2];
                 $presupuesto->valor_total = $valor_total;
                 $presupuesto->save();
                 return ['status' => 1, 'mensaje' => 'Insumo '.$insumo->descripcion.' sacada con éxito.', 'odontograma_paciente' => $odontograma_paciente, 'valores' => $valores, 'insumos' => $insumos];
@@ -2096,7 +2097,106 @@ class DentalController extends Controller
 
     public function dame_bono_pago(Request $req){
         $bono = Bono::where('id_referencia',$req->id_hora_medica)->first();
+        $pagos = PagosPresupuestoDental::where('id_ficha_atencion', $req->id_ficha_atencion)->get();
+        foreach($pagos as $p){
+            $bono->valor_atencion += $p->total;
+        }
         return $bono;
+    }
+
+    public function pago_presupuesto(Request $req){
+
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        // buscamos el presupuesto
+        $total_presupuesto = $req->total_pago;
+        $pago_actual = $req->monto_pago;
+        $abonado = $req->monto_abonado;
+
+        $presupuesto = PresupuestosDental::where('id_paciente', $req->id_paciente)->where('id_ficha_atencion', $req->id_ficha_atencion)->first();
+        $nuevo_pago = new PagosPresupuestoDental;
+        $nuevo_pago->id_paciente = $req->id_paciente;
+        $nuevo_pago->id_profesional = $profesional->id;
+        $nuevo_pago->id_lugar_atencion = $req->id_lugar_atencion;
+        $nuevo_pago->id_ficha_atencion = $req->id_ficha_atencion;
+        $nuevo_pago->id_presupuesto = $presupuesto->id;
+        $nuevo_pago->id_metodo_pago = 1;
+        $nuevo_pago->fecha_pago = Carbon::now()->format('Y-m-d');
+        $nuevo_pago->metodo_pago = $req->metodo_pago;
+        $nuevo_pago->total = $pago_actual;
+
+        $presupuesto->valor_abonado = $presupuesto->valor_abonado + $pago_actual;
+        $presupuesto->save();
+
+        if($nuevo_pago->save()){
+            $pagos_presupuesto = $this->dame_pagos_presupuesto($req->id_paciente, $req->id_ficha_atencion);
+            $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_ficha_atencion', $req->id_ficha_atencion)->get();
+            $suma_pagado = 0;
+            foreach($pagos_tratamientos_dentales as $p){
+                $suma_pagado += intval($p->total);
+            }
+            $valores_tratamientos = $this->dameValoresOdontograma($req->id_paciente, $req->id_ficha_atencion,$req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+            $suma_presupuesto = $valores_tratamientos[0] + $valores_tratamientos[1] + $valores_tratamientos[2];
+
+            $valor_insumos = $valores_tratamientos[2];
+
+            $fichaController = new ficha_atencionController;
+            $insumos_tratamientos = $fichaController->dame_insumos_tratamiento($req->id_paciente, $req->id_ficha_atencion);
+
+            foreach($insumos_tratamientos as $i){
+                if($suma_pagado > $valor_insumos){
+                    $i->estado_pago = "ok";
+                    $i->total_pagado = $suma_pagado;
+                    $i->total_insumos = $valor_insumos;
+                }else{
+                    $i->estado_pago = "error";
+                    $i->total_pagado = $suma_pagado;
+                    $i->total_insumos = $valor_insumos;
+                }
+            }
+            return ['estado' => 1,'mensaje' => 'Se ha registrado el pago correctamente', 'pagos' => $pagos_presupuesto,'insumos' => $insumos_tratamientos,'suma_pagado' => $suma_pagado];
+        }else{
+            return ['estado' => 0, 'mensaje' => 'Ha ocurrido un problema'];
+        }
+    }
+
+    public function eliminar_pago_presupuesto(Request $req){
+        $pago = PagosPresupuestoDental::find($req->id);
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        if($pago->delete()){
+            $pagos = $this->dame_pagos_presupuesto($req->id_paciente, $req->id_ficha_atencion);
+            $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_ficha_atencion', $req->id_ficha_atencion)->get();
+            $suma_pagado = 0;
+            foreach($pagos_tratamientos_dentales as $p){
+                $suma_pagado += intval($p->total);
+            }
+            $valores_tratamientos = $this->dameValoresOdontograma($req->id_paciente, $req->id_ficha_atencion,$req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+            $suma_presupuesto = $valores_tratamientos[0] + $valores_tratamientos[1] + $valores_tratamientos[2];
+
+            $valor_insumos = $valores_tratamientos[2];
+
+            $fichaController = new ficha_atencionController;
+            $insumos_tratamientos = $fichaController->dame_insumos_tratamiento($req->id_paciente, $req->id_ficha_atencion);
+
+            foreach($insumos_tratamientos as $i){
+                if($suma_pagado > $valor_insumos){
+                    $i->estado_pago = "ok";
+                    $i->total_pagado = $suma_pagado;
+                    $i->total_insumos = $valor_insumos;
+                }else{
+                    $i->estado_pago = "error";
+                    $i->total_pagado = $suma_pagado;
+                    $i->total_insumos = $valor_insumos;
+                }
+            }
+            return ['estado' => 'ok', 'mensaje' => 'Se ha eliminado el Pago con éxito','pagos' => $pagos,'suma_pagado' => $suma_pagado,'insumos' => $insumos_tratamientos];
+        }else{
+            return ['estado' => 'error','mensaje' => 'Ha ocurrido un problema'];
+        }
+    }
+
+    public function dame_pagos_presupuesto($id_paciente, $id_ficha_atencion){
+        $pagos = PagosPresupuestoDental::where('id_paciente', $id_paciente)->where('id_ficha_atencion', $id_ficha_atencion)->get();
+        return $pagos;
     }
 
     public function eliminar_insumos_tratamiento(Request $req){
@@ -2114,7 +2214,7 @@ class DentalController extends Controller
             try {
                 $insumos = $this->dame_insumos_tratamiento_todos($id_paciente, $id_ficha_atencion,null, null);
                 $valores = $this->dameValoresOdontograma($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $profesional->id_tipo_especialidad);
-                $valor_total = $valores[0] + $valores[1];
+                $valor_total = $valores[0] + $valores[1] + $valores[2];
 
                 $presupuesto->valor_total = $valor_total;
                 $presupuesto->save();

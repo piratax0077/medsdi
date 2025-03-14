@@ -584,14 +584,11 @@
 
                                                                     <td class="text-center align-middle">
                                                                         {{ $f->profesional->nombre }} {{ $f->profesional->apellido_uno }} {{ $f->profesional->apellido_dos }}<br>
-                                                                        @foreach ($especialidad as $esp)
-                                                                            @if($esp->id==$f->profesional->id_especialidad)
-                                                                                <b>{{ $esp->nombre }}<b><br>
-                                                                            @endif
-                                                                        @endforeach
+
+
                                                                     </td>
 
-                                                                    <td class="text-center align-middle">{{ $f->hipotesis_diagnostico }}</td>
+                                                                    <td class="text-center align-middle">{{ $f->hipotesis_diagnostico ? $f->hipotesis_diagnostico : ''}}</td>
 
                                                                     <td class="text-center align-middle">
                                                                         {{-- <a class="btn btn-xxs btn-info-light-c has-ripple"  @if (isset($f->id)) onclick="buscar_ficha_fmu({{ $f->id }});" @endif><i class="feather icon-file-plus"></i> Ver</a> --}}

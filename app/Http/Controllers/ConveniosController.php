@@ -259,7 +259,7 @@ class ConveniosController extends Controller
     }
 
     public function nuevoConvenio(Request $request){
-        return $request;
+
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $profesional_convenio = new ProfesionalConveniosIndependientes();
         $profesional_convenio->nombre_convenio = $request->nombre_convenio;

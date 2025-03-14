@@ -904,6 +904,7 @@ class EscritorioProfesional extends Controller
         // echo json_encode($paciente);
         // exit();
 
+
         return view('app.profesional.pacientes_profesional')->with(
             [
                 'ficha_atencion' => $ficha_atencion,

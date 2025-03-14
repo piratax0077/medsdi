@@ -3472,6 +3472,8 @@
             responsive: true,
         });
 
+        $('#table_pagos_presupuesto').DataTable();
+
         /* formatear rut */
         $("#solicitado_por_rut_rfl").rut({
             formatOn: 'keyup',

@@ -176,6 +176,7 @@
             $('#presup_estado_pago_gral').DataTable();
             $('#presup_insumos_pago').DataTable();
             $('#table_odontograma').DataTable();
+            $('#table_pagos_presupuesto').DataTable();
             $('#table_insumos_preimplante').DataTable();
             // declarar una variable integer random entre el 10 y el 20
             var random = Math.floor(Math.random() * (20 - 10 + 1)) + 10;

@@ -22,6 +22,6 @@
                     </div>
                 </div>
             </div>
-        @include('general/secciones_ficha/fmu')
+        @include('general.secciones_ficha.fmu')
     </div>
 @endsection
