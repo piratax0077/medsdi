@@ -105,6 +105,7 @@ use App\Models\Invitacion;
 use App\Models\Licencia;
 use App\Models\PacienteHistoricoDatosMedicos;
 use App\Models\PacientesDependientes;
+use App\Models\Personas;
 use App\Models\ProcedimientosCentro;
 use App\Models\ProcedimientosCentroLugarAtencionProfesional;
 use App\Models\ProfesionalHorariosBloqueo;
@@ -4722,6 +4723,10 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             if ($paciente == null) {
                 $tipo_paciente++;
                 $paciente = Profesional::where('rut', $request->rut)->with(['Direccion' => function($query){$query->with('Ciudad')->first();}])->first();
+                if ($paciente == null) {
+                    $tipo_paciente++;
+                    $paciente = Personas::select('id as id', 'rut as rut', 'nombre1 as nombres', 'appaterno as apellido_uno', 'apmaterno as apellido_dos')->where('rut', $request->rut)->first();
+                }
             }
         }
         if(isset($paciente))
