@@ -184,10 +184,7 @@
             return false;
         }
 
-        $.ajax({
-            url: "{{ ROUTE('profesional.convenio_nuevo') }}",
-            type: 'POST',
-            data: {
+        let data: {
                 nombre_convenio: nombre_convenio,
                 tipo_convenio: tipo_convenio,
                 porcentaje_dcto: porcentaje_dcto,
@@ -200,7 +197,14 @@
                 valor: valor,
                 lugar_atencion_convenio: lugar_atencion_convenio,
                 _token: "{{ csrf_token() }}"
-            },
+            }
+
+            return console.log(data);
+
+        $.ajax({
+            url: "{{ ROUTE('profesional.convenio_nuevo') }}",
+            type: 'POST',
+            data: data,
             success: function(response){
                 console.log(response);
                 if(response.estado == 1){

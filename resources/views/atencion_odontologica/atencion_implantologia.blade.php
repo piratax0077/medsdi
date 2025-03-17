@@ -313,7 +313,21 @@
 
                             // Recorrer el odontograma y agregar nuevas filas
                             odontograma.forEach(function(odonto) {
+
                                 if (odonto.presupuesto == 1) {
+                                    if(odonto.estado_pago == 'ok'){
+                                        var clase = 'bg-success';
+                                    }else if(odonto.estado_pago == 'incompleto'){
+                                        var clase = 'bg-warning';
+                                    }else{
+                                        var clase = 'bg-danger';
+                                    }
+
+                                    if(odonto.estado == 0){
+                                        var estado = 'PENDIENTE';
+                                    }else{
+                                        var estado = 'TERMINADO';
+                                    }
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table.row.add([
                                         odonto.descripcion,
@@ -321,8 +335,8 @@
                                         formatoMoneda(formatoMoneda(odonto.valor)),
                                         0,
                                         formatoMoneda(formatoMoneda(odonto.valor)),
-                                        '<div class="circle"></div>',
-                                        '', // Columna vacía
+                                        '<div class="circle '+clase+'"></div>',
+                                        estado, // Columna vacía
 
                                     ]).draw(false).node(); // Obtener el nodo de la fila
 
@@ -1104,6 +1118,18 @@
                             // Recorrer el odontograma y agregar nuevas filas
                             odontograma.forEach(function(odonto) {
                                 if (odonto.presupuesto == 1) {
+                                    if(odonto.estado_pago == 'ok'){
+                                        var clase = 'bg-success';
+                                    }else if(odonto.estado_pago == 'incompleto'){
+                                        var clase = 'bg-warning';
+                                    }else{
+                                        var clase = 'bg-danger';
+                                    }
+                                    if(odonto.estado == 0){
+                                        var estado = 'PENDIENTE';
+                                    }else{
+                                        var estado = 'TERMINADO';
+                                    }
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table.row.add([
                                         odonto.descripcion,
@@ -1111,8 +1137,8 @@
                                         formatoMoneda(formatoMoneda(odonto.valor)),
                                         0,
                                         formatoMoneda(formatoMoneda(odonto.valor)),
-                                        '<div class="circle"></div>',
-                                        '', // Columna vacía
+                                        '<div class="circle '+clase+'"></div>',
+                                        estado, // Columna vacía
 
                                     ]).draw(false).node(); // Obtener el nodo de la fila
 

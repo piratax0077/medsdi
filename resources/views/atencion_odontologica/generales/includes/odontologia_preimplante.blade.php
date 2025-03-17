@@ -670,7 +670,8 @@
                                 <option value="5">Injerto óseo</option>
                                 <option value="6">Membranas</option>
                                 <option value="7">Tornillos de fijación</option>
-                                <option value="8">Otros Insumos</option>
+                                <option value="8">Aditamentos</option>
+                                <option value="9">Otros Insumos</option>
                             </select>
                         </div>
                       </div>
@@ -687,7 +688,7 @@
                       </div>
                       <div class="col-md-4" id="insumos_select">
                           <div class="form-group">
-                              <label for="" class="floating-label-activo-sm">Insumos</label>
+                              <label for="" class="floating-label-activo-sm" id="titulo_tipo_insumo">Insumos</label>
                               <select name="nombreInsumo" data-titulo="Ex_cuello" data-seccion="Cuello"  id="nombreInsumo" class="form-control form-control-sm" >
                                 @foreach ($materiales_implantologia as $m)
                                     <option value="{{ $m->id }}">{{ $m->descripcion }}</option>
@@ -1179,13 +1180,21 @@
                         insumos.forEach(insumo => {
                             let total = insumo.cantidad * insumo.valor;
                             if(insumo.presupuesto == 1){
+                                if(insumo.estado_pago == 'ok'){
+                                    var clase = 'bg-success';
+                                }else if(insumo.estado_pago == 'intermedio'){
+                                    var clase = 'bg-warning';
+                                }else{
+                                    var clase = 'bg-danger';
+                                }
                                 let rowNode = table_insumos.row.add([
                                 insumo.insumos,
                                 insumo.cantidad,         // Nombre del insumo
                                 formatoMoneda(insumo.valor),       // Cantidad utilizada
                                 0,         // Unidad de medida
                                 formatoMoneda(total),
-                                '<div class="circle"></div>',
+                                ' <div class="circle '+clase+'"></div>',
+                                ''
 
                             ]).draw(false).node();
                              // Agregar clases a la fila
@@ -1362,13 +1371,20 @@
                         insumos.forEach(insumo => {
                             let total = insumo.cantidad * insumo.valor;
                             if(insumo.presupuesto == 1){
+                                if(insumo.estado_pago == 'ok'){
+                                    var clase = 'bg-success';
+                                }else if(insumo.estado_pago == 'intermedio'){
+                                    var clase = 'bg-warning';
+                                }else{
+                                    var clase = 'bg-danger';
+                                }
                                 let rowNode = table_insumos.row.add([
                                 insumo.insumos,
                                 insumo.cantidad,         // Nombre del insumo
                                 formatoMoneda(insumo.valor),       // Cantidad utilizada
                                 0,         // Unidad de medida
                                 formatoMoneda(total),
-                                ' <div class="circle"></div>',
+                                ' <div class="circle '+clase+'"></div>',
 
                             ]).draw(false).node();
 
@@ -1398,6 +1414,9 @@
 
     function dame_marcas_implantes(value){
         let id_tipo_insumo = value.value;
+        let tipo_insumo_text = value.options[value.selectedIndex].text;
+        console.log(tipo_insumo_text);
+        $('#titulo_tipo_insumo').html(tipo_insumo_text);
         if(id_tipo_insumo == 1){
             // quitar la clase d-none al select de marcas
             $('#marcas_implantes_select').removeClass('d-none');
