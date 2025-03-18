@@ -1950,6 +1950,7 @@ class ficha_atencionController extends Controller
 
         }
 
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,

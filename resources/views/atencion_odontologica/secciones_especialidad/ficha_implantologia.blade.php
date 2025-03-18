@@ -5963,7 +5963,7 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-
+ <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                 </div>
                             `);
                             $('#table_trabajos_presupuesto tbody').append(`
@@ -6835,7 +6835,7 @@ function agregar_examenes_ficha() {
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
 
                                 </div>
                             `);

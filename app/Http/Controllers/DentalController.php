@@ -2285,6 +2285,7 @@ class DentalController extends Controller
         $insumos->id_especialidad = $profesional->id_especialidad;
         $insumos->id_tratamiento = $pieza ? $pieza->id : null;
         $insumos->id_marca = $req->idMarcaInsumo;
+        $insumos->nombre_marca = $req->marcaInsumo;
         $insumos->insumos = $req->idTipoInsumo == 1 ? 'Implante' : $req->insumos;
         $insumos->cantidad = $req->cantidad;
         $insumos->valor = $req->valor;

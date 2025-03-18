@@ -1678,7 +1678,7 @@
                         // // }
                         // // html += '</td>';
                         //  // Checkbox para seleccionar el odontograma
-                        // html += '<td>';
+                        html += '<td>';
                         html += '<div class="form-check">';
                         html += '<input class="form-check-input" type="checkbox" value="' + odonto.id + '" '
                         html += odonto.presupuesto == 1 ? 'checked ' : '';
@@ -1724,7 +1724,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                 </div>
                             `);
                             $('#table_trabajos_presupuesto tbody').append(`
@@ -1887,7 +1887,7 @@
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                             </div>
                             <div class="form-group col-md-2">
-                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
+                                 <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                             </div>
                         `);
                         $('#table_trabajos_presupuesto tbody').append(`
@@ -2048,7 +2048,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                 </div>
                             `);
                             $('#table_trabajos_presupuesto tbody').append(`
@@ -2210,7 +2210,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                 </div>
                             `);
                             $('#table_trabajos_presupuesto tbody').append(`
@@ -2373,7 +2373,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
+                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                 </div>
                             `);
                             $('#table_trabajos_presupuesto tbody').append(`
@@ -2536,7 +2536,7 @@
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                             </div>
                             <div class="form-group col-md-2">
-                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
+ <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                             </div>
                         `);
                         $('#table_trabajos_presupuesto tbody').append(`
@@ -2689,8 +2689,8 @@
                                         <label class="floating-label-activo-sm">Total prestación</label>
                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                     </div>
-                                    <div class="form-group col-md-2">
-
+                                    <div class="form-group col-md-2 d-flex">
+ <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                     </div>
                                 `);
                                 $('#table_trabajos_presupuesto tbody').append(`
@@ -2722,28 +2722,28 @@
                         $('#odon_adults').append(response.odontograma_paciente_vista);
                         let table = $('#presup_estado_pago').DataTable();
 
-                            // Limpiar la tabla antes de agregar nuevas filas
-                            table.clear().draw();
+                        // Limpiar la tabla antes de agregar nuevas filas
+                        table.clear().draw();
 
-                            // Recorrer el odontograma y agregar nuevas filas
-                            odontograma.forEach(function(odonto) {
-                                if (odonto.presupuesto == 1) {
-                                    // Agregar una nueva fila a la tabla
-                                    let rowNode = table.row.add([
-                                        odonto.descripcion,
-                                        odonto.pieza,
-                                        formatoMoneda(formatoMoneda(odonto.valor)),
-                                        0,
-                                        formatoMoneda(formatoMoneda(odonto.valor)),
-                                        '',
-                                        '', // Columna vacía
-                                        `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
-                                    ]).draw(false).node(); // Obtener el nodo de la fila
+                        // Recorrer el odontograma y agregar nuevas filas
+                        odontograma.forEach(function(odonto) {
+                            if (odonto.presupuesto == 1) {
+                                // Agregar una nueva fila a la tabla
+                                let rowNode = table.row.add([
+                                    odonto.descripcion,
+                                    odonto.pieza,
+                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    0,
+                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    '',
+                                    '', // Columna vacía
+                                    `<button type="button" class="btn btn-success btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-plus"></i> Pagar</button>`
+                                ]).draw(false).node(); // Obtener el nodo de la fila
 
-                                    // Agregar clases a la fila
-                                    $(rowNode).addClass('text-center align-middle');
-                                }
-                            });
+                                // Agregar clases a la fila
+                                $(rowNode).addClass('text-center align-middle');
+                            }
+                        });
                     }
         },
         error: function (error) {

@@ -225,7 +225,7 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${{ number_format($o->valor,0,',','.') }}" >
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma({{ $o->id }})"><i class="fas fa-trash"></i> </button>
 
                                                 </div>
                                                 @endif
@@ -255,7 +255,7 @@
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                     </div>
                                                     <div class="form-group col-md-2 d-flex">
-
+                                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
 
                                                     </div>
                                                 @endif
@@ -285,7 +285,7 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
 
                                                 </div>
                                                 @endif
@@ -315,7 +315,7 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
 
                                                 </div>
                                                 @endif
@@ -345,7 +345,7 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
 
                                                 </div>
                                                 @endif
@@ -376,7 +376,7 @@
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
 
-
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -406,7 +406,7 @@
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
 
-
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -436,7 +436,7 @@
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
 
-
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -466,7 +466,7 @@
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
 
-
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -495,7 +495,7 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
 
                                                 </div>
                                                 @endif
@@ -526,7 +526,7 @@
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
 
-
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -556,7 +556,7 @@
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
 
-
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -585,18 +585,18 @@
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
-
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
 
                                                 </div>
                                                 @endif
                                             @endforeach
                                         </div>
-                                        <div class="form row" id="contenedor_insumos">
+                                        <div class="form-row" id="contenedor_insumos">
                                             @foreach ($insumos_tratamientos as $diagnostico)
                                                 @if($diagnostico->presupuesto == 1)
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">Insumo</label>
-                                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="{{ $diagnostico->insumos }}">
+                                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="{{ $diagnostico->insumos }} {{ $diagnostico->nombre_marca }}">
                                                 </div>
                                                 <div class="form-group col-md-3">
                                                     <label class="floating-label-activo-sm">Cantidad</label>
@@ -616,7 +616,7 @@
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
 
-
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -721,7 +721,7 @@
                                                                             </div>
                                                                             <div class="form-group col-md-2 d-flex">
 
-                                                                                <button type="button" class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo<span class="ripple ripple-animate" ></span></button>
+
                                                                             </div>
                                                                         </div>
                                                                     </div>

@@ -95,7 +95,7 @@
         var fecha_inicial_pago_convenio = $('#fecha_inicial_pago_convenio').val();
         var fecha_final_pago_convenio = $('#fecha_final_pago_convenio').val();
         let valor = $('#valor_convenio').val();
-        let lugar_atencion_convenio = $('#lugar_atencion_convenio').val();
+        let tipo_atencion_medica = $('#tipo_atencion_medica').val();
         var convenios = '';
         for (let i = 1; i < 13; i++) {
 
@@ -166,7 +166,7 @@
         //     mensaje += '<li>Ingrese observaciones</li>';
         // }
         if(productos_convenio == null){
-            valido = 0;
+            //valido = 0;
             mensaje += '<li>Seleccione productos a convenir</li>';
         }
 
@@ -183,8 +183,21 @@
             });
             return false;
         }
+        let conveniosSeleccionados = [];
 
-        let data: {
+        $('.custom-control-input:checked').each(function () {
+            const id = $(this).attr('id').split('_')[1]; // Extrae el ID numérico
+            const selectValue = $('#valor_convenio_' + id + ' select').val();
+            const inputValue = $('#valor_convenio_' + id + ' input[type="text"]').val();
+
+            conveniosSeleccionados.push({
+                convenio: $('#text_convenio_' + id).text().replace(/\s+/g, ' ').trim(), // Elimina saltos de línea y espacios extra
+                opcion: selectValue,
+                condicion: inputValue
+            });
+        });
+
+        let data = {
                 nombre_convenio: nombre_convenio,
                 tipo_convenio: tipo_convenio,
                 porcentaje_dcto: porcentaje_dcto,
@@ -195,11 +208,12 @@
                 productos_convenio: productos_convenio,
                 convenios: convenios,
                 valor: valor,
-                lugar_atencion_convenio: lugar_atencion_convenio,
+                tipo_atencion_medica: tipo_atencion_medica,
+                conveniosSeleccionados: conveniosSeleccionados,
                 _token: "{{ csrf_token() }}"
             }
 
-            return console.log(data);
+            console.log(data);
 
         $.ajax({
             url: "{{ ROUTE('profesional.convenio_nuevo') }}",

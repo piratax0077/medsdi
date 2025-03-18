@@ -229,6 +229,25 @@
         $('#table_trabajos_presupuesto').DataTable({
             responsive:'true'
         });
+        $('#presup_estado_pago').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                }
+            });
+
+        $('#presup_estado_pago_gral').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+
+        $('#presup_insumos_pago').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+
+
 
         var formatoMoneda = (valor) => {
             return valor.toLocaleString('es-MX', {

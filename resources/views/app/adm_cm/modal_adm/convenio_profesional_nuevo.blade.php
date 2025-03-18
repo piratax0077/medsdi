@@ -40,6 +40,7 @@
                                                 <div class="form-group">
                                                     <label class="floating-label-activo-sm">Tipo Convenio</label>
                                                     <select name="tipo_convenio" id="tipo_convenio" class="form-control" multiple="multiple">
+                                                        <option value="0">Seleccione</option>
                                                         @foreach($tipoproducto_convenios as $key_tc => $value_tc)
                                                             <option value="{{ $value_tc->id }}">{{ $value_tc->descripcion }}</option>
                                                         @endforeach
@@ -70,7 +71,7 @@
                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-8 mb-2">
                                                 <div class="form-group fill">
                                                     <label class="floating-label-activo-sm">Tipo de atención médica</label>
-                                                    <select name="lugar_atencion_convenio" id="lugar_atencion_convenio" class=" form-control form-control-sm">
+                                                    <select name="tipo_atencion_medica" id="tipo_atencion_medica" class=" form-control form-control-sm">
                                                         <option value="">Seleccione una opción</option>
                                                         <option value="Valor de presupuesto">Valor de presupuesto</option>
                                                         <option value="Controles">Controles</option>
@@ -282,16 +283,29 @@
 </div>
 
 <script>
-    function evaluar_convenio(id){
+    function evaluar_convenio(id) {
         var result = false;
-        if($('#convenio_'+id).is(':checked')){
+        if ($('#convenio_' + id).is(':checked')) {
             result = true;
-            $('#valor_convenio_'+id).css('display','block');
-        }else{
+            $('#valor_convenio_' + id).css('display', 'block');
+        } else {
             result = false;
-            $('#valor_convenio_'+id).css('display','none');
+            $('#valor_convenio_' + id).css('display', 'none');
         }
-        console.log(result);
+
+        // Captura del valor del select e input (si están visibles)
+        if (result) {
+            const selectValue = $('#valor_convenio_' + id + ' select').val();
+            const inputValue = $('#valor_convenio_' + id + ' input[type="text"]').val();
+
+            console.log(`Convenio ${id} seleccionado:`);
+            console.log(`- Opción seleccionada: ${selectValue}`);
+            console.log(`- Condición ingresada: ${inputValue}`);
+        } else {
+            console.log(`Convenio ${id} deseleccionado.`);
+        }
     }
+
+
 
 </script>

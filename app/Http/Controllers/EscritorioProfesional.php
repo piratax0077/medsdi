@@ -65,6 +65,7 @@ use App\Models\MaterialesImplantologia;
 use App\Models\OdontogramaPaciente;
 use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
+use App\Models\PagosPresupuestoDental;
 use App\Models\PiezasDentalCoronaProtesis;
 use App\Models\Prevision;
 use App\Models\Profesional;
@@ -2100,6 +2101,40 @@ class EscritorioProfesional extends Controller
                 }
                 $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma])->render();
                 $valores = $this->dameValoresOdontograma($tratamiento->id_paciente, $tratamiento->id_ficha_atencion, $tratamiento->id_lugar_atencion, $profesional->id_tipo_especialidad);
+                $valor_total = $valores[0] + $valores[1] + $valores[2];
+
+                $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_ficha_atencion', $tratamiento->id_ficha_atencion)->get();
+
+                $total_abonado = 0;
+                foreach($pagos_tratamientos_dentales as $p){
+                    $total_abonado += intval($p->total);
+                }
+
+                $valor_insumos = $valores[2];
+
+                $total_abonado_sin_insumos = $total_abonado - $valor_insumos;
+                $valor_odontograma = $valores[1];
+
+                $total_piezas_odontograma = count($odontograma_paciente);
+                $resto = $total_abonado_sin_insumos;
+
+                foreach($odontograma_paciente as $o){
+                    if($resto >= 0 && $resto >= intval($o->valor)){
+                        $o->estado_pago = 'ok';
+                        $resto -= intval($o->valor);
+                        $o->resto = $resto;
+
+                    }else if($resto >= 0 && $resto <= intval($o->valor)){
+                        $o->estado_pago = 'incompleto';
+
+                        $resto -= intval($o->valor);
+                        $o->resto = $resto;
+                    }else if($resto < 0){
+                        $o->estado_pago = 'error';
+                        $o->resto = $resto;
+                    }
+
+                }
                 return ['status' => 1 ,'mensaje' => 'Se ha actualizado correctamente', 'odontograma_paciente' => $odontograma_paciente,'odontograma' => $odontograma, 'valores' => $valores,'odontograma_paciente_vista' => $odontograma_paciente_vista];
             }else{
                 return ['status' => 0, 'mensaje' => 'Ha ocurrido un error'];

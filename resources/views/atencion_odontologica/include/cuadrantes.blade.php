@@ -1518,7 +1518,7 @@
             $(this).autocomplete({
                 source: function(request, response) {
                     $.ajax({
-                        url: "{{ route('dental.getDiagnosticoDental') }}",
+                        url: "{{ route('dental.getTratamientoImplantologia') }}",
                         type: 'post',
                         dataType: "json",
                         data: {
