@@ -1206,6 +1206,7 @@ Route::group([
     Route::get('Hora-medica/paciente/buscar/rut', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_rut_paciente'])->name('agenda.buscar_rut_paciente');
     Route::get('Hora-medica/hora/agendar/agendar', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_horas'])->name('agenda.agendar_hora');
     Route::get('Hora-medica/hora/agendar/paciente/nuevo', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_hora_nuevo_paciente'])->name('agenda.agendar_hora_nuevo_paciente');
+    Route::get('Hora-medica/hora/agendar/prereserva/paciente/nuevo', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_hora_nuevo_paciente_prereserva'])->name('agenda.agendar_hora_nuevo_paciente_prereserva');
     Route::post('Hora-medica/paciente/nuevo', [App\Http\Controllers\AsistenteController::class, 'AgregarNuevoPaciente'])->name('agenda.paciente.nuevo');
     Route::get('Hora-medica/validar/email', [App\Http\Controllers\EscritorioProfesional::class, 'validar_rut'])->name('agenda.validar_email');
 	Route::get('Hora-medica/validar/email/paciente', [App\Http\Controllers\EscritorioProfesional::class, 'validar_email_paciente'])->name('agenda.paciente.validar_email');
@@ -1328,7 +1329,7 @@ Route::group([
     Route::get('/Estadisticas', [App\Http\Controllers\LaboratorioController::class, 'estadisticas'])->name('laboratorio.estadisticas');
     Route::get('/Profesionales_institucion', [App\Http\Controllers\LaboratorioController::class, 'profesionales_institucion'])->name('laboratorio.profesionales_institucion');
     // Route::get('/Mis/Profesionales', [App\Http\Controllers\LaboratorioController::class, 'adm_inst_mis_profesionales'])->name('laboratorio.mis_profesionales');
-    Route::get('/Pacientes', [App\Http\Controllers\LaboratorioController::class, 'adm_buscar_pacientes'])->name('laboratorio.pacientes');
+    Route::get('/administracion/Pacientes/', [App\Http\Controllers\LaboratorioController::class, 'adm_buscar_pacientes'])->name('laboratorio.pacientes');
 	Route::get('/Personal', [App\Http\Controllers\LaboratorioController::class, 'personal'])->name('laboratorio.personal');
     Route::get('/Mis/Profesionales', [App\Http\Controllers\LaboratorioController::class, 'adm_inst_mis_profesionales'])->name('adm_cm.mis_profesionales');
     Route::get('/Profesional/lugar_atencion/horario', [App\Http\Controllers\LaboratorioController::class, 'mi_horario_lugar_atencion'])->name('laboratorio.prof_horario_lugar_atencion');
@@ -1364,6 +1365,9 @@ Route::group([
     Route::get('resultado/cargar/tabla', [App\Http\Controllers\LaboratorioController::class, 'cargarTablaResultado'])->name('laboratorio.cargar.tabla.resultados');
     Route::get('/Pacientes', [App\Http\Controllers\LaboratorioController::class, 'buscar_pacientes_profesional_asistente'])->name('laboratorio.pacientes.profesional.asistente');
     Route::get('/pacientes/buscar/rut', [App\Http\Controllers\LaboratorioController::class, 'buscar_paciente_rut'])->name('laboratorio.buscar_paciente_rut');
+
+    Route::get('/atencion/audifono/venta', [App\Http\Controllers\LaboratorioController::class, 'audifonosVenta'])->name('laboratorio.profesional.audifono.venta');
+    Route::get('/atencion/audifono/control', [App\Http\Controllers\LaboratorioController::class, 'audifonosControl'])->name('laboratorio.profesional.audifono.control');
 
 
 });
