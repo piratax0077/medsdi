@@ -600,7 +600,7 @@
                                                                                 @foreach ($insumos_tratamientos as $t)
                                                                                     @php $total = $t->cantidad * $t->valor @endphp
                                                                                     <tr>
-                                                                                        <td>{{ $t->insumos }}</td>
+                                                                                        <td>{{ $t->insumos }} {{ $t->nombre_marca }}</td>
                                                                                         <td>{{ $t->cantidad }}</td>
                                                                                         <td>{{ number_format($t->valor)  }}</td>
                                                                                         <td>{{ number_format($total)  }}</td>
@@ -670,7 +670,8 @@
                                 <option value="5">Injerto óseo</option>
                                 <option value="6">Membranas</option>
                                 <option value="7">Tornillos de fijación</option>
-                                <option value="8">Otros Insumos</option>
+                                <option value="8">Aditamentos</option>
+                                <option value="9">Otros Insumos</option>
                             </select>
                         </div>
                       </div>
@@ -687,7 +688,7 @@
                       </div>
                       <div class="col-md-4" id="insumos_select">
                           <div class="form-group">
-                              <label for="" class="floating-label-activo-sm">Insumos</label>
+                              <label for="" class="floating-label-activo-sm" id="titulo_tipo_insumo">Insumos</label>
                               <select name="nombreInsumo" data-titulo="Ex_cuello" data-seccion="Cuello"  id="nombreInsumo" class="form-control form-control-sm" >
                                 @foreach ($materiales_implantologia as $m)
                                     <option value="{{ $m->id }}">{{ $m->descripcion }}</option>
@@ -726,7 +727,6 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary" onclick="guardar_insumo()">Solicitar</button>
           </div>
         </div>
     </div>
@@ -820,6 +820,7 @@
                             text:'Se a agregado los insumos correctamente',
                             title:'Exito'
                         });
+                        $('#modal_insumos').modal('hide');
                         //limpiar_formulario_insumo();
                         let insumos = resp.insumos;
                         console.log(insumos);
@@ -857,10 +858,10 @@
                                     </td>`;
                             }
                             table.row.add([
-                                insumo.insumos,         // Nombre del insumo
+                                insumo.insumos + ' ' + insumo.nombre_marca ? insumo.nombre_marca : '',         // Nombre del insumo
                                 insumo.cantidad,       // Cantidad utilizada
-                                insumo.valor,         // Unidad de medida
-                                total,
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
                                 botones
                             ]);
                         });
@@ -942,6 +943,7 @@
                     $('#subtotal_clinico').val(formatoMoneda(total_general));
                     $('#total_clinico').val(formatoMoneda(total_general));
                     $('#total_presupuesto_dental').val(total_general);
+                    $('#subtotal_insumos').val(formatoMoneda(valores_insumos));
                     let insumos = resp.insumos;
                         console.log(insumos);
                         let table = $('#table_insumos_preimplante').DataTable();
@@ -975,10 +977,10 @@
                                     </td>`;
                             }
                             table.row.add([
-                                insumo.insumos,         // Nombre del insumo
+                                insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
                                 insumo.cantidad,       // Cantidad utilizada
-                                insumo.valor,         // Unidad de medida
-                                total,
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
                                 botones
                             ]);
                         });
@@ -1012,7 +1014,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i>  </button>
 
                                 </div>
                             `);
@@ -1088,8 +1090,9 @@
                         $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                         $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
-                        $('#subtotal_clinico').val(formatoMoneda(total_general));
-                        $('#total_clinico').val(formatoMoneda(total_general));
+                        $('#subtotal_insumos').val(formatoMoneda(valores_insumos));
+                        $('#total_presupuesto').val(formatoMoneda(total_general));
+                        $('#total_insumos').val(formatoMoneda(valores_insumos));
                         $('#total_presupuesto_dental').val(total_general);
                             //limpiar_formulario_insumo();
                         let insumos = resp.insumos;
@@ -1126,10 +1129,10 @@
                             }
 
                             table.row.add([
-                                insumo.insumos,         // Nombre del insumo
+                                `${insumo.insumos} ${insumo.nombre_marca}`,
                                 insumo.cantidad,       // Cantidad utilizada
-                                insumo.valor,         // Unidad de medida
-                                total,
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
                                 botones
                             ]);
                         });
@@ -1144,7 +1147,7 @@
                                 $('#contenedor_insumos').append(`
                                 <div class="form-group col-md-2 fill">
                                     <label class="floating-label-activo-sm">Insumo</label>
-                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos}">
+                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
                                 </div>
                                 <div class="form-group col-md-3 fill">
                                     <label class="floating-label-activo-sm">Cantidad</label>
@@ -1164,7 +1167,7 @@
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
 
-
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i> </button>
                                 </div>
                             `);
                             }
@@ -1179,13 +1182,21 @@
                         insumos.forEach(insumo => {
                             let total = insumo.cantidad * insumo.valor;
                             if(insumo.presupuesto == 1){
+                                if(insumo.estado_pago == 'ok'){
+                                    var clase = 'bg-success';
+                                }else if(insumo.estado_pago == 'intermedio'){
+                                    var clase = 'bg-warning';
+                                }else{
+                                    var clase = 'bg-danger';
+                                }
                                 let rowNode = table_insumos.row.add([
-                                insumo.insumos,
+                                `${insumo.insumos} ${insumo.nombre_marca}`,
                                 insumo.cantidad,         // Nombre del insumo
                                 formatoMoneda(insumo.valor),       // Cantidad utilizada
                                 0,         // Unidad de medida
                                 formatoMoneda(total),
-                                '<div class="circle"></div>',
+                                ' <div class="circle '+clase+'"></div>',
+                                ''
 
                             ]).draw(false).node();
                              // Agregar clases a la fila
@@ -1268,13 +1279,13 @@
                         $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                         $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
-                        $('#subtotal_clinico').val(formatoMoneda(total_general));
-                        $('#total_clinico').val(formatoMoneda(total_general));
+                        $('#subtotal_insumos').val(formatoMoneda(valores_insumos));
+                        $('#total_insumos').val(formatoMoneda(valores_insumos));
+                        $('#total_presupuesto').val(formatoMoneda(total_general));
                         $('#total_presupuesto_dental').val(total_general);
                                 //limpiar_formulario_insumo();
 
                         let insumos = resp.insumos;
-                        console.log(insumos);
                         let table = $('#table_insumos_preimplante').DataTable();
 
                         //Limpiar la tabla sin perder la configuración de DataTables
@@ -1308,10 +1319,10 @@
                                 </td>`;
                             }
                             table.row.add([
-                                insumo.insumos,         // Nombre del insumo
+                                `${insumo.insumos} ${insumo.nombre_marca}`,
                                 insumo.cantidad,       // Cantidad utilizada
-                                insumo.valor,         // Unidad de medida
-                                total,
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
                                 botones
                             ]);
                         });
@@ -1326,7 +1337,7 @@
                                 $('#contenedor_insumos').append(`
                                 <div class="form-group col-md-2 fill">
                                     <label class="floating-label-activo-sm">Insumo</label>
-                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos}">
+                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
                                 </div>
                                 <div class="form-group col-md-3 fill">
                                     <label class="floating-label-activo-sm">Cantidad</label>
@@ -1345,7 +1356,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i> </button>
 
                                 </div>
                             `);
@@ -1362,13 +1373,20 @@
                         insumos.forEach(insumo => {
                             let total = insumo.cantidad * insumo.valor;
                             if(insumo.presupuesto == 1){
+                                if(insumo.estado_pago == 'ok'){
+                                    var clase = 'bg-success';
+                                }else if(insumo.estado_pago == 'intermedio'){
+                                    var clase = 'bg-warning';
+                                }else{
+                                    var clase = 'bg-danger';
+                                }
                                 let rowNode = table_insumos.row.add([
-                                insumo.insumos,
+                                `${insumo.insumos} ${insumo.nombre_marca}`,
                                 insumo.cantidad,         // Nombre del insumo
                                 formatoMoneda(insumo.valor),       // Cantidad utilizada
                                 0,         // Unidad de medida
                                 formatoMoneda(total),
-                                ' <div class="circle"></div>',
+                                ' <div class="circle '+clase+'"></div>',
 
                             ]).draw(false).node();
 
@@ -1398,6 +1416,9 @@
 
     function dame_marcas_implantes(value){
         let id_tipo_insumo = value.value;
+        let tipo_insumo_text = value.options[value.selectedIndex].text;
+        console.log(tipo_insumo_text);
+        $('#titulo_tipo_insumo').html(tipo_insumo_text);
         if(id_tipo_insumo == 1){
             // quitar la clase d-none al select de marcas
             $('#marcas_implantes_select').removeClass('d-none');

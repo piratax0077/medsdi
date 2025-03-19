@@ -259,14 +259,28 @@ class ConveniosController extends Controller
     }
 
     public function nuevoConvenio(Request $request){
-        return $request;
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-        $profesional_convenio = new ProfesionalConveniosIndependientes();
-        $profesional_convenio->nombre_convenio = $request->nombre_convenio;
-        $profesional_convenio->convenios = $request->convenios;
-        $profesional_convenio->tipo_atencion = $request->lugar_atencion_convenio;
-        $profesional_convenio->valor = $request->valor;
-        $profesional_convenio->id_profesional = $profesional->id;
-        $profesional_convenio->id_lugar_atencion = $request->id_lugar_atencion_valor;
+        try {
+            $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+            $profesional_convenio = new ProfesionalConveniosIndependientes();
+            $profesional_convenio->nombre_convenio = $request->nombre_convenio;
+            $profesional_convenio->convenios = $request->conveniosSeleccionados ? json_encode($request->conveniosSeleccionados) : null;
+            $profesional_convenio->tipo_atencion = $request->tipo_atencion_medica;
+            $profesional_convenio->valor = $request->valor;
+            $profesional_convenio->id_profesional = $profesional->id;
+            $profesional_convenio->tipo_convenio = json_encode($request->tipo_convenio);
+            $profesional_convenio->fecha_inicio = $request->fecha_inicial_pago_convenio;
+            $profesional_convenio->fecha_fin = $request->fecha_final_pago_convenio;
+            $profesional_convenio->porcentaje = $request->porcentaje_dcto;
+            $profesional_convenio->estado = 1;
+            if($profesional_convenio->save()){
+                    return ['estado' => 1, 'mensaje' => 'Su convenio ha sido guardada con éxito.'];
+            }else{
+                    return ['estado' => 0,'mensaje' => 'Ha ocurrido un error'];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return ['estado' => 0, 'mensaje' => $e->getMessage()];
+        }
+
     }
 }

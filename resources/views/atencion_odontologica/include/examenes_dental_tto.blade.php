@@ -324,7 +324,7 @@ function cargar_a_presupuesto_impl(counter){
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
 
-
+ <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                 </div>
                             `);
                             $('#table_trabajos_presupuesto tbody').append(`

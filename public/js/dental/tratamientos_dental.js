@@ -4,7 +4,7 @@ $('#diag_seleccionado_gral_autocomplete').autocomplete({
     source: function(request, response) {
         // Fetch data
         $.ajax({
-            url: getDiagnosticoDentalUrl,
+            url: getTratamientoDentalImplantologiaUrl,
             type: 'post',
             dataType: "json",
             data: {
@@ -39,7 +39,7 @@ $('.tratamiento-autocomplete').each(function() {
         source: function(request, response) {
             // Fetch data
             $.ajax({
-                url: getDiagnosticoDentalUrl,
+                url: getTratamientoDentalImplantologiaUrl,
                 type: 'post',
                 dataType: "json",
                 data: {

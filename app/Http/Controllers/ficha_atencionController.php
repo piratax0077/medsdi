@@ -69,6 +69,7 @@ use App\Models\LugarAtencion;
 use App\Models\MarcasImplantes;
 use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
+use App\Models\PagosPresupuestoDental;
 use App\Models\PiezasDentalCoronaProtesis;
 use App\Models\Presentacion;
 use App\Models\PresupuestosDental;
@@ -1897,6 +1898,59 @@ class ficha_atencionController extends Controller
 
         $marcas_implantes = MarcasImplantes::all();
 
+        $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_ficha_atencion', $id_ficha_atencion)->get();
+
+        $total_abonado = 0;
+        foreach($pagos_tratamientos_dentales as $p){
+            $total_abonado += intval($p->total);
+        }
+
+        $suma_presupuesto = $valores_tratamientos[0] + $valores_tratamientos[1] + $valores_tratamientos[2];
+
+        $valor_insumos = $valores_tratamientos[2];
+
+        foreach($insumos_tratamientos as $i){
+            if($total_abonado >= $valor_insumos){
+                $i->estado_pago = "ok";
+                $i->total_pagado = $total_abonado;
+                $i->total_insumos = $valor_insumos;
+            }else{
+                $i->estado_pago = "error";
+                $i->total_pagado = $total_abonado;
+                $i->total_insumos = $valor_insumos;
+            }
+        }
+
+        $total_abonado_sin_insumos = $total_abonado - $valor_insumos;
+        $valor_odontograma = $valores_tratamientos[1];
+
+        $total_piezas_odontograma = count($odontograma);
+        $resto = $total_abonado_sin_insumos;
+
+        foreach($odontograma as $o){
+            if($o->presupuesto == 1){
+                if($resto > 0 && $resto >= intval($o->valor)){
+                    $o->estado_pago = 'ok';
+                    $o->clase = 'bg-success';
+                    $resto -= intval($o->valor);
+                    $o->resto = $resto;
+
+                }else if($resto > 0 && $resto <= intval($o->valor)){
+                    $o->estado_pago = 'incompleto';
+                    $o->clase = 'bg-warning';
+                    $resto -= intval($o->valor);
+                    $o->resto = $resto;
+                }else if($resto <= 0){
+                    $o->estado_pago = 'error';
+                    $o->clase = 'bg-danger';
+                    $o->resto = $resto;
+                }
+            }
+
+
+        }
+
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1907,6 +1961,7 @@ class ficha_atencionController extends Controller
                 'valores' => $valores_tratamientos[0],
                 'valores_piezas' => $valores_tratamientos[1],
                 'valores_insumos' => $valores_tratamientos[2],
+                'valor_abonado' => $total_abonado,
                 'examenes_tto_implantes' => $examanes_tto_implantes,
                 'examenes_post_implantes' => $examenes_post_implantes,
                 'examenes_post_implantes_grupos' => $examenes_post_implantes_grupos,
@@ -1917,6 +1972,7 @@ class ficha_atencionController extends Controller
                 'proveedores' => $proveedores,
                 'bodegas' => $bodegas,
                 'tratamientos_implantologia' => $tratamientos_implantologia,
+                'pagos_tratamientos_dentales' => $pagos_tratamientos_dentales,
                 'materiales_implantologia' => $materiales_implantologia,
                 'marcas_implantes' => $marcas_implantes,
                 'examenes_dental' => $examenes_dental,

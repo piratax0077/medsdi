@@ -25,8 +25,12 @@
     }
 }
 @endphp
+<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+    <h1 class="text-c-blue mt-1 mb-1 f-22 d-inline">Odontograma Adulto</h1>
+    <button type="button" class="btn btn-purple d-inline float-md-right mr-3">Ver simbología</button>
+</div>
 <!--ODONTOGRAMA SUPERIOR ADULTOS-->
-<div class="col-md-12 d-flex flex-row align-items-end justify-content-center">
+<div class="col-md-12 d-flex flex-row align-items-end justify-content-center mt-3">
     @foreach (range(18, 11) as $i)
         @php
             $codigoPieza = '1.' . ($i % 10); // Genera códigos 3.1, 3.2, ..., 3.8
@@ -56,7 +60,7 @@
                 <img src="{{ asset($imagen) }}" class="wid-60 img-fluid" role="button"
                     onclick="info_odontograma('{{ $codigoPieza }}');">
             </div>
-            <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2">{{ $codigoPieza }}</label>
+            <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2 font-weight-bold">{{ $codigoPieza }}</label>
         </div>
     @endforeach
     {{-- Piezas 2.1 - 2.8 --}}
@@ -89,7 +93,7 @@
                 <img src="{{ asset($imagen) }}" class="wid-60 img-fluid" role="button"
                     onclick="info_odontograma('{{ $codigoPieza }}');">
             </div>
-            <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2">{{ $codigoPieza }}</label>
+            <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2 font-weight-bold">{{ $codigoPieza }}</label>
         </div>
     @endforeach
 </div>
@@ -119,7 +123,7 @@
         @endphp
 
         <div class="text-center mx-1">
-            <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2">{{ $codigoPieza }}</label>
+            <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2 font-weight-bold">{{ $codigoPieza }}</label>
             <div class="diente_adulto" id="t{{ $codigoPieza }}">
                 <img src="{{ asset($imagen) }}" class="wid-60 img-fluid" role="button"
                     onclick="info_odontograma('{{ $codigoPieza }}');">
@@ -151,7 +155,7 @@
     @endphp
 
     <div class="text-center mx-1">
-        <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent mt-2">{{ $codigoPieza }}</label>
+        <label data-ndiente="{{ $codigoPieza }}" class="nav-label-dent font-weight-bold mt-2">{{ $codigoPieza }}</label>
         <div class="diente_adulto" id="t{{ $codigoPieza }}">
             <img src="{{ asset($imagen) }}" class="wid-60 img-fluid" role="button"
                 onclick="info_odontograma('{{ $codigoPieza }}');">
