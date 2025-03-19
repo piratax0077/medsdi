@@ -2944,4 +2944,14 @@ class LaboratorioController extends Controller
         return view($url, $array_data);
     }
 
+    public function audifonosVenta(Request $request)
+    {
+        return view('app.laboratorio.lab_profesional.venta_audifono');
+    }
+
+    public function audifonosControl(Request $request)
+    {
+        return view('app.laboratorio.lab_profesional.control_audifono');
+    }
+
 }

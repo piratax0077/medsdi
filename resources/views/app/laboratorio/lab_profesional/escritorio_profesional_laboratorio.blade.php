@@ -191,7 +191,7 @@
                 </div>
                  <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="card mb-3 subir">
-                        <a href="{{ ROUTE('laboratorio.lab_profesional.procesos_laboratorio') }}">
+                        <a href="{{ ROUTE('laboratorio.profesional.audifono.venta') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center" src="{{ asset('images/iconos/audifono-discapacidad.png') }}">
                                 <h6 class="mt-1">Venta audífonos y repuestos</h6>
@@ -201,10 +201,11 @@
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="card mb-3 subir">
-                        <a href="{{ ROUTE('laboratorio.lab_profesional.recepcion_muestras') }}">
+                        <a href="{{ ROUTE('laboratorio.profesional.audifono.control') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center" src="{{ asset('images/iconos/paciente-audifono.png') }}">
-                                <h6 class="mt-1">Mis usuarios de audífonos </h6>
+                                {{-- <h6 class="mt-1">Mis usuarios de audífonos </h6> --}}
+                                <h6 class="mt-1">Control audífonos</h6>
                             </div>
                         </a>
                     </div>

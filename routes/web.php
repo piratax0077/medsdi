@@ -1366,6 +1366,9 @@ Route::group([
     Route::get('/Pacientes', [App\Http\Controllers\LaboratorioController::class, 'buscar_pacientes_profesional_asistente'])->name('laboratorio.pacientes.profesional.asistente');
     Route::get('/pacientes/buscar/rut', [App\Http\Controllers\LaboratorioController::class, 'buscar_paciente_rut'])->name('laboratorio.buscar_paciente_rut');
 
+    Route::get('/atencion/audifono/venta', [App\Http\Controllers\LaboratorioController::class, 'audifonosVenta'])->name('laboratorio.profesional.audifono.venta');
+    Route::get('/atencion/audifono/control', [App\Http\Controllers\LaboratorioController::class, 'audifonosControl'])->name('laboratorio.profesional.audifono.control');
+
 
 });
 
