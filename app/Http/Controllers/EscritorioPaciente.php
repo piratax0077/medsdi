@@ -666,7 +666,9 @@ class EscritorioPaciente extends Controller
 
 
         /* ATENCIONES MEDICAS */
-        $fichas = FichaAtencion::where('id_paciente', $paciente->id)->where('finalizada', 1)->get();
+		$profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $fichas = FichaAtencion::where('id_paciente', $paciente->id)->where('id_profesional', $profesional->id)->where('finalizada', 1)->get();
+        // $fichas = FichaAtencion::where('id_paciente', $paciente->id)->where('finalizada', 1)->get();
         $especialidad = Especialidad::where('estado',1)->get();
         $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get();
 
@@ -2933,7 +2935,14 @@ class EscritorioPaciente extends Controller
         $nombre = $request->nombre;
         $apellido_uno = $request->apellido_uno;
         $apellido_dos = $request->apellido_dos;
-        $fecha_nacimiento = $request->fecha_nacimiento;
+        if (strpos($request->fecha_nacimiento, '/') !== false) {
+            // Si la fecha tiene el formato dd/mm/yyyy
+            $fechaConvertida = Carbon::createFromFormat('d/m/Y', $request->fecha_nacimiento)->format('Y-m-d');
+        } else {
+            // Si ya está en formato yyyy-mm-dd
+            $fechaConvertida = Carbon::createFromFormat('Y-m-d', $request->fecha_nacimiento)->format('Y-m-d');
+        }
+        $fecha_nacimiento = $fechaConvertida;
         $sexo = $request->sexo;
         $convenio = $request->convenio;
         $direccion = $request->direccion;

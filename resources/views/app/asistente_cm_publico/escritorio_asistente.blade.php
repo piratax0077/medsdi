@@ -868,7 +868,7 @@
 
                                                         //celeste
                                                         //Reservada
-                                                        if (data.estado_hora == 1) //else if (info.event.backgroundColor == '#FEAA32')
+                                                        if (data.estado_hora == 1 || data.estado_hora == 16) //else if (info.event.backgroundColor == '#FEAA32')
                                                         {
                                                             //'Reservada') //Hora pendiente
                                                             $('#hm_anular_hora').show();
@@ -1118,22 +1118,22 @@
                                             var valido_fecha = 1;
                                             /** VALIDACION DE FUERA DE HORARIO */
                                             // $.each(date.jsEvent.path, function(index, value)
-                                            $.each(date.jsEvent.srcElement.classList, function(index, value)
-                                            {
-                                                // console.log(value);
-                                                if(value == 'fc-non-business')
-                                                {
-                                                    swal({
-                                                        title: "Toma de Hora",
-                                                        text: "Horario no disponible con el Profesional",
-                                                        icon: "error",
-                                                        buttons: "Aceptar",
-                                                        DangerMode: true,
-                                                    })
-                                                    valido = 0;
-                                                }
+                                            // $.each(date.jsEvent.srcElement.classList, function(index, value)
+                                            // {
+                                            //     console.log(value);
+                                            //     if(value == 'fc-non-business')
+                                            //     {
+                                            //         swal({
+                                            //             title: "Toma de Hora",
+                                            //             text: "Horario no disponible con el Profesional",
+                                            //             icon: "error",
+                                            //             buttons: "Aceptar",
+                                            //             DangerMode: true,
+                                            //         })
+                                            //         valido = 0;
+                                            //     }
 
-                                            });
+                                            // });
 
                                             if(valido == 1)
                                             {
@@ -1148,44 +1148,40 @@
                                                 var curr_hour = date_DD.getHours();
                                                 var curr_mint = date_DD.getMinutes();
                                                 var fecha_seleccionada = curr_year+"-"+curr_month+"-"+curr_date+" "+curr_hour+":"+curr_mint;
-                                                $.each(CalendarEl.getEvents(), function( index, value ) {
-                                                    var date_str2 = value.startStr.replace('T',' ');
-                                                    var date_DD2 = new Date(date_str2);
-                                                    var curr_date2 = date_DD2.getDate();
-                                                    var curr_month2 = date_DD2.getMonth();
+                                                // $.each(CalendarEl.getEvents(), function( index, value ) {
+                                                //     var date_str2 = value.startStr.replace('T',' ');
+                                                //     var date_DD2 = new Date(date_str2);
+                                                //     var curr_date2 = date_DD2.getDate();
+                                                //     var curr_month2 = date_DD2.getMonth();
 
-                                                    var curr_year2 = date_DD2.getFullYear();
-                                                    var curr_hour2 = date_DD2.getHours();
-                                                    var curr_mint2 = date_DD2.getMinutes();
-                                                    var fecha_evento = curr_year2+"-"+curr_month2+"-"+curr_date2+" "+curr_hour2+":"+curr_mint2;
+                                                //     var curr_year2 = date_DD2.getFullYear();
+                                                //     var curr_hour2 = date_DD2.getHours();
+                                                //     var curr_mint2 = date_DD2.getMinutes();
+                                                //     var fecha_evento = curr_year2+"-"+curr_month2+"-"+curr_date2+" "+curr_hour2+":"+curr_mint2;
 
-                                                    if($.trim(fecha_seleccionada) == $.trim(fecha_evento))
-                                                    {
-                                                        valido = 0;
-                                                    }
-                                                });
+                                                //     if($.trim(fecha_seleccionada) == $.trim(fecha_evento))
+                                                //     {
+                                                //         valido = 0;
+                                                //     }
+                                                // });
 
                                                 /** VALIDAR BLOQUEO */
-                                                CalendarEl.getEvents().forEach(function(event) {
-                                                    var eventEnd = typeof event.end === 'string' ? moment(event.end) : event.end;
-                                                    if (date.date >= event.start && date.date <= eventEnd) {
-                                                        valido = 0;
-                                                        console.log('Existe un evento en esta fecha: ' + event.title);
-                                                        console.log(date.date);
-                                                        console.log(event.start);
-                                                        console.log(eventEnd);
-
-                                                        swal({
-                                                            title: "Toma de Hora",
-                                                            text: "El profesional no atiende en este periodo.",
-                                                            icon: "error",
-                                                            buttons: "Aceptar",
-                                                            DangerMode: true,
-                                                        });
-                                                        return false;
-                                                    }
-
-                                                });
+                                                // CalendarEl.getEvents().forEach(function(event) {
+                                                //     var eventEnd = typeof event.end === 'string' ? moment(event.end) : event.end;
+                                                //     if (date.date >= event.start && date.date <= eventEnd)
+                                                //     {
+                                                //         valido = 0;
+                                                //         console.log('Existe un evento en esta fecha: ' + event.title);
+                                                //         swal({
+                                                //             title: "Toma de Hora",
+                                                //             text: "El profesional no atiende en este periodo.",
+                                                //             icon: "error",
+                                                //             buttons: "Aceptar",
+                                                //             DangerMode: true,
+                                                //         });
+                                                //         return false;
+                                                //     }
+                                                // });
 
                                                 /** validar  dias pasados */
                                                 var diaActual = '{{ date('d') }}';
@@ -1668,6 +1664,12 @@
             $('.div_representante_nuevo').hide();
             $('.div_representante_existente').hide();
 
+            $('#prereserva_hora_nombres_paciente').val('');
+            $('#prereserva_hora_apellido_uno').val('');
+            $('#prereserva_hora_apellido_dos').val('');
+            $('#prereserva_hora_correo').val('');
+            $('#prereserva_hora_telefono_uno').val('');
+
 
             let rut = $('#rut_paciente_reserva').val();
 
@@ -1693,6 +1695,20 @@
 							data = JSON.parse(data);
 							if(data.tipo_paciente == 'SI')
 							{
+                                {{-- validacion para especialidad de pediatria --}}
+                                @if (isset($profesional))
+                                    @if ($profesional->id_tipo_especialidad == 11)
+                                        if (data.edad > 18) {
+                                            swal({
+                                                title: "Reserva de hora",
+                                                text: "El paciente es mayor de edad, el profesional es Pediatrico",
+                                                icon: "warning",
+                                                buttons: "Aceptar",
+                                            });
+                                        }
+                                    @endif
+                                @endif
+
 								$('.paciente_view').show();
 								$('.paciente_edit').hide();
 
@@ -1807,12 +1823,15 @@
 								else
 									$('#reserva_hora_sexo').val(0);
 
-
 								$('#reserva_hora_correo').val(data.email);
-								$('#region_agregar').val(data.direccion.ciudad.id_region);
-								buscar_ciudad(data.direccion.id_ciudad);
-								$('#reserva_hora_direccion').val(data.direccion.direccion);
-								$('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
+
+                                if(data?.["direccion"] !== undefined)
+                                {
+                                    $('#region_agregar').val(data.direccion.ciudad.id_region);
+                                    buscar_ciudad(data.direccion.id_ciudad);
+                                    $('#reserva_hora_direccion').val(data.direccion.direccion);
+                                    $('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
+                                }
 
 								$('#reserva_hora_telefono_uno').val(data.telefono_uno);
 
@@ -1823,6 +1842,15 @@
 								$('#reserva_hora_convenio').val();
 								$('#reserva_hora_descripcion').val();
 								--}}
+
+                                console.log('INFORMACION DE PRE RESERVA');
+                                console.log(data);
+                                // INFORMACION DE PRE RESERVA
+                                $('#prereserva_hora_nombres_paciente').val(data.nombres);
+                                $('#prereserva_hora_apellido_uno').val(data.apellido_uno);
+                                $('#prereserva_hora_apellido_dos').val(data.apellido_dos);
+                                $('#prereserva_hora_correo').val(data.email);
+                                $('#prereserva_hora_telefono_uno').val(data.telefono_uno);
 							}
 						} else {
 							$('#reserva_datos_paciente').hide();
@@ -2608,6 +2636,218 @@
                 });
         };
 
+        function agendar_hora_paciente_nuevo_prereserva()
+        {
+
+            let fecha_consulta = $('#fecha_consulta').val();
+
+            /** validacion para estados 16 pre reserva */
+            valido = 1;
+            var lista_horas = [];
+            $.each(CalendarEl.getEvents(), function( index, value ) {
+                var date_str2 = value.startStr.replace('T',' ');
+                var date_DD2 = new Date(date_str2);
+                var curr_date2 = date_DD2.getDate();
+                var curr_month2 = date_DD2.getMonth();
+                var curr_year2 = date_DD2.getFullYear();
+                var curr_hour2 = date_DD2.getHours();
+                var curr_mint2 = date_DD2.getMinutes();
+                var fecha_evento = curr_year2+"-"+curr_month2+"-"+curr_date2+" "+curr_hour2+":"+curr_mint2;
+
+                var date_DD3 = new Date(fecha_consulta);
+                var curr_date3 = date_DD3.getDate();
+                var curr_month3 = date_DD3.getMonth();
+                var curr_year3 = date_DD3.getFullYear();
+                var curr_hour3 = date_DD3.getHours();
+                var curr_mint3 = date_DD3.getMinutes();
+                var fecha_consulta3 = curr_year3+"-"+curr_month3+"-"+curr_date3+" "+curr_hour3+":"+curr_mint3;
+
+                // console.log(fecha_consulta3);
+                // console.log(fecha_evento);
+                // console.log('**********');
+
+                if($.trim(fecha_consulta3) == $.trim(fecha_evento))
+                {
+                    console.log(value.id);
+                    lista_horas.push(value.id);
+                }
+            });
+
+
+
+            console.log( 'agendar_hora_paciente_nuevo_prereserva' );
+            console.log( valido );
+            // return false;
+
+
+            let url = "{{ route('agenda.agendar_hora_nuevo_paciente_prereserva') }}";
+            let _token = $('#_token').val();
+
+            let tipo_agenda = $('#id_tipo_agenda').val();
+            var tipo_agenda_text = 'C';
+
+            console.log(tipo_agenda);
+            console.log(tipo_agenda_text);
+
+            switch (tipo_agenda) {
+                case '1':
+                    tipo_agenda_text = 'C'; //CONSULTA
+                    break;
+                case '2':
+                    tipo_agenda_text = 'D'; //DENTAL
+                    break;
+                case '3':
+                    tipo_agenda_text = 'T'; //TELEMEDICINA
+                    break;
+                case '4':
+                    tipo_agenda_text = 'E'; //EXAMEN
+                    break;
+            }
+
+            console.log(tipo_agenda_text);
+
+            let rut_paciente_reserva = $('#rut_paciente_reserva').val();
+            if (rut_paciente_reserva == '')
+            {
+                swal({
+                    title: "Error!",
+                    text: "Debe ingresar el Rut",
+                    icon: "error",
+                    type: "danger",
+                    DangerMode: true,
+                });
+                return false;
+            }
+
+            let reserva_hora_nombre = $('#prereserva_hora_nombres_paciente').val();
+            if (reserva_hora_nombre == '') {
+
+                swal({
+                    title: "Error!",
+                    text: "Debe ingresar los nombres del paciente",
+                    icon: "error",
+                    type: "danger",
+                    DangerMode: true,
+
+                });
+                return;
+
+            }
+
+            let reserva_hora_primer_apellido = $('#prereserva_hora_apellido_uno').val();
+            if (reserva_hora_primer_apellido == '') {
+
+                swal({
+                    title: "Error!",
+                    text: "Debe ingresar el primer apellido",
+                    icon: "error",
+                    type: "danger",
+                    DangerMode: true,
+
+                });
+                return;
+
+            }
+
+            let reserva_hora_segundo_apellido = $('#prereserva_hora_apellido_dos').val();
+            if (reserva_hora_segundo_apellido == '') {
+
+                swal({
+                    title: "Error!",
+                    text: "Debe ingresar el segundo apellido",
+                    icon: "error",
+                    type: "danger",
+                    DangerMode: true,
+
+                });
+
+                return;
+
+            }
+
+            let reserva_hora_email = $('#prereserva_hora_correo').val();
+            let reserva_hora_telefono_uno = $('#prereserva_hora_telefono_uno').val();
+
+            if(reserva_hora_email == '' && reserva_hora_telefono_uno =='')
+            {
+                swal({
+                    title: "Error!",
+                    text: "Debe email de contacto o telefono",
+                    icon: "error",
+                    type: "danger",
+                    DangerMode: true,
+
+                });
+
+                return;
+            }
+
+
+            let reserva_hora_confirmacion = $('#reserva_hora_confirmacion').val();
+            let reserva_hora_sms = $('#reserva_hora_sms').val();
+            let id_profesional = $('#agenda_profesional_asistente').val();
+            let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
+
+            console.log('ajax');
+            $.ajax({
+
+                url: url,
+                type: "get",
+                data: {
+                    _token: _token,
+                    fecha_consulta: fecha_consulta,
+                    rut_paciente_reserva: rut_paciente_reserva,
+                    reserva_hora_nombre: reserva_hora_nombre,
+                    reserva_hora_primer_apellido: reserva_hora_primer_apellido,
+                    reserva_hora_segundo_apellido: reserva_hora_segundo_apellido,
+                    reserva_hora_email: reserva_hora_email,
+                    reserva_hora_telefono: reserva_hora_telefono_uno,
+                    reserva_hora_confirmacion: reserva_hora_confirmacion,
+                    reserva_hora_sms: reserva_hora_sms,
+                    id_profesional:id_profesional,
+                    id_lugar_atencion: id_lugar_atencion,
+                    tipo_hora_medica: tipo_agenda_text,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    // data = JSON.parse(data);
+                    // console.log(data);
+                    if (data.estado == 1) {
+                        swal({
+                            title: "Exito!",
+                            text: "Hora medica agendada correctamente",
+                            type: "success",
+                            confirmButtonText: "Cool"
+                        });
+                        $('#reservar_hora').modal('hide');
+                        $('#agenda_agregar_paciente').modal('hide');
+                        cargarAgendaProfesional($('#id_tipo_agenda').val(),fecha_consulta);
+                    } else {
+                        swal({
+                            title: "Hora medica",
+                            text: data.msj,
+                            type: "error",
+                            confirmButtonText: "Cool"
+                        });
+                    }
+                } else {
+                    swal({
+                        title: "Error!",
+                        text: "Paciente no encontrado en el sistema",
+                        type: "error",
+                        confirmButtonText: "Cool"
+                    });
+                    // alert('Paciente no encontrado en el sistema');
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log('error');
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        };
+
         {{--  GENERAR HORA USUARIO EXISTENTE  --}}
         function agendar_hora() {
 
@@ -2814,6 +3054,48 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         };
+
+        function validar_tipo_hora_medica(id)
+        {
+            let url = "{{ route('agenda.buscar_hora_medica') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    //_token: _token,
+                    id_hora_medica: id,
+                },
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null)
+                {
+
+                    if(data.estado == 1)
+                    {
+                        if(data.estado_hora == 16)
+                        return 1;
+                        else
+                        return 0;
+                    }
+                    else
+                    {
+                        return 0;
+                        console.log('error validacion');
+                    }
+
+                }
+                else
+                {
+                    return 0;
+                    console.log('error validacion');
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        }
 
     </script>
 @endsection

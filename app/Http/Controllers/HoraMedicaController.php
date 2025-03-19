@@ -60,8 +60,10 @@ class HoraMedicaController extends Controller
         // 12. EXAMEN FINALIZADO
         // 13. BLOQUEO POR PROFESIONAL.
         // 14. ANULADA POR PROFESIONAL
+        // 15. HORA ANULADA POR PROFESIONAL
+        // 16. PRE RESERVA
         $registros = HoraMedica::where($filtro)
-                                ->whereIn('id_estado',[1,2,4,5,6,7,8,9,10,11,12,13])
+                                ->whereIn('id_estado',[1,2,4,5,6,7,8,9,10,11,12,13,16])
                                 ->with('Estado')
                                 ->with(['Paciente'=> function($query){
                                     $query->select('id','id_prevision','rut')
