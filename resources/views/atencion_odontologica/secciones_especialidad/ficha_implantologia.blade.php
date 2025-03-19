@@ -12,12 +12,12 @@
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="eval_periimpl_tab" data-toggle="tab" href="#eval_periimpl" role="tab" aria-controls="eval_periimpl" aria-selected="false">Evaluación-Periodonto-pre-implantar</a>
                     </li>
-                    <li class="nav-item-secciones">
+                    {{-- <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="evaluacion_general_tab" data-toggle="tab" href="#evaluacion_general" role="tab" aria-controls="evaluacion_general" aria-selected="false">Evaluación General</a>
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="tratamiento_tab" data-toggle="tab" href="#tratamiento" role="tab" aria-controls="tratamiento" aria-selected="false">Tratamiento/Presupuesto</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="presupuesto_tab" data-toggle="tab" href="#presupuesto" role="tab" aria-controls="presupuesto" aria-selected="false">Presupuesto</a>
                     </li>
@@ -5992,10 +5992,10 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                 $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
                 $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                 $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
-                $('#subtotal_clinico').val(formatoMoneda(total_general));
-                $('#total_clinico').val(formatoMoneda(total_general));
+                $('#subtotal_clinico').val(formatoMoneda(valores_boca_general + valores_odontograma));
+                $('#total_clinico').val(formatoMoneda(valores_boca_general + valores_odontograma));
                 $('#total_presupuesto_dental').val(total_general);
-
+                $('#total_presupuesto').val(formatoMoneda(total_general));
                 let table = $('#presup_estado_pago').DataTable();
                 table.clear().draw();
 

@@ -616,7 +616,7 @@
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
 
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -1346,7 +1346,7 @@
                                                                     @if($t->presupuesto == 1)
                                                                     @php $total = $t->cantidad * $t->valor @endphp
                                                                     <tr>
-                                                                        <td class="text-center align-middle">{{ $t->insumos }}</td>
+                                                                        <td class="text-center align-middle">{{ $t->insumos }} {{ $t->nombre_marca }}</td>
                                                                         <td class="text-center align-middle">{{ $t->cantidad }}</td>
                                                                         <td class="text-center align-middle">{{ number_format($t->valor)  }}</td>
                                                                         <td class="text-center align-middle">0</td>
@@ -1398,6 +1398,7 @@
                                                             <p id="valores_total_abonado_presupuesto_conf">${{ number_format($valor_abonado,0,',','.') }}</p>
                                                         </div>
                                                         @php $total_pago = $valores + $valores_piezas + $valores_insumos; @endphp
+                                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="reasignar_presupuesto({{ $total_pago }}, {{ $valor_abonado }},{{ $valores_insumos }})">Reasignar</button>
                                                         <button type="button" class="btn btn-outline-success btn-sm" onclick="pagar_presupuesto()">Pagar</button>
                                                     </div>
                                                 </div>
@@ -1501,12 +1502,12 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalPagoPresupuesto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
+        <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Pago</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 class="modal-title" id="exampleModalLabel">Pago</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <div class="modal-body">
@@ -1535,7 +1536,7 @@
                     <div class="mb-3">
                         <div class="form-group fill">
                             <label for="montoAbonado" class="floating-label-activo-sm">Monto Abonado</label>
-                            <input type="text" class="form-control form-control-sm" id="montoAbonado" value="${{ number_format($valor_abonado,0,',','.') }}" required>
+                            <input type="text" class="form-control form-control-sm" id="montoAbonado" value="${{ number_format($valor_abonado,0,',','.') }}" disabled required>
                         </div>
 
                     </div>
@@ -1611,7 +1612,70 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+  <!-- Modal -->
+<div class="modal fade" id="modalReasignarPresupuesto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3">
+                <h5>Monto Total</h5>
+                <p id="monto_total" class="font-weight-bold">
+                    {{ number_format($valores_insumos, 0, ',', '.') }} +
+                    {{ number_format($valores_piezas, 0, ',', '.') }} =
+                    {{ number_format($valores_piezas + $valores + $valores_insumos, 0, ',', '.') }}
+                </p>
+                <p id="monto_abonado" class="text-success">
+                    + {{ number_format($valor_abonado, 0, ',', '.') }}
+                </p>
+            </div>
+
+            <p id="info_pagos_seleccionados"></p>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Seleccionar</th>
+                            <th>Tipo</th>
+                            <th>Nombre</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($odontograma as $o)
+                            <tr>
+                                <td><input type="checkbox" class="valor-checkbox" data-valor="{{ $o->valor }}"></td>
+                                <td>Odontograma</td>
+                                <td>{{ $o->pieza }}</td>
+                                <td>${{ number_format($o->valor, 0, ',', '.') }}</td>
+                            </tr>
+                        @endforeach
+                        @foreach ($insumos_tratamientos as $i)
+                            <tr>
+                                <td><input type="checkbox" class="valor-checkbox" data-valor="{{ $i->valor }}"></td>
+                                <td>Insumo</td>
+                                <td>{{ $i->insumos }} {{ $i->nombre_marca }}</td>
+                                <td>${{ number_format($i->valor, 0, ',', '.') }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>
@@ -1963,7 +2027,7 @@
         total = $('#total_presupuesto_dental').val();
         console.log(formatoMoneda(parseInt(total)));
         // abrir modal
-        $('#exampleModal').modal('show');
+        $('#modalPagoPresupuesto').modal('show');
         $('#total_pago').val(formatoMoneda(parseInt(total)));
         let id_hora_medica = $('#hora_medica').val();
         console.log(id_hora_medica);
@@ -2361,4 +2425,31 @@
             }
         });
     }
+
+    function reasignar_presupuesto(){
+        console.log('reasignando');
+        $('#modalReasignarPresupuesto').modal('show');
+
+    }
+
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let totalSeleccionado = 0;
+
+        function actualizarTotal(valor, agregar) {
+            totalSeleccionado += agregar ? valor : -valor;
+            console.log('Total seleccionado:', totalSeleccionado);
+            document.getElementById('info_pagos_seleccionados').innerText = `Total seleccionado: ${formatoMoneda(totalSeleccionado)}`;
+        }
+
+        document.querySelectorAll('.valor-checkbox').forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                const valor = parseInt(this.getAttribute('data-valor'));
+                actualizarTotal(valor, this.checked);
+            });
+        });
+    });
+</script>
+

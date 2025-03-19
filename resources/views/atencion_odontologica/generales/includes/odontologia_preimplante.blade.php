@@ -820,6 +820,8 @@
                             text:'Se a agregado los insumos correctamente',
                             title:'Exito'
                         });
+                        let nuevo_insumo = resp.insumo;
+                        cargar_a_presupuesto_insumo(nuevo_insumo.id);
                         $('#modal_insumos').modal('hide');
                         //limpiar_formulario_insumo();
                         let insumos = resp.insumos;
@@ -858,7 +860,7 @@
                                     </td>`;
                             }
                             table.row.add([
-                                insumo.insumos + ' ' + insumo.nombre_marca ? insumo.nombre_marca : '',         // Nombre del insumo
+                                insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
                                 insumo.cantidad,       // Cantidad utilizada
                                 formatoMoneda(insumo.valor),         // Unidad de medida
                                 formatoMoneda(total),
@@ -913,6 +915,8 @@
         console.log(id);
         let data = {
             id: id,
+            id_paciente: $('#id_paciente').val(),
+            id_ficha_atencion: $('#id_fc').val(),
             _token: CSRF_TOKEN
         }
         let url = '{{ ROUTE("dental.eliminar_insumos_tto") }}';
@@ -929,21 +933,23 @@
                         title:'Exito'
                     });
                     let valores_boca_general = resp.valores[0];
-                    let valores_odontograma = resp.valores[1];
-                    let valores_insumos = resp.valores[2];
-                    let total_general = valores_boca_general + valores_odontograma + valores_insumos;
-                    $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
-                    $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
-                    $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
-                    $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
-                    $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
-                    $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
-                    $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
-                    $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
-                    $('#subtotal_clinico').val(formatoMoneda(total_general));
-                    $('#total_clinico').val(formatoMoneda(total_general));
-                    $('#total_presupuesto_dental').val(total_general);
-                    $('#subtotal_insumos').val(formatoMoneda(valores_insumos));
+                        let valores_odontograma = resp.valores[1];
+                        let valores_insumos = resp.valores[2];
+                        let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                        $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                        $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
+                        $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
+                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                        $('#subtotal_insumos').val(formatoMoneda(valores_insumos));
+                        $('#total_presupuesto').val(formatoMoneda(total_general));
+                        $('#total_insumos').val(formatoMoneda(valores_insumos));
+                        $('#total_presupuesto_dental').val(total_general);
+
+
                     let insumos = resp.insumos;
                         console.log(insumos);
                         let table = $('#table_insumos_preimplante').DataTable();
@@ -995,7 +1001,7 @@
                                 $('#contenedor_insumos').append(`
                                 <div class="form-group col-md-2 fill">
                                     <label class="floating-label-activo-sm">Insumo</label>
-                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos}">
+                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
                                 </div>
                                 <div class="form-group col-md-3 fill">
                                     <label class="floating-label-activo-sm">Cantidad</label>
@@ -1031,7 +1037,7 @@
                             let total = insumo.cantidad * insumo.valor;
                             if(insumo.presupuesto == 1){
                                 let rowNode = table_insumos.row.add([
-                                insumo.insumos,
+                                `${insumo.insumos} ${insumo.nombre_marca}`,
                                 insumo.cantidad,         // Nombre del insumo
                                 formatoMoneda(insumo.valor),       // Cantidad utilizada
                                 0,         // Unidad de medida

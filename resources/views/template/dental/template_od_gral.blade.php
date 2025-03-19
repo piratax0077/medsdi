@@ -250,12 +250,12 @@
 
 
         var formatoMoneda = (valor) => {
-            return valor.toLocaleString('es-MX', {
+            return valor.toLocaleString('es-CL', {
                 style: 'currency',
-                currency: 'MXN',
+                currency: 'CLP',
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
-            });
+            }).replace(/\./g, ',').replace(/,/g, '.');
         };
 
         function presupuesto(){

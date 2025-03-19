@@ -1869,7 +1869,7 @@
                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                     </div>
                                     <div class="form-group col-md-2 d-flex">
-<button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                     </div>
                                 `);
                                 $('#table_trabajos_presupuesto tbody').append(`
@@ -1898,9 +1898,10 @@
                         $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                         $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
-                        $('#subtotal_clinico').val(formatoMoneda(total_general));
-                        $('#total_clinico').val(formatoMoneda(total_general));
-                        $('#total_presupuesto_dental').val(total_general);
+                        $('#subtotal_clinico').val(formatoMoneda(valores_odontograma));
+                        $('#total_clinico').val(formatoMoneda(valores_odontograma));
+                        $('#total_presupuesto_dental').val(formatoMoneda(total_general));
+                        $('#total_presupuesto').val(formatoMoneda(total_general));
                         $('#odon_adults').empty();
                         $('#odon_adults').append(response.odontograma_paciente_vista);
 

@@ -2276,25 +2276,26 @@ class DentalController extends Controller
 
         }
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-        $insumos = new InsumosTratamientosDental;
-        $insumos->tipo = $req->tipo ? $req->tipo : null;
-        $insumos->tipo_insumo = $req->tipoInsumo;
-        $insumos->id_paciente = $req->id_paciente;
-        $insumos->id_profesional = $profesional->id;
-        $insumos->id_ficha_atencion = $req->id_ficha_atencion;
-        $insumos->id_especialidad = $profesional->id_especialidad;
-        $insumos->id_tratamiento = $pieza ? $pieza->id : null;
-        $insumos->id_marca = $req->idMarcaInsumo;
-        $insumos->nombre_marca = $req->marcaInsumo;
-        $insumos->insumos = $req->idTipoInsumo == 1 ? 'Implante' : $req->insumos;
-        $insumos->cantidad = $req->cantidad;
-        $insumos->valor = $req->valor;
-        $insumos->observaciones = $req->observaciones;
-        $insumos->estado = 1;
+        $insumo = new InsumosTratamientosDental;
+        $insumo->tipo = $req->tipo ? $req->tipo : null;
+        $insumo->tipo_insumo = $req->tipoInsumo;
+        $insumo->id_paciente = $req->id_paciente;
+        $insumo->id_profesional = $profesional->id;
+        $insumo->id_ficha_atencion = $req->id_ficha_atencion;
+        $insumo->id_especialidad = $profesional->id_especialidad;
+        $insumo->id_tratamiento = $pieza ? $pieza->id : null;
+        $insumo->id_marca = $req->idMarcaInsumo;
+        $insumo->nombre_marca = $req->marcaInsumo;
+        $insumo->insumos = $req->idTipoInsumo == 1 ? 'Implante' : $req->insumos;
+        $insumo->cantidad = $req->cantidad;
+        $insumo->valor = $req->valor;
+        $insumo->observaciones = $req->observaciones;
+        $insumo->presupuesto = 1;
+        $insumo->estado = 1;
         try {
-            if($insumos->save()){
+            if($insumo->save()){
                 $insumos = $this->dame_insumos_tratamiento_todos($req->id_paciente, $req->id_ficha_atencion,$req->id_tto, $req->tipo);
-                return ['mensaje'=>'ok','insumos'=>$insumos['insumos'],'total_insumos' => $insumos['total']];
+                return ['mensaje'=>'ok','insumos'=>$insumos['insumos'],'total_insumos' => $insumos['total'], 'insumo' => $insumo];
             }else{
                 return ['mensaje'=>'error'];
             }
