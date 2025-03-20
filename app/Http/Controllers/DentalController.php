@@ -1804,6 +1804,7 @@ class DentalController extends Controller
                 $odontograma_paciente = $this->dame_odontograma_paciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
 
                 $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
+
                 $valores = $this->dameValoresOdontograma($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
                 $insumos = InsumosTratamientosDental::where('id_ficha_atencion',$request->id_ficha_atencion)->get();
                 $valor_total = $valores[0] + $valores[1] + $valores[2];
@@ -1855,6 +1856,79 @@ class DentalController extends Controller
                 }
                 return ['status' => 1, 'mensaje' => 'Insumo '.$insumo->descripcion.' agregada con éxito.', 'odontograma_paciente' => $odontograma_paciente, 'valores' => $valores,'presupuesto' => $presupuesto,'insumos' => $insumos];
         }
+    }
+
+    public function reasignar_pago_presupuesto(Request $request){
+        try {
+            $valores = $request->valores;
+            $valorPresupuestoTotal = intval($request->valorPresupuestoTotal);
+            $valorAbonado = intval($request->valorAbonado);
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+            // limpiamos el estado de pago de todo el odontograma
+            $odontograma_paciente = $this->dame_odontograma_paciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
+            foreach($odontograma_paciente as $o){
+                $o->estado_pago = null;
+                $o->save();
+            }
+
+            // limpiamos el estado de pago de todos los insumos
+            $insumos = InsumosTratamientosDental::where('id_ficha_atencion',$request->id_ficha_atencion)->get();
+            foreach($insumos as $i){
+                $i->estado_pago = null;
+                $i->save();
+            }
+
+            foreach($valores as $v){
+                if($v['info'] == 'insumo'){
+                    if($valorAbonado >= 0 && $valorAbonado >= intval($v['valor'])){
+                        $insumo = InsumosTratamientosDental::find($v['id']);
+                        $insumo->estado_pago = 'ok'; // pagado
+                        $valorAbonado -= intval($v['valor']);
+                    }else if($valorAbonado >= 0 && $valorAbonado <= intval($v['valor'])){
+                        $insumo = InsumosTratamientosDental::find($v['id']);
+                        $insumo->estado_pago = 'incompleto'; // incompleto
+                        $valorAbonado -= intval($v['valor']);
+                    }else if($valorAbonado < 0){
+                        $insumo = InsumosTratamientosDental::find($v['id']);
+                        $insumo->estado_pago = 'error'; // error
+                    }
+                    $insumo->save();
+                }
+
+            }
+
+
+            foreach($valores as $v){
+                if($v['info'] == 'odonto'){
+                    if($valorAbonado >= 0 && $valorAbonado >= intval($v['valor'])){
+                        $pieza = OdontogramaPaciente::find($v['id']);
+                        $pieza->estado_pago = 'ok'; // pagado
+                        $valorAbonado -= intval($v['valor']);
+                        //$pieza->valorAbonado = $valorAbonado;
+                    }else if($valorAbonado >= 0 && $valorAbonado <= intval($v['valor'])){
+                        $pieza = OdontogramaPaciente::find($v['id']);
+                        $pieza->estado_pago = 'incompleto'; // incompleto
+                        $valorAbonado -= intval($v['valor']);
+                        //$pieza->valorAbonado = $valorAbonado;
+                    }else if($valorAbonado < 0){
+                        $pieza = OdontogramaPaciente::find($v['id']);
+                        $pieza->estado_pago = 'error'; // error
+                    }
+                    $pieza->save();
+
+                }
+            }
+
+            $odontograma_paciente = $this->dame_odontograma_paciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
+            $insumos = InsumosTratamientosDental::where('id_ficha_atencion',$request->id_ficha_atencion)->get();
+
+            return ['estado' => 1, 'mensaje' => 'Pagos reasignados correctamente', 'odontograma' => $odontograma_paciente, 'insumos' => $insumos];
+        } catch (\Exception $e) {
+            //throw $th;
+            return ['estado' => 0, 'mensaje' => $e->getMessage()];
+        }
+
     }
 
     public function cargar_tratamiento_presupuesto_period(Request $request){
@@ -2323,6 +2397,8 @@ class DentalController extends Controller
         $pago_actual = $req->monto_pago;
         $abonado = $req->monto_abonado;
 
+
+
         $presupuesto = PresupuestosDental::where('id_paciente', $req->id_paciente)->where('id_ficha_atencion', $req->id_ficha_atencion)->first();
         $nuevo_pago = new PagosPresupuestoDental;
         $nuevo_pago->id_paciente = $req->id_paciente;
@@ -2356,44 +2432,43 @@ class DentalController extends Controller
             $total_piezas_odontograma = count($odontograma_paciente);
             $resto = $total_abonado_sin_insumos;
 
-            foreach($odontograma_paciente as $o){
-                if($o->presupuesto == 1){
-                    if($resto > 0 && $resto >= intval($o->valor)){
-                        $o->estado_pago = 'ok';
-                        $o->clase = 'bg-success';
-                        $resto -= intval($o->valor);
-                        $o->resto = $resto;
+            if(intval($total_presupuesto) <= intval($pago_actual) || intval($total_abonado) >= intval($total_presupuesto)){
+                foreach($odontograma_paciente as $o){
+                    if($o->presupuesto == 1){
+                        if($resto > 0 && $resto >= intval($o->valor)){
+                            $o->estado_pago = 'ok';
+                            $resto -= intval($o->valor);
+                            $o->save();
 
-                    }else if($resto > 0 && $resto <= intval($o->valor)){
-                        $o->estado_pago = 'incompleto';
-                        $o->clase = 'bg-warning';
-                        $resto -= intval($o->valor);
-                        $o->resto = $resto;
-                    }else if($resto <= 0){
-                        $o->estado_pago = 'error';
-                        $o->clase = 'bg-danger';
-                        $o->resto = $resto;
+                        }else if($resto > 0 && $resto <= intval($o->valor)){
+                            $o->estado_pago = 'incompleto';
+                            $resto -= intval($o->valor);
+                            $o->save();
+                        }else if($resto <= 0){
+                            $o->estado_pago = 'error';
+                            $o->save();
+                        }
                     }
+
+
                 }
-
-
             }
+
 
             $fichaController = new ficha_atencionController;
             $insumos_tratamientos = $fichaController->dame_insumos_tratamiento($req->id_paciente, $req->id_ficha_atencion);
-
-            foreach($insumos_tratamientos as $i){
-                if($total_abonado >= $valor_insumos){
-                    $i->estado_pago = "ok";
-                    $i->total_pagado = $total_abonado;
-                    $i->total_insumos = $valor_insumos;
-                }else{
-                    $i->estado_pago = "error";
-                    $i->total_pagado = $total_abonado;
-                    $i->total_insumos = $valor_insumos;
+            if(intval($total_presupuesto) <= intval($pago_actual) || intval($total_abonado) >= intval($total_presupuesto)){
+                foreach($insumos_tratamientos as $i){
+                    if($total_abonado >= $valor_insumos){
+                        $i->estado_pago = "ok";
+                    }else{
+                        $i->estado_pago = "error";
+                    }
+                    $i->save();
                 }
             }
-            return ['estado' => 1,'mensaje' => 'Se ha registrado el pago correctamente', 'pagos' => $pagos_presupuesto,'insumos' => $insumos_tratamientos,'suma_pagado' => $total_abonado,'odontograma' => $odontograma_paciente];
+            $suma_adeudado = $suma_presupuesto - $total_abonado;
+            return ['estado' => 1,'mensaje' => 'Se ha registrado el pago correctamente', 'pagos' => $pagos_presupuesto,'insumos' => $insumos_tratamientos,'suma_pagado' => $total_abonado,'odontograma' => $odontograma_paciente,'suma_presupuesto' => $suma_presupuesto,'suma_adeudado' => $suma_adeudado];
         }else{
             return ['estado' => 0, 'mensaje' => 'Ha ocurrido un problema'];
         }
@@ -2401,6 +2476,9 @@ class DentalController extends Controller
 
     public function eliminar_pago_presupuesto(Request $req){
         $pago = PagosPresupuestoDental::find($req->id);
+        $pago_actual = $pago->total;
+        $total_presupuesto = $req->total_presupuesto;
+
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($pago->delete()){
             $odontograma_paciente = $this->dame_odontograma_paciente($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
@@ -2420,44 +2498,43 @@ class DentalController extends Controller
             $total_piezas_odontograma = count($odontograma_paciente);
             $resto = $total_abonado_sin_insumos;
 
-            foreach($odontograma_paciente as $o){
-                if($o->presupuesto == 1){
-                    if($resto > 0 && $resto >= intval($o->valor)){
-                        $o->estado_pago = 'ok';
-                        $o->clase = 'bg-success';
-                        $resto -= intval($o->valor);
-                        $o->resto = $resto;
+            if(intval($total_presupuesto) <= intval($pago_actual)){
+                foreach($odontograma_paciente as $o){
+                    if($o->presupuesto == 1){
+                        if($resto > 0 && $resto >= intval($o->valor)){
+                            $o->estado_pago = 'ok';
+                            $resto -= intval($o->valor);
+                            $o->save();
 
-                    }else if($resto > 0 && $resto <= intval($o->valor)){
-                        $o->estado_pago = 'incompleto';
-                        $o->clase = 'bg-warning';
-                        $resto -= intval($o->valor);
-                        $o->resto = $resto;
-                    }else if($resto <= 0){
-                        $o->estado_pago = 'error';
-                        $o->clase = 'bg-danger';
-                        $o->resto = $resto;
+                        }else if($resto > 0 && $resto <= intval($o->valor)){
+                            $o->estado_pago = 'incompleto';
+                            $resto -= intval($o->valor);
+                            $o->save();
+                        }else if($resto <= 0){
+                            $o->estado_pago = 'error';
+                            $o->save();
+                        }
                     }
+
+
                 }
-
-
             }
 
             $fichaController = new ficha_atencionController;
             $insumos_tratamientos = $fichaController->dame_insumos_tratamiento($req->id_paciente, $req->id_ficha_atencion);
 
-            foreach($insumos_tratamientos as $i){
-                if($total_abonado >= $valor_insumos){
-                    $i->estado_pago = "ok";
-                    $i->total_pagado = $total_abonado;
-                    $i->total_insumos = $valor_insumos;
-                }else{
-                    $i->estado_pago = "error";
-                    $i->total_pagado = $total_abonado;
-                    $i->total_insumos = $valor_insumos;
+            if(intval($total_presupuesto) <= intval($pago_actual)){
+                foreach($insumos_tratamientos as $i){
+                    if($total_abonado >= $valor_insumos){
+                        $i->estado_pago = "ok";
+                    }else{
+                        $i->estado_pago = "error";
+                    }
+                    $i->save();
                 }
             }
-            return ['estado' => 'ok', 'mensaje' => 'Se ha eliminado el Pago con éxito','pagos' => $pagos_presupuesto,'suma_pagado' => $total_abonado,'insumos' => $insumos_tratamientos,'odontograma' => $odontograma_paciente];
+            $suma_adeudado = $suma_presupuesto - $total_abonado;
+            return ['estado' => 'ok', 'mensaje' => 'Se ha eliminado el Pago con éxito','pagos' => $pagos_presupuesto,'suma_pagado' => $total_abonado,'insumos' => $insumos_tratamientos,'odontograma' => $odontograma_paciente,'suma_presupuesto' => $suma_presupuesto,'suma_adeudado' => $suma_adeudado];
         }else{
             return ['estado' => 'error','mensaje' => 'Ha ocurrido un problema'];
         }
@@ -2476,13 +2553,14 @@ class DentalController extends Controller
         $id_ficha_atencion = $insumo->id_ficha_atencion;
         $id_lugar_atencion = $insumo->id_lugar_atencion;
         $id_tto = $insumo->id_tratamiento;
+
         $presupuesto = PresupuestosDental::where('id_paciente', $id_paciente)->where('id_ficha_atencion', $id_ficha_atencion)->first();
 
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($insumo->delete()){
             try {
                 $insumos = $this->dame_insumos_tratamiento_todos($id_paciente, $id_ficha_atencion,null, null);
-                $valores = $this->dameValoresOdontograma($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $profesional->id_tipo_especialidad);
+                $valores = $this->dameValoresOdontograma($id_paciente, $id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
                 $valor_total = $valores[0] + $valores[1] + $valores[2];
 
                 $presupuesto->valor_total = $valor_total;
@@ -2496,6 +2574,7 @@ class DentalController extends Controller
     }
 
     public function dame_insumos_tipo(Request $req){
+        return $req;
         $insumos = MaterialesImplantologia::where('id_tipo_insumo',$req->id_tipo_insumo)->get();
         if(count($insumos) > 0){
             return $insumos;

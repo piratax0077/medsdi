@@ -1323,6 +1323,7 @@ class EscritorioProfesional extends Controller
     public function guardar_pieza_dental_tto_impl(Request $request){
         try {
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
             $tto = new ProcedimientosImplantes;
             $tto->id_paciente = $request->id_paciente;
             $tto->id_profesional = $profesional->id;
@@ -1349,17 +1350,26 @@ class EscritorioProfesional extends Controller
             $tto->grosor_nylon = intval($request->grosor_nylon);
             $tto->tiempo_quirurgico = $request->tiempo_quirurgico_tto;
             $tto->estado = 1;
-
             if($tto->save()){
                 $examenes = $this->dameProcedimientosImplantes($request->id_paciente, $profesional->id);
                 $tratamientos_implantologia = TratamientosImplantologia::orderBy('descripcion','asc')->get();
                 $materiales_implantologia = MaterialesImplantologia::orderBy('descripcion','asc')->get();
+                $pieza = OdontogramaPaciente::where('pieza', $request->numero_pieza)->where('id_paciente', $request->id_paciente)->where('id_ficha_atencion',$request->id_ficha_atencion)->first();
+                $pieza->estado = 1;
+                $pieza->save();
+                $odontograma = $this->dameOdontogramaPaciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
+                foreach($odontograma as $o){
+                    if($request->numero_pieza == $o->pieza){
+                        $o->estado = 1; // al guardar pieza se pasa a estado 1 : finalizado
+                        $o->save();
+                    }
+                }
                 $v = view('atencion_odontologica.include.procedimientos_implantes_todos',[
                     'examenes' => $examenes,
                     'tratamientos_implantologia' => $tratamientos_implantologia,
-                    'materiales_implantologia' => $materiales_implantologia,
+                    'materiales_implantologia' => $materiales_implantologia
                     ])->render();
-                return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
+                return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes,'odontograma' => $odontograma];
             }
         } catch (\Exception $e) {
             //throw $th;
@@ -1970,21 +1980,38 @@ class EscritorioProfesional extends Controller
         return response()->json(['ruta' => asset('reportes/' . $fileName)]);
     }
 
-    public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $id_tipo_especialidad,$id_presupuesto = null){
-        $query = OdontogramaPaciente::select(
-            'odontogramas_pacientes.*',
-            'diagnosticos_dental.descripcion',
-            'diagnosticos_dental.cantidad_bloques',
-            'diagnosticos_dental.valor',
-            'tratamientos_dental.descripcion as diagnostico')
-            ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
-            ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
-            ->where('odontogramas_pacientes.id_paciente', $id_paciente)
+    public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null){
+        if($tipo_especialidad == 16){
+            $query = OdontogramaPaciente::select(
+                'odontogramas_pacientes.*',
+                'tratamientos_implantologia.descripcion',
+                'tratamientos_implantologia.cantidad_bloques',
+                'tratamientos_implantologia.valor',
+                'tratamientos_dental.descripcion as diagnostico')
+                ->join('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
+                ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
+                ->where('odontogramas_pacientes.id_paciente', $id_paciente)
 
-            ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
-            ->where('odontogramas_pacientes.tipo_especialidad', $id_tipo_especialidad);
+                ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
+                ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
+        }else{
+            $query = OdontogramaPaciente::select(
+                'odontogramas_pacientes.*',
+                'diagnosticos_dental.descripcion',
+                'diagnosticos_dental.cantidad_bloques',
+                'diagnosticos_dental.valor',
+                'tratamientos_dental.descripcion as diagnostico')
+                ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
+                ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
+                ->where('odontogramas_pacientes.id_paciente', $id_paciente)
 
-            if(!is_null($id_ficha_atencion)){
+                ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
+                ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
+        }
+
+
+            // verificar si trae ficha de atencion
+            if (!is_null($id_ficha_atencion)) {
                 $query->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion);
             }
 

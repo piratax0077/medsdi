@@ -395,9 +395,9 @@
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Marca Implante</label>
                                                                                                                 <select name="prot_marc_implante"  id="prot_marc_implante" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prot_marc_implante','div_prot_marc_implante','obs_prot_marc_implante',3);">
-                                                                                                                    <option selected  value="1">MARCA 1</option>
-                                                                                                                    <option value="2">MARCA 2</option>
-                                                                                                                    <option value="3">OTRO</option>
+                                                                                                                    @foreach ($marcas_implantes as $marca)
+                                                                                                                        <option value="{{ $marca->id }}">{{ $marca->descripcion }}</option>
+                                                                                                                    @endforeach
                                                                                                                 </select>
                                                                                                             </div>
                                                                                                             <div class="form-group" id="div_prot_marc_implante" style="display:none;">
@@ -440,24 +440,11 @@
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Piezas N°</label>
                                                                                                                 <select class="js-example-basic-multiple" type="text" name="prot_pieza_imp"id="prot_pieza_imp" multiple="multiple">
-                                                                                                                    <option value="1.1">1.1</option>
-                                                                                                                    <option value="1.2">1.2</option>
-                                                                                                                    <option value="1.3">1.3</option>
-                                                                                                                    <option value="1.4">1.4</option>
-                                                                                                                    <option value="1.5">1.5</option>
-                                                                                                                    <option value="1.6">1.6</option>
-                                                                                                                    <option value="1.7">1.7</option>
-                                                                                                                    <option value="1.8">1.8</option>
-                                                                                                                    <option value="1.9">1.9</option>
-                                                                                                                    <option value="2.1">2.1</option>
-                                                                                                                    <option value="2.2">2.2</option>
-                                                                                                                    <option value="2.3">2.3</option>
-                                                                                                                    <option value="2.4">2.4</option>
-                                                                                                                    <option value="2.5">2.5</option>
-                                                                                                                    <option value="2.6">2.6</option>
-                                                                                                                    <option value="2.7">2.7</option>
-                                                                                                                    <option value="2.8">2.8</option>
-                                                                                                                    <option value="2.9">2.9</option>
+                                                                                                                    @foreach ($odontograma as $o)
+                                                                                                                        @if($o->presupuesto == 1)
+                                                                                                                            <option value="{{ $o->id }}">{{ $o->pieza }}</option>
+                                                                                                                        @endif
+                                                                                                                    @endforeach
                                                                                                                 </select>
                                                                                                             </div>
                                                                                                         </div>
@@ -574,7 +561,7 @@
                                                                 <a class="nav-link-aten text-reset" id="corona_prot_tab" data-toggle="tab" href="#corona_prot" role="tab" aria-controls="corona_prot" aria-selected="true">Instalación de Corona |  Prótesis</a>
                                                             </li>
                                                             <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="prox_cont_imp_tab" data-toggle="tab" href="#prox_cont_imp" role="tab" aria-controls="prox_cont_imp" aria-selected="true">Próximo control e Indicaciones</a>
+                                                                <a class="nav-link-aten text-reset" id="prox_cont_imp_tab" data-toggle="tab" href="#prox_cont_imp" role="tab" aria-controls="prox_cont_imp" aria-selected="true" >Próximo control e Indicaciones</a>
                                                             </li>
 
                                                         </ul>
@@ -1321,44 +1308,223 @@
                                                                             </div>  --}}
                                                                         </div>
                                                                         <!--INDICACIONES Y PROXIMO CONTROL-->
-                                                                        <div class="tab-pane fade show" id="prox_cont_imp" role="tabpanel" aria-labelledby="prox_cont_imp_tab">
+                                                                        <div class="tab-pane fade show" id="prox_cont_imp" role="tabpanel" aria-labelledby="prox_cont_imp_tab" >
+
                                                                             <div class="row">
-                                                                                <div class="col-sm-12 col-md-12">
-                                                                                    <div class="form-row">
-                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                            <div class="form-group">
-                                                                                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="recomendaciones_implante();" ><i class="fas fa-save"></i> Indicaciones Generales Post Implante </button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                            <div class="form-group">
-                                                                                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="recomendaciones_esp_implante();"><i class="fas fa-save"></i> Indicaciones Especiales para el paciente post Implante  </button>
+                                                                                <div class="col-md-12">
+                                                                                    <div class="card">
+                                                                                        <div class="card-body">
+                                                                                            <div class="row">
+                                                                                                <div class="col-sm-2">
+                                                                                                    <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                                                                        <a class="nav-link-aten text-reset active" id="prot_impl_man_tab" data-toggle="tab" href="#prot_impl_man" role="tab" aria-controls="prot_impl_man" aria-selected="true">Protocolo Man IMPL</a>
+                                                                                                        <a class="nav-link-aten text-reset" id="ind_impl_man_tab" data-toggle="tab" href="#ind_impl_man" role="tab" aria-controls="ind_impl_man" aria-selected="false">Indicaciones</a>
+                                                                                                        <a class="nav-link-aten text-reset" id="cit_control_impl__mantab" data-toggle="tab" href="#cit_control_impl_man" role="tab" aria-controls="cit_control_impl_man" aria-selected="false">Control</a>
+
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-sm-12 col-md-10 col-xl-10">
+                                                                                                    <div class="tab-content" id="v-pills-tabContent">
+                                                                                                        <div class="tab-pane fade show active" id="prot_impl_man" role="tabpanel" aria-labelledby="prot_impl_man_tab">
+                                                                                                            <div class="col-sm-12 col-md-12">
+                                                                                                                <div class="form-row">
+                                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                                        <div class="form-group">
+                                                                                                                            <label class="floating-label-activo-sm">Equipo Cirujanos</label>
+
+                                                                                                                            <div class="d-flex">
+                                                                                                                                <input class="form-control form-control-sm" type="text" name="prot_cirujanos_imp_man" id="prot_cirujanos_imp_man">
+                                                                                                                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="agregar_cirujano_impl_man()"><i class="fas fa-plus"></i></button>
+                                                                                                                            </div>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="d-none" id="div_nuevo_cirujano_impl_man" >
+                                                                                                                            <div class="form-group">
+                                                                                                                                <label class="floating-label-activo-sm">Nuevo cirujano</label>
+                                                                                                                                <input type="text" class="form-control form-control-sm">
+                                                                                                                            </div>
+                                                                                                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="ocultar_cirujano_impl_man()"><i class="fas fa-trash"></i></button>
+                                                                                                                            <button type="button" class="btn btn-outline-success btn-sm btn-icon"><i class="fas fa-save"></i></button>
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                                        <div class="form-group">
+                                                                                                                            <label class="floating-label-activo-sm">Anestesista</label>
+                                                                                                                            <input class="form-control form-control-sm" type="text" name="prot_anestesista_imp_man"id="prot_anestesista_imp_man">
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                                        <div class="form-group">
+                                                                                                                            <label class="floating-label-activo-sm">Tons</label>
+                                                                                                                            <input class="form-control form-control-sm" type="text" name="prot_tons_imp_man"id="prot_tons_imp_man">
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                                        <div class="form-group">
+                                                                                                                            <label class="floating-label-activo-sm">Arsenalera</label>
+                                                                                                                            <input class="form-control form-control-sm" type="text" name="prot_ars_imp_man"id="prot_ars_imp_man">
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+
+                                                                                                                <div class="form-row">
+                                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                                        <div class="form-group">
+                                                                                                                            <label class="floating-label-activo-sm">Forma y material del Implante</label>
+                                                                                                                            <select name="prot_forma_mat_man" id="prot_forma_mat_man"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prot_forma_mat_man','div_prot_forma_mat_man','det_prot_forma_mat_man',13)">
+                                                                                                                                <option value="0">Seleccione</option>
+                                                                                                                                <option value="1">Cilíndricos Titanio</option>
+                                                                                                                                <option value="2">Cilíndricos Porcelana</option>
+                                                                                                                                <option value="3">Cilíndricos Zirconio</option>
+                                                                                                                                <option value="4">Laminados Titanio</option>
+                                                                                                                                <option value="5">Laminados Porcelana</option>
+                                                                                                                                <option value="6">Laminados Zirconio</option>
+                                                                                                                                <option value="7">Tornillo Titanio</option>
+                                                                                                                                <option value="8">Tornillo Porcelana</option>
+                                                                                                                                <option value="9">Tornillo Zirconio</option>
+                                                                                                                                <option value="10">Cónicos Titanio</option>
+                                                                                                                                <option value="11">Cónicos Porcelana</option>
+                                                                                                                                <option value="12">Cónicos Zirconio</option>
+                                                                                                                                <option value="13">Otro</option>
+                                                                                                                            </select>
+                                                                                                                        </div>
+                                                                                                                        <div class="form-group"   id="div_prot_forma_mat_man" style="display:none">
+                                                                                                                            <label class="floating-label-activo-sm">Detalle Otros<i>(describir)</i></label>
+                                                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_prot_forma_mat_man" id="det_prot_forma_mat_man"></textarea>
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                                        <div class="form-group">
+                                                                                                                            <label class="floating-label-activo-sm">Marca Implante</label>
+                                                                                                                            <select name="prot_marc_implante_man"  id="prot_marc_implante_man" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prot_marc_implante','div_prot_marc_implante','obs_prot_marc_implante',3);">
+                                                                                                                                @foreach ($marcas_implantes as $marca)
+                                                                                                                                    <option value="{{ $marca->id }}">{{ $marca->descripcion }}</option>
+                                                                                                                                @endforeach
+                                                                                                                            </select>
+                                                                                                                        </div>
+                                                                                                                        <div class="form-group" id="div_prot_marc_implante_man" style="display:none;">
+                                                                                                                            <label class="floating-label-activo-sm">Otra Marca</label>
+                                                                                                                            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_prot_marc_implante_man" id="obs_prot_marc_implante_man"></textarea>
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                                        <div class="form-group">
+                                                                                                                            <label class="floating-label-activo-sm">Implantes</label>
+                                                                                                                            <select name="prot_proc_man" id="prot_proc_man"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prot_proc','div_prot_proc','det_prot_proc',3)">
+                                                                                                                                <option value="0">Seleccione</option>
+                                                                                                                                <option value="1">Implante único</option>
+                                                                                                                                <option value="2">Implante Múltiple</option>
+                                                                                                                                <option value="3">Otro</option>
+                                                                                                                            </select>
+                                                                                                                        </div>
+                                                                                                                        <div class="form-group"   id="div_prot_proc_man" style="display:none">
+                                                                                                                            <label class="floating-label-activo-sm">Detalle Otros<i>(describir)</i></label>
+                                                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_prot_proc" id="det_prot_proc"></textarea>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                                        <div class="form-group">
+                                                                                                                            <label class="floating-label-activo-sm">Corona/Prot provisoria</label>
+                                                                                                                            <select name="prot_prot_corona_man" id="prot_prot_corona_man"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prot_prot_corona_man','div_prot_prot_corona_man','det_prot_prot_corona_man',3)">
+                                                                                                                                <option value="0">Seleccione</option>
+                                                                                                                                <option value="1">Si</option>
+                                                                                                                                <option value="2">No</option>
+                                                                                                                                <option value="3">Otro (describa)</option>
+                                                                                                                            </select>
+                                                                                                                        </div>
+                                                                                                                        <div class="form-group"   id="div_prot_prot_corona_man" style="display:none">
+                                                                                                                            <label class="floating-label-activo-sm">Detalle Otros<i>(describir)</i></label>
+                                                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_prot_prot_corona_man" id="det_prot_prot_corona_man"></textarea>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                                        <div class="form-group">
+                                                                                                                            <label class="floating-label-activo-sm">Piezas N°</label>
+                                                                                                                            <select class="js-example-basic-multiple" type="text" name="prot_pieza_imp_man"id="prot_pieza_imp_man" multiple="multiple">
+                                                                                                                                @foreach ($odontograma as $o)
+                                                                                                                                    @if($o->presupuesto == 1)
+                                                                                                                                        <option value="{{ $o->id }}">{{ $o->pieza }}</option>
+                                                                                                                                    @endif
+                                                                                                                                @endforeach
+                                                                                                                            </select>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                                                                                                                        <div class="form-group">
+                                                                                                                            <label class="floating-label-activo-sm">Detalle Cirugía</label>
+                                                                                                                            @php
+                                                                                                                                $detalleCirugia = [];
+                                                                                                                                foreach ($examenes_post_implantes as $examen) {
+                                                                                                                                    $detalleCirugia[] = "La pieza {$examen->numero_pieza} se ha realizado {$examen->tipo_procedimiento} usando {$examen->anestesia} con {$examen->numero_tubos} tubos, con la técnica {$examen->tecnica_anestesia}";
+                                                                                                                                }
+                                                                                                                                $detallesCirugiaTexto = implode("\n", $detalleCirugia);
+                                                                                                                            @endphp
+                                                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="det_cir_man" id="det_cir_man">{{ $detallesCirugiaTexto }}</textarea>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+
+                                                                                                                <div class="form-row">
+                                                                                                                    <div class="col-sm-12 col-md-12 text-center">
+                                                                                                                        <button type="button" class="btn btn-sm btn-primary mt-2 mb-4" onclick="generar_pdf_protocolo_man_dental()">Ver documento en
+                                                                                                                            PDF</button>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                        </div>
+                                                                                                        <div class="tab-pane fade show" id="ind_impl_man" role="tabpanel" aria-labelledby="ind_impl_man_tab">
+
+                                                                                                            <div class="row">
+                                                                                                                <div class="col-sm-12 col-md-12">
+                                                                                                                    <div class="form-row">
+                                                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                                            <div class="form-group">
+                                                                                                                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="recomendaciones_implante();" ><i class="fas fa-save"></i> Indicaciones Generales Post Implante </button>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                                            <div class="form-group">
+                                                                                                                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="recomendaciones_esp_implante();" ><i class="fas fa-save"></i> Indicaciones Especiales para el paciente post Implante  </button>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="tab-pane fade show" id="cit_control_impl_man" role="tabpanel" aria-labelledby="cit_control_impl_man_tab">
+                                                                                                            <div class="row">
+                                                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                                    <div class="form-row">
+                                                                                                                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                                                            <div class="form-group">
+                                                                                                                                <label class="floating-label-activo-sm">Fecha de Próximo Control</label>
+                                                                                                                                <input class="form-control form-control-sm" type="date" name="f_control_impl"id="f_control_impl">
+                                                                                                                            </div>
+                                                                                                                        </div>
+
+                                                                                                                        <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
+                                                                                                                            <div class="form-group">
+                                                                                                                                <button type="button" class="btn btn-outline-primary btn-sm" ><i class="fas fa-save"></i> Ir a Agendar</button>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-
                                                                                 </div>
                                                                             </div>
-                                                                            <hr>
-                                                                            <hr>
-                                                                            <div class="row">
-                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                    <div class="form-row">
-                                                                                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                            <div class="form-group">
-                                                                                                <label class="floating-label-activo-sm">Fecha de Próximo Control</label>
-                                                                                                <input class="form-control form-control-sm" type="date" name="f_control_impl"id="f_control_impl">
-                                                                                            </div>
-                                                                                        </div>
 
-                                                                                        <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
-                                                                                            <div class="form-group">
-                                                                                                <button type="button" class="btn btn-outline-primary btn-sm" ><i class="fas fa-save"></i> Ir a Agendar</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
 
 
                                                                         </div>
@@ -2912,6 +3078,7 @@
         $('#paciente_piezas_dentales_ex_').select2();
         $('#tpo_proc_imp').select2();
         $('#prot_pieza_imp').select2();
+        $('#prot_pieza_imp_man').select2();
 
         const piezasSelect = $('#paciente_piezas_dentales_ex');
 
@@ -6197,9 +6364,19 @@ function agregar_cirujano_impl(){
     $('#div_nuevo_cirujano_impl').addClass('d-block');
 }
 
+function agregar_cirujano_impl_man(){
+    $('#div_nuevo_cirujano_impl_man').removeClass('d-none');
+    $('#div_nuevo_cirujano_impl_man').addClass('d-block');
+}
+
 function ocultar_cirujano_impl(){
     $('#div_nuevo_cirujano_impl').addClass('d-none');
     $('#div_nuevo_cirujano_impl').removeClass('d-block');
+}
+
+function ocultar_cirujano_impl_man(){
+    $('#div_nuevo_cirujano_impl_man').addClass('d-none');
+    $('#div_nuevo_cirujano_impl_man').removeClass('d-block');
 }
 
 function generar_pdf_protocolo_dental(){
@@ -6351,6 +6528,10 @@ function generar_pdf_protocolo_dental(){
 
         return false;
     }
+}
+
+function generar_pdf_protocolo_man_dental(){
+
 }
 
 function eliminar_pieza_dental_post_impl(id){
@@ -7029,6 +7210,7 @@ function ocultar_pieza_impl(counter){
     console.log(counter);
     $('#contenedor_pieza_tto_impl'+counter).empty();
 }
+
 
 </script>
 

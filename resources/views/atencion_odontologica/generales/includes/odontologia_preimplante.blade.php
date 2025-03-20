@@ -917,6 +917,7 @@
             id: id,
             id_paciente: $('#id_paciente').val(),
             id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
             _token: CSRF_TOKEN
         }
         let url = '{{ ROUTE("dental.eliminar_insumos_tto") }}';
@@ -1036,23 +1037,52 @@
                         insumos.forEach(insumo => {
                             let total = insumo.cantidad * insumo.valor;
                             if(insumo.presupuesto == 1){
+                                if(insumo.estado_pago == 'ok'){
+                                    var clase = 'bg-success';
+                                }else if(insumo.estado_pago == 'intermedio'){
+                                    var clase = 'bg-warning';
+                                }else{
+                                    var clase = 'bg-danger';
+                                }
                                 let rowNode = table_insumos.row.add([
                                 `${insumo.insumos} ${insumo.nombre_marca}`,
                                 insumo.cantidad,         // Nombre del insumo
                                 formatoMoneda(insumo.valor),       // Cantidad utilizada
                                 0,         // Unidad de medida
                                 formatoMoneda(total),
-                                '',
+                                ' <div class="circle '+clase+'"></div>',
                                 ''
-                            ]).draw(false).node();
 
-                            // Agregar clases a la fila
-                            $(rowNode).addClass('text-center align-middle');
+                            ]).draw(false).node();
+                             // Agregar clases a la fila
+                             $(rowNode).addClass('text-center align-middle status-circle');
                             }
 
                         });
 
                         table_insumos.draw();
+
+                        $('#table_pagos_reasignar_insumos tbody').empty();
+                        insumos.forEach(insumo => {
+                            if(insumo.presupuesto == 1){
+                                let total = insumo.cantidad * insumo.valor;
+                                $('#table_pagos_reasignar_insumos tbody').append(`
+                                <tr>
+                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${total}" data-id="${insumo.id}" data-info="insumo"></td>
+                                    <td>${insumo.insumos} ${insumo.nombre_marca}</td>
+                                    <td>${insumo.cantidad}</td>
+                                    <td>${formatoMoneda(insumo.valor)}</td>
+                                    <td>${formatoMoneda(total)}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `);
+                            }
+
+                        });
                 }
             },
             error: function(error){
@@ -1209,7 +1239,7 @@
                              $(rowNode).addClass('text-center align-middle status-circle');
                             }
 
-                        })
+                        });
 
                         $('#tratamiento_presupuesto tbody').empty();
                         let presupuesto = resp.presupuesto;
@@ -1241,6 +1271,28 @@
                             </td>
                         </tr>
                         `);
+
+                        $('#table_pagos_reasignar_insumos tbody').empty();
+                        insumos.forEach(insumo => {
+                            if(insumo.presupuesto == 1){
+                                let total = insumo.cantidad * insumo.valor;
+                                $('#table_pagos_reasignar_insumos tbody').append(`
+                                <tr>
+                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${total}" data-id="${insumo.id}" data-info="insumo"></td>
+                                    <td>${insumo.insumos} ${insumo.nombre_marca}</td>
+                                    <td>${insumo.cantidad}</td>
+                                    <td>${formatoMoneda(insumo.valor)}</td>
+                                    <td>${formatoMoneda(total)}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `);
+                            }
+
+                        });
                     }
             },
             error: function(error){

@@ -232,6 +232,19 @@
                     $('#contenedor_pieza_post_implantada').empty();
                     $('#contenedor_pieza_post_implantada').append(resp.v);
                     $('#pieza_post_implantada').empty();
+                    if (resp.examenes && resp.examenes.length > 0) {
+                        let detalleCirugia = resp.examenes.map(examen =>
+                            `La pieza ${examen.numero_pieza} se ha realizado ${examen.tipo_procedimiento} ` +
+                            `usando ${examen.anestesia} con ${examen.numero_tubos} tubos, ` +
+                            `con la técnica ${examen.tecnica_anestesia}`
+                        ).join("\n");
+
+                        $('#det_cir_man').val(detalleCirugia);
+
+
+                    } else {
+                        $('#det_cir_man').val('No hay detalles de cirugía disponibles.');
+                    }
                 }
             },
             error: function(error){
