@@ -356,6 +356,8 @@ function cargar_a_presupuesto_impl(counter){
                     $('#total_clinico').val(formatoMoneda(total_general));
                     $('#total_presupuesto_dental').val(total_general);
 
+                    $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
+
 
                     let table = $('#presup_estado_pago').DataTable();
                     table.clear().draw();

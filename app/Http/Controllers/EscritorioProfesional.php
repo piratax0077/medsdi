@@ -2285,6 +2285,16 @@ class EscritorioProfesional extends Controller
 
         $procedimiento = ProcedimientosImplantes::find($req->id);
 
+        $pieza = $procedimiento->numero_pieza;
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $odontograma = $this->dameOdontogramaPaciente($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+
+        foreach($odontograma as $o){
+            if($o->pieza == $pieza){
+                $o->estado = 0;
+                $o->save();
+            }
+        }
         $id_paciente = $procedimiento->id_paciente;
         $id_profesional = $procedimiento->id_profesional;
         if($procedimiento->delete()){
@@ -2295,8 +2305,9 @@ class EscritorioProfesional extends Controller
                 'examenes' => $examenes,
                 'tratamientos_implantologia' => $tratamientos_implantologia,
                 'materiales_implantologia' => $materiales_implantologia,
+                'odontograma' => $odontograma
                 ])->render();
-                return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes];
+                return ['mensaje' => 'OK', 'v' => $v,'examenes' => $examenes, 'odontograma' => $odontograma];
         }
     }
 
@@ -4055,13 +4066,15 @@ class EscritorioProfesional extends Controller
         $idCounter = $req->counter ? $req->counter : 0;
 
         $responsable = User::find(Auth::user()->id);
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+        $odontograma = $this->dameOdontogramaPaciente($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
         if($req->seccion == 'pfu'){
-            $v = view('atencion_odontologica.include.piezas_dental_pfu',['counter' => $idCounter])->render();
+            $v = view('atencion_odontologica.include.piezas_dental_pfu',['counter' => $idCounter, 'odontograma' => $odontograma])->render();
         }else{
-            $v = view('atencion_odontologica.include.piezas_dental_pfp',['counter' => $idCounter])->render();
+            $v = view('atencion_odontologica.include.piezas_dental_pfp',['counter' => $idCounter, 'odontograma' => $odontograma])->render();
         }
 
-        return ['mensaje' => 'OK','v' => $v];
+        return ['mensaje' => 'OK','v' => $v, 'odontograma' => $odontograma];
     }
 
 public function insumosDental(){

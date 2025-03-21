@@ -2591,6 +2591,7 @@ class DentalController extends Controller
 
     public function generar_pdf_prot_impl(Request $req){
 try {
+
      // Recibir los datos desde el request
      $data = $req->all();
      $id_paciente = $req->id_paciente;
@@ -2598,7 +2599,13 @@ try {
      $nombre_anest = $req->nombre_anest;
      $nombre_ars = $req->nombre_arsenalera;
      $implantes = $req->implantes;
-     $marca_impl = $req->marca_impl;
+     $insumos = $req->implantes_insumos;
+
+     $insumos_array = [];
+     foreach($insumos as $i){
+         $insumo = InsumosTratamientosDental::find($i);
+         array_push($insumos_array,$insumo);
+     }
      $forma_mat_impl = $req->forma_mat_impl;
      $prot_prot_corona = $req->prot_prot_corona;
      $det_cir = $req->det_cir;
@@ -2606,7 +2613,7 @@ try {
      $prot_pieza_imp = $req->prot_pieza_imp;
     //code...
     // Renderizar la vista del presupuesto dental
-    $pdf = Pdf::loadView('atencion_odontologica.PDF.protocolo_implantes_dental',compact('id_paciente','nombre_cir','nombre_anest','nombre_ars','implantes','marca_impl','forma_mat_impl','prot_prot_corona','det_cir','nombre_tons','prot_pieza_imp'));
+    $pdf = Pdf::loadView('atencion_odontologica.PDF.protocolo_implantes_dental',compact('id_paciente','nombre_cir','nombre_anest','nombre_ars','implantes','insumos_array','forma_mat_impl','prot_prot_corona','det_cir','nombre_tons','prot_pieza_imp'));
     // Guardar el PDF en la carpeta public
     $fileName = 'presupuesto_dental_' . $req->id_paciente . '.pdf';
     $filePath = public_path('reportes/' . $fileName);

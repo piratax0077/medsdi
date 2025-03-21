@@ -950,6 +950,9 @@
                         $('#total_insumos').val(formatoMoneda(valores_insumos));
                         $('#total_presupuesto_dental').val(total_general);
 
+                        $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
+                            $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
+
 
                     let insumos = resp.insumos;
                         console.log(insumos);
@@ -1130,6 +1133,9 @@
                         $('#total_presupuesto').val(formatoMoneda(total_general));
                         $('#total_insumos').val(formatoMoneda(valores_insumos));
                         $('#total_presupuesto_dental').val(total_general);
+
+                        $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
+                            $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
                             //limpiar_formulario_insumo();
                         let insumos = resp.insumos;
                         console.log(insumos);

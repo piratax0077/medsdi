@@ -391,12 +391,27 @@
                                                                                                             </div>
                                                                                                         </div>
 
-                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                        {{-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                             <div class="form-group">
                                                                                                                 <label class="floating-label-activo-sm">Marca Implante</label>
                                                                                                                 <select name="prot_marc_implante"  id="prot_marc_implante" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prot_marc_implante','div_prot_marc_implante','obs_prot_marc_implante',3);">
                                                                                                                     @foreach ($marcas_implantes as $marca)
                                                                                                                         <option value="{{ $marca->id }}">{{ $marca->descripcion }}</option>
+                                                                                                                    @endforeach
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                            <div class="form-group" id="div_prot_marc_implante" style="display:none;">
+                                                                                                                <label class="floating-label-activo-sm">Otra Marca</label>
+                                                                                                                <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_prot_marc_implante" id="obs_prot_marc_implante"></textarea>
+                                                                                                            </div>
+                                                                                                        </div> --}}
+
+                                                                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="floating-label-activo-sm">Implante</label>
+                                                                                                                <select name="prot_implante"  id="prot_implante" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prot_marc_implante','div_prot_marc_implante','obs_prot_marc_implante',3);" multiple="multiple">
+                                                                                                                    @foreach ($insumos_tratamientos as $i)
+                                                                                                                        <option value="{{ $i->id }}">{{ $i->insumos }} {{ $i->nombre_marca }}</option>
                                                                                                                     @endforeach
                                                                                                                 </select>
                                                                                                             </div>
@@ -581,7 +596,7 @@
                                                                                     <div class="card">
                                                                                         <div class="card-body">
                                                                                             <div id="contenedor_pieza_post_implantada">
-                                                                                                @php $count = 0; @endphp
+                                                                                                @php $count = 1; @endphp
                                                                                                 @foreach ($examenes_post_implantes as $examen)
                                                                                                 <div class="row">
                                                                                                     <div class="card">
@@ -1123,13 +1138,13 @@
                                                                                                         </div>
                                                                                                         <div class="tab-pane fade show" id="protesis_impl" role="tabpanel" aria-labelledby="protesis_impl_tab">
                                                                                                             <div class="form-row">
-                                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                                                {{-- <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                                                     <div class="form-group">
                                                                                                                         <label class="floating-label-activo-sm">Pieza N°</label>
                                                                                                                         <input type="text" class="form-control form-control-sm" name="n_pieza_protesis" id="n_pieza_protesis">
                                                                                                                     </div>
-                                                                                                                </div>
-                                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                                                </div> --}}
+                                                                                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                                     <div class="form-group">
                                                                                                                         <label class="floating-label-activo-sm">Tipo de Prótesis Superior</label>
                                                                                                                         <select name="protesis_imp_sup" id="protesis_imp_sup"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('protesis_imp_sup','div_protesis_imp_sup','obs_protesis_imp_sup',2)">
@@ -1144,7 +1159,7 @@
                                                                                                                         <input type="text" class="form-control form-control-sm" name="obs_protesis_imp_sup" id="obs_protesis_imp_sup">
                                                                                                                     </div>
                                                                                                                 </div>
-                                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                                     <div class="form-group">
                                                                                                                         <label class="floating-label-activo-sm">Tipo de Prótesis Inferior</label>
                                                                                                                         <select name="protesis_imp_inf" id="protesis_imp_inf"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('protesis_imp_inf','div_protesis_imp_inf','obs_protesis_imp_inf',2)">
@@ -1161,7 +1176,7 @@
                                                                                                                 </div>
                                                                                                                 <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                                     <div class="form-group">
-                                                                                                                        <label class="floating-label-activo-sm">Toma de impresión y envío a laboratorio</label>
+                                                                                                                        <label class="floating-label-activo-sm">Impresión / Envío a Lab.</label>
                                                                                                                         <select name="protesis_toma_imp" id="protesis_toma_imp"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('protesis_toma_imp','div_protesis_toma_imp','obs_protesis_toma_imp_inf',2)">
                                                                                                                             <option value="0">Seleccione</option>
                                                                                                                             <option value="1">No</option>
@@ -1211,7 +1226,7 @@
                                                                                                             <div class="form-row">
                                                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xm">
                                                                                                                     <div class="form-group">
-                                                                                                                        <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-pieza1 has-ripple" onclick="solicitar_protesis()">Solicitar Prótesis<span class="ripple ripple-animate" ></span></button>
+                                                                                                                        <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-pieza1 has-ripple" onclick="solicitar_protesis()">Reenvio de protesis a laboratorio<span class="ripple ripple-animate" ></span></button>
                                                                                                                     </div>
                                                                                                                 </div>
 
@@ -1396,12 +1411,27 @@
                                                                                                                         </div>
                                                                                                                     </div>
 
-                                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                                    {{-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                                                                                                                         <div class="form-group">
                                                                                                                             <label class="floating-label-activo-sm">Marca Implante</label>
                                                                                                                             <select name="prot_marc_implante_man"  id="prot_marc_implante_man" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prot_marc_implante','div_prot_marc_implante','obs_prot_marc_implante',3);">
                                                                                                                                 @foreach ($marcas_implantes as $marca)
                                                                                                                                     <option value="{{ $marca->id }}">{{ $marca->descripcion }}</option>
+                                                                                                                                @endforeach
+                                                                                                                            </select>
+                                                                                                                        </div>
+                                                                                                                        <div class="form-group" id="div_prot_marc_implante_man" style="display:none;">
+                                                                                                                            <label class="floating-label-activo-sm">Otra Marca</label>
+                                                                                                                            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_prot_marc_implante_man" id="obs_prot_marc_implante_man"></textarea>
+                                                                                                                        </div>
+                                                                                                                    </div> --}}
+
+                                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                                                                        <div class="form-group">
+                                                                                                                            <label class="floating-label-activo-sm">Implantes</label>
+                                                                                                                            <select name="prot_implante_man"  id="prot_implante_man" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prot_implante_man','div_prot_implante_man','obs_prot_implante_man',3);" multiple="multiple">
+                                                                                                                                @foreach ($insumos_tratamientos as $i)
+                                                                                                                                    <option value="{{ $i->id }}">{{ $i->insumos }} {{ $i->nombre_marca }}</option>
                                                                                                                                 @endforeach
                                                                                                                             </select>
                                                                                                                         </div>
@@ -1455,17 +1485,70 @@
                                                                                                                     </div>
                                                                                                                     <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
                                                                                                                         <div class="form-group">
-                                                                                                                            <label class="floating-label-activo-sm">Detalle Cirugía</label>
+                                                                                                                            <label class="floating-label-activo-sm">Detalle de Historia Clínica</label>
                                                                                                                             @php
-                                                                                                                                $detalleCirugia = [];
+                                                                                                                                $detalleHistoria = [];
                                                                                                                                 foreach ($examenes_post_implantes as $examen) {
-                                                                                                                                    $detalleCirugia[] = "La pieza {$examen->numero_pieza} se ha realizado {$examen->tipo_procedimiento} usando {$examen->anestesia} con {$examen->numero_tubos} tubos, con la técnica {$examen->tecnica_anestesia}";
+                                                                                                                                    $detalle = "La pieza {$examen->numero_pieza} presenta las siguientes observaciones:";
+
+                                                                                                                                    // Móvil
+                                                                                                                                    if ($examen->movil == "Sí") {
+                                                                                                                                        $detalle .= " Se observa movilidad en la pieza" . ($examen->obs_movil ? ", descrita como: {$examen->obs_movil}." : ".");
+                                                                                                                                    } else {
+                                                                                                                                        $detalle .= " No se observa movilidad en la pieza.";
+                                                                                                                                    }
+
+                                                                                                                                    // Posición
+                                                                                                                                    if ($examen->posicion == "Correcta") {
+                                                                                                                                        $detalle .= " La posición del implante es adecuada.";
+                                                                                                                                    } else {
+                                                                                                                                        $detalle .= " La posición del implante es incorrecta, presentando las siguientes desviaciones: "
+                                                                                                                                            . "vestíbulo-palatino: " . ($examen->vp ?? 'N/A') . ", "
+                                                                                                                                            . "vestíbulo-lingual: " . ($examen->vl ?? 'N/A') . ", "
+                                                                                                                                            . "mesio-distal: " . ($examen->md ?? 'N/A') . " y "
+                                                                                                                                            . "cráneo-caudal: " . ($examen->cc ?? 'N/A') . ".";
+                                                                                                                                    }
+
+                                                                                                                                    // Exposición de espiras
+                                                                                                                                    if ($examen->exp_espiras == "Sí") {
+                                                                                                                                        $detalle .= " Se evidencia exposición de espiras" . ($examen->obs_exp_espiras ? ", descrita como: {$examen->obs_exp_espiras}." : ".");
+                                                                                                                                    } else {
+                                                                                                                                        $detalle .= " No se observa exposición de espiras.";
+                                                                                                                                    }
+
+                                                                                                                                    // Supuración
+                                                                                                                                    if ($examen->supuracion == "Sí") {
+                                                                                                                                        $detalle .= " Se detecta presencia de supuración" . ($examen->obs_supuracion ? ", descrita como: {$examen->obs_supuracion}." : ".");
+                                                                                                                                    } else {
+                                                                                                                                        $detalle .= " No se observa supuración.";
+                                                                                                                                    }
+
+                                                                                                                                    // Estado de la encía
+                                                                                                                                    if ($examen->estado_encia == "Anormal") {
+                                                                                                                                        $detalle .= " El estado de la encía es anormal, descrito como: " . ($examen->obs_estado_encia ?? 'Sin observación') . ".";
+                                                                                                                                    } else {
+                                                                                                                                        $detalle .= " El estado de la encía es normal.";
+                                                                                                                                    }
+
+                                                                                                                                    // Pérdida ósea marginal
+                                                                                                                                    if (!empty($examen->perdida_osea_marginal)) {
+                                                                                                                                        $detalle .= " Se reporta una pérdida ósea marginal de aproximadamente {$examen->perdida_osea_marginal}.";
+                                                                                                                                    }
+
+                                                                                                                                    // Observaciones generales
+                                                                                                                                    if (!empty($examen->observaciones)) {
+                                                                                                                                        $detalle .= " Observaciones adicionales: {$examen->observaciones}.";
+                                                                                                                                    }
+
+                                                                                                                                    $detalleHistoria[] = $detalle;
                                                                                                                                 }
-                                                                                                                                $detallesCirugiaTexto = implode("\n", $detalleCirugia);
+
+                                                                                                                                $detallesHistoriaTexto = implode("\n\n", $detalleHistoria);
                                                                                                                             @endphp
-                                                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="det_cir_man" id="det_cir_man">{{ $detallesCirugiaTexto }}</textarea>
+                                                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="det_cir_man" id="det_cir_man">{{ $detallesHistoriaTexto }}</textarea>
                                                                                                                         </div>
                                                                                                                     </div>
+
                                                                                                                 </div>
 
                                                                                                                 <div class="form-row">
@@ -3079,6 +3162,8 @@
         $('#tpo_proc_imp').select2();
         $('#prot_pieza_imp').select2();
         $('#prot_pieza_imp_man').select2();
+        $('#prot_implante').select2();
+        $('#prot_implante_man').select2();
 
         const piezasSelect = $('#paciente_piezas_dentales_ex');
 
@@ -6130,7 +6215,7 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
- <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                 </div>
                             `);
                             $('#table_trabajos_presupuesto tbody').append(`
@@ -6163,43 +6248,58 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                 $('#total_clinico').val(formatoMoneda(valores_boca_general + valores_odontograma));
                 $('#total_presupuesto_dental').val(total_general);
                 $('#total_presupuesto').val(formatoMoneda(total_general));
+
+                $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
+
                 let table = $('#presup_estado_pago').DataTable();
                 table.clear().draw();
 
                 // Recorrer el odontograma y agregar nuevas filas
                 odontograma.forEach(function(odonto) {
 
-if (odonto.presupuesto == 1) {
-    if(odonto.estado_pago == 'ok'){
-        var clase = 'bg-success';
-    }else if(odonto.estado_pago == 'incompleto'){
-        var clase = 'bg-warning';
-    }else{
-        var clase = 'bg-danger';
-    }
+                        if (odonto.presupuesto == 1) {
+                            if(odonto.estado_pago == 'ok'){
+                                var clase = 'bg-success';
+                            }else if(odonto.estado_pago == 'incompleto'){
+                                var clase = 'bg-warning';
+                            }else{
+                                var clase = 'bg-danger';
+                            }
 
-    if(odonto.estado == 0){
-        var estado = 'PENDIENTE';
-    }else{
-        var estado = 'TERMINADO';
-    }
-    // Agregar una nueva fila a la tabla
-    let rowNode = table.row.add([
-        odonto.descripcion,
-        odonto.pieza,
-        formatoMoneda(formatoMoneda(odonto.valor)),
-        0,
-        formatoMoneda(formatoMoneda(odonto.valor)),
-        '<div class="circle '+clase+'"></div>',
-        estado, // Columna vacía
+                            if(odonto.estado == 0){
+                                var estado = 'PENDIENTE';
+                            }else{
+                                var estado = 'TERMINADO';
+                            }
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table.row.add([
+                                odonto.descripcion,
+                                odonto.pieza,
+                                formatoMoneda(formatoMoneda(odonto.valor)),
+                                0,
+                                formatoMoneda(formatoMoneda(odonto.valor)),
+                                '<div class="circle '+clase+'"></div>',
+                                estado, // Columna vacía
 
-    ]).draw(false).node(); // Obtener el nodo de la fila
+                            ]).draw(false).node(); // Obtener el nodo de la fila
 
-    // Agregar clases a la fila
-    $(rowNode).addClass('text-center align-middle status-circle');
-}
-});
+                            // Agregar clases a la fila
+                            $(rowNode).addClass('text-center align-middle status-circle');
+                        }
+                });
                 //limpiar_formulario_cargar_presupuesto_g();
+                $('#table_pagos_reasignar_odontograma tbody').empty();
+                odontograma.forEach(function(odonto) {
+                    if (odonto.presupuesto == 1) {
+                        let fila = `<tr>
+                            <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
+                            <td>${odonto.pieza}</td>
+                            <td>${formatoMoneda(odonto.valor)}</td>
+                            <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"> </i> </button></td>
+                        </tr>`;
+                        $('#table_pagos_reasignar_odontograma tbody').append(fila);
+                    }
+                });
             }else{
                 swal({
                     icon:'error',
@@ -6274,18 +6374,18 @@ function mostrar_nueva_pieza_dental_tto_impl(counter){
         }
 
         function eliminar_pieza_dental_tto_impl(id){
-    swal({
-            title: 'Advertencia',
-            text: '¿Está seguro de eliminar este examen?',
-            icon: 'warning',
-            buttons: ['Cancelar', 'Aceptar'],
-            dangerMode: true
-        }).then((aceptar) => {
-            if (aceptar) {
-                confirmar_eliminar_pieza_dental_tto_impl(id);
-            }
-        })
-}
+            swal({
+                    title: 'Advertencia',
+                    text: '¿Está seguro de eliminar este examen?',
+                    icon: 'warning',
+                    buttons: ['Cancelar', 'Aceptar'],
+                    dangerMode: true
+                }).then((aceptar) => {
+                    if (aceptar) {
+                        confirmar_eliminar_pieza_dental_tto_impl(id);
+                    }
+                })
+        }
 
 
 function confirmar_eliminar_pieza_dental_tto_impl(id){
@@ -6298,11 +6398,18 @@ function confirmar_eliminar_pieza_dental_tto_impl(id){
         data:{
             id: id,
             id_paciente: id_paciente,
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
             _token: CSRF_TOKEN
         },
         success: function(resp){
             console.log(resp);
             if(resp.mensaje == 'OK'){
+                swal({
+                    title:'Exito',
+                    text:'Se ha eliminado con éxito',
+                    icon:'success',
+                });
                 $('#contenedor_tto_implantologia').empty();
                 $('#contenedor_tto_implantologia').append(resp.v);
                 // Verificar si existen exámenes en la respuesta
@@ -6314,22 +6421,47 @@ function confirmar_eliminar_pieza_dental_tto_impl(id){
                         ).join("\n");
 
                         $('#det_cir').val(detalleCirugia);
+                    let odontograma = resp.odontograma;
+                        let table = $('#presup_estado_pago').DataTable();
+                        table.clear().draw();
 
-                         // Poblar el select2 con las piezas únicas
-                        let piezasUnicas = [...new Set(resp.examenes.map(examen => examen.numero_pieza))];
+                        // Recorrer el odontograma y agregar nuevas filas
+                        // Recorrer el odontograma y agregar nuevas filas
+                        odontograma.forEach(function(odonto) {
 
-                        let selectPieza = $('#prot_pieza_imp');
-                        selectPieza.empty(); // Limpiamos el select antes de agregar nuevas opciones
+                            if (odonto.presupuesto == 1) {
+                                if(odonto.estado_pago == 'ok'){
+                                    var clase = 'bg-success';
+                                }else if(odonto.estado_pago == 'incompleto'){
+                                    var clase = 'bg-warning';
+                                }else{
+                                    var clase = 'bg-danger';
+                                }
 
-                        piezasUnicas.forEach(pieza => {
-                            let option = new Option(pieza, pieza, false, false); // Solo el número
-                            selectPieza.append(option);
+                                if(odonto.estado == 0){
+                                    var estado = 'PENDIENTE';
+                                }else{
+                                    var estado = 'TERMINADO';
+                                }
+                                // Agregar una nueva fila a la tabla
+                                let rowNode = table.row.add([
+                                    odonto.descripcion,
+                                    odonto.pieza,
+                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    0,
+                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    '<div class="circle '+clase+'"></div>',
+                                    estado, // Columna vacía
+
+                                ]).draw(false).node(); // Obtener el nodo de la fila
+
+                                // Agregar clases a la fila
+                                $(rowNode).addClass('text-center align-middle status-circle');
+                            }
                         });
-
-                        selectPieza.trigger('change'); // Refrescar select2
-                    } else {
-                        $('#det_cir').val('No hay detalles de cirugía disponibles.');
-                    }
+                } else {
+                    $('#det_cir').val('No hay detalles de cirugía disponibles.');
+                }
             }
         },
         error: function(error){
@@ -6381,10 +6513,10 @@ function ocultar_cirujano_impl_man(){
 
 function generar_pdf_protocolo_dental(){
     let nombre_cir = $('#prot_cirujanos_imp').val();
-
     let nombre_anest = $('#prot_anestesista_imp').val();
     let nombre_tons = $('#prot_tons_imp').val();
     let nombre_arsenalera = $('#prot_ars_imp').val();
+
     let id_forma_mat_impl = $('#prot_forma_mat').val();
     let forma_mat_impl = $('#prot_forma_mat option:selected').text();
     let valido = 1;
@@ -6392,11 +6524,7 @@ function generar_pdf_protocolo_dental(){
     if(id_forma_mat_impl == 13){
         forma_mat_impl = $('#det_prot_forma_mat').val();
     }
-    let id_marca_impl = $('#prot_marc_implante').val();
-    let marca_impl = $('#prot_marc_implante option:selected').text();
-    if(id_marca_impl == 3){
-        marca_impl = $('#obs_prot_marc_implante option:selected').text();
-    }
+    let implantes_insumos = $('#prot_implante').val();
 
     let id_implantes = $('#prot_proc').val();
     let implantes = $('#prot_proc option:selected').text();
@@ -6458,8 +6586,7 @@ function generar_pdf_protocolo_dental(){
             nombre_arsenalera: nombre_arsenalera,
             id_forma_mat_impl: id_forma_mat_impl,
             forma_mat_impl: forma_mat_impl,
-            id_marca_impl: id_marca_impl,
-            marca_impl: marca_impl,
+            implantes_insumos: implantes_insumos,
             id_implantes: id_implantes,
             implantes: implantes,
             id_prot_prot_corona: id_prot_prot_corona,
@@ -6467,8 +6594,11 @@ function generar_pdf_protocolo_dental(){
             prot_pieza_imp: prot_pieza_imp,
             det_cir: det_cir,
             id_paciente: dame_id_paciente(),
+            tipo:'implantologia',
             _token: CSRF_TOKEN
         }
+
+        console.log(data);
 
        $.ajax({
         type:'post',
@@ -6531,7 +6661,152 @@ function generar_pdf_protocolo_dental(){
 }
 
 function generar_pdf_protocolo_man_dental(){
+    let nombre_cir = $('#prot_cirujanos_imp_man').val();
+    let nombre_anest = $('#prot_anestesista_imp_man').val();
+    let nombre_tons = $('#prot_tons_imp_man').val();
+    let nombre_arsenalera = $('#prot_ars_imp_man').val();
 
+    let id_forma_mat_impl = $('#prot_forma_mat_man').val();
+    let forma_mat_impl = $('#prot_forma_mat_man option:selected').text();
+    let valido = 1;
+    let mensaje = '';
+    if(id_forma_mat_impl == 13){
+        forma_mat_impl = $('#det_prot_forma_mat_man').val();
+    }
+    let implantes_insumos = $('#prot_implante_man').val();
+
+    let id_implantes = $('#prot_proc_man').val();
+    let implantes = $('#prot_proc_man option:selected').text();
+    if(id_implantes == 3){
+        implantes = $('#det_prot_proc_man').val();
+    }
+
+    if(id_implantes == 0){
+        valido = 0;
+        mensaje += '<li>Implantes </li>';
+    }
+
+    let id_prot_prot_corona = $('#prot_prot_corona_man').val();
+    let prot_prot_corona = $('#prot_prot_corona_man option:selected').text();
+    if(id_prot_prot_corona == 3){
+        prot_prot_corona = $('#det_prot_prot_corona_man').val();
+    }
+
+    let prot_pieza_imp = $('#prot_pieza_imp_man').val();
+
+    if(id_forma_mat_impl == 0){
+        valido = 0;
+        mensaje += '<li>Materia Implante </li>';
+    }
+
+    if(nombre_cir == ''){
+        valido = 0;
+        mensaje += '<li>Cirujano </li>';
+    }
+
+    if(nombre_anest == ''){
+        valido = 0;
+        mensaje += '<li>Anestesista </li>';
+    }
+
+    if(nombre_arsenalera == ''){
+        valido = 0;
+        mensaje += '<li>Arsenalera </li>';
+    }
+
+    if(nombre_tons == ''){
+        valido = 0;
+        mensaje += '<li>Tons </li>';
+    }
+
+    if(prot_pieza_imp.length == 0){
+        valido = 0;
+        mensaje += '<li>Piezas </li>'
+    }
+    let det_cir = $('#det_cir_man').val();
+
+    if(valido == 1){
+
+
+        let data = {
+            nombre_cir: nombre_cir,
+            nombre_anest: nombre_anest,
+            nombre_tons: nombre_tons,
+            nombre_arsenalera: nombre_arsenalera,
+            id_forma_mat_impl: id_forma_mat_impl,
+            forma_mat_impl: forma_mat_impl,
+            implantes_insumos: implantes_insumos,
+            id_implantes: id_implantes,
+            implantes: implantes,
+            id_prot_prot_corona: id_prot_prot_corona,
+            prot_prot_corona: prot_prot_corona,
+            prot_pieza_imp: prot_pieza_imp,
+            det_cir: det_cir,
+            id_paciente: dame_id_paciente(),
+            tipo:'mantencion',
+            _token: CSRF_TOKEN
+        }
+
+       console.log(data);
+
+       $.ajax({
+        type:'post',
+        url:'{{ route("dental.generar_pdf_protocolo_impl") }}',
+        data: data,
+        success: function(data){
+            console.log(data);
+            if(data == 'error'){
+                swal({
+                    title:'Error',
+                    text:'Primero debe generar la liquidación.',
+                    icon:'error',
+                    button:"Aceptar"
+                });
+                return false;
+            }
+            if(data.ruta){
+                swal({
+                    title: "Reporte generado",
+                    text: "El reporte se ha generado correctamente",
+                    icon: "success",
+                    button: "Aceptar"
+                }).then(() => {
+                    // Abrir el PDF en una ventana emergente
+                    var width = 800;
+                    var height = 600;
+                    var left = (screen.width - width) / 2;
+                    var top = (screen.height - height) / 2;
+                    window.open(data.ruta, 'Presupuesto dental', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                });
+            }else{
+                swal({
+                    title: "Error",
+                    text: "Ha ocurrido un error al generar el reporte",
+                    icon: "error",
+                    button: "Aceptar"
+                });
+            }
+        },
+        else: function(error){
+            console.log(error.responseText);
+        }
+       });
+    }else{
+        swal({
+            title: "Campos requeridos",
+            content:{
+                element: "div",
+                attributes:{
+                    innerHTML: mensaje,
+                },
+            },
+            icon: "error",
+            buttons: "Aceptar",
+            DangerMode: true,
+        });
+
+        return false;
+    }
 }
 
 function eliminar_pieza_dental_post_impl(id){
@@ -6568,6 +6843,67 @@ function confirmar_eliminar_pieza_post_impl(id){
                 $('#contenedor_pieza_post_implantada').empty();
                 $('#contenedor_pieza_post_implantada').append(resp.v);
             }
+            if (resp.examenes && resp.examenes.length > 0) {
+                let detalleHistoria = resp.examenes.map(implante => {
+                let detalle = `La pieza ${implante.numero_pieza} presenta las siguientes observaciones:\n`;
+
+                // Móvil
+                if (implante.movil === "Sí") {
+                    detalle += `Se observa movilidad en la pieza${implante.obs_movil ? `, descrita como: ${implante.obs_movil}` : ''}. `;
+                } else {
+                    detalle += `No se observa movilidad en la pieza. `;
+                }
+
+                // Posición
+                if (implante.posicion === "Correcta") {
+                    detalle += `La posición del implante es adecuada. `;
+                } else {
+                    detalle += `La posición del implante es incorrecta, presentando las siguientes desviaciones: ` +
+                        `vestíbulo-palatino: ${implante.vp || 'N/A'}, ` +
+                        `vestíbulo-lingual: ${implante.vl || 'N/A'}, ` +
+                        `mesio-distal: ${implante.md || 'N/A'} y ` +
+                        `cráneo-caudal: ${implante.cc || 'N/A'}. `;
+                }
+
+                // Exposición de espiras
+                if (implante.exp_espiras === "Sí") {
+                    detalle += `Se evidencia exposición de espiras${implante.obs_exp_espiras ? `, descrita como: ${implante.obs_exp_espiras}` : ''}. `;
+                } else {
+                    detalle += `No se observa exposición de espiras. `;
+                }
+
+                // Supuración
+                if (implante.supuracion === "Sí") {
+                    detalle += `Se detecta presencia de supuración${implante.obs_supuracion ? `, descrita como: ${implante.obs_supuracion}` : ''}. `;
+                } else {
+                    detalle += `No se observa supuración. `;
+                }
+
+                // Estado de la encía
+                if (implante.estado_encia === "Anormal") {
+                    detalle += `El estado de la encía es anormal, descrito como: ${implante.obs_estado_encia || 'Sin observación'}. `;
+                } else {
+                    detalle += `El estado de la encía es normal. `;
+                }
+
+                // Pérdida ósea marginal
+                if (implante.perdida_osea_marginal) {
+                    detalle += `Se reporta una pérdida ósea marginal de aproximadamente ${implante.perdida_osea_marginal}. `;
+                }
+
+                // Observaciones generales
+                if (implante.observaciones) {
+                    detalle += `Observaciones adicionales: ${implante.observaciones}. `;
+                }
+
+                return detalle;
+            }).join("\n\n");
+
+            $('#det_cir_man').val(detalleHistoria);
+
+        } else {
+            $('#det_cir_man').val('No hay detalles del control de implantes disponibles.');
+        }
         },
         error: function(error){
             console.log(error);
@@ -6650,6 +6986,9 @@ function mostrar_nuevo_pieza_pfu(){
         type: 'post',
         data: {
             seccion:'pfu',
+            id_paciente: $('#id_paciente').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
             _token: '{{ csrf_token() }}'
         },
         success: function(resp) {
@@ -6717,6 +7056,9 @@ function mostrar_nuevo_pieza_pfp(){
         type: 'post',
         data: {
             seccion:'pfp',
+            id_paciente: $('#id_paciente').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
             _token: '{{ csrf_token() }}'
         },
         success: function(resp) {
@@ -7041,11 +7383,17 @@ function agregar_examenes_ficha() {
                     let valores_insumos = resp.valores[2];
                     let total_general = valores_boca_general + valores_odontograma + valores_insumos;
                     $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                    $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
                     $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                    $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
                     $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                    $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
                     $('#subtotal_clinico').val(formatoMoneda(total_general));
                     $('#total_clinico').val(formatoMoneda(total_general));
+                    // guardamos el total en un input hidden
                     $('#total_presupuesto_dental').val(total_general);
+
+                    $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
 
                     let table = $('#presup_estado_pago').DataTable();
                     table.clear().draw();
@@ -7083,7 +7431,20 @@ function agregar_examenes_ficha() {
                             // Agregar clases a la fila
                             $(rowNode).addClass('text-center align-middle status-circle');
                         }
-                        });
+                    });
+
+                $('#table_pagos_reasignar_odontograma tbody').empty();
+                odontograma.forEach(function(odonto) {
+                    if (odonto.presupuesto == 1) {
+                        let fila = `<tr>
+                            <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
+                            <td>${odonto.pieza}</td>
+                            <td>${formatoMoneda(odonto.valor)}</td>
+                            <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"> </i> </button></td>
+                        </tr>`;
+                        $('#table_pagos_reasignar_odontograma tbody').append(fila);
+                    }
+                });
             }else{
                 swal({
                     icon:'error',

@@ -364,6 +364,20 @@
                     } else {
                         $('#det_cir').val('No hay detalles de cirugía disponibles.');
                     }
+
+                    let odontograma = resp.odontograma;
+                    $('#table_pagos_reasignar_odontograma tbody').empty();
+                    odontograma.forEach(function(odonto) {
+                        if (odonto.presupuesto == 1) {
+                            let fila = `<tr>
+                                <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
+                                <td>${odonto.pieza}</td>
+                                <td>${formatoMoneda(odonto.valor)}</td>
+                                <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"> </i> </button></td>
+                            </tr>`;
+                            $('#table_pagos_reasignar_odontograma tbody').append(fila);
+                        }
+                    });
                 }
             },
             error: function(error){

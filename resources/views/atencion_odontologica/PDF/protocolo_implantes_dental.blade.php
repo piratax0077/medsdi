@@ -13,7 +13,24 @@
     <p><strong>Anestesista:</strong> {{ $nombre_anest }}</p>
     <p><strong>Arsenalera:</strong> {{ $nombre_ars }}</p>
     <p><strong>Implantes:</strong> {{ $implantes }}</p>
-    <p><strong>Marca del Implante:</strong> {{ $marca_impl }}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Marca</th>
+                <th>Cantidad</th>
+            </tr>
+        </thead>
+        <tbody style="text-align: center;">
+            @foreach ($insumos_array as $implante)
+                <tr>
+                    <td>{{ $implante['insumos'] }}</td>
+                    <td>{{ $implante['nombre_marca'] }}</td>
+                    <td>{{ $implante['cantidad'] }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
     <p><strong>Forma del Material:</strong> {{ $forma_mat_impl }}</p>
     <p><strong>Prótesis sobre Implante:</strong> {{ $prot_prot_corona }}</p>
     <p><strong>Detalles de Cirugía:</strong> {{ $det_cir }}</p>

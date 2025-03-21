@@ -1900,8 +1900,10 @@
                         $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
                         $('#subtotal_clinico').val(formatoMoneda(valores_odontograma));
                         $('#total_clinico').val(formatoMoneda(valores_odontograma));
-                        $('#total_presupuesto_dental').val(formatoMoneda(total_general));
+                        $('#total_presupuesto_dental').val(total_general);
                         $('#total_presupuesto').val(formatoMoneda(total_general));
+                        $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
+                        $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
                         $('#odon_adults').empty();
                         $('#odon_adults').append(response.odontograma_paciente_vista);
 
@@ -1912,35 +1914,48 @@
 
                         // Recorrer el odontograma y agregar nuevas filas
                         odontograma.forEach(function(odonto) {
-                                if (odonto.presupuesto == 1) {
-                                    if(odonto.estado_pago == 'ok'){
-                                        var clase = 'bg-success';
-                                    }else if(odonto.estado_pago == 'incompleto'){
-                                        var clase = 'bg-warning';
-                                    }else{
-                                        var clase = 'bg-danger';
-                                    }
-                                    if(odonto.estado == 0){
-                                        var estado = 'PENDIENTE';
-                                    }else{
-                                        var estado = 'TERMINADO';
-                                    }
-                                    // Agregar una nueva fila a la tabla
-                                    let rowNode = table.row.add([
-                                        odonto.descripcion,
-                                        odonto.pieza,
-                                        formatoMoneda(formatoMoneda(odonto.valor)),
-                                        0,
-                                        formatoMoneda(formatoMoneda(odonto.valor)),
-                                        '<div class="circle '+clase+'"></div>',
-                                        estado, // Columna vacía
-
-                                    ]).draw(false).node(); // Obtener el nodo de la fila
-
-                                    // Agregar clases a la fila
-                                    $(rowNode).addClass('text-center align-middle status-circle');
+                            if (odonto.presupuesto == 1) {
+                                if(odonto.estado_pago == 'ok'){
+                                    var clase = 'bg-success';
+                                }else if(odonto.estado_pago == 'incompleto'){
+                                    var clase = 'bg-warning';
+                                }else{
+                                    var clase = 'bg-danger';
                                 }
-                            });
+                                if(odonto.estado == 0){
+                                    var estado = 'PENDIENTE';
+                                }else{
+                                    var estado = 'TERMINADO';
+                                }
+                                // Agregar una nueva fila a la tabla
+                                let rowNode = table.row.add([
+                                    odonto.descripcion,
+                                    odonto.pieza,
+                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    0,
+                                    formatoMoneda(formatoMoneda(odonto.valor)),
+                                    '<div class="circle '+clase+'"></div>',
+                                    estado, // Columna vacía
+
+                                ]).draw(false).node(); // Obtener el nodo de la fila
+
+                                // Agregar clases a la fila
+                                $(rowNode).addClass('text-center align-middle status-circle');
+                            }
+                        });
+
+                        $('#table_pagos_reasignar_odontograma tbody').empty();
+                        odontograma.forEach(function(odonto) {
+                            if (odonto.presupuesto == 1) {
+                                let fila = `<tr>
+                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
+                                    <td>${odonto.pieza}</td>
+                                    <td>${formatoMoneda(odonto.valor)}</td>
+                                    <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"> </i> </button></td>
+                                </tr>`;
+                                $('#table_pagos_reasignar_odontograma tbody').append(fila);
+                            }
+                        });
                     }
                 },
                 error: function(error){

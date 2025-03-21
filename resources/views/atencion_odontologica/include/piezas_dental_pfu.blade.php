@@ -6,7 +6,13 @@
                     <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Pieza N°</label>
-                            <input type="text" class="form-control form-control-sm" name="n_pieza_pfu{{ $counter }}" id="n_pieza_pfu{{ $counter }}">
+                            <select name="n_pieza_pfu{{ $counter }}" id="n_pieza_pfu{{ $counter }}" class="form-control form-control-sm">
+                                @foreach ($odontograma as $o)
+                                    @if($o->presupuesto == 1)
+                                        <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
@@ -44,10 +50,11 @@
                     <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                         <div class="form-group fill">
                             <label for="tornillo_cor_pfu{{ $counter }}" class="floating-label-activo-sm">Tornillo</label>
-                            <select class="form-control form-control-sm" name="tornillo_cor_pfu{{ $counter }}" id="tornillo_cor_pfu{{ $counter }}" onchange="evaluar_para_carga_detalle('tornillo_cor_pfu{{ $counter }}','div_tornillo_cor_pfu{{ $counter }}','obs_tornillo_cor_pfu{{ $counter }}',3);">
+                            <select class="form-control form-control-sm" name="tornillo_cor_pfu{{ $counter }}" id="tornillo_cor_pfu{{ $counter }}" onchange="evaluar_para_carga_detalle('tornillo_cor_pfu{{ $counter }}','div_tornillo_cor_pfu{{ $counter }}','obs_tornillo_cor_pfu{{ $counter }}',4);">
                                 <option value="1">Tornillo rodado</option>
                                 <option value="2">Fractura de tornillo</option>
-                                <option value="3">Otra</option>
+                                <option value="3">Tornillo óptimo</option>
+                                <option value="4">Otra</option>
                             </select>
                         </div>
                         <div class="form-group" id="div_tornillo_cor_pfu{{ $counter }}" style="display:none;">
@@ -107,7 +114,7 @@
         }
         var tornillo_cor_pfu = $('#tornillo_cor_pfu'+counter).val();
         var tornillo_cor_pfu_text = $('#tornillo_cor_pfu'+counter+' option:selected').text();
-        if(tornillo_cor_pfu == 3){
+        if(tornillo_cor_pfu == 4){
             var tornillo_cor_pfu_text = $('#obs_tornillo_cor_pfu'+counter).val();
         }
         var prueba_ajuste_cor_pfu = $('#prueba_ajuste_cor_pfu'+counter).val();
