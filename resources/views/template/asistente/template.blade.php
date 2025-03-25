@@ -865,7 +865,7 @@
                                                         $('#datos_consulta_region').html(data.paciente.direccion.region.nombre);
                                                         $('#input_reserva_hora_region_asistente').val(data.paciente.direccion.ciudad.id_region);
                                                         $('#datos_consulta_ciudad').html(data.paciente.direccion.ciudad.nombre);
-                                                        buscar_ciudad2('input_reserva_hora_ciudad_asistente', 'input_reserva_hora_region_asistente', data.paciente.direccion.ciudad.id);
+                                                        buscar_ciudad_general('input_reserva_hora_ciudad_asistente', 'input_reserva_hora_region_asistente', data.paciente.direccion.ciudad.id);
                                                         // $('#input_reserva_hora_ciudad_asistente').val(data.paciente.direccion.ciudad.id);
                                                     }
                                                     else

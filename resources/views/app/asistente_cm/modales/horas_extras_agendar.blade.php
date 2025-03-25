@@ -369,7 +369,12 @@
                     $('#he_reserva_sexo').text('Femenino');
                 }
                 $('#he_reserva_convenio').html(data.registro.prevision.nombre);
-                $('#he_reserva_direccion').html(data.registro.direccion.direccion+' '+data.registro.direccion.numero_dir+', '+data.registro.direccion.ciudad.nombre);
+
+                if(data.registro?.["direccion"] !== undefined && data.registro?.["direccion"] != null)
+                    $('#he_reserva_direccion').html(data.registro.direccion.direccion+' '+data.registro.direccion.numero_dir+', '+data.registro.direccion.ciudad.nombre);
+                else
+                    $('#he_reserva_direccion').html('');
+
                 $('#he_reserva_hora_email').html(data.registro.email);
                 $('#he_reserva_hora_telefono').html(data.registro.telefono_uno);
 
@@ -551,7 +556,7 @@
         .done(function(data) {
             if (data != null) {
 
-                data = JSON.parse(data);
+                // data = JSON.parse(data);
                 if(data.estado == 'error')
                 {
                     swal({
