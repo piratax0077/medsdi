@@ -228,6 +228,9 @@
     <!-- flatpickr -->
     <script src="{{ asset('js/flatpickr/flatpickr.min.js') }}"></script>
 
+    <script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
+	
+	<script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
 
     <script>
 

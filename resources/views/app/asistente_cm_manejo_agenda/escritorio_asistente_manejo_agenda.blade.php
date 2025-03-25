@@ -1602,6 +1602,7 @@
 
         {{-- BUSCAR PACIENTE --}}
         function buscar_paciente() {
+			
             $('#form_reseva_de_horas').submit(function(e) {
                 e.preventDefault();
             });
@@ -1659,6 +1660,10 @@
                     },
                 })
                 .done(function(data) {
+					
+					$('#div_cargando').hide();
+					$('#div_boton_buscar_paciente').show();
+						
                     console.log(JSON.parse(data));
 
                     if (data !== 'null') {
@@ -1839,6 +1844,9 @@
                     text: 'Debe ingresar RUT para buscar.',
                     icon: "error",
                 });
+				
+                $('#div_cargando').hide();
+                $('#div_boton_buscar_paciente').show();
             }
         };
 

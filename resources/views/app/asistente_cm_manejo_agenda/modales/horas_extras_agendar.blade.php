@@ -10,6 +10,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <input type="hidden" name="m_agendar_hora_extra_agendar_id_paciente" id="m_agendar_hora_extra_agendar_id_paciente" value="">
+                        <input type="hidden" name="m_agendar_hora_extra_prereserva" id="m_agendar_hora_extra_prereserva" value="0">
                         <div class="col-md-6">
                             <label class="mt-4">El Profesional atiende los dias <span id="m_agendar_hora_extra_dias_atencion" class="hljs-strong"></span></label>
                         </div>
@@ -39,7 +40,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger align-middle" onclick="agendar_lista_epera()"; data-dismiss="modal">Eliminar</button>
+                {{-- <button type="button" class="btn btn-danger align-middle" onclick="agendar_lista_epera()"; data-dismiss="modal">Eliminar</button> --}}
                 <button type="button" class="btn btn-info align-middle" onclick="cerrar_modal_he_agenda()"; data-dismiss="modal">Cerrar</button>
             </div>
         </div>
@@ -52,7 +53,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info pt-3 pb-2">
-                <h5 class="modal-title text-white text-center">Tomar hora</h5>
+                <h5 class="modal-title text-white text-center">Tomar horadd2</h5>
                 <button id="le_cerrar_tomar_hora" type="button" class="close text-white close_he_agenda_agregar_paciente" onclick="$('#he_agenda_agregar_paciente').modal('hide');" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -67,7 +68,7 @@
                     <input type="hidden" id="he_reserva_hora_hora_consulta" name="he_reserva_hora_hora_consulta" value="">
                     <input type="hidden" id="he_reserva_hora_origen" name="he_reserva_hora_origen" value="escritorio_asistente">
                     <input type="hidden" id="he_reserva_hora_id_asistente" name="he_reserva_hora_id_asistente" value="{{ $asistente->id }}">
-
+                    <input type="hidden" id="he_reserva_hora_prereserva" name="he_reserva_hora_prereserva" value="0">
                     {{--  VISUALIZACION DE DATOS DEL PACIENTE  --}}
                     <div id="he_reserva_datos_paciente" class="row mx-3">
                         <table class="table table-borderless table-xs">
@@ -131,7 +132,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger close_he_agenda_agregar_paciente" onclick="$('#he_agenda_agregar_paciente').modal('hide');" data-dismiss="modal">Cancelar</button>
-                            <button type="button" onclick="agendar_hora_le();" class="btn btn-info">Agendar Hora</button>
+                            <button type="button" id="he_reserva_hora_btn_agendar" onclick="agendar_hora_le();" class="btn btn-info">Agendar Hora</button>
 
                         </div>
                     </div>
@@ -150,6 +151,14 @@
         $('#m_agendar_hora_extra').modal('hide');
         $('#m_agendar_hora_extra_agendar_id_paciente').val('');
     }
+
+    /** ABRIR MODAL */
+    // function abrir_agendar_lista_epera(id, id_paciente)
+    // {
+    //     $('#m_agendar_hora_extra').modal('show');
+    //     $('#m_agendar_hora_extra_agendar_id_paciente').val(id_paciente);
+    //     carga_calendario_profesional_he();
+    // }
 
     /** CARGA DIA DE TRABAJO DE PROFESIONAL */
     function carga_calendario_profesional_he()
@@ -363,6 +372,21 @@
                 $('#he_reserva_direccion').html(data.registro.direccion.direccion+' '+data.registro.direccion.numero_dir+', '+data.registro.direccion.ciudad.nombre);
                 $('#he_reserva_hora_email').html(data.registro.email);
                 $('#he_reserva_hora_telefono').html(data.registro.telefono_uno);
+
+
+                console.log('generar_reserva_cita_hora_extra');
+                console.log('he_reserva_hora_prereserva');
+                console.log($('#he_reserva_hora_prereserva').val());
+                if ($('#he_reserva_hora_prereserva').val() == 1)
+                {
+                    $('#he_reserva_hora_btn_agendar').attr('onclick', 'agendar_hora_le_prereserva()');
+                }
+                else
+                {
+                    $('#he_reserva_hora_btn_agendar').attr('onclick', 'agendar_hora_le()');
+                }
+
+
             }
             else
             {
@@ -381,9 +405,9 @@
     }
 
     {{--  GENERAR HORA USUARIO EXISTENTE  --}}
-    function agendar_hora_le()
-    {
-        let url = "{{ route('agenda.paciente.solicitar.hora') }}";
+    function agendar_hora_le() {
+
+        let url = "{{ route('agenda.agendar_hora_extra_nuevo_paciente_prereserva') }}";
         let _token = $('#_token').val();
         let fecha_consulta = $('#he_reserva_hora_fecha_consulta').val()+' '+$('#he_reserva_hora_hora_consulta').val();
         let reserva_hora_id = $('#he_reserva_hora_id_paciente').val();
@@ -480,6 +504,107 @@
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
+    };
+
+    function agendar_hora_le_prereserva() {
+
+        let url = "{{ route('agenda.agendar_hora_extra_nuevo_paciente_prereserva') }}";
+        let _token = $('#_token').val();
+        let fecha_consulta = $('#he_reserva_hora_fecha_consulta').val()+' '+$('#he_reserva_hora_hora_consulta').val();
+        let reserva_hora_id = $('#he_reserva_hora_id_paciente').val();
+        let id_profesional = $('#he_reserva_hora_id_profesional').val();
+        let id_lugar_atencion = $('#he_reserva_hora_id_lugar_atencion').val();
+        let id_asistente = $('#he_reserva_hora_id_asistente').val();
+        let origen = $('#he_reserva_hora_origen').val();
+        let tipo_agenda = $('#id_tipo_agenda').val();
+        var tipo_agenda_text = 'C';
+
+        switch (tipo_agenda) {
+            case '1':
+                tipo_agenda_text = 'C';//CONSULTA
+                break;
+            case '2':
+                tipo_agenda_text = 'D';//DENTAL
+                break;
+            case '3':
+                tipo_agenda_text = 'T';//TELEMEDICINA
+                break;
+            case '4':
+                tipo_agenda_text = 'E';//EXAMEN
+                break;
+        }
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: {
+                _token: _token,
+                id_paciente: reserva_hora_id,
+                id_profesional: id_profesional,
+                fecha_consulta: fecha_consulta,
+                id_lugar_atencion: id_lugar_atencion,
+                id_asistente: id_asistente,
+                origen: origen,
+                tipo_hora_medica: tipo_agenda_text,
+            }
+        })
+        .done(function(data) {
+            if (data != null) {
+
+                data = JSON.parse(data);
+                if(data.estado == 'error')
+                {
+                    swal({
+                        title: "Error!",
+                        text: data.msj,
+                        icon: "error",
+                        type: "error",
+                        buttons: "Cerrar",
+                    });
+                }
+                else
+                {
+                    swal({
+                        title: "Hora Agendada Correctamente",
+                        icon: "success",
+                        buttons: "Aceptar",
+                        // DangerMode: true,
+                    });
+                }
+                $('#he_agenda_agregar_paciente').modal('hide');
+
+                $('#he_reserva_hora_id_profesional').val('');
+                $('#he_reserva_hora_id_lugar_atencion').val('');
+                $('#he_reserva_hora_fecha_consulta').val('');
+                $('#he_reserva_hora_hora_consulta').val('');
+                $('#he_reserva_hora_id_paciente').val('');
+                $('#le_reserva_rut_paciente').html('');
+                $('#he_reserva_hora_nombre').html('');
+                $('#he_reserva_fecha_nacimiento').html('');
+                $('#he_reserva_sexo').text('');
+                $('#he_reserva_convenio').html('');
+                $('#he_reserva_direccion').html('');
+                $('#he_reserva_hora_email').html('');
+                $('#he_reserva_hora_telefono').html('');
+
+                cargarAgendaProfesional('');
+
+            }
+            else
+            {
+                swal({
+                    title: "Error!",
+                    text: "Problema en la solicitud de la hora",
+                    icon: "error",
+                    type: "error",
+                    buttons: "Cerrar",
+                });
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
     };
 
 

@@ -12,7 +12,7 @@
                 <h6 id="cabecera_hora_medica" class="text-white f-16 mb-0 mt-0">Información del paciente</h6>
             </div>
             <div class="modal-body">
-
+                <div id="modal_consulta_mensaje" style="color: red; font-weight: bold;"></div>
                 <form id="datos_hora_medica">
                     <div class="row">
                         <div class="col-12">
@@ -143,6 +143,88 @@
                                         </td>
                                         </th>
                                     </tr>
+                                     {{-- direccion --}}
+                                     <tr>
+                                        <th scope="row">
+                                            <strong>Direcion</strong>
+                                        <td>
+
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_direcion"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            id="input_reserva_hora_direccion_asistente" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Número</strong>
+                                        <td>
+
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_numero"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            id="input_reserva_hora_numero_asistente" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Región</strong>
+                                        <td>
+
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_region"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <select name="input_reserva_hora_region_asistente" id="input_reserva_hora_region_asistente" class="form-control" onchange="buscar_ciudad_general('input_reserva_hora_region_asistente', 'input_reserva_hora_ciudad_asistente', 0);">
+                                                            <option value="0">Seleccione región</option>
+                                                            @foreach ($region as $reg)
+                                                                <option value="{{ $reg->id }}">{{ $reg->nombre }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Ciudad</strong>
+                                        <td>
+
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_ciudad"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <select name="input_reserva_hora_ciudad_asistente" id="input_reserva_hora_ciudad_asistente" class="form-control">
+                                                            <option value="0">Seleccione comuna</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        </th>
+                                    </tr>
                                     <tr class="paciente_edit_asistente" style="display:none">
 
                                         <td>
@@ -234,7 +316,7 @@
                 </div>
 
                 <div>
-                    <button type="submit" onclick="opcion_confirmar_hora()" id="hm_confirmar_hora"
+                    <button type="button" onclick="opcion_confirmar_hora()" id="hm_confirmar_hora"
                         class="btn btn-success btn-sm">
                         Confirmar Hora
                     </button>
@@ -706,7 +788,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info pt-3 pb-2">
                 <h5 class="modal-title text-white text-center" id="titulo_modal_reserva_especialidad">Tomar hora</h5>
-                <button id="cerrar_tomar_hora" type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button id="cerrar_tomar_hora" type="button" class="close text-white" data-dismiss="modal" aria-label="Close" onclick="$('#agenda_agregar_paciente').modal('hide');"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
 
@@ -730,10 +812,15 @@
                         </form>
                     </div>
                     <div class="col-sm-3 col-md-3 mb-3">
-                        <button class="btn btn-sm btn-info btn-block" onclick="buscar_paciente();"
-                            type="button"id="button-addon2">
-                            <i class="feather icon-search"></i> Buscar
-                        </button>
+                        <div id="div_cargando" style="display: none;">
+                            <img src="{{ asset('images/spinner.svg') }}" alt="cargando">
+                        </div>
+                        <div id="div_boton_buscar_paciente" style="display: ">
+                            <button class="btn btn-sm btn-info btn-block" onclick="buscar_paciente();"
+                                type="button"id="button-addon2">
+                                <i class="feather icon-search"></i> Buscar
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -994,7 +1081,7 @@
                         </div>
 
                         <div class="modal-footer mb-0 pt-1 pb-0 paciente_view">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close"><i
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close" onclick="$('#agenda_agregar_paciente').modal('hide');"><i
                                     class="feather icon-x"></i> Cancelar</button>
                             <button type="button" onclick="agendar_hora();" class="btn btn-info"><i
                                     class="feather icon-check"></i> Agendar hora</button>
@@ -1172,7 +1259,7 @@
                                         <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                                <input type="tel" class="form-control form-control-sm"
+                                                <input type="tel" class="form-control form-control-sm mask_telefono"
                                                     name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno"
                                                     onchange="validar_campo_telefono();">
                                             </div>
@@ -1378,7 +1465,7 @@
                                                     <div class="form-group">
                                                         <label
                                                             class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                                        <input type="tel" class="form-control form-control-sm"
+                                                        <input type="tel" class="form-control form-control-sm mask_telefono"
                                                             name="reserva_hora_representante_telefono_uno"
                                                             id="reserva_hora_representante_telefono_uno"
                                                             onchange="validar_campo_telefono_representante();">
@@ -1543,7 +1630,7 @@
                                         <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                                <input type="tel" class="form-control form-control-sm"
+                                                <input type="tel" class="form-control form-control-sm mask_telefono"
                                                     name="prereserva_hora_telefono_uno"
                                                     id="prereserva_hora_telefono_uno"
                                                     onchange="validar_campo_telefono();">
@@ -2387,6 +2474,11 @@
         var sexo_paciente = $('#input_reserva_sexo_asistente').val();
         var email_paciente = $('#input_reserva_hora_email_asistente').val();
         var telefono_paciente = $('#input_reserva_hora_telefono_asistente').val();
+        var direccion = $('#input_reserva_hora_direccion_asistente').val();
+        var numero = $('#input_reserva_hora_numero_asistente').val();
+        var region = $('#input_reserva_hora_region_asistente').val();
+        var ciudad = $('#input_reserva_hora_ciudad_asistente').val();
+
         var valido = 1;
         var mensaje = '';
 
@@ -2399,6 +2491,10 @@
             sexo: sexo_paciente,
             email: email_paciente,
             telefono: telefono_paciente,
+            direccion: direccion,
+            numero_direccion: numero,
+            region: region,
+            ciudad: ciudad,
         }
 
         if (id_paciente == '') {
@@ -2427,6 +2523,26 @@
             valido = 0;
             mensaje += 'Sexo del Pacientet requerido\n';
         }
+        if(direccion == '')
+        {
+            valido = 0;
+            mensaje += 'direccion del Paciente requerido\n';
+        }
+        if(numero == '')
+        {
+            valido = 0;
+            mensaje += 'numero del Paciente requerido\n';
+        }
+        if(region == '')
+        {
+            valido = 0;
+            mensaje += 'region del Paciente requerido\n';
+        }
+        if(ciudad == '')
+        {
+            valido = 0;
+            mensaje += 'ciudad del Paciente requerido\n';
+        }
 
         if (valido == 1) {
             if (modificando == 1) {
@@ -2445,14 +2561,17 @@
                             sexo: sexo_paciente,
                             email: email_paciente,
                             telefono: telefono_paciente,
+                            direccion: direccion,
+                            numero_direccion: numero,
+                            region: region,
+                            ciudad: ciudad,
                         },
                     })
                     .done(function(data) {
                         console.log(data);
                         if (data.estado == 1) {
                             if (data.estado == 1) {
-                                $('#datos_consulta_nombre').text(nombre_paciente + ' ' + apellido_uno_paciente +
-                                    ' ' + apellido_dos_paciente);
+                                $('#datos_consulta_nombre').text(nombre_paciente + ' ' + apellido_uno_paciente + ' ' + apellido_dos_paciente);
                                 $('#datos_consulta_edad').text(fecha_nacimiento);
                                 if (sexo_paciente == 'M') {
                                     $('#datos_consulta_sexo').text('Masculino');
@@ -2461,6 +2580,19 @@
                                 }
                                 $('#datos_consulta_email').text(email_paciente);
                                 $('#datos_consulta_telefono').text(telefono_paciente);
+
+                                $('#datos_consulta_direcion').text(data.paciente.direccion);
+                                $('#datos_consulta_numero').text(data.paciente.numero_direccion);
+                                $('#datos_consulta_region').text(data.paciente.region);
+                                $('#datos_consulta_ciudad').text(data.paciente.ciudad);
+
+                                if( data.paciente.id_direccion != '' )
+                                {
+                                    $('#hm_anular_hora').removeAttr('disabled');
+                                    $('#hm_confirmar_hora').removeAttr('disabled');
+                                    $('#modal_consulta_mensaje').text('');
+                                }
+
 
                                 $('.paciente_view_asistente').show();
                                 $('.paciente_edit_asistente').hide();

@@ -1207,7 +1207,9 @@ Route::group([
     Route::get('Hora-medica/hora/agendar/agendar', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_horas'])->name('agenda.agendar_hora');
     Route::get('Hora-medica/hora/agendar/paciente/nuevo', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_hora_nuevo_paciente'])->name('agenda.agendar_hora_nuevo_paciente');
     Route::get('Hora-medica/hora/agendar/prereserva/paciente/nuevo', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_hora_nuevo_paciente_prereserva'])->name('agenda.agendar_hora_nuevo_paciente_prereserva');
+    Route::post('Hora-medica/hora/extra/agendar/prereserva/paciente/nuevo', [App\Http\Controllers\EscritorioAsistente::class, 'agendar_hora_extra_nuevo_paciente_prereserva'])->name('agenda.agendar_hora_extra_nuevo_paciente_prereserva');
     Route::post('Hora-medica/paciente/nuevo', [App\Http\Controllers\AsistenteController::class, 'AgregarNuevoPaciente'])->name('agenda.paciente.nuevo');
+    Route::post('Hora-medica/paciente/nuevo/prereserva', [App\Http\Controllers\AsistenteController::class, 'AgregarNuevoPacientePrereserva'])->name('agenda.paciente.nuevo.prereserva');
     Route::get('Hora-medica/validar/email', [App\Http\Controllers\EscritorioProfesional::class, 'validar_rut'])->name('agenda.validar_email');
 	Route::get('Hora-medica/validar/email/paciente', [App\Http\Controllers\EscritorioProfesional::class, 'validar_email_paciente'])->name('agenda.paciente.validar_email');
 

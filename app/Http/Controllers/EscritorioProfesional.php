@@ -1161,7 +1161,28 @@ class EscritorioProfesional extends Controller
     public function buscar_hora_medica(Request $request)
     {
         $hora_medica = HoraMedica::where('id', $request->id_hora_medica)->first();
-        $paciente = Paciente::where('id', $hora_medica->id_paciente)->first();
+        $paciente = Paciente::where('id', $hora_medica->id_paciente)
+                                // ->with(['Direccion' => function($query){
+                                //     $query->with(['Ciudad' => function($query2){
+                                //         $query2->with('Region')->first();
+                                //     }])->first();
+                                // }])
+                                ->first();
+        if(!empty($paciente->id_direccion))
+        {
+            $direccion = Direccion::with('Ciudad')->find($paciente->id_direccion);
+            $dir_regi = Region::find($direccion->ciudad->id_region);
+            if($dir_regi)
+            {
+                $direccion->region = $dir_regi;
+            }
+
+            if($direccion)
+            {
+                $paciente->direccion = $direccion;
+            }
+        }
+
         if(!empty($hora_medica->id_profesional))
             $profesional = Profesional::where('id', $hora_medica->id_profesional)->first();
         else

@@ -1627,6 +1627,10 @@
 
         {{-- BUSCAR PACIENTE --}}
         function buscar_paciente() {
+
+            $('#div_cargando').show();
+            $('#div_boton_buscar_paciente').hide();
+
             $('#form_reseva_de_horas').submit(function(e) {
                 e.preventDefault();
             });
@@ -1690,10 +1694,14 @@
 					})
 					.done(function(data) {
 
+                        $('#div_cargando').hide();
+                        $('#div_boton_buscar_paciente').show();
+
                         console.log(JSON.parse(data));
 						if (data !== 'null') {
 							data = JSON.parse(data);
-							if(data.tipo_paciente == 'SI')
+
+                            if(data.tipo_paciente == 'SI')
 							{
                                 {{-- validacion para especialidad de pediatria --}}
                                 @if (isset($profesional))
@@ -1845,6 +1853,7 @@
 
                                 console.log('INFORMACION DE PRE RESERVA');
                                 console.log(data);
+
                                 // INFORMACION DE PRE RESERVA
                                 $('#prereserva_hora_nombres_paciente').val(data.nombres);
                                 $('#prereserva_hora_apellido_uno').val(data.apellido_uno);
@@ -1855,7 +1864,6 @@
 						} else {
 							$('#reserva_datos_paciente').hide();
 							$('#reserva_agregar_paciente_hora').show();
-
 						}
 
 					})
@@ -1870,6 +1878,9 @@
                     text: 'Debe ingresar RUT para buscar.',
                     icon: "error",
                 });
+
+                $('#div_cargando').hide();
+                $('#div_boton_buscar_paciente').show();
             }
 		};
 

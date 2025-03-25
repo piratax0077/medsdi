@@ -65,7 +65,11 @@ class AsistenteController extends Controller
                     $fechaConvertida = Carbon::createFromFormat('d/m/Y', $request->reserva_hora_fecha_nac)->format('Y-m-d');
                 } else {
                     // Si ya está en formato yyyy-mm-dd
-                    $fechaConvertida = Carbon::createFromFormat('Y-m-d', $request->reserva_hora_fecha_nac)->format('Y-m-d');
+					if(!empty($request->reserva_hora_fecha_nac))
+						$fechaConvertida = Carbon::createFromFormat('Y-m-d', $request->reserva_hora_fecha_nac)->format('Y-m-d');
+					if(!empty($request->fecha_nac))
+						$fechaConvertida = Carbon::createFromFormat('Y-m-d', $request->fecha_nac)->format('Y-m-d');
+				
                 }
                 $paciente->fecha_nac = $fechaConvertida;
 
@@ -140,6 +144,61 @@ class AsistenteController extends Controller
                         }
                     }
                     /** CIERRE CREACION DE USUARIO  */
+                }
+                else
+                {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'Problema a crear el Paciente.';
+                }
+            }
+            else
+            {
+                $pacienteFinal = $validacion_rut;
+            }
+            $datos['paciente_final'] = $pacienteFinal->id;
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+    public function AgregarNuevoPacientePrereserva(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if($valido)
+        {
+            /** CREAR PACIENTE */
+            $pacienteFinal = '';
+            /** valida rut */
+            $validacion_rut = Paciente::where('rut', $request->rut)->first();
+            if(!$validacion_rut)
+            {
+                /** creo paciente */
+                $paciente = new Paciente();
+                $paciente->rut = $request->rut;
+                $paciente->nombres = $request->nombres;
+                $paciente->apellido_uno = $request->apellido_uno;
+                $paciente->apellido_dos = $request->apellido_dos;
+                $paciente->sexo = 'M';
+
+                $paciente->id_prevision = 1;
+                $paciente->email = $request->email;
+                $paciente->telefono_uno = $request->telefono_uno;
+
+                if($paciente->save())
+                {
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'Paciente creado.';
+
+                    $pacienteFinal = Paciente::find($paciente->id);
                 }
                 else
                 {

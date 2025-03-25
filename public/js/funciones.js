@@ -31,3 +31,20 @@ function formatoRut(rut)
 
     rut.setCustomValidity('');
 }
+
+$(document).ready(function () {
+    $('.mask_telefono').mask('+56 Z0 0000 0000', {
+        translation: {
+            'Z': {
+                pattern: /[29]/, // Acepta 2 o 9 como primer dígito del prefijo
+                optional: false // Este dígito es obligatorio
+            },
+            '0': {
+                pattern: /[0-9]/, // Acepta cualquier dígito
+                optional: true // Hace que el segundo dígito sea opcional
+            }
+        },
+        placeholder: '+56 _ ____ ____', // Placeholder para guiar al usuario
+        clearIfNotMatch: true // Limpiar el campo si no coincide con la máscara
+    });
+});
