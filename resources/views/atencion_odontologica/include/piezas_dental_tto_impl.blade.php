@@ -155,9 +155,9 @@
             </div>
         </div>
         <div class="card-footer">
-            <div class="form-group">
+            <div class="form-group float-right">
                 <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_dental_tto_impl()">X</button>
-                <button type="button" class="btn btn-icon btn-primary-light-c" onclick="guardar_pieza_dental_tto_impl({{ $counter }})"><i class="fas fa-save"></i></button>
+                <button type="button" class="btn btn-success-light-c" onclick="guardar_pieza_dental_tto_impl({{ $counter }})"><i class="fas fa-check"></i> Prestación Terminada</button>
             </div>
         </div>
     </div>
@@ -292,6 +292,12 @@
             success: function(resp){
                 console.log(resp);
                 if(resp.mensaje == 'OK'){
+                    swal({
+                        title: "Pieza guardada",
+                        text: "Pieza guardada correctamente",
+                        icon: "success",
+                        button: "Aceptar",
+                    });
                     $('#contenedor_tto_implantologia').empty();
                     $('#contenedor_tto_implantologia').append(resp.v);
                     $('#pieza_dental_tto_impl').empty();
@@ -316,9 +322,62 @@
                         });
 
                         selectPieza.trigger('change'); // Refrescar select2
+                        let odontograma = resp.odontograma;
+                        let table = $('#presup_estado_pago').DataTable();
+
+                            // Limpiar la tabla antes de agregar nuevas filas
+                            table.clear().draw();
+
+                            // Recorrer el odontograma y agregar nuevas filas
+                            odontograma.forEach(function(odonto) {
+
+                                if (odonto.presupuesto == 1) {
+                                    if(odonto.estado_pago == 'ok'){
+                                        var clase = 'bg-success';
+                                    }else if(odonto.estado_pago == 'incompleto'){
+                                        var clase = 'bg-warning';
+                                    }else{
+                                        var clase = 'bg-danger';
+                                    }
+
+                                    if(odonto.estado == 0){
+                                        var estado = 'PENDIENTE';
+                                    }else{
+                                        var estado = 'TERMINADO';
+                                    }
+                                    // Agregar una nueva fila a la tabla
+                                    let rowNode = table.row.add([
+                                        odonto.descripcion,
+                                        odonto.pieza,
+                                        formatoMoneda(formatoMoneda(odonto.valor)),
+                                        0,
+                                        formatoMoneda(formatoMoneda(odonto.valor)),
+                                        '<div class="circle '+clase+'"></div>',
+                                        estado, // Columna vacía
+
+                                    ]).draw(false).node(); // Obtener el nodo de la fila
+
+                                    // Agregar clases a la fila
+                                    $(rowNode).addClass('text-center align-middle status-circle');
+                                }
+                            });
                     } else {
                         $('#det_cir').val('No hay detalles de cirugía disponibles.');
                     }
+
+                    let odontograma = resp.odontograma;
+                    $('#table_pagos_reasignar_odontograma tbody').empty();
+                    odontograma.forEach(function(odonto) {
+                        if (odonto.presupuesto == 1) {
+                            let fila = `<tr>
+                                <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
+                                <td>${odonto.pieza}</td>
+                                <td>${formatoMoneda(odonto.valor)}</td>
+                                <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"> </i> </button></td>
+                            </tr>`;
+                            $('#table_pagos_reasignar_odontograma tbody').append(fila);
+                        }
+                    });
                 }
             },
             error: function(error){

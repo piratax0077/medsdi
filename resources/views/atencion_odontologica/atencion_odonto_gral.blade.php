@@ -276,6 +276,10 @@
                             $('#total_clinico').val(formatoMoneda(total_general));
                             // guardamos el total en un input hidden
                             $('#total_presupuesto_dental').val(total_general);
+
+                            $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
+                            $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
+
                             let table = $('#presup_estado_pago').DataTable();
 
                             // Limpiar la tabla antes de agregar nuevas filas

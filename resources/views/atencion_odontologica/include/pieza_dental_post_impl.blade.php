@@ -74,19 +74,6 @@
                             <textarea class="form-control form-control-sm" data-titulo="General_endodoncia"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_sut_post_impl{{ $counter }}" id="obs_sut_post_impl{{ $counter }}"></textarea>
                         </div>
                     </div>
-                    {{-- <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                        <div class="form-group">
-                            <label class="floating-label-activo-sm">Desgaste del implante</label>
-                            <select name="desg_impl"  id="desg_impl" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('desg_impl','div_desg_impl','obs_desg_impl',2);">
-                                <option value="1">No</option>
-                                <option value="2">Si(describa)</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="div_desg_impl" style="display:none;">
-                            <label class="floating-label-activo-sm">Describa otro</label>
-                            <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_desg_impl" id="obs_desg_impl"></textarea>
-                        </div>
-                    </div> --}}
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Estado de la encía</label>
@@ -229,9 +216,78 @@
             success: function(resp){
                 console.log(resp);
                 if(resp.mensaje == 'OK'){
+                    swal({
+                        title: "Guardado",
+                        text: "Registro guardado correctamente",
+                        icon: "success",
+                        button: "Aceptar",
+                    });
                     $('#contenedor_pieza_post_implantada').empty();
                     $('#contenedor_pieza_post_implantada').append(resp.v);
                     $('#pieza_post_implantada').empty();
+                    if (resp.examenes && resp.examenes.length > 0) {
+                        let detalleHistoria = resp.examenes.map(implante => {
+                            let detalle = `La pieza ${implante.numero_pieza} presenta las siguientes observaciones:\n`;
+
+                            // Móvil
+                            if (implante.movil === "Sí") {
+                                detalle += `Se observa movilidad en la pieza${implante.obs_movil ? `, descrita como: ${implante.obs_movil}` : ''}. `;
+                            } else {
+                                detalle += `No se observa movilidad en la pieza. `;
+                            }
+
+                            // Posición
+                            if (implante.posicion === "Correcta") {
+                                detalle += `La posición del implante es adecuada. `;
+                            } else {
+                                detalle += `La posición del implante es incorrecta, presentando las siguientes desviaciones: ` +
+                                    `vestíbulo-palatino: ${implante.vp || 'N/A'}, ` +
+                                    `vestíbulo-lingual: ${implante.vl || 'N/A'}, ` +
+                                    `mesio-distal: ${implante.md || 'N/A'} y ` +
+                                    `cráneo-caudal: ${implante.cc || 'N/A'}. `;
+                            }
+
+                            // Exposición de espiras
+                            if (implante.exp_espiras === "Sí") {
+                                detalle += `Se evidencia exposición de espiras${implante.obs_exp_espiras ? `, descrita como: ${implante.obs_exp_espiras}` : ''}. `;
+                            } else {
+                                detalle += `No se observa exposición de espiras. `;
+                            }
+
+                            // Supuración
+                            if (implante.supuracion === "Sí") {
+                                detalle += `Se detecta presencia de supuración${implante.obs_supuracion ? `, descrita como: ${implante.obs_supuracion}` : ''}. `;
+                            } else {
+                                detalle += `No se observa supuración. `;
+                            }
+
+                            // Estado de la encía
+                            if (implante.estado_encia === "Anormal") {
+                                detalle += `El estado de la encía es anormal, descrito como: ${implante.obs_estado_encia || 'Sin observación'}. `;
+                            } else {
+                                detalle += `El estado de la encía es normal. `;
+                            }
+
+                            // Pérdida ósea marginal
+                            if (implante.perdida_osea_marginal) {
+                                detalle += `Se reporta una pérdida ósea marginal de aproximadamente ${implante.perdida_osea_marginal}. `;
+                            }
+
+                            // Observaciones generales
+                            if (implante.observaciones) {
+                                detalle += `Observaciones adicionales: ${implante.observaciones}. `;
+                            }
+
+                            return detalle;
+                        }).join("\n\n");
+
+                        $('#det_cir_man').val(detalleHistoria);
+
+                    } else {
+                        $('#det_cir_man').val('No hay detalles del control de implantes disponibles.');
+                    }
+
+
                 }
             },
             error: function(error){

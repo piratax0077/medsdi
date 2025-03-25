@@ -1,12 +1,12 @@
 <div class="card">
     <div class="card-body">
         <div class="form-row">
-            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+            {{-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                 <div class="form-group">
-                    <label class="floating-label-activo-sm">Pieza N°</label>
+                    <label class="floating-label-activo-sm">Piezas N°</label>
                     <input type="text" class="form-control form-control-sm" name="n_pieza_pfp{{ $counter }}" id="n_pieza_pfp{{ $counter }}">
                 </div>
-            </div>
+            </div> --}}
 
             <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                 <div class="form-group">
@@ -26,7 +26,7 @@
             </div>
             <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
                 <div class="form-group">
-                    <label class="floating-label-activo-sm">Toma de medida y envío a laboratorio</label>
+                    <label class="floating-label-activo-sm">Impresión / Envío a Lab.</label>
                     <select name="corona_toma_imp_pfp{{ $counter }}" id="corona_toma_imp_pfp{{ $counter }}"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('corona_toma_imp_pfp{{ $counter }}','div_corona_toma_imp_pfp{{ $counter }}','det_corona_toma_imp_pfp{{ $counter }}',2)">
                         <option value="0">Seleccione</option>
                         <option value="1">No</option>

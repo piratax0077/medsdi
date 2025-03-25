@@ -2453,6 +2453,7 @@ Route::post('/dental/dame_insumos',[App\Http\Controllers\DentalController::class
 Route::post('/dental/dame_bono_pago',[App\Http\Controllers\DentalController::class, 'dame_bono_pago'])->name('dental.dame_bono_pago');
 Route::post('/dental/pago_presupuesto',[App\Http\Controllers\DentalController::class, 'pago_presupuesto'])->name('dental.confirmar_pago_presupuesto_dental');
 Route::post('/dental/eliminar_pago_presupuesto',[App\Http\Controllers\DentalController::class, 'eliminar_pago_presupuesto'])->name('dental.eliminar_pago_presupuesto_dental');
+Route::post('/dental/reasignar_pago_presupuesto',[App\Http\Controllers\DentalController::class, 'reasignar_pago_presupuesto'])->name('dental.reasignar_presupuesto_dental');
 Route::post('/dental/nueva_pieza_post_impl',[App\Http\Controllers\EscritorioProfesional::class, 'mostrar_nueva_pieza_dental_pfu'])->name('profesional.mostrar_nueva_pieza_pfu');
 Route::post('/dental/eliminar_pieza_corona_protesis',[App\Http\Controllers\EscritorioProfesional::class, 'eliminarPiezaCoronaProtesis'])->name('profesional.eliminar_pieza_dental_corona_protesis');
 Route::post('/dental/guardar_pieza_dental',[App\Http\Controllers\EscritorioProfesional::class, 'guardar_pieza_dental_pfp'])->name('profesional.adm_dental.guardar_pieza_dental_pfp');

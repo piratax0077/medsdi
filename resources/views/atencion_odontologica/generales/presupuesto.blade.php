@@ -616,7 +616,7 @@
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex">
 
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -930,7 +930,7 @@
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <button type="button" class="btn btn-success btn-block btn-sm"
-                                                        onclick="respon_pago_dent();"><i class="fa fa-plus"></i>Ingresar Abono</button>
+                                                        onclick="pagar_presupuesto();"><i class="fa fa-plus"></i>Ingresar Abono</button>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -961,6 +961,13 @@
                                                                                 $estado = 'TERMINADO';
                                                                                 # code...
                                                                             }
+                                                                            if($o->estado_pago == 'ok'){
+                                                                                $clase = 'bg-success';
+                                                                            }else if($o->estado_pago == 'incompleto'){
+                                                                                $clase = 'bg-warning';
+                                                                            }else{
+                                                                                $clase = 'bg-danger';
+                                                                            }
                                                                             @endphp
                                                                             <tr>
                                                                                 <td class="text-center align-middle">{{ $o->descripcion }}</td>
@@ -969,7 +976,7 @@
                                                                                 <td class="text-center align-middle">0</td>
                                                                                 <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
                                                                                 <td class="text-center align-middle status-circle">
-                                                                                    <div class="circle {{ $o->clase }}"></div>
+                                                                                    <div class="circle {{ $clase }}"></div>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
                                                                                     {{ $estado }}
@@ -1346,7 +1353,7 @@
                                                                     @if($t->presupuesto == 1)
                                                                     @php $total = $t->cantidad * $t->valor @endphp
                                                                     <tr>
-                                                                        <td class="text-center align-middle">{{ $t->insumos }}</td>
+                                                                        <td class="text-center align-middle">{{ $t->insumos }} {{ $t->nombre_marca }}</td>
                                                                         <td class="text-center align-middle">{{ $t->cantidad }}</td>
                                                                         <td class="text-center align-middle">{{ number_format($t->valor)  }}</td>
                                                                         <td class="text-center align-middle">0</td>
@@ -1398,6 +1405,7 @@
                                                             <p id="valores_total_abonado_presupuesto_conf">${{ number_format($valor_abonado,0,',','.') }}</p>
                                                         </div>
                                                         @php $total_pago = $valores + $valores_piezas + $valores_insumos; @endphp
+                                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="reasignar_presupuesto({{ $total_pago }}, {{ $valor_abonado }},{{ $valores_insumos }})">Reasignar</button>
                                                         <button type="button" class="btn btn-outline-success btn-sm" onclick="pagar_presupuesto()">Pagar</button>
                                                     </div>
                                                 </div>
@@ -1501,12 +1509,12 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalPagoPresupuesto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
+        <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Pago</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 class="modal-title" id="exampleModalLabel">Pago</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <div class="modal-body">
@@ -1535,7 +1543,7 @@
                     <div class="mb-3">
                         <div class="form-group fill">
                             <label for="montoAbonado" class="floating-label-activo-sm">Monto Abonado</label>
-                            <input type="text" class="form-control form-control-sm" id="montoAbonado" value="${{ number_format($valor_abonado,0,',','.') }}" required>
+                            <input type="text" class="form-control form-control-sm" id="montoAbonado" value="${{ number_format($valor_abonado,0,',','.') }}" disabled required>
                         </div>
 
                     </div>
@@ -1611,6 +1619,111 @@
 
         </div>
         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+  <!-- Modal -->
+<div class="modal fade" id="modalReasignarPresupuesto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Reasignación del presupuesto</h5>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal_body_reasignar_presupuesto">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <h5>Monto Total</h5>
+                        <input type="hidden" id="total_presupuesto_a_pagar" value="{{ $valores_piezas + $valores + $valores_insumos }}">
+                        <input type="hidden" name="total_abonado_presupuesto" id="total_abonado_presupuesto" value="{{ $valor_abonado }}">
+                        <input type="hidden" name="total_adeudado_presupuesto" id="total_adeudado_presupuesto" value="{{ $valores_piezas + $valores + $valores_insumos - $valor_abonado }}">
+                        <p id="monto_total" class="font-weight-bold">
+                            {{ number_format($valores_insumos, 0, ',', '.') }} +
+                            {{ number_format($valores_piezas, 0, ',', '.') }} =
+                            {{ number_format($valores_piezas + $valores + $valores_insumos, 0, ',', '.') }}
+                        </p>
+                        <p id="monto_abonado" class="text-success">
+                            + {{ number_format($valor_abonado, 0, ',', '.') }}
+                        </p>
+                        <p id="monto_adeudado" class="text-danger">
+                            - {{ number_format($valores_piezas + $valores + $valores_insumos - $valor_abonado, 0, ',', '.') }}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <p id="info_pagos_seleccionados"></p>
+                </div>
+            </div>
+
+
+
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped" id="table_pagos_reasignar_odontograma">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Seleccionar</th>
+                            <th>Nombre</th>
+                            <th>Valor</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($odontograma as $o)
+                        @if($o->presupuesto == 1)
+                            <tr>
+                                <td><input type="checkbox" class="valor-checkbox"  data-valor="{{ $o->valor }}" data-id="{{ $o->id }}" data-info="odonto"></td>
+                                <td>{{ $o->pieza }}</td>
+                                <td>${{ number_format($o->valor, 0, ',', '.') }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_odontograma({{ $o->id }})"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped" id="table_pagos_reasignar_insumos">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Seleccionar</th>
+                            <th>Nombre</th>
+                            <th>Cantidad</th>
+                            <th>Valor Unitario</th>
+                            <th>Total</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($insumos_tratamientos as $i)
+                        @if($i->presupuesto == 1)
+                        @php $total = $i->cantidad * $i->valor; @endphp
+                            <tr>
+                                <td><input type="checkbox" class="valor-checkbox" data-valor="{{ $total }}" data-id="{{ $i->id }}" data-info="insumo"></td>
+                                <td>{{ $i->insumos }} {{ $i->nombre_marca }}</td>
+                                <td>{{ $i->cantidad }}</td>
+                                <td>${{ number_format($i->valor, 0, ',', '.') }}</td>
+                                <td>${{ number_format($i->cantidad * $i->valor, 0, ',', '.') }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo({{ $i->id }})"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="reasignar_presupuesto_modal()">Confirmar</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         </div>
       </div>
@@ -1963,7 +2076,7 @@
         total = $('#total_presupuesto_dental').val();
         console.log(formatoMoneda(parseInt(total)));
         // abrir modal
-        $('#exampleModal').modal('show');
+        $('#modalPagoPresupuesto').modal('show');
         $('#total_pago').val(formatoMoneda(parseInt(total)));
         let id_hora_medica = $('#hora_medica').val();
         console.log(id_hora_medica);
@@ -1979,7 +2092,7 @@
             url: url,
             data: data,
             success: function(resp){
-                console.log(resp);
+                return console.log(resp);
                 let valor_presupuesto = $('#total_presupuesto_dental').val();
                 let valor_abonado = resp.valor_atencion;
                 let deuda = valor_presupuesto - valor_abonado;
@@ -2166,6 +2279,8 @@
                      $('#montoAbonado').val(formatoMoneda(parseInt(response.suma_pagado)));
                      $('#valores_abonado_presupuesto').html(formatoMoneda(parseInt(response.suma_pagado)));
                      $('#valores_total_abonado_presupuesto_conf').html(formatoMoneda(parseInt(response.suma_pagado)));
+                     $('#total_abonado_presupuesto').val(parseInt(response.suma_pagado));
+                    $('#total_adeudado_presupuesto').val(parseInt(response.suma_adeudado));
                 }else{
                     swal({
                         title:'error',
@@ -2201,6 +2316,7 @@
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
             id_paciente: $('#id_paciente').val(),
+            total_presupuesto: $('#total_presupuesto_dental').val(),
             _token: CSRF_TOKEN
         }
 
@@ -2354,6 +2470,8 @@
                     $('#montoAbonado').val(formatoMoneda(parseInt(resp.suma_pagado)));
                     $('#valores_abonado_presupuesto').html(formatoMoneda(parseInt(resp.suma_pagado)));
                     $('#valores_total_abonado_presupuesto_conf').html(formatoMoneda(parseInt(resp.suma_pagado)));
+                    $('#total_abonado_presupuesto').val(parseInt(resp.suma_pagado));
+                    $('#total_adeudado_presupuesto').val(parseInt(resp.suma_adeudado));
                 }
             },
             error: function(error){
@@ -2361,4 +2479,182 @@
             }
         });
     }
+
+    function reasignar_presupuesto(){
+        console.log('reasignando');
+        $('#modalReasignarPresupuesto').modal('show');
+        let abonado = $('#total_abonado_presupuesto').val();
+        let adeudado = $('#total_adeudado_presupuesto').val();
+        $('#monto_abonado').html('+'+formatoMoneda(abonado));
+        $('#monto_adeudado').html('-'+formatoMoneda(adeudado));
+    }
+
+    function reasignar_presupuesto_modal() {
+        // Obtener los valores seleccionados
+        const valoresSeleccionados = [];
+        document.querySelectorAll('.valor-checkbox').forEach(function (checkbox) {
+            if (checkbox.checked) {
+                valoresSeleccionados.push({
+                    id: parseInt(checkbox.getAttribute('data-id')),
+                    info: checkbox.getAttribute('data-info'),
+                    valor: parseInt(checkbox.getAttribute('data-valor')),
+                });
+            }
+        });
+
+        // Crear objeto JSON con los datos del formulario
+        const data = {
+            _token: '{{ csrf_token() }}',  // Token CSRF
+            valores: valoresSeleccionados,
+            valorPresupuestoTotal: $('#total_presupuesto_a_pagar').val(),
+            valorAbonado: $('#total_abonado_presupuesto').val(),
+            valorAdeudado: $('#total_adeudado_presupuesto').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_paciente: $('#id_paciente').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+        };
+
+        // Enviar los datos por AJAX
+        $.ajax({
+            url: '{{ ROUTE("dental.reasignar_presupuesto_dental") }}', // Reemplaza con la URL de tu endpoint en el controlador
+            method: 'POST',
+            data: data,
+            success: function(response) {
+                console.log('Éxito:', response);
+                if(response.estado == 1){
+                    swal({
+                        title:'Exito',
+                        text: response.mensaje,
+                        icon:'success'
+                    });
+
+
+                     let table_piezas_odontograma = $('#presup_estado_pago').DataTable();
+
+                    // Limpiar la tabla antes de agregar nuevas filas
+                    table_piezas_odontograma.clear().draw();
+
+                    let odontograma = response.odontograma;
+
+                    // Recorrer el odontograma y agregar nuevas filas
+                    odontograma.forEach(function(odonto) {
+                        if (odonto.presupuesto == 1) {
+                            if(odonto.estado_pago == 'ok'){
+                                var clase = 'bg-success';
+                            }else if(odonto.estado_pago == 'incompleto'){
+                                var clase = 'bg-warning';
+                            }else{
+                                var clase = 'bg-danger';
+                            }
+                            if(odonto.estado == 0){
+                                var estado = 'PENDIENTE';
+                            }else{
+                                var estado = 'TERMINADO';
+                            }
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table_piezas_odontograma.row.add([
+                                odonto.descripcion,
+                                odonto.pieza,
+                                formatoMoneda(formatoMoneda(odonto.valor)),
+                                0,
+                                formatoMoneda(formatoMoneda(odonto.valor)),
+                                '<div class="circle '+clase+'"></div>',
+                                estado, // Columna vacía
+
+                            ]).draw(false).node(); // Obtener el nodo de la fila
+
+                            // Agregar clases a la fila
+                            $(rowNode).addClass('text-center align-middle status-circle');
+                        }
+                    });
+
+                    let insumos = response.insumos;
+                    console.log(insumos);
+                    let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
+                    table_insumos_pagos.clear();
+                    console.log(insumos);
+                    insumos.forEach(insumo => {
+                        let total = insumo.cantidad * insumo.valor;
+                        if(insumo.presupuesto == 1){
+                            if(insumo.estado_pago == 'ok'){
+                                var clase = 'bg-success';
+                            }else if(insumo.estado_pago == 'intermedio'){
+                                var clase = 'bg-warning';
+                            }else{
+                                var clase = 'bg-danger';
+                            }
+                            let rowNode = table_insumos_pagos.row.add([
+                            insumo.insumos,
+                            insumo.cantidad,         // Nombre del insumo
+                            formatoMoneda(insumo.valor),       // Cantidad utilizada
+                            0,         // Unidad de medida
+                            formatoMoneda(total),
+                            ' <div class="circle '+clase+'"></div>',
+
+                        ]).draw(false).node();
+
+                        // Agregar clases a la fila
+                        $(rowNode).addClass('text-center align-middle status-circle');
+                        }
+
+                    });
+                    table_insumos_pagos.draw();
+                }else{
+                    swal({
+                        title:'error',
+                        text: response.mensaje,
+                        icon:'error'
+                    });
+                }
+            },
+        });
+
+    }
+
+
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let totalSeleccionado = 0;
+        let totalPresupuesto = $('#total_presupuesto_a_pagar').val();
+
+        function actualizarTotal(valor, agregar)
+        {
+            let totalAbonado = parseInt($('#total_abonado_presupuesto').val()) || 0;
+            let totalAdeudado = parseInt($('#total_adeudado_presupuesto').val()) || 0;
+
+            totalSeleccionado += agregar ? valor : -valor;
+            console.log('Total seleccionado:', totalSeleccionado);
+            console.log('Total presupuesto:', totalPresupuesto);
+            console.log('Total abonado:', totalAbonado);
+
+            if(totalAbonado < totalSeleccionado) {
+                var clase = 'text-danger';
+                var texto = 'El monto seleccionado supera el total abonado';
+                var diferencia = totalSeleccionado - totalAbonado;
+            } else {
+                var clase = 'text-success';
+                var texto = 'Monto seleccionado correcto';
+                var diferencia = totalAbonado - totalSeleccionado;
+            }
+
+            document.getElementById('info_pagos_seleccionados').innerHTML = `
+                Total seleccionado: ${formatoMoneda(totalSeleccionado)}<br>
+                ${texto}<br>
+                Diferencia: ${formatoMoneda(diferencia)}
+            `;
+
+            document.getElementById('info_pagos_seleccionados').className = clase;
+        }
+
+        document.addEventListener('change', function (event) {
+            if (event.target.classList.contains('valor-checkbox')) {
+                const valor = parseInt(event.target.getAttribute('data-valor'));
+                actualizarTotal(valor, event.target.checked);
+            }
+        });
+    });
+
+</script>
+
