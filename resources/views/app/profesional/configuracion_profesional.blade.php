@@ -151,7 +151,7 @@
                         @if($profesional->id_especialidad == 2)
                         <div class="col-md-3">
                             <div class="card subir py-3">
-                                <a href="{{ route('profesional.insumos') }}">
+                                <a href="/insumos/dental">
                                     <div class="card-body text-center" style="cursor:pointer">
                                         <img class="wid-90 text-center mb-3"
                                         src="{{ asset('images/iconos/adm_comercial.png') }}"

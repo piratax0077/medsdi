@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ConvenioInstitucion;
+use App\Models\EmpresasConvenios;
 use App\Models\TipoConvenio;
 use App\Models\TipoConvenioInstitucion;
 use App\Models\TipoProductoConvenios;
@@ -13,6 +14,7 @@ use App\Models\TipoPago;
 use App\Models\Convenio;
 use App\Models\Profesional;
 use App\Models\ProfesionalConveniosIndependientes;
+use App\Models\Region;
 use App\Models\Instituciones;
 use App\Models\Servicios;
 use App\Models\AdminInstServ;
@@ -249,34 +251,64 @@ class ConveniosController extends Controller
         $tipos_convenio_institucion = TipoConvenioInstitucion::all();
         // 1: CM 2: DENTAL
         $tipoproducto_convenios = TipoProductoConvenios::where('id_tipo_convenio',2)->get();
+        $regiones = Region::all();
+        $convenios_empresas = EmpresasConvenios::where('id_profesional',$profesional->id)->get();
+
+
+
         return view('app.profesional.mis_convenios')->with([
             'profesional' => $profesional,
             'tipos_producto' => $tipos_producto,
             'tipos_convenio' => $tipos_convenio,
             'tipos_convenio_institucion' => $tipos_convenio_institucion,
-            'tipoproducto_convenios' => $tipoproducto_convenios
+            'tipoproducto_convenios' => $tipoproducto_convenios,
+            'regiones' => $regiones,
+            'convenios_empresas' => $convenios_empresas,
         ]);
     }
 
     public function nuevoConvenio(Request $request){
         try {
+
+            $convenios_seleccionados = $request->conveniosSeleccionados;
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-            $profesional_convenio = new ProfesionalConveniosIndependientes();
-            $profesional_convenio->nombre_convenio = $request->nombre_convenio;
-            $profesional_convenio->convenios = $request->conveniosSeleccionados ? json_encode($request->conveniosSeleccionados) : null;
-            $profesional_convenio->tipo_atencion = $request->tipo_atencion_medica;
-            $profesional_convenio->valor = $request->valor;
-            $profesional_convenio->id_profesional = $profesional->id;
-            $profesional_convenio->tipo_convenio = json_encode($request->tipo_convenio);
-            $profesional_convenio->fecha_inicio = $request->fecha_inicial_pago_convenio;
-            $profesional_convenio->fecha_fin = $request->fecha_final_pago_convenio;
-            $profesional_convenio->porcentaje = $request->porcentaje_dcto;
-            $profesional_convenio->estado = 1;
-            if($profesional_convenio->save()){
-                    return ['estado' => 1, 'mensaje' => 'Su convenio ha sido guardada con éxito.'];
-            }else{
-                    return ['estado' => 0,'mensaje' => 'Ha ocurrido un error'];
+            $mensaje = '';
+            foreach($convenios_seleccionados as $c){
+                $existe = EmpresasConvenios::where('nombre_convenio',$c['convenio'])->where('id_profesional',$profesional->id)->first();
+                if($existe){
+                    $mensaje .= 'El convenio '.$c['convenio'].' ya existe en su lista de convenios. ';
+                    continue;
+                }
+
+                $profesional_convenio = new EmpresasConvenios();
+                $profesional_convenio->nombre_convenio = $c['convenio'];
+                $profesional_convenio->porcentaje = $c['condicion'];
+                $profesional_convenio->estado_convenio = 1;
+                $profesional_convenio->id_profesional = $profesional->id;
+                $profesional_convenio->observaciones = $request->observaciones_nuevo_convenio;
+
+                $profesional_convenio->save();
+                $mensaje .= 'El convenio '.$c['convenio'].' ha sido guardado con éxito. ';
             }
+
+            $convenios_empresas = EmpresasConvenios::where('id_profesional',$profesional->id)->get();
+            foreach($convenios_empresas as $convenio){
+                if($convenio->id_tipo_convenio){
+                    $tipos_convenio_ = json_decode($convenio->id_tipo_convenio);
+                    $tipos_convenios = [];
+                    foreach($tipos_convenio_ as $tipo){
+                        $tipo_convenio = TipoProductoConvenios::find($tipo);
+                        array_push($tipos_convenios,$tipo_convenio->descripcion);
+                    }
+                    $convenio->tipos_convenio = $tipos_convenios;
+                }else{
+                    $convenio->tipos_convenio = [];
+                }
+
+            }
+
+            return ['estado' => 1, 'mensaje' => 'Su convenio ha sido guardada con éxito.', 'convenios_empresas' => $convenios_empresas, 'mensaje' => $mensaje];
+
         } catch (\Exception $e) {
             //throw $th;
             return ['estado' => 0, 'mensaje' => $e->getMessage()];

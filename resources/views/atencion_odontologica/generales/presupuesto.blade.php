@@ -17,11 +17,14 @@
                     <ul class="nav nav-tabs-aten nav-fill mb-10" id="od_grl" role="tablist">
                         @if(!$paciente->es_adulto)
                         <li class="nav-item">
-                            <a class="nav-link-aten text-reset active" id="od_pac_depend_tab" data-toggle="tab" href="#od_pac_depend" role="tab" aria-controls="od_pac_depend" aria-selected="true">Paciente Menor de edad y Dependientes</a>
+                            <a class="nav-link-aten text-reset " id="od_pac_depend_tab" data-toggle="tab" href="#od_pac_depend" role="tab" aria-controls="od_pac_depend" aria-selected="true">Paciente Menor de edad y Dependientes</a>
                         </li>
                         @endif
                         <li class="nav-item">
-                            <a class="nav-link-aten text-reset" id="od_presup_clinico-tab" data-toggle="tab" href="#od_presup_clinico" role="tab" aria-controls="od_presup_clinico" aria-selected="true">Presupuesto Clinico</a>
+                            <a class="nav-link-aten text-reset" id="od_convenios_vigentes-tab" data-toggle="tab" href="#od_convenios_vigentes" role="tab" aria-controls="od_convenios_vigentes" aria-selected="true">Convenios vigentes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link-aten text-reset active" id="od_presup_clinico-tab" data-toggle="tab" href="#od_presup_clinico" role="tab" aria-controls="od_presup_clinico" aria-selected="true">Presupuesto Clinico</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link-aten text-reset" id="od_laboratorio-tab" data-toggle="tab" href="#od_laboratorio" role="tab" aria-controls="od_laboratorio" aria-selected="true">Laboratorio</a>
@@ -39,7 +42,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="tab-content" id="od_grl">
                         <!--DEPENDIENTES-->
-                        <div class="tab-pane fade  {{ $paciente->es_adulto ? 'show active' : '' }}" id="od_pac_depend" role="tabpanel" aria-labelledby="od_pac_depend_tab">
+                        <div class="tab-pane fade  {{ !$paciente->es_adulto ? 'show active' : '' }}" id="od_pac_depend" role="tabpanel" aria-labelledby="od_pac_depend_tab">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="card">
@@ -196,8 +199,17 @@
                                 </div>
                             </div>
                         </div>
+                        <!--CONVENIOS-->
+                        <div class="tab-pane fade show" id="od_convenios_vigentes" role="tabpanel" aria-labelledby="od_convenios_vigentes_tab">
+                            <div class="card">
+                                <div class="card-body">
+                                    <p>convenios</p>
+                                    <p>{{ $paciente->prevision->nombre }}</p>
+                                </div>
+                            </div>
+                        </div>
                         <!--TRABAJOS-->
-                        <div class="tab-pane fade show" id="od_presup_clinico" role="tabpanel" aria-labelledby="od_presup_clinico_tab">
+                        <div class="tab-pane fade show active" id="od_presup_clinico" role="tabpanel" aria-labelledby="od_presup_clinico_tab">
                             <div class="card">
                                 <div class="card-body">
                                     <form>
@@ -2487,6 +2499,9 @@
         let adeudado = $('#total_adeudado_presupuesto').val();
         $('#monto_abonado').html('+'+formatoMoneda(abonado));
         $('#monto_adeudado').html('-'+formatoMoneda(adeudado));
+        // limpiamos los check con clase valor-checkbox
+        $('.valor-checkbox').prop('checked', false);
+        totalSeleccionado = 0;
     }
 
     function reasignar_presupuesto_modal() {

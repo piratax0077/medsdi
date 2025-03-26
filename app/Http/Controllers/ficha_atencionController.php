@@ -19,6 +19,7 @@ use App\Models\CertificadoReposo;
 use App\Models\ConsentimientoFaltante;
 use App\Models\Correlativos;
 use App\Models\DiagnosticosDental;
+use App\Models\EmpresasConvenios;
 use App\Models\EvolucionPacienteHospital;
 use App\Models\EvolucionUrgencia;
 use App\Models\ExamenesBocaGeneral;
@@ -1949,6 +1950,14 @@ class ficha_atencionController extends Controller
 
 
         }
+
+        $convenio = EmpresasConvenios::where('nombre_convenio','LIKE',$paciente->prevision->nombre)->first();
+        if($convenio){
+            $paciente->info_convenio = $convenio;
+        }else{
+            $paciente->info_convenio = null;
+        }
+
 
         return view($ruta_blade)->with(
             [

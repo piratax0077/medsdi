@@ -41,33 +41,32 @@
                         <thead>
                             <tr>
                                 <th class="text-wrap text-center align-middle">Convenio</th>
+                                <th class="text-center align-middle">Rut</th>
                                 <th class="text-center align-middle">Tipo</th>
                                 <th class="text-center align-middle">Fecha Inicial</th>
                                 <th class="text-center align-middle">Fecha Final</th>
-                                <th class="text-center align-middle">Productos</th>
                                 <th class="text-center align-middle">Descuento</th>
                                 <th class="text-center align-middle">Accion</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach($convenios_profesional as $convenio)
+                            @foreach($convenios_empresas as $convenio)
                                 <tr>
-                                    <td class="align-middle text-center">{{ $convenio->nombre_convenio_institucion }}</td>
-                                    <td class="align-middle text-center">{{ $convenio->tipo_convenio }}</td>
-                                    <td class="align-middle text-center">{{ $convenio->fecha_inicio_convenio_institucion }}</td>
-                                    <td class="align-middle text-center">{{ $convenio->fecha_fin_convenio_institucion }}</td>
+                                    <td class="align-middle text-center">{{ $convenio->nombre_convenio }}</td>
+                                    <td class="align-middle text-center">{{ $convenio->rut_empresa }}</td>
                                     <td class="align-middle text-center">
-                                        @foreach($convenio->tipos_productos as $pc)
-                                            <span>{{ $pc }}</span><br>
-                                        @endforeach
+
                                     </td>
-                                    <td class="align-middle text-center">{{ $convenio->porcentaje_convenio_institucion }}%</td>
+                                    <td class="align-middle text-center">{{ $convenio->fecha_inicio }}</td>
+                                    <td class="align-middle text-center">{{ $convenio->fecha_termino }}</td>
+
+                                    <td class="align-middle text-center">{{ $convenio->porcentaje }}%</td>
                                     <td class="align-middle text-center">
                                         <button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio({{ $convenio->id }})" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>
-                                        <button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio({{ $convenio->id }})"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_tipo_convenio({{ $convenio->id }})"><i class="fas fa-trash"></i> </button>
                                     </td>
                                 </tr>
-                            @endforeach --}}
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -88,86 +87,25 @@
     });
 
     function guardar_nuevo_convenio_profesional(){
-        var nombre_convenio = $('#nombre_convenio').val();
-        var tipo_convenio = $('#tipo_convenio').val();
-        var porcentaje_dcto = $('#porcentaje_dcto').val();
-        var tipo_convenio_institucion = $('#tipo_convenio_institucion').val();
-        var fecha_inicial_pago_convenio = $('#fecha_inicial_pago_convenio').val();
-        var fecha_final_pago_convenio = $('#fecha_final_pago_convenio').val();
-        let valor = $('#valor_convenio').val();
-        let tipo_atencion_medica = $('#tipo_atencion_medica').val();
         var convenios = '';
         for (let i = 1; i < 13; i++) {
-
             if ($('#convenio_' + i).prop('checked')) {
-
                 convenios = convenios + $('#text_convenio_' + i).text() + ',';
             }
-
         }
-        // var rut_representante_convenio = $('#rut_representante_convenio').val();
-        // var nombre_representante_convenio = $('#nombre_representante_convenio').val();
-        // var fecha_pago_convenio = $('#fecha_pago_convenio').val();
-        // var telefono_representante_convenio = $('#telefono_representante_convenio').val();
-        // var email_representante_convenio = $('#email_representante_convenio').val();
-        // var direccion_representante_convenio = $('#direccion_representante_convenio').val();
-        var observaciones_nuevo_convenio = $('#observaciones_nuevo_convenio').val();
+        var observaciones_nuevo_convenio = $('#observaciones_nuevo_convenio_prevision').val();
         var productos_convenio = $('#productos_convenio_').val();
 
         var valido = 1;
         var mensaje = '';
 
-        if(nombre_convenio == ''){
+        if(convenios == ''){
             valido = 0;
-            mensaje += '<li>Ingrese nombre de convenio</li>';
+            mensaje += '<li>Seleccione al menos un convenio</li>';
         }
-        if(tipo_convenio == 0){
+        if(observaciones_nuevo_convenio == ''){
             valido = 0;
-            mensaje += '<li>Seleccione tipo de convenio</li>';
-        }
-        if(porcentaje_dcto == ''){
-            valido = 0;
-            mensaje += '<li>Ingrese porcentaje de descuento</li>';
-        }
-        if(tipo_convenio_institucion == 0){
-            valido = 0;
-            mensaje += '<li>Seleccione tipo de convenio institución</li>';
-        }
-        if(fecha_inicial_pago_convenio == ''){
-            valido = 0;
-            mensaje += '<li>Seleccione fecha de pago</li>';
-        }
-        if(fecha_final_pago_convenio == ''){
-            valido = 0;
-            mensaje += '<li>Seleccione fecha de finalización de pago</li>';
-        }
-        // if(rut_representante_convenio == ''){
-        //     valido = 0;
-        //     mensaje += '<li>Ingrese rut representante</li>';
-        // }
-        // if(nombre_representante_convenio == ''){
-        //     valido = 0;
-        //     mensaje += '<li>Ingrese nombre representante</li>';
-        // }
-        // if(telefono_representante_convenio == ''){
-        //     valido = 0;
-        //     mensaje += '<li>Ingrese telefono representante</li>';
-        // }
-        // if(email_representante_convenio == ''){
-        //     valido = 0;
-        //     mensaje += '<li>Ingrese email representante</li>';
-        // }
-        // if(direccion_representante_convenio == ''){
-        //     valido = 0;
-        //     mensaje += '<li>Ingrese direccion representante</li>';
-        // }
-        // if(observaciones_nuevo_convenio == ''){
-        //     valido = 0;
-        //     mensaje += '<li>Ingrese observaciones</li>';
-        // }
-        if(productos_convenio == null){
-            //valido = 0;
-            mensaje += '<li>Seleccione productos a convenir</li>';
+            mensaje += '<li>Ingrese observaciones</li>';
         }
 
         if(valido == 0){
@@ -188,7 +126,7 @@
         $('.custom-control-input:checked').each(function () {
             const id = $(this).attr('id').split('_')[1]; // Extrae el ID numérico
             const selectValue = $('#valor_convenio_' + id + ' select').val();
-            const inputValue = $('#valor_convenio_' + id + ' input[type="text"]').val();
+            const inputValue = $('#valor_convenio_' + id + ' input[type="number"]').val();
 
             conveniosSeleccionados.push({
                 convenio: $('#text_convenio_' + id).text().replace(/\s+/g, ' ').trim(), // Elimina saltos de línea y espacios extra
@@ -198,22 +136,13 @@
         });
 
         let data = {
-                nombre_convenio: nombre_convenio,
-                tipo_convenio: tipo_convenio,
-                porcentaje_dcto: porcentaje_dcto,
-                tipo_convenio_institucion: tipo_convenio_institucion,
-                fecha_inicial_pago_convenio: fecha_inicial_pago_convenio,
-                fecha_final_pago_convenio: fecha_final_pago_convenio,
                 observaciones_nuevo_convenio: observaciones_nuevo_convenio,
-                productos_convenio: productos_convenio,
                 convenios: convenios,
-                valor: valor,
-                tipo_atencion_medica: tipo_atencion_medica,
                 conveniosSeleccionados: conveniosSeleccionados,
                 _token: "{{ csrf_token() }}"
             }
 
-            console.log(data);
+           console.log(data);
 
         $.ajax({
             url: "{{ ROUTE('profesional.convenio_nuevo') }}",
@@ -224,17 +153,38 @@
                 if(response.estado == 1){
                     swal({
                         title: 'Convenio registrado',
-                        text: response.msj,
+                        text: response.mensaje,
                         icon: 'success'
                     });
                     $('#nuevoConvenioInstitucion').modal('hide');
-                    $('#card_body_convenios_profesional').empty();
-                    $('#card_body_convenios_profesional').html(response.v);
-                    limpiar_formulario();
+                    let convenios = response.convenios_empresas;
+                    console.log(convenios);
+                    $('#tabla_convenios_profesional').DataTable().destroy();
+                    $('#tabla_convenios_profesional tbody').empty();
+                    convenios.forEach(convenio => {
+                        let fila = '<tr>';
+                        fila += '<td class="align-middle text-center">' + convenio.nombre_convenio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.rut_empresa + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.tipo_convenio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.fecha_inicio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.fecha_termino + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.porcentaje + '</td>';
+                        fila += '<td class="align-middle text-center">';
+                        fila += '<button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio(' + convenio.id + ')" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>';
+                        fila += '<button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio(' + convenio.id + ')"><i class="fas fa-trash"></i> </button>';
+                        fila += '</td>';
+                        fila += '</tr>';
+                        $('#tabla_convenios_profesional tbody').append(fila);
+                    });
+                    $('#tabla_convenios_profesional').DataTable({
+                        "language": {
+                            "url": "{{ asset('js/Spanish.json') }}"
+                        }
+                    });
                 }else{
                     swal({
                         title: 'Error',
-                        text: response.msj,
+                        text: response.mensaje,
                         icon: 'error'
                     });
                 }
@@ -357,6 +307,176 @@
                 }
             }
         });
+    }
+    /** buscar ciudad */
+    function buscar_ciudad(id_ciudad=0) {
+        let region = $('#region_empresa').val();
+        let url = "{{ route('adm_cm.buscar_ciudad_region') }}";
+        $.ajax({
+
+            url: url,
+            type: "get",
+            data: {
+                //_token: _token,
+                region: region,
+            },
+        })
+        .done(function(data) {
+            if (data != null) {
+                data = JSON.parse(data);
+
+                let ciudades = $('#ciudad_empresa');
+
+                ciudades.find('option').remove();
+                ciudades.append('<option value="0">seleccione</option>');
+                $(data).each(function(i, v) { // indice, valor
+                    ciudades.append('<option value="' + v.id + '">' + v.nombre +
+                        '</option>');
+                })
+
+                if(id_ciudad != 0)
+                    ciudades.val(id_ciudad);
+
+            } else {
+
+                swal({
+                    title: "Error",
+                    text: "Error al cargar las ciudades",
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                })
+                // alert('No se pudo Cargar las ciudades');
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+
+
+    }
+
+    function guardar_nuevo_convenio_profesional_empresa(){
+        let id_empresa = $('#id_empresa').val();
+        let nombre_convenio = $('#nombre_convenio').val();
+        let tipo_convenio = $('#tipo_convenio').val();
+        let porcentaje_dcto = $('#porcentaje_dcto').val();
+        let tipo_convenio_institucion = $('#tipo_convenio_institucion').val();
+        let fecha_inicial_pago_convenio = $('#fecha_inicial_pago_convenio').val();
+        let fecha_final_pago_convenio = $('#fecha_final_pago_convenio').val();
+        let convenio_indenifido = $('#convenio_infinito').is(':checked');
+        let observaciones = $('#observaciones_nuevo_convenio').val();
+
+        let valido = 1;
+        let mensaje = '';
+
+        if(nombre_convenio == ''){
+            valido = 0;
+            mensaje += '<li>Ingrese nombre de convenio</li>';
+        }
+        if(tipo_convenio == 0){
+            valido = 0;
+            mensaje += '<li>Seleccione tipo de convenio</li>';
+        }
+        if(porcentaje_dcto == ''){
+            valido = 0;
+            mensaje += '<li>Ingrese porcentaje de descuento</li>';
+        }
+        if(tipo_convenio_institucion == 0){
+            valido = 0;
+            mensaje += '<li>Seleccione tipo de convenio institución</li>';
+        }
+        if(fecha_inicial_pago_convenio == ''){
+            valido = 0;
+            mensaje += '<li>Seleccione fecha de pago</li>';
+        }
+        if(fecha_final_pago_convenio == ''){
+            //valido = 0;
+            mensaje += '<li>Seleccione fecha de finalización de pago</li>';
+        }
+        if(observaciones == ''){
+            valido = 0;
+            mensaje += '<li>Ingrese observaciones</li>';
+        }
+
+        if(valido == 0){
+            swal({
+                title: 'Error',
+                content: {
+                    element: 'div',
+                    attributes: {
+                        innerHTML: mensaje
+                    }
+                },
+                icon: 'error'
+            });
+            return false;
+        }
+
+        let url = "{{ route('profesional.guardar_convenio_empresa') }}";
+        let data = {
+            id_empresa: id_empresa,
+            nombre_convenio: nombre_convenio,
+            tipo_convenio: tipo_convenio,
+            porcentaje_dcto: porcentaje_dcto,
+            tipo_convenio_institucion: tipo_convenio_institucion,
+            fecha_inicial_pago_convenio: fecha_inicial_pago_convenio,
+            fecha_final_pago_convenio: fecha_final_pago_convenio,
+            convenio_indenifido: convenio_indenifido,
+            observaciones: observaciones,
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            _token: "{{ csrf_token() }}"
+        };
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            success: function(response){
+                console.log(response);
+                if(response.estado == 1){
+                    swal({
+                        title: 'Convenio registrado',
+                        text: response.msj,
+                        icon: 'success'
+                    });
+                    $('#nuevoConvenioInstitucion').modal('hide');
+                    let convenios = response.convenios;
+                    console.log(convenios);
+                    $('#tabla_convenios_profesional').DataTable().destroy();
+                    $('#tabla_convenios_profesional tbody').empty();
+                    convenios.forEach(convenio => {
+                        let fila = '<tr>';
+                        fila += '<td class="align-middle text-center">' + convenio.nombre_convenio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.rut_empresa + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.tipo_convenio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.fecha_inicio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.fecha_termino + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.porcentaje + '</td>';
+                        fila += '<td class="align-middle text-center">';
+                        fila += '<button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio(' + convenio.id + ')" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>';
+                        fila += '<button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio(' + convenio.id + ')"><i class="fas fa-trash"></i> </button>';
+                        fila += '</td>';
+                        fila += '</tr>';
+                        $('#tabla_convenios_profesional tbody').append(fila);
+                    });
+                    $('#tabla_convenios_profesional').DataTable({
+                        "language": {
+                            "url": "{{ asset('js/Spanish.json') }}"
+                        }
+                    });
+                    limpiar_formulario();
+                }else{
+                    swal({
+                        title: 'Error',
+                        text: response.msj,
+                        icon: 'error'
+                    });
+                }
+            }
+        });
+
     }
 </script>
 @endsection
