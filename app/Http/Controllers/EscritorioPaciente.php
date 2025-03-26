@@ -2973,10 +2973,13 @@ class EscritorioPaciente extends Controller
         {
             $datos['estado'] = 1;
             $datos['msj'] = 'exito';
-            $paciente->region = $region_paciente ? $region_paciente->nombre : '';
-            $paciente->ciudad = $ciudad_paciente ? $ciudad_paciente->nombre : '';
-            $paciente->email = $email;
             $datos['paciente'] = $paciente;
+            // $paciente->region = $region_paciente ? $region_paciente->nombre : '';
+            $datos['paciente']['region'] = $region_paciente ? $region_paciente->nombre : '';
+            // $paciente->ciudad = $ciudad_paciente ? $ciudad_paciente->nombre : '';
+            $datos['paciente']['ciudad'] = $ciudad_paciente ? $ciudad_paciente->nombre : '';
+            $datos['paciente']['numero_direccion'] = $request->numero_direccion;
+            $paciente->email = $email;
 
             /** modificar direccion */
             if($direccion){
@@ -3015,10 +3018,13 @@ class EscritorioPaciente extends Controller
                         $datos['direccion']['estado'] = 1;
                         $datos['direccion']['msj'] = 'exito';
                         $ciudad = Ciudad::find($ciudad);
-                        $paciente->ciudad = $ciudad->nombre;
+                        // $paciente->ciudad = $ciudad->nombre;
 
-                        $paciente->id_direccion = $nueva_direccion->id;
-                        if( $paciente->save() )
+                        $datos['direccion']['direccion'] = $carga_direccion;
+
+                        $paciente2 = Paciente::where('id', $request->id)->first();
+                        $paciente2->id_direccion = $nueva_direccion->id;
+                        if( $paciente2->save() )
                         {
                             $datos['direccion']['update_paciente']['estado'] = 1;
                             $datos['direccion']['update_paciente']['msj'] = 'exito';

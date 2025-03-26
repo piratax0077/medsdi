@@ -828,6 +828,7 @@
                                                 console.log(data);
                                                 if (data != null)
                                                 {
+                                                    $('#modal_consulta_mensaje').text('');
                                                     $('#reserva_hora_id_paciente_asistente').val(data.paciente.id);
                                                     $('#datos_consulta_rut').text(data.paciente.rut);
                                                     $('#datos_consulta_nombre').text(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
@@ -853,6 +854,32 @@
                                                     $('#estado_id_paciente').val(data.paciente.id);
                                                     $('#id_hora_medica').val(id_hora_medica);
 
+                                                    console.log('carga datos');
+                                                    console.log(data);
+                                                    if(data.paciente?.["direccion"] !== undefined)
+                                                    {
+                                                        $('#datos_consulta_direcion').html(data.paciente.direccion.direccion);
+                                                        $('#input_reserva_hora_direccion_asistente').val(data.paciente.direccion.direccion);
+                                                        $('#datos_consulta_numero').html(data.paciente.direccion.numero_dir);
+                                                        $('#input_reserva_hora_numero_asistente').val(data.paciente.direccion.numero_dir);
+                                                        $('#datos_consulta_region').html(data.paciente.direccion.region.nombre);
+                                                        $('#input_reserva_hora_region_asistente').val(data.paciente.direccion.ciudad.id_region);
+                                                        $('#datos_consulta_ciudad').html(data.paciente.direccion.ciudad.nombre);
+                                                        buscar_ciudad_general('input_reserva_hora_ciudad_asistente', 'input_reserva_hora_region_asistente', data.paciente.direccion.ciudad.id);
+                                                        // $('#input_reserva_hora_ciudad_asistente').val(data.paciente.direccion.ciudad.id);
+                                                    }
+                                                    else
+                                                    {
+                                                        $('#datos_consulta_direcion').html('no registrado');
+                                                        $('#input_reserva_hora_direccion_asistente').val('');
+                                                        $('#datos_consulta_numero').html('no registrado');
+                                                        $('#input_reserva_hora_numero_asistente').val('');
+                                                        $('#datos_consulta_region').html('no registrado');
+                                                        $('#input_reserva_hora_region_asistente').val('');
+                                                        $('#datos_consulta_ciudad').html('no registrado');
+                                                        $('#input_reserva_hora_ciudad_asistente').val('');
+                                                    }
+
                                                     //celeste
                                                     //Reservada
                                                     if (data.estado_hora == 1 || data.estado_hora == 16) //else if (info.event.backgroundColor == '#FEAA32')
@@ -868,6 +895,26 @@
 
                                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
                                                         $('#consulta').modal('show');
+
+                                                        console.log(data.estado_hora);
+                                                        console.log(data.paciente.id_direccion);
+                                                        console.log(data.paciente.fecha_nac);
+
+                                                        if(data.estado_hora == 16)
+                                                        {
+                                                            $('#modal_consulta_mensaje').text('DEBE COMPLETAR LOS DATOS DEL PACIENTE PARA CONFIRMAR HORA');
+                                                            // if(data.paciente.id_direccion == 'null' || data.paciente.fecha_nac == 'null')
+                                                            if( data.paciente.id_direccion == 'null' || data.paciente.id_direccion == null || data.paciente.id_direccion == '')
+                                                            {
+                                                                $('#hm_anular_hora').attr('disabled', 'disabled');
+                                                                $('#hm_confirmar_hora').attr('disabled', 'disabled');
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            $('#hm_anular_hora').removeAttr('disabled');
+                                                            $('#hm_confirmar_hora').removeAttr('disabled');
+                                                        }
 
                                                     }
                                                     //verde
@@ -1571,6 +1618,10 @@
         }
         {{-- BUSCAR PACIENTE --}}
         function buscar_paciente() {
+
+            $('#div_cargando').show();
+            $('#div_boton_buscar_paciente').hide();
+
             $('#form_reseva_de_horas').submit(function(e) {
                 e.preventDefault();
             });
@@ -1628,8 +1679,11 @@
                 },
             })
             .done(function(data) {
-                console.log(data);
 
+                $('#div_cargando').hide();
+                $('#div_boton_buscar_paciente').show();
+
+                console.log(data);
 
                 $('#div_procedimiento').show();
                 if (data !== 'null') {
@@ -1762,7 +1816,7 @@
                         $('#reserva_hora_telefono_uno').val(data.telefono_uno);
 
                         $('#reserva_hora_id_responsable').val('');
-						
+
                         {{--
                         $('#reserva_hora_profesion').val();
                         $('#reserva_hora_convenio').val();
@@ -2821,6 +2875,58 @@
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
+
+        };
+
+        function buscar_ciudad2(input_ciudad, input_region, id_ciudad=0) {
+
+
+            var region = $('#'+input_region).val();
+
+            if (region == null) {
+                region = $('#region_contacto_modificar').val();
+            }
+            let url = "{{ route('home.buscar_ciudad_region') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    //_token: _token,
+                    region: region,
+                },
+            })
+            .done(function(data) {
+                if (data != null) {
+                    data = JSON.parse(data);
+
+                    let ciudades = $('#'+input_ciudad);
+
+                    ciudades.find('option').remove();
+                    ciudades.append('<option value="0">Seleccione</option>');
+                    $(data).each(function(i, v) { // indice, valor
+                        ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                    })
+
+                    if(id_ciudad != 0)
+                    {
+                        ciudades.val(id_ciudad);
+                    }
+
+                } else {
+
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar las ciudades",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
+
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
 
         };
 

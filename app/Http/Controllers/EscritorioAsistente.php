@@ -59,6 +59,7 @@ class EscritorioAsistente extends Controller
             'asistente' => $asistente,
             'prevision' => $prevision,
             'tipo_bonos' => $tipo_bonos,
+            'region' => $region,
         );
 
 
@@ -1553,6 +1554,143 @@ class EscritorioAsistente extends Controller
             return $datos;
         } catch (\Exception $e) {
             //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
+    public function agendar_hora_extra_nuevo_paciente_prereserva(Request $request)
+    {
+        try {
+            $datos = array();
+            $error = array();
+            $valido = 1;
+
+            $paciente = Paciente::find($request->id_paciente);
+            $profesional = Profesional::find($request->id_profesional);
+
+            $datos['paciente']['estado'] = 1;
+            $datos['paciente']['msj'] = 'Paciente registrado';
+
+            /** buscar tiempo de la consult */
+            $dia_de_semana = \Carbon\Carbon::parse($request->fecha_consulta)->format('w');
+            $profesional_horarios = ProfesionalHorario::select('duracion_consulta')
+                                                    ->where('id_profesional', $profesional->id)
+                                                    ->where('id_lugar_atencion',$request->id_lugar_atencion)
+                                                    ->where('dia','like','%'.$dia_de_semana.'%')
+                                                    ->first();
+
+            // $profesional_horarios = '00:30:00';
+            // $tiempo_consulta = 30;
+            $horas = date('H',strtotime($profesional_horarios->duracion_consulta));
+            $minutos = date('i',strtotime($profesional_horarios->duracion_consulta));
+            $totales = ($horas*60) + $minutos;
+            $tiempo_consulta = $totales;
+
+            $texto_alias_examen = '';
+            # TIPO HORA MEDICA
+            switch ($request->tipo_hora_medica) {
+                case 'C': // 1
+                    $texto_alias_examen = 'Consulta';
+                    break;
+                case 'D': // 2
+                    $texto_alias_examen = 'Consulta Dental';
+                    break;
+                case 'T': // 3
+                    $texto_alias_examen = 'Consulta Telemedicina';
+                    break;
+                case 'E': // 4
+                    $texto_alias_examen = 'Consulta Examen';
+                    break;
+                case 'P': // 5
+                    $texto_alias_examen = 'Procedimiento';
+                    break;
+            }
+
+            $hora_medica = new HoraMedica();
+
+            $hora_medica->id_paciente = $paciente->id;
+            $hora_medica->id_profesional = $profesional->id;
+            $hora_medica->id_asistente = $request->id_asistente;
+            $hora_medica->id_estado = 16; //PRE RESERVA
+            $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
+            $hora_medica->fecha_consulta = \Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d');
+
+            $hora_medica->hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
+            $hora_medica->hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->subSecond()->format('H:i:s');
+
+            $hora_medica->tipo_hora_medica = $request->tipo_hora_medica;
+            $hora_medica->alias_examen = $texto_alias_examen;
+            $hora_medica->id_procedimiento = $request->reserva_hora_id_procedimiento;
+
+            $hora_medica->descripcion = $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
+
+            if ($hora_medica->save())
+            {
+                $datos['estado'] = 1;
+                $datos['msj'] = 'Hora Medica creada';
+                $datos['hora_medica'] = $hora_medica;
+
+                $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
+
+                if(!empty($paciente->email))
+                {
+
+                    /** envio de correo de confirmacion INSTITUCION */
+                    $blade = 'completar_datos_usuarios';
+
+                    $to = array(
+                        array('email' => $paciente->email,'name' =>  $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+                    );
+
+                    $cc = array();
+                    $bcc = array();
+                    $asunto = 'MED-SDI - Pre Agendada';
+                    $body = array(
+                        'nombre_paciente'=> $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
+                        'fecha'=> $hora_medica->fecha_consulta,
+                        'hora'=> $hora_medica->hora_inicio,
+                        'profesional_nombre'=> $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
+                        'profesional_especialidad'=> $profesional->Especialidad()->first()->nombre ? $profesional->Especialidad()->first()->nombre : '',
+                        'profesional_tipo_especialidad'=> $profesional->TipoEspecialidad()->first()->nombre ? $profesional->TipoEspecialidad()->first()->nombre : '',
+                        'profesional_sub_tipo_especialidad'=> $profesional->subTipoEspecialidad()->exists() ? $profesional->subTipoEspecialidad()->first()->nombre : '',
+                        // 'institucion'=> $nombre_institucion,
+                        'lugar_atencion'=>$lugar_atencion ? $lugar_atencion->nombre : '',
+                        'direccion'=> $lugar_atencion ? $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre : '',
+                    );
+                    $archivo = '';/** pendiente */
+                    $id_institucion = '';
+
+                    $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                    if($result_mail['estado'])
+                    {
+                        $datos['mail']['paciente']['estado'] = 1;
+                        $datos['mail']['paciente']['msj'] = 'Notificacion de bienvenida enviado';
+                    }
+                    else
+                    {
+                        $datos['mail']['paciente']['estado'] = 0;
+                        $datos['mail']['paciente']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                    }
+                }
+                else
+                {
+                    $datos['mail']['paciente']['estado'] = 0;
+                    $datos['mail']['paciente']['msj'] = 'Sin correo  de paciente';
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Problema al crear Hora Medica';
+            }
+
+
+            return $datos;
+        } catch (\Exception $e) {
+            //throw $th;
+            var_dump($e->getLine());
             return $e->getMessage();
         }
 

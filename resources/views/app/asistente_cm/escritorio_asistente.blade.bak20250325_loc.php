@@ -1,28 +1,27 @@
-@extends('template.asistente_cm_publico.template')
-
+@extends('template.asistente_cm.template')
 
 @section('page-styles')
     <link href='{{ asset('css/estilos_boton_agen_examenes.css') }}' rel='stylesheet' />
 @endsection
 
 @section('content')
+
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
-
             <!--Header-->
-            <div class="page-header">
+            <div class="page-header mb-2">
                 <div class="page-block">
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio Asistente Institución</h5>
+                                <h5 class="m-b-10 font-weight-bold">Escritorio Asistente Jefa de Caja</h5>
                             </div>
-                            {{-- <ul class="breadcrumb">
+                            <!--<ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ route('asistentecm.home') }}">Mi Escritorio </a>
+                                    <a href="{{ route('asistentejcm.home') }}">Mi Escritorio </a>
                                 </li>
-                            </ul> --}}
+                            </ul>-->
                         </div>
                     </div>
                 </div>
@@ -35,26 +34,13 @@
                     <div class="card-deck">
 
                         <div class="card subir px-4 py-2">
-                            <a href="{{ ROUTE('asistentecm.confirmar_hora') }}">
+                            <a href="{{ ROUTE('asistentejcm.buscar_paciente') }}">
                                 <div class="row my-auto">
                                     <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/pacientes.svg') }}">
                                     </div>
                                     <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="mt-1 mb-0">Confirmar Hora</h5>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="card subir px-4 py-2">
-                            <a href="{{ ROUTE('asistentecm.buscar_paciente') }}">
-                                <div class="row my-auto">
-                                    <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-30 text-center mt-1 mb-2" src="{{ asset('images/iconos/pacientes.svg') }}">
-                                    </div>
-                                    <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="mt-1 mb-0">Buscar Pacientes</h5>
+                                        <h5 class="text-left d-inline">Buscar Pacientes</h5>
                                     </div>
                                 </div>
                             </a>
@@ -65,10 +51,10 @@
                             <a href="{{ ROUTE('asistente.reservar_hora') }}">
                                 <div class="row my-auto">
                                     <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/profesional_2.svg') }}">
+                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/profesional_2.svg') }}">
                                     </div>
                                     <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="mt-1 mb-0">Reservar Hora Médica</h5>
+                                        <h5 class="text-left">Reservar Hora Médica</h5>
                                     </div>
                                 </div>
                             </a>
@@ -76,57 +62,43 @@
                         --}}
 
                         <div class="card subir px-4 py-2">
-                            <a href="{{ ROUTE('asistentecm.mis_profesionales') }}">
+                            <a href="{{ ROUTE('asistentejcm.mis_profesionales') }}">
                                 <div class="row my-auto">
                                     <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-30 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
+                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/agenda.svg') }}">
                                     </div>
                                     <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="mt-1 mb-0">Profesionales</h5>
+                                        <h5 class="text-left">Profesionales</h5>
                                     </div>
                                 </div>
                             </a>
                         </div>
 
-                        {{--
-                        <div class="card subir px-4 py-2">
-                            <a href="{{ ROUTE('asistente.administracion_asistente') }}">
+                        {{-- <div class="card subir px-4 py-2">
+                            <a href="{{ ROUTE('asistentejcm.administracion_asistente') }}">
                                 <div class="row my-auto">
                                     <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
                                     </div>
                                     <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="mt-1 mb-0">Administración</h5>
+                                        <h5 class="text-left">Administración</h5>
                                     </div>
                                 </div>
                             </a>
-                        </div>
-                        --}}
+                        </div> --}}
 
                         <div class="card subir px-4 py-2">
-                            <a href="{{ ROUTE('asistentecm.rendir') }}">
+                            <a href="{{ ROUTE('asistentejcm.rendir') }}">
                                 <div class="row my-auto">
                                     <div class="col-md-4 col-xs-12 d-inline">
-                                        <img class="wid-30 text-center mb-1" src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
+                                        <img class="wid-40 mt-0 " src="{{ asset('images/iconos/flujo_caja_2.svg') }}">
                                     </div>
                                     <div class="col-md-8 col-xs-12 d-inline">
-                                        <h5 class="mt-1 mb-0">Entrega de Caja</h5>
+                                        <h5 class="text-left">Manejo de Caja</h5>
                                     </div>
                                 </div>
                             </a>
                         </div>
-
-                        {{--
-                        <div class="card py-auto subir">
-                            <a href="{{ ROUTE('asistente.venta_productos') }}">
-                            <a href="{{ ROUTE('asistente.registro_paciente') }}" class="btn" type="button">
-                                <div class="card-body text-center" style="cursor:pointer">
-                                    <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/otros_servicios_1.svg') }}">
-                                    <h5 class="mt-1 mb-0"> Venta de Productos</h5>
-                                </div>
-                            </a>
-                        </div>
-                        --}}
 
                     </div>
                 </div>
@@ -198,8 +170,6 @@
     </div>
     <!--Cierre: Container Completo-->
 
-    <!-- DATOS DE VITAL IMPORTANCIA -->
-    <input type="hidden" name="id_especialidad_profesional" id="id_especialidad_profesional" value="">
 @endsection
 
 @section('modales')
@@ -207,17 +177,17 @@
 
     @include('general.asistentes.modal_consulta_agenda')
 
-    @include('app.asistente_cm_publico.modales.lista_espera')
+    @include('app.asistente_cm.modales.lista_espera')
 
     {{-- horas extras --}}
-    @include('app.asistente_cm_publico.modales.horas_extras')
-    @include('app.asistente_cm_publico.modales.horas_extras_agendar')
+    @include('app.asistente_cm.modales.horas_extras')
+    @include('app.asistente_cm.modales.horas_extras_agendar')
 
     {{-- hora examen --}}
     @include('app.general.asistente.reserva_hora_examen.horas_examen')
     @include('app.general.asistente.reserva_hora_examen.horas_examen_agendar')
-@endsection
 
+@endsection
 
 @section('page-script')
     <script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
@@ -251,6 +221,10 @@
                 $("#agenda_agregar_paciente").modal('hide');
                 $('#rut_paciente_reserva').val('');
             });
+
+            function cerrar_modal_infoProf() {
+                $('#info_prof').modal('hide');
+            }
 
             {{-- ****** VALIDACIONDEFORMULARIOS ****** --}}
             {{--  VALIDACION RUT BUSQUEDA - AGENDA  --}}
@@ -311,10 +285,6 @@
 
         });
 
-        function cerrar_modal_infoProf() {
-            $('#info_prof').modal('hide');
-        }
-
         function cerrarModalAutorizacionMenorEdad()
         {
             swal({
@@ -333,7 +303,7 @@
 
                 }
             })
-        };
+        }
 
         function solicitarAutorizacionMenorEdad()
         {
@@ -570,12 +540,11 @@
         var activeDaysInRange = [];
         function cargarAgendaProfesional(tipo_agenda, fecha)
         {
-			 var tipo_agenda_temp = $('#agenda_profesional_asistente option:selected').attr('data-id_tipo_agenda');
+            var tipo_agenda_temp = $('#agenda_profesional_asistente option:selected').attr('data-id_tipo_agenda');
 
             if(tipo_agenda_temp != 0)
                 tipo_agenda = tipo_agenda_temp;
-
-            console.log('asistente_cm_publico/escritorio_asistente');
+            console.log('asistente_cm/escritorio_asistente');
             if(fecha != undefined && fecha != '')
             {
                 var res = fecha.split('T')[0];
@@ -594,6 +563,7 @@
 
             if(id_profesional != '')
             {
+
                 $.ajax({
                     url: url1,
                     type: "GET",
@@ -603,7 +573,6 @@
                         tipo_agenda: tipo_agenda,
                     },
                     success:function(data){
-                        console.log(data.profesional);
                         $('.boton').hide();
                         if (data !== 'null')
                         {
@@ -612,7 +581,6 @@
                                 $('.boton').css('background-color','#8b52c2');
                                 $('.btn-agenda-'+tipo_agenda).css('background-color','#1cbebe');
                                 $('#id_tipo_agenda').val(tipo_agenda);
-                                $('#id_especialidad_profesional').val(data.profesional.id_especialidad);
 
                                 if (data.profesional.id_especialidad == 2) {
                                     console.log('dentista');
@@ -620,6 +588,7 @@
                                 } else {
                                     console.log('general');
                                     $('#link_pago_presupuesto_dental').addClass('d-none');
+                                    $('#pills-venta-dental').removeClass('show active');
                                 }
 
                                 switch (parseInt(tipo_agenda)) {
@@ -646,13 +615,16 @@
                                 }
 
                                 /** activar tipos de agendas del profesional */
+                                console.log('escritorio_asistente');
+                                console.log('data.tipo_agendas');
+                                console.log(data);
                                 var tipo_agendas_cant = data.tipo_agendas.length;
                                 if(tipo_agendas_cant > 0)
                                 {
+                                    carga_tipos_agendas(data.tipo_agendas);
+                                    carga_tipos_agendas_anular(data.tipo_agendas);
                                     $.each(data.tipo_agendas, function (key, value)
                                     {
-                                        carga_tipos_agendas(data.tipo_agendas);
-                                        carga_tipos_agendas_anular(data.tipo_agendas);
                                         $('.btn-agenda-'+value).show();
                                     });
                                 }
@@ -741,7 +713,6 @@
                                             meridiem: 'medium'
                                         },
                                         eventDidMount: function(info) {
-                                            {{--   console.log(info.el);  --}}
                                             $(info.el).tooltip({
                                                 title: info.event.extendedProps.description,
                                                 placement: "top",
@@ -764,7 +735,7 @@
                                                             if (data !== 'null')
                                                             {
                                                                 //data = JSON.parse(data);
-                                                                console.log('---------evento--------------');
+                                                                console.log('-----------------------');
                                                                 console.log(data);
                                                                 console.log('-----------------------');
                                                                 if(data.estado == 1)
@@ -811,6 +782,7 @@
                                                                         }
                                                                     });
                                                                     console.log(arrayTemp);
+                                                                    console.log('aqui');
                                                                     end(arrayTemp);
                                                                 }
                                                                 else
@@ -818,14 +790,13 @@
                                                                     console.log('falla en carga');
                                                                 }
                                                             }
-
                                                         }
                                             });
                                         },
 
                                         eventClick: function(info) {
                                             let id_hora_medica = info.event.id;
-                                            let url = "{{ route('agenda.buscar_hora_medica') }}";
+                                            let url = "{{ route('agenda.buscar_hora_medica') }}"
 
                                             $.ajax({
 
@@ -834,9 +805,10 @@
                                                     data: {
                                                         //_token: _token,
                                                         id_hora_medica: id_hora_medica,
-                                                    }
+                                                    },
                                                 })
                                                 .done(function(data) {
+                                                    console.log('hola');
                                                     if (data != null) {
                                                         $('#modal_consulta_mensaje').text('');
                                                         $('#reserva_hora_id_paciente_asistente').val(data.paciente.id);
@@ -892,7 +864,7 @@
 
                                                         //celeste
                                                         //Reservada
-                                                        if (data.estado_hora == 1 || data.estado_hora == 16) //else if (info.event.backgroundColor == '#FEAA32')
+                                                        if (data.estado_hora == 1) //else if (info.event.backgroundColor == '#FEAA32')
                                                         {
                                                             //'Reservada') //Hora pendiente
                                                             $('#hm_anular_hora').show();
@@ -909,28 +881,6 @@
                                                             // console.log(data);
                                                             // $('#reservar_hora').modal('hide');
                                                             //location.reload();
-
-
-                                                            console.log(data.estado_hora);
-                                                            console.log(data.paciente.id_direccion);
-                                                            console.log(data.paciente.fecha_nac);
-
-                                                            if(data.estado_hora == 16)
-                                                            {
-                                                                $('#modal_consulta_mensaje').text('DEBE COMPLETAR LOS DATOS DEL PACIENTE PARA CONFIRMAR HORA');
-                                                                // if(data.paciente.id_direccion == 'null' || data.paciente.fecha_nac == 'null')
-                                                                if( data.paciente.id_direccion == 'null' || data.paciente.id_direccion == null || data.paciente.id_direccion == '')
-                                                                {
-                                                                    $('#hm_anular_hora').attr('disabled', 'disabled');
-                                                                    $('#hm_confirmar_hora').attr('disabled', 'disabled');
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                $('#hm_anular_hora').removeAttr('disabled');
-                                                                $('#hm_confirmar_hora').removeAttr('disabled');
-                                                            }
-
                                                         }
                                                         //verde
                                                         // CONFIRMADO
@@ -949,13 +899,10 @@
 
                                                             /** PESTAÑA DE RECIBIR PAGO */
                                                             $('#bono_paciente_rut').val(data.paciente.rut);
-                                                            $('#bono_paciente_rut_dental').val(data.paciente.rut);
                                                             $('#bono_paciente_nombre').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
-                                                            $('#bono_paciente_nombre_dental').val(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
                                                             $('#bono_profesional_nombre').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
-                                                            $('#bono_profesional_nombre_dental').val(data.profesional.nombre+' '+data.profesional.apellido_uno+' '+data.profesional.apellido_dos);
                                                             $('#bono_profesional_rut').val( data.profesional.rut);
-                                                            $('#bono_profesional_rut_dental').val( data.profesional.rut);
+
                                                             $('#bono_hora_medica').val(info.event.id);
                                                             $('#bono_id_profesional').val(data.profesional.id);
                                                             $('#bono_id_paciente').val(data.paciente.id);
@@ -1067,7 +1014,6 @@
                                                         //Inasistida
                                                         else if (data.estado_hora == 7)//else if (info.event.backgroundColor == '#F9A825')
                                                         {
-
                                                             //'Inasistida')
                                                             $('#hm_anular_hora').hide();
                                                             $('#hm_atender_hora').hide();
@@ -1112,13 +1058,13 @@
                                                 });
 
 
-                                                $('#datos_hora_medica').show();
-                                                $('#cancelacion_hora_medica').hide();
-                                                $('#confirmacion_hora_medica').hide();
-                                                /*$('#opcion_cancelar_hora_div').hide();*/
-                                                $('#id_hora_medica').val(info.event.id);
-                                                $('#id_hora_realizar').val(info.event.id);
-                                                info.el.style.borderColor = 'red';
+                                            $('#datos_hora_medica').show();
+                                            $('#cancelacion_hora_medica').hide();
+                                            $('#confirmacion_hora_medica').hide();
+                                            /*$('#opcion_cancelar_hora_div').hide();*/
+                                            $('#id_hora_medica').val(info.event.id);
+                                            $('#id_hora_realizar').val(info.event.id);
+                                            info.el.style.borderColor = 'red';
                                         },
 
                                         selectOverlap: function(event) {
@@ -1164,22 +1110,22 @@
                                             var valido_fecha = 1;
                                             /** VALIDACION DE FUERA DE HORARIO */
                                             // $.each(date.jsEvent.path, function(index, value)
-                                            // $.each(date.jsEvent.srcElement.classList, function(index, value)
-                                            // {
-                                            //     console.log(value);
-                                            //     if(value == 'fc-non-business')
-                                            //     {
-                                            //         swal({
-                                            //             title: "Toma de Hora",
-                                            //             text: "Horario no disponible con el Profesional",
-                                            //             icon: "error",
-                                            //             buttons: "Aceptar",
-                                            //             DangerMode: true,
-                                            //         })
-                                            //         valido = 0;
-                                            //     }
+                                            $.each(date.jsEvent.srcElement.classList, function(index, value)
+                                            {
+                                                // console.log(value);
+                                                if(value == 'fc-non-business')
+                                                {
+                                                    swal({
+                                                        title: "Toma de Hora",
+                                                        text: "Horario no disponible con el Profesional",
+                                                        icon: "error",
+                                                        buttons: "Aceptar",
+                                                        DangerMode: true,
+                                                    })
+                                                    valido = 0;
+                                                }
 
-                                            // });
+                                            });
 
                                             if(valido == 1)
                                             {
@@ -1194,40 +1140,44 @@
                                                 var curr_hour = date_DD.getHours();
                                                 var curr_mint = date_DD.getMinutes();
                                                 var fecha_seleccionada = curr_year+"-"+curr_month+"-"+curr_date+" "+curr_hour+":"+curr_mint;
-                                                // $.each(CalendarEl.getEvents(), function( index, value ) {
-                                                //     var date_str2 = value.startStr.replace('T',' ');
-                                                //     var date_DD2 = new Date(date_str2);
-                                                //     var curr_date2 = date_DD2.getDate();
-                                                //     var curr_month2 = date_DD2.getMonth();
+                                                $.each(CalendarEl.getEvents(), function( index, value ) {
+                                                    var date_str2 = value.startStr.replace('T',' ');
+                                                    var date_DD2 = new Date(date_str2);
+                                                    var curr_date2 = date_DD2.getDate();
+                                                    var curr_month2 = date_DD2.getMonth();
 
-                                                //     var curr_year2 = date_DD2.getFullYear();
-                                                //     var curr_hour2 = date_DD2.getHours();
-                                                //     var curr_mint2 = date_DD2.getMinutes();
-                                                //     var fecha_evento = curr_year2+"-"+curr_month2+"-"+curr_date2+" "+curr_hour2+":"+curr_mint2;
+                                                    var curr_year2 = date_DD2.getFullYear();
+                                                    var curr_hour2 = date_DD2.getHours();
+                                                    var curr_mint2 = date_DD2.getMinutes();
+                                                    var fecha_evento = curr_year2+"-"+curr_month2+"-"+curr_date2+" "+curr_hour2+":"+curr_mint2;
 
-                                                //     if($.trim(fecha_seleccionada) == $.trim(fecha_evento))
-                                                //     {
-                                                //         valido = 0;
-                                                //     }
-                                                // });
+                                                    if($.trim(fecha_seleccionada) == $.trim(fecha_evento))
+                                                    {
+                                                        valido = 0;
+                                                    }
+                                                });
 
                                                 /** VALIDAR BLOQUEO */
-                                                // CalendarEl.getEvents().forEach(function(event) {
-                                                //     var eventEnd = typeof event.end === 'string' ? moment(event.end) : event.end;
-                                                //     if (date.date >= event.start && date.date <= eventEnd)
-                                                //     {
-                                                //         valido = 0;
-                                                //         console.log('Existe un evento en esta fecha: ' + event.title);
-                                                //         swal({
-                                                //             title: "Toma de Hora",
-                                                //             text: "El profesional no atiende en este periodo.",
-                                                //             icon: "error",
-                                                //             buttons: "Aceptar",
-                                                //             DangerMode: true,
-                                                //         });
-                                                //         return false;
-                                                //     }
-                                                // });
+                                                CalendarEl.getEvents().forEach(function(event) {
+                                                    var eventEnd = typeof event.end === 'string' ? moment(event.end) : event.end;
+                                                    if (date.date >= event.start && date.date <= eventEnd) {
+                                                        valido = 0;
+                                                        console.log('Existe un evento en esta fecha: ' + event.title);
+                                                        console.log(date.date);
+                                                        console.log(event.start);
+                                                        console.log(eventEnd);
+
+                                                        swal({
+                                                            title: "Toma de Hora",
+                                                            text: "El profesional no atiende en este periodo.",
+                                                            icon: "error",
+                                                            buttons: "Aceptar",
+                                                            DangerMode: true,
+                                                        });
+                                                        return false;
+                                                    }
+
+                                                });
 
                                                 /** validar  dias pasados */
                                                 var diaActual = '{{ date('d') }}';
@@ -1309,6 +1259,12 @@
                                     CalendarEl.setOption('businessHours', data_businessHours );
                                     CalendarEl.setOption('slotMinTime', info_profesional_seleccionado.horario_data.hora_inicio_agenda );
                                     CalendarEl.setOption('slotMaxTime', info_profesional_seleccionado.horario_data.hora_termino_agenda );
+                                    {{--  console.log(CalendarEl.getOption('hiddenDays'));  --}}
+                                    {{--  console.log(CalendarEl.getOption('businessHours'));  --}}
+                                    {{--  console.log(CalendarEl.getOption('slotMinTime'));  --}}
+                                    {{--  console.log(CalendarEl.getOption('slotMaxTime'));  --}}
+
+                                    CalendarEl.render();
 
                                     /** registra la fecha de la semana en la vista */
                                     CalendarEl.on('datesSet', function(info) {
@@ -1319,10 +1275,17 @@
                                         getInactiveDays(dia_inicio, dia_fin, array_activos);
                                         console.log('activeDaysInRange2:', activeDaysInRange);
                                     })
-                                    CalendarEl.render();
 
                                     if(fecha != '' && fecha != null)
                                         CalendarEl.gotoDate(fecha);
+
+
+                                    {{--   console.log(calendarEl);  --}}
+
+                                    // var event = calendarEl.getEventById('107');
+                                    {{--   console.log(event);  --}}
+                                    // var start = event.start;
+                                    {{--   console.log(start.toISOString());  --}}
                                 }
                                 else
                                 {
@@ -1340,7 +1303,6 @@
                                     $('#seccion_agenda_botones').hide();
                                     $('#seccion_agenda_agendas').hide();
                                 }
-
                             }
                             else
                             {
@@ -1378,9 +1340,6 @@
                 $('#seccion_agenda_botones').hide();
                 $('#seccion_agenda_agendas').hide();
             }
-
-
-
         }
 
         {{--  CANCELAR HORA CARGA DE MENSAJE --}}
@@ -1394,7 +1353,7 @@
             $('#hm_confirmar_hora').hide();
             $('#hm_ver_hora').hide();
             $('#confirmar_anulacion_hora').show();
-        };
+        }
 
         {{--  CANCELAR HORA  --}}
         function cancelar_hora() {
@@ -1425,7 +1384,7 @@
                         confirmButtonText: "Cool"
                     });
 
-                    cargarAgendaProfesional($('#id_tipo_agenda').val(), '');
+                    cargarAgendaProfesional($('#id_tipo_agenda').val(),'');
 
 
                 } else {
@@ -1482,7 +1441,7 @@
                             // DangerMode: true,
                             confirmButtonText: "Cool"
                         });
-                        cargarAgendaProfesional($('#id_tipo_agenda').val(), data.fecha_consulta);
+                        cargarAgendaProfesional($('#id_tipo_agenda').val(),data.fecha_consulta);
                         $('#consulta').modal('hide');
 
                     } else {
@@ -1605,7 +1564,7 @@
                                 // buttons: "Aceptar",
                                 //SuccessMode: true,
                             });
-                            cargarAgendaProfesional($('#id_tipo_agenda').val(), data.hora_medica.fecha_consulta);
+                            cargarAgendaProfesional($('#id_tipo_agenda').val(),data.hora_medica.fecha_consulta);
                             $('#modal_recepcion_bonos_api').modal('hide');
                             $('#bono_paciente_rut').val('');
                             $('#bono_paciente_nombre').val('');
@@ -1671,6 +1630,7 @@
 
         }
 
+
         {{-- BUSCAR PACIENTE --}}
         function buscar_paciente() {
 
@@ -1680,6 +1640,7 @@
             $('#form_reseva_de_horas').submit(function(e) {
                 e.preventDefault();
             });
+
 
             $('#reserva_hora_nombres_paciente').val('');
             $('#reserva_hora_apellido_uno').val('');
@@ -1714,107 +1675,95 @@
             $('.div_representante_nuevo').hide();
             $('.div_representante_existente').hide();
 
-            $('#prereserva_hora_nombres_paciente').val('');
-            $('#prereserva_hora_apellido_uno').val('');
-            $('#prereserva_hora_apellido_dos').val('');
-            $('#prereserva_hora_correo').val('');
-            $('#prereserva_hora_telefono_uno').val('');
-
 
             let rut = $('#rut_paciente_reserva').val();
 
-			if(rut != '')
+            if(rut != '')
             {
+                $('#reserva_agregar_paciente_hora').hide();
+                $('#reserva_datos_paciente').hide();
+                let url = "{{ route('agenda.buscar_rut_paciente') }}";
 
-				$('#reserva_agregar_paciente_hora').hide();
-				$('#reserva_datos_paciente').hide();
-				let url = "{{ route('agenda.buscar_rut_paciente') }}";
+                $.ajax({
 
-				$.ajax({
+                    url: url,
+                    type: "get",
+                    data: {
+                        rut: rut,
+                    },
+                })
+                .done(function(data) {
 
-						url: url,
-						type: "get",
-						data: {
-							rut: rut,
-						},
-					})
-					.done(function(data) {
+                    $('#div_cargando').hide();
+                    $('#div_boton_buscar_paciente').show();
 
-                        $('#div_cargando').hide();
-                        $('#div_boton_buscar_paciente').show();
-
-                        console.log(JSON.parse(data));
-						if (data !== 'null') {
-							data = JSON.parse(data);
-
-                            if(data.tipo_paciente == 'SI')
-							{
-                                {{-- validacion para especialidad de pediatria --}}
-                                @if (isset($profesional))
-                                    @if ($profesional->id_tipo_especialidad == 11)
-                                        if (data.edad > 18) {
-                                            swal({
-                                                title: "Reserva de hora",
-                                                text: "El paciente es mayor de edad, el profesional es Pediatrico",
-                                                icon: "warning",
-                                                buttons: "Aceptar",
-                                            });
-                                        }
-                                    @endif
+                    if (data !== 'null') {
+                        data = JSON.parse(data);
+                        if(data.tipo_paciente == 'SI')
+                        {
+                            {{-- validacion para especialidad de pediatria --}}
+                            @if (isset($profesional))
+                                @if ($profesional->id_tipo_especialidad == 11)
+                                    if (data.edad > 18) {
+                                        swal({
+                                            title: "Reserva de hora",
+                                            text: "El paciente es mayor de edad, el profesional es Pediatrico",
+                                            icon: "warning",
+                                            buttons: "Aceptar",
+                                        });
+                                    }
                                 @endif
+                            @endif
 
-								$('.paciente_view').show();
-								$('.paciente_edit').hide();
+                            $('.paciente_view').show();
+                            $('.paciente_edit').hide();
 
-								{{--  console.log(data);  --}}
-								$('#reserva_datos_paciente').show();
-								$('#reserva_hora_id_paciente').val(data.id);
-								$('#reserva_rut_paciente').text(data.rut);
+                            {{--  console.log(data);  --}}
+                            $('#reserva_datos_paciente').show();
+                            $('#reserva_hora_id_paciente').val(data.id);
+                            $('#reserva_rut_paciente').text(data.rut);
 
-								$('#reserva_hora_nombre').text(data.nombres + ' ' + data.apellido_uno + ' ' + data.apellido_dos);
-								$('#input_reserva_hora_nombre').val(data.nombres);
-								$('#input_reserva_hora_apellido_uno').val(data.apellido_uno);
-								$('#input_reserva_hora_apellido_dos').val(data.apellido_dos);
+                            $('#reserva_hora_nombre').text(data.nombres + ' ' + data.apellido_uno + ' ' + data.apellido_dos);
+                            $('#input_reserva_hora_nombre').val(data.nombres);
+                            $('#input_reserva_hora_apellido_uno').val(data.apellido_uno);
+                            $('#input_reserva_hora_apellido_dos').val(data.apellido_dos);
 
-								$('#reserva_fecha_nacimiento').text(data.fecha_nac);
-								$('#input_reserva_fecha_nacimiento').val(DateFormatVista(data.fecha_nac));
+                            $('#reserva_fecha_nacimiento').text(data.fecha_nac);
+                            $('#input_reserva_fecha_nacimiento').val(DateFormatVista(data.fecha_nac));
 
-								if (data.sexo == 'M') {
-									$('#reserva_sexo').text('Masculino');
-								} else {
-									$('#reserva_sexo').text('Femenino');
-								}
-								$('#input_reserva_hora_sexo').val(data.sexo);
+                            if (data.sexo == 'M') {
+                                $('#reserva_sexo').text('Masculino');
+                            } else {
+                                $('#reserva_sexo').text('Femenino');
+                            }
+                            $('#input_reserva_hora_sexo').val(data.sexo);
 
-								$('#reserva_hora_email').text(data.email);
-								$('#input_reserva_hora_email').val(data.email);
+                            $('#reserva_hora_email').text(data.email);
+                            $('#input_reserva_hora_email').val(data.email);
 
-								$('#reserva_hora_telefono').text(data.telefono_uno);
-								$('#input_reserva_hora_telefono').val(data.telefono_uno);
+                            $('#reserva_hora_telefono').text(data.telefono_uno);
+                            $('#input_reserva_hora_telefono').val(data.telefono_uno);
 
-								$('#reserva_convenio').text(data.prevision.nombre);
-								$('#input_reserva_convenio').val(data.prevision.id);
+                            $('#reserva_convenio').text(data.prevision.nombre);
+                            $('#input_reserva_convenio').val(data.prevision.id);
+                            $('#div_procedimiento').css('display','block');
 
+                            $('#reserva_direccion').text(data.direccion.direccion+' '+data.direccion.numero_dir+', '+data.direccion.ciudad.nombre);
+                            $('#input_reserva_direccion_direccion').val(data.direccion.direccion);
+                            $('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir);
 
-                                $('#div_procedimiento').css('display','block');
-								$('#reserva_direccion').text(data.direccion.direccion+' '+data.direccion.numero_dir+', '+data.direccion.ciudad.nombre);
-								$('#input_reserva_direccion_direccion').val(data.direccion.direccion);
-								$('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir);
+                            $('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
+                            // $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
+                            buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', data.direccion.ciudad.id);
 
-								$('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
-								// $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
-								buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', data.direccion.ciudad.id);
+                            $('#rut_paciente_reserva').val('');
+                            $('.div_rut_buscar').hide();
 
-								$('#rut_paciente_reserva').val('');
-								$('.div_rut_buscar').hide();
+                            $('#reserva_hora_edad').val(data.edad);
 
-								$('#reserva_hora_edad').val(data.edad);
+                            $('#id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
 
-								$('#id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
-
-                                $('#presupuesto_numero').empty();
-
-                                console.log(data.presupuestos.length);
+                            console.log(data.presupuestos.length);
                                 if(data.presupuestos.length > 0){
                                     $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
                                     data.presupuestos.forEach(p => {
@@ -1826,97 +1775,85 @@
 
                                 }
 
-								if(data.edad < 18)
-								{
-									$('#acompanante_representante').prop("checked", true);
-									$('#acompanante_acompanante').prop("checked", false);
-									$('#autorizacion_atencion').prop("checked", false);
+                            if(data.edad < 18)
+                            {
+                                $('#acompanante_representante').prop("checked", true);
+                                $('#acompanante_acompanante').prop("checked", false);
+                                $('#autorizacion_atencion').prop("checked", false);
 
-									$('#div_info_representante').html(data.nombre_responsable);
+                                $('#div_info_representante').html(data.nombre_responsable);
 
-									$('#reserva_hora_id_acompanante').html('');
-									$.each(data.acompanante, function (indexInArray, valueOfElement)
-									{
-										console.log(valueOfElement);
-										var html = '';
-										html = '<option value="'+valueOfElement.id_acompanante+'">'+valueOfElement.acompanante.nombre+' '+valueOfElement.acompanante.apellido_uno+' - '+valueOfElement.acompanante.rut+'</option>';
-										$('#reserva_hora_id_acompanante').append(html);
-									});
-									$('#reserva_hora_id_acompanante').select2();
-
-									$('#reserva_hora_id_responsable').val(data.id_responsable);
-
-									$('#seccion_acompanante').show();
-									$('#seccion_autorizacion').show();
-								}
-								else
-								{
-									$('#acompanante_representante').prop("checked",false);
-									$('#acompanante_acompanante').prop("checked",false);
-									$('#autorizacion_atencion').prop("checked",false);
-									$('#reserva_hora_id_acompanante').val('');
-
-
-									$('#reserva_hora_id_responsable').val('');
-
-									$('#seccion_acompanante').hide();
-									$('#seccion_autorizacion').hide();
-								}
-							}
-							else
-							{
-								$('#reserva_datos_paciente').hide();
-								$('#reserva_agregar_paciente_hora').show();
-
-								$('#reserva_hora_nombres_paciente').val(data.nombres);
-								$('#reserva_hora_apellido_uno').val(data.apellido_uno);
-								$('#reserva_hora_apellido_dos').val(data.apellido_dos);
-								$('#reserva_hora_fecha_nac').val(data.fecha_nac);
-								if(data.sexo != null)
-									$('#reserva_hora_sexo').val(data.sexo);
-								else
-									$('#reserva_hora_sexo').val(0);
-
-								$('#reserva_hora_correo').val(data.email);
-
-                                if(data?.["direccion"] !== undefined)
+                                $('#reserva_hora_id_acompanante').html('');
+                                $.each(data.acompanante, function (indexInArray, valueOfElement)
                                 {
-                                    $('#region_agregar').val(data.direccion.ciudad.id_region);
-                                    buscar_ciudad(data.direccion.id_ciudad);
-                                    $('#reserva_hora_direccion').val(data.direccion.direccion);
-                                    $('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
-                                }
+                                    console.log(valueOfElement);
+                                    var html = '';
+                                    html = '<option value="'+valueOfElement.id_acompanante+'">'+valueOfElement.acompanante.nombre+' '+valueOfElement.acompanante.apellido_uno+' - '+valueOfElement.acompanante.rut+'</option>';
+                                    $('#reserva_hora_id_acompanante').append(html);
+                                });
+                                $('#reserva_hora_id_acompanante').select2();
 
-								$('#reserva_hora_telefono_uno').val(data.telefono_uno);
+                                $('#reserva_hora_id_responsable').val(data.id_responsable);
 
-								$('#reserva_hora_id_responsable').val('');
+                                $('#seccion_acompanante').show();
+                                $('#seccion_autorizacion').show();
+                            }
+                            else
+                            {
+                                $('#acompanante_representante').prop("checked",false);
+                                $('#acompanante_acompanante').prop("checked",false);
+                                $('#autorizacion_atencion').prop("checked",false);
+                                $('#reserva_hora_id_acompanante').val('');
 
-								{{--
-								$('#reserva_hora_profesion').val();
-								$('#reserva_hora_convenio').val();
-								$('#reserva_hora_descripcion').val();
-								--}}
 
-                                console.log('INFORMACION DE PRE RESERVA');
-                                console.log(data);
+                                $('#reserva_hora_id_responsable').val('');
 
-                                // INFORMACION DE PRE RESERVA
-                                $('#prereserva_hora_nombres_paciente').val(data.nombres);
-                                $('#prereserva_hora_apellido_uno').val(data.apellido_uno);
-                                $('#prereserva_hora_apellido_dos').val(data.apellido_dos);
-                                $('#prereserva_hora_correo').val(data.email);
-                                $('#prereserva_hora_telefono_uno').val(data.telefono_uno);
-							}
-						} else {
-							$('#reserva_datos_paciente').hide();
-							$('#reserva_agregar_paciente_hora').show();
-						}
+                                $('#seccion_acompanante').hide();
+                                $('#seccion_autorizacion').hide();
+                            }
+                        }
+                        else
+                        {
+                            $('#reserva_datos_paciente').hide();
+                            $('#reserva_agregar_paciente_hora').show();
 
-					})
-					.fail(function(jqXHR, ajaxOptions, thrownError) {
-						console.log(jqXHR, ajaxOptions, thrownError)
-					});
-			}
+                            $('#reserva_hora_nombres_paciente').val(data.nombres);
+                            $('#reserva_hora_apellido_uno').val(data.apellido_uno);
+                            $('#reserva_hora_apellido_dos').val(data.apellido_dos);
+                            $('#reserva_hora_fecha_nac').val(data.fecha_nac);
+                            if(data.sexo != null)
+                                $('#reserva_hora_sexo').val(data.sexo);
+                            else
+                                $('#reserva_hora_sexo').val(0);
+
+
+                            $('#reserva_hora_correo').val(data.email);
+                            $('#region_agregar').val(data.direccion.ciudad.id_region);
+                            buscar_ciudad(data.direccion.id_ciudad);
+                            $('#reserva_hora_direccion').val(data.direccion.direccion);
+                            $('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
+
+                            $('#reserva_hora_telefono_uno').val(data.telefono_uno);
+
+                            $('#reserva_hora_id_responsable').val('');
+
+                            {{--
+                            $('#reserva_hora_profesion').val();
+                            $('#reserva_hora_convenio').val();
+                            $('#reserva_hora_descripcion').val();
+                            --}}
+                        }
+                    } else {
+                        $('#reserva_datos_paciente').hide();
+                        $('#reserva_agregar_paciente_hora').show();
+
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
             else
             {
                 swal({
@@ -1924,184 +1861,11 @@
                     text: 'Debe ingresar RUT para buscar.',
                     icon: "error",
                 });
-
-                $('#div_cargando').hide();
+				$('#div_cargando').hide();
                 $('#div_boton_buscar_paciente').show();
             }
-		};
 
-        // Función para actualizar el input de valor total
-        function updateTotalValue() {
-            const selectedOption = $('#presupuesto_numero option:selected'); // Obtener la opción seleccionada
-            let url = "{{ ROUTE('profesional.mi_agenda.dame_tratamientos_presupuesto') }}";
-            let id_presupuesto = selectedOption.val();
-
-            $.ajax({
-                type:'post',
-                url: url,
-                data:{
-                    id: id_presupuesto,
-                    _token: CSRF_TOKEN
-                },
-                success: function(resp){
-                    console.log(resp);
-                    let tratamientos = resp.tratamientos;
-                    let maxilar_superior_gral_diagnosticos = resp.maxilar_superior_gral_diagnosticos;
-                    let maxilar_superior_gral_tratamientos = resp.maxilar_superior_gral_tratamientos;
-                    let maxilar_superior_gral_diagnosticos_endo = resp.maxilar_superior_gral_diagnosticos_endo;
-                    let maxilar_superior_gral_tratamientos_endo = resp.maxilar_superior_gral_tratamientos_endo;
-                    let maxilar_inferior_gral_diagnosticos = resp.maxilar_inferior_gral_diagnosticos;
-                    let maxilar_inferior_gral_tratamientos = resp.maxilar_inferior_gral_tratamientos;
-                    let maxilar_inferior_gral_diagnosticos_endo = resp.maxilar_inferior_gral_diagnosticos_endo;
-                    let maxilar_inferior_gral_tratamientos_endo = resp.maxilar_inferior_gral_tratamientos_endo;
-                    let boca_completa_gral_diagnosticos = resp.boca_completa_gral_diagnosticos;
-                    let boca_completa_gral_tratamientos = resp.boca_completa_gral_tratamientos;
-                    let boca_completa_gral_diagnosticos_endo = resp.boca_completa_gral_diagnosticos_endo;
-                    let boca_completa_gral_tratamientos_endo = resp.boca_completa_gral_tratamientos_endo;
-                    const totalValue = selectedOption.data('total') || ''; // Obtener el valor del atributo data-total
-                    var bloques = resp.bloques;
-                    $('#bono_valor_consulta').val(totalValue); // Actualizar el input de valor total
-                    $('#contenedor_tratamientos_presupuesto').show();
-                    $('#contenedor_tratamientos_presupuesto').empty();
-                    tratamientos.forEach(t => {
-
-                        const checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        const disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">N° Pieza ${t.pieza} - ${t.tratamiento}</label>
-                            </div>`);
-
-
-                    });
-                    maxilar_superior_gral_diagnosticos.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_superior_gral_tratamientos.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_superior_gral_diagnosticos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_superior_gral_tratamientos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_inferior_gral_diagnosticos.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_inferior_gral_tratamientos.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_inferior_gral_diagnosticos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    maxilar_inferior_gral_tratamientos_endo.forEach(t => {
-                        if(t.presupuesto == 1){
-                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
-                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
-
-                            $('#contenedor_tratamientos_presupuesto').append(`
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
-                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
-                            </div>`);
-                            }
-                    });
-                    $('#contenedor_tratamientos_presupuesto').append('Se utilizan <span id="cantidad_bloques_atencion">'+bloques+'</span> bloques de atención.');
-                },
-                error: function(error){
-                    console.log(error);
-                }
-            });
-
-        }
-
-        function handleCheckboxClick(id, isChecked, tipo = null) {
-            console.log(`Checkbox con ID ${id} está ${isChecked ? 'seleccionado' : 'deseleccionado'}`);
-
-            // Aquí puedes manejar la lógica adicional o enviar el ID al servidor
-            $.ajax({
-                url: '{{ ROUTE("profesional.mi_agenda.atender_tratamiento_presupuesto") }}',
-                method: 'POST',
-                data: { id: id, checked: isChecked,tipo: tipo, _token: CSRF_TOKEN },
-                success: function(response) {
-                    console.log('Servidor respondió:', response);
-                    let bloques_actualizados = response.bloques;
-                    let bloques_original = parseInt($('#cantidad_bloques_atencion').text());
-                    let bloques = response.atendido == 1 ? bloques_original + bloques_actualizados : bloques_original - bloques_actualizados;
-                    if(bloques < 0) bloques = 0;
-                    $('#cantidad_bloques_atencion').html(bloques);
-                },
-                error: function(error) {
-                    console.error('Error al enviar datos:', error);
-                }
-            });
-        }
+        };
 
         {{--  REGISTRO NUEVO PACIENTE GENERACION DE HORA  --}}
         function agendar_hora_paciente_nuevo() {
@@ -2202,6 +1966,10 @@
 
                 });
                 return;
+            }
+            else
+            {
+                reserva_hora_fecha_nac = formatDateDB(reserva_hora_fecha_nac);
             }
 
             let reserva_hora_sexo = $('#reserva_hora_sexo').val();
@@ -2473,6 +2241,10 @@
                         });
                         return;
                     }
+                    else
+                    {
+                        reserva_hora_representante_fecha_nac = formatDateDB(reserva_hora_representante_fecha_nac);
+                    }
                     if( reserva_hora_representante_sexo == '' )
                     {
                         swal({
@@ -2551,19 +2323,16 @@
                             }
                             else
                             {
-                                if(reserva_hora_representante_result_codigo_validacion =='0')
-                                {
-                                    var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-                                    if (caract.test(reserva_hora_representante_correo) == false){
-                                        swal({
-                                            title: "Error!",
-                                            text: "Debe ingresar el email o teléfono del representante",
-                                            icon: "error",
-                                            type: "danger",
-                                            DangerMode: true,
-                                        });
-                                        return;
-                                    }
+                                var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
+                                if (caract.test(reserva_hora_representante_correo) == false){
+                                    swal({
+                                        title: "Error!",
+                                        text: "Debe ingresar el email o teléfono del representante",
+                                        icon: "error",
+                                        type: "danger",
+                                        DangerMode: true,
+                                    });
+                                    return;
                                 }
                             }
                         }
@@ -2655,7 +2424,6 @@
                     },
                 })
                 .done(function(data) {
-                    console.log(data);
                     if (data != null) {
                         // data = JSON.parse(data);
                         // console.log(data);
@@ -2693,218 +2461,6 @@
                 });
         };
 
-        function agendar_hora_paciente_nuevo_prereserva()
-        {
-
-            let fecha_consulta = $('#fecha_consulta').val();
-
-            /** validacion para estados 16 pre reserva */
-            valido = 1;
-            var lista_horas = [];
-            $.each(CalendarEl.getEvents(), function( index, value ) {
-                var date_str2 = value.startStr.replace('T',' ');
-                var date_DD2 = new Date(date_str2);
-                var curr_date2 = date_DD2.getDate();
-                var curr_month2 = date_DD2.getMonth();
-                var curr_year2 = date_DD2.getFullYear();
-                var curr_hour2 = date_DD2.getHours();
-                var curr_mint2 = date_DD2.getMinutes();
-                var fecha_evento = curr_year2+"-"+curr_month2+"-"+curr_date2+" "+curr_hour2+":"+curr_mint2;
-
-                var date_DD3 = new Date(fecha_consulta);
-                var curr_date3 = date_DD3.getDate();
-                var curr_month3 = date_DD3.getMonth();
-                var curr_year3 = date_DD3.getFullYear();
-                var curr_hour3 = date_DD3.getHours();
-                var curr_mint3 = date_DD3.getMinutes();
-                var fecha_consulta3 = curr_year3+"-"+curr_month3+"-"+curr_date3+" "+curr_hour3+":"+curr_mint3;
-
-                // console.log(fecha_consulta3);
-                // console.log(fecha_evento);
-                // console.log('**********');
-
-                if($.trim(fecha_consulta3) == $.trim(fecha_evento))
-                {
-                    console.log(value.id);
-                    lista_horas.push(value.id);
-                }
-            });
-
-
-
-            console.log( 'agendar_hora_paciente_nuevo_prereserva' );
-            console.log( valido );
-            // return false;
-
-
-            let url = "{{ route('agenda.agendar_hora_nuevo_paciente_prereserva') }}";
-            let _token = $('#_token').val();
-
-            let tipo_agenda = $('#id_tipo_agenda').val();
-            var tipo_agenda_text = 'C';
-
-            console.log(tipo_agenda);
-            console.log(tipo_agenda_text);
-
-            switch (tipo_agenda) {
-                case '1':
-                    tipo_agenda_text = 'C'; //CONSULTA
-                    break;
-                case '2':
-                    tipo_agenda_text = 'D'; //DENTAL
-                    break;
-                case '3':
-                    tipo_agenda_text = 'T'; //TELEMEDICINA
-                    break;
-                case '4':
-                    tipo_agenda_text = 'E'; //EXAMEN
-                    break;
-            }
-
-            console.log(tipo_agenda_text);
-
-            let rut_paciente_reserva = $('#rut_paciente_reserva').val();
-            if (rut_paciente_reserva == '')
-            {
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar el Rut",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-                });
-                return false;
-            }
-
-            let reserva_hora_nombre = $('#prereserva_hora_nombres_paciente').val();
-            if (reserva_hora_nombre == '') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar los nombres del paciente",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-                return;
-
-            }
-
-            let reserva_hora_primer_apellido = $('#prereserva_hora_apellido_uno').val();
-            if (reserva_hora_primer_apellido == '') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar el primer apellido",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-                return;
-
-            }
-
-            let reserva_hora_segundo_apellido = $('#prereserva_hora_apellido_dos').val();
-            if (reserva_hora_segundo_apellido == '') {
-
-                swal({
-                    title: "Error!",
-                    text: "Debe ingresar el segundo apellido",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-
-                return;
-
-            }
-
-            let reserva_hora_email = $('#prereserva_hora_correo').val();
-            let reserva_hora_telefono_uno = $('#prereserva_hora_telefono_uno').val();
-
-            if(reserva_hora_email == '' && reserva_hora_telefono_uno =='')
-            {
-                swal({
-                    title: "Error!",
-                    text: "Debe email de contacto o telefono",
-                    icon: "error",
-                    type: "danger",
-                    DangerMode: true,
-
-                });
-
-                return;
-            }
-
-
-            let reserva_hora_confirmacion = $('#reserva_hora_confirmacion').val();
-            let reserva_hora_sms = $('#reserva_hora_sms').val();
-            let id_profesional = $('#agenda_profesional_asistente').val();
-            let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
-
-            console.log('ajax');
-            $.ajax({
-
-                url: url,
-                type: "get",
-                data: {
-                    _token: _token,
-                    fecha_consulta: fecha_consulta,
-                    rut_paciente_reserva: rut_paciente_reserva,
-                    reserva_hora_nombre: reserva_hora_nombre,
-                    reserva_hora_primer_apellido: reserva_hora_primer_apellido,
-                    reserva_hora_segundo_apellido: reserva_hora_segundo_apellido,
-                    reserva_hora_email: reserva_hora_email,
-                    reserva_hora_telefono: reserva_hora_telefono_uno,
-                    reserva_hora_confirmacion: reserva_hora_confirmacion,
-                    reserva_hora_sms: reserva_hora_sms,
-                    id_profesional:id_profesional,
-                    id_lugar_atencion: id_lugar_atencion,
-                    tipo_hora_medica: tipo_agenda_text,
-                },
-            })
-            .done(function(data) {
-                console.log(data);
-                if (data != null) {
-                    // data = JSON.parse(data);
-                    // console.log(data);
-                    if (data.estado == 1) {
-                        swal({
-                            title: "Exito!",
-                            text: "Hora medica agendada correctamente",
-                            type: "success",
-                            confirmButtonText: "Cool"
-                        });
-                        $('#reservar_hora').modal('hide');
-                        $('#agenda_agregar_paciente').modal('hide');
-                        cargarAgendaProfesional($('#id_tipo_agenda').val(),fecha_consulta);
-                    } else {
-                        swal({
-                            title: "Hora medica",
-                            text: data.msj,
-                            type: "error",
-                            confirmButtonText: "Cool"
-                        });
-                    }
-                } else {
-                    swal({
-                        title: "Error!",
-                        text: "Paciente no encontrado en el sistema",
-                        type: "error",
-                        confirmButtonText: "Cool"
-                    });
-                    // alert('Paciente no encontrado en el sistema');
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log('error');
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        };
-
         {{--  GENERAR HORA USUARIO EXISTENTE  --}}
         function agendar_hora() {
 
@@ -2916,6 +2472,7 @@
             let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
             let tipo_agenda = $('#id_tipo_agenda').val();
             var tipo_agenda_text = 'C';
+
             var procedimiento = '';
             var proc_bloque = '';
             if($('#form_reseva_de_horas_id_procedimiento').length == 1)
@@ -2925,7 +2482,6 @@
             }else{
                 proc_bloque = parseInt($('#cantidad_bloques_atencion').text());
             }
-
 
             console.log(tipo_agenda);
             console.log(tipo_agenda_text);
@@ -2947,30 +2503,6 @@
 
             console.log(tipo_agenda_text);
 
-            let representante = 0;
-            let lista_Acompanante = $('#reserva_hora_id_acompanante').val();
-
-            if( $('#acompanante_representante').prop("checked") )
-                representante = 1;
-            else
-                representante = 0;
-
-            let acompanante = 0;
-            if( $('#acompanante_acompanante').prop("checked") )
-                acompanante = 1;
-            else
-            {
-                acompanante = 0;
-                lista_Acompanante = '';
-            }
-
-            let autorizacion_atencion = 0;
-            if( $('#autorizacion_atencion').prop("checked") )
-                autorizacion_atencion = 1;
-            else
-                autorizacion_atencion = 0;
-
-
             $.ajax({
 
                     url: url,
@@ -2982,15 +2514,12 @@
                         id_lugar_atencion: id_lugar_atencion,
                         id_profesional: id_profesional,
                         tipo_hora_medica: tipo_agenda_text,
-                        representante: representante,
-                        acompanante: acompanante,
-                        lista_Acompanante: lista_Acompanante,
-                        autorizacion_atencion: autorizacion_atencion,
                         procedimiento: procedimiento,
                         proc_bloque: proc_bloque
                     }
                 })
                 .done(function(data) {
+                    console.log(data);
                     if (data != null) {
                         data = JSON.parse(data);
                         if(data.estado == 'error') {
@@ -3038,6 +2567,179 @@
         {{--  BUSCANDO CIUDAD --}}
         function buscar_ciudades(id_ciudad=0) {
             buscar_ciudad(id_ciudad);
+        }
+
+         // Función para actualizar el input de valor total
+         function updateTotalValue() {
+            const selectedOption = $('#presupuesto_numero option:selected'); // Obtener la opción seleccionada
+            let url = "{{ ROUTE('profesional.mi_agenda.dame_tratamientos_presupuesto') }}";
+            let id_presupuesto = selectedOption.val();
+
+            $.ajax({
+                type:'post',
+                url: url,
+                data:{
+                    id: id_presupuesto,
+                    _token: CSRF_TOKEN
+                },
+                success: function(resp){
+                    console.log(resp);
+                    let tratamientos = resp.tratamientos;
+                    let maxilar_superior_gral_diagnosticos = resp.maxilar_superior_gral_diagnosticos;
+                    let maxilar_superior_gral_tratamientos = resp.maxilar_superior_gral_tratamientos;
+                    let maxilar_superior_gral_diagnosticos_endo = resp.maxilar_superior_gral_diagnosticos_endo;
+                    let maxilar_superior_gral_tratamientos_endo = resp.maxilar_superior_gral_tratamientos_endo;
+                    let maxilar_inferior_gral_diagnosticos = resp.maxilar_inferior_gral_diagnosticos;
+                    let maxilar_inferior_gral_tratamientos = resp.maxilar_inferior_gral_tratamientos;
+                    let maxilar_inferior_gral_diagnosticos_endo = resp.maxilar_inferior_gral_diagnosticos_endo;
+                    let maxilar_inferior_gral_tratamientos_endo = resp.maxilar_inferior_gral_tratamientos_endo;
+                    let boca_completa_gral_diagnosticos = resp.boca_completa_gral_diagnosticos;
+                    let boca_completa_gral_tratamientos = resp.boca_completa_gral_tratamientos;
+                    let boca_completa_gral_diagnosticos_endo = resp.boca_completa_gral_diagnosticos_endo;
+                    let boca_completa_gral_tratamientos_endo = resp.boca_completa_gral_tratamientos_endo;
+                    const totalValue = selectedOption.data('total') || ''; // Obtener el valor del atributo data-total
+                    var bloques = resp.bloques;
+                    $('#bono_valor_consulta').val(totalValue); // Actualizar el input de valor total
+                    $('#contenedor_tratamientos_presupuesto').show();
+                    $('#contenedor_tratamientos_presupuesto').empty();
+                    tratamientos.forEach(t => {
+
+                        const checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        const disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">N° Pieza ${t.pieza} - ${t.tratamiento}</label>
+                            </div>`);
+
+
+                    });
+                    maxilar_superior_gral_diagnosticos.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_superior_gral_tratamientos.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_superior_gral_diagnosticos_endo.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_superior_gral_tratamientos_endo.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_inferior_gral_diagnosticos.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_inferior_gral_tratamientos.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_inferior_gral_diagnosticos_endo.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    maxilar_inferior_gral_tratamientos_endo.forEach(t => {
+                        if(t.presupuesto == 1){
+                        var checked = t.atendido == 1 ? 'checked' : ''; // Si está atendido, agrega 'checked'
+                        var disabled = t.atendido == 1 ? 'disabled' : ''; // Agregar 'disabled' si está atendido
+
+                            $('#contenedor_tratamientos_presupuesto').append(`
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked}>
+                                <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
+                            </div>`);
+                            }
+                    });
+                    $('#contenedor_tratamientos_presupuesto').append('Se utilizan <span id="cantidad_bloques_atencion">'+bloques+'</span> bloques de atención.');
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+
+        }
+
+        function handleCheckboxClick(id, isChecked, tipo = null) {
+            console.log(`Checkbox con ID ${id} está ${isChecked ? 'seleccionado' : 'deseleccionado'}`);
+
+            // Aquí puedes manejar la lógica adicional o enviar el ID al servidor
+            $.ajax({
+                url: '{{ ROUTE("profesional.mi_agenda.atender_tratamiento_presupuesto") }}',
+                method: 'POST',
+                data: { id: id, checked: isChecked,tipo: tipo, _token: CSRF_TOKEN },
+                success: function(response) {
+                    console.log('Servidor respondió:', response);
+                    let bloques_actualizados = response.bloques;
+                    let bloques_original = parseInt($('#cantidad_bloques_atencion').text());
+                    let bloques = response.atendido == 1 ? bloques_original + bloques_actualizados : bloques_original - bloques_actualizados;
+                    if(bloques < 0) bloques = 0;
+                    $('#cantidad_bloques_atencion').html(bloques);
+                },
+                error: function(error) {
+                    console.error('Error al enviar datos:', error);
+                }
+            });
         }
 
         function buscar_ciudad(id_ciudad=0) {
@@ -3112,49 +2814,7 @@
             });
         };
 
-        function validar_tipo_hora_medica(id)
-        {
-            let url = "{{ route('agenda.buscar_hora_medica') }}";
-            $.ajax({
-                url: url,
-                type: "get",
-                data: {
-                    //_token: _token,
-                    id_hora_medica: id,
-                },
-            })
-            .done(function(data) {
-                console.log(data);
-                if (data != null)
-                {
-
-                    if(data.estado == 1)
-                    {
-                        if(data.estado_hora == 16)
-                        return 1;
-                        else
-                        return 0;
-                    }
-                    else
-                    {
-                        return 0;
-                        console.log('error validacion');
-                    }
-
-                }
-                else
-                {
-                    return 0;
-                    console.log('error validacion');
-                }
-
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }
-
     </script>
+@include('app.general.asistente.agenda.boton_flotante_agenda_exa_ciru')
 @endsection
 
-@include('app.general.asistente.agenda.boton_flotante_agenda_exa_ciru')
