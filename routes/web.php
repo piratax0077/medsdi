@@ -2463,3 +2463,4 @@ Route::post('/profesional/registrar_empresa', [App\Http\Controllers\EscritorioPr
 Route::post('/profesional/registrar_convenio_profesional/empresa', [App\Http\Controllers\EscritorioProfesional::class, 'registrar_convenio_profesional_empresa'])->name('profesional.guardar_convenio_empresa');
 Route::post('/profesional/guardar_tipo_convenio', [App\Http\Controllers\EscritorioProfesional::class, 'guardar_tipo_convenio'])->name('profesional.guardar_tipo_convenio');
 Route::post('/profesional/eliminar_tipo_convenio',[App\Http\Controllers\EscritorioProfesional::class, 'eliminar_tipo_convenio'])->name('profesional.eliminar_tipo_convenio');
+Route::post('/profesional/aplicar_convenio_tratamiento',[App\Http\Controllers\EscritorioProfesional::class, 'aplicar_convenio_tratamiento'])->name('profesional.aplicar_convenio_tratamiento');

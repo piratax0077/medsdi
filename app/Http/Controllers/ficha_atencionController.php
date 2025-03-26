@@ -1958,10 +1958,18 @@ class ficha_atencionController extends Controller
             $paciente->info_convenio = null;
         }
 
+        $convenios_empresas = EmpresasConvenios::where('id_profesional',$profesional->id)->get();
+        $convenios_prevision = EmpresasConvenios::select('empresas_convenios.*','tipoproducto_convenios.descripcion')
+                                                    ->leftjoin('tipoproducto_convenios','empresas_convenios.id_convenio','tipoproducto_convenios.id')
+                                                    ->where('empresas_convenios.id_empresa',null)
+                                                    ->where('empresas_convenios.id_profesional', $profesional->id)
+                                                    ->get();
 
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
+                'convenios_empresas' => $convenios_empresas,
+                'convenios_prevision' => $convenios_prevision,
                 'tipos_receta' => $tipos_receta,
                 'recetas' => $recetas,
                 'insumos_tratamientos' => $insumos_tratamientos,

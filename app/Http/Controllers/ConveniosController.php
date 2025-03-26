@@ -253,8 +253,11 @@ class ConveniosController extends Controller
         $tipoproducto_convenios = TipoProductoConvenios::where('id_tipo_convenio',2)->get();
         $regiones = Region::all();
         $convenios_empresas = EmpresasConvenios::where('id_profesional',$profesional->id)->get();
-
-
+        $convenios_prevision = EmpresasConvenios::select('empresas_convenios.*','tipoproducto_convenios.descripcion')
+                                                    ->leftjoin('tipoproducto_convenios','empresas_convenios.id_convenio','tipoproducto_convenios.id')
+                                                    ->where('empresas_convenios.id_empresa',null)
+                                                    ->where('empresas_convenios.id_profesional', $profesional->id)
+                                                    ->get();
 
         return view('app.profesional.mis_convenios')->with([
             'profesional' => $profesional,
@@ -264,6 +267,7 @@ class ConveniosController extends Controller
             'tipoproducto_convenios' => $tipoproducto_convenios,
             'regiones' => $regiones,
             'convenios_empresas' => $convenios_empresas,
+            'convenios_prevision' => $convenios_prevision
         ]);
     }
 

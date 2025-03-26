@@ -205,6 +205,36 @@
                                 <div class="card-body">
                                     <p>convenios</p>
                                     <p>{{ $paciente->prevision->nombre }}</p>
+                                    <div class="row">
+                                        @foreach ($convenios_prevision as $c)
+                                        <div class="col-md-3">
+                                            <div class="card {{ $paciente->prevision->nombre == $c->nombre_convenio ? 'bg-success' : '' }}" >
+                                                <img class="card-img-top" src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="Card image cap">
+                                                <div class="card-body">
+                                                  <h5 class="card-title">{{ $c->nombre_convenio }}</h5>
+                                                  <p class="card-text">{{ $c->porcentaje }} % {{ $c->descripcion }}</p>
+                                                  <a href="#" class="btn btn-primary">Aplicar</a>
+                                                </div>
+                                              </div>
+                                        </div>
+                                        @endforeach
+
+                                    </div>
+                                    {{-- <div class="row">
+                                        @foreach ($convenios_empresas as $c)
+                                        <div class="col-md-3">
+                                            <div class="card {{ $paciente->prevision->nombre == $c->nombre_convenio ? 'bg-success' : '' }}" >
+                                                <img class="card-img-top" src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="Card image cap">
+                                                <div class="card-body">
+                                                  <h5 class="card-title">{{ $c->nombre_convenio }}</h5>
+                                                  <p class="card-text">{{ $c->porcentaje }} % {{ $c->descripcion }}</p>
+                                                  <a href="#" class="btn btn-primary">Aplicar</a>
+                                                </div>
+                                              </div>
+                                        </div>
+                                        @endforeach
+
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -944,6 +974,19 @@
                                                         <button type="button" class="btn btn-success btn-block btn-sm"
                                                         onclick="pagar_presupuesto();"><i class="fa fa-plus"></i>Ingresar Abono</button>
                                                     </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        @foreach ($convenios_prevision as $c)
+                                                            @if( $paciente->prevision->nombre == $c->nombre_convenio)
+                                                            <p>{{ $paciente->prevision->nombre }} {{ $c->porcentaje }} % {{ $c->descripcion }}
+                                                                <button type="button" class="btn btn-outline-success btn-sm btn-icon" onclick="aplicar_convenio_tratamiento({{ $c->id }})"><i class="fas fa-check"></i></button>
+                                                                <button type="button" class="btn btn-outline-primary btn-sm btn-icon" onclick="imprimir_convenio_tratamiento({{ $c->id }})"><i class="fas fa-print"></i></button>
+                                                            </p>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-12">
@@ -1964,7 +2007,7 @@
                 // Recorrer el array de insumos y agregarlos a la tabla
                 insumos.forEach(insumo => {
                     table.row.add([
-                        insumo.insumos,         // Nombre del insumo
+                        insumo.insumos + ' ' + insumo.nombre_marca,          // Nombre del insumo
                         insumo.cantidad,       // Cantidad utilizada
                         insumo.valor,         // Unidad de medida
                         insumo.observaciones     // Descripción u observaciones
@@ -2043,7 +2086,7 @@
                         // Recorrer el array de insumos y agregarlos a la tabla
                         insumos.forEach(insumo => {
                             table.row.add([
-                                insumo.insumos,         // Nombre del insumo
+                                insumo.insumos + ' ' + insumo.nombre_marca,          // Nombre del insumo
                                 insumo.cantidad,       // Cantidad utilizada
                                 insumo.valor,         // Unidad de medida
                                 insumo.observaciones     // Descripción u observaciones
@@ -2252,7 +2295,7 @@
                         }
 
                         table_insumos.row.add([
-                            insumo.insumos,         // Nombre del insumo
+                            insumo.insumos + ' ' + insumo.nombre_marca,          // Nombre del insumo
                             insumo.cantidad,       // Cantidad utilizada
                             insumo.valor,         // Unidad de medida
                             total,
@@ -2273,7 +2316,7 @@
                                 var clase = 'bg-danger';
                             }
                             let rowNode = table_insumos_pagos.row.add([
-                            insumo.insumos,
+                            insumo.insumos + ' ' + insumo.nombre_marca,
                             insumo.cantidad,         // Nombre del insumo
                             formatoMoneda(insumo.valor),       // Cantidad utilizada
                             0,         // Unidad de medida
@@ -2441,7 +2484,7 @@
                         }
 
                         table_insumos.row.add([
-                            insumo.insumos,         // Nombre del insumo
+                            insumo.insumos + ' ' + insumo.nombre_marca,          // Nombre del insumo
                             insumo.cantidad,       // Cantidad utilizada
                             insumo.valor,         // Unidad de medida
                             total,
@@ -2463,7 +2506,7 @@
                                 var clase = 'bg-danger';
                             }
                             let rowNode = table_insumos_pagos.row.add([
-                            insumo.insumos,
+                            insumo.insumos + ' ' + insumo.nombre_marca,
                             insumo.cantidad,         // Nombre del insumo
                             formatoMoneda(insumo.valor),       // Cantidad utilizada
                             0,         // Unidad de medida
@@ -2599,7 +2642,7 @@
                                 var clase = 'bg-danger';
                             }
                             let rowNode = table_insumos_pagos.row.add([
-                            insumo.insumos,
+                            insumo.insumos + ' ' + insumo.nombre_marca,
                             insumo.cantidad,         // Nombre del insumo
                             formatoMoneda(insumo.valor),       // Cantidad utilizada
                             0,         // Unidad de medida
@@ -2670,6 +2713,114 @@
             }
         });
     });
+
+    function aplicar_convenio_tratamiento(id){
+        let data = {
+            id: id,
+            id_paciente: $('#id_paciente').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            _token: CSRF_TOKEN
+        }
+        let url = "{{ ROUTE('profesional.aplicar_convenio_tratamiento') }}";
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                let odontograma = resp.odontograma;
+                let table_piezas_odontograma = $('#presup_estado_pago').DataTable();
+
+                // Limpiar la tabla antes de agregar nuevas filas
+                table_piezas_odontograma.clear().draw();
+
+                // Recorrer el odontograma y agregar nuevas filas
+                odontograma.forEach(function(odonto) {
+
+                    if (odonto.presupuesto == 1) {
+                        if(odonto.estado_pago == 'ok'){
+                            var clase = 'bg-success';
+                        }else if(odonto.estado_pago == 'incompleto'){
+                            var clase = 'bg-warning';
+                        }else{
+                            var clase = 'bg-danger';
+                        }
+
+                        if(odonto.estado == 0){
+                            var estado = 'PENDIENTE';
+                        }else{
+                            var estado = 'TERMINADO';
+                        }
+                        // Agregar una nueva fila a la tabla
+                        let rowNode = table_piezas_odontograma.row.add([
+                            odonto.descripcion,
+                            odonto.pieza,
+                            formatoMoneda(formatoMoneda(odonto.valor)),
+                            0,
+                            formatoMoneda(formatoMoneda(odonto.valor)),
+                            '<div class="circle '+clase+'"></div>',
+                            estado, // Columna vacía
+
+                        ]).draw(false).node(); // Obtener el nodo de la fila
+
+                        // Agregar clases a la fila
+                        $(rowNode).addClass('text-center align-middle status-circle');
+                    }
+                });
+
+                let insumos = resp.insumos;
+
+                let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
+                table_insumos_pagos.clear();
+                console.log(insumos);
+                insumos.forEach(insumo => {
+                    let total = insumo.cantidad * insumo.valor;
+                    if(insumo.presupuesto == 1){
+                        if(insumo.estado_pago == 'ok'){
+                            var clase = 'bg-success';
+                        }else if(insumo.estado_pago == 'intermedio'){
+                            var clase = 'bg-warning';
+                        }else{
+                            var clase = 'bg-danger';
+                        }
+                        let rowNode = table_insumos_pagos.row.add([
+                        insumo.insumos + ' ' + insumo.nombre_marca,
+                        insumo.cantidad,         // Nombre del insumo
+                        formatoMoneda(insumo.valor),       // Cantidad utilizada
+                        0,         // Unidad de medida
+                        formatoMoneda(total),
+                        ' <div class="circle '+clase+'"></div>',
+
+                    ]).draw(false).node();
+
+                    // Agregar clases a la fila
+                    $(rowNode).addClass('text-center align-middle status-circle');
+                    }
+
+                });
+                table_insumos_pagos.draw();
+
+                let valores_boca_general = resp.valores[0];
+                let valores_odontograma = resp.valores[1];
+                let valores_insumos = resp.valores[2];
+                let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+                $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                $('#subtotal_clinico').val(formatoMoneda(total_general));
+                $('#total_clinico').val(formatoMoneda(total_general));
+                // guardamos el total en un input hidden
+                $('#total_presupuesto_dental').val(total_general);
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        });
+    }
 
 </script>
 

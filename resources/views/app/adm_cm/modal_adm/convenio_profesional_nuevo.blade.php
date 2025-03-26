@@ -132,6 +132,7 @@
                                                 <table class="table">
                                                     <thead>
                                                         <tr>
+                                                            <th>Empresa</th>
                                                             <th>Tipo Convenio</th>
                                                             <th>Porcentaje</th>
                                                             <th>Acciones</th>
@@ -386,14 +387,101 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row" id="contenedor_nuevo_convenio_prevision">
                                             <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Observaciones</label>
-                                                    <textarea name="observaciones_nuevo_convenio_prevision" id="observaciones_nuevo_convenio_prevision" cols="30" rows="4" class="form-control"></textarea>
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Previsión</th>
+                                                            <th>Tipo Convenio</th>
+                                                            <th>Porcentaje</th>
+                                                            <th>Acciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="contenedor_tipos_convenios_prevision">
+                                                        @foreach ($convenios_prevision as $c)
+                                                            <tr>
+                                                                <td>{{ $c->nombre_convenio }}</td>
+                                                                <td>{{ $c->descripcion }} </td>
+                                                                <td>{{ $c->porcentaje }} %</td>
+                                                                <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_tipo_convenio_prevision({{ $c->id }})"><i class="fas fa-trash"></i></button></td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                                <div class="row d-none" id="contenedor_tipo_convenio_prevision">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group flex-grow-1 me-2">
+                                                            <label class="floating-label-activo-sm">Nombre Convenio</label>
+                                                            <input type="text" class="form-control form-control-sm" id="nombre_convenio_prevision1" name="nombre_convenio_prevision1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Tipo Convenio</label>
+                                                            <select name="tipo_convenio_prevision1" id="tipo_convenio_prevision1" class="form-control">
+                                                                <option value="0">Seleccione</option>
+                                                                @foreach($tipoproducto_convenios as $key_tc => $value_tc)
+                                                                    <option value="{{ $value_tc->id }}">{{ $value_tc->descripcion }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Porcentaje</label>
+                                                            <input type="text" class="form-control form-control-sm" name="porcentaje_dcto_prevision1" id="porcentaje_dcto_prevision1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <button type="button" class="btn btn-success btn-sm float-right" onclick="guardar_tipo_convenio_prevision(1)"><i class="fas fa-save"></i></button>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Fecha Inicial</label>
+                                                            <input type="date" class="form-control" value="<?php echo date('Y-m-d') ?>" id="fecha_inicial_pago_convenio_prevision1" name="fecha_inicial_pago_convenio_prevision1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Fecha Final</label>
+                                                            <input type="date" class="form-control" value="" id="fecha_final_pago_convenio_prevision1" name="fecha_final_pago_convenio_prevision1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 d-flex justify-content-between">
+                                                        <div class="switch switch-success d-inline">
+                                                            <input type="checkbox" id="convenio_infinito_prevision1" name="convenio_infinito_prevision1" class="switch-input" onclick="convenio_infinito()">
+                                                            <label for="convenio_infinito1" class="cr"></label>
+                                                        </div>
+                                                        <br>
+                                                        <label class="floating-label-activo-sm">Indefinido</label>
+
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Observaciones</label>
+                                                            <textarea name="observaciones_nuevo_convenio_prevision" id="observaciones_nuevo_convenio_prevision" cols="30" rows="4" class="form-control"></textarea>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="col-md-12" id="contenedor_tipos_convenio_empresa"></div>
+
+
+
+
+
+
+                                            <div class="col-md-12">
+                                                <button type="button" class="btn btn-success btn-sm btn-icon" onclick="nuevo_tipo_convenio_prevision()"><i class="fas fa-plus"></i></button>
+                                                {{-- <button type="button" class="btn btn-outline-primary btn-sm float-right mx-2">Solicitar incorporación nuevo convenio</button> --}}
+
+                                            </div>
+
+
                                         </div>
+
                                         {{-- <button type="button" class="btn btn-outline-primary btn-sm float-right mx-2">Solicitar incorporación nuevo convenio</button> --}}
                                         <button class="btn btn-outline-success btn-sm float-right" onclick="guardar_nuevo_convenio_profesional()"><i class="fas fa-save"></i> Guardar</button>
                                     </div>
@@ -564,26 +652,26 @@
 <input type="hidden" name="id_empresa" id="id_empresa">
 <script>
     function evaluar_convenio(id) {
-        var result = false;
-        if ($('#convenio_' + id).is(':checked')) {
-            result = true;
-            $('#valor_convenio_' + id).css('display', 'block');
-        } else {
-            result = false;
-            $('#valor_convenio_' + id).css('display', 'none');
-        }
+        // var result = false;
+        // if ($('#convenio_' + id).is(':checked')) {
+        //     result = true;
+        //     $('#valor_convenio_' + id).css('display', 'block');
+        // } else {
+        //     result = false;
+        //     $('#valor_convenio_' + id).css('display', 'none');
+        // }
 
-        // Captura del valor del select e input (si están visibles)
-        if (result) {
-            const selectValue = $('#valor_convenio_' + id + ' select').val();
-            const inputValue = $('#valor_convenio_' + id + ' input[type="number"]').val();
+        // // Captura del valor del select e input (si están visibles)
+        // if (result) {
+        //     const selectValue = $('#valor_convenio_' + id + ' select').val();
+        //     const inputValue = $('#valor_convenio_' + id + ' input[type="number"]').val();
 
-            console.log(`Convenio ${id} seleccionado:`);
-            console.log(`- Opción seleccionada: ${selectValue}`);
-            console.log(`- Condición ingresada: ${inputValue}`);
-        } else {
-            console.log(`Convenio ${id} deseleccionado.`);
-        }
+        //     console.log(`Convenio ${id} seleccionado:`);
+        //     console.log(`- Opción seleccionada: ${selectValue}`);
+        //     console.log(`- Condición ingresada: ${inputValue}`);
+        // } else {
+        //     console.log(`Convenio ${id} deseleccionado.`);
+        // }
     }
 
     function buscar_empresa(){
@@ -638,8 +726,9 @@
                         $('#contenedor_tipos_convenios').append(
                         `
                             <tr>
+                                <td>${data.empresa.nombre_empresa}</td>
                                 <td>${e.descripcion} </td>
-                                <td>${e.porcentaje} </td>
+                                <td>${e.porcentaje} %</td>
                                 <td>
                                     <button class="btn btn-outline-warning btn-sm has-ripple" ><i class="fa fa-edit" aria-hidden="true"></i></button>
                                     <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_tipo_convenio(${e.id})"><i class="fas fa-trash"> </i> </button> </td>
@@ -779,6 +868,10 @@
         $('#contenedor_tipo_convenio').toggleClass('d-none');
     }
 
+    function nuevo_tipo_convenio_prevision(){
+        $('#contenedor_tipo_convenio_prevision').toggleClass('d-none');
+    }
+
     function guardar_nombre_convenio(){
 
         let nombre = $('#nombre_convenio').val();
@@ -873,7 +966,7 @@
                         `
                             <tr>
                                 <td>${e.descripcion} </td>
-                                <td>${e.porcentaje} </td>
+                                <td>${e.porcentaje} %</td>
                                 <td><button type="button" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"> </i> </button> </td>
                             </tr>
                         `
@@ -889,7 +982,159 @@
                         fila += '<td class="align-middle text-center">' + convenio.tipo_convenio + '</td>';
                         fila += '<td class="align-middle text-center">' + convenio.fecha_inicio + '</td>';
                         fila += '<td class="align-middle text-center">' + convenio.fecha_termino + '</td>';
-                        fila += '<td class="align-middle text-center">' + convenio.porcentaje + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.porcentaje + ' %</td>';
+                        fila += '<td class="align-middle text-center">';
+                        fila += '<button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio(' + convenio.id + ')" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>';
+                        fila += '<button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio(' + convenio.id + ')"><i class="fas fa-trash"></i> </button>';
+                        fila += '</td>';
+                        fila += '</tr>';
+                        $('#tabla_convenios_profesional tbody').append(fila);
+                    });
+                    $('#tabla_convenios_profesional').DataTable({
+                        "language": {
+                            "url": "{{ asset('js/Spanish.json') }}"
+                        }
+                    });
+                }else{
+                    swal({
+                        title: 'Error',
+                        text: data.mensaje,
+                        icon: 'error'
+                    });
+                }
+            }
+        });
+    }
+
+    function guardar_tipo_convenio_prevision(count){
+        let nombre_convencion = $('#nombre_convenio_prevision'+count).val();
+        let tipo_convenio = $('#tipo_convenio_prevision'+count).val();
+        let porcentaje = $('#porcentaje_dcto_prevision'+count).val();
+        let fecha_inicio = $('#fecha_inicial_pago_convenio_prevision'+count).val();
+        let fecha_termino = $('#fecha_final_pago_convenio_prevision'+count).val();
+        let observaciones = $('#observaciones_nuevo_convenio_prevision').val();
+        let id_empresa = $('#id_empresa').val();
+
+        let valido = 1;
+        let mensaje = '';
+
+        if(nombre_convencion == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar un nombre de convenio</li>';
+        }
+
+        if(tipo_convenio == 0){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar un tipo de convenio</li>';
+        }
+        if(porcentaje == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar un porcentaje</li>';
+        }
+        if(fecha_inicio == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar una fecha de inicio</li>';
+        }
+        if(fecha_termino == '' && $('#convenio_infinito').is(':checked') == false){
+            //valido = 0;
+            //mensaje += '<li>Debe ingresar una fecha de término</li>';
+        }
+
+
+        var convenios = '';
+        for (let i = 1; i < 13; i++) {
+            if ($('#convenio_' + i).prop('checked')) {
+                convenios = convenios + $('#text_convenio_' + i).text() + ',';
+            }
+        }
+        let conveniosSeleccionados = [];
+
+        $('.custom-control-input:checked').each(function () {
+            const id = $(this).attr('id').split('_')[1]; // Extrae el ID numérico
+            const selectValue = $('#valor_convenio_' + id + ' select').val();
+            const inputValue = $('#valor_convenio_' + id + ' input[type="number"]').val();
+
+            conveniosSeleccionados.push({
+                convenio: $('#text_convenio_' + id).text().replace(/\s+/g, ' ').trim(), // Elimina saltos de línea y espacios extra
+                opcion: selectValue,
+                condicion: inputValue
+            });
+        });
+
+        if(convenios == ''){
+            valido = 0;
+            mensaje += '<li>Seleccione al menos un convenio</li>';
+        }
+
+        if(valido == 0){
+            swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+            return false;
+        }
+
+
+        let data = {
+            nombre_convenio: nombre_convencion,
+            tipo_convenio: tipo_convenio,
+            porcentaje: porcentaje,
+            fecha_inicio: fecha_inicio,
+            fecha_termino: fecha_termino,
+            observaciones: observaciones,
+            convenios: convenios,
+            conveniosSeleccionados: conveniosSeleccionados,
+            id_empresa: id_empresa,
+            _token: CSRF_TOKEN
+        }
+
+        console.log(data);
+        $.ajax({
+            url: '{{ ROUTE("profesional.guardar_tipo_convenio") }}',
+            type: 'POST',
+            data: data,
+            success: function(data){
+                console.log(data);
+                if(data.estado == 1){
+                    swal({
+                        title: 'Exito',
+                        text: data.mensaje,
+                        icon: 'success'
+                    });
+
+                    let todos_convenios = data.todos_convenios;
+                    $('#contenedor_tipos_convenios_prevision').empty();
+                    todos_convenios.forEach(e => {
+                        $('#contenedor_tipos_convenios_prevision').append(
+                        `
+                            <tr>
+                                <td>${e.nombre_convenio}</td>
+                                <td>${e.descripcion} </td>
+                                <td>${e.porcentaje} %</td>
+                                <td><button type="button" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"> </i> </button> </td>
+                            </tr>
+                        `
+                        );
+                    });
+                    $('#tabla_convenios_profesional').DataTable().destroy();
+                    $('#tabla_convenios_profesional tbody').empty();
+                    let convenios = data.convenios;
+                    convenios.forEach(convenio => {
+                        let fila = '<tr>';
+                        fila += '<td class="align-middle text-center">' + convenio.nombre_convenio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.rut_empresa + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.tipo_convenio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.fecha_inicio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.fecha_termino + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.porcentaje + ' %</td>';
                         fila += '<td class="align-middle text-center">';
                         fila += '<button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio(' + convenio.id + ')" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>';
                         fila += '<button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio(' + convenio.id + ')"><i class="fas fa-trash"></i> </button>';
@@ -956,7 +1201,7 @@
                         fila += '<td class="align-middle text-center">' + convenio.tipo_convenio + '</td>';
                         fila += '<td class="align-middle text-center">' + convenio.fecha_inicio + '</td>';
                         fila += '<td class="align-middle text-center">' + convenio.fecha_termino + '</td>';
-                        fila += '<td class="align-middle text-center">' + convenio.porcentaje + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.porcentaje + ' %</td>';
                         fila += '<td class="align-middle text-center">';
                         fila += '<button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio(' + convenio.id + ')" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>';
                         fila += '<button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio(' + convenio.id + ')"><i class="fas fa-trash"></i> </button>';
@@ -968,6 +1213,84 @@
                         "language": {
                             "url": "{{ asset('js/Spanish.json') }}"
                         }
+                    });
+                }
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        })
+    }
+
+    function eliminar_tipo_convenio_prevision(id){
+        swal({
+            title: "¿Esta seguro que desea ELIMINAR el tipo de convenio?",
+            text: "Favor confirme o cancele la solicitud",
+            icon: "warning",
+            buttons: ["Cancelar", "Solicitar"],
+            dangerMode: true,
+        }).then((willDelete) => {
+            if(willDelete){
+                confirmar_eliminar_tipo_convenio_prevision(id);
+            }
+        });
+    }
+
+    function confirmar_eliminar_tipo_convenio_prevision(id){
+        let url = "{{ ROUTE('profesional.eliminar_tipo_convenio') }}";
+        let data = {
+            id: id,
+            id_empresa: $('#id_empresa').val(),
+            _token: CSRF_TOKEN
+        }
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(data){
+                console.log(data);
+                if(data.estado == 1){
+                    swal({
+                        title: 'Exito',
+                        text: data.mensaje,
+                        icon: 'success'
+                    });
+                    $('#tabla_convenios_profesional').DataTable().destroy();
+                    $('#tabla_convenios_profesional tbody').empty();
+                    let convenios = data.convenios;
+                    let convenios_prevision = data.convenios_prevision;
+                    convenios.forEach(convenio => {
+                        let fila = '<tr>';
+                        fila += '<td class="align-middle text-center">' + convenio.nombre_convenio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.rut_empresa + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.tipo_convenio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.fecha_inicio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.fecha_termino + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.porcentaje + ' %</td>';
+                        fila += '<td class="align-middle text-center">';
+                        fila += '<button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio(' + convenio.id + ')" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>';
+                        fila += '<button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio(' + convenio.id + ')"><i class="fas fa-trash"></i> </button>';
+                        fila += '</td>';
+                        fila += '</tr>';
+                        $('#tabla_convenios_profesional tbody').append(fila);
+                    });
+                    $('#tabla_convenios_profesional').DataTable({
+                        "language": {
+                            "url": "{{ asset('js/Spanish.json') }}"
+                        }
+                    });
+                    $('#contenedor_tipos_convenios_prevision').empty();
+                    convenios_prevision.forEach( convenio => {
+                        $('#contenedor_tipos_convenios_prevision').append(
+                        `
+                            <tr>
+                                <td>${convenio.nombre_convenio}</td>
+                                <td>${convenio.descripcion} </td>
+                                <td>${convenio.porcentaje} %</td>
+                                <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_tipo_convenio_prevision(${convenio.id})"><i class="fas fa-trash"> </i> </button> </td>
+                            </tr>
+                        `
+                        );
                     });
                 }
             },

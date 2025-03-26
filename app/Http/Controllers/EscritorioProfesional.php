@@ -1054,12 +1054,31 @@ class EscritorioProfesional extends Controller
 
     }
 
+    public function aplicar_convenio_tratamiento(Request $request){
+        $convenio = EmpresasConvenios::find($request->id);
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $odontograma = $this->dameOdontogramaPaciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
+        foreach($odontograma as $o){
+            $o->valor = $o->valor - $o->valor * (intval($convenio->porcentaje) / 100);
+        }
+        $insumos = $this->dame_insumos_tratamiento($request->id_paciente, $request->id_ficha_atencion);
+        foreach($insumos as $i){
+            $i->valor = $i->valor - $i->valor * (intval($convenio->porcentaje) / 100);
+        }
+        $valores = $this->dameValoresOdontograma($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
+        $valores[0] = $valores[0] - $valores[0] * (intval($convenio->porcentaje) / 100);
+        $valores[1] = $valores[1] - $valores[1] * (intval($convenio->porcentaje) / 100);
+        $valores[2] = $valores[2] - $valores[2] * (intval($convenio->porcentaje) / 100);
+
+        return ['odontograma' => $odontograma, 'insumos' => $insumos,'valores' => $valores];
+    }
+
     public function guardar_tipo_convenio(Request $req){
         try {
             $empresa = Empresas::where('id', $req->id_empresa)->first();
-
+            $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
             if ($empresa) {
-                $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+
                 $nuevo_convenio = new EmpresasConvenios;
                 $nuevo_convenio->id_empresa = $empresa->id;
                 $nuevo_convenio->id_convenio = $req->tipo_convenio;
@@ -1088,6 +1107,35 @@ class EscritorioProfesional extends Controller
                     ];
                 }
             }else{
+                $conveniosSeleccionados = $req->conveniosSeleccionados;
+                foreach($conveniosSeleccionados as $c){
+                    $nuevo_convenio = new EmpresasConvenios;
+                    $nuevo_convenio->id_convenio = $req->tipo_convenio;
+                    $nuevo_convenio->nombre_convenio = $c['convenio'];
+                    $nuevo_convenio->porcentaje = $req->porcentaje;
+                    $nuevo_convenio->id_profesional = $profesional->id;
+                    $nuevo_convenio->fecha_inicio = $req->fecha_inicio;
+                    $nuevo_convenio->fecha_termino = $req->fecha_termino;
+                    $nuevo_convenio->observaciones = $req->observaciones;
+
+                    $nuevo_convenio->save();
+                }
+                $todos_convenios = EmpresasConvenios::select('empresas_convenios.*','tipoproducto_convenios.descripcion')
+                ->join('tipoproducto_convenios','empresas_convenios.id_convenio','tipoproducto_convenios.id')
+                ->where('empresas_convenios.id_profesional',$profesional->id)
+                ->where('empresas_convenios.id_empresa', null)
+                ->get();
+                $convenios =  EmpresasConvenios::select('empresas_convenios.*','tipoproducto_convenios.descripcion')
+                ->join('tipoproducto_convenios','empresas_convenios.id_convenio','tipoproducto_convenios.id')
+                ->where('empresas_convenios.id_profesional',$profesional->id)
+                ->get();
+                return [
+                    'estado' => 1,
+                    'mensaje' => 'Tipo de convenio agregado correctamente',
+                    'empresa' => $empresa,
+                    'todos_convenios' => $todos_convenios,
+                    'convenios' => $convenios
+                ];
                 return ['estado' => 0, 'mensaje' => 'Empresa no encontrada'];
             }
         } catch (\Exception $e) {
@@ -1103,10 +1151,16 @@ class EscritorioProfesional extends Controller
             $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
             if($tipo_convenio->delete()){
                 $todos_convenios = EmpresasConvenios::select('empresas_convenios.*','tipoproducto_convenios.descripcion')
-                        ->join('tipoproducto_convenios','empresas_convenios.id_convenio','tipoproducto_convenios.id')
+                        ->leftjoin('tipoproducto_convenios','empresas_convenios.id_convenio','tipoproducto_convenios.id')
                         ->where('empresas_convenios.id_profesional',$profesional->id)
                         ->get();
-                return ['estado' => 1, 'mensaje' => 'Se ha eliminado con exito', 'convenios' => $todos_convenios];
+
+                $todos_convenios_prevision = EmpresasConvenios::select('empresas_convenios.*','tipoproducto_convenios.descripcion')
+                ->join('tipoproducto_convenios','empresas_convenios.id_convenio','tipoproducto_convenios.id')
+                ->where('empresas_convenios.id_profesional',$profesional->id)
+                ->where('empresas_convenios.id_empresa', null)
+                ->get();
+                return ['estado' => 1, 'mensaje' => 'Se ha eliminado con exito', 'convenios' => $todos_convenios, 'convenios_prevision' => $todos_convenios_prevision];
             }else{
                 return ['estado' => 0,'mensaje' => 'Ha ocurrido un error'];
             }
