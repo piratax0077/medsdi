@@ -2456,3 +2456,8 @@ Route::post('/dental/nueva_pieza_post_impl',[App\Http\Controllers\EscritorioProf
 Route::post('/dental/eliminar_pieza_corona_protesis',[App\Http\Controllers\EscritorioProfesional::class, 'eliminarPiezaCoronaProtesis'])->name('profesional.eliminar_pieza_dental_corona_protesis');
 Route::post('/dental/guardar_pieza_dental',[App\Http\Controllers\EscritorioProfesional::class, 'guardar_pieza_dental_pfp'])->name('profesional.adm_dental.guardar_pieza_dental_pfp');
 Route::post('/dental/guardar_pieza_dental_pfu',[App\Http\Controllers\EscritorioProfesional::class, 'guardar_pieza_dental_pfu'])->name('profesional.adm_dental.guardar_pieza_dental_pfu');
+Route::post('/profesional/buscar_empresa', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_empresa'])->name('profesional.buscar_empresa');
+Route::post('/profesional/registrar_empresa', [App\Http\Controllers\EscritorioProfesional::class, 'registrar_empresa'])->name('profesional.registrar_empresa');
+Route::post('/profesional/registrar_convenio_profesional/empresa', [App\Http\Controllers\EscritorioProfesional::class, 'registrar_convenio_profesional_empresa'])->name('profesional.guardar_convenio_empresa');
+Route::post('/profesional/guardar_tipo_convenio', [App\Http\Controllers\EscritorioProfesional::class, 'guardar_tipo_convenio'])->name('profesional.guardar_tipo_convenio');
+Route::post('/profesional/eliminar_tipo_convenio',[App\Http\Controllers\EscritorioProfesional::class, 'eliminar_tipo_convenio'])->name('profesional.eliminar_tipo_convenio');
