@@ -105,7 +105,7 @@
                                 class="btn btn-sm btn-info btn-block accion_modal_orden_trabajo">ORDEN DE TRABAJO
                                 MENOR</button>
                             <button type="button"
-                                class="btn btn-sm btn-info btn-block accion_modal_orden_trabajoM">ORDEN DE TRABAJO
+                                class="btn btn-sm btn-info btn-block accion_modal_orden_trabajoM" >ORDEN DE TRABAJO
                                 MAYOR</button>
                         </div>
                     </div>

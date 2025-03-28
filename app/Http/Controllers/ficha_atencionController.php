@@ -19,6 +19,7 @@ use App\Models\CertificadoReposo;
 use App\Models\ConsentimientoFaltante;
 use App\Models\Correlativos;
 use App\Models\DiagnosticosDental;
+use App\Models\EmpresasConvenios;
 use App\Models\EvolucionPacienteHospital;
 use App\Models\EvolucionUrgencia;
 use App\Models\ExamenesBocaGeneral;
@@ -1955,9 +1956,25 @@ class ficha_atencionController extends Controller
 
         }
 
+        $convenio = EmpresasConvenios::where('nombre_convenio','LIKE',$paciente->prevision->nombre)->first();
+        if($convenio){
+            $paciente->info_convenio = $convenio;
+        }else{
+            $paciente->info_convenio = null;
+        }
+
+        $convenios_empresas = EmpresasConvenios::where('id_profesional',$profesional->id)->get();
+        $convenios_prevision = EmpresasConvenios::select('empresas_convenios.*','tipoproducto_convenios.descripcion')
+                                                    ->leftjoin('tipoproducto_convenios','empresas_convenios.id_convenio','tipoproducto_convenios.id')
+                                                    ->where('empresas_convenios.id_empresa',null)
+                                                    ->where('empresas_convenios.id_profesional', $profesional->id)
+                                                    ->get();
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
+                'convenios_empresas' => $convenios_empresas,
+                'convenios_prevision' => $convenios_prevision,
                 'tipos_receta' => $tipos_receta,
                 'recetas' => $recetas,
                 'insumos_tratamientos' => $insumos_tratamientos,
@@ -2153,7 +2170,11 @@ class ficha_atencionController extends Controller
     }
 
     public function dameOrdenesTrabajoMenor($id_paciente, $id_profesional){
-        $ordenes = OrdenTrabajoMenor::where('id_paciente', $id_paciente)->where('id_profesional',$id_profesional)->get();
+        $ordenes = OrdenTrabajoMenor::select('ordenes_trabajos_menores.*','laboratorios.nombre as nombre_lab')
+                                        ->join('laboratorios','ordenes_trabajos_menores.id_laboratorio','laboratorios.id')
+                                        ->where('ordenes_trabajos_menores.id_paciente', $id_paciente)
+                                        ->where('ordenes_trabajos_menores.id_profesional',$id_profesional)
+                                        ->get();
         return $ordenes;
     }
 

@@ -188,6 +188,7 @@
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         $(document).ready(function () {
+
             $('#table_trabajos_menores_dental').DataTable();
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))

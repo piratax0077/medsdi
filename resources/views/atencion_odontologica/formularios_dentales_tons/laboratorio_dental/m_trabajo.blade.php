@@ -52,19 +52,20 @@
                          <div class="form-group col-sm-6 col-md-6">
                              <label class="floating-label-activo-sm">Nombre Paciente</label>
                              <!--correlativo-->
-                             <input type="text" class="form-control form-control-sm" name="paciente_trabajo_menor_"
-                                 id="paciente_trabajo_menor_"
+                             <input type="text" class="form-control form-control-sm" name="nombre_paciente_trabajo_menor"
+                                 id="nombre_paciente_trabajo_menor"
                                  value="{{ $paciente->nombre }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}"
                                  disabled>
                          </div>
                          <div class="form-group col-sm-6 col-md-6">
                              <label class="floating-label-activo-sm">Rut Paciente</label>
-                             <input type="text" class="form-control form-control-sm" name="paciente_trabajo_mayor"
-                                 id="paciente_trabajo_mayor" value="{{ $paciente->rut }}" disabled>
+                             <input type="text" class="form-control form-control-sm" name="rut_paciente_trabajo_menor"
+                                 id="rut_paciente_trabajo_menor" value="{{ $paciente->rut }}" disabled>
                          </div>
                          <div class="form-group col-sm-12 col-md-12">
                             <label class="floating-label-activo-sm">Laboratorios</label>
-                            <select name="" id="" class="form-control form-control-sm">
+                            <select name="lab_trabajo_menor" id="lab_trabajo_menor" class="form-control form-control-sm">
+                                <option value="0">Seleccione</option>
                                 @if(isset($laboratorios))
                                     @foreach ($laboratorios as $lab)
                                         <option value="{{ $lab->id }}">{{ $lab->nombre }}</option>
@@ -168,8 +169,9 @@
         let nro_orden_trabajo_menor = $('#nro_orden_trabajo_menor').val();
         let clinica_doctor = $('#clinica_doctor').val();
         let rut_profesional = $('#rut_profesional_trabajo_menor').val();
-        let paciente_trabajo_menor = $('#paciente_trabajo_menor_').val();
-        let paciente_trabajo_mayor = $('#paciente_trabajo_mayor').val();
+        let rut_paciente = $('#rut_paciente_trabajo_menor').val();
+        let laboratorio = $('#lab_trabajo_menor').val();
+        let nombre_paciente = $('#nombre_paciente_trabajo_menor').val();
         let guia = $('#guia').val();
         let color = $('#color').val();
         let urgencia = $('#urgencia').val();
@@ -192,13 +194,17 @@
             valido = 0;
             mensaje += '<li>Debe ingresar el rut del profesional</li>';
         }
-        if(paciente_trabajo_menor == ''){
+        if(nombre_paciente == ''){
             valido = 0;
             mensaje += '<li>Debe ingresar el nombre del paciente</li>';
         }
-        if(paciente_trabajo_mayor == ''){
+        if(rut_paciente == ''){
             valido = 0;
             mensaje += '<li>Debe ingresar el rut del paciente</li>';
+        }
+        if(laboratorio == 0){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar el laboratorio</li>';
         }
         if(guia == ''){
             valido = 0;
@@ -243,8 +249,8 @@
                 nro_orden_trabajo_menor: nro_orden_trabajo_menor,
                 clinica_doctor: clinica_doctor,
                 rut_profesional: rut_profesional,
-                paciente_trabajo_menor: paciente_trabajo_menor,
-                paciente_trabajo_mayor: paciente_trabajo_mayor,
+                nombre_paciente: nombre_paciente,
+                rut_paciente: rut_paciente,
                 guia: guia,
                 color: color,
                 urgencia: urgencia,
@@ -252,6 +258,7 @@
                 trabajo_realizar: trabajo_realizar,
                 comentarios_trabajo_menor: comentarios_trabajo_menor,
                 id_paciente: dame_id_paciente(),
+                laboratorio: laboratorio,
                 _token: CSRF_TOKEN
             }
 
@@ -295,6 +302,46 @@
                             `);
                         });
                         $('#table_trabajos_menores_dental').DataTable();
+                        $('#contenedor_ordenes_trabajos_menores_dental').empty();
+                        ordenes_trabajo.forEach(orden => {
+                            $('#contenedor_ordenes_trabajos_menores_dental').append(`
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-row">
+
+                                            <div class="form-group col-md-2 fill">
+                                                <label class="floating-label-activo-sm">Nombre Laboratorio</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom" value="${orden.nombre_lab}">
+                                            </div>
+                                            <div class="form-group col-md-2 fill">
+                                                <label class="floating-label-activo-sm">Trabajo Requerido</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_ord_trab" id="lab_ord_trab" value="${orden.trabajo_realizar}">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="floating-label-activo-sm">F.envío</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="floating-label-activo-sm">F.entrega</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent">
+                                            </div>
+                                            <div class="form-group col-md-2 fill">
+                                                <label class="floating-label-activo-sm">Estado</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_est" id="lab_est" value="Pendiente">
+                                            </div>
+                                            <div class="form-group col-md-2 fill">
+                                                <label class="floating-label-activo-sm">N° Identificación</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="${orden.nro_orden}">
+                                            </div>
+                                            <div class="form-group col-md-2 d-flex">
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                        });
                     }else{
                         swal({
                             title:'Error',
@@ -313,8 +360,8 @@
         let nro_orden_trabajo_menor = $('#nro_orden_trabajo_menor').val();
         let clinica_doctor = $('#clinica_doctor').val();
         let rut_profesional = $('#rut_profesional_trabajo_menor').val();
-        let paciente_trabajo_menor = $('#paciente_trabajo_menor_').val();
-        let paciente_trabajo_mayor = $('#paciente_trabajo_mayor').val();
+        let nombre_paciente = $('#nombre_paciente_trabajo_menor_').val();
+        let rut_paciente = $('#rut_paciente_trabajo_menor').val();
         let guia = $('#guia').val();
         let color = $('#color').val();
         let urgencia = $('#urgencia').val();
@@ -337,11 +384,11 @@
             valido = 0;
             mensaje += '<li>Debe ingresar el rut del profesional</li>';
         }
-        if(paciente_trabajo_menor == ''){
+        if(nombre_paciente == ''){
             valido = 0;
             mensaje += '<li>Debe ingresar el nombre del paciente</li>';
         }
-        if(paciente_trabajo_mayor == ''){
+        if(rut_paciente == ''){
             valido = 0;
             mensaje += '<li>Debe ingresar el rut del paciente</li>';
         }
@@ -388,8 +435,8 @@
                 nro_orden_trabajo_menor: nro_orden_trabajo_menor,
                 clinica_doctor: clinica_doctor,
                 rut_profesional: rut_profesional,
-                paciente_trabajo_menor: paciente_trabajo_menor,
-                paciente_trabajo_mayor: paciente_trabajo_mayor,
+                nombre_paciente: nombre_paciente,
+                rut_paciente: rut_paciente,
                 guia: guia,
                 color: color,
                 urgencia: urgencia,
@@ -462,6 +509,7 @@
     function confirmar_eliminar_trabajo_menor_dental(id){
         let data = {
             id: id,
+            id_paciente: dame_id_paciente(),
             _token: CSRF_TOKEN
         }
         let url = "{{ route('dental.eliminar_trabajo_menor') }}";
@@ -502,6 +550,46 @@
                         `);
                     });
                     $('#table_trabajos_menores_dental').DataTable();
+                    $('#contenedor_ordenes_trabajos_menores_dental').empty();
+                        ordenes_trabajo.forEach(orden => {
+                            $('#contenedor_ordenes_trabajos_menores_dental').append(`
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-row">
+
+                                            <div class="form-group col-md-2 fill">
+                                                <label class="floating-label-activo-sm">Nombre Laboratorio</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom" value="${orden.nombre_lab}">
+                                            </div>
+                                            <div class="form-group col-md-2 fill">
+                                                <label class="floating-label-activo-sm">Trabajo Requerido</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_ord_trab" id="lab_ord_trab" value="${orden.trabajo_realizar}">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="floating-label-activo-sm">F.envío</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="floating-label-activo-sm">F.entrega</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent">
+                                            </div>
+                                            <div class="form-group col-md-2 fill">
+                                                <label class="floating-label-activo-sm">Estado</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_est" id="lab_est" value="Pendiente">
+                                            </div>
+                                            <div class="form-group col-md-2 fill">
+                                                <label class="floating-label-activo-sm">N° Identificación</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="${orden.nro_orden}">
+                                            </div>
+                                            <div class="form-group col-md-2 d-flex">
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                        });
                 }else{
                     swal({
                         title:'Error',
@@ -511,5 +599,102 @@
                 }
             }
         })
+    }
+
+    function guardar_trabajo_mayor_dental(){
+        let campos = [
+        { id: '#nro_orden_trabajo_mayor', nombre: 'N° orden' },
+        { id: '#id_profesional_fc', nombre: 'ID Profesional' },
+        { id: '#id_paciente', nombre: 'ID Paciente' },
+        { id: '#guia_trabajo_mayor', nombre: 'Guía' },
+        { id: '#color_trabajo_mayor', nombre: 'Color' },
+        { id: '#urgencia_trabajo_mayor', nombre: 'Urgencia' },
+        { id: '#material_trabajo_mayor', nombre: 'Material' },
+        { id: '#trabajo_realizar_trabajo_mayor', nombre: 'Trabajo a realizar' },
+        { id: '#comentarios_trabajo_mayor', nombre: 'Comentarios' },
+        { id: '#marca_implante_trabajo_mayor', nombre: 'Marca implante' },
+        { id: '#medida_implante_trabajo_mayor', nombre: 'Medida implante' },
+        { id: '#nro_replicas_trabajo_mayor', nombre: 'N° Réplicas' },
+        { id: '#nro_tornillos_trabajo_mayor', nombre: 'N° Tornillos' },
+        { id: '#otros_trabajo_mayor', nombre: 'Otros' },
+        { id: '#cubetas_trabajo_mayor', nombre: 'Cubetas' },
+        { id: '#p_articulacion_trabajo_mayor', nombre: 'Prueba articulación' },
+        { id: '#p_dientes_trabajo_mayor', nombre: 'Prueba dientes' },
+        { id: '#p_metal_trabajo_mayor', nombre: 'Prueba metal' },
+        { id: '#bizcocho_trabajo_mayor', nombre: 'Bizcocho' },
+        { id: '#terminacion_trabajo_mayor', nombre: 'Terminación' },
+        { id: '#compostura_trabajo_mayor', nombre: 'Compostura' }
+    ];
+
+    let valido = 1;
+    let mensaje = '';
+    let data = {};
+
+    campos.forEach(campo => {
+        let valor = $(campo.id).val().trim();
+        if (valor === '') {
+            valido = 0;
+            mensaje += `<li>${campo.nombre}</li>`;
+        } else {
+            data[campo.clave] = valor;
+        }
+    });
+
+    if (!valido) {
+        swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+    } else {
+        let data = {
+            nro_orden_trabajo_mayor: $('#nro_orden_trabajo_mayor').val(),
+            clinica_doctor_trabajo_mayor: $('#clinica_doctor_trabajo_mayor').val(),
+            rut_profesional_trabajo_mayor: $('#rut_profesional_trabajo_mayor').val(),
+            id_profesional: $('#id_profesional_fc').val(),
+            paciente_trabajo_mayor: $('#id_paciente').val(),
+            guia_trabajo_mayor: $('#guia_trabajo_mayor').val(),
+            color_trabajo_mayor: $('#color_trabajo_mayor').val(),
+            urgencia_trabajo_mayor: $('#urgencia_trabajo_mayor').val(),
+            material_trabajo_mayor: $('#material_trabajo_mayor').val(),
+            trabajo_realizar_trabajo_mayor: $('#trabajo_realizar_trabajo_mayor').val(),
+            comentarios_trabajo_mayor: $('#comentarios_trabajo_mayor').val(),
+            marca_implante_trabajo_mayor: $('#marca_implante_trabajo_mayor').val(),
+            _medida_implantetrabajo_mayor: $('#medida_implante_trabajo_mayor').val(),
+            nro_replicas_trabajo_mayor: $('#nro_replicas_trabajo_mayor').val(),
+            nro_tornillos_trabajo_mayor: $('#nro_tornillos_trabajo_mayor').val(),
+            otros_trabajo_mayor: $('#otros_trabajo_mayor').val(),
+            cubetas_trabajo_mayor: $('#cubetas_trabajo_mayor').val(),
+            p_articulacion_trabajo_mayor: $('#p_articulacion_trabajo_mayor').val(),
+            p_dientes_trabajo_mayor: $('#p_dientes_trabajo_mayor').val(),
+            p_metal_trabajo_mayor: $('#p_metal_trabajo_mayor').val(),
+            bizcocho_trabajo_mayor: $('#bizcocho_trabajo_mayor').val(),
+            terminacion_trabajo_mayor: $('#terminacion_trabajo_mayor').val(),
+            compostura_trabajo_mayor: $('#compostura_trabajo_mayor').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            _token: CSRF_TOKEN
+        }
+       let url = "{{ ROUTE('dental.registrar_orden_trabajo_mayor') }}";
+       $.ajax({
+        type:'post',
+        data: data,
+        url: url,
+        success: function(resp){
+            console.log(resp);
+        },
+        error: function(error){
+            console.log(error.responseText);
+        }
+       });
+    }
+
     }
 </script>

@@ -2589,6 +2589,16 @@ class DentalController extends Controller
         return ['mensaje' => 'ok', 'insumos' => $insumos['insumos'],'total_insumos' => $insumos['total']];
     }
 
+    public function dame_prestaciones_presupuesto(Request $req){
+
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $odontograma = $this->dame_odontograma_paciente($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+        $fichaController = new ficha_atencionController;
+        $insumos = $fichaController->dame_insumos_tratamiento($req->id_paciente, $req->id_ficha_atencion);
+        $valores = $this->dameValoresOdontograma($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+        return ['odontograma' => $odontograma, 'insumos' => $insumos,'valores' => $valores];
+    }
+
     public function generar_pdf_prot_impl(Request $req){
 try {
 
@@ -3923,12 +3933,14 @@ try {
             $trabajo_menor->id_profesional = $profesional->id;
             $trabajo_menor->id_ficha_atencion = $request->id_ficha_atencion;
             $trabajo_menor->id_lugar_atencion = $request->id_lugar_atencion;
+            $trabajo_menor->id_laboratorio = $request->laboratorio;
+
             if (!$trabajo_menor->save()) {
                 return 'error';
             }
             $mensaje = 'Se ha agregado Orden de trabajo menos de forma exitosa';
 
-            $ordenes_trabajo = OrdenTrabajoMenor::where('nro_orden', $request->nro_orden_trabajo_menor)->get();
+            $ordenes_trabajo = OrdenTrabajoMenor::where('id_paciente', $request->id_paciente)->where('id_profesional', $profesional->id)->get();
 
             return ['mensaje' => 'OK', 'msj' => $mensaje, 'ordenes_trabajo' => $ordenes_trabajo];
         } catch (\Exception $e) {
@@ -3960,10 +3972,10 @@ try {
     public function eliminar_orden_trabajo_menor(Request $req){
         try {
             $orden_trabajo_menor = OrdenTrabajoMenor::where('id', $req->id)->first();
-
+            $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
             $nro_orden = $orden_trabajo_menor->nro_orden;
             if ($orden_trabajo_menor->delete()) {
-                $ordenes_trabajo = OrdenTrabajoMenor::where('nro_orden', $nro_orden)->get();
+                $ordenes_trabajo = OrdenTrabajoMenor::where('id_paciente', $req->id_paciente)->where('id_profesional', $profesional->id)->get();
                 return ['mensaje' => 'OK', 'msj' => 'Orden de trabajo menor eliminada correctamente', 'ordenes_trabajo' => $ordenes_trabajo];
             } else {
                 return ['mensaje' => 'ERROR', 'msj' => 'No se encontró la orden de trabajo menor'];
@@ -3985,6 +3997,10 @@ public function generar_pdf_trabajo_menor(Request $req){
 
     // Devolver la ruta accesible del archivo PDF
     return response()->json(['ruta' => asset('reportes/' . $fileName)]);
+}
+
+public function generar_pdf_trabajo_mayor(Request $req){
+    return $req;
 }
 
     public function registrar_orden_trabajo_mayor(Request $request)
