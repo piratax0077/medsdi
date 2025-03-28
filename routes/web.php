@@ -281,6 +281,7 @@ Route::group([
     Route::post('/Registrar_orden_trabajo_mayor', [DentalController::class, 'registrar_orden_trabajo_mayor'])->name('dental.registrar_orden_trabajo_mayor');
     Route::post('/Generar_pdf_trabajo_mayor', [DentalController::class, 'generar_pdf_trabajo_menor'])->name('dental.generar_pdf_trabajo_mayor');
     Route::post('/Eliminar_orden_trabajo_menor', [DentalController::class, 'eliminar_orden_trabajo_menor'])->name('dental.eliminar_trabajo_menor');
+    Route::post('/Eliminar_orden_trabajo_mayor', [DentalController::class, 'eliminar_orden_trabajo_mayor'])->name('dental.eliminar_trabajo_mayor');
     Route::post('/Generar_pdf_trabajo_menor',[DentalController::class, 'generar_pdf_trabajo_menor'])->name('dental.generar_pdf_trabajo_menor');
     Route::post('/Generar_pdf_insumos_dental_sidebar', [DentalController::class, 'generar_pdf_insumos_dental_sidebar'])->name('dental.generar_pdf_insumos_dental_sidebar');
     Route::post('/Registrar_insumos_pedido',[DentalController::class, 'registrar_insumos_pedido'])->name('dental.agregar_insumo_pedido');

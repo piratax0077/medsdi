@@ -58,6 +58,17 @@
                             <input type="text" class="form-control form-control-sm" name="paciente_rut_trabajo_mayor"
                                 id="paciente_rut_trabajo_mayor" value="{{ $paciente->rut }}" disabled>
                         </div>
+                        <div class="form-group col-sm-12 col-md-12">
+                            <label class="floating-label-activo-sm">Laboratorios</label>
+                            <select name="lab_trabajo_mayor" id="lab_trabajo_mayor" class="form-control form-control-sm">
+                                <option value="0">Seleccione</option>
+                                <option value="1">Laboratorio1</option>
+                                <option value="2">Laboratorio2</option>
+                                <option value="3">Laboratorio3</option>
+                                <option value="4">Laboratorio4</option>
+
+                            </select>
+                        </div>
                         <div class="form-group col-sm-6 col-md-6">
                             <label class="floating-label-activo-sm">Guia</label>
                             <input type="text" class="form-control form-control-sm" name="guia_trabajo_mayor"
@@ -180,17 +191,45 @@
                                 id="compostura_trabajo_mayor">
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="col-sm-12 col-md-12 text-center">
-                            <!--<p class="mb-2">Saluda atentamente</p>-->
-                            <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_mayor_dental()">Ver documento en PDF</button>
-                        </div>
-                    </div>
+
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_mayor_dental()">Ver documento en PDF</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                         <button type="button" class="btn btn-info" onclick="guardar_trabajo_mayor_dental()">Guardar</button>
                     </div>
                 </form>
+                <table class="table table-responsive w-100" id="table_trabajos_mayores_dental">
+                    <thead>
+                        <tr>
+                            <th>N° Orden</th>
+                            <th>Apellido</th>
+                            <th>Guia</th>
+                            <th>Color</th>
+                            <th>Urgencia</th>
+                            <th>Material</th>
+                            <th>Trabajo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         @foreach ($ordenes_tmy as $orden)
+                             <tr>
+                                <td>{{ $orden->nro_orden }}</td>
+                                <td>{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}</td>
+                                <td>{{ $orden->guia }}</td>
+                                <td>{{ $orden->color }}</td>
+                                <td>{{ $orden->urgencia }}</td>
+                                <td>{{ $orden->material }}</td>
+                                <td>{{ $orden->trabajo_realizar }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-success" onclick="solicitar_permisos()"><i class="fas fa-user"></i>Solicitar permisos</button>
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_mayor_dental()">Ver PDF</button>
+                                    <button type="button" class="btn btn-sm btn-danger btn-icon" onclick="eliminar_trabajo_mayor_dental({{ $orden->id }})"><i class="fas fa-trash"></i></button>
+                                </td>
+                             </tr>
+                         @endforeach
+                    </tbody>
+                 </table>
             </div>
 
         </div>

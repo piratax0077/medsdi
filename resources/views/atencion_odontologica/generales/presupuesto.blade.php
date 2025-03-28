@@ -755,6 +755,7 @@
                                                         <div class="tab-pane fade show active" id="od_laboratorio_trab" role="tabpanel" aria-labelledby="od_laboratorio_trab-tab">
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-12" id="contenedor_ordenes_trabajos_menores_dental">
+                                                                    @if(isset($ordenes_tm))
                                                                     @foreach ($ordenes_tm as $o)
                                                                     <div class="card">
                                                                         <div class="card-body">
@@ -770,11 +771,11 @@
                                                                                 </div>
                                                                                 <div class="form-group col-md-2">
                                                                                     <label class="floating-label-activo-sm">F.envío</label>
-                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv">
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv" value="{{ $o->fecha_envio }}">
                                                                                 </div>
                                                                                 <div class="form-group col-md-2">
                                                                                     <label class="floating-label-activo-sm">F.entrega</label>
-                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent">
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent" value="{{ $o->fecha_entrega }}">
                                                                                 </div>
                                                                                 <div class="form-group col-md-2">
                                                                                     <label class="floating-label-activo-sm">Estado</label>
@@ -782,7 +783,7 @@
                                                                                 </div>
                                                                                 <div class="form-group col-md-2">
                                                                                     <label class="floating-label-activo-sm">N° Identificación</label>
-                                                                                    <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="{{ $o->id }}">
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="{{ $o->nro_orden }}">
                                                                                 </div>
                                                                                 <div class="form-group col-md-2 d-flex">
 
@@ -793,14 +794,56 @@
                                                                     </div>
 
                                                                     @endforeach
+                                                                    @endif
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-12" id="contenedor_ordenes_trabajos_mayores_dental">
+                                                                    @if(isset($ordenes_tmy))
+                                                                    @foreach ($ordenes_tmy as $o)
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <div class="form-row">
 
-                                                                    <div class="form-row">
-                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <label class="floating-label-activo-sm">Observaciones </label>
-                                                                            <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">Nombre Laboratorio</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom" value="{{ $o->nombre_lab }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">Trabajo Requerido</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_ord_trab" id="lab_ord_trab" value="{{ $o->trabajo_realizar }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">F.envío</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv" value="{{ $o->fecha_envio }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">F.entrega</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent" value="{{ $o->fecha_entrega }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">Estado</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_est" id="lab_est" value="{{ $o->estado == 1 ? 'Pendiente' : 'Otro' }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">N° Identificación</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="{{ $o->nro_orden }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2 d-flex">
+
+
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
 
+                                                                    @endforeach
+                                                                    @endif
+
+                                                                </div>
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                        <label class="floating-label-activo-sm">Observaciones </label>
+                                                                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                    </div>
                                                                 </div>
                                                             </div>
 

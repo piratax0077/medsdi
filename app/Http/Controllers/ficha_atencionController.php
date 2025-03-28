@@ -135,6 +135,7 @@ use App\Models\OftalmoExamenNeurologico;
 use App\Models\OftalmoExamenPresionOcular;
 use App\Models\OftalmoExamenVisionColores;
 use App\Models\OrdenTrabajoMenor;
+use App\Models\OrdenTrabajoMayor;
 use App\Models\ProcedimientosCentro;
 use App\Models\RecomendacionDetalle;
 use App\Models\VideoConsultaInfo;
@@ -1882,6 +1883,7 @@ class ficha_atencionController extends Controller
         $examenes_piezas_pfp = $this->dameProcedimientosCoronaProtesis($paciente->id, $profesional->id, 'pfp');
 
         $ordenes_tm = $this->dameOrdenesTrabajoMenor($paciente->id, $profesional->id);
+        $ordenes_tmy = $this->dameOrdenesTrabajoMayor($paciente->id, $profesional->id);
 
         $correlativo_otm = $this->dame_correlativo('Orden Trabajo Menor');
 
@@ -1965,6 +1967,7 @@ class ficha_atencionController extends Controller
                                                     ->where('empresas_convenios.id_profesional', $profesional->id)
                                                     ->get();
 
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -1984,6 +1987,7 @@ class ficha_atencionController extends Controller
                 'examenes_piezas_pfu' => $examenes_piezas_pfu,
                 'examenes_piezas_pfp' => $examenes_piezas_pfp,
                 'ordenes_tm' => $ordenes_tm,
+                'ordenes_tmy' => $ordenes_tmy,
                 'correlativo_otm' => $correlativo_otm,
                 'proveedores' => $proveedores,
                 'bodegas' => $bodegas,
@@ -2169,6 +2173,15 @@ class ficha_atencionController extends Controller
                                         ->join('laboratorios','ordenes_trabajos_menores.id_laboratorio','laboratorios.id')
                                         ->where('ordenes_trabajos_menores.id_paciente', $id_paciente)
                                         ->where('ordenes_trabajos_menores.id_profesional',$id_profesional)
+                                        ->get();
+        return $ordenes;
+    }
+
+    public function dameOrdenesTrabajoMayor($id_paciente, $id_profesional){
+        $ordenes = OrdenTrabajoMayor::select('ordenes_trabajos_mayores.*','laboratorios.nombre as nombre_lab')
+                                        ->leftjoin('laboratorios','ordenes_trabajos_mayores.id_laboratorio','laboratorios.id')
+                                        ->where('ordenes_trabajos_mayores.id_paciente', $id_paciente)
+                                        ->where('ordenes_trabajos_mayores.id_profesional',$id_profesional)
                                         ->get();
         return $ordenes;
     }
