@@ -3725,7 +3725,7 @@
                                 //SuccessMode: true,
                             });
 
-                            cargarAgendaSucursal();
+                            cargarAgendaSucursal(data.hora_medica.fecha_consulta);
 
                             $('#modal_recepcion_bonos_api').modal('hide');
                             $('#bono_paciente_rut').val('');
