@@ -89,7 +89,7 @@
             </div>
             <!-- tab general-->
             <!--Contenido de tab-->
-            <form action="{{ route('ficha.otro.prof.registrar_octavo_par') }}" method="POST">
+            <form action="{{ route('ficha.otro.prof.registrar_lab_general') }}" method="POST">
                 <input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">
                 <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
                 <input type="hidden" name="id_examen" value="{{ $id_ficha_atencion }}" id="id_examen">
@@ -104,10 +104,10 @@
                         <div class="tab-content" id="at-oftalmo">
                             <!--Atender paciente-->
                             <div class="tab-pane fade show active" id="atender" role="tabpanel" aria-labelledby="atender-tab">
-                                <!--INFORME EXAMEN DEL 8° PAR CRANEANO-->
-                                <div class="row">
+                                <!-- FORMULARIO GENERAL ATENCION LABORATORIO-->
+                                <div class="row"style="margin-top: 22px; ">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="f-18 text-c-blue mb-2">Informe examen del 8° par craneano</h6>
+                                        <h6 class="f-18 text-c-blue mb-2">Formulario general atención</h6>
                                     </div>
                                 </div>
                                 <div class="row div_form_examen_ocho_par">
@@ -204,14 +204,14 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-row">
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
+                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                             <label class="floating-label-activo-sm">Antecedentes Especialidad</label>
                                                             <textarea class="form-control caja-texto form-control-sm mb-9"  rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="ant_especialidad" id="ant_especialidad" placeholder="Diagnóstico, sintomatología, uso de audífonos, cirugías examen fisico relevante patologías crónicas, etc."></textarea>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-row">
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
+                                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                             <label class="floating-label-activo-sm">Observacion General</label>
                                                             <textarea class="form-control caja-texto form-control-sm mb-9"  rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_general" id="obs_general" placeholder="Diagnóstico, sintomatología, uso de audífonos, cirugías examen fisico relevante patologías crónicas, etc."></textarea>
                                                         </div>

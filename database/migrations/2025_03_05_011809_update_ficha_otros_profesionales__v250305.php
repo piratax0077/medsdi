@@ -27,7 +27,7 @@ class UpdateFichaOtrosProfesionalesV250305 extends Migration
      */
     public function down()
     {
-        Schema::table('horas_meficha_otros_profesionalesdicas', function (Blueprint $table) {
+        Schema::table('ficha_otros_profesionales', function (Blueprint $table) {
             $table->drop('estado_archivo');
             $table->drop('archivo');
         });

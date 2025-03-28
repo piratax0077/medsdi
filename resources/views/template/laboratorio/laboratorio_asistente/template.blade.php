@@ -160,6 +160,10 @@
     <!-- file-upload Js -->
     <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
 
+
+	<script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
+
+
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
