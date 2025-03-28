@@ -1505,6 +1505,7 @@ Route::group([
 
 	/** FONOAUDIOLOGIA OCTAVO PAR */
     Route::post('Ficha_Atencion/crear/fonoaudiologia', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_fono_octa_par'])->name('ficha.otro.prof.registrar_octavo_par');
+    Route::post('Ficha_Atencion/crear/fonoaudiologia/general', [App\Http\Controllers\FichaAtencionOtrosProfController::class, 'store_fono_lab_general'])->name('ficha.otro.prof.registrar_lab_general');
 
 });
 

@@ -884,6 +884,7 @@ class ProfesionalProvisorioController extends Controller
             {
                 $datos['estado'] = 1;
                 $datos['msg'] = 'Registros Creado';
+                $datos['last_id'] = $registro->id;
                 $datos['request_data'] = json_encode(array(
                     'nombre'=>$nombre,
                     'apellido_uno'=>$apellido_uno,

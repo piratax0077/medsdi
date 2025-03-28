@@ -1254,14 +1254,19 @@ class ficha_atencionController extends Controller
                 if($profesional->id_tipo_especialidad == 55)
                 {
                     $procedimientoCentroTem = ProcedimientosCentro::find($hora->id_procedimiento);
-                    if($procedimientoCentroTem->otros == 2)
-                    {
-                        // $ruta_blade = 'atencion_otros_prof.atencion_fono_octavopar';
-                        $ruta_blade = 'app.laboratorio.atencion_fono_octavopar';
-                    }
-                    else
-                    {
-                        $ruta_blade = 'app.laboratorio.atencion_prof_laboratorio_especialidades';
+
+                    switch ($procedimientoCentroTem->otros) {
+                        case '1':
+                            $ruta_blade = 'app.laboratorio.atencion_prof_laboratorio_especialidades';
+                            break;
+                        case '2':
+                            // $ruta_blade = 'atencion_otros_prof.atencion_fono_octavopar';
+                            $ruta_blade = 'app.laboratorio.atencion_fono_octavopar';
+                            break;
+
+                        default:
+                            $ruta_blade = 'app.laboratorio.atencion_prof_laboratorio_especialidades';
+                            break;
                     }
 
                     $fichaTipo = '';

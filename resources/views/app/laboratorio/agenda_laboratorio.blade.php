@@ -1159,7 +1159,7 @@
             });
         }
 
-        function cargarAgendaSucursal()
+        function cargarAgendaSucursal(fecha)
         {
             let url = "{{ route('laboratorio.sucursal.horario.agenda') }}";
 
@@ -1183,7 +1183,7 @@
                     if (data.estado == 1)
                     {
                         console.log(data);
-                        agendaCalendario(data, '', id_lugar_atencion, id_box);
+                        agendaCalendario(data, fecha, id_lugar_atencion, id_box);
                     }
                     else
                     {
@@ -2831,7 +2831,7 @@
                         }
                         // cargarAgendaProfesional( data.id_profesional,fecha_consulta );
 
-                        cargarAgendaSucursal();
+                        cargarAgendaSucursal(fecha_consulta);
 
                     } else {
 
@@ -3511,7 +3511,7 @@
                             confirmButtonText: "Cool"
                         });
 
-                        cargarAgendaSucursal();
+                        cargarAgendaSucursal(data.fecha_consulta);
 
                         // location.reload();
 
@@ -3608,7 +3608,7 @@
                         confirmButtonText: "Cool"
                     });
                     // cargarAgendaProfesional( id_profesional, data.fecha_consulta );
-                    cargarAgendaSucursal();
+                    cargarAgendaSucursal(data.fecha_consulta);
                     // setTimeout(function() {
                     //     location.reload()
                     // }, 5000);
