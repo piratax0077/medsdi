@@ -483,7 +483,7 @@
                                         </div>
 
                                         {{-- <button type="button" class="btn btn-outline-primary btn-sm float-right mx-2">Solicitar incorporación nuevo convenio</button> --}}
-                                        <button class="btn btn-outline-success btn-sm float-right" onclick="guardar_nuevo_convenio_profesional()"><i class="fas fa-save"></i> Guardar</button>
+                                        {{-- <button class="btn btn-outline-success btn-sm float-right" onclick="guardar_nuevo_convenio_profesional()"><i class="fas fa-save"></i> Guardar</button> --}}
                                     </div>
 
                                     <div class="tab-pane fade show " id="pills-convenio_ffaa_caja_comp" role="tabpanel" aria-labelledby="pills-convenio_ffaa_caja_comp-tab">
@@ -493,9 +493,9 @@
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="convenio_1" onclick="evaluar_convenio(1)">
-                                                    <label class="custom-control-label" id="text_convenio_1" for="convenio_1">Ejército</label>
-                                                    <div style="display: none" id="valor_convenio_1">
+                                                    <input type="checkbox" class="custom-control-input" id="convenio_ffa1" onclick="evaluar_convenio(1)">
+                                                    <label class="custom-control-label" id="text_convenio_ffa1" for="convenio_ffa1">Ejército</label>
+                                                    <div style="display: none" id="valor_convenio_ffa1">
                                                         <select class="form-control-sm">
                                                             <option value="0">Seleccione</option>
                                                             <option value="1">Pago con bono o programa</option>
@@ -506,9 +506,9 @@
                                                 </div>
 
                                                 <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="convenio_2" onclick="evaluar_convenio(2)">
-                                                    <label class="custom-control-label" id="text_convenio_2" for="convenio_2">Armada</label>
-                                                    <div style="display: none" id="valor_convenio_2">
+                                                    <input type="checkbox" class="custom-control-input" id="convenio_ffa2" onclick="evaluar_convenio(2)">
+                                                    <label class="custom-control-label" id="text_convenio_ffa2" for="convenio_ffa2">Armada</label>
+                                                    <div style="display: none" id="valor_convenio_ffa2">
                                                         <select class="form-control-sm">
                                                             <option value="0">Seleccione</option>
                                                             <option value="1">Pago con bono o programa</option>
@@ -518,9 +518,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="convenio_2" onclick="evaluar_convenio(2)">
-                                                    <label class="custom-control-label" id="text_convenio_3" for="convenio_3">Bomberos</label>
-                                                    <div style="display: none" id="valor_convenio_3">
+                                                    <input type="checkbox" class="custom-control-input" id="convenio_ffa3" onclick="evaluar_convenio(3)">
+                                                    <label class="custom-control-label" id="text_convenio_ffa3" for="convenio_ffa3">Bomberos</label>
+                                                    <div style="display: none" id="valor_convenio_ffa3">
                                                         <select class="form-control-sm">
                                                             <option value="0">Seleccione</option>
                                                             <option value="1">Pago con bono o programa</option>
@@ -534,9 +534,9 @@
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="convenio_3" onclick="evaluar_convenio(3)">
-                                                    <label class="custom-control-label" id="text_convenio_3" for="convenio_3">Fuerza Aérea</label>
-                                                    <div style="display: none" id="valor_convenio_3">
+                                                    <input type="checkbox" class="custom-control-input" id="convenio_ffa4" onclick="evaluar_convenio(4)">
+                                                    <label class="custom-control-label" id="text_convenio_ffa4" for="convenio_ffa4">Fuerza Aérea</label>
+                                                    <div style="display: none" id="valor_convenio_ffa4d">
                                                         <select class="form-control-sm">
                                                             <option value="0">Seleccione</option>
                                                             <option value="1">Pago con bono o programa</option>
@@ -547,9 +547,9 @@
                                                 </div>
 
                                                 <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="convenio_4" onclick="evaluar_convenio(4)">
-                                                    <label class="custom-control-label" id="text_convenio_4" for="convenio_4">Carabineros</label>
-                                                    <div style="display: none" id="valor_convenio_4">
+                                                    <input type="checkbox" class="custom-control-input" id="convenio_ffa5" onclick="evaluar_convenio(5)">
+                                                    <label class="custom-control-label" id="text_convenio_ffa5" for="convenio_ffa5">Carabineros</label>
+                                                    <div style="display: none" id="valor_convenio_ffa5">
                                                         <select class="form-control-sm">
                                                             <option value="0">Seleccione</option>
                                                             <option value="1">Pago con bono o programa</option>
@@ -559,9 +559,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="convenio_2" onclick="evaluar_convenio(2)">
-                                                    <label class="custom-control-label" id="text_convenio_4" for="convenio_3">PDI</label>
-                                                    <div style="display: none" id="valor_convenio_4">
+                                                    <input type="checkbox" class="custom-control-input" id="convenio_ffa6" onclick="evaluar_convenio(6)">
+                                                    <label class="custom-control-label" id="text_convenio_ffa6" for="convenio_ffa6">PDI</label>
+                                                    <div style="display: none" id="valor_convenio_ffa6">
                                                         <select class="form-control-sm">
                                                             <option value="0">Seleccione</option>
                                                             <option value="1">Pago con bono o programa</option>
@@ -573,9 +573,9 @@
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="convenio_1" onclick="evaluar_convenio(1)">
-                                                    <label class="custom-control-label" id="text_convenio_1" for="convenio_1">Caja Los Andes</label>
-                                                    <div style="display: none" id="valor_convenio_1">
+                                                    <input type="checkbox" class="custom-control-input" id="convenio_ffa7" onclick="evaluar_convenio(7)">
+                                                    <label class="custom-control-label" id="text_convenio_ffa7" for="convenio_ffa7">Caja Los Andes</label>
+                                                    <div style="display: none" id="valor_convenio_ffa7">
                                                         <select name="" id="" class="form-control-sm">
                                                             <option value="0">Seleccione</option>
                                                             <option value="1">Pago con bono o programa</option>
@@ -586,9 +586,9 @@
                                                 </div>
 
                                                 <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="convenio_2" onclick="evaluar_convenio(2)">
-                                                    <label class="custom-control-label" id="text_convenio_2" for="convenio_2">Caja La Araucana</label>
-                                                    <div style="display: none" id="valor_convenio_2">
+                                                    <input type="checkbox" class="custom-control-input" id="convenio_ffa8" onclick="evaluar_convenio(8)">
+                                                    <label class="custom-control-label" id="text_convenio_ffa8" for="convenio_ffa8">Caja La Araucana</label>
+                                                    <div style="display: none" id="valor_convenio_ffa8">
                                                         <select name="" id="" class="form-control-sm">
                                                             <option value="0">Seleccione</option>
                                                             <option value="1">Pago con bono o programa</option>
@@ -599,9 +599,9 @@
                                                 </div>
 
                                                 <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="convenio_3" onclick="evaluar_convenio(3)">
-                                                    <label class="custom-control-label" id="text_convenio_3" for="convenio_3">Caja 18 de Septiembre</label>
-                                                    <div style="display: none" id="valor_convenio_3">
+                                                    <input type="checkbox" class="custom-control-input" id="convenio_ffa9" onclick="evaluar_convenio(9)">
+                                                    <label class="custom-control-label" id="text_convenio_ffa9" for="convenio_ffa9">Caja 18 de Septiembre</label>
+                                                    <div style="display: none" id="valor_convenio_ffa9">
                                                         <select name="" id="" class="form-control-sm">
                                                             <option value="0">Seleccione</option>
                                                             <option value="1">Pago con bono o programa</option>
@@ -612,9 +612,9 @@
                                                 </div>
 
                                                 <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input" id="convenio_4" onclick="evaluar_convenio(4)">
-                                                    <label class="custom-control-label" id="text_convenio_4" for="convenio_4">Caja Los Héroes</label>
-                                                    <div style="display: none" id="valor_convenio_4">
+                                                    <input type="checkbox" class="custom-control-input" id="convenio_ffa10" onclick="evaluar_convenio(10)">
+                                                    <label class="custom-control-label" id="text_convenio_ffa10" for="convenio_ffa10">Caja Los Héroes</label>
+                                                    <div style="display: none" id="valor_convenio_ffa10">
                                                         <select name="" id="" class="form-control-sm">
                                                             <option value="0">Seleccione</option>
                                                             <option value="1">Pago con bono o programa</option>
@@ -626,16 +626,104 @@
 
                                             </div>
                                         </div>
-                                        <div class="row">
+                                        <div class="row" id="contenedor_nuevo_convenio_ffa">
                                             <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Observaciones</label>
-                                                    <textarea name="observaciones_nuevo_convenio" id="observaciones_nuevo_convenio" cols="30" rows="4" class="form-control"></textarea>
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FFAA</th>
+                                                            <th>Tipo Convenio</th>
+                                                            <th>Porcentaje</th>
+                                                            <th>Acciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="contenedor_tipos_convenios_ffa">
+                                                        @if(isset($convenios_ffa))
+                                                        @foreach ($convenios_ffa as $c)
+                                                            <tr>
+                                                                <td>{{ $c->nombre_convenio }}</td>
+                                                                <td>{{ $c->descripcion }} </td>
+                                                                <td>{{ $c->porcentaje }} %</td>
+                                                                <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_tipo_convenio_prevision({{ $c->id }})"><i class="fas fa-trash"></i></button></td>
+                                                            </tr>
+                                                        @endforeach
+                                                        @endif
+                                                    </tbody>
+                                                </table>
+                                                <div class="row d-none" id="contenedor_tipo_convenio_ffa">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group flex-grow-1 me-2">
+                                                            <label class="floating-label-activo-sm">Nombre Convenio</label>
+                                                            <input type="text" class="form-control form-control-sm" id="nombre_convenio_ffa1" name="nombre_convenio_ffa1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Tipo Convenio</label>
+                                                            <select name="tipo_convenio_ffa1" id="tipo_convenio_ffa1" class="form-control">
+                                                                <option value="0">Seleccione</option>
+                                                                @foreach($tipoproducto_convenios as $key_tc => $value_tc)
+                                                                    <option value="{{ $value_tc->id }}">{{ $value_tc->descripcion }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Porcentaje</label>
+                                                            <input type="text" class="form-control form-control-sm" name="porcentaje_dcto_ffa1" id="porcentaje_dcto_ffa1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <button type="button" class="btn btn-success btn-sm float-right" onclick="guardar_tipo_convenio_ffa(1)"><i class="fas fa-save"></i></button>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Fecha Inicial</label>
+                                                            <input type="date" class="form-control" value="<?php echo date('Y-m-d') ?>" id="fecha_inicial_pago_convenio_ffa1" name="fecha_inicial_pago_convenio_ffa1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Fecha Final</label>
+                                                            <input type="date" class="form-control" value="" id="fecha_final_pago_convenio_ffa1" name="fecha_final_pago_convenio_ffa1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4 d-flex justify-content-between">
+                                                        <div class="switch switch-success d-inline">
+                                                            <input type="checkbox" id="convenio_infinito_ffa1" name="convenio_infinito_ffa1" class="switch-input" onclick="convenio_infinito()">
+                                                            <label for="convenio_infinito1" class="cr"></label>
+                                                        </div>
+                                                        <br>
+                                                        <label class="floating-label-activo-sm">Indefinido</label>
+
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label class="floating-label-activo-sm">Observaciones</label>
+                                                            <textarea name="observaciones_nuevo_convenio_ffa" id="observaciones_nuevo_convenio_ffa" cols="30" rows="4" class="form-control"></textarea>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="col-md-12" id="contenedor_tipos_convenio_ffa"></div>
+
+
+
+
+
+
+                                            <div class="col-md-12">
+                                                <button type="button" class="btn btn-success btn-sm btn-icon" onclick="nuevo_tipo_convenio_ffa()"><i class="fas fa-plus"></i></button>
+                                                {{-- <button type="button" class="btn btn-outline-primary btn-sm float-right mx-2">Solicitar incorporación nuevo convenio</button> --}}
+
+                                            </div>
+
+
                                         </div>
                                         {{-- <button type="button" class="btn btn-outline-primary btn-sm float-right mx-2">Solicitar incorporación nuevo convenio</button> --}}
-                                        <button class="btn btn-outline-success btn-sm float-right" onclick="guardar_nuevo_convenio_profesional()"><i class="fas fa-save"></i> Guardar</button>
+                                        {{-- <button class="btn btn-outline-success btn-sm float-right" onclick="guardar_nuevo_convenio_profesional()"><i class="fas fa-save"></i> Guardar</button> --}}
                                     </div>
                                 </div>
 
@@ -870,6 +958,10 @@
 
     function nuevo_tipo_convenio_prevision(){
         $('#contenedor_tipo_convenio_prevision').toggleClass('d-none');
+    }
+
+    function nuevo_tipo_convenio_ffa(){
+        $('#contenedor_tipo_convenio_ffa').toggleClass('d-none');
     }
 
     function guardar_nombre_convenio(){
@@ -1158,12 +1250,164 @@
         });
     }
 
+    function guardar_tipo_convenio_ffa(count){
+        let nombre_convencion = $('#nombre_convenio_ffa'+count).val();
+        let tipo_convenio = $('#tipo_convenio_ffa'+count).val();
+        let porcentaje = $('#porcentaje_dcto_ffa'+count).val();
+        let fecha_inicio = $('#fecha_inicial_pago_convenio_ffa'+count).val();
+        let fecha_termino = $('#fecha_final_pago_convenio_ffa'+count).val();
+        let observaciones = $('#observaciones_nuevo_convenio_ffa').val();
+        let id_empresa = $('#id_empresa').val();
+
+        let valido = 1;
+        let mensaje = '';
+
+        if(nombre_convencion == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar un nombre de convenio</li>';
+        }
+
+        if(tipo_convenio == 0){
+            valido = 0;
+            mensaje += '<li>Debe seleccionar un tipo de convenio</li>';
+        }
+        if(porcentaje == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar un porcentaje</li>';
+        }
+        if(fecha_inicio == ''){
+            valido = 0;
+            mensaje += '<li>Debe ingresar una fecha de inicio</li>';
+        }
+        if(fecha_termino == '' && $('#convenio_infinito').is(':checked') == false){
+            //valido = 0;
+            //mensaje += '<li>Debe ingresar una fecha de término</li>';
+        }
+
+
+        var convenios = '';
+        for (let i = 1; i < 13; i++) {
+            if ($('#convenio_ffa' + i).prop('checked')) {
+                convenios = convenios + $('#text_convenio_ffa' + i).text() + ',';
+            }
+        }
+        let conveniosSeleccionados = [];
+
+        $('.custom-control-input:checked').each(function () {
+            const id = $(this).attr('id').split('_')[1]; // Extrae el ID numérico
+            const selectValue = $('#valor_convenio_' + id + ' select').val();
+            const inputValue = $('#valor_convenio_' + id + ' input[type="number"]').val();
+
+            conveniosSeleccionados.push({
+                convenio: $('#text_convenio_' + id).text().replace(/\s+/g, ' ').trim(), // Elimina saltos de línea y espacios extra
+                opcion: selectValue,
+                condicion: inputValue
+            });
+        });
+
+        if(convenios == ''){
+            valido = 0;
+            mensaje += '<li>Seleccione al menos un convenio</li>';
+        }
+
+        if(valido == 0){
+            swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+            return false;
+        }
+
+
+        let data = {
+            nombre_convenio: nombre_convencion,
+            tipo_convenio: tipo_convenio,
+            porcentaje: porcentaje,
+            fecha_inicio: fecha_inicio,
+            fecha_termino: fecha_termino,
+            observaciones: observaciones,
+            convenios: convenios,
+            conveniosSeleccionados: conveniosSeleccionados,
+            id_empresa: id_empresa,
+            _token: CSRF_TOKEN
+        }
+
+        console.log(data);
+        $.ajax({
+            url: '{{ ROUTE("profesional.guardar_tipo_convenio") }}',
+            type: 'POST',
+            data: data,
+            success: function(data){
+                console.log(data);
+                if(data.estado == 1){
+                    swal({
+                        title: 'Exito',
+                        text: data.mensaje,
+                        icon: 'success'
+                    });
+
+                    let todos_convenios = data.todos_convenios;
+                    $('#contenedor_tipos_convenios_prevision').empty();
+                    todos_convenios.forEach(e => {
+                        $('#contenedor_tipos_convenios_prevision').append(
+                        `
+                            <tr>
+                                <td>${e.nombre_convenio}</td>
+                                <td>${e.descripcion} </td>
+                                <td>${e.porcentaje} %</td>
+                                <td><button type="button" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"> </i> </button> </td>
+                            </tr>
+                        `
+                        );
+                    });
+                    $('#tabla_convenios_profesional').DataTable().destroy();
+                    $('#tabla_convenios_profesional tbody').empty();
+                    let convenios = data.convenios;
+                    convenios.forEach(convenio => {
+                        let fila = '<tr>';
+                        fila += '<td class="align-middle text-center">' + convenio.nombre_convenio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.rut_empresa + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.tipo_convenio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.fecha_inicio + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.fecha_termino + '</td>';
+                        fila += '<td class="align-middle text-center">' + convenio.porcentaje + ' %</td>';
+                        fila += '<td class="align-middle text-center">';
+                        fila += '<button class="btn btn-warning btn-sm has-ripple" onclick="dame_convenio(' + convenio.id + ')" data-toggle="modal" data-target="#editarConvenioInstitucion"><i class="fa fa-edit" aria-hidden="true"></i></button>';
+                        fila += '<button type="button" class="btn btn-danger btn-sm has-ripple" onclick="eliminar_convenio(' + convenio.id + ')"><i class="fas fa-trash"></i> </button>';
+                        fila += '</td>';
+                        fila += '</tr>';
+                        $('#tabla_convenios_profesional tbody').append(fila);
+                    });
+                    $('#tabla_convenios_profesional').DataTable({
+                        "language": {
+                            "url": "{{ asset('js/Spanish.json') }}"
+                        }
+                    });
+                }else{
+                    swal({
+                        title: 'Error',
+                        text: data.mensaje,
+                        icon: 'error'
+                    });
+                }
+            }
+        });
+    }
+
     function eliminar_tipo_convenio(id){
         swal({
             title: "¿Esta seguro que desea ELIMINAR el tipo de convenio?",
             text: "Favor confirme o cancele la solicitud",
             icon: "warning",
-            buttons: ["Cancelar", "Solicitar"],
+            buttons: ["Cancelar", "Confirmar"],
             dangerMode: true,
         }).then((willDelete) => {
             if(willDelete){

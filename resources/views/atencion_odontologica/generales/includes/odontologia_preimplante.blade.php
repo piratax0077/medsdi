@@ -480,7 +480,13 @@
                                                             <div class="col-md-6" id="contenedor_pieza_tto_implante">
                                                                 <div class="card">
                                                                     <div class="card-body">
-                                                                        <div class="form-row">
+                                                                        <div class="row my-3">
+                                                                            <div class="col-md-12 bg-warning text-danger">
+                                                                                <h1 style="font-size: 28px;text-align: center; font-weight: bold; text-transform: uppercase;">Seleccionar Piezas individuales</h1>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="form-row mt-3">
                                                                             <div class="col-sm-2 col-md-4 col-lg-4 col-xl-2">
                                                                                 <div class="form-group">
                                                                                     <label class="floating-label-activo-sm">Pieza N°</label>
@@ -501,7 +507,7 @@
 
                                                                         </div>
                                                                         <hr>
-                                                                        <button type="button" class="btn btn-outline-primary btn-sm w-100 mt-3" onclick="abrir_modal_insumos()"><i class="fas fa-plus"></i> Insumos</button>
+                                                                        <button type="button" class="btn btn-outline-primary btn-sm w-100 my-3"  onclick="abrir_modal_insumos()"><i class="fas fa-plus"></i> Agregar Insumos</button>
                                                                         <table class="display table table-striped table-hover dt-responsive nowrap table-sm dataTable no-footer dtr-inline">
                                                                             <thead>
                                                                                 <tr>
@@ -525,6 +531,13 @@
                                                             <div class="col-md-6">
                                                                 <div class="card">
                                                                     <div class="card-body">
+
+                                                                            <div class="row my-3">
+                                                                                <div class="col-md-12 bg-warning text-danger">
+                                                                                    <h1 style="font-size: 28px;text-align: center; font-weight: bold; text-transform: uppercase;">Seleccionar Grupo de Piezas</h1>
+                                                                                </div>
+
+                                                                            </div>
                                                                         <div class="row">
                                                                             <div class="col-12">
                                                                                 @include('atencion_odontologica.generales.odontograma_adulto_grupos')
@@ -585,7 +598,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <hr>
-                                                                        <button type="button" class="btn btn-outline-primary btn-sm w-100 my-3"  onclick="abrir_modal_insumos()"><i class="fas fa-plus"></i> Insumos</button>
+                                                                        <button type="button" class="btn btn-outline-primary btn-sm w-100 my-3"  onclick="abrir_modal_insumos()"><i class="fas fa-plus"></i> Agregar Insumos</button>
                                                                         <table id="table_insumos_preimplante" class="display table table-striped table-hover dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2 table-responsive">
                                                                             <thead>
                                                                                 <tr>

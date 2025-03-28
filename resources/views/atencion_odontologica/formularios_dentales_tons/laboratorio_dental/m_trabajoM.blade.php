@@ -103,8 +103,12 @@
                     <div class="form-row">
                         <div class="form-group col-sm-6 col-md-6">
                             <label class="floating-label-activo-sm">Marca Implante</label>
-                            <input type="text" class="form-control form-control-sm" name="marca_implante_trabajo_mayor"
+                            <select class="form-control form-control-sm" name="marca_implante_trabajo_mayor"
                                 id="marca_implante_trabajo_mayor">
+                                @foreach ($marcas_implantes as $marca)
+                                    <option value="{{ $marca->id }}">{{ $marca->descripcion }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group col-sm-6 col-md-6">
                             <label class="floating-label-activo-sm">Medida Implante</label>
@@ -184,7 +188,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-info">Guardar</button>
+                        <button type="button" class="btn btn-info" onclick="guardar_trabajo_mayor_dental()">Guardar</button>
                     </div>
                 </form>
             </div>
@@ -251,7 +255,7 @@
                 DangerMode: true,
             });
     } else {
-        let url = "{{ ROUTE('dental.registrar_orden_trabajo_mayor') }}";
+        let url = "{{ ROUTE('dental.generar_pdf_trabajo_mayor') }}";
        let data = {
         nro_orden_trabajo_mayor: $('#nro_orden_trabajo_mayor').val(),
         clinica_doctor_trabajo_mayor: $('#clinica_doctor_trabajo_mayor').val(),

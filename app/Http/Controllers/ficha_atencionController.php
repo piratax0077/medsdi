@@ -2165,7 +2165,11 @@ class ficha_atencionController extends Controller
     }
 
     public function dameOrdenesTrabajoMenor($id_paciente, $id_profesional){
-        $ordenes = OrdenTrabajoMenor::where('id_paciente', $id_paciente)->where('id_profesional',$id_profesional)->get();
+        $ordenes = OrdenTrabajoMenor::select('ordenes_trabajos_menores.*','laboratorios.nombre as nombre_lab')
+                                        ->join('laboratorios','ordenes_trabajos_menores.id_laboratorio','laboratorios.id')
+                                        ->where('ordenes_trabajos_menores.id_paciente', $id_paciente)
+                                        ->where('ordenes_trabajos_menores.id_profesional',$id_profesional)
+                                        ->get();
         return $ordenes;
     }
 

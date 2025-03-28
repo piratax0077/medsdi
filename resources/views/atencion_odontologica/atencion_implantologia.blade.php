@@ -185,6 +185,8 @@
             mostrar_nuevas_imagenes_dent(random);
             mostrar_pieza_dental_examen(random);
         });
+
+
     function cargar_a_presupuesto(id, tipo = null){
         let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";
         let data = {

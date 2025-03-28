@@ -1,13 +1,35 @@
 <style>
     .status-circle .circle {
-    width: 20px;
-    height: 20px;
-    background-color: red;
-    border-radius: 50%;
-    display: inline-block;
-    border: 2px solid #fff; /* Opcional: Borde blanco para mejor visibilidad */
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Opcional: Sombra suave */
-}
+        width: 20px;
+        height: 20px;
+        background-color: red;
+        border-radius: 50%;
+        display: inline-block;
+        border: 2px solid #fff; /* Opcional: Borde blanco para mejor visibilidad */
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Opcional: Sombra suave */
+    }
+
+    .promo-banner {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: pulse 1.5s infinite alternate;
+            margin: 0px 10px 0px 10px;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        100% {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+    }
 </style>
 <div class="card">
     <div class="card-body">
@@ -213,7 +235,7 @@
                                                 <div class="card-body">
                                                   <h5 class="card-title">{{ $c->nombre_convenio }}</h5>
                                                   <p class="card-text">{{ $c->porcentaje }} % {{ $c->descripcion }}</p>
-                                                  <a href="#" class="btn btn-primary">Aplicar</a>
+                                                  <a href="#" class="btn btn-primary" @if($paciente->prevision->nombre == $c->nombre_convenio) onclick="aplicar_convenio_tratamiento({{ $c->id }})" @endif>Aplicar</a>
                                                 </div>
                                               </div>
                                         </div>
@@ -731,54 +753,57 @@
                                                 <div class="col-sm-12 col-md-10 col-xl-10">
                                                     <div class="tab-content" id="v-pills-tabContent">
                                                         <div class="tab-pane fade show active" id="od_laboratorio_trab" role="tabpanel" aria-labelledby="od_laboratorio_trab-tab">
-                                                            <div class="col-sm-12 col-md-12">
-                                                                @foreach ($ordenes_tm as $o)
-                                                                <div class="card">
-                                                                    <div class="card-body">
-                                                                        <div class="form-row">
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-12" id="contenedor_ordenes_trabajos_menores_dental">
+                                                                    @foreach ($ordenes_tm as $o)
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <div class="form-row">
 
-                                                                            <div class="form-group col-md-2">
-                                                                                <label class="floating-label-activo-sm">Nombre Laboratorio</label>
-                                                                                <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom">
-                                                                            </div>
-                                                                            <div class="form-group col-md-2">
-                                                                                <label class="floating-label-activo-sm">Trabajo Requerido</label>
-                                                                                <input type="text" class="form-control form-control-sm" name="lab_ord_trab" id="lab_ord_trab">
-                                                                            </div>
-                                                                            <div class="form-group col-md-2">
-                                                                                <label class="floating-label-activo-sm">F.envío</label>
-                                                                                <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv">
-                                                                            </div>
-                                                                            <div class="form-group col-md-2">
-                                                                                <label class="floating-label-activo-sm">F.entrega</label>
-                                                                                <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent">
-                                                                            </div>
-                                                                            <div class="form-group col-md-2">
-                                                                                <label class="floating-label-activo-sm">Estado</label>
-                                                                                <input type="text" class="form-control form-control-sm" name="lab_est" id="lab_est">
-                                                                            </div>
-                                                                            <div class="form-group col-md-2">
-                                                                                <label class="floating-label-activo-sm">N° Identificación</label>
-                                                                                <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab">
-                                                                            </div>
-                                                                            <div class="form-group col-md-2 d-flex">
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">Nombre Laboratorio</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom" value="{{ $o->nombre_lab }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">Trabajo Requerido</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_ord_trab" id="lab_ord_trab" value="{{ $o->trabajo_realizar }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">F.envío</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">F.entrega</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">Estado</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_est" id="lab_est" value="{{ $o->estado == 1 ? 'Pendiente' : 'Otro' }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">N° Identificación</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="{{ $o->id }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2 d-flex">
 
 
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
 
-                                                                @endforeach
+                                                                    @endforeach
 
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <label class="floating-label-activo-sm">Observaciones </label>
-                                                                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                            <label class="floating-label-activo-sm">Observaciones </label>
+                                                                            <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
 
+                                                                </div>
                                                             </div>
+
                                                         </div>
                                                         <div class="tab-pane fade show" id="costo_presupuesto_trab" role="tabpanel" aria-labelledby="costo_presupuesto_trab-tab">
                                                             <div class="col-sm-12 col-md-12">
@@ -956,19 +981,19 @@
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ $presupuesto ? number_format($presupuesto->valor_total,0,',','.') : '' }}">
+                                                        <input type="text" class="form-control form-control-sm" name="subtotal_presup" id="subtotal_presup" value="{{ $presupuesto ? number_format($presupuesto->valor_total,0,',','.') : '' }}">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Descuento</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        <input type="text" class="form-control form-control-sm" name="descuento_presup" id="descuento_presup">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Total</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        <input type="text" class="form-control form-control-sm" name="total_presup" id="total_presup">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <label class="floating-label-activo-sm">Abonos</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        <input type="text" class="form-control form-control-sm" name="abonos_presup" id="abonos_presup" value="{{ number_format($valor_abonado,0,',','.') }}">
                                                     </div>
                                                     <div class="form-group col-md-2">
                                                         <button type="button" class="btn btn-success btn-block btn-sm"
@@ -979,10 +1004,12 @@
                                                     <div class="col-md-12">
                                                         @foreach ($convenios_prevision as $c)
                                                             @if( $paciente->prevision->nombre == $c->nombre_convenio)
-                                                            <p>{{ $paciente->prevision->nombre }} {{ $c->porcentaje }} % {{ $c->descripcion }}
-                                                                <button type="button" class="btn btn-outline-success btn-sm btn-icon" onclick="aplicar_convenio_tratamiento({{ $c->id }})"><i class="fas fa-check"></i></button>
-                                                                <button type="button" class="btn btn-outline-primary btn-sm btn-icon" onclick="imprimir_convenio_tratamiento({{ $c->id }})"><i class="fas fa-print"></i></button>
+                                                            <p class="promo-banner my-3">{{ $paciente->prevision->nombre }} {{ $c->porcentaje }} % {{ $c->descripcion }}
+                                                                <button type="button" class="btn btn-outline-light btn-sm btn-icon" onclick="aplicar_convenio_tratamiento({{ $c->id }})"><i class="fas fa-check"></i></button>
+                                                                <button type="button" class="btn btn-outline-primary btn-sm btn-icon" onclick="generar_pdf()"><i class="fas fa-print"></i></button>
+                                                                <span id="mensaje" class="badge badge-success"></span>
                                                             </p>
+
                                                             @endif
                                                         @endforeach
                                                     </div>
@@ -2336,6 +2363,7 @@
                      $('#valores_total_abonado_presupuesto_conf').html(formatoMoneda(parseInt(response.suma_pagado)));
                      $('#total_abonado_presupuesto').val(parseInt(response.suma_pagado));
                     $('#total_adeudado_presupuesto').val(parseInt(response.suma_adeudado));
+                    $('#abonos_presup').val(formatoMoneda(response.suma_pagado));
                 }else{
                     swal({
                         title:'error',
@@ -2527,6 +2555,7 @@
                     $('#valores_total_abonado_presupuesto_conf').html(formatoMoneda(parseInt(resp.suma_pagado)));
                     $('#total_abonado_presupuesto').val(parseInt(resp.suma_pagado));
                     $('#total_adeudado_presupuesto').val(parseInt(resp.suma_adeudado));
+                    $('#abonos_presup').val(formatoMoneda(resp.suma_pagado));
                 }
             },
             error: function(error){
@@ -2715,6 +2744,20 @@
     });
 
     function aplicar_convenio_tratamiento(id){
+        swal({
+            title: "¿Esta seguro que desea aplicar el descuento?",
+            text: "Favor confirme o cancele la solicitud",
+            icon: "warning",
+            buttons: ["Cancelar", "Confirmar"],
+            dangerMode: true,
+        }).then((willDelete) => {
+            if(willDelete){
+                confirmar_aplicar_convenio_tratamiento(id);
+            }
+        });
+    }
+
+    function confirmar_aplicar_convenio_tratamiento(id){
         let data = {
             id: id,
             id_paciente: $('#id_paciente').val(),
@@ -2729,6 +2772,139 @@
             data: data,
             success: function(resp){
                 console.log(resp);
+                $('#mensaje').html('Descuento aplicado');
+                // Cambiar el botón para que pase a ser "Quitar convenio"
+                const boton = document.querySelector(`button[onclick="aplicar_convenio_tratamiento(${id})"]`);
+                if (boton) {
+                    boton.classList.remove('btn-outline-success');
+                    boton.classList.add('btn-outline-danger');
+                    boton.innerHTML = '<i class="fas fa-times"></i>';
+                    boton.setAttribute('onclick', `quitar_convenio_tratamiento(${id})`);
+                }
+                let odontograma = resp.odontograma;
+                let table_piezas_odontograma = $('#presup_estado_pago').DataTable();
+
+                // Limpiar la tabla antes de agregar nuevas filas
+                table_piezas_odontograma.clear().draw();
+
+                // Recorrer el odontograma y agregar nuevas filas
+                odontograma.forEach(function(odonto) {
+
+                    if (odonto.presupuesto == 1) {
+                        if(odonto.estado_pago == 'ok'){
+                            var clase = 'bg-success';
+                        }else if(odonto.estado_pago == 'incompleto'){
+                            var clase = 'bg-warning';
+                        }else{
+                            var clase = 'bg-danger';
+                        }
+
+                        if(odonto.estado == 0){
+                            var estado = 'PENDIENTE';
+                        }else{
+                            var estado = 'TERMINADO';
+                        }
+                        // Agregar una nueva fila a la tabla
+                        let rowNode = table_piezas_odontograma.row.add([
+                            odonto.descripcion,
+                            odonto.pieza,
+                            formatoMoneda(formatoMoneda(odonto.valor)),
+                            formatoMoneda(formatoMoneda(odonto.valor - odonto.valor_descuento)),
+                            formatoMoneda(formatoMoneda(odonto.valor_descuento)),
+                            '<div class="circle '+clase+'"></div>',
+                            estado, // Columna vacía
+
+                        ]).draw(false).node(); // Obtener el nodo de la fila
+
+                        // Agregar clases a la fila
+                        $(rowNode).addClass('text-center align-middle status-circle');
+                    }
+                });
+
+                let insumos = resp.insumos;
+
+                let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
+                table_insumos_pagos.clear();
+                console.log(insumos);
+                insumos.forEach(insumo => {
+                    let total = insumo.cantidad * insumo.valor;
+                    if(insumo.presupuesto == 1){
+                        if(insumo.estado_pago == 'ok'){
+                            var clase = 'bg-success';
+                        }else if(insumo.estado_pago == 'intermedio'){
+                            var clase = 'bg-warning';
+                        }else{
+                            var clase = 'bg-danger';
+                        }
+                        let rowNode = table_insumos_pagos.row.add([
+                        insumo.insumos + ' ' + insumo.nombre_marca,
+                        insumo.cantidad,         // Nombre del insumo
+                        formatoMoneda(insumo.valor),       // Cantidad utilizada
+                        formatoMoneda(insumo.valor - insumo.valor_descuento),         // Unidad de medida
+                        formatoMoneda(insumo.valor_descuento),
+                        ' <div class="circle '+clase+'"></div>',
+
+                    ]).draw(false).node();
+
+                    // Agregar clases a la fila
+                    $(rowNode).addClass('text-center align-middle status-circle');
+                    }
+
+                });
+                table_insumos_pagos.draw();
+
+                let valores_boca_general = resp.valores[0];
+                let valores_odontograma = resp.valores[1];
+                let valores_insumos = resp.valores[2];
+                let descuentos = resp.descuentos;
+                let total_general = valores_boca_general + valores_odontograma + valores_insumos - descuentos;
+                $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                $('#valores_descuentos_presupuesto').html(formatoMoneda(resp.descuentos));
+                $('#valores_descuentos_presupuesto_conf').html(formatoMoneda(resp.descuentos));
+                $('#descuento_presup').val(formatoMoneda(resp.descuentos));
+                $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                $('#total_presup').val(formatoMoneda(total_general));
+                $('#subtotal_clinico').val(formatoMoneda(total_general));
+                $('#total_clinico').val(formatoMoneda(total_general));
+                // guardamos el total en un input hidden
+                $('#total_presupuesto_dental').val(total_general);
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        });
+    }
+
+    function quitar_convenio_tratamiento(id){
+        console.log(id);
+        let url = "{{ ROUTE('dental.dame_prestaciones_presupuesto') }}";
+        let data = {
+            id: id,
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            id_paciente: $('#id_paciente').val(),
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                $('#mensaje').html('Descuento retirado');
+                // Cambiar el botón para que vuelva a ser "Aplicar convenio"
+                const boton = document.querySelector(`button[onclick="quitar_convenio_tratamiento(${id})"]`);
+                if (boton) {
+                    boton.classList.remove('btn-outline-danger');
+                    boton.classList.add('btn-outline-success');
+                    boton.innerHTML = '<i class="fas fa-check"></i>';
+                    boton.setAttribute('onclick', `aplicar_convenio_tratamiento(${id})`);
+                }
                 let odontograma = resp.odontograma;
                 let table_piezas_odontograma = $('#presup_estado_pago').DataTable();
 
@@ -2789,7 +2965,7 @@
                         insumo.cantidad,         // Nombre del insumo
                         formatoMoneda(insumo.valor),       // Cantidad utilizada
                         0,         // Unidad de medida
-                        formatoMoneda(total),
+                        formatoMoneda(insumo.valor),
                         ' <div class="circle '+clase+'"></div>',
 
                     ]).draw(false).node();
@@ -2800,7 +2976,6 @@
 
                 });
                 table_insumos_pagos.draw();
-
                 let valores_boca_general = resp.valores[0];
                 let valores_odontograma = resp.valores[1];
                 let valores_insumos = resp.valores[2];
@@ -2811,6 +2986,10 @@
                 $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
                 $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                 $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                $('#descuento_presup').val('$'+0);
+                $('#valores_descuentos_presupuesto').text('$'+0);
+                $('#valores_descuentos_presupuesto_conf').text('$'+0);
+                $('#total_presup').val(formatoMoneda(total_general));
                 $('#subtotal_clinico').val(formatoMoneda(total_general));
                 $('#total_clinico').val(formatoMoneda(total_general));
                 // guardamos el total en un input hidden
@@ -2819,7 +2998,7 @@
             error: function(error){
                 console.log(error.responseText);
             }
-        });
+        })
     }
 
 </script>

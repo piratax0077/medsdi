@@ -1058,19 +1058,26 @@ class EscritorioProfesional extends Controller
         $convenio = EmpresasConvenios::find($request->id);
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $odontograma = $this->dameOdontogramaPaciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
+
+        $descuentos = 0;
+
         foreach($odontograma as $o){
-            $o->valor = $o->valor - $o->valor * (intval($convenio->porcentaje) / 100);
+            $o->valor_descuento = $o->valor - $o->valor * (intval($convenio->porcentaje) / 100);
+            $descuentos += $o->valor * (intval($convenio->porcentaje) / 100);
+            $o->nuevo_valor = $o->valor - $o->valor_descuento;
         }
         $insumos = $this->dame_insumos_tratamiento($request->id_paciente, $request->id_ficha_atencion);
         foreach($insumos as $i){
-            $i->valor = $i->valor - $i->valor * (intval($convenio->porcentaje) / 100);
+            $i->valor_descuento = $i->valor - $i->valor * (intval($convenio->porcentaje) / 100);
+            $descuentos += $i->valor * (intval($convenio->porcentaje) / 100);
+            $i->nuevo_valor = $i->valor - $i->valor_descuento;
         }
         $valores = $this->dameValoresOdontograma($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
-        $valores[0] = $valores[0] - $valores[0] * (intval($convenio->porcentaje) / 100);
-        $valores[1] = $valores[1] - $valores[1] * (intval($convenio->porcentaje) / 100);
-        $valores[2] = $valores[2] - $valores[2] * (intval($convenio->porcentaje) / 100);
+        // $valores[0] = $valores[0] - $valores[0] * (intval($convenio->porcentaje) / 100);
+        // $valores[1] = $valores[1] - $valores[1] * (intval($convenio->porcentaje) / 100);
+        // $valores[2] = $valores[2] - $valores[2] * (intval($convenio->porcentaje) / 100);
 
-        return ['odontograma' => $odontograma, 'insumos' => $insumos,'valores' => $valores];
+        return ['odontograma' => $odontograma, 'insumos' => $insumos,'valores' => $valores, 'descuentos' => $descuentos];
     }
 
     public function guardar_tipo_convenio(Request $req){
