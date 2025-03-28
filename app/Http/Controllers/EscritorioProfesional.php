@@ -1405,6 +1405,12 @@ class EscritorioProfesional extends Controller
                 $responsable = null;
         }
 
+        $procedimiento = '';
+        if(!empty($hora_medica->id_procedimiento))
+        {
+            $procedimiento = ProcedimientosCentro::find($hora_medica->id_procedimiento);
+        }
+
 
         // return json_encode($paciente);
         return array(
@@ -1413,6 +1419,7 @@ class EscritorioProfesional extends Controller
             'estado_hora' =>$hora_medica->id_estado,
             'edad' => $edad,
             'responsable' => $responsable,
+            'procedimiento' => $procedimiento,
         );
     }
 
