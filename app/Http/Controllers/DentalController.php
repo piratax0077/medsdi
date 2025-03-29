@@ -2597,6 +2597,16 @@ class DentalController extends Controller
         $fichaController = new ficha_atencionController;
         $insumos = $fichaController->dame_insumos_tratamiento($req->id_paciente, $req->id_ficha_atencion);
         $valores = $this->dameValoresOdontograma($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+        $total_general = $valores[0] + $valores[1] + $valores[2];
+        $total_con_descuento = $total_general;
+        $total_abonado = intval(str_replace('.', '', $req->monto_abonado));
+
+        // if($total_con_descuento <= $total_abonado){
+        //     foreach($odontograma as $o){
+        //         $o->estado_pago = 'ok';
+        //     }
+        // }
+
         return ['odontograma' => $odontograma, 'insumos' => $insumos,'valores' => $valores];
     }
 

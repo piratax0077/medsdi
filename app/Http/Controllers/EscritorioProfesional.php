@@ -1055,9 +1055,16 @@ class EscritorioProfesional extends Controller
     }
 
     public function aplicar_convenio_tratamiento(Request $request){
+
         $convenio = EmpresasConvenios::find($request->id);
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $odontograma = $this->dameOdontogramaPaciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
+
+        $valores = $this->dameValoresOdontograma($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
+        // $valores[0] = $valores[0] - $valores[0] * (intval($convenio->porcentaje) / 100);
+        // $valores[1] = $valores[1] - $valores[1] * (intval($convenio->porcentaje) / 100);
+        // $valores[2] = $valores[2] - $valores[2] * (intval($convenio->porcentaje) / 100);
+
 
         $descuentos = 0;
 
@@ -1072,12 +1079,19 @@ class EscritorioProfesional extends Controller
             $descuentos += $i->valor * (intval($convenio->porcentaje) / 100);
             $i->nuevo_valor = $i->valor - $i->valor_descuento;
         }
-        $valores = $this->dameValoresOdontograma($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
-        // $valores[0] = $valores[0] - $valores[0] * (intval($convenio->porcentaje) / 100);
-        // $valores[1] = $valores[1] - $valores[1] * (intval($convenio->porcentaje) / 100);
-        // $valores[2] = $valores[2] - $valores[2] * (intval($convenio->porcentaje) / 100);
 
-        return ['odontograma' => $odontograma, 'insumos' => $insumos,'valores' => $valores, 'descuentos' => $descuentos];
+        $total_general = $valores[0] + $valores[1] + $valores[2];
+        $total_con_descuento = $total_general - $descuentos;
+        $total_abonado = intval(str_replace('.', '', $request->monto_abonado));
+
+        if($total_con_descuento <= $total_abonado){
+            foreach($odontograma as $o){
+                $o->estado_pago = 'ok';
+            }
+        }
+
+
+        return ['odontograma' => $odontograma, 'insumos' => $insumos,'valores' => $valores, 'descuentos' => $descuentos, 'total_general' => $total_general, 'total_con_descuento' => $total_con_descuento,'total_abonado' => $total_abonado];
     }
 
     public function guardar_tipo_convenio(Request $req){

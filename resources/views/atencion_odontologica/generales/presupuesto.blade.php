@@ -2806,6 +2806,7 @@
             id_paciente: $('#id_paciente').val(),
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
+            monto_abonado: $('#abonos_presup').val(),
             _token: CSRF_TOKEN
         }
         let url = "{{ ROUTE('profesional.aplicar_convenio_tratamiento') }}";
@@ -2896,6 +2897,71 @@
                 });
                 table_insumos_pagos.draw();
 
+                $('#contenedor_piezas_dentales_presupuesto').empty();
+                odontograma.forEach(function(odonto){
+                    if(odonto.presupuesto == 1){
+                        $('#contenedor_piezas_dentales_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Pieza</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor - odonto.valor_descuento)}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor_descuento)}" >
+                            </div>
+                            <div class="form-group col-md-2 d-flex">
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                            </div>
+                        `);
+                    }
+                });
+
+                $('#contenedor_insumos').empty();
+                insumos.forEach(insumo => {
+                    if(insumo.presupuesto == 1){
+                        let total = insumo.cantidad * insumo.valor;
+                        $('#contenedor_insumos').append(`
+                        <div class="form-group col-md-2 fill">
+                            <label class="floating-label-activo-sm">Insumo</label>
+                            <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                        </div>
+                        <div class="form-group col-md-3 fill">
+                            <label class="floating-label-activo-sm">Cantidad</label>
+                            <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                        </div>
+                        <div class="form-group col-md-2 fill">
+                            <label class="floating-label-activo-sm">Sub-Total</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor)}">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label class="floating-label-activo-sm">Descuento</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor - insumo.valor_descuento)}">
+                        </div>
+                        <div class="form-group col-md-2 fill">
+                            <label class="floating-label-activo-sm">Total Prestación</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor_descuento)}">
+                        </div>
+                        <div class="form-group col-md-2 d-flex">
+                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i>  </button>
+
+                        </div>
+                    `);
+                    }
+
+                });
+
                 let valores_boca_general = resp.valores[0];
                 let valores_odontograma = resp.valores[1];
                 let valores_insumos = resp.valores[2];
@@ -2930,6 +2996,7 @@
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
             id_paciente: $('#id_paciente').val(),
+            monto_abonado: $('#abonos_presup').val(),
             _token: CSRF_TOKEN
         }
 
@@ -2988,6 +3055,37 @@
                     }
                 });
 
+                $('#contenedor_piezas_dentales_presupuesto').empty();
+                odontograma.forEach(function(odonto){
+                    if(odonto.presupuesto == 1){
+                        $('#contenedor_piezas_dentales_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Pieza</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="0">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
+                            </div>
+                            <div class="form-group col-md-2 d-flex">
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                            </div>
+                        `);
+                    }
+                });
+
                 let insumos = resp.insumos;
 
                 let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
@@ -3019,6 +3117,41 @@
 
                 });
                 table_insumos_pagos.draw();
+
+                $('#contenedor_insumos').empty();
+                insumos.forEach(insumo => {
+                    if(insumo.presupuesto == 1){
+                        let total = insumo.cantidad * insumo.valor;
+                        $('#contenedor_insumos').append(`
+                        <div class="form-group col-md-2 fill">
+                            <label class="floating-label-activo-sm">Insumo</label>
+                            <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                        </div>
+                        <div class="form-group col-md-3 fill">
+                            <label class="floating-label-activo-sm">Cantidad</label>
+                            <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                        </div>
+                        <div class="form-group col-md-2 fill">
+                            <label class="floating-label-activo-sm">Sub-Total</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor)}">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label class="floating-label-activo-sm">Descuento</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor - insumo.valor_descuento)}">
+                        </div>
+                        <div class="form-group col-md-2 fill">
+                            <label class="floating-label-activo-sm">Total Prestación</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor_descuento)}">
+                        </div>
+                        <div class="form-group col-md-2 d-flex">
+                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i>  </button>
+
+                        </div>
+                    `);
+                    }
+
+                });
+
                 let valores_boca_general = resp.valores[0];
                 let valores_odontograma = resp.valores[1];
                 let valores_insumos = resp.valores[2];
@@ -3042,6 +3175,21 @@
                 console.log(error.responseText);
             }
         })
+    }
+
+    /*-Agendar hora medica-*/
+    function hora_medica (id_profesional, id_lugar_atencion){
+        $('#modal_reserva_hora_lugar_atencion').val('');
+        $('#modal_reserva_dias_atencion').val('');
+        $('#modal_reserva_fecha').val('');
+        $('#modal_reserva_hora_lista_horas').html('');
+        // asigno id profesioanl
+        $('#modal_reserva_hora_id_profesional').val(id_profesional);
+
+        // cargo lugares de atencion  y asigno lugar con hora mas proxima
+        lugar_atencion_profesional($('#modal_reserva_hora_id_profesional'), 'modal_reserva_hora_lugar_atencion', id_lugar_atencion)
+
+        $('#reservar_hora').modal('show');
     }
 
 </script>

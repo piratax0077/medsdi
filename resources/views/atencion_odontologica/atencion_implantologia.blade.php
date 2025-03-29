@@ -2149,5 +2149,8 @@ function confirmar_eliminar_pieza_dental_pieza(id, tipo){
 }
 
 
+
+
+
 </script>
 @endsection

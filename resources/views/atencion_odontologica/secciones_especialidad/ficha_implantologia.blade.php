@@ -519,13 +519,13 @@
                                                                                                                                 <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                                                                                                                                     <div class="form-group">
                                                                                                                                         <label class="floating-label-activo-sm">Fecha de Próximo Control</label>
-                                                                                                                                        <input class="form-control form-control-sm" type="date" name="f_control_impl"id="f_control_impl">
+                                                                                                                                        <input class="form-control form-control-sm" type="date" name="f_control_impl"id="f_control_impl" >
                                                                                                                                     </div>
                                                                                                                                 </div>
 
                                                                                                                                 <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
                                                                                                                                     <div class="form-group">
-                                                                                                                                        <button type="button" class="btn btn-outline-primary btn-sm" ><i class="fas fa-save"></i> Ir a Agendar</button>
+                                                                                                                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="hora_medica_pedir({{ $profesional->id }}, {{ $id_lugar_atencion }})"><i class="fas fa-save"></i> Ir a Agendar</button>
                                                                                                                                     </div>
                                                                                                                                 </div>
                                                                                                                             </div>
@@ -3121,6 +3121,7 @@
 @include('atencion_odontologica.modals.infantil.tratamiento_boca_completainf')
 @include('atencion_odontologica.modals.infantil.tratamiento_maxilar_inferiorinf')
 @include('atencion_odontologica.modals.infantil.tratamiento_maxilar_superiorinf')
+@include("general.reserva_hora.modal.tomar_hora_dental")
 
 <script>
 
@@ -7571,6 +7572,7 @@ function ocultar_pieza_impl(counter){
     console.log(counter);
     $('#contenedor_pieza_tto_impl'+counter).empty();
 }
+
 
 
 </script>
