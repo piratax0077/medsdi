@@ -63,6 +63,7 @@
                     </div>
 
                 </form>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="$('#ficha_profesional').modal('hide')">Cerrar</button>
@@ -89,7 +90,7 @@
                     <div class="col-md-6">
                         <div class="form-row">
                             <div class="form-group col-md-12 mb-2 mt-0">
-                                <label class="floating-label-active-sm mb-0">Lugar de atención</label>
+                                <label class="floating-label-activo-sm mb-1">Lugar de atención</label>
                                 <select class="form-control form-control-sm" id="modal_reserva_hora_lugar_atencion" name="modal_reserva_hora_lugar_atencion" onchange="carga_calendario_profesional_pedir();">
                                     <option value="">Seleccione</option>
                                 </select>
@@ -107,13 +108,14 @@
 
                     <div class="col-md-12">
                         <div class="form-row">
-                            <div class="form-group col-md-12 mb-2 mt-0">
-                                <label class="floating-label-active-sm mb-0">Seleccione una fecha</label>
+                            <div class="form-group col-md-12 mb-2 mt-1">
+                                <label class="floating-label-activo-sm mb-0">Seleccione una fecha</label>
                                 {{-- <input class="form-control form-control-sm" type="date" name="modal_reserva_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_reserva_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  disabled="disabled"/> --}}
                                 <input class="form-control form-control-sm" type="date" name="modal_reserva_fecha" onchange="cargar_horas_disponibles_calendario_profesion(this.value);" id="modal_reserva_fecha" min=<?php $hoy=date('Y-m-d'); echo $hoy; ?> max=<?php $max=date("Y-m-d",strtotime($hoy."+ 60 days")); echo $max; ?>  />
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-12 mt-4">
                         <div class="row">
                             <div class="col-md-12 text-center">
@@ -137,6 +139,33 @@
                         <label class="label">Seleccione  Lugar de Atención, Día en el calendario y haga click en la Hora Disponible.</label>
                     </div>
                 </div>
+                {{-- <table class="table">
+                    <thead>
+                        <tr>
+                            <td>N° Pieza</td>
+                            <td>Prestación</td>
+                            <td>Seleccionar</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($odontograma as $o)
+                        @if($o->presupuesto == 1)
+                            <tr>
+                                <td>{{ $o->pieza }}</td>
+                                <td>{{ $o->descripcion }}</td>
+                                <td>
+                                    <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onclick="handleCheckboxClick({{ $o->id }}, this.checked)">
+                                    <label class="form-check-label" for="flexCheckDefault" >
+
+                                    </label>
+                                  </div>
+                                </td>
+                            </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table> --}}
             </div>
         </div>
     </div>
@@ -238,6 +267,36 @@
                                     </th>
                                     <td><span id="reserva_hora_telefono"></span></td>
                                 </tr>
+                                <tr>
+                                    <th scope="row">
+                                        <strong>Bloques</strong>
+                                    </th>
+                                    <td><span id="reserva_hora_cantidad_bloques">0</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>Pieza</td>
+                                    <td>Tratamiento</td>
+                                    <td>Seleccionar</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($odontograma as $o)
+                                    <tr>
+                                        <td>{{ $o->pieza }}</td>
+                                        <td>{{ $o->descripcion }}</td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="flexSwitchOdontoAgenda" onclick="handleCheckboxClick({{ $o->id }},this.checked)">
+                                                {{-- <label class="form-check-label" for="flexSwitchOdontoAgenda">Default switch checkbox input</label> --}}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
 
@@ -1130,6 +1189,7 @@ function generar_reserva_cita(hora)
 
     let id_profesional = $('#modal_reserva_hora_id_profesional').val();
     let id_lugar_atencion = $('#modal_reserva_hora_lugar_atencion').val();
+    let cantidad_bloques = $('#reserva_hora_cantidad_bloques').val();
     let fecha_consulta = $('#modal_reserva_fecha').val();
     $('#reserva_hora_id_profesional').val('');
     $('#reserva_hora_id_lugar_atencion').val('');
@@ -1222,7 +1282,7 @@ function agendar_hora() {
             procedimiento = $('#form_reseva_de_horas_id_procedimiento').val();
             proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
         }else{
-            proc_bloque = parseInt($('#cantidad_bloques_atencion').text());
+            proc_bloque = parseInt($('#reserva_hora_cantidad_bloques').text());
         }
 
     console.log(tipo_agenda);
@@ -1322,5 +1382,29 @@ $(document).ready(function() {
         responsive: true,
     })
 });
+
+function handleCheckboxClick(id, isChecked, tipo = null) {
+
+    console.log(`Checkbox con ID ${id} está ${isChecked ? 'seleccionado' : 'deseleccionado'}`);
+
+    // Aquí puedes manejar la lógica adicional o enviar el ID al servidor
+    $.ajax({
+        url: '{{ ROUTE("profesional.mi_agenda.atender_tratamiento_presupuesto") }}',
+        method: 'POST',
+        data: { id: id, checked: isChecked,tipo: tipo,origen: 'agenda' , _token: CSRF_TOKEN },
+        success: function(response) {
+            console.log('Servidor respondió:', response);
+            let bloques_actualizados = response.bloques;
+            let bloques_original = parseInt($('#reserva_hora_cantidad_bloques').text());
+            console.log(bloques_actualizados, bloques_original);
+            let bloques = response.atendido == 1 ? bloques_original + bloques_actualizados : bloques_original - bloques_actualizados;
+            if(bloques < 0) bloques = 0;
+            $('#reserva_hora_cantidad_bloques').html(bloques);
+        },
+        error: function(error) {
+            console.error('Error al enviar datos:', error);
+        }
+    });
+}
 
 </script>

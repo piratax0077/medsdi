@@ -1959,7 +1959,7 @@
                     let ciudades = $('#reserva_hora_representante_ciudad_agregar');
 
                     ciudades.find('option').remove();
-                    ciudades.append('<option value="0">seleccione</option>');
+                    ciudades.append('<option value="0">Seleccione región</option>');
                     $(data).each(function(i, v) { // indice, valor
                         ciudades.append('<option value="' + v.id + '">' + v.nombre +
                             '</option>');
@@ -2638,7 +2638,8 @@
         }
     }
 
-    function buscar_ciudad_general(input_region, input_ciudad, id_ciudad = 0) {
+    function buscar_ciudad_general(input_ciudad,input_region, id_ciudad = 0) {
+        // return console.log(input_region, input_ciudad, id_ciudad);
         var region = $('#' + input_region).val();
         console.log(region);
         let url = "{{ route('home.buscar_ciudad_region') }}";
@@ -2656,7 +2657,7 @@
                     let ciudades = $('#' + input_ciudad);
 
                     ciudades.find('option').remove();
-                    ciudades.append('<option value="0">seleccione</option>');
+                    ciudades.append('<option value="0">seleccione ciudad</option>');
                     $(data).each(function(i, v) { // indice, valor
                         ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
                     })

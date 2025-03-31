@@ -2002,7 +2002,7 @@ class EscritorioPaciente extends Controller
             'profesional_nombre'=> $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
             'profesional_especialidad'=> $profesional->Especialidad()->first()->nombre,
             'profesional_tipo_especialidad'=> $profesional->TipoEspecialidad()->first()->nombre,
-            'profesional_sub_tipo_especialidad'=> $profesional->SubTipoEspecialidad()->first()->nombre,
+            'profesional_sub_tipo_especialidad' => optional($profesional->SubTipoEspecialidad()->first())->nombre ?? null, // Si no existe, no se muestra
             // 'institucion'=> $nombre_institucion,
             'lugar_atencion'=> $lugar_atencion->nombre,
             'direccion'=> $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre,

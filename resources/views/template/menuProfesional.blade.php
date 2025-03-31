@@ -63,6 +63,13 @@
                         </ul>
                     </li>
                 </ul>
+                <div id="info_cliente" class="mt-5 p-3" style="border: 1px solid  #3c79af;margin: 10px;padding: 10px; margin-top: 125px;">
+                    <h6 class="mb-3" style="font-size: 12px; font-weight: bold;">INFORMACION DEL PACIENTE</h6>
+                    <p>{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}</p>
+                    <p>{{ $paciente->edad }}</p>
+                    <p>{{ $paciente->rut }}</p>
+                    <p>{{ $paciente->prevision->nombre }}</p>
+                </div>
             </div>
         </div>
     </nav>
@@ -131,6 +138,7 @@
                         </ul>
                     </li>
                 </ul>
+
             </div>
         </div>
     </nav>

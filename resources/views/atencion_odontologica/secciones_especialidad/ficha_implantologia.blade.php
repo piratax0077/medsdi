@@ -516,18 +516,19 @@
                                                                                                                     <div id="pieza_dentalrx" class="row">
                                                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                                             <div class="form-row">
-                                                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 align-center text-center">
+                                                                                                                                    <div class="form-group">
+                                                                                                                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="hora_medica_pedir({{ $profesional->id }}, {{ $id_lugar_atencion }})"><i class="fas fa-save"></i> Ir a Agendar</button>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                                                     <div class="form-group">
                                                                                                                                         <label class="floating-label-activo-sm">Fecha de Próximo Control</label>
                                                                                                                                         <input class="form-control form-control-sm" type="date" name="f_control_impl"id="f_control_impl" >
                                                                                                                                     </div>
                                                                                                                                 </div>
 
-                                                                                                                                <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
-                                                                                                                                    <div class="form-group">
-                                                                                                                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="hora_medica_pedir({{ $profesional->id }}, {{ $id_lugar_atencion }})"><i class="fas fa-save"></i> Ir a Agendar</button>
-                                                                                                                                    </div>
-                                                                                                                                </div>
+
                                                                                                                             </div>
                                                                                                                         </div>
                                                                                                                     </div>
@@ -1584,18 +1585,19 @@
                                                                                                             <div class="row">
                                                                                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                                     <div class="form-row">
-                                                                                                                        <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 align-center text-center">
+                                                                                                                            <div class="form-group">
+                                                                                                                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="hora_medica_pedir({{ $profesional->id }},{{ $id_lugar_atencion }})"><i class="fas fa-save"></i> Ir a Agendar</button>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                                             <div class="form-group">
                                                                                                                                 <label class="floating-label-activo-sm">Fecha de Próximo Control</label>
                                                                                                                                 <input class="form-control form-control-sm" type="date" name="f_control_impl"id="f_control_impl">
                                                                                                                             </div>
                                                                                                                         </div>
 
-                                                                                                                        <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
-                                                                                                                            <div class="form-group">
-                                                                                                                                <button type="button" class="btn btn-outline-primary btn-sm" ><i class="fas fa-save"></i> Ir a Agendar</button>
-                                                                                                                            </div>
-                                                                                                                        </div>
+
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                             </div>

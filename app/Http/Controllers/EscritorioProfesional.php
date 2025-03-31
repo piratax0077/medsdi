@@ -2307,15 +2307,25 @@ class EscritorioProfesional extends Controller
             ->join('diagnosticos_dental','odontogramas_pacientes.diagnostico','diagnosticos_dental.id')
             ->where('odontogramas_pacientes.id',$req->id)
             ->first();
-            if($req->checked == 'true'){
-                $pieza->atendido = 1;
-                $pieza->save();
-                return ['msj' => 'Pieza '.$pieza->pieza.' atendida con éxito.','bloques' => $pieza->cantidad_bloques, 'atendido' => 1];
-            }else{
-                $pieza->atendido = 0;
-                $pieza->save();
-                return ['msj' => 'Pieza '.$pieza->pieza.' liberada.','bloques' => $pieza->cantidad_bloques, 'atendido' => 0];
+            if(!isset($req->origen) && !$req->origen == 'agenda'){
+                if($req->checked == 'true'){
+                    $pieza->atendido = 1;
+                    $pieza->save();
+                    return ['msj' => 'Pieza '.$pieza->pieza.' atendida con éxito.','bloques' => $pieza->cantidad_bloques, 'atendido' => 1];
+                }else{
+                    $pieza->atendido = 0;
+                    $pieza->save();
+                    return ['msj' => 'Pieza '.$pieza->pieza.' liberada.','bloques' => $pieza->cantidad_bloques, 'atendido' => 0];
+                }
             }
+
+            if($req->checked == 'true'){
+                return ['msj' => 'Pieza '.$pieza->pieza.' agendada con éxito', 'bloques' => $pieza->cantidad_bloques,'atendido' => 1];
+            }else{
+                return ['msj' => 'Pieza '.$pieza->pieza.' desagendada con éxito', 'bloques' => $pieza->cantidad_bloques,'atendido' => 0];
+            }
+
+
         }else{
             $examen_boca_general = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor','diagnosticos_dental.cantidad_bloques')
                                     ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
