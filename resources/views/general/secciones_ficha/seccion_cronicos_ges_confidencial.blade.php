@@ -62,7 +62,7 @@
                                 <div class="form-group">
                                     <div class="custom-control custom-switch">
                                         <input type="checkbox" class="custom-control-input" onchange="es_cronico();" id="enf_cronico" name="enf_cronico" data-toggle="modal" data-target="#form_enfermo_cronico" value="{!! old('enf_cronico') !!}">
-                                        <label class="custom-control-label" for="enf_cronico">¿Es enfermo crónico?</label>
+                                        <label class="custom-control-label" for="enf_cronico">Control crónico</label>
                                     </div>
                                 </div>
                             </div>
@@ -3236,12 +3236,12 @@
         data.profesional = $('#user-profesional').val();
         data.estado = 1;
 
-
         $.ajax({
             url: url,
             type: "POST",
             data: data,
             success: (resp)=>{
+                console.log(resp);
                 if(resp.estado==1)
                 {
                     $('#nombre').val('');
@@ -3466,6 +3466,7 @@
 
                     $('#tabla_antecedentes thead').html(head_);
                     $('#tabla_antecedentes tbody').html(html_);
+
                 }
             },
             error: (resp)=>{

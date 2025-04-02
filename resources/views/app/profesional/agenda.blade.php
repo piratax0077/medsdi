@@ -571,18 +571,18 @@
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Correo Electr&oacute;nico Paciente</label>
+                                        <label class="floating-label-activo-sm">Correo Electr&oacute;nico Contacto</label>
 
                                         <input type="text" class="form-control form-control-sm"
                                             onblur="validar_email_agenda();validar_campo_telefono();" onchange="validar_email_agenda();validar_campo_telefono();"name="reserva_hora_correo"
                                             id="reserva_hora_correo">
                                         <span id="mensaje_email_reserva" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold; display:none"></span>
-                                        <label class="" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold;">En caso que sea menor de edad no es requerido</label>
+                                        {{-- <label class="" style="width: 100%; font-size: 10px; color: #f00; font-weight: bold;">En caso que sea menor de edad no es requerido</label> --}}
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                     <div class="form-group">
-                                        <label class="floating-label-activo-sm">Tel&eacute;fono</label>
+                                        <label class="floating-label-activo-sm">Tel&eacute;fono Contacto</label>
                                         <input type="tel" class="form-control form-control-sm"
                                             name="reserva_hora_telefono_uno" id="reserva_hora_telefono_uno" onblur="validar_campo_telefono();" onchange="validar_campo_telefono();">
                                     </div>
@@ -1438,7 +1438,8 @@
             {
                 // if (telefono != '')
                 {
-                    var re = new RegExp(/^\x2b56[6-9][0-9]{8}$/i);//+56612341234
+                    // var re = new RegExp(/^\x2b56[6-9][0-9]{8}$/i);//+56612341234
+                    var re = new RegExp(/^\d{9}$/);
                     if( re.test(telefono) )
                     {
 

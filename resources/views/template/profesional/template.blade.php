@@ -2227,7 +2227,7 @@
                     $('#mensaje_email_reserva').text('El correo electrónico introducido no es correcto.');
                     $('#mensaje_email_reserva').show();
                     // $('#reserva_hora_correo').focus();
-                    $("#guardar_reserva_paciente").prop('disabled', true);
+                    //$("#guardar_reserva_paciente").prop('disabled', true);
                     return false;
                 }
             }
@@ -2246,9 +2246,9 @@
 
                     if (edad > 17)
                     {
-                        $('#mensaje_email_reserva').text('Debe Ingresar un email.');
-                        $('#mensaje_email_reserva').show();
-                        $("#guardar_reserva_paciente").prop('disabled', true);
+                        //$('#mensaje_email_reserva').text('Debe Ingresar un email.');
+                        //$('#mensaje_email_reserva').show();
+                        //$("#guardar_reserva_paciente").prop('disabled', true);
                         $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',false);
                     }
                     else
@@ -2261,7 +2261,7 @@
                 {
                     console.log("La edad no es válida.");
                     $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',true);
-                    $("#guardar_reserva_paciente").prop('disabled', true);
+                    //$("#guardar_reserva_paciente").prop('disabled', true);
                 }
                 return false;
             }
@@ -2331,7 +2331,7 @@
                     DangerMode: true,
                 })
                 // alert('El correo electrónico introducido no es correcto.');
-                $("#guardar_reserva_paciente").prop('disabled', true);
+                //$("#guardar_reserva_paciente").prop('disabled', true);
                 return false;
             }
 
@@ -2363,7 +2363,7 @@
                     } else {
                         $('#mensaje_email_reserva_representante').text('');
                         $('#mensaje_email_reserva_representante').hide();
-                        $("#guardar_reserva_paciente").prop('disabled', false);
+                        //$("#guardar_reserva_paciente").prop('disabled', false);
                     }
 
                 })
@@ -5801,8 +5801,8 @@
                     reserva_hora_telefono_uno: {
                         required: false,
                         celular: true,
-                        minlength:12,
-                        maxlength:12
+                        minlength:9,
+                        maxlength:9
                     },
                     reserva_hora_representante_telefono_uno: {
                         required: false,
@@ -5878,12 +5878,12 @@
             $.validator.addMethod( "celular",function(value, element, pattern) {
                     if(value != '')
                     {
-                        var re = new RegExp(/^\x2b56[6-9][0-9]{8}$/i);//+56612341234
+                        var re = new RegExp(/^\d{9}$/);
                         return re.test(value);
                     }
                     else
                     return true;
-                },"Numero no valido. Ejemplo: +56912341234"
+                },"Numero no valido. Ejemplo: 912341234"
             );
 
         });

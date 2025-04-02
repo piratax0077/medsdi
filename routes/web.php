@@ -797,7 +797,7 @@ Route::group([
     Route::get('centro/procedimientos/eliminar', [App\Http\Controllers\ProcedimientosCentroLugarAtencionProfesionalController::class, 'modificar_r'])->name('centro.procedimientos.eliminar');
 
 	Route::get('Receta_Online/licencia/pdf', [App\Http\Controllers\LicenciaAprobacionController::class, 'pdfLicenciaPaciente'])->name('profesional.licencia.pdf');
-
+    Route::get('control_acceso',[App\Http\Controllers\EscritorioProfesional::class, 'control_acceso'])->name('app.profesional.control_acceso');
 });
 
 Route::post('/buscar_rut_profesional_bodega', [App\Http\Controllers\EscritorioProfesional::class, 'buscar_rut_profesional_bodega'])->name('profesional.buscar_rut_profesional_bodega');
@@ -2030,6 +2030,9 @@ Route::get('ficha_atencion/ver_archivos', [App\Http\Controllers\ficha_atencionCo
 
 /** TRABAJOS DENTALES */
 Route::get('trabajos_dentales/ver', [App\Http\Controllers\ficha_atencionController::class, 'getTrabajosDentales'])->name('ficha_atencion.ver_trabajos');
+
+/** EVOLUCIONES DENTALES */
+Route::get('evoluciones_dentales/ver',[App\Http\Controllers\ficha_atencionController::class, 'getEvolucionesDentales'])->name('ficha_atencion.ver_evoluciones');
 
 /** ALERGIAS */
 Route::get('alergias/ver', [App\Http\Controllers\AlergiasController::class, 'getAlergias'])->name('alergias.ver');

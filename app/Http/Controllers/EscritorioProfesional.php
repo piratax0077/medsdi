@@ -5406,6 +5406,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
 
     public function agendar_hora_nuevo_paciente(Request $request)
     {
+
         $datos = array();
         $error = array();
         $valido = 1;
@@ -5455,7 +5456,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                         else
                         {
                             // $paciente->email = $temp.'@med-sdi.cl';
-                            $paciente->email = PacienteController::generarEmailPacienteTemporal($request->reserva_hora_nombre,$request->reserva_hora_primer_apellido,$request->reserva_hora_segundo_apellido);
+                            //$paciente->email = PacienteController::generarEmailPacienteTemporal($request->reserva_hora_nombre,$request->reserva_hora_primer_apellido,$request->reserva_hora_segundo_apellido);
                         }
                     }
                     else if($request->dependiente == 0)
@@ -5469,7 +5470,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                             else
                             {
                                 // $paciente->email = $temp.'@med-sdi.cl';
-                                $paciente->email = PacienteController::generarEmailPacienteTemporal($request->reserva_hora_nombre,$request->reserva_hora_primer_apellido,$request->reserva_hora_segundo_apellido);
+                                //$paciente->email = PacienteController::generarEmailPacienteTemporal($request->reserva_hora_nombre,$request->reserva_hora_primer_apellido,$request->reserva_hora_segundo_apellido);
                             }
                         }
                         else
@@ -5481,7 +5482,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 else
                 {
                     // $paciente->email = $temp.'@med-sdi.cl';
-                    $paciente->email = PacienteController::generarEmailPacienteTemporal($request->reserva_hora_nombre,$request->reserva_hora_primer_apellido,$request->reserva_hora_segundo_apellido);
+                    //$paciente->email = PacienteController::generarEmailPacienteTemporal($request->reserva_hora_nombre,$request->reserva_hora_primer_apellido,$request->reserva_hora_segundo_apellido);
                 }
             }
 
@@ -5582,6 +5583,10 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                         $pass_temp = random_int(1111,9999);
                         $user->password = Hash::make($pass_temp);
 
+                        if($paciente->email == '' || $paciente->email == null || empty($paciente->email)){
+                            $user->rut = $paciente->rut;
+                        }
+
                         if($user->save())
                         {
                             $user->assignRole('Paciente');
@@ -5595,35 +5600,41 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                                 }
                                 else
                                 {
-                                    /** envio de correo de confirmacion  */
-                                    $blade = 'bienvenida_paciente_usuario';
-                                    $to = array(
-                                            array('email' => $paciente->email,'name' => $paciente->nombres . ' ' .$paciente->apellido_uno . ' ' .$paciente->apellido_dos),
-                                        );
-                                    $cc = array();
-                                    $bcc = array();
-                                    $asunto = 'MED-SDI - Bienvenido!';
-                                    $body = array(
-                                                'nombre'=>$paciente->nombres . ' ' .$paciente->apellido_uno . ' ' .$paciente->apellido_dos,
-                                                'user' => $paciente->email,
-                                                'pass' => $pass_temp
-                                                );
-                                    $archivo = '';/** pendiente */
-                                    $id_institucion = '';
+                                    if($paciente->email == '' || $paciente->email == null || empty($paciente->email)){
+                                        /** envio de correo de confirmacion  */
+                                        $blade = 'bienvenida_paciente_usuario';
+                                        $to = array(
+                                                array('email' => $paciente->email,'name' => $paciente->nombres . ' ' .$paciente->apellido_uno . ' ' .$paciente->apellido_dos),
+                                            );
+                                        $cc = array();
+                                        $bcc = array();
+                                        $asunto = 'MED-SDI - Bienvenido!';
+                                        $body = array(
+                                                    'nombre'=>$paciente->nombres . ' ' .$paciente->apellido_uno . ' ' .$paciente->apellido_dos,
+                                                    'user' => $paciente->email,
+                                                    'pass' => $pass_temp
+                                                    );
+                                        $archivo = '';/** pendiente */
+                                        $id_institucion = '';
 
-                                    $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+                                        $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
 
-                                    if($result_mail['estado'])
-                                    {
-                                        $datos['paciente']['user']['mail']['estado'] = 1;
-                                        $datos['paciente']['user']['mail']['msj'] = 'Notificacion de bienvenida enviado';
-                                    }
-                                    else
-                                    {
+                                        if($result_mail['estado'])
+                                        {
+                                            $datos['paciente']['user']['mail']['estado'] = 1;
+                                            $datos['paciente']['user']['mail']['msj'] = 'Notificacion de bienvenida enviado';
+                                        }
+                                        else
+                                        {
+                                            $datos['paciente']['user']['mail']['estado'] = 0;
+                                            $datos['paciente']['user']['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                                        }
+                                        /** cerrar envio de correo de confirmacion  */
+                                    }else{
                                         $datos['paciente']['user']['mail']['estado'] = 0;
-                                        $datos['paciente']['user']['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                                        $datos['paciente']['user']['mail']['msj'] = 'El paciente no tiene email valido';
                                     }
-                                    /** cerrar envio de correo de confirmacion  */
+
                                 }
                             }
                         }
@@ -5912,52 +5923,59 @@ public function eliminarPiezaCoronaProtesis(Request $req){
 
                     $lugar_atencion = LugarAtencion::find($request->id_lugar_atencion);
 
-                    /** envio de correo de confirmacion INSTITUCION */
-                    $blade = 'hora_agendada';
-                    // if( (\Carbon\Carbon::parse($request->reserva_hora_fecha_nac)->age) < 18 || $request->dependiente == 1 )
-                    // {
-                    //     /** buscar representante de paciente */
-                    //     $to = array(
-                    //         array('email' => $paciente->email,'name' =>  $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
-                    //     );
-                    // }
-                    // else
-                    {
-                        $to = array(
-                            array('email' => $paciente->email,'name' =>  $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
-                        );
-                    }
-
-                    $cc = array();
-                    $bcc = array();
-                    $asunto = 'MED-SDI - Nueva Hora Agendada';
-                    $body = array(
-                        'nombre_paciente'=> $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
-                        'fecha'=> $hora_medica->fecha_consulta,
-                        'hora'=> $hora_medica->hora_inicio,
-                        'profesional_nombre'=> $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
-                        'profesional_especialidad'=> $profesional->Especialidad()->first()->nombre,
-                        'profesional_tipo_especialidad'=> $profesional->TipoEspecialidad()->first()->nombre,
-                        'profesional_sub_tipo_especialidad'=> $profesional->SubTipoEspecialidad()->first()->nombre,
-                        // 'institucion'=> $nombre_institucion,
-                        'lugar_atencion'=> $lugar_atencion->nombre,
-                        'direccion'=> $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre,
-                    );
-                    $archivo = '';/** pendiente */
-                    $id_institucion = '';
-
-                    $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
-
-                    if($result_mail['estado'])
-                    {
-                        $datos['mail']['institucion']['estado'] = 1;
-                        $datos['mail']['institucion']['msj'] = 'Notificacion de bienvenida enviado';
-                    }
-                    else
-                    {
+                    if($paciente->email == '' || $paciente->email == null || empty($paciente->email)){
                         $datos['mail']['institucion']['estado'] = 0;
                         $datos['mail']['institucion']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                    }else{
+                        /** envio de correo de confirmacion INSTITUCION */
+                        $blade = 'hora_agendada';
+                        // if( (\Carbon\Carbon::parse($request->reserva_hora_fecha_nac)->age) < 18 || $request->dependiente == 1 )
+                        // {
+                        //     /** buscar representante de paciente */
+                        //     $to = array(
+                        //         array('email' => $paciente->email,'name' =>  $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+                        //     );
+                        // }
+                        // else
+                        {
+                            $to = array(
+                                array('email' => $paciente->email,'name' =>  $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos),
+                            );
+                        }
+
+                        $cc = array();
+                        $bcc = array();
+                        $asunto = 'MED-SDI - Nueva Hora Agendada';
+                        $body = array(
+                            'nombre_paciente'=> $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
+                            'fecha'=> $hora_medica->fecha_consulta,
+                            'hora'=> $hora_medica->hora_inicio,
+                            'profesional_nombre'=> $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
+                            'profesional_especialidad'=> $profesional->Especialidad()->first()->nombre,
+                            'profesional_tipo_especialidad'=> $profesional->TipoEspecialidad()->first()->nombre,
+                            'profesional_sub_tipo_especialidad'=> $profesional->SubTipoEspecialidad()->first()->nombre,
+                            // 'institucion'=> $nombre_institucion,
+                            'lugar_atencion'=> $lugar_atencion->nombre,
+                            'direccion'=> $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre,
+                        );
+                        $archivo = '';/** pendiente */
+                        $id_institucion = '';
+
+                        $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                        if($result_mail['estado'])
+                        {
+                            $datos['mail']['institucion']['estado'] = 1;
+                            $datos['mail']['institucion']['msj'] = 'Notificacion de bienvenida enviado';
+                        }
+                        else
+                        {
+                            $datos['mail']['institucion']['estado'] = 0;
+                            $datos['mail']['institucion']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                        }
                     }
+
+
                 }
                 else
                 {
@@ -6476,7 +6494,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 'profesional_nombre'=> mb_strtoupper($profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos),
                 'profesional_especialidad'=> mb_strtoupper($profesional->Especialidad()->first()->nombre),
                 'profesional_tipo_especialidad'=> mb_strtoupper($profesional->TipoEspecialidad()->first()->nombre),
-                'profesional_sub_tipo_especialidad'=> mb_strtoupper($profesional->SubTipoEspecialidad()->first()->nombre),
+                'profesional_sub_tipo_especialidad' => optional($profesional->SubTipoEspecialidad()->first())->nombre ?? null, // Si no existe, no se muestra
                 // 'institucion'=> $nombre_institucion,
                 'lugar_atencion'=> mb_strtoupper($lugar_atencion->nombre),
                 'direccion'=> mb_strtoupper($lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre),

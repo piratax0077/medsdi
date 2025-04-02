@@ -26,7 +26,7 @@
                                                 <th>Recetas</th>
                                                 @if($profesional->id_especialidad == 2)<th>Presupuestos</th> @endif
                                                 @if($profesional->id_especialidad == 2)<th>Tratamientos </th> @endif
-
+                                                @if($profesional->id_especialidad == 2)<th>Evoluciones </th> @endif
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -59,6 +59,9 @@
                                                             <td>
                                                                 <button type="button" class="btn btn-xxs btn-success-light-c" @if(isset($f->id)) onclick="buscar_trabajos({{ $f->id }});" @endif> Tratamientos </button>
                                                             </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-xxs btn-primary-light-c" onclick="buscar_evoluciones({{ $f->id }})">Evoluciones</button>
+                                                            </td>
                                                         @endif
                                                     </tr>
                                                 @endforeach
@@ -81,6 +84,7 @@
 @include('general.secciones_ficha.modal_atencion_previa.hist_cons_examen')
 @include('general.secciones_ficha.modal_atencion_previa.hist_cons_archivo')
 @include('general.secciones_ficha.modal_atencion_previa.hist_trabajos_dental')
+@include('general.secciones_ficha.modal_atencion_previa.hist_evoluciones_dental')
 @include('general.secciones_ficha.modal_atencion_previa.hist_cons')
 <script>
     $(document).ready(function() {

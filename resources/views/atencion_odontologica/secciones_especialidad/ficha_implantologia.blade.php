@@ -524,7 +524,22 @@
                                                                                                                                 <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                                                     <div class="form-group">
                                                                                                                                         <label class="floating-label-activo-sm">Fecha de Próximo Control</label>
-                                                                                                                                        <input class="form-control form-control-sm" type="date" name="f_control_impl"id="f_control_impl" >
+                                                                                                                                        <input class="form-control form-control-sm" type="date" name="f_control_impl"id="f_control_impl" value="{{ isset($proxima_fecha_atencion) ? $proxima_fecha_atencion : '' }}" disabled>
+                                                                                                                                    </div>
+                                                                                                                                    <!-- Tarjeta con horas de atención -->
+                                                                                                                                    <div class="card mt-2">
+                                                                                                                                        <div class="card-body text-center">
+                                                                                                                                            <h6 class="card-title">Horario de Atención</h6>
+                                                                                                                                            <span class="badge bg-primary p-2">
+                                                                                                                                                <i class="fas fa-clock"></i>
+                                                                                                                                                {{ isset($hora_inicio_atencion) ? $hora_inicio_atencion : '--:--' }}
+                                                                                                                                            </span>
+                                                                                                                                            <span class="mx-2">a</span>
+                                                                                                                                            <span class="badge bg-success p-2">
+                                                                                                                                                <i class="fas fa-clock"></i>
+                                                                                                                                                {{ isset($hora_fin_atencion) ? $hora_fin_atencion : '--:--' }}
+                                                                                                                                            </span>
+                                                                                                                                        </div>
                                                                                                                                     </div>
                                                                                                                                 </div>
 
@@ -1593,7 +1608,22 @@
                                                                                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                                                                                             <div class="form-group">
                                                                                                                                 <label class="floating-label-activo-sm">Fecha de Próximo Control</label>
-                                                                                                                                <input class="form-control form-control-sm" type="date" name="f_control_impl"id="f_control_impl">
+                                                                                                                                <input class="form-control form-control-sm" type="date" name="f_control_impl"id="f_control_impl" value="{{ isset($proxima_fecha_atencion) ? $proxima_fecha_atencion : '' }}" disabled>
+                                                                                                                            </div>
+                                                                                                                            <!-- Tarjeta con horas de atención -->
+                                                                                                                            <div class="card mt-2">
+                                                                                                                                <div class="card-body text-center">
+                                                                                                                                    <h6 class="card-title">Horario de Atención</h6>
+                                                                                                                                    <span class="badge bg-primary p-2">
+                                                                                                                                        <i class="fas fa-clock"></i>
+                                                                                                                                        {{ isset($hora_inicio_atencion) ? $hora_inicio_atencion : '--:--' }}
+                                                                                                                                    </span>
+                                                                                                                                    <span class="mx-2">a</span>
+                                                                                                                                    <span class="badge bg-success p-2">
+                                                                                                                                        <i class="fas fa-clock"></i>
+                                                                                                                                        {{ isset($hora_fin_atencion) ? $hora_fin_atencion : '--:--' }}
+                                                                                                                                    </span>
+                                                                                                                                </div>
                                                                                                                             </div>
                                                                                                                         </div>
 

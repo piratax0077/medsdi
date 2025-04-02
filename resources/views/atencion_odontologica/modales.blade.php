@@ -1065,75 +1065,149 @@
             $('#table_atenciones_previas_trabajos tbody').html('');
 
             $.ajax({
-                    url: url,
-                    type: "get",
-                    data: {
-                        id_ficha_atencion_soli: id_ficha
-                    },
-                    dataType: "json",
-                })
-                .done(function(data) {
-                    console.log(data);
-                    if (data != null) {
+                url: url,
+                type: "get",
+                data: {
+                    id_ficha_atencion_soli: id_ficha
+                },
+                dataType: "json",
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
 
-                        $('#m_cons_trabajosLabel').text('Trabajos Realizados en esta consulta del Paciente: ' + data.paciente.nombres);
-                        if(data.estado == 1)
+                    $('#m_cons_trabajosLabel').text('Trabajos Realizados en esta consulta del Paciente: ' + data.paciente.nombres);
+                    if(data.estado == 1)
+                    {
+                        $('#table_atenciones_previas_trabajos tbody').html('');
+                        var j = 1; //contador para asignar id al boton que borrara la fila
+                        $.each(data.odontograma, function(index, value)
                         {
-                            $('#table_atenciones_previas_trabajos tbody').html('');
-                            var j = 1; //contador para asignar id al boton que borrara la fila
-                            $.each(data.odontograma, function(index, value)
-                            {
-                                var fecha = formatDate(value.fecha);
-                                var trabajo = value.tratamiento;
-                                var diagnostico = value.diagnostico;
-                                var n_pieza = value.pieza;
-                                var id = value.id;
-                                var id_ficha_trabajo = value.id_ficha;
-                                var url = value.url;
+                            var fecha = formatDate(value.fecha);
+                            var trabajo = value.tratamiento;
+                            var diagnostico = value.diagnostico;
+                            var n_pieza = value.pieza;
+                            var id = value.id;
+                            var id_ficha_trabajo = value.id_ficha;
+                            var url = value.url;
 
-                                var fila = '';
-                                fila += '<tr class="tr_examen" id="row' + j + '">';
-                                fila += '    <td class="text-center align-middle">' + fecha + '</td>';
-                                fila += '    <td class="text-center align-middle">' + n_pieza + '</td>';
-                                fila += '    <td class="text-center align-middle">' + diagnostico + '</td>';
-                                fila += '    <td class="text-center align-middle">' + trabajo + '</td>';
-                                fila += '</tr>';
+                            var fila = '';
+                            fila += '<tr class="tr_examen" id="row' + j + '">';
+                            fila += '    <td class="text-center align-middle">' + fecha + '</td>';
+                            fila += '    <td class="text-center align-middle">' + n_pieza + '</td>';
+                            fila += '    <td class="text-center align-middle">' + diagnostico + '</td>';
+                            fila += '    <td class="text-center align-middle">' + trabajo + '</td>';
+                            fila += '</tr>';
 
-                                j++;
+                            j++;
 
-                                $('#table_atenciones_previas_trabajos tbody').append(fila);
-
-                            });
-                            $('#valor_odontograma_hist').html('Total Odontograma: '+formatoMoneda(data.valores_odontograma[1]));
-                        }
-                        else
-                        {
-                            $('#table_atenciones_previas_trabajos tbody').html('');
-                            var fila = '<tr><td colspan="2"><span><h5>no existen registros</h5></span></td></tr>';
                             $('#table_atenciones_previas_trabajos tbody').append(fila);
-                        }
 
+                        });
+                        $('#valor_odontograma_hist').html('Total Odontograma: '+formatoMoneda(data.valores_odontograma[1]));
                     }
                     else
                     {
                         $('#table_atenciones_previas_trabajos tbody').html('');
-                        var fila = '<tr><td colspan="2"><span><h5>no existen registros</h5></span></td></tr>'
+                        var fila = '<tr><td colspan="2"><span><h5>no existen registros</h5></span></td></tr>';
                         $('#table_atenciones_previas_trabajos tbody').append(fila);
                     }
 
-                    $('#m_cons_trabajos').modal('show');
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+                }
+                else
+                {
+                    $('#table_atenciones_previas_trabajos tbody').html('');
+                    var fila = '<tr><td colspan="2"><span><h5>no existen registros</h5></span></td></tr>'
+                    $('#table_atenciones_previas_trabajos tbody').append(fila);
+                }
 
-                $('#table_atenciones_previas_trabajos').dataTable().fnClearTable();
-                $('#table_atenciones_previas_trabajos').dataTable().fnDestroy();
-                $('#table_atenciones_previas_trabajos').DataTable({
-                    responsive: true,
-                });
+                $('#m_cons_trabajos').modal('show');
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+
+            $('#table_atenciones_previas_trabajos').dataTable().fnClearTable();
+            $('#table_atenciones_previas_trabajos').dataTable().fnDestroy();
+            $('#table_atenciones_previas_trabajos').DataTable({
+                responsive: true,
+            });
 
         }
+
+        function buscar_evoluciones(id_ficha_clinica) {
+            let url = "{{ route('ficha_atencion.ver_evoluciones') }}";
+            let id_ficha = id_ficha_clinica;
+            $('#table_atenciones_previas_evoluciones').html('');
+
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    id_ficha_atencion_soli: id_ficha
+                },
+                dataType: "json",
+            })
+            .done(function(data) {
+                console.log(data);
+                if (data != null) {
+                    $('#m_cons_EvolucionesLabel').text('Evoluciones Realizadas en esta consulta del Paciente: ' + data.paciente.nombres);
+
+                    if (data.estado == 1) {
+                        $('#table_atenciones_previas_evoluciones').empty();
+                        var j = 1;
+
+                        var contenedor = `<div class="row">`; // Contenedor de las cards
+
+                        $.each(data.odontograma, function(index, value) {
+                            var fecha = formatDate(value.fecha);
+                            var trabajo = value.tratamiento;
+                            var diagnostico = value.diagnostico;
+                            var n_pieza = value.pieza;
+                            var id = value.id;
+                            var id_ficha_trabajo = value.id_ficha;
+                            var url = value.url;
+
+                            var fila = `
+                                <div class="col-md-4 mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Pieza Dental: ${n_pieza}</h5>
+                                            <p class="card-text"><strong>Fecha:</strong> ${fecha}</p>
+                                            <p class="card-text"><strong>Diagnóstico:</strong> ${diagnostico}</p>
+                                            <p class="card-text"><strong>Tratamiento:</strong> ${trabajo}</p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+
+                            contenedor += fila;
+                            j++;
+                        });
+
+                        contenedor += `</div>`; // Cierre del contenedor de cards
+
+                        $('#table_atenciones_previas_evoluciones').append(contenedor);
+                        $('#valor_odontograma_evol').html('Total Odontograma: ' + formatoMoneda(data.valores_odontograma[1]));
+                    } else {
+                        $('#table_atenciones_previas_evoluciones').html('');
+                        var fila = '<div class="alert alert-warning text-center" role="alert"><h5>No existen registros</h5></div>';
+                        $('#table_atenciones_previas_evoluciones').append(fila);
+                    }
+                } else {
+                    $('#table_atenciones_previas_evoluciones').html('');
+                    var fila = '<div class="alert alert-warning text-center" role="alert">No existen registros</div>';
+                    $('#table_atenciones_previas_evoluciones').append(fila);
+                }
+
+                $('#m_cons_evoluciones').modal('show');
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError);
+            });
+        }
+
 
         function generar_pdf_historial(id_ficha_clinica){
             let url = "{{ route('profesional.generar_pdf_presupuesto_dental_hist') }}";

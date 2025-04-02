@@ -317,6 +317,17 @@
 							<a>
                         </div>
                     </div>
+                    <div class="col-sm-3">
+                        <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
+                            <a href="{{ ROUTE('app.profesional.control_acceso') }}">
+                                <div class="card-body pb-0 pt-0">
+                                    <img class="wid-40 mt-3"
+                                        src="{{ asset('images/iconos_ingreso/laboratorio.svg') }}" alt="">
+                                    <h5 class="card-title text-white mt-2">Control de acceso</h5>
+                                </div>
+							<a>
+                        </div>
+                    </div>
                     {{--<div class="col-sm-3">
                         <div class="card text-center my-3 subir card-color" style="cursor: pointer;">
                             <a href="adm_cm.area_bodega">

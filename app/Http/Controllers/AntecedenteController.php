@@ -154,12 +154,12 @@ class AntecedenteController extends Controller
             $error['id_users'] = 'campo requerido';
             $campos_requeridos = 1;
         }
-        /*
-        if($request->comentario=='')
+
+        if($request->nombre=='' || $request->nombre == null)
         {
-            $error['comentario'] = 'campo requerido';
+            $error['nombre'] = 'campo requerido';
             $campos_requeridos = 1;
-        }*/
+        }
 
         /*
         if($request->data=='')
@@ -174,6 +174,7 @@ class AntecedenteController extends Controller
             $error['estado'] = 'campo requerido';
             $campos_requeridos = 1;
         }
+
 
         /* FIN - VALIDACION CAMPOS */
 
@@ -190,6 +191,18 @@ class AntecedenteController extends Controller
 
             $registro->estado = $request->estado;
 
+            // validar que no se repita
+            // **VERIFICAR SI YA EXISTE UN REGISTRO CON EL MISMO "nombre" PARA EL PACIENTE**
+            $existe = Antecedente::where('id_paciente', $request->id_paciente)
+            ->whereRaw("JSON_EXTRACT(data, '$.nombre') = ?", [$request->nombre])
+            ->exists();
+
+            if ($existe) {
+                return response([
+                    'estado' => 0,
+                    'error' => 'El antecedente con este nombre ya existe para este paciente'
+                ])->header('Content-Type', 'application/json');
+            }
             if($registro->save())
             {
 				$datos['estado'] = 1;

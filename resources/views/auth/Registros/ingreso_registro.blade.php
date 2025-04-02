@@ -126,7 +126,7 @@
                                 </select>
                             </div>
                             <div class="form-group mb-3">
-                                <button type="submit" class="btn btn-info mb-4" value="Registrarme">Registrarme</button>
+                                <button type="submit" class="btn btn-info mb-4" value="Registrarme" disabled>Registrarme</button>
                                 <button type="button" class="btn btn-outline-info mb-4 toggle-btn">Tengo una cuenta</button>
                             </div>
                         </form>
