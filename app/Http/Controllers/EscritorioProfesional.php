@@ -71,6 +71,7 @@ use App\Models\PagosPresupuestoDental;
 use App\Models\PiezasDentalCoronaProtesis;
 use App\Models\Prevision;
 use App\Models\Profesional;
+use App\Models\ProfesionalTons;
 use App\Models\PresupuestosDental;
 use App\Models\ProcedimientosImplantes;
 use App\Models\ProcedimientosPostImplantes;
@@ -1111,11 +1112,181 @@ class EscritorioProfesional extends Controller
     public function tons(){
 
         $region = Region::all();
-        return view('app.profesional.tons',['region' => $region])->render();
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $relaciones = ProfesionalTons::select(
+            'profesional_tons.*',
+            'profesionales1.nombre as nombre_profesional',
+            'profesionales1.apellido_uno as apellido_profesional',
+            'profesionales2.nombre as nombre_tons',
+            'profesionales2.apellido_uno as apellido_tons'
+        )
+        ->join('profesionales as profesionales1', 'profesional_tons.id_profesional', '=', 'profesionales1.id')
+        ->join('profesionales as profesionales2', 'profesional_tons.id_tons', '=', 'profesionales2.id')
+        ->where('profesional_tons.id_profesional', $profesional->id)
+        ->get();
+
+        return view('app.profesional.tons',['region' => $region, 'relaciones' => $relaciones])->render();
+    }
+
+    public function registrar_tons(Request $req){
+
+        $datos = array();
+        $error = array();
+        $valido = 1;
+        /** validacion de correo en paciente */
+        $temp_valid_email = Profesional::where(DB::raw('UPPER(email)'), mb_strtoupper($req->email))->count();
+        if($temp_valid_email == 0){
+            $user = Auth::user()->id;
+            $direccion = new Direccion();
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+            $direccion->direccion = $req->direccion;
+            $direccion->numero_dir = $req->numero;
+            $direccion->id_ciudad = $req->ciudad;
+            $direccion->save();
+            $nuevo_profesional = new Profesional;
+            $nuevo_profesional->rut = $req->rut;
+            $nuevo_profesional->nombre = $req->nombre;
+            $nuevo_profesional->apellido_uno = $req->apellido_uno;
+            $nuevo_profesional->apellido_dos = $req->apellido_dos;
+            $nuevo_profesional->sexo = $req->sexo;
+            $nuevo_profesional->fecha_nacimiento = $req->fecha_nac;
+            $nuevo_profesional->certificado = 3;
+            $nuevo_profesional->email = $req->email;
+            $nuevo_profesional->id_especialidad = 13; // tons
+            $nuevo_profesional->telefono_uno = $req->telefono;
+            $nuevo_profesional->id_direccion = $direccion->id;
+
+            if ($nuevo_profesional->save())
+            {
+                $datos['tons']['estado'] = 1;
+                $datos['tons']['msj'] = 'Tons registrado';
+
+                /** CREACION DE USUARIO  */
+                if( (\Carbon\Carbon::parse($req->fecha_nac)->age) >= 18)
+                {
+                    /** buscar por rut */
+                    //$user = User::where(DB::raw('UPPER(email)'), mb_strtoupper($nuevo_profesional))->first();
+                    /** buscar por correo */
+                    $user = User::where(DB::raw('UPPER(email)'), mb_strtoupper($nuevo_profesional->email))->first();
+
+
+                    if($user == NULL)
+                    {
+                        $user = new User();
+                        $user->name = $nuevo_profesional->nombres . ' ' .$nuevo_profesional->apellido_uno . ' ' .$nuevo_profesional->apellido_dos;
+
+                        $user->email = $nuevo_profesional->email;
+
+
+                        $pass_temp = random_int(1111,9999);
+                        $user->password = Hash::make($pass_temp);
+
+                        if($nuevo_profesional->email == '' || $nuevo_profesional->email == null || empty($nuevo_profesional->email)){
+                            $user->rut = $nuevo_profesional->rut;
+                        }
+
+                        if($user->save())
+                        {
+                            $user->assignRole('Profesional');
+                            $nuevo_profesional->id_usuario = $user->id;
+                            if($nuevo_profesional->save())
+                            {
+                                $datos['tons']['user']['update_tons'] = 'Tons actualizado con Usuario.';
+                                if( $req->reserva_result_codigo_validacion == 1 )
+                                {
+                                    /** envio de sms */
+                                }
+                                else
+                                {
+                                    if($nuevo_profesional->email == '' || $nuevo_profesional->email == null || empty($nuevo_profesional->email)){
+                                        /** envio de correo de confirmacion  */
+                                        $blade = 'bienvenida_tons_usuario';
+                                        $to = array(
+                                                array('email' => $nuevo_profesional->email,'name' => $nuevo_profesional->nombres . ' ' .$nuevo_profesional->apellido_uno . ' ' .$nuevo_profesional->apellido_dos),
+                                            );
+                                        $cc = array();
+                                        $bcc = array();
+                                        $asunto = 'MED-SDI - Bienvenido!';
+                                        $body = array(
+                                                    'nombre'=>$nuevo_profesional->nombres . ' ' .$nuevo_profesional->apellido_uno . ' ' .$nuevo_profesional->apellido_dos,
+                                                    'user' => $nuevo_profesional->email,
+                                                    'pass' => $pass_temp
+                                                    );
+                                        $archivo = '';/** pendiente */
+                                        $id_institucion = '';
+
+                                        $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                                        if($result_mail['estado'])
+                                        {
+                                            $datos['tons']['user']['mail']['estado'] = 1;
+                                            $datos['tons']['user']['mail']['msj'] = 'Notificacion de bienvenida enviado';
+                                        }
+                                        else
+                                        {
+                                            $datos['tons']['user']['mail']['estado'] = 0;
+                                            $datos['tons']['user']['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                                        }
+                                        /** cerrar envio de correo de confirmacion  */
+                                    }else{
+                                        $datos['tons']['user']['mail']['estado'] = 0;
+                                        $datos['tons']['user']['mail']['msj'] = 'El tons no tiene email valido';
+                                    }
+                                    $datos['estado'] = 1;
+                                    $datos['msj'] = 'Tons creada';
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $user->assignRole('Profesional');
+                        $nuevo_profesional->id_usuario = $user->id;
+                        if($nuevo_profesional->save())
+                        {
+                            $datos['tons']['user']['update_paciente'] = 'tons actualizado con Usuario.';
+                        }
+                    }
+                }
+                /** CIERRE CREACION DE USUARIO  */
+
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'Problema al crear Tons';
+            }
+        }else{
+            $datos['estado'] = 0;
+            $datos['msj'] = 'el correo ya esta siendo utilizado por otro profesional.';
+        }
+
+        return $datos;
     }
 
     public function solicitar_tons(Request $req){
-        return $req;
+        try {
+            $tons = Profesional::find($req->id_tons);
+            $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+            $existe = ProfesionalTons::where('id_profesional', $profesional->id)->where('id_tons',$tons->id)->first();
+            if($existe){
+                return ['estado' => 0,'msj' => 'Ya estan asociados con anterioridad.'];
+            }
+            $relacion = new ProfesionalTons;
+            $relacion->id_profesional = $profesional->id;
+            $relacion->id_tons = $tons->id;
+            $relacion->fecha = Carbon::now();
+
+            if($relacion->save()){
+                return ['estado' => 1, 'msj' => 'Se ha generado la relación exitosamente.'];
+            }else{
+                return ['estado' => 0,'msj' => 'Ha ocurrido un error al guardar la relación'];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return ['estado' => 0,'msj' => $e->getMessage()];
+        }
+
     }
 
     public function guardar_tipo_convenio(Request $req){

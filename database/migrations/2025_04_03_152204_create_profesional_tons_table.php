@@ -15,6 +15,11 @@ class CreateProfesionalTonsTable extends Migration
     {
         Schema::create('profesional_tons', function (Blueprint $table) {
             $table->id();
+            $table->integer('id_profesional');
+            $table->integer('id_tons');
+            $table->integer('estado')->default(1);
+            $table->date('fecha');
+            $table->string('observaciones')->nullable();
             $table->timestamps();
         });
     }

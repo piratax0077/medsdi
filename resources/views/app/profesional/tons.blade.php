@@ -71,15 +71,8 @@
                                 class="display table table-striped dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th class="align-middle">Nombre</th>
-                                        <th class="align-middle">Dirección</th>
-                                        <th class="align-middle">Tipo</th>
-                                        <th class="align-middle">Contacto</th>
-                                        <th class="align-middle">Editar</th>
-                                        <th class="align-middle">Asistentes</th>
-                                        <th class="align-middle">Horarios</th>
-                                        <th class="align-middle">Procedimientos</th>
-                                        <th class="align-middle">Convenios y Valores</th>
+                                        <th class="align-middle">Profesional</th>
+                                        <th class="align-middle">Tons</th>
                                         <th class="align-middle">Deshabilitar</th>
                                         <th class="align-middle">Eliminar</th>
                                     </tr>
@@ -87,91 +80,35 @@
                                 <tbody>
 
                                     {{-- {{ dd($lugares) }} --}}
-                                    @if (isset($lugares))
-                                        @foreach ($lugares as $l)
-                                            @if ($l->pivot->estado !== 3)
-                                                <tr>
-                                                    <td class="align-middle">{{ $l->nombre }}</td>
-                                                    <td class="align-middle">
-                                                        <span>{{ $l->Direccion()->first()->direccion . ' ' . $l->Direccion()->first()->numero_dir }}</span><br>
-                                                        <span>{{ $l->Direccion()->first()->Ciudad()->first()->nombre }}</span>
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        @if ($l->tipo == 1)
-                                                            Centro Medico
-                                                        @else
-                                                            Particular
-                                                        @endif
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        <span>{{ $l->email }}</span><br>
-                                                        <span>{{ $l->telefono }}</span>
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        {{-- editar lugar atencion --}}
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon  accion_editar_lugar_atencion" data-toggle="modal" onclick="ver_lugar_atencion({{ $l->id }});" data-target="#editar_lugar_atencion" title="Editar lugar de atención">
-                                                            <i class="feather icon-edit"></i>
+                                    @if (isset($relaciones))
+                                        @foreach ($relaciones as $r)
+
+                                            <tr>
+                                                <td class="align-middle">{{ $r->nombre_profesional }} {{ $r->apellido_profesional }}</td>
+                                                <td class="align-middle">{{ $r->nombre_tons }} {{ $r->apellido_tons }}</td>
+
+                                                <td class="align-middle">
+                                                    {{-- horario --}}
+                                                    <button type="button" class="btn btn-info btn-sm btn-icon  accion_editar_horarios" data-toggle="modal" onclick="">
+                                                        <i class="fas fa-clock"></i>
+                                                    </button>
+
+                                                </td>
+
+
+
+                                                <td>
+                                                    {{-- eliminar de lugar de atencion --}}
+
+                                                    <div class="align-middle">
+                                                        <button type="button" class="btn btn-danger btn-sm btn-icon accion_editar_valores" data-toggle="modal" onclick="" title="Eliminar">
+                                                            <i class="feather icon-x"></i>
                                                         </button>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        {{-- ver asistente lugar de atencion --}}
-                                                        <button type="button" class="btn btn-warning btn-sm btn-icon  accion_asistentes" onclick="mi_asistente_lugar_atencion({{ $l->id }})" data-toggle="tooltip" data-placement="top" title="Configurar">
-                                                            <i class="feather icon-user"></i>
-                                                        </button>
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        {{-- horario --}}
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon  accion_editar_horarios" data-toggle="modal" onclick="mi_horario_lugar_atencion({{ $l->id }})">
-                                                            <i class="fas fa-clock"></i>
-                                                        </button>
+                                                    </div>
 
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        {{-- procedimientos --}}
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon  accion_editar_horarios" data-toggle="modal" onclick="mi_procedimiento_lugar_atencion({{ $l->id }}, {{ $id_profesional }});">
-                                                            <i class="fas fa-procedures"></i>
-                                                        </button>
+                                                </td>
+                                            </tr>
 
-                                                    </td>
-                                                    <td class="align-middle">
-                                                        {{-- valores de lugar de atencion --}}
-                                                        <button type="button" class="btn btn-success btn-sm btn-icon accion_editar_valores" data-toggle="modal" onclick="mis_valores_lugar_atencion({{ $l->id }})" title="Configurar">
-                                                            <i class="fas fa-dollar-sign"></i>
-                                                        </button>
-                                                    </td>
-
-                                                    <td>
-                                                        {{-- estado de lugar de atencion --}}
-                                                        @if ($l->pivot->estado == '1')
-                                                            <div class="align-middle">
-                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                    <input type="checkbox" onclick="cambio_estado_lugar_atencion({{ $l->id }})" id="estado_lugar_atencion_{{ $l->id }}" checked="true">
-                                                                    <label for="estado_lugar_atencion_{{ $l->id }}" class="cr"></label>
-                                                                </div>
-                                                            </div>
-                                                        @else
-                                                            <div class="align-middle">
-                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                    <input type="checkbox" onclick="cambio_estado_lugar_atencion({{ $l->id }})" id="estado_lugar_atencion_{{ $l->id }}">
-                                                                    <label for="estado_lugar_atencion_{{ $l->id }}" class="cr"></label>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-
-                                                    </td>
-
-                                                    <td>
-                                                        {{-- eliminar de lugar de atencion --}}
-
-                                                        <div class="align-middle">
-                                                            <button type="button" class="btn btn-danger btn-sm btn-icon accion_editar_valores" data-toggle="modal" onclick="eliminar_lugar_atencion({{ $l->id }})" title="Eliminar">
-                                                                <i class="feather icon-x"></i>
-                                                            </button>
-                                                        </div>
-
-                                                    </td>
-                                                </tr>
-                                            @endif
                                         @endforeach
                                     @endif
 
@@ -187,7 +124,7 @@
     <!--Modal nuevo lugar de atención-->
     <div id="nueva_tons" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="nueva_tons"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info">
                     <h5 class="modal-title text-white text-center" id="nueva_tons_titulo">Agregar nueva TONS&nbsp;</h5>
@@ -209,26 +146,53 @@
                     </div>
 
                     <div class="form-row d-none" id="contenedor_tons">
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Nombre</label>
-                                <input class="form-control form-control-sm" name="nombre_lugar_atencion" id="nombre_lugar_atencion" type="text">
+                                <input class="form-control form-control-sm" name="nombre_nueva_tons" id="nombre_nueva_tons" type="text">
                             </div>
                         </div>
-
+                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Apellido Paterno</label>
+                                <input class="form-control form-control-sm" name="apellido_uno_nueva_tons" id="apellido_uno_nueva_tons" type="text">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Apellido Materno</label>
+                                <input class="form-control form-control-sm" name="apellido_dos_nueva_tons" id="apellido_dos_nueva_tons" type="text">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Sexo</label>
+                                <select name="sexo_nueva_tons" id="sexo_nueva_tons" class="form-control form-control-sm">
+                                    <option value="0">Seleccione</option>
+                                    <option value="F">Femenino</option>
+                                    <option value="M">Masculino</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Fecha de Nacimiento</label>
+                                <input class="form-control form-control-sm" name="fecha_nac_nueva_tons" id="fecha_nac_nueva_tons" type="date">
+                            </div>
+                        </div>
                         <div class="col-sm-8 col-md-8 col-lg-8 col-xl-8">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Direcci&oacute;n</label>
-                                <input class="form-control form-control-sm" name="direccion_lugar_atencion" id="direccion_lugar_atencion" type="text">
+                                <input class="form-control form-control-sm" name="direccion_nueva_tons" id="direccion_nueva_tons" type="text">
                             </div>
                         </div>
                         <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Nº</label>
-                                <input class="form-control form-control-sm" name="numero_lugar_atencion" id="numero_lugar_atencion" type="text">
+                                <input class="form-control form-control-sm" name="numero_nueva_tons" id="numero_nueva_tons" type="text">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Regi&oacute;n</label>
                                 <select id="region_agregar" onchange="buscar_ciudad();" name="region_agregar" class="form-control form-control-sm" required>
@@ -243,7 +207,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                             <div class="form-group">
                                 <label class="floating-label-activo-sm">Ciudad</label>
                                 <select id="ciudad_agregar" name="ciudad_agregar" class="form-control form-control-sm" required>
@@ -254,24 +218,27 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="form-group ">
                                 <label class="floating-label-activo-sm">Tipo</label>
-                                <select id="tipo_agregar_lugar_atencion" name="tipo_agregar_lugar_atencion" class="js-example-basic-single form-control form-control-sm">
+                                <select id="tipo_nueva_tons" name="tipo_nueva_tons" class="js-example-basic-single form-control form-control-sm">
                                     <option value="0">Seleccione</option>
                                     <option value="1">Centro Médico</option>
                                     <option value="2">Consulta Particular</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
-                                <input class="form-control form-control-sm" name="email_lugar_atencion" id="email_lugar_atencion" type="email">
+                                <input class="form-control form-control-sm" name="email_nueva_tons" id="email_nueva_tons" type="email">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Tel&eacute;fono</label>
+                                <input class="form-control form-control-sm" name="telefono_nueva_tons" id="telefono_nueva_tons" type="text">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                <input class="form-control form-control-sm" name="telefono_lugar_atencion" id="telefono_lugar_atencion_1" type="text">
-                            </div>
+                            <button type="button" class="btn btn-outline-success btn-sm w-100 my-3" onclick="registrar_tons()">Registrar</button>
                         </div>
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="form-group">
@@ -424,11 +391,157 @@
             data: data,
             success: function(resp){
                 console.log(resp);
+                if(resp.estado == 1){
+                    swal({
+                        icon:'success',
+                        title:'Exito',
+                        text: resp.msj
+                    });
+                    // cerrar modal
+                    $('#nueva_tons').modal('hide');
+                }else{
+                    swal({
+                        icon:'info',
+                        title:'Info',
+                        text: resp.msj
+                    });
+                }
             },
             error: function(error){
                 console.log(error.responseText);
             }
         });
     }
+
+    function registrar_tons() {
+    let nombre = $('#nombre_nueva_tons').val().trim();
+    let apellido_uno = $('#apellido_uno_nueva_tons').val().trim();
+    let apellido_dos = $('#apellido_dos_nueva_tons').val().trim();
+    let sexo = $('#sexo_nueva_tons').val();
+    let fecha_nac = $('#fecha_nac_nueva_tons').val();
+    let direccion = $('#direccion_nueva_tons').val().trim();
+    let numero = $('#numero_nueva_tons').val().trim();
+    let region = $('#region_agregar').val();
+    let ciudad = $('#ciudad_agregar').val();
+    let tipo = $('#tipo_nueva_tons').val();
+    let email = $('#email_nueva_tons').val().trim();
+    let telefono = $('#telefono_nueva_tons').val().trim();
+
+    let valido = true;
+    let mensaje = '';
+
+    // Validación de campos requeridos
+    if (nombre === '') {
+        valido = false;
+        mensaje += '<li>El nombre es obligatorio</li>';
+    }
+    if (apellido_uno === '') {
+        valido = false;
+        mensaje += '<li>El primer apellido es obligatorio</li>';
+    }
+    if(sexo == 0){
+        valido = false;
+        mensaje += '<li>Debe seleccionar sexo de tons</li>';
+    }
+    if(fecha_nac === ''){
+        valido = false;
+        mensaje += '<li>La fecha de nacimiento es obligatoria </li>';
+    }
+    if (direccion === '') {
+        valido = false;
+        mensaje += '<li>La dirección es obligatoria</li>';
+    }
+    if (numero === '') {
+        valido = false;
+        mensaje += '<li>El número es obligatorio</li>';
+    }
+    if (region === null || region === '') {
+        valido = false;
+        mensaje += '<li>Debes seleccionar una región</li>';
+    }
+    if (ciudad === null || ciudad === '') {
+        valido = false;
+        mensaje += '<li>Debes seleccionar una ciudad</li>';
+    }
+    if (tipo === null || tipo === '') {
+        valido = false;
+        mensaje += '<li>Debes seleccionar un tipo</li>';
+    }
+
+    // Validación de correo electrónico
+    let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email !== '' && !emailRegex.test(email)) {
+        valido = false;
+        mensaje += '<li>El correo electrónico no es válido</li>';
+    }
+
+    // Validación de teléfono (solo números y longitud mínima)
+    let telefonoRegex = /^[0-9]{9,15}$/; // De 9 a 15 dígitos
+    if (telefono !== '' && !telefonoRegex.test(telefono)) {
+        valido = false;
+        mensaje += '<li>El teléfono debe contener solo números y tener entre 9 y 15 dígitos</li>';
+    }
+
+    // Si hay errores, mostramos el mensaje y detenemos la ejecución
+    if (!valido) {
+        swal({
+            title: "Campos requeridos",
+            content:{
+                element: "div",
+                attributes:{
+                    innerHTML: mensaje,
+                },
+            },
+            icon: "error",
+            buttons: "Aceptar",
+            DangerMode: true,
+        });
+        return false;
+    }
+
+    let data = {
+        rut: $('#rut_tons').val(),
+        nombre: nombre,
+        apellido_uno: apellido_uno,
+        apellido_dos: apellido_dos,
+        sexo: sexo,
+        fecha_nac: fecha_nac,
+        direccion: direccion,
+        numero: numero,
+        region: region,
+        ciudad: ciudad,
+        tipo: tipo,
+        email: email,
+        telefono: telefono,
+        _token: CSRF_TOKEN
+    };
+
+    console.log(data);
+    let url = "{{ ROUTE('profesional.registrar_nueva_tons') }}";
+    // Aquí puedes hacer la petición AJAX para registrar la información
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.estado == 1){
+                swal({
+                    icon:'success',
+                    text: resp.msj
+                });
+            }else{
+                swal({
+                    icon:'error',
+                    text: resp.msj,
+                });
+            }
+        },
+        error: function(error){
+            console.log(error.responseText);
+        }
+    })
+}
+
 </script>
 @endsection
