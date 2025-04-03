@@ -1387,6 +1387,7 @@ class EscritorioAsistente extends Controller
                 $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
                 $profesional = Profesional::where('id',$request->id_profesional)->first();
 
+                $paciente->token = md5(uniqid());
                 $paciente->rut = $request->rut_paciente_reserva;
                 $paciente->nombres = $request->reserva_hora_nombre;
                 $paciente->apellido_uno = $request->reserva_hora_primer_apellido;

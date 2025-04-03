@@ -1469,6 +1469,23 @@
                                         $('#bono_prevision').val(data.paciente.id_prevision);
                                         $('#bono_prevision_txt').val( $('#bono_prevision option:selected').text() );
 
+                                        if(data?.["procedimiento"] !== undefined)
+                                        {
+                                            if(data.procedimiento != '')
+                                            {
+                                                $('#bono_valor_consulta').val(data.procedimiento.valor);
+                                            }
+                                            else
+                                            {
+                                                $('#bono_valor_consulta').val('');
+                                            }
+                                        }
+                                        else
+                                        {
+                                            $('#bono_valor_consulta').val('');
+                                        }
+
+
                                         /** PESTAÑA DE VENTA DE BONO */
                                         $('#venta_rut').val(data.paciente.rut);
                                         $('#venta_serie').val('');

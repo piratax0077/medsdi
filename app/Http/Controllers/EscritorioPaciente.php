@@ -92,6 +92,7 @@ class EscritorioPaciente extends Controller
     {
 
         $paciente = new Paciente();
+        $paciente->token = md5(uniqid());
         $paciente->rut = $request->txt_rut;
         $paciente->nombres = $request->nombre_registro;
         $paciente->apellido_uno = $request->primer_apellido_registro;

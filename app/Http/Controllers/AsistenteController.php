@@ -54,6 +54,7 @@ class AsistenteController extends Controller
                 $direccion->save();
 
                 $paciente = new Paciente();
+                $paciente->token = md5(uniqid());
                 $paciente->rut = $request->rut;
                 $paciente->nombres = $request->nombres;
                 $paciente->apellido_uno = $request->apellido_uno;
@@ -69,7 +70,7 @@ class AsistenteController extends Controller
 						$fechaConvertida = Carbon::createFromFormat('Y-m-d', $request->reserva_hora_fecha_nac)->format('Y-m-d');
 					if(!empty($request->fecha_nac))
 						$fechaConvertida = Carbon::createFromFormat('Y-m-d', $request->fecha_nac)->format('Y-m-d');
-				
+
                 }
                 $paciente->fecha_nac = $fechaConvertida;
 
@@ -183,6 +184,7 @@ class AsistenteController extends Controller
             {
                 /** creo paciente */
                 $paciente = new Paciente();
+                $paciente->token = md5(uniqid());
                 $paciente->rut = $request->rut;
                 $paciente->nombres = $request->nombres;
                 $paciente->apellido_uno = $request->apellido_uno;

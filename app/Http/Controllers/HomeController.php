@@ -393,6 +393,7 @@ class HomeController extends Controller
         if(!$validacionEmail)
         {
             $paciente = new Paciente();
+            $paciente->token = md5(uniqid());
             $paciente->rut = $request->rut_verificacion;
             $paciente->nombres = $request->nombre_registro;
             $paciente->apellido_uno = $request->primer_apellido_registro;
