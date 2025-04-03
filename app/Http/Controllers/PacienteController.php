@@ -90,7 +90,7 @@ class PacienteController extends Controller
         $direccion = new Direccion();
 
         $paciente = new Paciente();
-
+        $paciente->token = md5(uniqid());
         $paciente->rut = $request->rut_paciente_agregar;
 
         $paciente->nombres = $request->nombres_paciente_agregar;

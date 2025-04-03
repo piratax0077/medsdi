@@ -5408,6 +5408,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             $direccion->numero_dir = $request->reserva_hora_numero_dir;
             $direccion->id_ciudad = $request->reserva_hora_comuna;
             $direccion->save();
+            $paciente->token = md5(uniqid());
             $paciente->rut = $request->rut_paciente_reserva;
             $paciente->nombres = $request->reserva_hora_nombre;
             $paciente->apellido_uno = $request->reserva_hora_primer_apellido;
@@ -5659,6 +5660,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
 
 
                         $paciente_representante = new Paciente();
+                        $paciente_representante->token = md5(uniqid());
                         $paciente_representante->rut = $representante_rut;
                         $paciente_representante->nombres = $representante_nombres_paciente;
                         $paciente_representante->apellido_uno = $representante_apellido_uno;
