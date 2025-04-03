@@ -1051,6 +1051,7 @@
                                                                 <button type="button" class="btn btn-outline-light btn-sm btn-icon" onclick="aplicar_convenio_tratamiento({{ $c->id }})"><i class="fas fa-check"></i></button>
                                                                 <button type="button" class="btn btn-outline-primary btn-sm btn-icon" onclick="generar_pdf()"><i class="fas fa-print"></i></button>
                                                                 <span id="mensaje" class="badge badge-success"></span>
+                                                                <input type="hidden" name="tiene_dcto" id="tiene_dcto" value="0">
                                                             </p>
 
                                                             @endif
@@ -1530,7 +1531,7 @@
                                                             <p id="valores_total_abonado_presupuesto_conf">${{ number_format($valor_abonado,0,',','.') }}</p>
                                                         </div>
                                                         @php $total_pago = $valores + $valores_piezas + $valores_insumos; @endphp
-                                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="reasignar_presupuesto({{ $total_pago }}, {{ $valor_abonado }},{{ $valores_insumos }})">Reasignar</button>
+                                                        <button type="button" class="btn btn-outline-primary btn-sm" style="width: 85px;" onclick="reasignar_presupuesto({{ $total_pago }}, {{ $valor_abonado }},{{ $valores_insumos }})">Reasignar Pago</button>
                                                         <button type="button" class="btn btn-outline-success btn-sm" onclick="pagar_presupuesto()">Pagar</button>
                                                     </div>
                                                 </div>
@@ -2238,6 +2239,7 @@
         const montoAbonado = $('#montoAbonado').val().replace(/[^0-9]/g, '');
         const metodoPago = $('#metodoPago').val();
         const bonoPrevision = $('#bono_prevision').val();
+        const id_dcto = $('#tiene_dcto').val();
 
         // Verificar que todos los campos requeridos estén completos
         if (!montoPago || !montoAbonado || !metodoPago) {
@@ -2257,6 +2259,7 @@
             id_ficha_atencion: $('#id_fc').val(),
             id_paciente: $('#id_paciente').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
+            id_dcto: id_dcto
         };
 
         // Enviar los datos por AJAX
@@ -2817,6 +2820,7 @@
             success: function(resp){
                 console.log(resp);
                 $('#mensaje').html('Descuento aplicado');
+                $('#tiene_dcto').val(id);
                 // Cambiar el botón para que pase a ser "Quitar convenio"
                 const boton = document.querySelector(`button[onclick="aplicar_convenio_tratamiento(${id})"]`);
                 if (boton) {
@@ -3042,9 +3046,9 @@
                         let rowNode = table_piezas_odontograma.row.add([
                             odonto.descripcion,
                             odonto.pieza,
-                            formatoMoneda(formatoMoneda(odonto.valor)),
+                            formatoMoneda((odonto.valor)),
                             0,
-                            formatoMoneda(formatoMoneda(odonto.valor)),
+                            formatoMoneda((odonto.valor)),
                             '<div class="circle '+clase+'"></div>',
                             estado, // Columna vacía
 
@@ -3122,6 +3126,7 @@
                 insumos.forEach(insumo => {
                     if(insumo.presupuesto == 1){
                         let total = insumo.cantidad * insumo.valor;
+                        let dcto = insumo.valor - insumo.valor_descuento;
                         $('#contenedor_insumos').append(`
                         <div class="form-group col-md-2 fill">
                             <label class="floating-label-activo-sm">Insumo</label>
@@ -3133,15 +3138,15 @@
                         </div>
                         <div class="form-group col-md-2 fill">
                             <label class="floating-label-activo-sm">Sub-Total</label>
-                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor)}">
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${(insumo.valor)}">
                         </div>
                         <div class="form-group col-md-1">
                             <label class="floating-label-activo-sm">Descuento</label>
-                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor - insumo.valor_descuento)}">
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${(dcto)}">
                         </div>
                         <div class="form-group col-md-2 fill">
                             <label class="floating-label-activo-sm">Total Prestación</label>
-                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor_descuento)}">
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${(insumo.valor_descuento)}">
                         </div>
                         <div class="form-group col-md-2 d-flex">
                             <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i>  </button>
@@ -3156,6 +3161,7 @@
                 let valores_odontograma = resp.valores[1];
                 let valores_insumos = resp.valores[2];
                 let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+
                 $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
                 $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
                 $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
@@ -3167,7 +3173,7 @@
                 $('#valores_descuentos_presupuesto_conf').text('$'+0);
                 $('#total_presup').val(formatoMoneda(total_general));
                 $('#subtotal_clinico').val(formatoMoneda(total_general));
-                $('#total_clinico').val(formatoMoneda(total_general));
+                $('#total_clinico').val((total_general));
                 // guardamos el total en un input hidden
                 $('#total_presupuesto_dental').val(total_general);
             },

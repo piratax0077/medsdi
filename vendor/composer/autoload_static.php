@@ -970,6 +970,7 @@ class ComposerStaticInit602740cfabbf6d5d1707a7b161a4afcd
         'App\\Models\\Direccion' => __DIR__ . '/../..' . '/app/Models/Direccion.php',
         'App\\Models\\DocumentoFcPaciente' => __DIR__ . '/../..' . '/app/Models/DocumentoFcPaciente.php',
         'App\\Models\\Dosis' => __DIR__ . '/../..' . '/app/Models/Dosis.php',
+        'App\\Models\\Empresas' => __DIR__ . '/../..' . '/app/Models/Empresas.php',
         'App\\Models\\EmpresasConvenios' => __DIR__ . '/../..' . '/app/Models/EmpresasConvenios.php',
         'App\\Models\\EndodonciaPaciente' => __DIR__ . '/../..' . '/app/Models/EndodonciaPaciente.php',
         'App\\Models\\EnfermedadCronica' => __DIR__ . '/../..' . '/app/Models/EnfermedadCronica.php',

@@ -1094,6 +1094,30 @@ class EscritorioProfesional extends Controller
         return ['odontograma' => $odontograma, 'insumos' => $insumos,'valores' => $valores, 'descuentos' => $descuentos, 'total_general' => $total_general, 'total_con_descuento' => $total_con_descuento,'total_abonado' => $total_abonado];
     }
 
+    public function buscar_tons(Request $req){
+        $rut = $req->rut_tons;
+        $profesional = Profesional::where('rut','like',$rut)->where('id_especialidad',13)->first();
+        if($profesional){
+            $direccion = Direccion::where('id', $profesional->id_direccion)->first();
+            $profesional->direccion = $direccion;
+            $profesional->ciudad = $direccion->Ciudad()->first();
+            return ['estado' => 1,'tons' => $profesional];
+        }else{
+            return ['estado' => 0];
+        }
+
+    }
+
+    public function tons(){
+
+        $region = Region::all();
+        return view('app.profesional.tons',['region' => $region])->render();
+    }
+
+    public function solicitar_tons(Request $req){
+        return $req;
+    }
+
     public function guardar_tipo_convenio(Request $req){
         try {
             $empresa = Empresas::where('id', $req->id_empresa)->first();
@@ -1922,10 +1946,13 @@ class EscritorioProfesional extends Controller
         $responsable = User::find(Auth::user()->id);
         $tratamientos_implantologia = TratamientosImplantologia::orderBy('descripcion','asc')->get();
         $materiales_implantologia = MaterialesImplantologia::orderBy('descripcion','asc')->get();
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $odontograma = $this->dameOdontogramaPaciente($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
         $v = view('atencion_odontologica.include.piezas_dental_tto_impl',[
-            'counter' => $random,
+            'counter' => $idCounter,
             'tratamientos_implantologia' => $tratamientos_implantologia,
             'materiales_implantologia' => $materiales_implantologia,
+            'odontograma' => $odontograma,
             ])->render();
         return ['mensaje' => 'OK','v' => $v];
     }
@@ -2930,7 +2957,12 @@ class EscritorioProfesional extends Controller
         try {
 
             $idCounter = $req->count ? $req->count : 1;
-            $v = view('atencion_odontologica.include.pieza_dental_post_impl',['counter' => $idCounter])->render();
+            $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+            $odontograma = $this->dameOdontogramaPaciente($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+            $v = view('atencion_odontologica.include.pieza_dental_post_impl',[
+                'counter' => $idCounter,
+                'odontograma' => $odontograma
+                ])->render();
             return ['mensaje' => 'OK', 'v' => $v];
 
 

@@ -8,7 +8,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div id="table_atenciones_previas_evoluciones"></div>
+                <!-- Contenedor de los Pills -->
+                <div id="odontograma-pills-container"></div>
+
+                <!-- Contenedor del Tab Content -->
+                <div id="odontograma-tab-content"></div>
                 <!--fin autollenado-->
             </div>
             <div  class="d-flex container">

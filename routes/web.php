@@ -2471,3 +2471,6 @@ Route::post('/profesional/registrar_convenio_profesional/empresa', [App\Http\Con
 Route::post('/profesional/guardar_tipo_convenio', [App\Http\Controllers\EscritorioProfesional::class, 'guardar_tipo_convenio'])->name('profesional.guardar_tipo_convenio');
 Route::post('/profesional/eliminar_tipo_convenio',[App\Http\Controllers\EscritorioProfesional::class, 'eliminar_tipo_convenio'])->name('profesional.eliminar_tipo_convenio');
 Route::post('/profesional/aplicar_convenio_tratamiento',[App\Http\Controllers\EscritorioProfesional::class, 'aplicar_convenio_tratamiento'])->name('profesional.aplicar_convenio_tratamiento');
+Route::get('/profesional/tons',[App\Http\Controllers\EscritorioProfesional::class, 'tons'])->name('profesional.tons');
+Route::post('/profesional/buscar_tons',[App\Http\Controllers\EscritorioProfesional::class, 'buscar_tons'])->name('profesional.buscar_tons');
+Route::post('/profesional/solicitar_tons',[App\Http\Controllers\EscritorioProfesional::class, 'solicitar_tons'])->name('profesional.solicitar_tons');

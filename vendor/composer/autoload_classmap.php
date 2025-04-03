@@ -277,6 +277,7 @@ return array(
     'App\\Models\\Direccion' => $baseDir . '/app/Models/Direccion.php',
     'App\\Models\\DocumentoFcPaciente' => $baseDir . '/app/Models/DocumentoFcPaciente.php',
     'App\\Models\\Dosis' => $baseDir . '/app/Models/Dosis.php',
+    'App\\Models\\Empresas' => $baseDir . '/app/Models/Empresas.php',
     'App\\Models\\EmpresasConvenios' => $baseDir . '/app/Models/EmpresasConvenios.php',
     'App\\Models\\EndodonciaPaciente' => $baseDir . '/app/Models/EndodonciaPaciente.php',
     'App\\Models\\EnfermedadCronica' => $baseDir . '/app/Models/EnfermedadCronica.php',

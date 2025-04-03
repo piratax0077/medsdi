@@ -3,9 +3,16 @@
         <div class="card-body">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="form-row">
-                    <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
+                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <label class="floating-label-activo-sm">Pieza N°</label>
-                        <input type="text" class="form-control form-control-sm" name="numero_pieza_post_impl{{ $counter }}" id="numero_pieza_post_impl{{ $counter }}">
+                        <select name="numero_pieza_post_impl{{ $counter }}" id="numero_pieza_post_impl{{ $counter }}" class="form-control form-control-sm">
+                            <option value="0">Seleccione</option>
+                            @foreach ($odontograma as $o)
+                            @if($o->presupuesto == 1)
+                                <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
+                            @endif
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
                         <div class="form-group">
