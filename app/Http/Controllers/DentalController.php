@@ -50,6 +50,7 @@ use App\Models\Interconsulta;
 use App\Models\InsumosTratamientosDental;
 use App\Models\Laboratorio;
 use App\Models\LugarAtencion;
+use App\Models\MarcasImplantes;
 use App\Models\MaterialesImplantologia;
 use App\Models\MaterialesInsumosPaciente;
 use App\Models\MedicamentoUsoCronicoExterno;
@@ -2596,6 +2597,16 @@ class DentalController extends Controller
         $fichaController = new ficha_atencionController;
         $insumos = $fichaController->dame_insumos_tratamiento($req->id_paciente, $req->id_ficha_atencion);
         $valores = $this->dameValoresOdontograma($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+        $total_general = $valores[0] + $valores[1] + $valores[2];
+        $total_con_descuento = $total_general;
+        $total_abonado = intval(str_replace('.', '', $req->monto_abonado));
+
+        // if($total_con_descuento <= $total_abonado){
+        //     foreach($odontograma as $o){
+        //         $o->estado_pago = 'ok';
+        //     }
+        // }
+
         return ['odontograma' => $odontograma, 'insumos' => $insumos,'valores' => $valores];
     }
 
@@ -3911,6 +3922,7 @@ try {
     public function registrar_orden_trabajo_menor(Request $request)
     {
         try {
+
             //code...
             $user = Auth::user()->id;
             $profesional = Profesional::where('id_usuario', $user)->first();
@@ -3934,15 +3946,18 @@ try {
             $trabajo_menor->id_ficha_atencion = $request->id_ficha_atencion;
             $trabajo_menor->id_lugar_atencion = $request->id_lugar_atencion;
             $trabajo_menor->id_laboratorio = $request->laboratorio;
+            $trabajo_menor->fecha_envio = Carbon::now();
 
             if (!$trabajo_menor->save()) {
                 return 'error';
             }
             $mensaje = 'Se ha agregado Orden de trabajo menos de forma exitosa';
 
-            $ordenes_trabajo = OrdenTrabajoMenor::where('id_paciente', $request->id_paciente)->where('id_profesional', $profesional->id)->get();
+            $ficha_atencionController = new ficha_atencionController;
+            $ordenes_trabajo_menor = $ficha_atencionController->dameOrdenesTrabajoMenor($request->id_paciente, $profesional->id);
+            $ordenes_trabajo_mayor = $ficha_atencionController->dameOrdenesTrabajoMayor($request->id_paciente, $profesional->id);
 
-            return ['mensaje' => 'OK', 'msj' => $mensaje, 'ordenes_trabajo' => $ordenes_trabajo];
+            return ['mensaje' => 'OK', 'msj' => $mensaje, 'ordenes_trabajo_menor' => $ordenes_trabajo_menor,'ordenes_trabajo_mayor' => $ordenes_trabajo_mayor];
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();
@@ -3975,8 +3990,28 @@ try {
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
             $nro_orden = $orden_trabajo_menor->nro_orden;
             if ($orden_trabajo_menor->delete()) {
-                $ordenes_trabajo = OrdenTrabajoMenor::where('id_paciente', $req->id_paciente)->where('id_profesional', $profesional->id)->get();
-                return ['mensaje' => 'OK', 'msj' => 'Orden de trabajo menor eliminada correctamente', 'ordenes_trabajo' => $ordenes_trabajo];
+                $ficha_atencionController = new ficha_atencionController();
+                $ordenes_trabajo_menor = $ficha_atencionController->dameOrdenesTrabajoMenor($req->id_paciente, $profesional->id);
+                $ordenes_trabajo_mayor = $ficha_atencionController->dameOrdenesTrabajoMayor($req->id_paciente, $profesional->id);
+                return ['mensaje' => 'OK', 'msj' => 'Orden de trabajo menor eliminada correctamente', 'ordenes_trabajo_menor' => $ordenes_trabajo_menor];
+            } else {
+                return ['mensaje' => 'ERROR', 'msj' => 'No se encontró la orden de trabajo menor'];
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function eliminar_orden_trabajo_mayor(Request $req){
+        try {
+            $orden_trabajo_mayor = OrdenTrabajoMayor::where('id', $req->id)->first();
+            $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+            $nro_orden = $orden_trabajo_mayor->nro_orden;
+            if ($orden_trabajo_mayor->delete()) {
+                $ficha_atencionController = new ficha_atencionController();
+                $ordenes_trabajo_menor = $ficha_atencionController->dameOrdenesTrabajoMenor($req->id_paciente, $profesional->id);
+                $ordenes_trabajo_mayor = $ficha_atencionController->dameOrdenesTrabajoMayor($req->id_paciente, $profesional->id);
+                return ['mensaje' => 'OK', 'msj' => 'Orden de trabajo menor eliminada correctamente', 'ordenes_trabajo_mayor' => $ordenes_trabajo_mayor];
             } else {
                 return ['mensaje' => 'ERROR', 'msj' => 'No se encontró la orden de trabajo menor'];
             }
@@ -4028,7 +4063,8 @@ public function generar_pdf_trabajo_mayor(Request $req){
 
         $trabajo_mayor->comentarios = $request->comentarios_trabajo_mayor;
 
-        $trabajo_mayor->marca_implante = $request->marca_implante_trabajo_mayor;
+        $marca_implante = MarcasImplantes::find($request->marca_implante_trabajo_mayor);
+        $trabajo_mayor->marca_implante = $marca_implante ? $marca_implante->descripcion : '';
 
         $trabajo_mayor->medida_implante = $request->_medida_implantetrabajo_mayor;
 
@@ -4060,21 +4096,22 @@ public function generar_pdf_trabajo_mayor(Request $req){
 
         $trabajo_mayor->id_ficha_atencion = $request->id_ficha_atencion;
         $trabajo_mayor->id_lugar_atencion = $request->id_lugar_atencion;
+        $trabajo_mayor->id_laboratorio = $request->laboratorio;
+        $trabajo_mayor->fecha_envio = Carbon::now();
 
-        return $trabajo_mayor;
         if (!$trabajo_mayor->save()) {
 
             return 'error';
 
         }
 
+        $mensaje = 'Se ha agregado Orden de trabajo mayor de forma exitosa';
 
+        $ficha_atencionController = new ficha_atencionController;
+        $ordenes_trabajo_menor = $ficha_atencionController->dameOrdenesTrabajoMenor($request->id_paciente, $profesional->id);
+        $ordenes_trabajo_mayor = $ficha_atencionController->dameOrdenesTrabajoMayor($request->id_paciente, $profesional->id);
 
-        $mensaje = 'Se ha agregado Orden de trabajo menos de forma exitosa';
-
-
-
-        return ['estado' => 'ok','mensaje' => $mensaje];
+        return ['estado' => 1,'mensaje' => $mensaje,'ordenes_trabajo_menor' => $ordenes_trabajo_menor,'ordenes_trabajo_mayor' => $ordenes_trabajo_mayor];
 
     }
 

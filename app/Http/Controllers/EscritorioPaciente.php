@@ -1870,9 +1870,38 @@ class EscritorioPaciente extends Controller
                 $proc_bloque = ( !empty($request->proc_bloque)?intval($request->proc_bloque):1 );
                 $tiempo_consulta = intval($proc_bloque) * 15;
             }else if($profesional->id_especialidad == 2){
+                // $procedimiento = $request->procedimiento;
+                // $proc_bloque = ( !empty($request->proc_bloque)?intval($request->proc_bloque):1 );
+                // $tiempo_consulta = intval($proc_bloque) * 15;
                 $procedimiento = $request->procedimiento;
-                $proc_bloque = ( !empty($request->proc_bloque)?intval($request->proc_bloque):1 );
+                $proc_bloque = (!empty($request->proc_bloque) ? intval($request->proc_bloque) : 1);
                 $tiempo_consulta = intval($proc_bloque) * 15;
+
+                // Calcular hora de inicio y término
+                $hora_inicio = \Carbon\Carbon::parse($request->fecha_consulta)->format('H:i:s');
+                $hora_termino = \Carbon\Carbon::parse($request->fecha_consulta)->addMinutes($tiempo_consulta)->format('H:i:s');
+
+                // Validar si ya hay una hora médica que se solape
+                $choque_horario = HoraMedica::where('id_profesional', $profesional->id)
+                    ->where('id_lugar_atencion', $request->id_lugar_atencion)
+                    ->where('fecha_consulta', \Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d'))
+                    ->where(function ($query) use ($hora_inicio, $hora_termino) {
+                        $query->whereBetween('hora_inicio', [$hora_inicio, $hora_termino])
+                            ->orWhereBetween('hora_termino', [$hora_inicio, $hora_termino])
+                            ->orWhere(function ($query) use ($hora_inicio, $hora_termino) {
+                                $query->where('hora_inicio', '<=', $hora_inicio)
+                                        ->where('hora_termino', '>=', $hora_termino);
+                            });
+                    })
+                    ->exists();
+
+                if ($choque_horario) {
+                    return json_encode([
+                        'estado' => 'error',
+                        'id_profesional' => $profesional->id,
+                        'msj' => 'La hora médica se superpone con otra ya registrada.<br> Eliga un bloque mayor'
+                    ]);
+                }
             }
             else
             {
@@ -2003,7 +2032,7 @@ class EscritorioPaciente extends Controller
             'profesional_nombre'=> $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,
             'profesional_especialidad'=> $profesional->Especialidad()->first()->nombre,
             'profesional_tipo_especialidad'=> $profesional->TipoEspecialidad()->first()->nombre,
-            'profesional_sub_tipo_especialidad'=> $profesional->SubTipoEspecialidad()->first()->nombre,
+            'profesional_sub_tipo_especialidad' => optional($profesional->SubTipoEspecialidad()->first())->nombre ?? null, // Si no existe, no se muestra
             // 'institucion'=> $nombre_institucion,
             'lugar_atencion'=> $lugar_atencion->nombre,
             'direccion'=> $lugar_atencion->Direccion()->first()->direccion.' '.$lugar_atencion->Direccion()->first()->numero_dir.', '.$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre,

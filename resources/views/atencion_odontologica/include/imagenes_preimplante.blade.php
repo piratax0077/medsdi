@@ -130,7 +130,7 @@
     function init_dropzone_imagenes_preimplante()
     {
         // Inicializa Dropzone sobre el nuevo elemento
-        dropzone = new Dropzone("#mis-imagenes-dentales-preimplante", {
+        dropzone_preimpl = new Dropzone("#mis-imagenes-dentales-preimplante", {
             url: "{{ ROUTE('profesional.imagenes.guardar_dental')  }}",
             method: 'post',
             autoProcessQueue: false, // Desactiva el procesamiento automático
@@ -266,16 +266,16 @@
                     $('#id_imagenes_dental').val(resp.rx.id);
 
                     // Una vez que el envío de datos ha sido exitoso, procesamos la cola de imágenes
-                    if (dropzone.getQueuedFiles().length > 0) {
+                    if (dropzone_preimpl.getQueuedFiles().length > 0) {
                         console.log("Iniciando carga de imágenes...");
                         // Desvinculamos el evento "queuecomplete" antes de procesar la cola
-                        dropzone.off("queuecomplete");
+                        dropzone_preimpl.off("queuecomplete");
 
                         // Procesar la cola de imágenes
-                        dropzone.processQueue();  // Esto procesará la cola y subirá las imágenes
+                        dropzone_preimpl.processQueue();  // Esto procesará la cola y subirá las imágenes
 
                         // Usamos un evento para esperar a que se complete la carga de imágenes
-                        dropzone.on("queuecomplete", function() {
+                        dropzone_preimpl.on("queuecomplete", function() {
                             // Una vez que la cola esté completa, podemos realizar más acciones si es necesario
                             console.log("Carga de imágenes completada.");
                         });
@@ -283,34 +283,10 @@
                         console.log("No hay imágenes para cargar.");
                         alert("No has seleccionado imágenes para subir.");
 
-                        // Si el Dropzone no está funcionando correctamente, puedes destruirlo y volver a inicializarlo
-                        if (dropzone) {
-                            // Destruir la instancia actual de Dropzone
-                            dropzone.destroy();
-                        }
-                    }
-                    // Una vez que el envío de datos ha sido exitoso, procesamos la cola de imágenes
-                    if (dropzone_post.getQueuedFiles().length > 0) {
-                        console.log("Iniciando carga de imágenes...");
-                        // Desvinculamos el evento "queuecomplete" antes de procesar la cola
-                        dropzone_post.off("queuecomplete");
-
-                        // Procesar la cola de imágenes
-                        dropzone_post.processQueue();  // Esto procesará la cola y subirá las imágenes
-
-                        // Usamos un evento para esperar a que se complete la carga de imágenes
-                        dropzone_post.on("queuecomplete", function() {
-                            // Una vez que la cola esté completa, podemos realizar más acciones si es necesario
-                            console.log("Carga de imágenes completada.");
-                        });
-                    } else {
-                        console.log("No hay imágenes para cargar.");
-                        alert("No has seleccionado imágenes para subir.");
-
-                        // Si el Dropzone no está funcionando correctamente, puedes destruirlo y volver a inicializarlo
-                        if (dropzone_post) {
-                            // Destruir la instancia actual de Dropzone
-                            dropzone_post.destroy();
+                        // Si el dropzone_preimpl no está funcionando correctamente, puedes destruirlo y volver a inicializarlo
+                        if (dropzone_preimpl) {
+                            // Destruir la instancia actual de dropzone_preimpl
+                            dropzone_preimpl.destroy();
                         }
                     }
 

@@ -110,13 +110,9 @@
                                  id="comentarios_trabajo_menor">
                          </div>
                      </div>
-                     <div class="form-row">
-                         <div class="col-sm-12 col-md-12 text-center">
-                             <!--<p class="mb-2">Saluda atentamente</p>-->
-                             <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_menor_dental()">Ver documento en PDF</button>
-                         </div>
-                     </div>
+
                      <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_menor_dental()">Ver documento en PDF</button>
                          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                          <button type="button" class="btn btn-info" onclick="guardar_trabajo_menor_dental()">Guardar</button>
                      </div>
@@ -278,12 +274,12 @@
                             icon:'success'
                         });
                         $('#modal_orden_trabajo').modal('hide');
-                        let ordenes_trabajo = response.ordenes_trabajo;
+                        let ordenes_trabajo_menor = response.ordenes_trabajo_menor;
                         $('#table_trabajos_menores_dental').DataTable();
 
                         $('#table_trabajos_menores_dental').DataTable().destroy();
                         $('#table_trabajos_menores_dental tbody').empty();
-                        ordenes_trabajo.forEach(orden => {
+                        ordenes_trabajo_menor.forEach(orden => {
                             $('#table_trabajos_menores_dental tbody').append(`
                                 <tr>
                                     <td>${orden.nro_orden}</td>
@@ -303,7 +299,7 @@
                         });
                         $('#table_trabajos_menores_dental').DataTable();
                         $('#contenedor_ordenes_trabajos_menores_dental').empty();
-                        ordenes_trabajo.forEach(orden => {
+                        ordenes_trabajo_menor.forEach(orden => {
                             $('#contenedor_ordenes_trabajos_menores_dental').append(`
                                 <div class="card">
                                     <div class="card-body">
@@ -319,11 +315,11 @@
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label class="floating-label-activo-sm">F.envío</label>
-                                                <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv">
+                                                <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv" value="${orden.fecha_envio}">
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label class="floating-label-activo-sm">F.entrega</label>
-                                                <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent">
+                                                <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent" value="${orden.fecha_entrega}">
                                             </div>
                                             <div class="form-group col-md-2 fill">
                                                 <label class="floating-label-activo-sm">Estado</label>
@@ -525,12 +521,12 @@
                         text:response.msj,
                         icon:'success'
                     });
-                    let ordenes_trabajo = response.ordenes_trabajo;
+                    let ordenes_trabajo_menor = response.ordenes_trabajo_menor;
                     $('#table_trabajos_menores_dental').DataTable();
 
                     $('#table_trabajos_menores_dental').DataTable().destroy();
                     $('#table_trabajos_menores_dental tbody').empty();
-                    ordenes_trabajo.forEach(orden => {
+                    ordenes_trabajo_menor.forEach(orden => {
                         $('#table_trabajos_menores_dental tbody').append(`
                             <tr>
                                 <td>${orden.nro_orden}</td>
@@ -551,7 +547,7 @@
                     });
                     $('#table_trabajos_menores_dental').DataTable();
                     $('#contenedor_ordenes_trabajos_menores_dental').empty();
-                        ordenes_trabajo.forEach(orden => {
+                        ordenes_trabajo_menor.forEach(orden => {
                             $('#contenedor_ordenes_trabajos_menores_dental').append(`
                                 <div class="card">
                                     <div class="card-body">
@@ -567,11 +563,120 @@
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label class="floating-label-activo-sm">F.envío</label>
-                                                <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv">
+                                                <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv" value="${orden.fecha_envio}">
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <label class="floating-label-activo-sm">F.entrega</label>
-                                                <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent">
+                                                <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent" value="${orden.fecha_entrega}">
+                                            </div>
+                                            <div class="form-group col-md-2 fill">
+                                                <label class="floating-label-activo-sm">Estado</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_est" id="lab_est" value="Pendiente">
+                                            </div>
+                                            <div class="form-group col-md-2 fill">
+                                                <label class="floating-label-activo-sm">N° Identificación</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="${orden.nro_orden}">
+                                            </div>
+                                            <div class="form-group col-md-2 d-flex">
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                        });
+                }else{
+                    swal({
+                        title:'Error',
+                        text:response.msj,
+                        icon:'error'
+                    });
+                }
+            }
+        })
+    }
+
+    function eliminar_trabajo_mayor_dental(id){
+        swal({
+            title: "¿Está seguro de eliminar la orden de trabajo mayor?",
+            text: "Una vez eliminada no podrá recuperarla",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                confirmar_eliminar_trabajo_mayor_dental(id);
+            }
+        })
+    }
+
+    function confirmar_eliminar_trabajo_mayor_dental(id){
+        let data = {
+            id: id,
+            id_paciente: dame_id_paciente(),
+            _token: CSRF_TOKEN
+        }
+        let url = "{{ route('dental.eliminar_trabajo_mayor') }}";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: data,
+            success: function(response){
+                console.log(response);
+                if(response.mensaje == 'OK'){
+                    swal({
+                        title:'Orden de trabajo mayor',
+                        text:response.msj,
+                        icon:'success'
+                    });
+                    let ordenes_trabajo_mayor = response.ordenes_trabajo_mayor;
+                    $('#table_trabajos_mayores_dental').DataTable();
+
+                    $('#table_trabajos_mayores_dental').DataTable().destroy();
+                    $('#table_trabajos_mayores_dental tbody').empty();
+                    ordenes_trabajo_mayor.forEach(orden => {
+                        $('#table_trabajos_mayores_dental tbody').append(`
+                            <tr>
+                                <td>${orden.nro_orden}</td>
+                                <td>${orden.paciente}</td>
+                                <td>${orden.guia}</td>
+                                <td>${orden.color}</td>
+                                <td>${orden.urgencia}</td>
+                                <td>${orden.material}</td>
+                                <td>${orden.trabajo_realizar}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-success" onclick="solicitar_permisos()"><i class="fas fa-user"></i>Solicitar permisos</button>
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_menor_dental()">Ver PDF</button>
+
+                                    <button type="button" class="btn btn-sm btn-danger btn-icon" onclick="eliminar_trabajo_menor_dental(${orden.id})"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                    $('#table_trabajos_mayores_dental').DataTable();
+                    $('#contenedor_ordenes_trabajos_mayores_dental').empty();
+                        ordenes_trabajo_mayor.forEach(orden => {
+                            $('#contenedor_ordenes_trabajos_menores_dental').append(`
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-row">
+
+                                            <div class="form-group col-md-2 fill">
+                                                <label class="floating-label-activo-sm">Nombre Laboratorio</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom" value="${orden.nombre_lab}">
+                                            </div>
+                                            <div class="form-group col-md-2 fill">
+                                                <label class="floating-label-activo-sm">Trabajo Requerido</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_ord_trab" id="lab_ord_trab" value="${orden.trabajo_realizar}">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="floating-label-activo-sm">F.envío</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv" value="${orden.fecha_envio}">
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label class="floating-label-activo-sm">F.entrega</label>
+                                                <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent" value="${orden.fecha_entrega}">
                                             </div>
                                             <div class="form-group col-md-2 fill">
                                                 <label class="floating-label-activo-sm">Estado</label>
@@ -610,6 +715,7 @@
         { id: '#color_trabajo_mayor', nombre: 'Color' },
         { id: '#urgencia_trabajo_mayor', nombre: 'Urgencia' },
         { id: '#material_trabajo_mayor', nombre: 'Material' },
+        { id: '#lab_trabajo_mayor', nombre: 'Laboratorio'},
         { id: '#trabajo_realizar_trabajo_mayor', nombre: 'Trabajo a realizar' },
         { id: '#comentarios_trabajo_mayor', nombre: 'Comentarios' },
         { id: '#marca_implante_trabajo_mayor', nombre: 'Marca implante' },
@@ -680,6 +786,8 @@
             compostura_trabajo_mayor: $('#compostura_trabajo_mayor').val(),
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
+            id_paciente: dame_id_paciente(),
+            laboratorio: $('#lab_trabajo_mayor').val(),
             _token: CSRF_TOKEN
         }
        let url = "{{ ROUTE('dental.registrar_orden_trabajo_mayor') }}";
@@ -689,6 +797,76 @@
         url: url,
         success: function(resp){
             console.log(resp);
+            if(resp.estado == 1){
+                swal({
+                    title:'Exito',
+                    text:resp.mensaje,
+                    icon:'success'
+                });
+                let ordenes_trabajo_mayor = resp.ordenes_trabajo_mayor;
+                $('#table_trabajos_mayores_dental').DataTable();
+
+                $('#table_trabajos_mayores_dental').DataTable().destroy();
+                $('#table_trabajos_mayores_dental tbody').empty();
+                ordenes_trabajo_mayor.forEach(orden => {
+                    $('#table_trabajos_mayores_dental tbody').append(`
+                        <tr>
+                            <td>${orden.nro_orden}</td>
+                            <td>${orden.paciente}</td>
+                            <td>${orden.guia}</td>
+                            <td>${orden.color}</td>
+                            <td>${orden.urgencia}</td>
+                            <td>${orden.material}</td>
+                            <td>${orden.trabajo_realizar}</td>
+                            <td>
+                                                                    <button type="button" class="btn btn-sm btn-success" onclick="solicitar_permisos(${orden.id})"><i class="fas fa-user"></i>Solicitar permisos</button>
+                                <button type="button" class="btn btn-sm btn-primary" onclick="generar_pdf_trabajo_menor_dental()">Ver PDF</button>
+                                <button type="button" class="btn btn-sm btn-danger btn-icon" onclick="eliminar_trabajo_menor_dental(${orden.id})"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `);
+                });
+                $('#contenedor_ordenes_trabajos_mayores_dental').empty();
+                ordenes_trabajo_mayor.forEach(orden => {
+                    $('#contenedor_ordenes_trabajos_mayores_dental').append(`
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-row">
+
+                                    <div class="form-group col-md-2 fill">
+                                        <label class="floating-label-activo-sm">Nombre Laboratorio</label>
+                                        <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom" value="${orden.nombre_lab}">
+                                    </div>
+                                    <div class="form-group col-md-2 fill">
+                                        <label class="floating-label-activo-sm">Trabajo Requerido</label>
+                                        <input type="text" class="form-control form-control-sm" name="lab_ord_trab" id="lab_ord_trab" value="${orden.trabajo_realizar}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">F.envío</label>
+                                        <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv" value="${orden.fecha_envio}">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="floating-label-activo-sm">F.entrega</label>
+                                        <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent" value="${orden.fecha_entrega}">
+                                    </div>
+                                    <div class="form-group col-md-2 fill">
+                                        <label class="floating-label-activo-sm">Estado</label>
+                                        <input type="text" class="form-control form-control-sm" name="lab_est" id="lab_est" value="Pendiente">
+                                    </div>
+                                    <div class="form-group col-md-2 fill">
+                                        <label class="floating-label-activo-sm">N° Identificación</label>
+                                        <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="${orden.nro_orden}">
+                                    </div>
+                                    <div class="form-group col-md-2 d-flex">
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                });
+            }
         },
         error: function(error){
             console.log(error.responseText);

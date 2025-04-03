@@ -190,6 +190,7 @@
         $(document).ready(function () {
 
             $('#table_trabajos_menores_dental').DataTable();
+            $('#table_trabajos_mayores_dental').DataTable();
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
                 swal({

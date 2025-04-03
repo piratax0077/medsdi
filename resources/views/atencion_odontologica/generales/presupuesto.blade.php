@@ -755,6 +755,7 @@
                                                         <div class="tab-pane fade show active" id="od_laboratorio_trab" role="tabpanel" aria-labelledby="od_laboratorio_trab-tab">
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-12" id="contenedor_ordenes_trabajos_menores_dental">
+                                                                    @if(isset($ordenes_tm))
                                                                     @foreach ($ordenes_tm as $o)
                                                                     <div class="card">
                                                                         <div class="card-body">
@@ -770,11 +771,11 @@
                                                                                 </div>
                                                                                 <div class="form-group col-md-2">
                                                                                     <label class="floating-label-activo-sm">F.envío</label>
-                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv">
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv" value="{{ $o->fecha_envio }}">
                                                                                 </div>
                                                                                 <div class="form-group col-md-2">
                                                                                     <label class="floating-label-activo-sm">F.entrega</label>
-                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent">
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent" value="{{ $o->fecha_entrega }}">
                                                                                 </div>
                                                                                 <div class="form-group col-md-2">
                                                                                     <label class="floating-label-activo-sm">Estado</label>
@@ -782,7 +783,7 @@
                                                                                 </div>
                                                                                 <div class="form-group col-md-2">
                                                                                     <label class="floating-label-activo-sm">N° Identificación</label>
-                                                                                    <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="{{ $o->id }}">
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="{{ $o->nro_orden }}">
                                                                                 </div>
                                                                                 <div class="form-group col-md-2 d-flex">
 
@@ -793,14 +794,56 @@
                                                                     </div>
 
                                                                     @endforeach
+                                                                    @endif
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-12" id="contenedor_ordenes_trabajos_mayores_dental">
+                                                                    @if(isset($ordenes_tmy))
+                                                                    @foreach ($ordenes_tmy as $o)
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <div class="form-row">
 
-                                                                    <div class="form-row">
-                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                            <label class="floating-label-activo-sm">Observaciones </label>
-                                                                            <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">Nombre Laboratorio</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom" value="{{ $o->nombre_lab }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">Trabajo Requerido</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_ord_trab" id="lab_ord_trab" value="{{ $o->trabajo_realizar }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">F.envío</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv" value="{{ $o->fecha_envio }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">F.entrega</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent" value="{{ $o->fecha_entrega }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">Estado</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_est" id="lab_est" value="{{ $o->estado == 1 ? 'Pendiente' : 'Otro' }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">N° Identificación</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="{{ $o->nro_orden }}">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2 d-flex">
+
+
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
 
+                                                                    @endforeach
+                                                                    @endif
+
+                                                                </div>
+                                                                <div class="form-row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                        <label class="floating-label-activo-sm">Observaciones </label>
+                                                                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                    </div>
                                                                 </div>
                                                             </div>
 
@@ -2763,6 +2806,7 @@
             id_paciente: $('#id_paciente').val(),
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
+            monto_abonado: $('#abonos_presup').val(),
             _token: CSRF_TOKEN
         }
         let url = "{{ ROUTE('profesional.aplicar_convenio_tratamiento') }}";
@@ -2853,6 +2897,71 @@
                 });
                 table_insumos_pagos.draw();
 
+                $('#contenedor_piezas_dentales_presupuesto').empty();
+                odontograma.forEach(function(odonto){
+                    if(odonto.presupuesto == 1){
+                        $('#contenedor_piezas_dentales_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Pieza</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor - odonto.valor_descuento)}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor_descuento)}" >
+                            </div>
+                            <div class="form-group col-md-2 d-flex">
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                            </div>
+                        `);
+                    }
+                });
+
+                $('#contenedor_insumos').empty();
+                insumos.forEach(insumo => {
+                    if(insumo.presupuesto == 1){
+                        let total = insumo.cantidad * insumo.valor;
+                        $('#contenedor_insumos').append(`
+                        <div class="form-group col-md-2 fill">
+                            <label class="floating-label-activo-sm">Insumo</label>
+                            <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                        </div>
+                        <div class="form-group col-md-3 fill">
+                            <label class="floating-label-activo-sm">Cantidad</label>
+                            <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                        </div>
+                        <div class="form-group col-md-2 fill">
+                            <label class="floating-label-activo-sm">Sub-Total</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor)}">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label class="floating-label-activo-sm">Descuento</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor - insumo.valor_descuento)}">
+                        </div>
+                        <div class="form-group col-md-2 fill">
+                            <label class="floating-label-activo-sm">Total Prestación</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor_descuento)}">
+                        </div>
+                        <div class="form-group col-md-2 d-flex">
+                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i>  </button>
+
+                        </div>
+                    `);
+                    }
+
+                });
+
                 let valores_boca_general = resp.valores[0];
                 let valores_odontograma = resp.valores[1];
                 let valores_insumos = resp.valores[2];
@@ -2887,6 +2996,7 @@
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
             id_paciente: $('#id_paciente').val(),
+            monto_abonado: $('#abonos_presup').val(),
             _token: CSRF_TOKEN
         }
 
@@ -2945,6 +3055,37 @@
                     }
                 });
 
+                $('#contenedor_piezas_dentales_presupuesto').empty();
+                odontograma.forEach(function(odonto){
+                    if(odonto.presupuesto == 1){
+                        $('#contenedor_piezas_dentales_presupuesto').append(`
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Pieza</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="floating-label-activo-sm">Prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="floating-label-activo-sm">Descuento</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="0">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="floating-label-activo-sm">Total prestación</label>
+                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
+                            </div>
+                            <div class="form-group col-md-2 d-flex">
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                            </div>
+                        `);
+                    }
+                });
+
                 let insumos = resp.insumos;
 
                 let table_insumos_pagos = $('#presup_insumos_pago').DataTable();
@@ -2976,6 +3117,41 @@
 
                 });
                 table_insumos_pagos.draw();
+
+                $('#contenedor_insumos').empty();
+                insumos.forEach(insumo => {
+                    if(insumo.presupuesto == 1){
+                        let total = insumo.cantidad * insumo.valor;
+                        $('#contenedor_insumos').append(`
+                        <div class="form-group col-md-2 fill">
+                            <label class="floating-label-activo-sm">Insumo</label>
+                            <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                        </div>
+                        <div class="form-group col-md-3 fill">
+                            <label class="floating-label-activo-sm">Cantidad</label>
+                            <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                        </div>
+                        <div class="form-group col-md-2 fill">
+                            <label class="floating-label-activo-sm">Sub-Total</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor)}">
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label class="floating-label-activo-sm">Descuento</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor - insumo.valor_descuento)}">
+                        </div>
+                        <div class="form-group col-md-2 fill">
+                            <label class="floating-label-activo-sm">Total Prestación</label>
+                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor_descuento)}">
+                        </div>
+                        <div class="form-group col-md-2 d-flex">
+                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i>  </button>
+
+                        </div>
+                    `);
+                    }
+
+                });
+
                 let valores_boca_general = resp.valores[0];
                 let valores_odontograma = resp.valores[1];
                 let valores_insumos = resp.valores[2];
@@ -2999,6 +3175,21 @@
                 console.log(error.responseText);
             }
         })
+    }
+
+    /*-Agendar hora medica-*/
+    function hora_medica (id_profesional, id_lugar_atencion){
+        $('#modal_reserva_hora_lugar_atencion').val('');
+        $('#modal_reserva_dias_atencion').val('');
+        $('#modal_reserva_fecha').val('');
+        $('#modal_reserva_hora_lista_horas').html('');
+        // asigno id profesioanl
+        $('#modal_reserva_hora_id_profesional').val(id_profesional);
+
+        // cargo lugares de atencion  y asigno lugar con hora mas proxima
+        lugar_atencion_profesional($('#modal_reserva_hora_id_profesional'), 'modal_reserva_hora_lugar_atencion', id_lugar_atencion)
+
+        $('#reservar_hora').modal('show');
     }
 
 </script>

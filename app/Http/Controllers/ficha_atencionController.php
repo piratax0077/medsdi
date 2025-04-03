@@ -135,6 +135,7 @@ use App\Models\OftalmoExamenNeurologico;
 use App\Models\OftalmoExamenPresionOcular;
 use App\Models\OftalmoExamenVisionColores;
 use App\Models\OrdenTrabajoMenor;
+use App\Models\OrdenTrabajoMayor;
 use App\Models\ProcedimientosCentro;
 use App\Models\RecomendacionDetalle;
 use App\Models\VideoConsultaInfo;
@@ -411,8 +412,7 @@ class ficha_atencionController extends Controller
         $filtro_previas[] = array('confidencial', '0');
         $filtro_previas[] = array('finalizada', 1);
         $filtro_previas[] = array('id_profesional', $profesional->id);
-        $fichas = FichaAtencion::where($filtro_previas)->get();
-
+        $fichas = FichaAtencion::where($filtro_previas)->orderBy('created_at','desc')->get();
 
         // // FICHA DE ATENCION ACTUAL
         // $filtro_fichaAtencion = array();
@@ -653,7 +653,7 @@ class ficha_atencionController extends Controller
             // $filtro_previas[] = array('confidencial', '0');
             // $filtro_previas[] = array('finalizada', 1);
             $filtro_previas[] = array('id_profesional', $profesional->id);
-            $fichas = FichaGinecoObstetrica::where($filtro_previas)->get();
+            $fichas = FichaGinecoObstetrica::where($filtro_previas)->orderBy('created_at','asc')->get();
         }
         else if($profesional->id_sub_tipo_especialidad == 78)
         {
@@ -1887,6 +1887,7 @@ class ficha_atencionController extends Controller
         $examenes_piezas_pfp = $this->dameProcedimientosCoronaProtesis($paciente->id, $profesional->id, 'pfp');
 
         $ordenes_tm = $this->dameOrdenesTrabajoMenor($paciente->id, $profesional->id);
+        $ordenes_tmy = $this->dameOrdenesTrabajoMayor($paciente->id, $profesional->id);
 
         $correlativo_otm = $this->dame_correlativo('Orden Trabajo Menor');
 
@@ -1970,9 +1971,26 @@ class ficha_atencionController extends Controller
                                                     ->where('empresas_convenios.id_profesional', $profesional->id)
                                                     ->get();
 
+        $hoy = Carbon::now()->toDateString(); // Se usa toDateString() para comparar solo la fecha
+
+        $proxima_fecha_atencion = HoraMedica::where('fecha_consulta', '>', $hoy)
+            ->where('id_paciente',$paciente->id)
+            ->where('id_estado',1)
+            ->orderBy('fecha_consulta', 'asc') // Ordena por la fecha más cercana
+            ->first();
+        if($proxima_fecha_atencion){
+            $hora_inicio_fecha_atencion = $proxima_fecha_atencion->hora_inicio;
+            $hora_fin_fecha_atencion = $proxima_fecha_atencion->hora_termino;
+            $proxima_fecha_atencion = $proxima_fecha_atencion->fecha_consulta;
+
+        }
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
+                'proxima_fecha_atencion' => $proxima_fecha_atencion,
+                'hora_inicio_atencion' => isset($hora_inicio_fecha_atencion) ? $hora_inicio_fecha_atencion : '',
+                'hora_fin_atencion' => isset($hora_fin_fecha_atencion) ? $hora_fin_fecha_atencion : '',
                 'convenios_empresas' => $convenios_empresas,
                 'convenios_prevision' => $convenios_prevision,
                 'tipos_receta' => $tipos_receta,
@@ -1989,6 +2007,7 @@ class ficha_atencionController extends Controller
                 'examenes_piezas_pfu' => $examenes_piezas_pfu,
                 'examenes_piezas_pfp' => $examenes_piezas_pfp,
                 'ordenes_tm' => $ordenes_tm,
+                'ordenes_tmy' => $ordenes_tmy,
                 'correlativo_otm' => $correlativo_otm,
                 'proveedores' => $proveedores,
                 'bodegas' => $bodegas,
@@ -2106,7 +2125,6 @@ class ficha_atencionController extends Controller
                 'grupo_sanguineo' => $grupo_sanguineo,
                 'antecedentes' => $antecedentes,
                 'token' => $request->token,
-                'fichas' => $fichas,
                 'especialidad' => $especialidad,
                 'sub_tipo_especialidad' => $sub_tipo_especialidad,
                 'direccion' => $direccion,
@@ -2174,6 +2192,15 @@ class ficha_atencionController extends Controller
                                         ->join('laboratorios','ordenes_trabajos_menores.id_laboratorio','laboratorios.id')
                                         ->where('ordenes_trabajos_menores.id_paciente', $id_paciente)
                                         ->where('ordenes_trabajos_menores.id_profesional',$id_profesional)
+                                        ->get();
+        return $ordenes;
+    }
+
+    public function dameOrdenesTrabajoMayor($id_paciente, $id_profesional){
+        $ordenes = OrdenTrabajoMayor::select('ordenes_trabajos_mayores.*','laboratorios.nombre as nombre_lab')
+                                        ->leftjoin('laboratorios','ordenes_trabajos_mayores.id_laboratorio','laboratorios.id')
+                                        ->where('ordenes_trabajos_mayores.id_paciente', $id_paciente)
+                                        ->where('ordenes_trabajos_mayores.id_profesional',$id_profesional)
                                         ->get();
         return $ordenes;
     }
@@ -9993,6 +10020,22 @@ class ficha_atencionController extends Controller
             'maxilar_superior_gral_diagnosticos_endo' => $maxilar_superior_gral_diagnosticos_endo,
             'boca_completa_gral_tratamiento_endo' => $boca_completa_gral_tratamiento_endo,
             'boca_completa_gral_diagnostico_endo' => $boca_completa_gral_diagnostico_endo,
+            'odontograma' => $odontograma,
+            'valores_odontograma' => $valores_odontograma,
+            'paciente' => $paciente,
+            'profesional' => $profesional,
+            'estado' => 1
+        ];
+    }
+
+    public function getEvolucionesDentales(Request $request){
+        $id_ficha_atencion = $request->id_ficha_atencion_soli;
+        $ficha = FichaAtencion::where('id',$id_ficha_atencion)->first();
+        $paciente = Paciente::find($ficha->id_paciente);
+        $profesional = Profesional::find($ficha->id_profesional);
+        $odontograma = $this->dameOdontogramaPaciente($paciente->id, $id_ficha_atencion, $ficha->id_lugar_atencion, $profesional->id_tipo_especialidad);
+        $valores_odontograma = $this->dameValores($paciente->id, $ficha->id, $ficha->id_lugar_atencion, $profesional->id_tipo_especialidad);
+        return [
             'odontograma' => $odontograma,
             'valores_odontograma' => $valores_odontograma,
             'paciente' => $paciente,
