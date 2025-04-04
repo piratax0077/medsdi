@@ -1265,7 +1265,7 @@
                             <div class="col-md-12">
                                 <input type="hidden" value="" id="id-antecedente-m">
                                 <input type="hidden" value="" id="tipo-antecedente-m">
-                                <input type="hidden" value="{{ $paciente->rut }}" id="user-rut">
+                                <input type="hidden" value="{{ $profesional->rut }}" id="user-rut">
                                 <input type="hidden" value="{{ $profesional->Especialidad()->first()->nombre }}" id="user-profesion">
                                 <input type="hidden" value="{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}" id="user-profesional">
                                 <input type="hidden" value="{{Auth::user()->id}}" id="user-id">

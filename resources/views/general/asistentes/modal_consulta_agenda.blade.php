@@ -812,10 +812,11 @@
                         </form>
                     </div>
                     <div class="col-sm-3 col-md-3 mb-3">
-                        <div id="div_cargando" style="display: none;">
-                            <img src="{{ asset('images/spinner.svg') }}" alt="cargando">
-                        </div>
-                        <div id="div_boton_buscar_paciente" style="display: ">
+                        <button class="btn btn-sm btn-info btn-block" type="button" id="div_cargando" style="display: none;">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Buscando</span>  Buscando
+                        </button>
+                        <div id="div_boton_buscar_paciente" style="display:">
                             <button class="btn btn-sm btn-info btn-block" onclick="buscar_paciente();"
                                 type="button"id="button-addon2">
                                 <i class="feather icon-search"></i> Buscar
