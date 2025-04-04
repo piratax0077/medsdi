@@ -1958,6 +1958,21 @@
                                 $('#table_pagos_reasignar_odontograma tbody').append(fila);
                             }
                         });
+                        let count = $('#random_preimpl').val();
+                        let count_post_impl = $('#random_postimpl').val();
+                        $('#numero_pieza_tto_impl'+count).empty();
+                        $('#numero_pieza_post_impl'+count).empty();
+                        odontograma.forEach(o => {
+                            if(o.presupuesto == 1){
+                                $('#numero_pieza_tto_impl'+count).append(`
+                                    <option value="${o.pieza}">${o.pieza} </option>
+                                `);
+                                $('#numero_pieza_post_impl'+count).append(`
+                                    <option value="${o.pieza}">${o.pieza} </option>
+                                `);
+                            }
+
+                        });
                     }
                 },
                 error: function(error){

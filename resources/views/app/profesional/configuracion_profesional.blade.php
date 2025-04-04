@@ -134,7 +134,23 @@
                         @if($profesional->id_especialidad == 2)
                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
                             <div class="card subir py-3">
-                                <a href="busq_secretaria.php">
+                                <a href="{{ ROUTE('profesional.tons') }}">
+                                    <div class="card-body text-center" style="cursor:pointer">
+                                        <img class="wid-90 text-center mb-3"
+                                        src="{{ asset('images/iconos/usuario_asistente.svg') }}"
+
+                                        alt="Profesional">
+                                        <h5 class="f-16">
+                                        Tons de atención
+                                        </h5>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        @endif
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+                            <div class="card subir py-3">
+                                <a href="#">
                                     <div class="card-body text-center" style="cursor:pointer">
                                         <img class="wid-90 text-center mb-3"
                                         src="{{ asset('images/iconos/usuario_asistente.svg') }}"
@@ -147,24 +163,6 @@
                                 </a>
                             </div>
                         </div>
-                        @endif
-                        @if($profesional->id_especialidad == 2)
-                        <div class="col-md-3">
-                            <div class="card subir py-3">
-                                <a href="/insumos/dental">
-                                    <div class="card-body text-center" style="cursor:pointer">
-                                        <img class="wid-90 text-center mb-3"
-                                        src="{{ asset('images/iconos/adm_comercial.png') }}"
-
-                                        alt="Profesional">
-                                        <h5 class="f-16">
-                                            Configuracion de insumos
-                                        </h5>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        @endif
                     </div>
                 </div>
             </div>

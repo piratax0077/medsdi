@@ -32,6 +32,7 @@ use App\Models\DiagnosticoCie;
 use App\Models\DiagnosticosDental;
 use App\Models\DiagnosticosDentalProfesional;
 use App\Models\Direccion;
+use App\Models\EmpresasConvenios;
 use App\Models\EndodonciaPaciente;
 use App\Models\ExamenMedico;
 use App\Models\ExamenPPF;
@@ -2392,6 +2393,9 @@ class DentalController extends Controller
 
     public function pago_presupuesto(Request $req){
 
+        if($req->id_dcto <> 0){
+            $convenio = EmpresasConvenios::find($req->id_dcto);
+        }
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         // buscamos el presupuesto
         $total_presupuesto = $req->total_pago;
@@ -2453,6 +2457,14 @@ class DentalController extends Controller
 
 
                 }
+                $descuentos = 0;
+                if(isset($convenio)){
+                    foreach($odontograma_paciente as $o){
+                        $o->valor_descuento = $o->valor - $o->valor * (intval($convenio->porcentaje) / 100);
+                        $descuentos += $o->valor * (intval($convenio->porcentaje) / 100);
+                        $o->nuevo_valor = $o->valor - $o->valor_descuento;
+                    }
+                }
             }
 
 
@@ -2467,8 +2479,24 @@ class DentalController extends Controller
                     }
                     $i->save();
                 }
+                foreach($insumos_tratamientos as $i){
+                    if(isset($convenio)){
+                        $i->valor_descuento = $i->valor - $i->valor * (intval($convenio->porcentaje) / 100);
+                        $descuentos += $i->valor * (intval($convenio->porcentaje) / 100);
+                        $i->nuevo_valor = $i->valor - $i->valor_descuento;
+                    }
+                }
             }
-            $suma_adeudado = $suma_presupuesto - $total_abonado;
+            $total_general = $valores[0] + $valores[1] + $valores[2];
+            $total_con_descuento = $total_general - $descuentos;
+            $total_abonado = intval(str_replace('.', '', $req->monto_abonado));
+
+            if($total_con_descuento <= $total_abonado){
+                foreach($odontograma_paciente as $o){
+                    $o->estado_pago = 'ok';
+                }
+            }
+            $suma_adeudado = $total_general - $total_abonado;
             return ['estado' => 1,'mensaje' => 'Se ha registrado el pago correctamente', 'pagos' => $pagos_presupuesto,'insumos' => $insumos_tratamientos,'suma_pagado' => $total_abonado,'odontograma' => $odontograma_paciente,'suma_presupuesto' => $suma_presupuesto,'suma_adeudado' => $suma_adeudado];
         }else{
             return ['estado' => 0, 'mensaje' => 'Ha ocurrido un problema'];

@@ -1138,14 +1138,15 @@
         function buscar_evoluciones(id_ficha_clinica) {
             let url = "{{ route('ficha_atencion.ver_evoluciones') }}";
             let id_ficha = id_ficha_clinica;
-            $('#table_atenciones_previas_evoluciones').html('');
+
+            // Vaciar los contenedores antes de llenarlos nuevamente
+            $('#odontograma-pills-container').html('');
+            $('#odontograma-tab-content').html('');
 
             $.ajax({
                 url: url,
                 type: "get",
-                data: {
-                    id_ficha_atencion_soli: id_ficha
-                },
+                data: { id_ficha_atencion_soli: id_ficha },
                 dataType: "json",
             })
             .done(function(data) {
@@ -1154,10 +1155,8 @@
                     $('#m_cons_EvolucionesLabel').text('Evoluciones Realizadas en esta consulta del Paciente: ' + data.paciente.nombres);
 
                     if (data.estado == 1) {
-                        $('#table_atenciones_previas_evoluciones').empty();
-                        var j = 1;
-
-                        var contenedor = `<div class="row">`; // Contenedor de las cards
+                        var pillsNav = `<ul class="nav nav-tabs-secciones mb-3 mt-3" id="pills-tab" role="tablist">`;
+                        var pillsContent = `<div class="tab-content" id="pills-tabContent">`;
 
                         $.each(data.odontograma, function(index, value) {
                             var fecha = formatDate(value.fecha);
@@ -1165,40 +1164,49 @@
                             var diagnostico = value.diagnostico;
                             var n_pieza = value.pieza;
                             var id = value.id;
-                            var id_ficha_trabajo = value.id_ficha;
-                            var url = value.url;
 
-                            var fila = `
-                                <div class="col-md-4 mb-3">
+                            var activeClass = (index === 0) ? "active" : "";
+
+                            // Crear los Pills (botones de pestañas)
+                            pillsNav += `
+                                <li class="nav-item-secciones" role="presentation">
+                                    <a class="nav-secciones text-uppercase ${activeClass}" id="pills-${id}-tab" data-toggle="tab" href="#pills-${id}" role="tab">
+                                        Pieza ${n_pieza}
+                                    </a>
+                                </li>
+                            `;
+
+                            // Crear el contenido de cada tab
+                            pillsContent += `
+                                <div class="tab-pane fade show ${activeClass}" id="pills-${id}" role="tabpanel">
                                     <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title">Pieza Dental: ${n_pieza}</h5>
                                             <p class="card-text"><strong>Fecha:</strong> ${fecha}</p>
                                             <p class="card-text"><strong>Diagnóstico:</strong> ${diagnostico}</p>
                                             <p class="card-text"><strong>Tratamiento:</strong> ${trabajo}</p>
-
                                         </div>
                                     </div>
                                 </div>
                             `;
-
-                            contenedor += fila;
-                            j++;
                         });
 
-                        contenedor += `</div>`; // Cierre del contenedor de cards
+                        pillsNav += `</ul>`;
+                        pillsContent += `</div>`;
 
-                        $('#table_atenciones_previas_evoluciones').append(contenedor);
+                        // Insertar los elementos en los respectivos contenedores
+                        $('#odontograma-pills-container').append(pillsNav);
+                        $('#odontograma-tab-content').append(pillsContent);
+
                         $('#valor_odontograma_evol').html('Total Odontograma: ' + formatoMoneda(data.valores_odontograma[1]));
+
                     } else {
-                        $('#table_atenciones_previas_evoluciones').html('');
-                        var fila = '<div class="alert alert-warning text-center" role="alert"><h5>No existen registros</h5></div>';
-                        $('#table_atenciones_previas_evoluciones').append(fila);
+                        $('#odontograma-pills-container').html('<div class="alert alert-warning text-center" role="alert"><h5>No existen registros</h5></div>');
+                        $('#odontograma-tab-content').html('');
                     }
                 } else {
-                    $('#table_atenciones_previas_evoluciones').html('');
-                    var fila = '<div class="alert alert-warning text-center" role="alert">No existen registros</div>';
-                    $('#table_atenciones_previas_evoluciones').append(fila);
+                    $('#odontograma-pills-container').html('<div class="alert alert-warning text-center" role="alert">No existen registros</div>');
+                    $('#odontograma-tab-content').html('');
                 }
 
                 $('#m_cons_evoluciones').modal('show');
@@ -1207,6 +1215,8 @@
                 console.log(jqXHR, ajaxOptions, thrownError);
             });
         }
+
+
 
 
         function generar_pdf_historial(id_ficha_clinica){
