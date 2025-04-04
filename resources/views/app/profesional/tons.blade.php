@@ -67,7 +67,7 @@
                                     <span class="alert alert-warning"> {{ $mensaje }}</span>
                                 @endif
                             </div>
-                            <table id="tabla_lugares_atencion"
+                            <table id="tabla_tons_profesional"
                                 class="display table table-striped dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
@@ -101,7 +101,7 @@
                                                     {{-- eliminar de lugar de atencion --}}
 
                                                     <div class="align-middle">
-                                                        <button type="button" class="btn btn-danger btn-sm btn-icon accion_editar_valores" data-toggle="modal" onclick="" title="Eliminar">
+                                                        <button type="button" class="btn btn-danger btn-sm btn-icon accion_editar_valores" data-toggle="modal" onclick="eliminar_relacion_tons({{ $r->id }})" title="Eliminar">
                                                             <i class="feather icon-x"></i>
                                                         </button>
                                                     </div>
@@ -383,26 +383,51 @@
         let data = {
             id_tons: id_tons,
             _token: CSRF_TOKEN
-        }
+        };
 
         $.ajax({
-            type:'post',
+            type: 'post',
             url: url,
             data: data,
             success: function(resp){
                 console.log(resp);
                 if(resp.estado == 1){
                     swal({
-                        icon:'success',
-                        title:'Exito',
+                        icon: 'success',
+                        title: 'Éxito',
                         text: resp.msj
                     });
-                    // cerrar modal
+
+                    // Cerrar modal
                     $('#nueva_tons').modal('hide');
-                }else{
+
+                    let tonss = resp.tonss;
+                    let table = $('#tabla_tons_profesional').DataTable(); // Accede a la instancia de DataTable
+
+                    // Limpia los datos de la tabla correctamente
+                    table.clear();
+
+                    // Agrega las nuevas filas
+                    tonss.forEach(tons => {
+                        table.row.add([
+                            tons.nombre_profesional + ' ' + tons.apellido_profesional,
+                            tons.nombre_tons + ' ' + tons.apellido_tons,
+
+                            `<button type="button" class="btn btn-info btn-sm btn-icon accion_editar_horarios">
+                                <i class="fas fa-clock"></i>
+                            </button>`,
+                            `<button type="button" class="btn btn-danger btn-sm btn-icon accion_editar_valores" data-toggle="modal" onclick="eliminar_relacion_tons(${tons.id})" title="Eliminar">
+                                <i class="feather icon-x"></i>
+                            </button>`
+                        ]);
+                    });
+
+                    // Dibuja la tabla nuevamente
+                    table.draw();
+                } else {
                     swal({
-                        icon:'info',
-                        title:'Info',
+                        icon: 'info',
+                        title: 'Info',
                         text: resp.msj
                     });
                 }
@@ -413,135 +438,205 @@
         });
     }
 
+
     function registrar_tons() {
-    let nombre = $('#nombre_nueva_tons').val().trim();
-    let apellido_uno = $('#apellido_uno_nueva_tons').val().trim();
-    let apellido_dos = $('#apellido_dos_nueva_tons').val().trim();
-    let sexo = $('#sexo_nueva_tons').val();
-    let fecha_nac = $('#fecha_nac_nueva_tons').val();
-    let direccion = $('#direccion_nueva_tons').val().trim();
-    let numero = $('#numero_nueva_tons').val().trim();
-    let region = $('#region_agregar').val();
-    let ciudad = $('#ciudad_agregar').val();
-    let tipo = $('#tipo_nueva_tons').val();
-    let email = $('#email_nueva_tons').val().trim();
-    let telefono = $('#telefono_nueva_tons').val().trim();
+        let nombre = $('#nombre_nueva_tons').val().trim();
+        let apellido_uno = $('#apellido_uno_nueva_tons').val().trim();
+        let apellido_dos = $('#apellido_dos_nueva_tons').val().trim();
+        let sexo = $('#sexo_nueva_tons').val();
+        let fecha_nac = $('#fecha_nac_nueva_tons').val();
+        let direccion = $('#direccion_nueva_tons').val().trim();
+        let numero = $('#numero_nueva_tons').val().trim();
+        let region = $('#region_agregar').val();
+        let ciudad = $('#ciudad_agregar').val();
+        let tipo = $('#tipo_nueva_tons').val();
+        let email = $('#email_nueva_tons').val().trim();
+        let telefono = $('#telefono_nueva_tons').val().trim();
 
-    let valido = true;
-    let mensaje = '';
+        let valido = true;
+        let mensaje = '';
 
-    // Validación de campos requeridos
-    if (nombre === '') {
-        valido = false;
-        mensaje += '<li>El nombre es obligatorio</li>';
-    }
-    if (apellido_uno === '') {
-        valido = false;
-        mensaje += '<li>El primer apellido es obligatorio</li>';
-    }
-    if(sexo == 0){
-        valido = false;
-        mensaje += '<li>Debe seleccionar sexo de tons</li>';
-    }
-    if(fecha_nac === ''){
-        valido = false;
-        mensaje += '<li>La fecha de nacimiento es obligatoria </li>';
-    }
-    if (direccion === '') {
-        valido = false;
-        mensaje += '<li>La dirección es obligatoria</li>';
-    }
-    if (numero === '') {
-        valido = false;
-        mensaje += '<li>El número es obligatorio</li>';
-    }
-    if (region === null || region === '') {
-        valido = false;
-        mensaje += '<li>Debes seleccionar una región</li>';
-    }
-    if (ciudad === null || ciudad === '') {
-        valido = false;
-        mensaje += '<li>Debes seleccionar una ciudad</li>';
-    }
-    if (tipo === null || tipo === '') {
-        valido = false;
-        mensaje += '<li>Debes seleccionar un tipo</li>';
-    }
-
-    // Validación de correo electrónico
-    let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (email !== '' && !emailRegex.test(email)) {
-        valido = false;
-        mensaje += '<li>El correo electrónico no es válido</li>';
-    }
-
-    // Validación de teléfono (solo números y longitud mínima)
-    let telefonoRegex = /^[0-9]{9,15}$/; // De 9 a 15 dígitos
-    if (telefono !== '' && !telefonoRegex.test(telefono)) {
-        valido = false;
-        mensaje += '<li>El teléfono debe contener solo números y tener entre 9 y 15 dígitos</li>';
-    }
-
-    // Si hay errores, mostramos el mensaje y detenemos la ejecución
-    if (!valido) {
-        swal({
-            title: "Campos requeridos",
-            content:{
-                element: "div",
-                attributes:{
-                    innerHTML: mensaje,
-                },
-            },
-            icon: "error",
-            buttons: "Aceptar",
-            DangerMode: true,
-        });
-        return false;
-    }
-
-    let data = {
-        rut: $('#rut_tons').val(),
-        nombre: nombre,
-        apellido_uno: apellido_uno,
-        apellido_dos: apellido_dos,
-        sexo: sexo,
-        fecha_nac: fecha_nac,
-        direccion: direccion,
-        numero: numero,
-        region: region,
-        ciudad: ciudad,
-        tipo: tipo,
-        email: email,
-        telefono: telefono,
-        _token: CSRF_TOKEN
-    };
-
-    console.log(data);
-    let url = "{{ ROUTE('profesional.registrar_nueva_tons') }}";
-    // Aquí puedes hacer la petición AJAX para registrar la información
-    $.ajax({
-        type:'post',
-        url: url,
-        data: data,
-        success: function(resp){
-            console.log(resp);
-            if(resp.estado == 1){
-                swal({
-                    icon:'success',
-                    text: resp.msj
-                });
-            }else{
-                swal({
-                    icon:'error',
-                    text: resp.msj,
-                });
-            }
-        },
-        error: function(error){
-            console.log(error.responseText);
+        // Validación de campos requeridos
+        if (nombre === '') {
+            valido = false;
+            mensaje += '<li>El nombre es obligatorio</li>';
         }
-    })
-}
+        if (apellido_uno === '') {
+            valido = false;
+            mensaje += '<li>El primer apellido es obligatorio</li>';
+        }
+        if(sexo == 0){
+            valido = false;
+            mensaje += '<li>Debe seleccionar sexo de tons</li>';
+        }
+        if(fecha_nac === ''){
+            valido = false;
+            mensaje += '<li>La fecha de nacimiento es obligatoria </li>';
+        }
+        if (direccion === '') {
+            valido = false;
+            mensaje += '<li>La dirección es obligatoria</li>';
+        }
+        if (numero === '') {
+            valido = false;
+            mensaje += '<li>El número es obligatorio</li>';
+        }
+        if (region === null || region === '') {
+            valido = false;
+            mensaje += '<li>Debes seleccionar una región</li>';
+        }
+        if (ciudad === null || ciudad === '') {
+            valido = false;
+            mensaje += '<li>Debes seleccionar una ciudad</li>';
+        }
+        if (tipo === null || tipo === '') {
+            valido = false;
+            mensaje += '<li>Debes seleccionar un tipo</li>';
+        }
+
+        // Validación de correo electrónico
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email !== '' && !emailRegex.test(email)) {
+            valido = false;
+            mensaje += '<li>El correo electrónico no es válido</li>';
+        }
+
+        // Validación de teléfono (solo números y longitud mínima)
+        let telefonoRegex = /^[0-9]{9,15}$/; // De 9 a 15 dígitos
+        if (telefono !== '' && !telefonoRegex.test(telefono)) {
+            valido = false;
+            mensaje += '<li>El teléfono debe contener solo números y tener entre 9 y 15 dígitos</li>';
+        }
+
+        // Si hay errores, mostramos el mensaje y detenemos la ejecución
+        if (!valido) {
+            swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+            return false;
+        }
+
+        let data = {
+            rut: $('#rut_tons').val(),
+            nombre: nombre,
+            apellido_uno: apellido_uno,
+            apellido_dos: apellido_dos,
+            sexo: sexo,
+            fecha_nac: fecha_nac,
+            direccion: direccion,
+            numero: numero,
+            region: region,
+            ciudad: ciudad,
+            tipo: tipo,
+            email: email,
+            telefono: telefono,
+            _token: CSRF_TOKEN
+        };
+
+        console.log(data);
+        let url = "{{ ROUTE('profesional.registrar_nueva_tons') }}";
+        // Aquí puedes hacer la petición AJAX para registrar la información
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.estado == 1){
+                    swal({
+                        icon:'success',
+                        text: resp.msj
+                    });
+                    buscar_tons();
+                }else{
+                    swal({
+                        icon:'error',
+                        text: resp.msj,
+                    });
+                }
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        })
+    }
+
+    function eliminar_relacion_tons(id){
+        swal({
+            title: "¿Esta seguro que desea ELIMINAR la relación tons profesional?",
+            text: "Favor confirme o cancele la solicitud",
+            icon: "warning",
+            buttons: ["Cancelar", "Solicitar"],
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                confirmar_eliminar_relacion_tons(id);
+            }
+        });
+    }
+
+    function confirmar_eliminar_relacion_tons(id){
+        console.log(id);
+        let url = "{{ ROUTE('profesional.eliminar_tons') }}";
+        let data = {
+            id: id,
+            _token: CSRF_TOKEN
+        }
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.estado == 1){
+                    swal({
+                        icon:'success',
+                        text: resp.msj
+                    });
+                    let tonss = resp.tonss;
+                    let table = $('#tabla_tons_profesional').DataTable(); // Accede a la instancia de DataTable
+
+                    // Limpia los datos de la tabla correctamente
+                    table.clear();
+
+                    // Agrega las nuevas filas
+                    tonss.forEach(tons => {
+                        table.row.add([
+                            tons.nombre_profesional + ' ' + tons.apellido_profesional,
+                            tons.nombre_tons + ' ' + tons.apellido_tons,
+                            `<button type="button" class="btn btn-info btn-sm btn-icon accion_editar_horarios">
+                                <i class="fas fa-clock"></i>
+                            </button>`,
+                            `<button type="button" class="btn btn-danger btn-sm btn-icon accion_editar_valores" data-toggle="modal" onclick="eliminar_relacion_tons(${tons.id})" title="Eliminar">
+                                <i class="feather icon-x"></i>
+                            </button>`
+                        ]);
+                    });
+
+                    // Dibuja la tabla nuevamente
+                    table.draw();
+                }else{
+                    swal({
+                        icon:'error',
+                        text: resp.msj
+                    });
+                }
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        })
+    }
 
 </script>
 @endsection

@@ -1113,7 +1113,13 @@ class EscritorioProfesional extends Controller
 
         $region = Region::all();
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-        $relaciones = ProfesionalTons::select(
+        $relaciones = $this->dame_relaciones_tons($profesional->id);
+
+        return view('app.profesional.tons',['region' => $region, 'relaciones' => $relaciones])->render();
+    }
+
+    public function dame_relaciones_tons($id_profesional){
+       $relaciones =  ProfesionalTons::select(
             'profesional_tons.*',
             'profesionales1.nombre as nombre_profesional',
             'profesionales1.apellido_uno as apellido_profesional',
@@ -1122,10 +1128,27 @@ class EscritorioProfesional extends Controller
         )
         ->join('profesionales as profesionales1', 'profesional_tons.id_profesional', '=', 'profesionales1.id')
         ->join('profesionales as profesionales2', 'profesional_tons.id_tons', '=', 'profesionales2.id')
-        ->where('profesional_tons.id_profesional', $profesional->id)
+        ->where('profesional_tons.id_profesional', $id_profesional)
         ->get();
 
-        return view('app.profesional.tons',['region' => $region, 'relaciones' => $relaciones])->render();
+        return $relaciones;
+    }
+
+    public function eliminar_tons(Request $req){
+
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $id_profesional = $profesional->id;
+        $relacion = ProfesionalTons::where('id',$req->id)->first();
+        if($relacion){
+            if($relacion->delete()){
+                $tonss = $this->dame_relaciones_tons($id_profesional);
+                return ['estado' => 1, 'mensaje' => 'Eliminado correctamente','tonss' => $tonss];
+            }else{
+                return ['estado' => 0, 'mensaje' => 'Error al eliminar'];
+            }
+        }else{
+            return ['estado' => 0, 'mensaje' => 'No existe la relacion'];
+        }
     }
 
     public function registrar_tons(Request $req){
@@ -1278,7 +1301,8 @@ class EscritorioProfesional extends Controller
             $relacion->fecha = Carbon::now();
 
             if($relacion->save()){
-                return ['estado' => 1, 'msj' => 'Se ha generado la relación exitosamente.'];
+                $todas_tons = $this->dame_relaciones_tons($profesional->id);
+                return ['estado' => 1, 'msj' => 'Se ha generado la relación exitosamente.','tonss' => $todas_tons];
             }else{
                 return ['estado' => 0,'msj' => 'Ha ocurrido un error al guardar la relación'];
             }

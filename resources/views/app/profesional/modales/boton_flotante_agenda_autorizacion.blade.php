@@ -187,13 +187,79 @@
                     <div class="col-12">
                         <div class="form-group fill">
                             <label for="rut_tons" class="floating-label-activo-sm">Rut de tons</label>
-                            <input type="text" name="rut_tons" id="rut_tons" class="form-control form-control-sm">
+                            <input type="text" name="rut_tons" id="rut_tons" class="form-control form-control-sm" oninput="formatoRut(this)">
                         </div>
                     </div>
 
                 </div>
-                <button type="button" class="btn btn-outline-success btn-sm w-100 my-3"><i class="fas fa-search"></i> Buscar</button>
-
+                <button type="button" class="btn btn-outline-success btn-sm w-100 my-3" onclick="buscar_tons()"><i class="fas fa-search"></i> Buscar</button>
+                <div class="form-row d-none" id="contenedor_tons">
+                <span class="badge badge-info">No se ha encontrado información</span>
+                </div>
+                <div class="form-row d-none" id="contenedor_datos_tons">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nombre_tons" class="floating-label-activo-sm">Nombre</label>
+                            <input type="text" id="nombre_tons" name="nombre_tons" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="apellidos_tons" class="floating-label-activo-sm">Apellidos</label>
+                            <input type="text" id="apellidos_tons" name="apellidos_tons" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="email" class="floating-label-activo-sm">Correo Electrónico</label>
+                            <input type="email" id="email_tons" name="email_tons" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="email" class="floating-label-activo-sm">Región</label>
+                            <select name="region_tons" id="region_tons" class="form-control form-control-sm" disabled>
+                                @if(isset($region))
+                                @foreach ($region as $reg)
+                                    @if (isset($region))
+                                        <option value="{{ $reg->id }}">{{ $reg->nombre }} </option>
+                                    @endif
+                                @endforeach
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="email" class="floating-label-activo-sm">Ciudad</label>
+                            <input type="email" id="ciudad_tons" name="ciudad_tons" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="direccion_tons" class="floating-label-activo-sm">Dirección</label>
+                            <input type="text" id="direccion_tons" name="direccion_tons" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="telefono_tons" class="floating-label-activo-sm">Teléfono</label>
+                            <input type="text" id="telefono_tons" name="telefono_tons" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="sexo_tons" class="floating-label-activo-sm">Sexo</label>
+                            <select  id="sexo_tons" name="sexo_tons" class="form-control form-control-sm" disabled>
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-outline-success btn-sm my-3 w-100" onclick="solicitar_tons()">Seleccionar</button>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-sm btn-danger" onclick="cerrar_autorizacion_fmu();">Cerrar</button>
@@ -806,6 +872,55 @@
                 }
             });
         }
+
+        function buscar_tons(){
+        let rut_tons = $('#rut_tons').val();
+        if(rut_tons == ''){
+            swal({
+                title:'info',
+                icon:'info',
+                text:'Debe ingresar rut'
+            });
+            return false;
+        }
+        let data = {
+            rut_tons: rut_tons,
+            _token: CSRF_TOKEN
+        }
+
+        let url = "{{ ROUTE('profesional.buscar_tons') }}";
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.estado == 1){
+                    $('#contenedor_datos_tons').removeClass('d-none');
+                    $('#contenedor_tons').addClass('d-none');
+                    let tons = resp.tons;
+                    $('#id_tons').val(tons.id);
+                    $('#nombre_tons').val(tons.nombre);
+                    $('#apellidos_tons').val(tons.apellido_uno+' '+tons.apellido_dos);
+                    $('#email_tons').val(tons.email);
+                    $('#region_tons').val(tons.ciudad.id_region);
+                    $('#ciudad_tons').val(tons.ciudad.nombre);
+                    $('#direccion_tons').val(tons.direccion.direccion+' '+tons.direccion.numero_dir);
+                    $('#telefono_tons').val(tons.telefono_uno);
+                    $('#sexo_tons').val(tons.sexo);
+                }else{
+                    $('#contenedor_datos_tons').addClass('d-none');
+                    $('#contenedor_tons').removeClass('d-none');
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+
+
+    }
     </script>
 
 

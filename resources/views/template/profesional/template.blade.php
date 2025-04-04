@@ -5422,6 +5422,10 @@
                 responsive: true,
             });
 
+            $('#tabla_tons_profesional').DataTable({
+                responsive: true
+            });
+
             //cierre modales lugar atencion
             $("#cerrar_editar_asistentes").click(function() {
                 $("#editar_asistentes").modal('hide');
@@ -6504,6 +6508,8 @@
                         responsive: true,
                         "bPaginate": true,
                     });
+
+
 
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
