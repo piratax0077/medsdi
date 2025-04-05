@@ -1031,23 +1031,38 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr class="paciente_view">
                                     <th scope="row">
-                                        <strong>Fecha última atención</strong>
+                                        <strong>Fecha última consulta</strong>
                                     </th>
                                     <td>
-                                        <div class="fecha_ultima_view">
+                                        <div>
                                             <span id="reserva_fecha_ultima"></span>
                                         </div>
-                                        <div class="fecha_ultima_edit" style="display:none">
-                                            <div class="form-row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                    <input type="text" class="form-control form-control-sm"
-                                                        id="input_reserva_fecha_ultima" value="">
-                                                </div>
+                                    </td>
+                                    <td class="text-center align-middle status-circle" id="estado_pago">
+                                        <div class="circle bg-success"></div>
+                                    </td>
+                                </tr>
+                                <tr class="paciente_view">
+                                    <th scope="row">
+                                        <strong>Información pagos</strong>
+                                    </th>
+                                    <td>
+                                        <div >
+                                            <span id="reserva_hora_pago"></span>
+                                            <div class="status-circle">
+                                                <div class="circle bg-success"></div> Pago completo
+                                            </div>
+                                            <div class="status-circle">
+                                                <div class="circle bg-warning"></div> Pago incompleto
+                                            </div>
+                                            <div class="status-circle">
+                                                <div class="circle bg-danger"></div> Sin pagos
                                             </div>
                                         </div>
                                     </td>
+
                                 </tr>
                                 <!-- <tr class="paciente_edit" style="display: none;">
                                     <hr>

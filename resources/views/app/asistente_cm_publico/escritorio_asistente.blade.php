@@ -3,6 +3,17 @@
 
 @section('page-styles')
     <link href='{{ asset('css/estilos_boton_agen_examenes.css') }}' rel='stylesheet' />
+    <style>
+        .status-circle .circle {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            display: inline-block;
+            border: 2px solid #fff; /* Opcional: Borde blanco para mejor visibilidad */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Opcional: Sombra suave */
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -200,6 +211,7 @@
 
     <!-- DATOS DE VITAL IMPORTANCIA -->
     <input type="hidden" name="id_especialidad_profesional" id="id_especialidad_profesional" value="">
+    <input type="hidden" name="id_profesional" id="id_profesional" value="">
 @endsection
 
 @section('modales')
@@ -613,6 +625,7 @@
                                 $('.btn-agenda-'+tipo_agenda).css('background-color','#1cbebe');
                                 $('#id_tipo_agenda').val(tipo_agenda);
                                 $('#id_especialidad_profesional').val(data.profesional.id_especialidad);
+                                $('#id_profesional').val(data.profesional.id);
 
                                 if (data.profesional.id_especialidad == 2) {
                                     console.log('dentista');
@@ -851,6 +864,9 @@
                                                         $('#input_reserva_hora_email_asistente').val(data.paciente.email);
                                                         $('#datos_consulta_telefono').text(data.paciente.telefono_uno);
                                                         $('#input_reserva_hora_telefono_asistente').val(data.paciente.telefono_uno);
+
+                                                        $('#datos_consulta_fecha_ultima').text(data.paciente.fecha_ultima_atencion);
+
 
                                                         if (data.paciente.sexo == 'M') {
                                                             $('#datos_consulta_sexo').text('Masculino');
@@ -1736,6 +1752,7 @@
 						type: "get",
 						data: {
 							rut: rut,
+                            id_profesional: $('#id_profesional').val(),
 						},
 					})
 					.done(function(data) {
@@ -1779,6 +1796,26 @@
 								$('#reserva_fecha_nacimiento').text(data.fecha_nac);
 								$('#input_reserva_fecha_nacimiento').val(DateFormatVista(data.fecha_nac));
 
+                                $('#reserva_fecha_ultima').text(data.fecha_ultima_atencion);
+                                let bonos = data.bonos;
+                                let suma_pagado = 0;
+
+                                bonos.forEach(b => {
+                                    suma_pagado += b.valor_atencion;
+                                });
+                                $('#estado_pago').empty();
+                                var clase = 'bg-success';
+                                if(suma_pagado < 16770){
+                                    clase = 'bg-danger';
+                                    $('#estado_pago').append(`
+                                        <div class="circle ${clase}"></div>
+                                    `);
+                                }else{
+                                    $('#estado_pago').append(`
+                                        <div class="circle ${clase}"></div>
+                                    `);
+                                }
+
 								if (data.sexo == 'M') {
 									$('#reserva_sexo').text('Masculino');
 								} else {
@@ -1803,7 +1840,7 @@
 
 								$('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
 								// $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
-								buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', data.direccion.ciudad.id);
+								buscar_ciudad_general('input_reserva_direccion_ciudad', 'input_reserva_direccion_region', data.direccion.ciudad.id);
 
 								$('#rut_paciente_reserva').val('');
 								$('.div_rut_buscar').hide();

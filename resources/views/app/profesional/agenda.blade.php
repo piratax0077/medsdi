@@ -1,6 +1,17 @@
 @extends('template.profesional.template')
 @section('page-styles')
     <link href='{{ asset('js/fullcalendar-5.10.1/lib/main.css') }}' rel='stylesheet' />
+    <style>
+        .status-circle .circle {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            display: inline-block;
+            border: 2px solid #fff; /* Opcional: Borde blanco para mejor visibilidad */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Opcional: Sombra suave */
+        }
+    </style>
 
     <style>
         #loading {
@@ -333,13 +344,11 @@
                                                 <div class="form-row">
                                                     <div class="col-sm-12 col-md-9">
                                                         <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Direcci&oacute;n</label>
                                                             <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_direccion" id="input_reserva_direccion_direccion" value="">
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-12 col-md-3">
                                                         <div class="form-group">
-                                                            <label class="floating-label-activo-sm">Depto. | Ofic.</label>
                                                             <input type="address" class="form-control form-control-sm" name="input_reserva_direccion_numero_dir" id="input_reserva_direccion_numero_dir" value="">
                                                         </div>
                                                     </div>
@@ -404,6 +413,39 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr class="paciente_view">
+                                        <th scope="row">
+                                            <strong>Fecha última consulta</strong>
+                                        </th>
+                                        <td>
+                                            <div>
+                                                <span id="reserva_fecha_ultima_consulta"></span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center align-middle status-circle" id="estado_pago">
+                                            <div class="circle bg-success"></div>
+                                        </td>
+                                    </tr>
+                                    <tr class="paciente_view">
+                                        <th scope="row">
+                                            <strong>Información pagos</strong>
+                                        </th>
+                                        <td>
+                                            <div >
+                                                <span id="reserva_hora_pago"></span>
+                                                <div class="status-circle">
+                                                    <div class="circle bg-success"></div> Pago completo
+                                                </div>
+                                                <div class="status-circle">
+                                                    <div class="circle bg-warning"></div> Pago incompleto
+                                                </div>
+                                                <div class="status-circle">
+                                                    <div class="circle bg-danger"></div> Sin pagos
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                    </tr>
                                    <!-- <tr class="paciente_edit" style="display: none;">
                                         <hr>
                                     </tr>-->
@@ -434,7 +476,7 @@
                             </div>
 
                             <div class="modal-footer mb-0 pt-1 pb-0 paciente_view">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal"><i
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i
                                         class="feather icon-x"></i> Cancelar</button>
                                 <button type="button" onclick="agendar_hora();" class="btn btn-info"><i
                                         class="feather icon-check"></i> Agendar hora</button>
@@ -1087,13 +1129,15 @@
                                     <label class="floating-label-activo-sm">Clase Pago</label>
                                     <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm">
                                         <option value="0">Seleccione</option>
-                                        <option value="1">Emitido por Institucion</option>
-                                        <option value="2">Váucher</option>
-                                        <option value="3">Caja Vecina</option>
                                         <option value="4">Bono Web</option>
                                         <option value="5">Bono Web Pre-Pago</option>
-                                        <option value="6">Particular</option>
+                                        <option value="3">Caja Vecina</option>
                                         <option value="7">COPAGO Fonasa</option>
+                                        <option value="2">Control sin costo</option>
+                                        <option value="1">Emitido por Institucion</option>
+                                        <option value="8">Garantía</option>
+                                        <option value="6">Particular</option>
+
                                     </select>
                                 </div>
                             </div>
@@ -1123,7 +1167,7 @@
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Valor total</label>
                                     <input name="bono_valor_consulta" id="bono_valor_consulta" type="number"
-                                        class="form-control form-control-sm">
+                                        class="form-control form-control-sm" value="16770">
                                 </div>
                             </div>
 

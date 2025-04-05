@@ -566,8 +566,8 @@
 
             if(tipo_agenda_temp != 0)
                 tipo_agenda = tipo_agenda_temp;
-            console.log(tipo_agenda);
-            console.log('template.asistente.template');
+                console.log(tipo_agenda);
+                console.log('template.asistente.template');
             if(fecha != undefined && fecha != '')
             {
                 var res = fecha.split('T')[0];
@@ -635,6 +635,7 @@
                             console.log('data.tipo_agendas');
                             console.log(data);
                             var tipo_agendas_cant = data.tipo_agendas.length;
+                            $('#id_profesional').val(data.profesional.id);
                             if(tipo_agendas_cant > 0)
                             {
                                 carga_tipos_agendas(data.tipo_agendas);
@@ -865,6 +866,7 @@
                                                         $('#datos_consulta_region').html(data.paciente.direccion.region.nombre);
                                                         $('#input_reserva_hora_region_asistente').val(data.paciente.direccion.ciudad.id_region);
                                                         $('#datos_consulta_ciudad').html(data.paciente.direccion.ciudad.nombre);
+                                                        $('#datos_consulta_fecha_ultima').html(data.paciente.fecha_ultima_atencion);
                                                         buscar_ciudad_general('input_reserva_hora_region_asistente', 'input_reserva_hora_ciudad_asistente', data.paciente.direccion.ciudad.id);
 
                                                         // $('#input_reserva_hora_ciudad_asistente').val(data.paciente.direccion.ciudad.id);
@@ -1677,6 +1679,7 @@
                 type: "get",
                 data: {
                     rut: rut,
+                    id_profesional: $('#id_profesional').val(),
                 },
             })
             .done(function(data) {
@@ -1684,11 +1687,10 @@
                 $('#div_cargando').hide();
                 $('#div_boton_buscar_paciente').show();
 
-                console.log(data);
-
                 $('#div_procedimiento').show();
                 if (data !== 'null') {
                     data = JSON.parse(data);
+                    console.log(data);
                     if(data.tipo_paciente == 'SI')
                     {
 
@@ -1707,7 +1709,25 @@
 
                         $('#reserva_fecha_nacimiento').text(data.fecha_nac);
                         $('#input_reserva_fecha_nacimiento').val(DateFormatVista(data.fecha_nac));
-                        $('#reserva_fecha_ultima').text(data.fecha_ultima);
+                        $('#reserva_fecha_ultima').html(data.fecha_ultima_atencion);
+                        let bonos = data.bonos;
+                        let suma_pagado = 0;
+
+                        bonos.forEach(b => {
+                            suma_pagado += b.valor_atencion;
+                        });
+                        $('#estado_pago').empty();
+                        var clase = 'bg-success';
+                        if(suma_pagado < 16750){
+                            clase = 'bg-danger';
+                            $('#estado_pago').append(`
+                                <div class="circle ${clase}"></div>
+                            `);
+                        }else{
+                            $('#estado_pago').append(`
+                                <div class="circle ${clase}"></div>
+                            `);
+                        }
 
                         if (data.sexo == 'M') {
                             $('#reserva_sexo').text('Masculino');

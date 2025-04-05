@@ -54,7 +54,7 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <h4 class="text-white f-20 d-inline">Tons</h4>
                                         <button type="button" class="btn btn-light btn-xs float-md-right d-inline" data-toggle="modal" data-target="#nueva_tons">
-                                            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Agregar TONS
+                                            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Busca y registro TONS
                                         </button>
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
                                 class="display table table-striped dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th class="align-middle">Profesional</th>
+                                        <th class="align-middle">Lugar de atención</th>
                                         <th class="align-middle">Tons</th>
                                         <th class="align-middle">Deshabilitar</th>
                                         <th class="align-middle">Eliminar</th>
@@ -84,7 +84,7 @@
                                         @foreach ($relaciones as $r)
 
                                             <tr>
-                                                <td class="align-middle">{{ $r->nombre_profesional }} {{ $r->apellido_profesional }}</td>
+                                                <td class="align-middle">{{ $r->lugar_atencion }}</td>
                                                 <td class="align-middle">{{ $r->nombre_tons }} {{ $r->apellido_tons }}</td>
 
                                                 <td class="align-middle">
@@ -240,15 +240,7 @@
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <button type="button" class="btn btn-outline-success btn-sm w-100 my-3" onclick="registrar_tons()">Registrar</button>
                         </div>
-                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div class="form-group">
-                                <div class="switch switch-success d-inline m-r-10">
-                                    <input type="checkbox" id="notificar_pacientes" name="notificar_pacientes">
-                                    <label for="notificar_pacientes" class="cr"></label>
-                                    <label>Notificar a pacientes</label>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                     <div class="form-row d-none" id="contenedor_datos_tons">
                         <div class="col-md-6">
@@ -311,7 +303,22 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <button type="button" class="btn btn-outline-success btn-sm my-3 w-100" onclick="solicitar_tons()">Solicitar</button>
+                            <div class="form-group">
+                                <label for="lugar_atencion_tons" class="floating-label-activo-sm">Asigne lugar de atención</label>
+                                <select  id="lugar_atencion_tons" name="lugar_atencion_tons" class="form-control form-control-sm">
+                                    <option value="0">Seleccione</option>
+                                    @if(isset($lugares_atencion))
+                                    @foreach ($lugares_atencion as $lugar)
+                                        @if (isset($lugar))
+                                            <option value="{{ $lugar->id }}">{{ $lugar->nombre }} </option>
+                                        @endif
+                                    @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-outline-success btn-sm my-3 w-100" onclick="solicitar_tons()">Asociar a mi equipo</button>
                         </div>
                     </div>
                 </div>
@@ -378,10 +385,21 @@
 
     function solicitar_tons(){
         let id_tons = $('#id_tons').val();
+        let lugar_atencion = $('#lugar_atencion_tons').val();
+
+        if(lugar_atencion == 0){
+            swal({
+                title:'info',
+                icon:'info',
+                text:'Debe seleccionar lugar de atención'
+            });
+            return false;
+        }
         console.log(id_tons);
         let url = "{{ ROUTE('profesional.solicitar_tons') }}";
         let data = {
             id_tons: id_tons,
+            lugar_atencion: lugar_atencion,
             _token: CSRF_TOKEN
         };
 
@@ -410,7 +428,7 @@
                     // Agrega las nuevas filas
                     tonss.forEach(tons => {
                         table.row.add([
-                            tons.nombre_profesional + ' ' + tons.apellido_profesional,
+                            tons.lugar_atencion,
                             tons.nombre_tons + ' ' + tons.apellido_tons,
 
                             `<button type="button" class="btn btn-info btn-sm btn-icon accion_editar_horarios">
@@ -612,7 +630,7 @@
                     // Agrega las nuevas filas
                     tonss.forEach(tons => {
                         table.row.add([
-                            tons.nombre_profesional + ' ' + tons.apellido_profesional,
+                            tons.lugar_atencion,
                             tons.nombre_tons + ' ' + tons.apellido_tons,
                             `<button type="button" class="btn btn-info btn-sm btn-icon accion_editar_horarios">
                                 <i class="fas fa-clock"></i>

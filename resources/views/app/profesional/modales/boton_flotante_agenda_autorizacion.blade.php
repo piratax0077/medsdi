@@ -176,7 +176,7 @@
 </div>
 
 <div id="modal_tons_dental" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Registro de Tons" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal_autorizacion_fmuLabel">Registro de tons</h5>
@@ -187,16 +187,17 @@
                     <div class="col-12">
                         <div class="form-group fill">
                             <label for="rut_tons" class="floating-label-activo-sm">Rut de tons</label>
-                            <input type="text" name="rut_tons" id="rut_tons" class="form-control form-control-sm" oninput="formatoRut(this)">
+                            <input type="text" name="rut_tons" id="rut_tons" class="form-control form-control-sm" >
                         </div>
                     </div>
 
                 </div>
                 <button type="button" class="btn btn-outline-success btn-sm w-100 my-3" onclick="buscar_tons()"><i class="fas fa-search"></i> Buscar</button>
                 <div class="form-row d-none" id="contenedor_tons">
-                <span class="badge badge-info">No se ha encontrado información</span>
+                    <span class="badge badge-info" style="font-size: 15px;text-align: center;align-items: center;margin: 10px auto;">No se ha encontrado información. Si desea inscribirla valla al panel de configuración usando este <a href="{{ ROUTE('profesional.tons') }}" _target="blank">link</a>. </span>
                 </div>
                 <div class="form-row d-none" id="contenedor_datos_tons">
+                    <input type="hidden" name="id_tons" id="id_tons" value="">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="nombre_tons" class="floating-label-activo-sm">Nombre</label>
@@ -256,10 +257,48 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-outline-success btn-sm my-3 w-100" onclick="solicitar_tons()">Seleccionar</button>
+                        <button type="button" class="btn btn-outline-success btn-sm my-3 w-100" onclick="solicitar_tons_profesional()">Seleccionar</button>
                     </div>
                 </div>
+                <table class="table table-responsive">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellidos</th>
+                            <th scope="col">Rut</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Seleccionar</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_tons">
+                        @foreach ($tons_dental as $tons)
+                            <tr>
+                                <td>{{ $tons->nombre_tons }}</td>
+                                <td>{{ $tons->apellido_tons }}</td>
+                                <td>{{ $tons->rut_tons }}</td>
+                                <td>{{ $tons->telefono_tons }}</td>
+                                <td>{{ $tons->email_tons }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="solicitar_tons_profesional({{ $tons->id }})">Seleccionar</button>
+                                </td>
+                                <td>
+                                    @if($tons->estado == 2)
+
+                                        <span class="badge badge-danger">Activo</span>
+                                    @elseif($tons->estado == 1)
+                                        <span class="badge badge-success">Inactivo</span>
+                                    @else
+                                        <span class="badge badge-warning">Inactivo</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-sm btn-danger" onclick="cerrar_autorizacion_fmu();">Cerrar</button>
@@ -920,6 +959,41 @@
         });
 
 
+    }
+
+    function solicitar_tons_profesional(){
+        let id_tons = $('#id_tons').val();
+        let data = {
+            id_tons: id_tons,
+            _token: CSRF_TOKEN
+        }
+        let url = "{{ ROUTE('profesional.solicitar_tons_atencion_dental') }}";
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.estado == 1){
+                    $('#modal_tons_dental').modal('hide');
+                    swal({
+                        title:'info',
+                        icon:'success',
+                        text:'Solicitud enviada'
+                    });
+                }else{
+                    $('#modal_tons_dental').modal('hide');
+                    swal({
+                        title:'info',
+                        icon:'error',
+                        text:'Error al enviar solicitud'
+                    });
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
     }
     </script>
 

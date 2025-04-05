@@ -2,6 +2,17 @@
 
 @section('page-styles')
     <link href='{{ asset('css/estilos_boton_agen_examenes.css') }}' rel='stylesheet' />
+    <style>
+        .status-circle .circle {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            display: inline-block;
+            border: 2px solid #fff; /* Opcional: Borde blanco para mejor visibilidad */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Opcional: Sombra suave */
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -113,7 +124,8 @@
             <!--Cierre: agenda -->
         </div>
     </div>
-
+<!-- DATOS DE VITAL IMPORTANCIA -->
+<input type="hidden" name="id_profesional" id="id_profesional" value="">
 @endsection
 
 

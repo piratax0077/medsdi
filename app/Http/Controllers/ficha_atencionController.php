@@ -1985,10 +1985,15 @@ class ficha_atencionController extends Controller
 
         }
 
+        $epc = new EscritorioProfesional;
+        $tons_dental = $epc->dame_relaciones_tons($profesional->id);
+
+
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
                 'proxima_fecha_atencion' => $proxima_fecha_atencion,
+                'tons_dental' => $tons_dental,
                 'hora_inicio_atencion' => isset($hora_inicio_fecha_atencion) ? $hora_inicio_fecha_atencion : '',
                 'hora_fin_atencion' => isset($hora_fin_fecha_atencion) ? $hora_fin_fecha_atencion : '',
                 'convenios_empresas' => $convenios_empresas,

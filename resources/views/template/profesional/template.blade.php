@@ -2428,6 +2428,7 @@
                     type: "get",
                     data: {
                         rut: rut,
+                        id_lugar_atencion: $('#id_lugar_atencion').val()
                     },
                 })
                 .done(function(data) {
@@ -2467,6 +2468,27 @@
                             $('#input_reserva_hora_nombre').val(data.nombres);
                             $('#input_reserva_hora_apellido_uno').val(data.apellido_uno);
                             $('#input_reserva_hora_apellido_dos').val(data.apellido_dos);
+
+                            $('#reserva_fecha_ultima_consulta').html(data.fecha_ultima_atencion);
+
+                            let bonos = data.bonos;
+                            let suma_pagado = 0;
+
+                            bonos.forEach(b => {
+                                suma_pagado += b.valor_atencion;
+                            });
+                            $('#estado_pago').empty();
+                            var clase = 'bg-success';
+                            if(suma_pagado < 16750){
+                                clase = 'bg-danger';
+                                $('#estado_pago').append(`
+                                    <div class="circle ${clase}"></div>
+                                `);
+                            }else{
+                                $('#estado_pago').append(`
+                                    <div class="circle ${clase}"></div>
+                                `);
+                            }
 
                             $('#reserva_fecha_nacimiento').text(data.fecha_nac);
                             $('#input_reserva_fecha_nacimiento').val(DateFormatVista(data.fecha_nac));

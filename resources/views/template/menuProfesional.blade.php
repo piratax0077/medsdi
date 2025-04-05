@@ -70,7 +70,7 @@
                     <p style="color:#137370;">{{ $paciente->rut }}</p>
                     <p style="color:#137370;">{{ $paciente->prevision->nombre }}</p>
 
-                    @if(isset($control_peso) && count($control_peso) > 0)
+                    {{-- @if(isset($control_peso) && count($control_peso) > 0)
                     <p style="color:#137370;">Obesidad</p>
                     @endif
                     @if (isset($hipertension) && count($hipertension) > 0)
@@ -81,7 +81,7 @@
                     @endif
                     @if (isset($contro) && count($contro) > 0)
                     <p style="color:#137370;">Insuficiencia renal</p>
-                    @endif
+                    @endif --}}
                     <hr>
                     <h6 class="mt-3 mb-3" style="font-size: 12px; font-weight: bold; color:#137370;">PATOLOGÍAS CRONICAS</h6>
                     <ul>
