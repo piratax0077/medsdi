@@ -421,6 +421,7 @@
         let id_asistente = $('#he_reserva_hora_id_asistente').val();
         let origen = $('#he_reserva_hora_origen').val();
         let tipo_agenda = $('#id_tipo_agenda').val();
+        let id_paciente = $('#he_reserva_hora_id_paciente').val();
         var tipo_agenda_text = 'C';
 
         switch (tipo_agenda) {
@@ -447,15 +448,17 @@
                     reserva_hora_id: reserva_hora_id,
                     id_lugar_atencion: id_lugar_atencion,
                     id_profesional: id_profesional,
+                    id_paciente: id_paciente,
                     id_asistente: id_asistente,
                     origen: origen,
                     tipo_hora_medica: tipo_agenda_text,
                 }
             })
             .done(function(data) {
+                console.log(data);
                 if (data != null) {
 
-                    data = JSON.parse(data);
+                    // data = JSON.parse(data);
                     if(data.estado == 'error')
                     {
                         swal({
