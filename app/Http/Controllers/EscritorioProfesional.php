@@ -5384,7 +5384,6 @@ public function eliminarPiezaCoronaProtesis(Request $req){
 
         // $paciente->fecha_ultima = Carbon::now()->format('Y-m-d');
         // $paciente['fecha_ultima'] = Carbon::now()->format('Y-m-d');
-<<<<<<< HEAD
 
         $profesional_agenda = Profesional::where('id_usuario', $request->id_profesional)->first();
 
@@ -5425,32 +5424,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
 
         }
 
-=======
->>>>>>> 45d6c221fad1672a873a36e0638e1c032513fe6e
 
-        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
-		
-		if($profesional)
-		{
-			$fecha_ultima_atencion = HoraMedica::select('horas_medicas.fecha_consulta','fichas_atenciones.*')
-			->join('fichas_atenciones','horas_medicas.id_ficha_atencion','fichas_atenciones.id')
-			->where('horas_medicas.id_paciente', $paciente->id)
-			->where('horas_medicas.id_profesional', $profesional->id)
-			->where('fichas_atenciones.finalizada',1)
-			->where('horas_medicas.id_lugar_atencion', $request->id_lugar_atencion)
-			->orderBy('horas_medicas.id','desc')
-			->first();
-
-			if ($fecha_ultima_atencion) {
-				$paciente->fecha_ultima_atencion = Carbon::parse($fecha_ultima_atencion->fecha_consulta)->toDateString(); // Solo la fecha (YYYY-MM-DD)
-				//$paciente->hora_ultima_atencion = Carbon::parse($fecha_ultima_atencion->created_at)->toTimeString(); // Solo la hora (HH:MM:SS)
-			}	
-		}	
-        else
-		{
-			$paciente->fecha_ultima_atencion = Carbon::now()->format('Y-m-d');
-		}
-		
         return json_encode($paciente);
     }
 
