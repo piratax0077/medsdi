@@ -728,6 +728,7 @@
                                     <option value="">Seleccione una opción</option>
                                     <option value="En consulta médica">En consulta médica</option>
                                     <option value="Domicilio">Domicilio</option>
+                                    <option value="Garantía por bono">Garantía por bono</option>
                                 </select>
                             </div>
                         </div>

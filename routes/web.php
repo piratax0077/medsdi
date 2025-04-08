@@ -2453,7 +2453,7 @@ Route::get('/insumos/dental',[App\Http\Controllers\EscritorioProfesional::class,
 /** RUTAS PROVISORIAS  */
 Route::get('periodontograma_prueba',[App\Http\Controllers\DentalController::class,'periodontograma_prueba'])->name('periodontograma_prueba');
 
-
+Route::post('/profesional/dame_valor_consulta',[App\Http\Controllers\EscritorioProfesional::class, 'dame_valor_consulta'])->name('profesional.dame_valor_consulta');
 Route::post('/dental/eliminar_insumos_tto',[App\Http\Controllers\DentalController::class, 'eliminar_insumos_tratamiento'])->name('dental.eliminar_insumos_tto');
 Route::post('/dental/dame_insumos',[App\Http\Controllers\DentalController::class, 'dame_insumos_tipo'])->name('dental.dame_implantes_dental');
 Route::post('/dental/dame_bono_pago',[App\Http\Controllers\DentalController::class, 'dame_bono_pago'])->name('dental.dame_bono_pago');
@@ -2477,3 +2477,4 @@ Route::post('/profesional/solicitar_tons',[App\Http\Controllers\EscritorioProfes
 Route::post('/profesional/registrar_tons',[App\Http\Controllers\EscritorioProfesional::class, 'registrar_tons'])->name('profesional.registrar_nueva_tons');
 Route::post('/profesional/eliminar_tons',[App\Http\Controllers\EscritorioProfesional::class, 'eliminar_tons'])->name('profesional.eliminar_tons');
 Route::post('/profesional/solicitar_tons_atencion',[App\Http\Controllers\EscritorioProfesional::class, 'solicitar_tons_atencion'])->name('profesional.solicitar_tons_atencion_dental');
+

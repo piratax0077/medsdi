@@ -3006,7 +3006,7 @@ class EscritorioProfesional extends Controller
     }
 
     public function guardar_pieza_dental_examen_dolor_odontop(Request $req){
-        return $req;
+        return 'hola';
     }
 
     public function guardar_pieza_dental_examen_oral_rx_end(Request $req){
@@ -5392,7 +5392,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
 			$fecha_ultima_atencion = HoraMedica::select('horas_medicas.fecha_consulta','fichas_atenciones.*')
 			->join('fichas_atenciones','horas_medicas.id_ficha_atencion','fichas_atenciones.id')
 			->where('horas_medicas.id_paciente', $paciente->id)
-			// ->where('horas_medicas.id_profesional', $profesional->id)
+			->where('horas_medicas.id_profesional', $profesional_agenda->id)
 			->where('fichas_atenciones.finalizada',1)
 			// ->where('horas_medicas.id_lugar_atencion', $request->id_lugar_atencion)
 			->orderBy('horas_medicas.id','desc')
@@ -6451,6 +6451,16 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         //     $valido = 0;
         // }
 
+        if($request->id_clase_bono == 6 || $request->id_clase_bono == 8){
+            $profesional_convenio = ProfesionalConvenio::where('id_profesional', $request->id_profesional)->where('id_lugar_atencion', $request->id_lugar_atencion)->first();
+            if($profesional_convenio){
+                if($request->valor_atencion !== $profesional_convenio->valor){
+                    $error['id_referencia'] = 'El valor de la atención no corresponde al convenio del profesional. El valor a pagar es $'.number_format($profesional_convenio->valor,0,',','.');
+                    $valido = 0;
+                }
+            }
+        }
+
 
         if($valido == 1)
         {
@@ -6668,6 +6678,18 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         }
 
         return $datos;
+    }
+
+    public function dame_valor_consulta(Request $request){
+
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+
+        $profesional_convenio = ProfesionalConvenio::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$request->id_lugar_atencion)->first();
+        return $profesional_convenio;
+    }
+
+    public function dame_valor_consulta_nueva(Request $req){
+        return 'hola';
     }
 
     public function enviar_email(Request $request)

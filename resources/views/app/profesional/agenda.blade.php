@@ -977,7 +977,7 @@
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Clase Pago</label>
-                                <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm">
+                                <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm" onchange="validar_prevision(this)">
                                     <option value="0">Seleccione</option>
                                     <option value="1">Efectivo</option>
                                     <option value="2">Transferencia</option>
@@ -1125,30 +1125,6 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Clase Pago</label>
-                                    <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm">
-                                        <option value="0">Seleccione</option>
-                                        <option value="4">Bono Web</option>
-                                        <option value="5">Bono Web Pre-Pago</option>
-                                        <option value="3">Caja Vecina</option>
-                                        <option value="7">COPAGO Fonasa</option>
-                                        <option value="2">Control sin costo</option>
-                                        <option value="1">Emitido por Institucion</option>
-                                        <option value="8">Garantía</option>
-                                        <option value="6">Particular</option>
-
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Nº de bono o programa</label>
-                                    <input type="text" class="form-control form-control-sm" name="bono_numero"
-                                        id="bono_numero">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
                                 <div class="input-group">
                                     <label class="floating-label-activo-sm">Convenio</label>
                                     <input type="text" class="form-control form-control-sm" name="bono_prevision_txt" id="bono_prevision_txt" disabled="disabled" value="">
@@ -1165,9 +1141,46 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Valor total</label>
+                                    <label class="floating-label-activo-sm">Clase Pago</label>
+                                    <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm" onchange="validar_prevision(this)">
+                                        <option value="0">Seleccione</option>
+                                        <option value="4">Bono Web</option>
+                                        {{-- <option value="5">Bono Web Pre-Pago</option> --}}
+                                        <option value="3">Caja Vecina</option>
+                                        {{-- <option value="7">COPAGO Fonasa</option> --}}
+                                        <option value="2">Control sin costo</option>
+                                        <option value="1">Emitido por Institucion</option>
+                                        <option value="8">Garantía</option>
+                                        <option value="6">Particular</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Nº de bono o programa</label>
+                                    <input type="text" class="form-control form-control-sm" name="bono_numero"
+                                        id="bono_numero">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Valor Bonificación</label>
+                                    <input type="number" class="form-control form-control-sm" name="valor_bonificacion" id="valor_bonificacion" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Aporte Seguro</label>
+                                    <input type="number" class="form-control form-control-sm" name="valor_seguro" id="valor_seguro" value="0">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Valor a pagar</label>
                                     <input name="bono_valor_consulta" id="bono_valor_consulta" type="number"
-                                        class="form-control form-control-sm" value="16770">
+                                        class="form-control form-control-sm" value="">
                                 </div>
                             </div>
 
@@ -2048,6 +2061,68 @@
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
+        }
+
+        function validar_prevision(value){
+            let id_clase_bono = value.value;
+            console.log(id_clase_bono);
+            if(id_clase_bono != 2 && id_clase_bono != 0){
+                let url = "{{ ROUTE('profesional.dame_valor_consulta') }}";
+                let data = {
+                    id_clase_bono: id_clase_bono,
+                    id_lugar_atencion: $('#id_lugar_atencion').val(),
+                    _token: CSRF_TOKEN
+                }
+
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    data: data,
+                    success: function(resp) {
+                        console.log(resp);
+                        if(id_clase_bono == 6){
+                            var valor = resp.valor;
+                            var valor_bon = 0;
+                        }else if(id_clase_bono == 8){
+                            var valor = resp.valor_garantia;
+                            var valor_bon = 0;
+                        }else{
+                            var valor = resp.valor_copago_fonasa;
+                            var valor_bon = resp.valor_bon_fonasa;
+                        }
+
+                        $('#bono_valor_consulta').val(valor);
+                        $('#valor_bonificacion').val(valor_bon);
+
+                        // if (data != null) {
+                        //     data = JSON.parse(data);
+                        //     if(data.estado == 1)
+                        //     {
+                        //         $('#valor_consulta').val(data.valor);
+                        //         $('#valor_consulta_texto').text('Valor Consulta: $'+data.valor);
+                        //     }
+                        //     else
+                        //     {
+                        //         $('#valor_consulta').val(0);
+                        //         $('#valor_consulta_texto').text('Valor Consulta: $0');
+                        //     }
+                        // }
+                        // else
+                        // {
+                        //     $('#valor_consulta').val(0);
+                        //     $('#valor_consulta_texto').text('Valor Consulta: $0');
+                        // }
+                    }
+                })
+
+            }else{
+                $('#valor_bonificacion').val(0);
+                $('#valor_bonificacion').attr('disabled', false);
+                $('#valor_seguro').val(0);
+                $('#valor_seguro').attr('disabled', false);
+                $('#bono_valor_consulta').val(0);
+            }
+
         }
 
     </script>

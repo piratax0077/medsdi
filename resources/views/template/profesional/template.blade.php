@@ -6115,6 +6115,8 @@
             var bono_profesional_nombre = $('#bono_profesional_nombre').val();
             var bono_profesional_rut = $('#bono_profesional_rut').val();
             var bono_numero = $('#bono_numero').val();
+            var bono_valor_bonificacion = $('#valor_bonificacion').val();
+            var bono_valor_seguro = $('#valor_seguro').val();
             var bono_valor_consulta = $('#bono_valor_consulta').val();
             var bono_prevision = $('#bono_prevision').val();
             var bono_prevision_nombre = $('#bono_prevision option:selected').text();
@@ -6126,6 +6128,7 @@
             var bono_id_paciente = $('#bono_id_paciente').val();
             var bono_id_tipo_bono = $('#bono_id_tipo_bono').val();
             var bono_id_clase_bono = $('#bono_id_clase_bono').val();
+            var id_lugar_atencion = $('#id_lugar_atencion').val();
 
             var mensaje = '';
             var valido = 1;
@@ -6146,20 +6149,36 @@
                 mensaje += 'Campo requerido RUT DEL PROFESIONAL\n';
                 valido = 0;
             }
-            if (bono_id_clase_bono != 6) {
+            if (parseInt(bono_id_clase_bono) !== 6 && parseInt(bono_id_clase_bono)  !== 2 && parseInt(bono_id_clase_bono)  !== 8) {
                 if (bono_numero == '') {
                     mensaje += 'Campo requerido NUMERO DEL BONO O PROGRAMA\n';
                     valido = 0;
                 }
+                var suma = parseInt(bono_valor_bonificacion) + parseInt(bono_valor_seguro) + parseInt(bono_valor_consulta);
+                if (suma !== 26830) {
+                    mensaje += 'El valor total no coincide con valor actual del bono\n';
+                    valido = 0;
+                }
+                console.log(suma);
+                if( bono_valor_seguro == '') {
+                    mensaje += 'Campo requerido VALOR SEGURO\n';
+                    valido = 0;
+                }
+                if (bono_valor_consulta == '') {
+                    mensaje += 'Campo requerido VALOR TOTAL\n';
+                    valido = 0;
+                }
+                if (bono_prevision == '' || bono_prevision == 0) {
+                    mensaje += 'Campo requerido CONVENIO\n';
+                    valido = 0;
+                }
             }
-            if (bono_valor_consulta == '') {
-                mensaje += 'Campo requerido VALOR TOTAL\n';
+            if( bono_valor_bonificacion == '') {
+                mensaje += 'Campo requerido VALOR BONIFICACION\n';
                 valido = 0;
             }
-            if (bono_prevision == '' || bono_prevision == 0) {
-                mensaje += 'Campo requerido CONVENIO\n';
-                valido = 0;
-            }
+
+
 
             if (valido == 1) {
                 let url = "{{ route('profesional.recibir_bono') }}";
@@ -6172,6 +6191,8 @@
                             convenio: bono_prevision,
                             convenio_nombre: bono_prevision_nombre,
                             numero_bono: bono_numero,
+                            valor_bonificacion: bono_valor_bonificacion,
+                            valor_seguro: bono_valor_seguro,
                             valor_atencion: bono_valor_consulta,
                             glosa: '1',
                             id_profesional: bono_id_profesional,
@@ -6180,6 +6201,7 @@
                             id_tipo_bono: bono_id_tipo_bono,
                             id_clase_bono: bono_id_clase_bono,
                             id_referencia: bono_hora_medica, //une bono a hora medica (para buscar id ficha atencion)
+                            id_lugar_atencion: id_lugar_atencion,
                             numero_sesiones: bono_sn_sesiones
                         }
                     })
@@ -6220,7 +6242,7 @@
 
                             } else {
                                 var mensaje = '';
-                                if (isset(data.bono)) {
+                                if ((data.bono)) {
                                     if (data.bono.estado == 0) {
                                         mensaje += bono.estado.msj;
                                     }
@@ -6228,13 +6250,13 @@
                                         mensaje += data.hora_medica.msj;
                                     }
                                 } else {
-                                    mensaje += data.error;
+                                    mensaje += data.error.id_referencia;
                                 }
 
                                 swal({
                                     title: "Recepción de bonos y programas",
                                     text: 'Pago con Problemas.\n' + data.msj + '\n' + mensaje,
-                                    icon: "success",
+                                    icon: "error",
                                     // buttons: "Aceptar",
                                     //SuccessMode: true,
                                 });
