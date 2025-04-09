@@ -40,7 +40,7 @@ class HoraMedicaController extends Controller
         {
             $filtro[] = array('id_estado',$request->id_estado);
         }
-        if(!empty($request->id_box))
+		if(!empty($request->id_box))
         {
             $filtro[] = array('id_box',$request->id_box);
         }
@@ -116,7 +116,7 @@ class HoraMedicaController extends Controller
         // 8. LLAMANDO
 
         $registros = HoraMedica::where($filtro)
-                                ->whereIn('id_estado',[1,2,4,5,8])
+                                ->whereIn('id_estado',[1,2,4,5,8,16])
                                 ->with('Estado')
                                 ->with(['Paciente'=> function($query){
                                     $query->select('id','nombres', 'apellido_uno', 'apellido_dos', 'rut')

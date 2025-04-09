@@ -644,39 +644,48 @@ class EscritorioGeneral extends Controller
      */
     public function diasLaboralesProfesionaLugarAtencionBuscador(Request $request){
         $datos = array();
-
         $horario = ProfesionalHorario::where('id_profesional', $request->id_profesional)
                                         ->where('id_lugar_atencion', $request->lugar_atencion)
                                         ->tipoAgenda($request->tipo_agenda)
                                         ->orderBy('dia', 'ASC')
                                         ->get();
 
-        $horario_agenda_no_laboral = '1,2,3,4,5,6,7';
-        $horario_agenda_laboral = '';
+        $dias_no_laborales = ['1','2','3','4','5','6','7'];
+        $dias_laborales = [];
 
         foreach ($horario as $hor) {
             $ho = explode(',', $hor->dia);
-            // dd($ho);
-            foreach ($ho as $key => $h) {
-                if ($h == 0) {
-                    $horario_agenda_no_laboral = str_replace($h, '', $horario_agenda_no_laboral);
-                    $horario_agenda_laboral .= $h;
-                } else {
-                    $horario_agenda_no_laboral = str_replace(',' . $h, '', $horario_agenda_no_laboral);
-                    $horario_agenda_laboral .= ',' . $h;
+            foreach ($ho as $h) {
+                $h = trim($h);
+                // Agregar a días laborales si no está ya
+                if (!in_array($h, $dias_laborales)) {
+                    $dias_laborales[] = $h;
+                }
+
+                // Quitar de los días no laborales si está presente
+                if (($key = array_search($h, $dias_no_laborales)) !== false) {
+                    unset($dias_no_laborales[$key]);
                 }
             }
         }
-        $horario_agenda_no_laboral = ltrim($horario_agenda_no_laboral, ',');
-        $horario_agenda_laboral = ltrim($horario_agenda_laboral, ',');
 
+        // Ordenar los arrays si quieres mantener un orden consistente
+        sort($dias_laborales);
+        sort($dias_no_laborales);
+
+        $horario_agenda_laboral = implode(',', $dias_laborales);
+        $horario_agenda_no_laboral = implode(',', $dias_no_laborales);
 
         $datos['estado'] = 1;
         $datos['msj'] = 'registros';
-        $datos['registros'] = array('horario_agenda_laboral' => $horario_agenda_laboral,'horario_agenda_no_laboral' => $horario_agenda_no_laboral);
+        $datos['registros'] = array(
+            'horario_agenda_laboral' => $horario_agenda_laboral,
+            'horario_agenda_no_laboral' => $horario_agenda_no_laboral
+        );
 
         return $datos;
     }
+
 
     // carga de horas disponibles para profesional por profesional lugar atencion y dia (horas disponibles)
     /**

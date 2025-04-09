@@ -1615,7 +1615,7 @@ class EscritorioAsistente extends Controller
             $hora_medica->id_profesional = $profesional->id;
             $hora_medica->id_asistente = $request->id_asistente;
             // $hora_medica->id_estado = 16; //PRE RESERVA
-            $hora_medica->id_estado = 2; // AGENDADA
+            $hora_medica->id_estado = 1; // AGENDADA
             $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
             $hora_medica->fecha_consulta = \Carbon\Carbon::parse($request->fecha_consulta)->format('Y-m-d');
 

@@ -909,7 +909,7 @@
                                                             // if(data.paciente.id_direccion == 'null' || data.paciente.fecha_nac == 'null')
                                                             if( data.paciente.id_direccion == 'null' || data.paciente.id_direccion == null || data.paciente.id_direccion == '')
                                                             {
-                                                                $('#hm_anular_hora').attr('disabled', 'disabled');
+                                                                // $('#hm_anular_hora').attr('disabled', 'disabled');
                                                                 $('#hm_confirmar_hora').attr('disabled', 'disabled');
                                                             }
                                                         }

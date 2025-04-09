@@ -257,7 +257,20 @@
                             </select>
                         </div>
                     </div>
-
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="lugar_atencion_tons" class="floating-label-activo-sm">Lugar de atención</label>
+                            <select  id="lugar_atencion_tons" name="lugar_atencion_tons" class="form-control form-control-sm" disabled>
+                                @if(isset($lugares_atencion))
+                                @foreach ($lugares_atencion as $lugar)
+                                    @if (isset($lugar))
+                                        <option value="{{ $lugar->id }}">{{ $lugar->nombre }} </option>
+                                    @endif
+                                @endforeach
+                                @endif
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-md-12">
                         <button type="button" class="btn btn-outline-success btn-sm my-3 w-100" onclick="solicitar_tons_profesional()">Seleccionar</button>
                     </div>
