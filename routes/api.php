@@ -12,6 +12,7 @@ use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\JitsiController;
 use App\Http\Controllers\VentaManualRecetaController;
 use App\Http\Controllers\DentalController;
+use App\Http\Controllers\CentroMedicoController;
 
 
 /*
@@ -93,6 +94,10 @@ Route::post('/insertPaciente', [DentalController::class, 'insertPaciente'])->nam
 Route::get('/buscar_ciudad_region', [App\Http\Controllers\DentalController::class, 'buscar_ciudad_region'])->name('api.buscar_ciudad_region');
 Route::get('/dame_regiones', [App\Http\Controllers\DentalController::class, 'dameRegiones'])->name('api.dame_regiones');
 Route::get('/buscar_paciente', [App\Http\Controllers\DentalController::class, 'buscarPaciente'])->name('api.buscar_paciente');
+Route::post('/buscar_profesionales_cm',[App\Http\Controllers\CentroMedicoController::class, 'buscarProfesional'])->name('api.buscar_profesionales_cm');
+Route::post('/buscar_especialidades_cm',[App\Http\Controllers\CentroMedicoController::class, 'buscarEspecialidades'])->name('api.buscar_especialidades_cm');
+Route::post('/buscar_sub_especialidades_cm',[App\Http\Controllers\CentroMedicoController::class, 'buscarSubEspecialidades'])->name('api.buscar_sub_especialidades_cm');
+Route::post('/buscar_profesionales_cm_todos',[App\Http\Controllers\CentroMedicoController::class, 'buscarProfesionales'])->name('api.buscar_profesionales_cm_todos');
 
 /**jwt test */
 Route::get('/jwt/generar', [JitsiController::class, 'generarJWT_r']);

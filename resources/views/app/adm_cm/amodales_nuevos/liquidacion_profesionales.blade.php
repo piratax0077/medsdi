@@ -494,7 +494,8 @@
     }
 
     function dame_subtipo_especialidad(){
-        let especialidad = $('#especialidad_nuevo_profesional_convenio').val();
+        let especialidad = $('#especialidad_nuevo_profesional').val();
+        console.log(especialidad);
         let url = "{{ route('web.profesional.buscar_sub_tipo_especialidad') }}";
         $.ajax({
 
@@ -510,7 +511,7 @@
                 if (data != null) {
                     registros = data.registros;
 
-                    let subespecialidades = $('#sub_especialidad_nuevo_profesional_convenio');
+                    let subespecialidades = $('#sub_especialidad_nuevo_profesional');
 
                     subespecialidades.find('option').remove();
                     subespecialidades.append('<option value="0">seleccione</option>');
@@ -535,5 +536,56 @@
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
+    }
+
+    function validar_email_agenda() {
+        if ($("#reserva_hora_correo").val().indexOf('@', 0) == -1 || $("#reserva_hora_correo")
+            .val().indexOf(
+                '.', 0) == -1) {
+            swal({
+                title: "El correo electrónico introducido no es correcto.",
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            })
+            // alert('El correo electrónico introducido no es correcto.');
+            $("#guardar_reserva_paciente").prop('disabled', true);
+            return false;
+        }
+
+        let email = $('#reserva_hora_correo').val();
+        let url = "#";
+
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+
+                email: email,
+
+            }
+
+        })
+        .done(function(data) {
+            if (data == 'fail') {
+
+                // console.log(data);
+
+                $('#mensaje_email_reserva').text('el email ya esta en nuestros registros');
+                $('#mensaje_email_reserva').show();
+                $('#reserva_hora_correo').focus();
+
+                $("#guardar_reserva_paciente").prop('disabled', true);
+
+            } else {
+                $('#mensaje_email_reserva').text('');
+                $('#mensaje_email_reserva').hide();
+                $("#guardar_reserva_paciente").prop('disabled', false);
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
     }
 </script>

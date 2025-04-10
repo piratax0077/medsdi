@@ -84,6 +84,8 @@ class EscritorioAsistenteCmPublico extends Controller
             $tipo_bonos = TipoBono::where('estado', 1)->get();
 
             $url = 'app.asistente_cm_publico.escritorio_asistente'; // institucion
+            $asistente->id_lugar_atencion = $id_lugar_atencion;
+
             $array_data = array(
                 'asistente' => $asistente,
                 'prevision' => $prevision,

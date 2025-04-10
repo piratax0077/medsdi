@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\HoraMedica;
+use App\Models\Bono;
 use Illuminate\Http\Request;
 
 class HoraMedicaController extends Controller
@@ -114,6 +115,7 @@ class HoraMedicaController extends Controller
         // 4. ESPERA
         // 5. REALIZANDO
         // 8. LLAMANDO
+        // 16. PRERESERVA
 
         $registros = HoraMedica::where($filtro)
                                 ->whereIn('id_estado',[1,2,4,5,8,16])
@@ -127,6 +129,18 @@ class HoraMedicaController extends Controller
                                 ->get();
         if(count($registros)>0)
         {
+            try {
+                foreach($registros as $r){
+                    if($r->estado->id !== 2){
+                        $bono = Bono::where('id_referencia',$r->id)->first();
+                        $r->dato = $bono ? $bono : null;
+                    }
+                }
+            } catch (\Exception $e) {
+                //throw $th;
+                return $e->getMessage();
+            }
+
             $datos['estado'] = 1;
             $datos['registros'] = $registros;
         }

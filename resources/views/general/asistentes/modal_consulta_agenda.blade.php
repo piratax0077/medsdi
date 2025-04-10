@@ -444,12 +444,16 @@
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Clase Pago</label>
                                     <select id="bono_id_clase_bono" name="bono_id_clase_bono"
-                                        class="form-control form-control-sm">
-                                        <option value="1">Bono Fisico</option>
-                                        <option value="2">Sencillito</option>
-                                        <option value="3">Caja Vecina</option>
+                                        class="form-control form-control-sm" onchange="evaluar_clase_pago(this)">
+                                        <option value="0">Seleccione</option>
+                                        <option value="9">Bono Físico</option>
                                         <option value="4">Bono Web</option>
-                                        <option value="5">Bono Web Pre-Pago</option>
+                                        {{-- <option value="5">Bono Web Pre-Pago</option> --}}
+                                        <option value="3">Caja Vecina</option>
+                                        {{-- <option value="7">COPAGO Fonasa</option> --}}
+                                        <option value="2">Control sin costo</option>
+                                        <option value="1">Emitido por Institucion</option>
+                                        <option value="8">Garantía</option>
                                         <option value="6">Particular</option>
                                     </select>
                                 </div>
@@ -475,7 +479,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Valor total</label>
+                                    <label class="floating-label-activo-sm">Valor a rendir</label>
                                     <input name="bono_valor_consulta" id="bono_valor_consulta" type="number"
                                         class="form-control form-control-sm">
                                 </div>
@@ -830,7 +834,7 @@
                     <input type="hidden" id="fecha_consulta" name="fecha_consulta" value="">
                     <input type="hidden" id="reserva_hora_id_paciente" name="reserva_hora_id_paciente" value="">
 
-                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="">
+                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $asistente->id_lugar_atencion }}">
                     <input type="hidden" name="fecha" id="fecha" value="">
                     <input type="hidden" name="reserva_hora_edad" id="reserva_hora_edad" value="">
                     <input type="hidden" name="reserva_hora_id_responsable" id="reserva_hora_id_responsable" value="">
@@ -2480,6 +2484,71 @@
 
     }
 
+    function evaluar_clase_pago(value){
+        let id_clase_bono = value.value;
+            console.log(id_clase_bono);
+            if(id_clase_bono != 2 && id_clase_bono != 0){
+                let url = "{{ ROUTE('profesional.dame_valor_consulta') }}";
+                let data = {
+                    id_profesional: $('#id_profesional').val(),
+                    id_clase_bono: id_clase_bono,
+                    id_lugar_atencion: $('#id_lugar_atencion').val(),
+                    _token: CSRF_TOKEN
+                }
+
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    data: data,
+                    success: function(resp) {
+                        console.log(resp);
+                        if(id_clase_bono == 6){
+                            var valor = resp.valor;
+                            var valor_bon = 0;
+                        }else if(id_clase_bono == 8){
+                            var valor = resp.valor_garantia;
+                            var valor_bon = 0;
+                        }else if(id_clase_bono == 9){
+                            var valor = 0;
+                        }
+                        else{
+                            var valor = resp.valor_copago_fonasa;
+                            var valor_bon = resp.valor_bon_fonasa;
+                        }
+
+                        $('#bono_valor_consulta').val(valor);
+                        $('#valor_bonificacion').val(valor_bon);
+
+                        // if (data != null) {
+                        //     data = JSON.parse(data);
+                        //     if(data.estado == 1)
+                        //     {
+                        //         $('#valor_consulta').val(data.valor);
+                        //         $('#valor_consulta_texto').text('Valor Consulta: $'+data.valor);
+                        //     }
+                        //     else
+                        //     {
+                        //         $('#valor_consulta').val(0);
+                        //         $('#valor_consulta_texto').text('Valor Consulta: $0');
+                        //     }
+                        // }
+                        // else
+                        // {
+                        //     $('#valor_consulta').val(0);
+                        //     $('#valor_consulta_texto').text('Valor Consulta: $0');
+                        // }
+                    }
+                })
+
+            }else{
+                $('#valor_bonificacion').val(0);
+                $('#valor_bonificacion').attr('disabled', false);
+                $('#valor_seguro').val(0);
+                $('#valor_seguro').attr('disabled', false);
+                $('#bono_valor_consulta').val(0);
+            }
+    }
+
     function actualizar_paciente_asistente() {
         var modificando = $('#modificando_paciente_asistente').val();
         var id_paciente = $('#estado_id_paciente').val();
@@ -2738,3 +2807,4 @@
             });
     }
 </script>
+

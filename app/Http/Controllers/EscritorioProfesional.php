@@ -6680,12 +6680,35 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         return $datos;
     }
 
+    public function devolucion_bono(Request $req){
+        $id_bono = $req->id_hora_medica;
+        $bono = Bono::where('id_referencia', $id_bono)->first();
+
+        $bono->devuelto = 1;
+
+        if($bono->save()){
+            return ['estado' => 1, 'mensaje' => 'El dinero y/o documento fue devuelto con éxito.'];
+        }else{
+            return ['estado' => 0, 'mensaje' => 'Ha ocurrido un error'];
+        }
+
+    }
+
     public function dame_valor_consulta(Request $request){
+        try {
+            if($request->id_profesional){
+                $profesional = Profesional::where('id_usuario',$request->id_profesional)->first();
+            }else{
+                $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+            }
 
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+            $profesional_convenio = ProfesionalConvenio::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$request->id_lugar_atencion)->first();
+            return $profesional_convenio;
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
 
-        $profesional_convenio = ProfesionalConvenio::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$request->id_lugar_atencion)->first();
-        return $profesional_convenio;
     }
 
     public function dame_valor_consulta_nueva(Request $req){
@@ -6716,6 +6739,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
 
     public function cancelar_hora(Request $request)
     {
+
         $hora_medica = HoraMedica::where('id', $request->id_hora_medica)->first();
 
         $hora_medica->comentarios_cancelacion = $request->comentario;

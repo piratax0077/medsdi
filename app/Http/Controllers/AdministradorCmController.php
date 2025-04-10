@@ -4074,6 +4074,24 @@ class AdministradorCmController extends Controller
             $sub_tipo_especialidad = $request->sub_tipo_especialidad;
             $id_user_solicitud = Auth::user()->id;
 
+            $nuevo_profesional = new Profesional;
+            $nuevo_profesional->rut = $rut;
+            $nuevo_profesional->nombre = $nombre;
+            $nuevo_profesional->apellido_uno = $apellido_uno;
+            $nuevo_profesional->apellido_dos = $apellido_dos;
+            $nuevo_profesional->sexo = "M";
+            $nuevo_profesional->fecha_nacimiento = null;
+            $nuevo_profesional->email = $email;
+            $nuevo_profesional->bienvenida = 0;
+            $nuevo_profesional->telefono_uno = $telefono;
+            $nuevo_profesional->estado = 1;
+            $nuevo_profesional->certificado = 3;
+            $nuevo_profesional->id_direccion = 3673;
+            $nuevo_profesional->id_especialidad = $profesion;
+            $nuevo_profesional->id_tipo_especialidad = $especialidad;
+            $nuevo_profesional->id_sub_tipo_especialidad = $sub_tipo_especialidad;
+
+            $nuevo_profesional->save();
             $result_invitacion = InvitacionController::registroInvtacionProfesional($request->id_lugar_atencion, $rut, $nombre, $apellido_uno, $apellido_dos, $telefono, $email, $profesion, $especialidad, $sub_tipo_especialidad, $id_user_solicitud, '', '0');
 
             if($result_invitacion->estado == 1)

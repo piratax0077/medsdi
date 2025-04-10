@@ -230,7 +230,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Clase Pago</label>
-                                    <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm">
+                                    <select id="bono_id_clase_bono" name="bono_id_clase_bono" class="form-control form-control-sm" onchange="evaluar_clase_pago(this)">
                                         <option value="1">Bono Fisico</option>
                                         <option value="2">Sencillito</option>
                                         <option value="3">Caja Vecina</option>
@@ -653,4 +653,23 @@
 </div>
 @include('app.asistente.modales.m_esperando_api')
 <!-- FIN MODAL AGREGAR HORA MEDICA -->
+
+<script>
+    function evaluar_clase_pago(value){
+        let id_clase_pago = value.value;
+        switch (id_clase_pago) {
+            case 1:
+                $('#bono_valor_consulta').val(0);
+                break;
+            case 2:
+                $('#bono_valor_consulta').val(0);
+                break;
+            case 3:
+                $('#bono_valor_consulta').val(0);
+                break;
+            default:
+                break;
+        }
+    }
+</script>
 

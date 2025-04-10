@@ -1548,6 +1548,7 @@ class EscritorioGeneral extends Controller
     /** sub tipo especialidad */
     public function cargar_sub_tipo_especialidad(Request $request)
     {
+
         $datos = array();
         $filtro = array();
         $filtro[] = array('estado',1);

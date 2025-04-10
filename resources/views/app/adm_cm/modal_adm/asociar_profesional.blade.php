@@ -194,7 +194,7 @@
                             </div>
 
                             <div class="form-group col-sm-12 col-md-12">
-                                <label class="floating-label">Profesión<span style="color: red; font-size: 10px;">*</span></label>
+                                <label class="floating-label-activo-sm">Profesión<span style="color: red; font-size: 10px;">*</span></label>
                                 <select class="form-control form-control-sm" id="agregar_profesional_nuevo_profesion" name="agregar_profesional_nuevo_profesion" onchange="buscar_tipo_especialidad()">
                                     <option selected value="0">Seleccione</option>
                                     @if (isset($especialidad))
@@ -206,7 +206,7 @@
                             </div>
 
                             <div class="form-group col-sm-12 col-md-12">
-                                <label class="floating-label">Especialidad<span style="color: red; font-size: 10px;">*</span></label>
+                                <label class="floating-label-activo-sm">Especialidad<span style="color: red; font-size: 10px;">*</span></label>
                                 <select class="form-control form-control-sm" id="agregar_profesional_nuevo_especialidad" name="agregar_profesional_nuevo_especialidad" onchange="buscar_sub_tipo_especialidad()">
                                     <option selected value="0">Seleccione</option>
                                     <option>-</option>
@@ -214,7 +214,7 @@
                             </div>
 
                             <div class="form-group col-sm-12 col-md-12">
-                                <label class="floating-label">Tipo Especialidad<span style="color: red; font-size: 10px;">*</span></label>
+                                <label class="floating-label-activo-sm">Tipo Especialidad<span style="color: red; font-size: 10px;">*</span></label>
                                 <select class="form-control form-control-sm" id="agregar_profesional_nuevo_sub_tipo_especialidad" name="agregar_profesional_nuevo_sub_tipo_especialidad">
                                     <option selected value="0">Seleccione</option>
                                     <option>-</option>
@@ -661,6 +661,88 @@
         let ggcc = $('#agregar_profesional_nuevo_ggcc').val();
         let box = $('#agregar_profesional_nuevo_box').val();
 
+        let valido = 1;
+        let mensaje = '';
+
+        if (id_lugar_atencion == '') {
+            valido = 0;
+            mensaje += '<li>Lugar de atención</li>';
+        }
+        if (rut == '') {
+            valido = 0;
+            mensaje += '<li>RUT</li>';
+        }
+        if (nombre == '') {
+            valido = 0;
+            mensaje += '<li>Nombre</li>';
+        }
+        if (apellido_uno == '') {
+            valido = 0;
+            mensaje += '<li>Primer apellido</li>';
+        }
+        if (apellido_dos == '') {
+            valido = 0;
+            mensaje += '<li>Segundo apellido</li>';
+        }
+        if (correo == '') {
+            valido = 0;
+            mensaje += '<li>Correo electrónico</li>';
+        }
+        if (telefono_uno == '') {
+            valido = 0;
+            mensaje += '<li>Teléfono</li>';
+        }
+        if (profesion == '') {
+            valido = 0;
+            mensaje += '<li>Profesión</li>';
+        }
+        if (especialidad == '') {
+            valido = 0;
+            mensaje += '<li>Especialidad</li>';
+        }
+        if (sub_tipo_especialidad == '') {
+            valido = 0;
+            mensaje += '<li>Sub tipo especialidad</li>';
+        }
+        if (id_tipo_convenio_institucion == '') {
+            valido = 0;
+            mensaje += '<li>Tipo de convenio con institución</li>';
+        }
+        if (fijo == '') {
+            valido = 0;
+            mensaje += '<li>Valor fijo</li>';
+        }
+        // if (atencion == '') {
+        //     valido = 0;
+        //     mensaje += '<li>Valor atención</li>';
+        // }
+        // if (confirmacion_agenda == '') {
+        //     valido = 0;
+        //     mensaje += '<li>Confirmación agenda</li>';
+        // }
+        // if (ggcc == '') {
+        //     valido = 0;
+        //     mensaje += '<li>GGCC</li>';
+        // }
+        // if (box == '') {
+        //     valido = 0;
+        //     mensaje += '<li>Box</li>';
+        // }
+
+        if (valido == 0) {
+            swal({
+                title: 'Faltan campos por completar',
+                content:{
+                    element: "ul",
+                    attributes: {
+                        innerHTML: mensaje
+                    }
+                },
+                icon: 'warning'
+            });
+            return;
+        }
+
 
         let url = "{{ route('adm_cm.asociar_profesional_nuevo')}}";
 
@@ -689,6 +771,7 @@
             },
         })
         .done(function(data) {
+            console.log(data);
             if (data.estado == 1)
             {
 
@@ -900,5 +983,7 @@
             $('#div_nuevo_servicio').addClass('d-none');
         }
     }
+
+
 
 </script>

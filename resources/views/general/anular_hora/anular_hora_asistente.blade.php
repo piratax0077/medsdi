@@ -75,6 +75,37 @@
     </div>
 </div>
 
+<!-- Modal devolución -->
+<div class="modal fade" id="modalDevolucion" tabindex="-1" role="dialog" aria-labelledby="modalDevolucionLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="formDevolucion" action="#" method="POST">
+        @csrf
+        <input type="hidden" id="modalDevolucionValor" name="valor_devolucion">
+        <input type="hidden" id="modalDevolucionIdHora" name="id_hora">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modalDevolucionLabel">Devolución de dinero</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            <p>¿Deseas devolver el monto de <strong>$<span id="modalValorTexto"></span></strong>?</p>
+            <div class="form-group">
+                <label for="motivo_devolucion">Motivo de devolución:</label>
+                <textarea class="form-control" name="motivo_devolucion" id="motivo_devolucion" rows="3" required></textarea>
+            </div>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-success" onclick="devolver_bono()">Confirmar devolución y anular hora</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+
 <script>
     function abrir_anular_hora()
     {
@@ -209,6 +240,14 @@
 
                 $.each(data.registros, function (index, value)
                 {
+                    var clase = 'd-none';
+                    if(value.estado.id !== 1 && value.estado.id !== 2){
+                        clase = 'badge badge-danger mb-3';
+                    }
+                    var valor = 0;
+                    if(value.dato !== null){
+                        valor = value.dato ? value.dato.valor_atencion : null;
+                    }
                     var html = '';
                     html += '<div class="row" style="border: 2px solid #aba8a8; border-radius: 13px; margin: 1em;padding: 10px 0px;">';
                     html += '    <div class="col-md-6 mb-2" style="text-align: left;"><span class="font-weight-bold">Paciente:</span> '+value.paciente.nombres+' '+value.paciente.apellido_uno+' '+value.paciente.apellido_dos+'</div>';
@@ -217,7 +256,11 @@
                     html += '    <div class="col-md-6 mb-2" style="text-align: left;"><span class="font-weight-bold">Hora termino:</span> '+value.hora_termino+'</div>';
                     html += '    <div class="col-md-12 mb-2" style="text-align: left;background-color:'+value.estado.color+';"><span class="font-weight-bold">Estado: '+value.estado.valor+'</span></div>';
                     html += '    <div class="col-md-6 mb-2" style="text-align: center;">';
-                    html += '       <button class="btn btn-sm btn-danger-light" onclick="cargar_comentario_anular_hora(\''+value.id+'\');">Anular</button>';
+                    html += '       <span class="'+clase+'">Hay pago asociado. Se debe anular el pago de $'+valor+'. </span>';
+                    html += '       <button class="btn btn-sm btn-danger-light mr-2" onclick="cargar_comentario_anular_hora(\''+value.id+'\');">Anular</button>';
+                    if(valor && valor !== 0){
+                        html += '       <button class="btn btn-sm btn-warning" onclick="abrirModalDevolucion('+valor+', \''+value.id+'\')">Devolver $'+valor+'</button>';
+                    }
                     html += '    </div>';
                     html += '</div>';
 
@@ -269,12 +312,23 @@
         $('#anular_comentario').val("");
     }
 
+    function abrirModalDevolucion(valor, id_hora) {
+        $('#modalDevolucionValor').val(valor);
+        $('#modalDevolucionIdHora').val(id_hora);
+        $('#modalDevolucion').modal('show');
+        $('#modalValorTexto').html(valor);
+    }
+
     function anular_horas()
     {
         var id_profesional = $('#anular_id_profesional_comentario').val();
         var id_lugar_atencion = $('#anular_id_lugar_atencion_comentario').val();
         var id_hora = $('#anular_id_hora_comentario').val();
         var comentario = $('#anular_comentario').val();
+
+        if(!comentario || comentario == null || comentario == undefined || comentario == ''){
+            comentario = '';
+        }
 
         let url = "{{ route('agenda.cancelar_hora') }}";
 
@@ -289,6 +343,7 @@
                 },
             })
             .done(function(data) {
+                console.log(data);
                 if (data != null) {
                     data = JSON.parse(data);
                     console.log(data);
@@ -327,6 +382,45 @@
         $.each(tipos_agendas, function (key, value)
         {
             $("#anular_agenda").append('<option value="'+value+'">'+arrayTipoAgenda[value]+'</option>');
+        });
+    }
+
+    function devolver_bono(){
+        let id_hora_medica = $('#modalDevolucionIdHora').val();
+        let url = "{{ ROUTE('profesional.devolucion_bono') }}";
+        let motivo_devolucion = $('#motivo_devolucion').val();
+        let data = {
+            id_hora_medica: id_hora_medica,
+            motivo_devolucion: motivo_devolucion,
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.estado == 1){
+                    swal({
+                        title:'Exito',
+                        icon:'success',
+                        text: resp.mensaje,
+                    });
+                    // cerrar modal
+                    $('#modalDevolucion').modal('hide');
+
+                }else{
+                    swal({
+                        title:'Error',
+                        icon:'error',
+                        text: resp.mensaje,
+                    });
+                }
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
         });
     }
 </script>

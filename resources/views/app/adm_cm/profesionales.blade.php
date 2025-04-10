@@ -658,6 +658,56 @@ $(document).ready(function(){
             })
         }
 
+        function validar_email_agenda() {
+        if ($("#agregar_profesional_nuevo_correo").val().indexOf('@', 0) == -1 || $("#agregar_profesional_nuevo_correo")
+            .val().indexOf(
+                '.', 0) == -1) {
+            swal({
+                title: "El correo electrónico introducido no es correcto.",
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            })
+            // alert('El correo electrónico introducido no es correcto.');
+            $("#guardar_reserva_paciente").prop('disabled', true);
+            return false;
+        }
+
+        let email = $('#agregar_profesional_nuevo_correo').val();
+        let url = "#";
+
+        $.ajax({
+            url: url,
+            type: "get",
+            data: {
+
+                email: email,
+
+            }
+
+        })
+        .done(function(data) {
+            if (data == 'fail') {
+
+                // console.log(data);
+
+                $('#mensaje_email_reserva').text('el email ya esta en nuestros registros');
+                $('#mensaje_email_reserva').show();
+                $('#agregar_profesional_nuevo_correo').focus();
+
+                $("#guardar_reserva_paciente").prop('disabled', true);
+
+            } else {
+                $('#mensaje_email_reserva').text('');
+                $('#mensaje_email_reserva').hide();
+                $("#guardar_reserva_paciente").prop('disabled', false);
+            }
+
+        })
+        .fail(function(jqXHR, ajaxOptions, thrownError) {
+            console.log(jqXHR, ajaxOptions, thrownError)
+        });
+    }
     </script>
 @endsection
 
