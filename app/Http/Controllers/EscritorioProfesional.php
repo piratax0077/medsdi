@@ -192,6 +192,9 @@ class EscritorioProfesional extends Controller
         $profesional->telefono_uno = $request->telefono_uno;
 
         $profesional->save();
+        $user->email = $request->email;
+
+        $user->save();
 
         if (!$profesional->save()) {
 
@@ -2225,34 +2228,40 @@ class EscritorioProfesional extends Controller
     }
 
     public function dameBocaCompletaGeneralTratamiento($id_paciente, $tipo_especialidad){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Boca completa')
         ->where('examenes_boca_general.tipo_examen',1)
         ->where('especialidad_examen','tratamiento')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.id_profesional',$profesional->id)
         ->get();
         return $examenes;
     }
 
     public function dameBocaCompletaGeneralDiagnostico($id_paciente, $tipo_especialidad){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Boca completa')
         ->where('examenes_boca_general.tipo_examen',1)
         ->where('especialidad_examen','diagnostico')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.id_profesional',$profesional->id)
         ->get();
         return $examenes;
     }
 
     public function dameMaxilarInferiorGeneralTratamiento($id_paciente, $tipo_especialidad){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Maxilar inferior')
         ->where('examenes_boca_general.tipo_examen',1)
         ->where('especialidad_examen','tratamiento')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.id_profesional',$profesional->id)
         ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
@@ -2293,45 +2302,53 @@ class EscritorioProfesional extends Controller
     }
 
     public function dameMaxilarSuperiorGeneralTratamientoEndodoncia($id_paciente){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('examenes_boca_general.localizacion','Maxilar superior')
         ->where('examenes_boca_general.tipo_examen',2)
         ->where('examenes_boca_general.especialidad_examen','tratamiento')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.id_profesional',$profesional->id)
         ->get();
         return $examenes;
     }
 
     public function dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($id_paciente){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Maxilar superior')
         ->where('examenes_boca_general.tipo_examen',2)
         ->where('especialidad_examen','diagnostico')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.id_profesional',$profesional->id)
         ->get();
         return $examenes;
     }
 
     public function dameMaxilarInferiorGeneralTratamientoEndodoncia($id_paciente){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Maxilar inferior')
         ->where('examenes_boca_general.tipo_examen',2)
         ->where('especialidad_examen','tratamiento')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.id_profesional',$profesional->id)
         ->get();
         return $examenes;
     }
 
     public function dameMaxilarInferiorGeneralDiagnosticoEndodoncia($id_paciente){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
         ->where('localizacion','Maxilar inferior')
         ->where('examenes_boca_general.tipo_examen',2)
         ->where('especialidad_examen','diagnostico')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.id_profesional',$profesional->id)
         ->get();
         return $examenes;
     }
@@ -2485,6 +2502,7 @@ class EscritorioProfesional extends Controller
     }
 
     public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($tipo_especialidad == 16){
             $query = OdontogramaPaciente::select(
                 'odontogramas_pacientes.*',
@@ -2495,7 +2513,7 @@ class EscritorioProfesional extends Controller
                 ->join('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
                 ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
                 ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-
+                ->where('odontogramas_pacientes.id_profesional', $profesional->id)
                 ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
                 ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
         }else{
@@ -2508,7 +2526,7 @@ class EscritorioProfesional extends Controller
                 ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
                 ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
                 ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-
+                ->where('odontogramas_pacientes.id_profesional', $profesional->id)
                 ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
                 ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
         }
@@ -2694,18 +2712,21 @@ class EscritorioProfesional extends Controller
     }
 
     public function dameMaxilarSuperiorGeneralTratamiento($id_paciente, $tipo_especialidad){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
                                             ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
                                             ->where('examenes_boca_general.id_paciente',$id_paciente)
                                             ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
                                             ->where('examenes_boca_general.localizacion','Maxilar superior')
                                             ->where('examenes_boca_general.tipo_examen',1)
+                                            ->where('examenes_boca_general.id_profesional',$profesional->id)
                                             ->where('examenes_boca_general.especialidad_examen','tratamiento')
                                             ->get();
         return $examenes;
     }
 
     public function dameMaxilarSuperiorGeneralDiagnostico($id_paciente, $tipo_especialidad){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
 
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
@@ -2713,6 +2734,7 @@ class EscritorioProfesional extends Controller
         ->where('examenes_boca_general.tipo_examen',1)
         ->where('especialidad_examen','diagnostico')
         ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.id_profesional',$profesional->id)
         ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad)
         ->get();
         return $examenes;
@@ -5386,15 +5408,15 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         // $paciente['fecha_ultima'] = Carbon::now()->format('Y-m-d');
 
         $profesional_agenda = Profesional::where('id_usuario', $request->id_profesional)->first();
-
-		if($profesional_agenda && $paciente['tipo_paciente'] == 'SI')
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+		if($profesional_agenda && !$profesional && $paciente['tipo_paciente'] == 'SI')
 		{
 			$fecha_ultima_atencion = HoraMedica::select('horas_medicas.fecha_consulta','fichas_atenciones.*')
 			->join('fichas_atenciones','horas_medicas.id_ficha_atencion','fichas_atenciones.id')
 			->where('horas_medicas.id_paciente', $paciente->id)
 			->where('horas_medicas.id_profesional', $profesional_agenda->id)
 			->where('fichas_atenciones.finalizada',1)
-			// ->where('horas_medicas.id_lugar_atencion', $request->id_lugar_atencion)
+			->where('horas_medicas.id_lugar_atencion', $request->id_lugar_atencion)
 			->orderBy('horas_medicas.id','desc')
 			->first();
 
@@ -5405,6 +5427,17 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 $paciente->fecha_ultima_atencion = Carbon::now()->format('Y-m-d');
             }
 		}
+        if($profesional && $paciente['tipo_paciente'] == 'SI'){
+            $fecha_ultima_atencion = HoraMedica::select('horas_medicas.fecha_consulta','fichas_atenciones.*')
+			->join('fichas_atenciones','horas_medicas.id_ficha_atencion','fichas_atenciones.id')
+			->where('horas_medicas.id_paciente', $paciente->id)
+			->where('horas_medicas.id_profesional', $profesional->id)
+			->where('fichas_atenciones.finalizada',1)
+			->where('horas_medicas.id_lugar_atencion', $request->id_lugar_atencion)
+			->orderBy('horas_medicas.id','desc')
+			->first();
+            if($fecha_ultima_atencion) $paciente->fecha_ultima_atencion = Carbon::parse($fecha_ultima_atencion->fecha_consulta)->toDateString(); // Solo la fecha (YYYY-MM-DD)
+        }
         else
 		{
 			$paciente['fecha_ultima_atencion'] = Carbon::now()->format('Y-m-d');
@@ -5413,9 +5446,10 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
         // bonos
-        if($profesional){
-            $bonos = Bono::where('id_paciente', $paciente->id)->where('id_profesional',$profesional->id)->orderBy('id','desc')->take(1)->get();
-            $paciente->bonos = $bonos;
+        if($profesional &&  $paciente['tipo_paciente'] == 'NO'){
+            // $bonos = Bono::where('id_paciente', $paciente->id)->where('id_profesional',$profesional->id)->orderBy('id','desc')->take(1)->get();
+            $bonos = [];
+            //$paciente->bonos = $bonos;
         }else{
             if($paciente['tipo_paciente'] == 'SI'){
                 $bonos = Bono::where('id_paciente', $paciente->id)->where('id_profesional',$request->id_profesional)->get();

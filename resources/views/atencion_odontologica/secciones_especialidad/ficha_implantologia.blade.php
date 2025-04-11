@@ -2671,15 +2671,15 @@
                                             <div class="form-row">
                                                 <div class="form-group col-md-4">
                                                     <label class="floating-label-activo-sm">Hipótesis diagnóstica</label>
-                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" value="{{ $fichaAtencion->hipotesis_diagnostico}}">
+                                                        <input type="text" class="form-control form-control-sm"  data-input_igual="lic_descripcion_hipotesis,hipotesis_certificado" name="descripcion_hipotesis" id="descripcion_hipotesis" onchange="cargarIgual('descripcion_hipotesis')" value="{{ isset($fichaAtencion->hipotesis_diagnostico) ? $fichaAtencion->hipotesis_diagnostico : '' }}">
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                     <label class="floating-label-activo-sm">Indicaciones</label>
-                                                    <input type="text" class="form-control form-control-sm" name="ind_oft" id="ind_oft" value="{{ $fichaAtencion->indicaciones }}">
+                                                    <input type="text" class="form-control form-control-sm" name="ind_oft" id="ind_oft" value="{{ isset($fichaAtencion->indicaciones) ? $fichaAtencion->indicaciones : ''  }}">
                                                 </div>
                                                 <div class="form-group col-md-4">
                                                     <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
-                                                    <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie" name="descripcion_cie" id="descripcion_cie" value="{{ $fichaAtencion->descripcion_ce10 }}" onchange="cargarIgual('descripcion_cie')">
+                                                    <input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie" name="descripcion_cie" id="descripcion_cie" value="{{ isset($fichaAtencion->descripcion_ce10) ? $fichaAtencion->descripcion_ce10 : ''  }}" onchange="cargarIgual('descripcion_cie')">
                                                     <input type="hidden" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="" onchange="cargarIgual('id_descripcion_cie')">
                                                 </div>
                                             </div>

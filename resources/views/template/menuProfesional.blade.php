@@ -1,4 +1,4 @@
-@if (isset($id_ficha_atencion) && !empty($id_ficha_atencion))
+@if (isset($fichaAtencion) && !empty($fichaAtencion))
 
     <nav class="pcoded-navbar menu-light">
         <div class="navbar-wrapper">
@@ -84,7 +84,7 @@
                     @endif --}}
                     <hr>
                     <h6 class="mt-3 mb-3" style="font-size: 12px; font-weight: bold; color:#137370;">PATOLOGÍAS CRONICAS</h6>
-                    <ul>
+                    <ul id="listado_patologias_paciente">
                         @foreach ($antecedentes as $a)
                         @if($a->estado == 1 && $a->id_tipo_antecedente == 2)
                             <li>{{ $a->antecedente_data->nombre }}</li>

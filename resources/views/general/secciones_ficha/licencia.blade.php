@@ -462,7 +462,7 @@
                                                             <label class="floating-label-activo-sm">Hipótesis Diagnóstica</label>
                                                             <input type="text" class="form-control form-control-sm"  data-input_igual="hip-diag_spec,descripcion_hipotesis" name="lic_descripcion_hipotesis" id="lic_descripcion_hipotesis" value="{{ $licencia->descripcion_hipotesis }}" onchange="cargarIgual('lic_descripcion_hipotesis')">
                                                         @else
-                                                            @if (isset($fichaAtencion) && $fichaAtencion->hipotesis_diagnostico != null)
+                                                            @if (isset($fichaAtencion) && isset($fichaAtencion->hipotesis_diagnostico) )
                                                                 <label class="floating-label-activo-sm">Hipótesis Diagnóstica</label>
                                                                 <input type="text" class="form-control form-control-sm"  data-input_igual="hip-diag_spec,descripcion_hipotesis" name="lic_descripcion_hipotesis" id="lic_descripcion_hipotesis" value="{{ $fichaAtencion->hipotesis_diagnostico }}" onchange="cargarIgual('lic_descripcion_hipotesis')">
                                                             @else
@@ -480,10 +480,10 @@
                                                             <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="lic_descripcion_cie" id="lic_descripcion_cie" value="{{ $licencia->descripcion_cie }}" onchange="cargarIgual('lic_descripcion_cie')">
                                                             <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_lic_descripcion_cie" id="id_lic_descripcion_cie" value="{{ $licencia->id_descripcion_cie }}" onchange="cargarIgual('id_lic_descripcion_cie')">
                                                         @else
-                                                            @if (isset($fichaAtencion) && $fichaAtencion->diagnostico_ce10 != null)
+                                                            @if (isset($fichaAtencion) && isset($fichaAtencion->diagnostico_ce10))
                                                                 <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
-                                                                <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="lic_descripcion_cie" id="lic_descripcion_cie" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('lic_descripcion_cie')">
-                                                                <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_lic_descripcion_cie" id="id_lic_descripcion_cie" value="{{ $fichaAtencion->diagnostico_ce10 }}" onchange="cargarIgual('id_lic_descripcion_cie')">
+                                                                <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="lic_descripcion_cie" id="lic_descripcion_cie" value="{{ isset($fichaAtencion->diagnostico_ce10) ? $fichaAtencion->diagnostico_ce10 : '' }}" onchange="cargarIgual('lic_descripcion_cie')">
+                                                                <input type="hidden" class="form-control form-control-sm" data-input_igual="id_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_lic_descripcion_cie" id="id_lic_descripcion_cie" value="{{ isset($fichaAtencion->diagnostico_ce10) ? $fichaAtencion->diagnostico_ce10 : '' }}" onchange="cargarIgual('id_lic_descripcion_cie')">
                                                             @else
                                                                 <label class="floating-label-activo-sm">Diagnóstico CIE-10</label>
                                                                 <input type="text" class="form-control form-control-sm" data-input_igual="descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="lic_descripcion_cie" id="lic_descripcion_cie" value="{!! old('lic_descripcion_cie') !!}" onchange="cargarIgual('lic_descripcion_cie')">

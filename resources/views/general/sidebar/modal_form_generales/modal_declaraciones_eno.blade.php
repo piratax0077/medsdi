@@ -8,7 +8,7 @@
             </div>
 
             <div class="modal-body">
-                <input type="hidden" name="eno_id_ficha_atencion" id="eno_id_ficha_atencion" value=" @if ($fichaAtencion != null) {{ $fichaAtencion->id }} @endif">
+                <input type="hidden" name="eno_id_ficha_atencion" id="eno_id_ficha_atencion" value=" @if (isset($fichaAtencion->id)) {{ $fichaAtencion->id }} @endif">
                 <input type="hidden" name="eno_id_pacienter" id="eno_id_pacienter" value="{{ $paciente->id }}">
                 <input type="hidden" name="eno_id_lugar_atencion" id="eno_id_lugar_atencion" value="{{ $lugar_atencion->id }}">
 
@@ -44,7 +44,7 @@
                                 </div>
                                 <div class="form-group col-sm-6 col-md-6">
                                     <label class="floating-label-activo-sm">Nº de ficha clínica o código de control</label>
-                                    <input type="text" class="form-control form-control-sm" name="numero_ficha_control" id="numero_ficha_control" value="{{ $fichaAtencion->id }}" readonly>
+                                    <input type="text" class="form-control form-control-sm" name="numero_ficha_control" id="numero_ficha_control" value="{{ isset($fichaAtencion->id) ? $fichaAtencion->id : '' }}" readonly>
                                 </div>
                             </div>
                         </div>

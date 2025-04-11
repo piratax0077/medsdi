@@ -1,7 +1,7 @@
 <!--INDICACIONES-->
 
 <div class="row">
-    @if (isset($fichaAtencion) && $fichaAtencion->hipotesis_diagnostico != null)
+    @if (isset($fichaAtencion) && isset($fichaAtencion->hipotesis_diagnostico) )
     <div class="col-sm-12 col-md-6 text-center">
         <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
             <button type="button" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar

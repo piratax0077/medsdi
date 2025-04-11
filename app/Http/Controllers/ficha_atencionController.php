@@ -1988,7 +1988,6 @@ class ficha_atencionController extends Controller
         $epc = new EscritorioProfesional;
         $tons_dental = $epc->dame_relaciones_tons($profesional->id);
 
-
         return view($ruta_blade)->with(
             [
                 'paciente' => $paciente,
@@ -2310,6 +2309,7 @@ class ficha_atencionController extends Controller
 
 
     public function dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($tipo_especialidad == 16){
             $query = OdontogramaPaciente::select(
                 'odontogramas_pacientes.*',
@@ -2320,8 +2320,9 @@ class ficha_atencionController extends Controller
                 ->join('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
                 ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
                 ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-
+                ->where('odontogramas_pacientes.id_profesional', )
                 ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
+                ->where('odontogramas_pacientes.id_profesional', $profesional->id)
                 ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
         }else{
             $query = OdontogramaPaciente::select(
@@ -2333,8 +2334,8 @@ class ficha_atencionController extends Controller
                 ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
                 ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
                 ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-
                 ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
+                ->where('odontogramas_pacientes.id_profesional', $profesional->id)
                 ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
         }
 
@@ -5439,7 +5440,9 @@ class ficha_atencionController extends Controller
             $ficha = FichaAtencion::where('id', $hora_medica->id_ficha_atencion)->first();
             $id_profesional = $request->id_profesional_fc;
             $id_paciente = $request->id_paciente_fc;
-
+            if(!$ficha){
+                $ficha = new FichaAtencion;
+            }
 			$ficha->motivo = $request->motivo;
             $ficha->antecedentes = $request->antecedentes;
             $ficha->examen_fisico = $request->examen_fisico;
@@ -10844,6 +10847,8 @@ class ficha_atencionController extends Controller
                 $profesional = Profesional::where('id_usuario', $user)->first();
             }
 
+            return $profesional;
+
             $paciente = Paciente::find($hora->id_paciente);
 
             $ficha_previas = '';
@@ -11204,11 +11209,53 @@ class ficha_atencionController extends Controller
                                 }
                                 break;
                             case 10: //NEUROLOGÍA Y NEUROCIRUGÍA
+                                /** FICHAS DE ATENCIONES PREVIAS */
+                                $filtro_previas = array();
+                                $filtro_previas[] = array('id_paciente', $paciente->id);
+                                $filtro_previas[] = array('confidencial', '0');
+                                $filtro_previas[] = array('finalizada', 1);
+                                $filtro_previas[] = array('id_profesional', $profesional->id);
+                                $ficha_previas = FichaAtencion::where($filtro_previas)->get();
 
+                                $datos['ficha_previas'] = $ficha_previas;
+
+
+                                /** FICHA ATENCION ACTUAL */
+                                if(empty($hora->id_ficha_atencion))
+                                {
+                                    $nueva_ficha_atencion = new FichaAtencion();
+                                    $nueva_ficha_atencion->id_paciente = $paciente->id;
+                                    $nueva_ficha_atencion->id_profesional = $profesional->id;
+                                    $nueva_ficha_atencion->id_lugar_atencion = $hora->id_lugar_atencion;
+
+                                    if ($nueva_ficha_atencion->save())
+                                    {
+                                        $hora->id_estado = 5;
+                                        $hora->fecha_realizacion_consulta = now();
+                                        $hora->id_ficha_atencion = $nueva_ficha_atencion->id;
+                                        $hora->save();
+                                        $ficha_actual_nueva = $nueva_ficha_atencion;
+                                    }
+                                    else
+                                    {
+                                        $nueva_ficha_atencion = '';
+                                    }
+                                }
+                                else
+                                {
+                                    $filtro_fichaAtencion = array();
+                                    $filtro_fichaAtencion[] = array('id_paciente', $paciente->id);
+                                    $filtro_fichaAtencion[] = array('id', $hora->id_ficha_atencion);
+                                    $ficha_actual_nueva = FichaAtencion::where($filtro_fichaAtencion)->first();
+                                }
+
+                                $datos['id_ficha_actual_nueva'] = $ficha_actual_nueva->id;
+                                $datos['ficha_actual_nueva'] = $ficha_actual_nueva;
                                 if(!empty($profesional->id_sub_tipo_especialidad))
                                 {
                                     switch (intval($profesional->id_sub_tipo_especialidad)) {
                                         case 58:// 58	Neurología
+
                                             break;
                                         case 59:// 59	Neurocirugía
                                             break;

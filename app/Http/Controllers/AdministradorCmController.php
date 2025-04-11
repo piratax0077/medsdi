@@ -3905,11 +3905,11 @@ class AdministradorCmController extends Controller
             $error['especialidad'] = 'campo requerido';
             $valido = 0;
         }
-        if(empty($request->sub_tipo_especialidad))
-        {
-            $error['sub_tipo_especialidad'] = 'campo requerido';
-            $valido = 0;
-        }
+        // if(empty($request->sub_tipo_especialidad))
+        // {
+        //     $error['sub_tipo_especialidad'] = 'campo requerido';
+        //     $valido = 0;
+        // }
         if(empty($request->id_tipo_convenio_institucion))
         {
             $error['id_tipo_convenio_institucion'] = 'campo requerido';
@@ -4063,6 +4063,7 @@ class AdministradorCmController extends Controller
             /** FIN INFORMACION DE INSTITUCION Y RESPONSABLE */
 
             /** REGISTRO INVITACION */
+            $sexo = $request->sexo;
             $rut = $request->rut;
             $nombre = $request->nombre;
             $apellido_uno = $request->apellido_uno;
@@ -4079,14 +4080,17 @@ class AdministradorCmController extends Controller
             $nuevo_profesional->nombre = $nombre;
             $nuevo_profesional->apellido_uno = $apellido_uno;
             $nuevo_profesional->apellido_dos = $apellido_dos;
-            $nuevo_profesional->sexo = "M";
+            $nuevo_profesional->sexo = $sexo;
             $nuevo_profesional->fecha_nacimiento = null;
             $nuevo_profesional->email = $email;
             $nuevo_profesional->bienvenida = 0;
             $nuevo_profesional->telefono_uno = $telefono;
             $nuevo_profesional->estado = 1;
             $nuevo_profesional->certificado = 3;
-            $nuevo_profesional->id_direccion = 3673;
+
+            $lugar_atencion = LugarAtencion::where('id', $request->id_lugar_atencion)->first();
+
+            $nuevo_profesional->id_direccion = $lugar_atencion->id_direccion;
             $nuevo_profesional->id_especialidad = $profesion;
             $nuevo_profesional->id_tipo_especialidad = $especialidad;
             $nuevo_profesional->id_sub_tipo_especialidad = $sub_tipo_especialidad;

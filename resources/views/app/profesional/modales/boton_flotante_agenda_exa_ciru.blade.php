@@ -704,7 +704,7 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked)" ${checked} ${disabled}>
                                 <label class="form-check-label" for="tratamiento${t.id}">N° Pieza ${t.pieza} - ${t.tratamiento}</label>
                             </div>`);
                         }
@@ -716,7 +716,7 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
 
@@ -729,7 +729,7 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
 
@@ -742,7 +742,7 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
 
@@ -755,7 +755,7 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar superior ${t.diagnostico_tratamiento}</label>
                             </div>`);
 
@@ -768,7 +768,7 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
 
@@ -781,7 +781,7 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
 
@@ -794,7 +794,7 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
 
@@ -807,7 +807,7 @@
 
                             $('#contenedor_tratamientos_presupuesto').append(`
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} >
+                                <input class="form-check-input" type="checkbox" id="tratamiento${t.id}" onclick="handleCheckboxClick(${t.id}, this.checked,'gral')" ${checked} ${disabled}>
                                 <label class="form-check-label" for="tratamiento${t.id}">Maxilar inferior ${t.diagnostico_tratamiento}</label>
                             </div>`);
 

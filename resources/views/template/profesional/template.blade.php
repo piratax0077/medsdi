@@ -2432,7 +2432,7 @@
                     },
                 })
                 .done(function(data) {
-
+                    console.log(data);
                     console.log(JSON.parse(data));
                     if (data !== 'null') {
 
@@ -2523,7 +2523,7 @@
                             $('#reserva_hora_edad').val(data.edad);
 
                             // $('#id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
-                            $('#contenedor_tratamientos_presupuesto').hide();
+                            $('#contenedor_tratamientos_presupuesto').show();
                             $('#presupuesto_numero').empty();
                             $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
                             console.log(data.presupuestos.length);
@@ -6149,30 +6149,30 @@
                 mensaje += 'Campo requerido RUT DEL PROFESIONAL\n';
                 valido = 0;
             }
-            if (parseInt(bono_id_clase_bono) !== 6 && parseInt(bono_id_clase_bono)  !== 2 && parseInt(bono_id_clase_bono)  !== 8) {
-                if (bono_numero == '') {
-                    mensaje += 'Campo requerido NUMERO DEL BONO O PROGRAMA\n';
-                    valido = 0;
-                }
-                var suma = parseInt(bono_valor_bonificacion) + parseInt(bono_valor_seguro) + parseInt(bono_valor_consulta);
-                if (suma !== 26830) {
-                    mensaje += 'El valor total no coincide con valor actual del bono\n';
-                    valido = 0;
-                }
-                console.log(suma);
-                if( bono_valor_seguro == '') {
-                    mensaje += 'Campo requerido VALOR SEGURO\n';
-                    valido = 0;
-                }
-                if (bono_valor_consulta == '') {
-                    mensaje += 'Campo requerido VALOR TOTAL\n';
-                    valido = 0;
-                }
-                if (bono_prevision == '' || bono_prevision == 0) {
-                    mensaje += 'Campo requerido CONVENIO\n';
-                    valido = 0;
-                }
-            }
+            // if (parseInt(bono_id_clase_bono) !== 6 && parseInt(bono_id_clase_bono)  !== 2 && parseInt(bono_id_clase_bono)  !== 8) {
+            //     if (bono_numero == '') {
+            //         mensaje += 'Campo requerido NUMERO DEL BONO O PROGRAMA\n';
+            //         valido = 0;
+            //     }
+            //     var suma = parseInt(bono_valor_bonificacion) + parseInt(bono_valor_seguro) + parseInt(bono_valor_consulta);
+            //     if (suma !== 26830) {
+            //         mensaje += 'El valor total no coincide con valor actual del bono\n';
+            //         valido = 0;
+            //     }
+            //     console.log(suma);
+            //     if( bono_valor_seguro == '') {
+            //         mensaje += 'Campo requerido VALOR SEGURO\n';
+            //         valido = 0;
+            //     }
+            //     if (bono_valor_consulta == '') {
+            //         mensaje += 'Campo requerido VALOR TOTAL\n';
+            //         valido = 0;
+            //     }
+            //     if (bono_prevision == '' || bono_prevision == 0) {
+            //         mensaje += 'Campo requerido CONVENIO\n';
+            //         valido = 0;
+            //     }
+            // }
             if( bono_valor_bonificacion == '') {
                 mensaje += 'Campo requerido VALOR BONIFICACION\n';
                 valido = 0;

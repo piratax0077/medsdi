@@ -1247,7 +1247,7 @@
                         </select>
 					</div>
 				</div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -3289,7 +3289,7 @@
                     var html_ = '';
                     var permiso_ = '';
                     var id_users = parseInt($('#user-id').val());
-
+                    $('#listado_patologias_paciente').empty();
                     resp.registros.forEach(e => {
 
                         permiso_ = '';
@@ -3321,6 +3321,7 @@
                                         <td>${permiso_}</td>
                                     </tr>
                                 `;
+
                             break;
                             case '2':
                                 head_ =`
@@ -3341,6 +3342,7 @@
                                         <td>${permiso_}</td>
                                     </tr>
                                 `;
+                                $('#listado_patologias_paciente').append(`<li>${e.antecedente_data.nombre} </li>`);
                             break;
                             case '3':
                                 head_ =`

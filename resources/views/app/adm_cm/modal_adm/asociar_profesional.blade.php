@@ -161,6 +161,17 @@
                             </div>
                             <div class="col-sm-12 col-md-12">
                                 <div class="form-group">
+                                    <label class="floating-label-activo-sm">Sexo<span style="color: red; font-size: 10px;">*</span></label>
+                                    <select name="agregar_profesional_sexo" id="agregar_profesional_sexo" class="form-control form-control-sm">
+                                        <option value="0">Seleccione</option>
+                                        <option value="M">Masculino</option>
+                                        <option value="F">Femenino</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
                                     <label class="floating-label-activo-sm">Nombres<span style="color: red; font-size: 10px;">*</span></label>
                                     <input type="text" required class="form-control form-control-sm" name="agregar_profesional_nuevo_nombre" id="agregar_profesional_nuevo_nombre">
                                 </div>
@@ -193,32 +204,40 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-sm-12 col-md-12">
-                                <label class="floating-label-activo-sm">Profesión<span style="color: red; font-size: 10px;">*</span></label>
-                                <select class="form-control form-control-sm" id="agregar_profesional_nuevo_profesion" name="agregar_profesional_nuevo_profesion" onchange="buscar_tipo_especialidad()">
-                                    <option selected value="0">Seleccione</option>
-                                    @if (isset($especialidad))
-                                        @foreach ($especialidad as $esp)
-                                            <option value="{{ $esp->id }}">{{ $esp->nombre }}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group fill ">
+                                    <label class="floating-label-activo-sm">Profesión<span style="color: red; font-size: 10px;">*</span></label>
+                                    <select class="form-control form-control-sm" id="agregar_profesional_nuevo_profesion" name="agregar_profesional_nuevo_profesion" onchange="buscar_tipo_especialidad()">
+                                        <option selected value="0">Seleccione</option>
+                                        @if (isset($especialidad))
+                                            @foreach ($especialidad as $esp)
+                                                <option value="{{ $esp->id }}">{{ $esp->nombre }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+
                             </div>
 
-                            <div class="form-group col-sm-12 col-md-12">
-                                <label class="floating-label-activo-sm">Especialidad<span style="color: red; font-size: 10px;">*</span></label>
-                                <select class="form-control form-control-sm" id="agregar_profesional_nuevo_especialidad" name="agregar_profesional_nuevo_especialidad" onchange="buscar_sub_tipo_especialidad()">
-                                    <option selected value="0">Seleccione</option>
-                                    <option>-</option>
-                                </select>
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Especialidad<span style="color: red; font-size: 10px;">*</span></label>
+                                    <select class="form-control form-control-sm" id="agregar_profesional_nuevo_especialidad" name="agregar_profesional_nuevo_especialidad" onchange="buscar_sub_tipo_especialidad()">
+                                        <option selected value="0">Seleccione</option>
+                                        <option>-</option>
+                                    </select>
+                                </div>
                             </div>
 
-                            <div class="form-group col-sm-12 col-md-12">
-                                <label class="floating-label-activo-sm">Tipo Especialidad<span style="color: red; font-size: 10px;">*</span></label>
-                                <select class="form-control form-control-sm" id="agregar_profesional_nuevo_sub_tipo_especialidad" name="agregar_profesional_nuevo_sub_tipo_especialidad">
-                                    <option selected value="0">Seleccione</option>
-                                    <option>-</option>
-                                </select>
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Tipo Especialidad<span style="color: red; font-size: 10px;">*</span></label>
+                                    <select class="form-control form-control-sm" id="agregar_profesional_nuevo_sub_tipo_especialidad" name="agregar_profesional_nuevo_sub_tipo_especialidad">
+                                        <option selected value="0">Seleccione</option>
+                                        <option>-</option>
+                                    </select>
+                                </div>
+
                             </div>
 
                         </div>
@@ -643,6 +662,7 @@
     {
         let id_lugar_atencion = $('#agregar_profesional_int_id_lugar_atencion').val();
 
+        let sexo = $('#agregar_profesional_sexo').val();
         let rut = $('#agregar_profesional_nuevo_rut').val();
         let nombre = $('#agregar_profesional_nuevo_nombre').val();
         let apellido_uno = $('#agregar_profesional_nuevo_apellido_uno').val();
@@ -667,6 +687,10 @@
         if (id_lugar_atencion == '') {
             valido = 0;
             mensaje += '<li>Lugar de atención</li>';
+        }
+        if(sexo == 0){
+            valido = 0;
+            mensaje += '<li>Sexo</li>';
         }
         if (rut == '') {
             valido = 0;
@@ -752,6 +776,7 @@
             data: {
                 _token: CSRF_TOKEN,
                 id_lugar_atencion : id_lugar_atencion,
+                sexo: sexo,
                 rut : rut,
                 nombre : nombre,
                 apellido_uno : apellido_uno,

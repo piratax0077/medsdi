@@ -19,10 +19,10 @@
 @include('general.sidebar.modal_form_generales.modal_declaraciones_eno')
 
 <!---******* Modal Formulario Reembolso gastos médicos ********-->
-@include('general.sidebar.modal_form_generales.modal_form_reembolso_medico')
+{{-- @include('general.sidebar.modal_form_generales.modal_form_reembolso_medico') --}}
 
 <!---******* Modal Formulario Reembolso gastos dentales ********-->
-@include('general.sidebar.modal_form_generales.modal_form_reembolso_dental')
+{{-- @include('general.sidebar.modal_form_generales.modal_form_reembolso_dental') --}}
 
 
 <!--Modals Formularios de Consentimientos informados generales-->

@@ -231,7 +231,9 @@
                                         <option value="">Seleccione</option>
                                     </select>
                                 </div>
-                                <div id="contenedor_tratamientos_presupuesto"></div>
+                                <div id="contenedor_tratamientos_presupuesto">
+                                    Se utilizan <span id="cantidad_bloques_atencion">1</span> bloque de atención.
+                                </div>
                             </div>
 
                         @endif
