@@ -11,7 +11,7 @@
                             </div>
                             <div class="form-group fill mt-3">
                                 <label for="" class="floating-label-activo-sm">Identificación de imagen</label>
-                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_result_biopsia4" id="obs_result_biopsia4"></textarea>
+                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="iden_image_pre{{ $counter }}" id="iden_image_pre{{ $counter }}"></textarea>
                             </div>
                         </div>
                     </div>
@@ -24,7 +24,7 @@
                             <div>
                                 <div class="form-group fill mt-3">
                                     <label for="" class="floating-label-activo-sm">Identificación de imagen</label>
-                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_result_biopsia4" id="obs_result_biopsia4"></textarea>
+                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="iden_image_post{{ $counter }}" id="iden_image_post{{ $counter }}"></textarea>
                                 </div>
 
                             </div>
@@ -95,8 +95,10 @@
                 // Verifica si formData es válido antes de agregar los datos
                 if (formData) {
                     const idExamenRx = document.querySelector('#id_imagenes_dental').value;
+                    const idImagePre = document.querySelector('#id_image_pre').value;
                     const detalle = "Pre";
                     formData.append("id_examen", idExamenRx);
+                    formData.append("id_image_pre",idImagePre);
                     formData.append("detalle", detalle);
 
                     console.log("Datos adicionales enviados:", {
@@ -136,13 +138,16 @@
                 // Verifica si formData es válido antes de agregar los datos
                 if (formData) {
                     const idExamenRx = document.querySelector('#id_imagenes_dental').value;
+                    const idImagePost = document.querySelector('#id_image_post').value;
                     const detalle = "Post";
                     formData.append("id_examen", idExamenRx);
                     formData.append("detalle", detalle);
+                    formData.append("id_image_post", idImagePost);
 
                     console.log("Datos adicionales enviados:", {
                         id_examen: idExamenRx,
-                        detalle: detalle
+                        detalle: detalle,
+                        id_image_post: idImagePost
                     });
                 } else {
                     console.error("formData no está disponible");
@@ -164,6 +169,8 @@
         let id_profesional = $('#id_profesional').val();
         let id_especialidad = $('#id_especialidad').val();
         let id_ficha_atencion = $('#id_fc').val();
+        let id_image_pre = $('#iden_image_pre'+counter).val();
+        let id_image_post = $('#iden_image_post'+counter).val();
         let seccion = 'gral';
 
         let data = {
@@ -176,6 +183,8 @@
             id_profesional: id_profesional,
             id_especialidad: id_especialidad,
             id_ficha_atencion: id_ficha_atencion,
+            id_image_pre: id_image_pre,
+            id_image_post: id_image_post,
             seccion: seccion
         }
 
@@ -192,6 +201,8 @@
                     $('#contenedor_imagenes_dent').append(resp.v);
                     $('#contenedor_nueva_imagen_dent').empty();
                     $('#id_imagenes_dental').val(resp.rx.id);
+                    $('#id_image_pre').val(id_image_pre);
+                    $('#id_image_post').val(id_image_post);
 
                     // Una vez que el envío de datos ha sido exitoso, procesamos la cola de imágenes
                     if (dropzone.getQueuedFiles().length > 0) {

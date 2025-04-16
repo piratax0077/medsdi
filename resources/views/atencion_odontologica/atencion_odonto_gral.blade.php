@@ -142,6 +142,8 @@
     <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
     <input type="hidden" name="id_examen_oral_rx" id="id_examen_oral_rx" value="">
     <input type="hidden" name="id_imagenes_dental" id="id_imagenes_dental" value="">
+    <input type="hidden" name="id_image_pre" id="id_image_pre" value="">
+    <input type="hidden" name="id_image_post" id="id_image_post" value="">
 @endsection
 
 
@@ -159,6 +161,7 @@
             mostrar_nueva_pieza_oral_rx_odontop(random);
             mostrar_pieza_dental_examen_odontop_(random);
             mostrar_nueva_pieza_ex_radio(random);
+            mostrar_nuevas_imagenes_dent(random);
         });
         function cargar_a_presupuesto(id, tipo = null){
         let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";

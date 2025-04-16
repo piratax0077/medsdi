@@ -189,6 +189,7 @@ class CargaImagenController extends Controller
 
     public function guardarImagenesDental(Request $request)
     {
+
         // Validar archivos
         $request->validate([
             'file' => 'required|array|min:1',
@@ -221,6 +222,8 @@ class CargaImagenController extends Controller
                 $obj = new \stdClass();
                 $obj->path = $path;
                 $obj->momento = $request->detalle;
+                $obj->id_image_pre = $request->id_image_pre;
+                $obj->id_image_post = $request->id_image_post;
 
                 $imagenes_anteriores[] = $obj;
 

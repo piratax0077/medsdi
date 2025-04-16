@@ -13,31 +13,40 @@
                                 <div class="card-body">
                                     <!-- Contenedor de Imágenes -->
                                     <div class="form-row" id="contenedor_piezas_ex_oral">
-                                        @if (!empty($imagen->paths_imagenes) && is_array($imagen->paths_imagenes))
-                                            @foreach ($imagen->paths_imagenes as $path)
-                                                @if (isset($path['momento']) && $path['momento'] === 'Pre')
-                                                    <div>
-                                                        <!-- Botón para ampliar imagen -->
-                                                        <a href="javascript:void(0)" onclick="amplificar_imagen('{{ json_encode($path) }}')">
-                                                            <img src="{{ asset('storage/' . ltrim($path['path'], '/')) }}"
-                                                                alt="Imagen del examen"
-                                                                class="img-fluid mx-2 imagen_rx">
-                                                        </a>
+                                        @php
+                                            $imagenes_pre = collect($imagen->paths_imagenes)->filter(function ($item) {
+                                                return isset($item['momento']) && $item['momento'] === 'Pre';
+                                            });
+                                        @endphp
 
-                                                        <!-- Botón para eliminar imagen -->
-                                                        <button type="button"
-                                                                class="btn btn-outline-danger btn-sm my-2"
-                                                                onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                @else
-                                                <p>No hay imágenes disponibles para este examen.</p>
-                                                @endif
+                                        @if ($imagenes_pre->isNotEmpty())
+                                            @foreach ($imagenes_pre as $path)
+                                                <div>
+                                                    <!-- Botón para ampliar imagen -->
+                                                    <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path['path'] }}')">
+                                                        <img src="{{ asset('storage/' . ltrim($path['path'], '/')) }}"
+                                                            alt="Imagen del examen"
+                                                            class="img-fluid mx-2 imagen_rx">
+                                                    </a>
+
+                                                    @if (!empty($path['id_image_pre']))
+                                                        <div class="mt-1 text-muted small">
+                                                            ID Pre: {{ $path['id_image_pre'] }}
+                                                        </div>
+                                                    @endif
+
+                                                    <!-- Botón para eliminar imagen -->
+                                                    <button type="button"
+                                                            class="btn btn-outline-danger btn-sm my-2"
+                                                            onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
                                             @endforeach
                                         @else
                                             <p>No hay imágenes disponibles para este examen.</p>
                                         @endif
+
                                     </div>
 
                                 </div>
@@ -46,41 +55,49 @@
                         <div class="col-sm-4 mt-2">
                             <div class="card">
                                 <div class="card text-center" id="img">
-                                    <H6>Imagenes Post</H6>
+                                    <h6>Imágenes Post</h6>
                                 </div>
                                 <div class="card-body">
                                     <!-- Contenedor de Imágenes -->
                                     <div class="form-row" id="contenedor_piezas_ex_oral">
-                                        @if (!empty($imagen->paths_imagenes) && is_array($imagen->paths_imagenes))
-                                            @foreach ($imagen->paths_imagenes as $path)
-                                                @if (isset($path['momento']) && $path['momento'] === 'Post')
-                                                    <div>
-                                                        <!-- Botón para ampliar imagen -->
-                                                        <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path['path'] }}')">
-                                                            <img src="{{ asset('storage/' . ltrim($path['path'], '/')) }}"
-                                                                alt="Imagen del examen"
-                                                                class="img-fluid mx-2 imagen_rx">
-                                                        </a>
+                                        @php
+                                            $imagenes_post = collect($imagen->paths_imagenes ?? [])->filter(function ($item) {
+                                                return isset($item['momento']) && $item['momento'] === 'Post';
+                                            });
+                                        @endphp
 
-                                                        <!-- Botón para eliminar imagen -->
-                                                        <button type="button"
-                                                                class="btn btn-outline-danger btn-sm my-2"
-                                                                onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
+                                        @if ($imagenes_post->isNotEmpty())
+                                            @foreach ($imagenes_post as $path)
+                                                <div>
+                                                    <!-- Botón para ampliar imagen -->
+                                                    <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path['path'] }}')">
+                                                        <img src="{{ asset('storage/' . ltrim($path['path'], '/')) }}"
+                                                            alt="Imagen del examen"
+                                                            class="img-fluid mx-2 imagen_rx">
+                                                    </a>
+
+                                                    <!-- Mostrar ID asociado a la imagen Post -->
+                                                    @if (!empty($path['id_image_post']))
+                                                    <div class="mt-1 text-muted small">
+                                                        ID Post: {{ $path['id_image_post'] }}
                                                     </div>
-                                                @else
-                                                <p>No hay imágenes disponibles para este examen.</p>
-                                                @endif
+                                                    @endif
+                                                    <!-- Botón para eliminar imagen -->
+                                                    <button type="button"
+                                                            class="btn btn-outline-danger btn-sm my-2"
+                                                            onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
                                             @endforeach
                                         @else
                                             <p>No hay imágenes disponibles para este examen.</p>
                                         @endif
                                     </div>
-
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-sm-4 mt-2">
                             <div class="form-group fill">
                                 <input type="hidden" name="biopsia_odont{{ $count }}" id="biopsia_odont{{ $count }}" value="">
