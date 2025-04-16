@@ -21,10 +21,10 @@
             <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center pb-2">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="page-header-title">
                                 <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN IMPLANTOLOGÍA</strong></h5>
-                                <p class="font-italic mt-0 mb-0 text-white">
+                                <h6 class="mt-0 mb-0 text-white float-md-right">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                         $fecha = \Carbon\Carbon::parse(now());
@@ -32,8 +32,7 @@
                                         $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
                                     @endphp
                                     {{ $fecha }} <br>
-                                    {{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }} {{ $paciente->rut }} &nbsp;  {{ $paciente->edad }} años.
-                                </p>
+                                </h6>
 
                             </div>
                         </div>
@@ -147,12 +146,12 @@
 @section('js_inferior')
 <script>
      $(document).ready(function () {
-            swal({
-                icon: 'info',
-                title: 'En Construcción',
-                text: 'Esta página se encuentra en desarrollo.',
-                confirmButtonText: 'Aceptar'
-            });
+            // swal({
+            //     icon: 'info',
+            //     title: 'En Construcción',
+            //     text: 'Esta página se encuentra en desarrollo.',
+            //     confirmButtonText: 'Aceptar'
+            // });
             $('#table_atenciones_previas_trabajos').DataTable({
                     "language": {
                         "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
@@ -273,7 +272,7 @@
                                             <label class="floating-label-activo-sm">Total prestación</label>
                                             <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                         </div>
-                                        <div class="form-group col-md-2 d-flex">
+                                        <div class="form-group col-md-2 d-flex justify-content-center">
                                             <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
 
                                         </div>
@@ -386,7 +385,7 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2 d-flex">
+                                <div class="form-group col-md-2 d-flex justify-content-center">
 
 
                                 </div>
@@ -1183,7 +1182,7 @@
                                         <label class="floating-label-activo-sm">Total prestación</label>
                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                     </div>
-                                    <div class="form-group col-md-2 d-flex">
+                                    <div class="form-group col-md-2 d-flex justify-content-center">
 
 
                                     </div>
@@ -1870,7 +1869,7 @@
                                         <label class="floating-label-activo-sm">Total prestación</label>
                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                     </div>
-                                    <div class="form-group col-md-2 d-flex">
+                                    <div class="form-group col-md-2 d-flex justify-content-center">
                                         <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                     </div>
                                 `);

@@ -6,7 +6,7 @@
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="form-row">
                     <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
-                        <label class="floating-label-activo-sm">Pieza N°</label>
+                        <label class="floating-label-activo-sm">Pieza N°x</label>
                         <input type="text" class="form-control form-control-sm" name="numero_pieza_tto_impl{{ $counter }}" id="numero_pieza_tto_impl{{ $counter }}" value="{{ $e->numero_pieza }}">
                     </div>
                     <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">

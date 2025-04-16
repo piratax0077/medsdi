@@ -247,7 +247,7 @@
                     }
 
                     swal({
-                        title: "Anular Horara",
+                        title: "Anular Hora",
                         text: mensaje,
                         icon: "error",
                     });

@@ -63,7 +63,9 @@ class EscritorioAsistenteCmPublico extends Controller
             $id_lugar_atencion = $contrato->id_lugar_atencion;
 
             $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
-            $profesionales = $lugares_atencion->profesionales()->get();
+            $profesionales = $lugares_atencion->profesionales()
+            ->orderBy('apellido_uno','asc')
+            ->get();
 
             foreach ($profesionales as $key_tipo_agenda => $value_tipo_agenda)
             {

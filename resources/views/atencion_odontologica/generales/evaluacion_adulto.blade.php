@@ -180,7 +180,7 @@
                                                                                             <input type="hidden" name="caraO_check_{{ $loop->index + 1 }}_1" id="caraO_check_{{ $loop->index + 1 }}_1"
                                                                                                 value="0">
                                                                                             <input type="hidden" name="caraD_check_{{ $loop->index + 1 }}_1" id="caraD_check_{{ $loop->index + 1 }}_1" value="0">
-                                                                                            <input type="hidden" name="carav_check_{{ $loop->index + 1 }}_1" id="carav_check_{{ $loop->index + 1 }}_1"value="0">
+                                                                                            <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_1" id="caraV_check_{{ $loop->index + 1 }}_1"value="0">
                                                                                             <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_1" id="caraP_check_{{ $loop->index + 1 }}_1"value="0">
                                                                                         </td>
                                                                                     </tr>
@@ -417,7 +417,7 @@
                                                                                                 value="0">
                                                                                             <input type="hidden" name="caraD_check_{{ $loop->index + 1 }}_2" id="caraD_check_{{ $loop->index + 1 }}_2"
                                                                                                 value="0">
-                                                                                            <input type="hidden" name="carav_check_{{ $loop->index + 1 }}_2" id="carav_check_{{ $loop->index + 1 }}_2"
+                                                                                            <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_2" id="caraV_check_{{ $loop->index + 1 }}_2"
                                                                                                 value="0">
                                                                                             <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_2" id="caraP_check_{{ $loop->index + 1 }}_2"
                                                                                                 value="0">
@@ -655,7 +655,7 @@
                                                                                             value="0">
                                                                                         <input type="hidden" name="caraD_check_{{ $loop->index + 1 }}_3" id="caraD_check_{{ $loop->index + 1 }}_3"
                                                                                             value="0">
-                                                                                        <input type="hidden" name="carav_check_{{ $loop->index + 1 }}_3" id="carav_check_{{ $loop->index + 1 }}_3"
+                                                                                        <input type="hidden" name="caraV_check_{{ $loop->index + 1 }}_3" id="caraV_check_{{ $loop->index + 1 }}_3"
                                                                                             value="0">
                                                                                         <input type="hidden" name="caraP_check_{{ $loop->index + 1 }}_3" id="caraP_check_{{ $loop->index + 1 }}_3"
                                                                                             value="0">
@@ -1610,7 +1610,7 @@
             var caraM = $('#caraM_check_'+count+'_1').val();
             var caraO = $('#caraO_check_'+count+'_1').val();
             var caraD = $('#caraD_check_'+count+'_1').val();
-            var carav = $('#carav_check_'+count+'_1').val();
+            var caraV = $('#caraV_check_'+count+'_1').val();
             var caraP = $('#caraP_check_'+count+'_1').val();
             var diagnostico = $('#diagnostico_'+count+'_1').val();
             var tratamiento = $('#tratamiento_'+count+'_1').val();
@@ -1619,7 +1619,7 @@
             var caraM = $('#caraM_endo_check_'+count+'_1').val();
             var caraO = $('#caraO_endo_check_'+count+'_1').val();
             var caraD = $('#caraD_endo_check_'+count+'_1').val();
-            var carav = $('#caraV_endo_check_'+count+'_1').val();
+            var caraV = $('#caraV_endo_check_'+count+'_1').val();
             var caraP = $('#caraP_endo_check_'+count+'_1').val();
             var diagnostico = $('#diagnostico_endo_'+count+'_1').val();
             var tratamiento = $('#tratamiento_endo_'+count+'_1').val();
@@ -1636,7 +1636,7 @@
             caraM: caraM,
             caraO: caraO,
             caraD: caraD,
-            carav: carav,
+            caraV: caraV,
             caraP: caraP,
             diagnostico: diagnostico,
             tratamiento: tratamiento,
@@ -1723,7 +1723,7 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex justify-content-center">
                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                 </div>
                             `);
@@ -1754,6 +1754,12 @@
                     $('#odonto_adulto').empty();
                     $('#odonto_adulto').append(response.odontograma_paciente_vista);
 
+                }else{
+                    swal({
+                        title: 'Odontograma',
+                        text: response.mensaje,
+                        icon: 'error'
+                    });
                 }
             }
         })
@@ -1771,7 +1777,7 @@
             var caraM = $('#caraM_check_'+count+'_2').val();
             var caraO = $('#caraO_check_'+count+'_2').val();
             var caraD = $('#caraD_check_'+count+'_2').val();
-            var carav = $('#carav_check_'+count+'_2').val();
+            var carav = $('#caraV_check_'+count+'_2').val();
             var caraP = $('#caraP_check_'+count+'_2').val();
 
             var diagnostico = $('#diagnostico_'+count+'_2').val();
@@ -1886,7 +1892,7 @@
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-2 d-flex justify-content-center">
                                  <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                             </div>
                         `);
@@ -1931,7 +1937,7 @@
             var caraM = $('#caraM_check_'+count+'_3').val();
             var caraO = $('#caraO_check_'+count+'_3').val();
             var caraD = $('#caraD_check_'+count+'_3').val();
-            var carav = $('#carav_check_'+count+'_3').val();
+            var carav = $('#caraV_check_'+count+'_3').val();
             var caraP = $('#caraP_check_'+count+'_3').val();
 
             var diagnostico = $('#diagnostico_'+count+'_3').val();
@@ -2047,7 +2053,7 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex justify-content-center">
                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                 </div>
                             `);
@@ -2209,7 +2215,7 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex justify-content-center">
                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                 </div>
                             `);
@@ -2372,7 +2378,7 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-2 d-flex justify-content-center">
                                      <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                 </div>
                             `);
@@ -2535,8 +2541,8 @@
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                             </div>
-                            <div class="form-group col-md-2">
- <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                            <div class="form-group col-md-2 d-flex justify-content-center">
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                             </div>
                         `);
                         $('#table_trabajos_presupuesto tbody').append(`
@@ -2689,8 +2695,8 @@
                                         <label class="floating-label-activo-sm">Total prestación</label>
                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                     </div>
-                                    <div class="form-group col-md-2 d-flex">
- <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                    <div class="form-group col-md-2 d-flex justify-content-center">
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                                     </div>
                                 `);
                                 $('#table_trabajos_presupuesto tbody').append(`

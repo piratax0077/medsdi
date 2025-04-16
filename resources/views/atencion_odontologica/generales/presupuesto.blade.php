@@ -228,6 +228,7 @@
                                     <p>convenios</p>
                                     <p>{{ $paciente->prevision->nombre }}</p>
                                     <div class="row">
+                                        @if($convenios_prevision->count() > 0)
                                         @foreach ($convenios_prevision as $c)
                                         <div class="col-md-3">
                                             <div class="card {{ $paciente->prevision->nombre == $c->nombre_convenio ? 'bg-success' : '' }}" >
@@ -240,7 +241,9 @@
                                               </div>
                                         </div>
                                         @endforeach
-
+                                        @else
+                                        <span class="badge badge-danger">No ha configurado sus convenios. Puede ir directamente desde este <a href="{{ route('profesional.mis_propios_convenios') }}">link </a></span>
+                                        @endif
                                     </div>
                                     {{-- <div class="row">
                                         @foreach ($convenios_empresas as $c)
@@ -288,7 +291,7 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${{ number_format($o->valor,0,',','.') }}" >
                                                 </div>
-                                                <div class="form-group col-md-2 d-flex">
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
                                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma({{ $o->id }})"><i class="fas fa-trash"></i> </button>
 
                                                 </div>
@@ -318,7 +321,7 @@
                                                         <label class="floating-label-activo-sm">Total prestación</label>
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                     </div>
-                                                    <div class="form-group col-md-2 d-flex">
+                                                    <div class="form-group col-md-2 d-flex justify-content-center">
                                                         <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
 
                                                     </div>
@@ -2925,7 +2928,7 @@
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor_descuento)}" >
                             </div>
-                            <div class="form-group col-md-2 d-flex">
+                            <div class="form-group col-md-2 d-flex justify-content-center">
                                 <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                             </div>
                         `);
@@ -3083,7 +3086,7 @@
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                             </div>
-                            <div class="form-group col-md-2 d-flex">
+                            <div class="form-group col-md-2 d-flex justify-content-center">
                                 <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                             </div>
                         `);

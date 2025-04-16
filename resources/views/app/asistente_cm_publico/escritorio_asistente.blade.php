@@ -868,6 +868,7 @@
 
                                                         $('#datos_consulta_fecha_ultima').text(data.paciente.fecha_ultima_atencion);
 
+                                                        $('#datos_consulta_observaciones').text(data.hora_medica.observaciones);
 
                                                         if (data.paciente.sexo == 'M') {
                                                             $('#datos_consulta_sexo').text('Masculino');
@@ -1757,7 +1758,7 @@
 						},
 					})
 					.done(function(data) {
-
+                        console.log(data);
                         $('#div_cargando').hide();
                         $('#div_boton_buscar_paciente').show();
 
@@ -2953,6 +2954,7 @@
             let id_profesional = $('#agenda_profesional_asistente').val();
             let id_lugar_atencion = $('#agenda_lugar_atencion_asistente').val();
             let tipo_agenda = $('#id_tipo_agenda').val();
+            let observaciones = $('#reserva_hora_descripcion').val();
             var tipo_agenda_text = 'C';
             var procedimiento = '';
             var proc_bloque = '';
@@ -3025,10 +3027,12 @@
                         lista_Acompanante: lista_Acompanante,
                         autorizacion_atencion: autorizacion_atencion,
                         procedimiento: procedimiento,
+                        observaciones: observaciones,
                         proc_bloque: proc_bloque
                     }
                 })
                 .done(function(data) {
+                    console.log(data);
                     if (data != null) {
                         data = JSON.parse(data);
                         if(data.estado == 'error') {
@@ -3144,6 +3148,53 @@
                     // alert('No se pudo Cargar las ciudades');
                 }
 
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+        };
+
+        function buscar_ciudad_general(input_region, input_ciudad, id_ciudad=0)
+        {
+            console.log(input_region);
+            console.log(input_ciudad);
+            var region = $('#'+input_region).val();
+            console.log(region);
+            let url = "{{ route('home.buscar_ciudad_region') }}";
+            $.ajax({
+                url: url,
+                type: "get",
+                data: {
+                    region: region,
+                },
+            })
+            .done(function(data) {
+                if (data != null) {
+                    data = JSON.parse(data);
+
+                    let ciudades = $('#'+input_ciudad);
+
+                    ciudades.find('option').remove();
+                    ciudades.append('<option value="0">seleccione</option>');
+                    $(data).each(function(i, v) { // indice, valor
+                        ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                    })
+
+                    if(id_ciudad != 0)
+                    {
+                        ciudades.val(id_ciudad);
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Error",
+                        text: "Error al cargar las ciudades",
+                        icon: "error",
+                        buttons: "Aceptar",
+                        DangerMode: true,
+                    });
+                }
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)

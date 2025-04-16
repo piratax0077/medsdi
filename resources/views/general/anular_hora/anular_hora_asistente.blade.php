@@ -220,8 +220,8 @@
     function cargar_anular_horas()
     {
         let url = "{{ route('agenda.dia.horas.ver') }}";
-        let id_profesional = $('#bloqueo_id_profesional').val();
-        let id_lugar_atencion = $('#bloqueo_id_lugar_atencion').val();
+        let id_profesional = $('#id_profesional').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
         let fecha_consulta = $('#anular_fecha_consulta').val();
         $('#horas_medicas_lista').html('');
         $.ajax({
@@ -289,7 +289,7 @@
                     }
 
                     swal({
-                        title: "Anular Horara",
+                        title: "Anular Hora",
                         text: mensaje,
                         icon: "error",
                     });

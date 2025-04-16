@@ -1,10 +1,10 @@
-<div class="row">
-    <div class="card">
-        <div class="card-body">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+<div class="form-row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="card">
+            <div class="card-body">
                 <div class="form-row">
-                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                        <label class="floating-label-activo-sm">Pieza N°</label>
+                    <div class="form-group col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+                        <label class="floating-label-activo-sm">Pieza Nº</label>
                         <select name="numero_pieza_tto_impl{{ $counter }}" id="numero_pieza_tto_impl{{ $counter }}" class="form-control form-control-sm">
                             <option value="0">Seleccione</option>
                             @foreach ($odontograma as $o)
@@ -14,7 +14,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10 col-xxl-4">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Tipo de Procedimiento</label>
                             <select name="tpo_proc_imp{{ $counter }}" data-titulo="tpo_proc_imp" data-seccion="Implante"  id="tpo_proc_imp{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tpo_proc_imp{{ $counter }}','div_tpo_proc_imp{{ $counter }}','obs_tpo_proc_impo{{ $counter }}',10);">
@@ -27,7 +27,7 @@
                             <label class="floating-label-activo-sm">Otro tipo de Procedimiento</label>
                             <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_proc_imp{{ $counter }}" id="obs_tpo_proc_imp{{ $counter }}"></textarea>
                             <div class="form-group mt-3">
-                                <label class="floating-label-activo-sm">UCO?</label>
+                                <label class="floating-label-activo-sm">¿UCO?</label>
                                 <input type="text"class="form-control form-control-sm" id="uco_tto{{ $counter }}">
                             </div>
                             <div class="form-group mt-3">
@@ -36,14 +36,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <div class="col-sm-12 col-md-5 col-lg-3 col-xl-3 col-xxl-4">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Anestesia</label>
                             <select name="anestesia_impl{{ $counter }}" data-titulo="anestesia_impl" data-seccion="anestesia_impl{{ $counter }}"  id="anestesia_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('anestesia_impl{{ $counter }}','div_anestesia_impl{{ $counter }}','obs_anestesia_impl{{ $counter }}',4);">
                                 <option selected  value="1">Local</option>
                                 <option value="2">Local mas sedación consciente</option>
                                 <option value="3">Anestesia General</option>
-                                <option value="4">Otro describir</option>
+                                <option value="4">Otro (Describir)</option>
                             </select>
                         </div>
                         <div class="form-group" id="div_anestesia_impl{{ $counter }}" style="display:none;">
@@ -51,13 +51,13 @@
                             <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesia_impl{{ $counter }}" id="obs_anestesia_impl{{ $counter }}"></textarea>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
+                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
                         <div class="form-group">
                             <label for="" class="floating-label-activo-sm">N° de tubos</label>
                             <input type="text" class="form-control form-control-sm" name="numero_tubos_impl{{ $counter }}" id="numero_tubos_impl{{ $counter }}">
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <div class="col-sm-12 col-md-5 col-lg-4 col-xl-4 col-xxl-4">
                         <div class="form-group">
                             <label for="" class="floating-label-activo-sm">Técnica de antestesia</label>
                             <select name="tec_anestesia_impl{{ $counter }}" data-titulo="tec_anestesia_impl{{ $counter }}" data-seccion="tec_anestesia_impl{{ $counter }}"  id="tec_anestesia_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tec_anestesia_impl{{ $counter }}','div_tec_anestesia_impl{{ $counter }}','obs_tec_anestesia_impl{{ $counter }}',10);">
@@ -70,7 +70,7 @@
                                 <option value="7">Técnica carrea</option>
                                 <option value="8">Técnica akinosi</option>
                                 <option value="9">Técnica gowgates</option>
-                                <option value="10">Otro describir</option>
+                                <option value="10">Otro (Describir)</option>
                             </select>
                         </div>
                         <div class="form-group" id="div_tec_anestesia_impl{{ $counter }}" style="display:none;">
@@ -78,7 +78,7 @@
                             <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tec_anestesia_impl{{ $counter }}" id="obs_tec_anestesia_impl{{ $counter }}"></textarea>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-4">
                         <div class="form-group">
                             <label for="" class="floating-label-activo-sm">Anestésico</label>
                             <select name="anestesico_impl{{ $counter }}" data-titulo="anestesico_impl{{ $counter }}" data-seccion="anestesico_impl"  id="anestesico_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('anestesico_impl{{ $counter }}','div_anestesico_impl{{ $counter }}','obs_anestesico_impl{{ $counter }}',6);">
@@ -87,15 +87,15 @@
                                 <option value="3">Articaína 4%</option>
                                 <option value="4">Benzocaína 7.5%</option>
                                 <option value="5">Bupivacaína 7.5%</option>
-                                <option value="6">Otro describir</option>
+                                <option value="6">Otro (Describir)</option>
                             </select>
                         </div>
                         <div class="form-group" id="div_anestesico_impl{{ $counter }}" style="display:none;">
-                            <label class="floating-label-activo-sm">Otro anestesico</label>
+                            <label class="floating-label-activo-sm">Otro anestésico</label>
                             <textarea class="form-control form-control-sm" data-titulo="anestisico_dental_title"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anestesico_impl{{ $counter }}" id="obs_anestesico_impl{{ $counter }}"></textarea>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
+                    <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-4">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Incidentes</label>
                             <select name="incid_col_impl{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="incid_col_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('incid_col_impl{{ $counter }}','div_incid_col_impl{{ $counter }}','obs_incid_col_impl{{ $counter }}',2);">
@@ -105,11 +105,11 @@
                             </select>
                         </div>
                         <div class="form-group" id="div_incid_col_impl{{ $counter }}" style="display:none;">
-                            <label class="floating-label-activo-sm">Obs</label>
+                            <label class="floating-label-activo-sm">Observaciones</label>
                             <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_incid_col_impl{{ $counter }}" id="obs_incid_col_impl{{ $counter }}"></textarea>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-sm-12 col-md-6 col-lg-5 col-xl-5 col-xxl-4">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Material de injerto óseo</label>
                             <select name="mat_inj_oseo_impl{{ $counter }}" data-titulo="Ex_cuello" data-seccion="Cuello"  id="mat_inj_oseo_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('mat_inj_oseo{{ $counter }}','div_mat_inj_oseo{{ $counter }}','obs_mat_inj_oseo{{ $counter }}',6);">
@@ -123,13 +123,13 @@
                             <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_mat_inj_oseo{{ $counter }}" id="obs_mat_inj_oseo{{ $counter }}"></textarea>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <div class="col-sm-12 col-md-6 col-lg-5 col-xl-5 col-xxl-2">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Método de injerto óseo</label>
                             <input type="text" name="metodo_injerto_tto{{ $counter }}" id="metodo_injerto_tto{{ $counter }}" class="form-control form-control-sm">
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Suturas</label>
                             <select name="suturas_impl{{ $counter }}" data-titulo="suturas_impl{{ $counter }}" data-seccion="suturas"  id="suturas_impl{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('suturas_impl{{ $counter }}','div_suturas{{ $counter }}','obs_suturas{{ $counter }}',5);">
@@ -137,38 +137,36 @@
                                 <option value="2">Seda</option>
                                 <option value="3">Nylon</option>
                                 <option value="4">Polipropileno</option>
-                                <option value="5">Otro describir</option>
+                                <option value="5">Otro (Describir)</option>
                             </select>
                         </div>
                         <div class="form-group" id="div_suturas{{ $counter }}" style="display:none;">
-                            <label class="floating-label-activo-sm">Describa</label>
+                            <label class="floating-label-activo-sm">Otro (Describir)</label>
                             <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_suturas{{ $counter }}" id="obs_suturas{{ $counter }}"></textarea>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2" id="grosor_nylon{{ $counter }}" >
+                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2" id="grosor_nylon{{ $counter }}" >
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Grosor</label>
                             <input type="text" name="grosor_nylon_input{{ $counter }}" id="grosor_nylon_input{{ $counter }}" class="form-control form-control-sm">
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
                         <div class="form-group">
                             <label for="tiempo_quir_impl{{ $counter }}" class="floating-label-activo-sm">Tiempo quirúrgico</label>
-                            <input type="number" class="form-control form-control-sm" id="tiempo_quir_impl{{ $counter }}">
+                            <input type="time" class="form-control form-control-sm" id="tiempo_quir_impl{{ $counter }}">
                         </div>
                     </div>
-
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="float-right">
+                    <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_dental_tto_impl()"><i class="feather icon-x"></i> </button>
+                    <button type="button" class="btn btn-sm btn-success-light-c" onclick="guardar_pieza_dental_tto_impl({{ $counter }})"><i class="feather icon-check"></i> Prestación Terminada</button>
                 </div>
             </div>
         </div>
-        <div class="card-footer">
-            <div class="form-group float-right">
-                <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_dental_tto_impl()">X</button>
-                <button type="button" class="btn btn-success-light-c" onclick="guardar_pieza_dental_tto_impl({{ $counter }})"><i class="fas fa-check"></i> Prestación Terminada</button>
-            </div>
-        </div>
     </div>
-
 </div>
 
 <script>

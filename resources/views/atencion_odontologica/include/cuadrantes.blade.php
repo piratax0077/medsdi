@@ -1511,14 +1511,17 @@
     <!-- Contenido de los cuadrantes -->
 </div>
 
+<input type="hidden" name="url_tratamientos" id="url_tratamientos" value="{{ $url_tratamientos }}">
+
 {{-- Script para inicializar el autocomplete --}}
 <script>
     $(document).ready(function() {
+        let url = $('#url_tratamientos').val();
         $('.tratamiento-autocomplete').each(function() {
             $(this).autocomplete({
                 source: function(request, response) {
                     $.ajax({
-                        url: "{{ route('dental.getTratamientoImplantologia') }}",
+                        url: url,
                         type: 'post',
                         dataType: "json",
                         data: {

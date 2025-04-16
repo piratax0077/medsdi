@@ -89,6 +89,7 @@ class HoraMedicaController extends Controller
 
     function verRegistrosDia(Request $request)
     {
+
         $datos = array();
         $filtro= array();
 

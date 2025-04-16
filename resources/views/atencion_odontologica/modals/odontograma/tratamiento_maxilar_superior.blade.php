@@ -30,7 +30,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="floating-label-activo-sm">Diagnostico</label>
-                                        <input type="text" name="diag_seleccionado_gral_autocomplete" id="diag_seleccionado_gral_autocomplete" class="form-control form-control-sm">
+                                        <input type="text" name="diag_seleccionado_gral_autocomplete" id="diag_seleccionado_gral_autocomplete" class="form-control form-control-sm tratamiento-autocomplete">
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12 mt-2 diagnostico_activo"></div>
@@ -1000,8 +1000,8 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
+                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
                                 </div>
                             `);
                             }
@@ -1219,8 +1219,8 @@
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                             </div>
-                            <div class="form-group col-md-2">
-                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" >Ver Estado Trabajo</button>
+                            <div class="form-group col-md-2 d-flex justify-content-center">
+                                <button classtton type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
                             </div>
                         `);
                         }

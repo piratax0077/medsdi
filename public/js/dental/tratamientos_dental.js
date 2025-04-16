@@ -1,10 +1,11 @@
-const getDiagnosticoDentalUrl = window.getDiagnosticoDentalUrl;
-const getTratamientoDentalImplantologiaUrl = window.getTratamientoDentalImplantologiaUrl;
+$(document).ready(function() {
+    const getDiagnosticoDentalUrl = window.getDiagnosticoDentalUrl;
+
 $('#diag_seleccionado_gral_autocomplete').autocomplete({
     source: function(request, response) {
         // Fetch data
         $.ajax({
-            url: getTratamientoDentalImplantologiaUrl,
+            url: getDiagnosticoDentalUrl,
             type: 'post',
             dataType: "json",
             data: {
@@ -39,7 +40,7 @@ $('.tratamiento-autocomplete').each(function() {
         source: function(request, response) {
             // Fetch data
             $.ajax({
-                url: getTratamientoDentalImplantologiaUrl,
+                url: getDiagnosticoDentalUrl,
                 type: 'post',
                 dataType: "json",
                 data: {
@@ -520,3 +521,5 @@ function buscar_ciudad_paciente(id_ciudad = 0) {
 
 
 };
+});
+

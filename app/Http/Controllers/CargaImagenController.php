@@ -187,57 +187,67 @@ class CargaImagenController extends Controller
 
     }
 
-    public function guardarImagenesDental(Request $request){
-
-        // Verifica si los parámetros están presentes
+    public function guardarImagenesDental(Request $request)
+    {
+        // Validar archivos
         $request->validate([
             'file' => 'required|array|min:1',
             'file.*' => 'image|max:4096',
         ]);
 
-        $paths = [];
+        $imagenes_rx = ImagenesDentalPaciente::find($request->id_examen);
 
+        if (!$imagenes_rx) {
+            return response()->json([
+                'success' => false,
+                'mensaje' => 'No se encontró el examen para asociar las imágenes.'
+            ]);
+        }
+
+        // Obtener las imágenes anteriores si existen
+        $imagenes_anteriores = [];
+        if ($imagenes_rx->paths_imagenes) {
+            $decoded = json_decode($imagenes_rx->paths_imagenes);
+            foreach ($decoded as $item) {
+                $imagenes_anteriores[] = $item;
+            }
+        }
+
+        // Agregar nuevas imágenes
         if ($request->hasFile('file')) {
             foreach ($request->file('file') as $file) {
                 $path = $file->store('images', 'public');
 
-                // crear un objeto nuevo para guardar el detalle de la imagen y el path
                 $obj = new \stdClass();
                 $obj->path = $path;
                 $obj->momento = $request->detalle;
 
-                // agregar el objeto al array de paths
-                $paths[] = json_encode($obj);
+                $imagenes_anteriores[] = $obj;
 
-                 // Ahora copiamos la imagen de 'storage/app/public/images' a 'public/storage/images'
+                // Copiar a carpeta pública
                 $publicPath = public_path('storage/images/' . basename($path));
                 File::copy(storage_path('app/public/' . $path), $publicPath);
             }
         }
 
-        $imagenes_rx = ImagenesDentalPaciente::find($request->id_examen);
-
-        $imagenes_rx->paths_imagenes = json_encode($paths);
+        // Guardar nuevamente todo el array
+        $imagenes_rx->paths_imagenes = json_encode($imagenes_anteriores);
         $imagenes_rx->momento_imagen = $request->detalle;
 
-        if($imagenes_rx->save()){
-            // Retornar respuesta con los datos procesados
+        if ($imagenes_rx->save()) {
             return response()->json([
                 'success' => true,
-                'paths' => $paths,
-                'total_imagenes' => count($paths),
+                'paths' => $imagenes_anteriores,
+                'total_imagenes' => count($imagenes_anteriores),
             ]);
-        }else{
+        } else {
             return response()->json([
                 'success' => false,
-                'paths' => $paths,
-                'total_imagenes' => count($paths),
-                'mensaje' => 'error'
+                'mensaje' => 'Error al guardar las imágenes.'
             ]);
         }
-
-
     }
+
     /**
      * mover y renombrar archivo
      *

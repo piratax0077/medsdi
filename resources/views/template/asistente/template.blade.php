@@ -869,7 +869,7 @@
                                                         $('#datos_consulta_fecha_ultima').html(data.paciente.fecha_ultima_atencion);
                                                         buscar_ciudad_general('input_reserva_hora_region_asistente', 'input_reserva_hora_ciudad_asistente', data.paciente.direccion.ciudad.id);
 
-                                                        // $('#input_reserva_hora_ciudad_asistente').val(data.paciente.direccion.ciudad.id);
+                                                        $('#input_reserva_hora_ciudad_asistente').val(data.paciente.direccion.ciudad.id);
                                                     }
                                                     else
                                                     {
@@ -1515,8 +1515,6 @@
                 valido = 0;
             }
 
-            if(bono)
-
             if(bono_prevision == '' || bono_prevision == 0)
             {
                 mensaje += 'Campo requerido CONVENIO\n';
@@ -1700,7 +1698,7 @@
                 },
             })
             .done(function(data) {
-
+                console.log(data);
                 $('#div_cargando').hide();
                 $('#div_boton_buscar_paciente').show();
 
@@ -3401,6 +3399,8 @@
 
         function buscar_ciudad_general(input_region, input_ciudad, id_ciudad=0)
         {
+            console.log(input_region);
+            console.log(input_ciudad);
             var region = $('#'+input_region).val();
             console.log(region);
             let url = "{{ route('home.buscar_ciudad_region') }}";

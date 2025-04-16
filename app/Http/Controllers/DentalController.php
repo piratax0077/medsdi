@@ -1440,6 +1440,10 @@ class DentalController extends Controller
     public function registrar_odontograma(Request $request)
     {
         try {
+
+            if($request->diagnostico == 0 || $request->tratamiento == null){
+                return ['mensaje' => 'Debe seleccionar un diagnostico y un tratamiento'];
+            }
             $user = Auth::user()->id;
             $profesional = Profesional::where('id_usuario', $user)->first();
 
@@ -1475,6 +1479,7 @@ class DentalController extends Controller
             $odontograma->id_ficha_atencion = $request->id_ficha_atencion;
             $odontograma->id_lugar_atencion = $request->id_lugar_atencion;
             $odontograma->tipo_especialidad = $profesional->id_tipo_especialidad;
+            $odontograma->fecha = Carbon::now()->format('Y-m-d H:m:s');
             $odontograma->estado = 0;
 
             if (!$odontograma->save()) {
@@ -2167,8 +2172,12 @@ class DentalController extends Controller
 
                 }
 
+                $url_tratamientos = $profesional->id_tipo_especialidad == 18
+                    ? route('dental.getDiagnosticoDental')
+                    : route('dental.getTratamientoImplantologia');
 
                 $vista_presupuestos = view('atencion_odontologica.include.cuadrantes',[
+                    'url_tratamientos' => $url_tratamientos,
                     'primer_cuadrante' => $primer_cuadrante,
                     'segundo_cuadrante' => $segundo_cuadrante,
                     'tercer_cuadrante' => $tercer_cuadrante,

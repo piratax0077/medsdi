@@ -18,6 +18,13 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
 
+      <!-- select2 selectbonito css -->
+      <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+      <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
+
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+
     <!-- data tables css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
@@ -45,6 +52,9 @@
     <link rel="stylesheet" href="{{ asset('css/bs_canvas.css') }}?t={{ time() }}">
 
     <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}?t=<?= time() ?>">
+    <script src="{{ asset('js/modals_atencion_dental.js') }}"></script>
+    <!--Formularios Modals-->
+    <script src="{{ asset('js/modals_atencion_odonto_gral.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!-- fancy box -->
     <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
@@ -71,6 +81,7 @@
     @yield('styles')
 </head>
 <body>
+    @include('atencion_odontologica.generales.eval_periimplante')
     @include('template.dental.header')
     @include('template.menuProfesional')
 
@@ -84,7 +95,10 @@
 
 
     @include('app.atencion_hospital.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia')
+    @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajoM')
+    @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajo')
 
+    @include('atencion_odontologica.formularios_dentales_tons.pedido_material_trabajo.pedido_insumos_materiales')
     <!-- Modal de la vista fin -->
     <footer>
         {{--  @include('template.include.footer')  --}}
@@ -134,7 +148,8 @@
     <!--Formularios Modals-->
     <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
-
+    <!--Formularios Modals-->
+    <script src="{{ asset('js/modals_atencion_implantologia.js') }}?upd={{ random_int(1111,9999) }}"></script>
     <!--Tooltips-->
     <script src="{{ asset('js/tooltip_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 

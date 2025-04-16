@@ -322,7 +322,7 @@ function cargar_a_presupuesto_impl(counter){
                                 <label class="floating-label-activo-sm">Total prestación</label>
                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
                             </div>
-                            <div class="form-group col-md-2 d-flex">
+                            <div class="form-group col-md-2 d-flex justify-content-center">
 
                                 <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
                             </div>

@@ -1615,6 +1615,7 @@ class EscritorioProfesional extends Controller
 		$fecha_ultima_atencion = HoraMedica::select('horas_medicas.fecha_consulta','fichas_atenciones.*')
         ->join('fichas_atenciones','horas_medicas.id_ficha_atencion','fichas_atenciones.id')
         ->where('horas_medicas.id_paciente', $hora_medica->id_paciente)
+        ->where('horas_medicas.id_profesional',$profesional->id)
         ->where('fichas_atenciones.finalizada',1)
         ->where('horas_medicas.id_lugar_atencion', $hora_medica->id_lugar_atencion)
         ->orderBy('horas_medicas.id','desc')
@@ -1653,6 +1654,7 @@ class EscritorioProfesional extends Controller
             'paciente' => $paciente,
             'profesional' =>$profesional,
             'estado_hora' =>$hora_medica->id_estado,
+            'hora_medica' => $hora_medica,
             'edad' => $edad,
             'responsable' => $responsable,
             'procedimiento' => $procedimiento,
@@ -2758,6 +2760,7 @@ class EscritorioProfesional extends Controller
             $rx->observaciones = $req->observaciones ? $req->observaciones : 'SIN OBSERVACIONES';
             $rx->biopsia = $req->biopsia == 'true' ? 1 : 0;
             $rx->estado = 1;
+
             if($rx->save()){
                 if($req->seccion == 'gral'){
                     $imagenes = $this->dameInfoImagenesDentalPaciente($req->id_paciente,'gral');
@@ -3005,15 +3008,17 @@ class EscritorioProfesional extends Controller
 
     public function guardar_pieza_dental_examen_oral_rx(Request $req){
         try {
+
             $rx = new ExamenesDentalOralRx;
             $rx->id_ficha_atencion = $req->id_fc;
             $rx->id_paciente = $req->id_paciente;
             $rx->id_profesional = $req->id_profesional;
             $rx->id_lugar_atencion = $req->id_lugar_atencion;
-            $rx->numero_pieza = $req->numero_pieza;
+            $rx->numero_piezas = json_encode($req->numero_pieza);
             $rx->espacio_periodontal = $req->espacio_periodontal_aplical;
             $rx->hueso_alveolal = $req->hueso_alveolar_apical;
-            $rx->observaciones = $req->obs ? $req->obs : 'SIN OBSERVACIONES';
+            $rx->informe = $req->informe_radiologo;
+            $rx->observaciones = $req->observaciones_radiologo ? $req->observaciones_radiologo : 'SIN OBSERVACIONES';
             if($rx->save()){
                 $examenes = $this->dameExamenesPiezaDentalOraxRx($rx->id_paciente);
                 $v = view('atencion_odontologica.include.examenes_dental_oral_rx_todos',['examenes' => $examenes])->render();
@@ -3252,6 +3257,7 @@ class EscritorioProfesional extends Controller
 
             // Puedes asignar este array al objeto `$e` si lo necesitas
             $e->decoded_imagenes = $nueva_lista_imagenes; // Agregamos el array decodificado al examen
+            $e->numero_piezas = json_decode($e->numero_piezas);
         }
 
         return $examenes;
@@ -3309,36 +3315,30 @@ class EscritorioProfesional extends Controller
         return $examenes;
     }
 
-    public function dameInfoImagenesDentalPaciente($id_paciente,$seccion)
+    public function dameInfoImagenesDentalPaciente($id_paciente,$seccion, $id_ficha_atencion = null)
     {
         // Obtén las imágenes del paciente
-        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)->where('seccion',$seccion)->get();
+        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)->where('seccion',$seccion)
+        ->when($id_ficha_atencion, function ($query, $id_ficha_atencion) {
+            return $query->where('id_ficha_atencion', $id_ficha_atencion);
+        })
+        ->get();
 
         // Itera sobre cada imagen para procesar `paths_imagenes`
         foreach ($imagenes as $imagen) {
             if (!empty($imagen->paths_imagenes)) {
-                // Intenta decodificar `paths_imagenes`
                 $imagenes_decoded = json_decode($imagen->paths_imagenes, true);
 
-                // Valida que la decodificación fue exitosa
                 if (json_last_error() === JSON_ERROR_NONE && is_array($imagenes_decoded)) {
-                    // Asigna los valores decodificados al atributo
-                    $imagen->paths_imagenes = array_map(function ($path) {
-                        // Decodifica cada JSON anidado
-                        $decodedPath = json_decode($path, true);
-
-                        // Valida el JSON interno y devuelve los datos o null si hay un error
-                        return json_last_error() === JSON_ERROR_NONE ? $decodedPath : null;
-                    }, $imagenes_decoded);
+                    $imagen->paths_imagenes = $imagenes_decoded; // ← YA decodificado como array
                 } else {
-                    // Si la decodificación falla, maneja el error (opcional)
                     $imagen->paths_imagenes = [];
                 }
             } else {
-                // Si `paths_imagenes` está vacío o no existe
                 $imagen->paths_imagenes = [];
             }
         }
+
 
         return $imagenes;
     }
@@ -3355,9 +3355,9 @@ class EscritorioProfesional extends Controller
 
         // Filtramos los paths para eliminar el que coincide con el path recibido
         $filteredPaths = array_filter($paths, function($p) use ($path) {
-            $pArray = json_decode($p, true);
-            return $pArray['path'] !== $path;
+            return $p['path'] !== $path;
         });
+
 
         // Reindexamos el array para evitar problemas con los índices
         $filteredPaths = array_values($filteredPaths);
@@ -3402,7 +3402,7 @@ class EscritorioProfesional extends Controller
         $examen->electrico = $req->resp_elect;
         $examen->id_paciente = $req->id_paciente;
         $examen->id_lugar_atencion = $req->id_lugar_atencion;
-        $examen->id_profesional = $req->id_profesional;
+        $examen->id_profesional = $profesional->id;
         $examen->id_especialidad = $req->id_especialidad;
         $examen->id_ficha_atencion = $req->id_ficha_atencion;
         $examen->resp_frio = $req->resp_frio;
@@ -3444,7 +3444,11 @@ class EscritorioProfesional extends Controller
 
             $paciente = Paciente::where('id', $req->id_paciente)->first();
             $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();
+            $url_tratamientos = $profesional->id_tipo_especialidad == 18
+            ? route('dental.getDiagnosticoDental')
+            : route('dental.getTratamientoImplantologia');
             $vista_presupuestos = view('atencion_odontologica.include.cuadrantes',[
+                'url_tratamientos' => $url_tratamientos,
                 'primer_cuadrante' => $primer_cuadrante,
                 'segundo_cuadrante' => $segundo_cuadrante,
                 'tercer_cuadrante' => $tercer_cuadrante,
@@ -3525,7 +3529,11 @@ class EscritorioProfesional extends Controller
 
             $paciente = Paciente::where('id', $req->id_paciente)->first();
             $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();
+            $url_tratamientos = $profesional->id_tipo_especialidad == 18
+            ? route('dental.getDiagnosticoDental')
+            : route('dental.getTratamientoImplantologia');
             $vista_presupuestos = view('atencion_odontologica.include.cuadrantes',[
+                'url_tratamientos' => $url_tratamientos,
                 'primer_cuadrante' => $primer_cuadrante,
                 'segundo_cuadrante' => $segundo_cuadrante,
                 'tercer_cuadrante' => $tercer_cuadrante,
@@ -3565,11 +3573,13 @@ class EscritorioProfesional extends Controller
     }
 
     public function dameExamenesPiezaDentalPiezaPrimerCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad) {
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '1.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3578,6 +3588,7 @@ class EscritorioProfesional extends Controller
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '5.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3586,6 +3597,7 @@ class EscritorioProfesional extends Controller
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '1.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3596,12 +3608,14 @@ class EscritorioProfesional extends Controller
     }
 
     public function dameExamenesPiezaDentalPiezaSegundoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad) {
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $otro_tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '2.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3610,6 +3624,7 @@ class EscritorioProfesional extends Controller
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '6.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3618,6 +3633,7 @@ class EscritorioProfesional extends Controller
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '2.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3627,12 +3643,14 @@ class EscritorioProfesional extends Controller
     }
 
     public function dameExamenesPiezaDentalPiezaTercerCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad) {
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $otro_tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '3.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3641,6 +3659,7 @@ class EscritorioProfesional extends Controller
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '7.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3649,6 +3668,7 @@ class EscritorioProfesional extends Controller
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '3.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3658,12 +3678,14 @@ class EscritorioProfesional extends Controller
     }
 
     public function dameExamenesPiezaDentalPiezaCuartoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad) {
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $otro_tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '4.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3672,6 +3694,7 @@ class EscritorioProfesional extends Controller
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '8.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3680,6 +3703,7 @@ class EscritorioProfesional extends Controller
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '4.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3689,12 +3713,14 @@ class EscritorioProfesional extends Controller
     }
 
     public function dameExamenesPiezaDentalPiezaQuintoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad) {
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $otro_tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '5.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3703,6 +3729,7 @@ class EscritorioProfesional extends Controller
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '9.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3711,6 +3738,7 @@ class EscritorioProfesional extends Controller
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '5.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3720,12 +3748,14 @@ class EscritorioProfesional extends Controller
     }
 
     public function dameExamenesPiezaDentalPiezaSextoCuadrante($id_paciente, $tipo_paciente, $tipo_especialidad) {
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($tipo_paciente == 'adulto'){
             $tipo = 1;
             $otro_tipo = 2;
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '6.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3734,6 +3764,7 @@ class EscritorioProfesional extends Controller
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '6.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3742,6 +3773,7 @@ class EscritorioProfesional extends Controller
             $examenes = ExamenesDentalPieza::where('id_paciente', $id_paciente)
                     ->where('tipo_examen', $tipo)
                     ->where('tipo_especialidad', $tipo_especialidad)
+                    ->where('id_profesional', $profesional->id)
                     ->where('estado', 1)
                     ->whereRaw("CAST(numero_pieza AS CHAR) LIKE '6.%'") // Convierte a cadena y filtra
                     ->get();
@@ -3751,19 +3783,27 @@ class EscritorioProfesional extends Controller
     }
 
     public function dameExamenesPiezaDentalPiezaEnd($id_paciente){
-        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)->where('tipo_examen',2)->where('estado',1)->get();
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)
+        ->where('id_profesional',$profesional->id)
+        ->where('tipo_examen',2)->where('estado',1)->get();
         return $examenes;
     }
 
     public function dameExamenesPiezaDentalPiezaOdontop($id_paciente){
-        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)->where('tipo_examen',3)->where('estado',1)->get();
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)
+        ->where('id_profesional',$profesional->id)
+        ->where('tipo_examen',3)->where('estado',1)->get();
         return $examenes;
     }
 
     public function dameExamenesPiezaDentalPieza($id_paciente, $tipo_especialidad){
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)
         ->where('tipo_examen',1)
         ->where('tipo_especialidad',$tipo_especialidad)
+        ->where('id_profesional', $profesional->id)
         ->where('estado',1)
         ->get();
         return $examenes;
@@ -4934,7 +4974,8 @@ public function eliminarPiezaCoronaProtesis(Request $req){
     }
 
     public function dame_tratamientos_presupuesto(Request $req){
-        $presupuesto_dental = PresupuestosDental::find($req->id);
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $presupuesto_dental = PresupuestosDental::where('id',$req->id)->where('id_profesional',$profesional->id)->first();
 
         if($presupuesto_dental){
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
@@ -5323,6 +5364,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
 
     public function buscar_rut_paciente(Request $request)
     {
+
         if ($request->tipo == 'asistente') {
             $asistente = Asistente::where('rut', $request->rut)->with(['Direccion' => function($query){$query->with('Ciudad')->first();}])->first();
 
@@ -5341,7 +5383,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 $paciente = Profesional::where('rut', $request->rut)->with(['Direccion' => function($query){$query->with('Ciudad')->first();}])->first();
                 if ($paciente == null) {
                     $tipo_paciente++;
-                    $paciente = Personas::select('id as id', 'rut as rut', 'nombre1 as nombres', 'appaterno as apellido_uno', 'apmaterno as apellido_dos')->where('rut', $request->rut)->first();
+                    //$paciente = Personas::select('id as id', 'rut as rut', 'nombre1 as nombres', 'appaterno as apellido_uno', 'apmaterno as apellido_dos')->where('rut', $request->rut)->first();
                 }
             }
         }
@@ -5357,6 +5399,8 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             $paciente['edad'] = 99;
             $paciente['nombre_responsable'] = '';
             $paciente['id_responsable'] = '';
+
+            return json_encode($paciente);
         }
         else
         {
@@ -5398,17 +5442,30 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             $paciente['nombre_responsable'] = $nombres_representante;
             $paciente['id_responsable'] = $id_representante;
             $paciente['acompanante'] = $registro_temp;
-            $presupuestos_dentales = PresupuestosDental::where('id_paciente',$paciente->id)->get();
 
-            $paciente['presupuestos'] = $presupuestos_dentales;
+
         }
+
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+
+            if(!$profesional){
+                $profesional = Profesional::where('id', $request->id_profesional)->first();
+            }
+
+            if($paciente['tipo_paciente'] = 'SI'){
+                if($profesional->id_especialidad == 2){
+                    $presupuestos_dentales = PresupuestosDental::where('id_paciente',$paciente->id)->where('id_profesional', $profesional->id)->get();
+                    if($presupuestos_dentales) $paciente['presupuestos'] = $presupuestos_dentales;
+                }
+
+            }
 
 
         // $paciente->fecha_ultima = Carbon::now()->format('Y-m-d');
         // $paciente['fecha_ultima'] = Carbon::now()->format('Y-m-d');
 
         $profesional_agenda = Profesional::where('id_usuario', $request->id_profesional)->first();
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+
 		if($profesional_agenda && !$profesional && $paciente['tipo_paciente'] == 'SI')
 		{
 			$fecha_ultima_atencion = HoraMedica::select('horas_medicas.fecha_consulta','fichas_atenciones.*')
@@ -5427,16 +5484,17 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 $paciente->fecha_ultima_atencion = Carbon::now()->format('Y-m-d');
             }
 		}
+
         if($profesional && $paciente['tipo_paciente'] == 'SI'){
             $fecha_ultima_atencion = HoraMedica::select('horas_medicas.fecha_consulta','fichas_atenciones.*')
 			->join('fichas_atenciones','horas_medicas.id_ficha_atencion','fichas_atenciones.id')
-			->where('horas_medicas.id_paciente', $paciente->id)
+			// ->where('horas_medicas.id_paciente', $paciente->id)
 			->where('horas_medicas.id_profesional', $profesional->id)
 			->where('fichas_atenciones.finalizada',1)
 			->where('horas_medicas.id_lugar_atencion', $request->id_lugar_atencion)
 			->orderBy('horas_medicas.id','desc')
 			->first();
-            if($fecha_ultima_atencion) $paciente->fecha_ultima_atencion = Carbon::parse($fecha_ultima_atencion->fecha_consulta)->toDateString(); // Solo la fecha (YYYY-MM-DD)
+            //if($fecha_ultima_atencion) $paciente->fecha_ultima_atencion = Carbon::parse($fecha_ultima_atencion->fecha_consulta)->toDateString(); // Solo la fecha (YYYY-MM-DD)
         }
         else
 		{
@@ -5451,9 +5509,11 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             $bonos = [];
             //$paciente->bonos = $bonos;
         }else{
-            if($paciente['tipo_paciente'] == 'SI'){
+            if($paciente['tipo_paciente'] == 'SI' && isset($paciente->id)){
                 $bonos = Bono::where('id_paciente', $paciente->id)->where('id_profesional',$request->id_profesional)->get();
                 $paciente->bonos = $bonos;
+            }else{
+                $paciente['bonos'] = [];
             }
 
         }

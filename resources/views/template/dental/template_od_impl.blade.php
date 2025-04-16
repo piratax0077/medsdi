@@ -128,7 +128,7 @@
     <!--Formularios Modals-->
     <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
     <!--Formularios Modals-->
-    <script src="{{ asset('js/modals_atencion_implantologia.js') }}?upd={{ random_int(1111,9999) }}"></script>
+    <script src="{{ asset('js/modals_atencion_odonto_gral.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!--Form wizard-->
     <script src="{{ asset('js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
@@ -178,8 +178,8 @@
     <script src="{{ asset('js/cara_dental.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <script>
-        window.getDiagnosticoDentalUrl = "{{ route('dental.getDiagnosticoDental') }}";
-        window.getTratamientoDentalImplantologiaUrl = "{{ route('dental.getTratamientoImplantologia') }}";
+        window.getDiagnosticoDentalUrl = "{{ route('dental.getTratamientoImplantologia') }}";
+        // window.getTratamientoDentalImplantologiaUrl = "{{ route('dental.getTratamientoImplantologia') }}";
     </script>
     @routes
     <script src="{{asset('js/dental/tratamientos_dental.js')}}"></script>

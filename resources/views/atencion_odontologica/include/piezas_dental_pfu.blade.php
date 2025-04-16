@@ -1,96 +1,90 @@
-<div class="card">
+<div class="card-informacion">
     <div class="card-body">
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <div class="form-row">
-                    <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
-                        <div class="form-group">
-                            <label class="floating-label-activo-sm">Pieza N°</label>
-                            <select name="n_pieza_pfu{{ $counter }}" id="n_pieza_pfu{{ $counter }}" class="form-control form-control-sm">
-                                @foreach ($odontograma as $o)
-                                    @if($o->presupuesto == 1)
-                                        <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                        <div class="form-group fill">
-                            <label class="floating-label-activo-sm">Móvil</label>
-                            <select name="movil_pfu{{ $counter }}" id="movil_pfu{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('movil_pfu{{ $counter }}','div_movil_pfu{{ $counter }}','obs_movil_pfu{{ $counter }}',2);">
-                                <option value="0">Seleccione</option>
-                                <option value="1">No</option>
-                                <option value="2">Sí</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="div_movil_pfu{{ $counter }}" style="display: none">
-                            <label class="floating-label-activo-sm">Describa</label>
-                            <textarea class="form-control form-control-sm" data-titulo="" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_movil_pfu{{ $counter }}" id="obs_movil_pfu{{ $counter }}"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                        <div class="form-group">
-                            <label class="floating-label-activo-sm">Prueba de ajuste</label>
-                            <select name="prueba_ajuste_cor_pfu{{ $counter }}"  id="prueba_ajuste_cor_pfu{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prueba_ajuste_cor_pfu{{ $counter }}','div_prueba_ajuste_cor_pfu{{ $counter }}','obs_prueba_ajuste_cor_pfu{{ $counter }}',2);">
-                                <option selected  value="1">Buena </option>
-                                <option value="2">No devuelta a laboratorio</option>
-
-                            </select>
-                        </div>
-                        <div class="form-group" id="div_prueba_ajuste_cor_pfu{{ $counter }}" style="display:none;">
-                            <label class="floating-label-activo-sm">Otro describa</label>
-                            <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_prueba_ajuste_cor_pfu{{ $counter }}" id="obs_prueba_ajuste_cor_pfu{{ $counter }}"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                        <div class="form-group fill">
-                            <label for="tornillo_cor_pfu{{ $counter }}" class="floating-label-activo-sm">Tornillo</label>
-                            <select class="form-control form-control-sm" name="tornillo_cor_pfu{{ $counter }}" id="tornillo_cor_pfu{{ $counter }}" onchange="evaluar_para_carga_detalle('tornillo_cor_pfu{{ $counter }}','div_tornillo_cor_pfu{{ $counter }}','obs_tornillo_cor_pfu{{ $counter }}',4);">
-                                <option value="1">Tornillo rodado</option>
-                                <option value="2">Fractura de tornillo</option>
-                                <option value="3">Tornillo óptimo</option>
-                                <option value="4">Otra</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="div_tornillo_cor_pfu{{ $counter }}" style="display:none;">
-                            <label class="floating-label-activo-sm">Otro describa</label>
-                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tornillo_cor_pfu{{ $counter }}" id="obs_tornillo_cor_pfu{{ $counter }}"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                        <div class="form-group">
-                            <label class="floating-label-activo-sm">Pulido</label>
-                            <select name="pulido_ajuste_pfu{{ $counter }}" id="pulido_ajuste_pfu{{ $counter }}"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('pulido_ajuste_pfu{{ $counter }}','div_pulido_ajuste_pfu{{ $counter }}','det_pulido_ajuste_pfu{{ $counter }}',2)">
-                                <option value="0">Seleccione</option>
-                                <option value="1">Satisfactorio</option>
-                                <option value="2">Deficiente se cita a control</option>
-
-                            </select>
-                        </div>
-                        <div class="form-group"   id="div_pulido_ajuste_pfu{{ $counter }}" style="display:none">
-                            <label class="floating-label-activo-sm">Detalle <i>(describir)</i></label>
-                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_pulido_ajuste_pfu{{ $counter }}" id="det_pulido_ajuste_pfu{{ $counter }}"></textarea>
-                        </div>
-                    </div>
-
-
+        <div class="form-row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h6 class="sub-aten">PFU</h6>
+                <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-3"><i class="fas fa-plus"></i> Añadir pieza</button>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-1">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Pieza N°</label>
+                    <select name="n_pieza_pfu{{ $counter }}" id="n_pieza_pfu{{ $counter }}" class="form-control form-control-sm">
+                        @foreach ($odontograma as $o)
+                            @if($o->presupuesto == 1)
+                                <option value="{{ $o->pieza }}">{{ $o->pieza }}</option>
+                            @endif
+                        @endforeach
+                    </select>
                 </div>
-                <div class="form-row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <div class="form-group">
-                            <label class="floating-label-activo-sm">Observaciones al procedimiento</label>
-                            <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="aprec_pfu{{ $counter }}" id="aprec_pfu{{ $counter }}"></textarea>
-                        </div>
-                    </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                <div class="form-group fill">
+                    <label class="floating-label-activo-sm">Móvil</label>
+                    <select name="movil_pfu{{ $counter }}" id="movil_pfu{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('movil_pfu{{ $counter }}','div_movil_pfu{{ $counter }}','obs_movil_pfu{{ $counter }}',2);">
+                        <option value="0">Seleccione</option>
+                        <option value="1">No</option>
+                        <option value="2">Sí</option>
+                    </select>
                 </div>
+                <div class="form-group" id="div_movil_pfu{{ $counter }}" style="display: none">
+                    <label class="floating-label-activo-sm">Describir</label>
+                    <textarea class="form-control form-control-sm" data-titulo="" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_movil_pfu{{ $counter }}" id="obs_movil_pfu{{ $counter }}"></textarea>
+                </div>
+            </div>
 
+            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-3">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Prueba de ajuste</label>
+                    <select name="prueba_ajuste_cor_pfu{{ $counter }}"  id="prueba_ajuste_cor_pfu{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prueba_ajuste_cor_pfu{{ $counter }}','div_prueba_ajuste_cor_pfu{{ $counter }}','obs_prueba_ajuste_cor_pfu{{ $counter }}',2);">
+                        <option selected  value="1">Buena </option>
+                        <option value="2">No devuelta a laboratorio</option>
 
+                    </select>
+                </div>
+                <div class="form-group" id="div_prueba_ajuste_cor_pfu{{ $counter }}" style="display:none;">
+                    <label class="floating-label-activo-sm">Otro (Describir)</label>
+                    <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_prueba_ajuste_cor_pfu{{ $counter }}" id="obs_prueba_ajuste_cor_pfu{{ $counter }}"></textarea>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-3">
+                <div class="form-group fill">
+                    <label for="tornillo_cor_pfu{{ $counter }}" class="floating-label-activo-sm">Tornillo</label>
+                    <select class="form-control form-control-sm" name="tornillo_cor_pfu{{ $counter }}" id="tornillo_cor_pfu{{ $counter }}" onchange="evaluar_para_carga_detalle('tornillo_cor_pfu{{ $counter }}','div_tornillo_cor_pfu{{ $counter }}','obs_tornillo_cor_pfu{{ $counter }}',4);">
+                        <option value="1">Tornillo rodado</option>
+                        <option value="2">Fractura de tornillo</option>
+                        <option value="3">Tornillo óptimo</option>
+                        <option value="4">Otra</option>
+                    </select>
+                </div>
+                <div class="form-group" id="div_tornillo_cor_pfu{{ $counter }}" style="display:none;">
+                    <label class="floating-label-activo-sm">Otro (Describir)</label>
+                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tornillo_cor_pfu{{ $counter }}" id="obs_tornillo_cor_pfu{{ $counter }}"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-3">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Pulido</label>
+                    <select name="pulido_ajuste_pfu{{ $counter }}" id="pulido_ajuste_pfu{{ $counter }}"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('pulido_ajuste_pfu{{ $counter }}','div_pulido_ajuste_pfu{{ $counter }}','det_pulido_ajuste_pfu{{ $counter }}',2)">
+                        <option value="0">Seleccione</option>
+                        <option value="1">Satisfactorio</option>
+                        <option value="2">Deficiente se cita a control</option>
+                    </select>
+                </div>
+                <div class="form-group"   id="div_pulido_ajuste_pfu{{ $counter }}" style="display:none">
+                    <label class="floating-label-activo-sm">Detalle (Describir)</label>
+                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_pulido_ajuste_pfu{{ $counter }}" id="det_pulido_ajuste_pfu{{ $counter }}"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="form-group">
+                    <label class="floating-label-activo-sm">Obs. Al procedimiento</label>
+                    <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="aprec_pfu{{ $counter }}" id="aprec_pfu{{ $counter }}"></textarea>
+                </div>
             </div>
         </div>
     </div>

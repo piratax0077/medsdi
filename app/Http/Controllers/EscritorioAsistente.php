@@ -1842,7 +1842,8 @@ class EscritorioAsistente extends Controller
 
         $hora_medica->id_procedimiento = $request->id_procedimiento;
 
-        $hora_medica->descripcion = $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos;
+        $hora_medica->descripcion = $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos;
+        $hora_medica->observaciones = $request->observaciones;
         $hora_medica->id_lugar_atencion = $request->id_lugar_atencion;
 
         /**acompañantes */

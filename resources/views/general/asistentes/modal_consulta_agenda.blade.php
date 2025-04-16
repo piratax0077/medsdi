@@ -146,7 +146,7 @@
                                      {{-- direccion --}}
                                      <tr>
                                         <th scope="row">
-                                            <strong>Direcion</strong>
+                                            <strong>Dirección</strong>
                                         <td>
 
                                             <div class="paciente_view_asistente">
@@ -2723,47 +2723,47 @@
         }
     }
 
-    function buscar_ciudad_general(input_ciudad,input_region, id_ciudad = 0) {
-        // return console.log(input_region, input_ciudad, id_ciudad);
-        var region = $('#' + input_region).val();
-        console.log(region);
-        let url = "{{ route('home.buscar_ciudad_region') }}";
-        $.ajax({
-                url: url,
-                type: "get",
-                data: {
-                    region: region,
-                },
-            })
-            .done(function(data) {
-                if (data != null) {
-                    data = JSON.parse(data);
+    // function buscar_ciudad_general(input_ciudad,input_region, id_ciudad = 0) {
+    //     // return console.log(input_region, input_ciudad, id_ciudad);
+    //     var region = $('#' + input_region).val();
+    //     console.log(region);
+    //     let url = "{{ route('home.buscar_ciudad_region') }}";
+    //     $.ajax({
+    //             url: url,
+    //             type: "get",
+    //             data: {
+    //                 region: region,
+    //             },
+    //         })
+    //         .done(function(data) {
+    //             if (data != null) {
+    //                 data = JSON.parse(data);
 
-                    let ciudades = $('#' + input_ciudad);
+    //                 let ciudades = $('#' + input_ciudad);
 
-                    ciudades.find('option').remove();
-                    ciudades.append('<option value="0">seleccione ciudad</option>');
-                    $(data).each(function(i, v) { // indice, valor
-                        ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
-                    })
+    //                 ciudades.find('option').remove();
+    //                 ciudades.append('<option value="0">seleccione ciudad</option>');
+    //                 $(data).each(function(i, v) { // indice, valor
+    //                     ciudades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+    //                 })
 
-                    if (id_ciudad != 0) {
-                        ciudades.val(id_ciudad);
-                    }
-                } else {
-                    swal({
-                        title: "Error",
-                        text: "Error al cargar las ciudades",
-                        icon: "error",
-                        buttons: "Aceptar",
-                        DangerMode: true,
-                    });
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-    };
+    //                 if (id_ciudad != 0) {
+    //                     ciudades.val(id_ciudad);
+    //                 }
+    //             } else {
+    //                 swal({
+    //                     title: "Error",
+    //                     text: "Error al cargar las ciudades",
+    //                     icon: "error",
+    //                     buttons: "Aceptar",
+    //                     DangerMode: true,
+    //                 });
+    //             }
+    //         })
+    //         .fail(function(jqXHR, ajaxOptions, thrownError) {
+    //             console.log(jqXHR, ajaxOptions, thrownError)
+    //         });
+    // };
 
     function actualizar_prevision_paciente(input_paciente, input_prevision) {
         var paciente = $('#' + input_paciente).val();

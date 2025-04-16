@@ -101,12 +101,8 @@
                         aria-labelledby="heading_consentimientos_informados2"
                         data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
-                            <button type="button"
-                                class="btn btn-sm btn-info btn-block accion_modal_orden_trabajo">ORDEN DE TRABAJO
-                                MENOR</button>
-                            <button type="button"
-                                class="btn btn-sm btn-info btn-block accion_modal_orden_trabajoM" >ORDEN DE TRABAJO
-                                MAYOR</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="lab_dent_menor()";>+ ORDEN DE TRABAJO  MENOR</button>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left" onclick="lab_dent_mayor()";>+ ORDEN DE TRABAJO MAYOR</button>
                         </div>
                     </div>
                 </div>
