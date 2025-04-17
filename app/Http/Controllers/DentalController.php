@@ -2612,7 +2612,7 @@ class DentalController extends Controller
     }
 
     public function dame_insumos_tipo(Request $req){
-        return $req;
+
         $insumos = MaterialesImplantologia::where('id_tipo_insumo',$req->id_tipo_insumo)->get();
         if(count($insumos) > 0){
             return $insumos;

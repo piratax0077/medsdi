@@ -1833,7 +1833,7 @@ class EscritorioProfesional extends Controller
             $empresa = Empresas::where('rut_empresa', $req->rut)->first();
 
             if(!$empresa){
-                return ['estado' => 0, 'mensaje' => 'Empresa no encontrada'];
+                return ['estado' => 0, 'mensaje' => 'Empresa no encontrada. Completar formulario.'];
             }else{
                 $empresa->region = Region::where('id', $empresa->id_region)->first();
                 $empresa->ciudad = Ciudad::where('id', $empresa->id_comuna)->first();
@@ -2782,6 +2782,20 @@ class EscritorioProfesional extends Controller
         }
     }
 
+    public function recargar_imagenes_dental_paciente(Request $req){
+        if($req->seccion == 'gral'){
+            $imagenes = $this->dameInfoImagenesDentalPaciente($req->id_paciente,'gral');
+            $v = view('atencion_odontologica.include.imagenes_dental_todas',['imagenes' => $imagenes])->render();
+        }elseif($req->seccion == 'implantologia'){
+            $imagenes = $this->dameInfoImagenesDentalPaciente($req->id_paciente,'implantologia');
+            $v = view('atencion_odontologica.include.imagenes_dental_preimplante_todas',['imagenes' => $imagenes])->render();
+        }else{
+            $imagenes = $this->dameInfoImagenesDentalPaciente($req->id_paciente,'periodoncica');
+            $v = view('atencion_odontologica.include.imagenes_dental_period_todas',['imagenes' => $imagenes])->render();
+        }
+        return ['mensaje' => 'OK', 'v' => $v];
+    }
+
     public function mostrar_nuevas_imagenes_dental(Request $req){
 
         $idCounter = $req->counter ? $req->counter : 0;
@@ -3030,6 +3044,12 @@ class EscritorioProfesional extends Controller
             return ['mensaje' => 'error','v' => $e->getMessage()];
         }
 
+    }
+
+    public function recargar_piezas_dental_examen_oral_rx(Request $req){
+        $examenes = $this->dameExamenesPiezaDentalOraxRx($req->id_paciente);
+        $v = view('atencion_odontologica.include.examenes_dental_oral_rx_todos',['examenes' => $examenes])->render();
+        return ['mensaje' => 'OK','v' => $v];
     }
 
     public function guardar_pieza_dental_examen_dolor_odontop(Request $req){

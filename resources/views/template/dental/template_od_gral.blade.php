@@ -241,25 +241,17 @@
 			@endif
         });
 
+        $('#table_insumos_odon_gral').DataTable();
+
         $('#table_trabajos_presupuesto').DataTable({
             responsive:'true'
         });
-        $('#presup_estado_pago').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
-                }
-            });
+        $('#presup_estado_pago').DataTable();
 
-        $('#presup_estado_pago_gral').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
-            }
-        });
+        $('#presup_estado_pago_gral').DataTable();
 
         $('#presup_insumos_pago').DataTable({
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
-            }
+            responsive: 'true'
         });
 
 

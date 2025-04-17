@@ -255,6 +255,10 @@
 
                     // Re-inicializar el Dropzone nuevamente
                     //init_dropzone_imagenes();  // Asegúrate de que la función initDropzone esté disponible
+                    setTimeout(() => {
+                        recargar_imagenes_rx('gral');
+                    }, 1000);
+
                 }
             },
             error: function(error){
@@ -263,6 +267,31 @@
         })
 
 
+    }
+
+    function recargar_imagenes_rx(seccion){
+        let url = "{{ ROUTE('profesional.recargar_imagenes_dental_paciente') }}";
+        let id_paciente = dame_id_paciente();
+
+        let data = {
+            _token: CSRF_TOKEN,
+            id_paciente: id_paciente,
+            seccion: seccion
+        }
+
+        $.ajax({
+            type:'post',
+            data: data,
+            url: url,
+            success: function(resp){
+                console.log(resp);
+                $('#contenedor_imagenes_dent').empty();
+                $('#contenedor_imagenes_dent').append(resp.v);
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
     }
 
     function biopsia(alias_examen, counter)

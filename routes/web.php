@@ -562,6 +562,7 @@ Route::group([
     Route::post('/eliminar_nueva_pieza_dental_paciente_end', [App\Http\Controllers\EscritorioProfesional::class, 'eliminar_nueva_pieza_dental_end'])->name('profesional.eliminar_nueva_pieza_dental_end');
     Route::post('/eliminar_nueva_pieza_dental_paciente_rx_odontop', [App\Http\Controllers\EscritorioProfesional::class, 'eliminar_nueva_pieza_dental_rx_odontop'])->name('profesional.eliminar_nueva_pieza_dental_rx_odontop');
     Route::post('/guardar_pieza_dental_examen_oral_rx',[App\Http\Controllers\EscritorioProfesional::class,'guardar_pieza_dental_examen_oral_rx'])->name('profesional.guardar_pieza_dental_examen_oral_rx');
+    Route::post('/recargar_piezas_dental_examen_oral_rx',[App\Http\Controllers\EscritorioProfesional::class,'recargar_piezas_dental_examen_oral_rx'])->name('profesional.recargar_piezas_dental_examen_oral_rx');
     Route::post('/eliminar_imagen_rx_paciente',[App\Http\Controllers\EscritorioProfesional::class,'eliminar_imagen_rx_paciente'])->name('profesional.eliminar_imagen_rx_paciente');
     Route::post('/eliminar_imagen_rx_end_paciente',[App\Http\Controllers\EscritorioProfesional::class,'eliminar_imagen_rx_end_paciente'])->name('profesional.eliminar_imagen_rx_end_paciente');
     Route::post('/mostrar_nueva_pieza_dental_examen',[App\Http\Controllers\EscritorioProfesional::class,'mostrar_nueva_pieza_dental_examen'])->name('profesional.mostrar_nueva_pieza_dental_examen');
@@ -572,6 +573,7 @@ Route::group([
     Route::post('/mostrar_nueva_pieza_post_impl',[App\Http\Controllers\EscritorioProfesional::class,'mostrar_nueva_pieza_dental_post_impl'])->name('profesional.mostrar_nueva_pieza_dental_post_impl');
     Route::post('/mostrar_nuevo_grupo_post_impl',[App\Http\Controllers\EscritorioProfesional::class,'mostrar_nuevo_grupo_post_impl'])->name('profesional.mostrar_nuevo_grupo_post_impl');
     Route::post('/guardar_imagenes_dental_paciente',[App\Http\Controllers\EscritorioProfesional::class,'guardar_imagenes_dental_paciente'])->name('profesional.guardar_imagenes_dental_paciente');
+    Route::post('/recargar_imagenes_dental_paciente',[App\Http\Controllers\EscritorioProfesional::class,'recargar_imagenes_dental_paciente'])->name('profesional.recargar_imagenes_dental_paciente');
     Route::post('/eliminar_imagen_dental_paciente',[App\Http\Controllers\EscritorioProfesional::class,'eliminar_imagen_dental_paciente'])->name('profesional.eliminar_imagen_dental_paciente');
     Route::post('/guardar_pieza_dental_examen_pieza',[App\Http\Controllers\EscritorioProfesional::class,'guardar_pieza_dental_examen_pieza'])->name('profesional.guardar_pieza_examen_pieza');
     Route::post('/guardar_pieza_dental_examen_pieza_hist',[App\Http\Controllers\EscritorioProfesional::class,'guardar_pieza_dental_examen_pieza_hist'])->name('profesional.guardar_pieza_examen_pieza_hist');

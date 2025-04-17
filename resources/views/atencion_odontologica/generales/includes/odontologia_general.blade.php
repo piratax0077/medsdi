@@ -473,7 +473,7 @@
                                                             <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
                                                                 <div class="form-group">
 
-                                                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nueva_pieza_ex_radio({{ $count }})"><i class="fas fa-plus"></i> Añadir nueva pieza</button>
+                                                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nueva_pieza_ex_radio({{ $counter }})"><i class="fas fa-plus"></i> Añadir nueva pieza</button>
                                                                 </div>
                                                             </div>
                                                         </div>

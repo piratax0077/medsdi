@@ -160,7 +160,7 @@
             mostrar_pieza_dental_examen_odontop(random);
             mostrar_nueva_pieza_oral_rx_odontop(random);
             mostrar_pieza_dental_examen_odontop_(random);
-            mostrar_nueva_pieza_ex_radio(random);
+            // mostrar_nueva_pieza_ex_radio(random);
             mostrar_nuevas_imagenes_dent(random);
         });
         function cargar_a_presupuesto(id, tipo = null){
@@ -551,7 +551,7 @@
                                     <label class="floating-label-activo-sm">Total prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
-                                <div class="form-group col-md-2 d-flex">
+                                <div class="form-group col-md-2 d-flex justify-content-center">
                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
 
                                 </div>
@@ -973,6 +973,15 @@
             }
         });
     }
+
+    var formatoMoneda = (valor) => {
+            return valor.toLocaleString('es-CL', {
+                style: 'currency',
+                currency: 'CLP',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).replace(/\./g, ',').replace(/,/g, '.');
+        };
 
     function sacar_de_presupuesto(id, tipo = null){
         let url = "{{ ROUTE('dental.sacar_tratamiento_presupuesto') }}";

@@ -441,7 +441,7 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2 d-flex">
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
 
                                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
@@ -471,7 +471,7 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2 d-flex">
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
 
                                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
@@ -501,7 +501,7 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2 d-flex">
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
 
                                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
@@ -531,7 +531,7 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2 d-flex">
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
 
                                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
@@ -561,7 +561,7 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2 d-flex">
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
                                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
 
                                                 </div>
@@ -591,7 +591,7 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2 d-flex">
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
 
                                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
@@ -621,7 +621,7 @@
                                                     <label class="floating-label-activo-sm">Total prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2 d-flex">
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
 
                                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
@@ -651,7 +651,7 @@
                                                     <label class="floating-label-activo-sm">Total Prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2 d-flex">
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
                                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
 
                                                 </div>
@@ -681,7 +681,7 @@
                                                     <label class="floating-label-activo-sm">Total Prestación</label>
                                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor * $diagnostico->cantidad,0,',','.') }}">
                                                 </div>
-                                                <div class="form-group col-md-2 d-flex">
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
 
                                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
                                                 </div>
@@ -1130,7 +1130,6 @@
                                                                         <th class="text-center align-middle">Valor total</th>
                                                                         <th class="text-center align-middle">Descuento</th>
                                                                         <th class="text-center align-middle">Valor a pagar</th>
-                                                                        <th class="text-center align-middle">Aprobado</th>
                                                                         <th class="text-center align-middle">Estado Pago</th>
                                                                         <th class="text-center align-middle">Estado Prestación</th>
                                                                     </tr>
@@ -1152,7 +1151,7 @@
                                                                                 <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
                                                                                 <td class="text-center align-middle">0</td>
                                                                                 <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                                <td class="text-center align-middle"></td>
+
                                                                                 <td class="text-center align-middle status-circle">
                                                                                     <div class="circle"></div>
                                                                                 </td>
@@ -1179,7 +1178,7 @@
                                                                             <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
                                                                             <td class="text-center align-middle">0</td>
                                                                             <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                            <td class="text-center align-middle"></td>
+
                                                                             <td class="text-center align-middle status-circle">
                                                                                 <div class="circle"></div>
                                                                             </td>
@@ -1206,7 +1205,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
                                                                         <td class="text-center align-middle">0</td>
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle"></td>
+
                                                                         <td class="text-center align-middle status-circle">
                                                                             <div class="circle"></div>
                                                                         </td>
@@ -1233,7 +1232,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
                                                                         <td class="text-center align-middle">0</td>
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle"></td>
+
                                                                         <td class="text-center align-middle status-circle">
                                                                             <div class="circle"></div>
                                                                         </td>
@@ -1260,7 +1259,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
                                                                         <td class="text-center align-middle">0</td>
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle"></td>
+
                                                                         <td class="text-center align-middle status-circle">
                                                                             <div class="circle"></div>
                                                                         </td>
@@ -1287,7 +1286,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
                                                                         <td class="text-center align-middle">0</td>
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle"></td>
+
                                                                         <td class="text-center align-middle status-circle">
                                                                             <div class="circle"></div>
                                                                         </td>
@@ -1314,7 +1313,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
                                                                         <td class="text-center align-middle">0</td>
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle"></td>
+
                                                                         <td class="text-center align-middle status-circle">
                                                                             <div class="circle"></div>
                                                                         </td>
@@ -1341,7 +1340,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
                                                                         <td class="text-center align-middle">0</td>
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle"></td>
+
                                                                         <td class="text-center align-middle status-circle">
                                                                             <div class="circle"></div>
                                                                         </td>
@@ -1368,7 +1367,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
                                                                         <td class="text-center align-middle">0</td>
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle"></td>
+
                                                                         <td class="text-center align-middle status-circle">
                                                                             <div class="circle"></div>
                                                                         </td>
@@ -1395,7 +1394,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
                                                                         <td class="text-center align-middle">0</td>
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle"></td>
+
                                                                         <td class="text-center align-middle status-circle">
                                                                             <div class="circle"></div>
                                                                         </td>
@@ -1422,7 +1421,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
                                                                         <td class="text-center align-middle">0</td>
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle"></td>
+
                                                                         <td class="text-center align-middle status-circle">
                                                                             <div class="circle"></div>
                                                                         </td>
@@ -1449,7 +1448,7 @@
                                                                             <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
                                                                             <td class="text-center align-middle">0</td>
                                                                             <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                            <td class="text-center align-middle"></td>
+
                                                                             <td class="text-center align-middle status-circle">
                                                                                 <div class="circle"></div>
                                                                             </td>
@@ -2247,6 +2246,11 @@
         // Verificar que todos los campos requeridos estén completos
         if (!montoPago || !montoAbonado || !metodoPago) {
             console.error('Por favor complete todos los campos obligatorios.');
+            swal({
+                title:'Error',
+                icon:'error',
+                text:'Por favor complete todos los campos obligatorios.',
+            })
             return;
         }
 

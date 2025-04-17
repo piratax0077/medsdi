@@ -312,18 +312,9 @@ function guardar_nueva_pieza_ex_radio(counter){
                     title:'Exito',
                     text:'Pieza agregada correctamente'
                 });
-                // Mostrar las imágenes subidas
-                if (resp.rx && resp.rx.decoded_imagenes) {
-                    resp.rx.decoded_imagenes.forEach(function(imagen) {
-                        imagen.paths_imagenes.forEach(function(path) {
-                            $('#contenedor_examenes_oral_rx').append(`
-                                <div class="col-md-4">
-                                    <img src="${path}" class="img-fluid" alt="Imagen subida">
-                                </div>
-                            `);
-                        });
-                    });
-                }
+                setTimeout(() => {
+                    recargar_imagenes_rx();
+                }, 1000);
             } else {
                 $('#pieza_dentalrx').empty();
                 $('#pieza_dentalrx').append(resp.mensaje);
@@ -368,7 +359,8 @@ function guardar_nueva_pieza_ex_radio(counter){
                 }
 
                 // Re-inicializar el Dropzone nuevamente
-                initDropzone();  // Asegúrate de que la función initDropzone esté disponible
+                //initDropzone();  // Asegúrate de que la función initDropzone esté disponible
+
             }
         },
         error: function(error){
@@ -377,7 +369,30 @@ function guardar_nueva_pieza_ex_radio(counter){
     });
 }
 
+function recargar_imagenes_rx(){
+    let url = "{{ route('profesional.recargar_piezas_dental_examen_oral_rx') }}";
+    let data = {
+        _token: CSRF_TOKEN,
+        id_paciente: dame_id_paciente()
+    }
 
+    $.ajax({
+        type:'post',
+        data:data,
+        url: url,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#pieza_dentalrx').empty();
+                $('#pieza_dentalrx').append(resp.v);
+
+            }
+        },
+        error: function(error){
+            console.log(error.responseText);
+        }
+    });
+}
 
 
 function ocultar_nueva_pieza_dental_rx(){

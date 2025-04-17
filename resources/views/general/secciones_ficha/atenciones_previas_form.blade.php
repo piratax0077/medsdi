@@ -22,8 +22,8 @@
                                                 <th>Fecha</th>
                                                 <th>Diagnóstico</th>
                                                 <th>Ficha clínica</th>
-                                                <th>Exámenes</th>
-                                                <th>Recetas</th>
+                                                <th>Documentos</th>
+
                                                 @if($profesional->id_especialidad == 2)<th>Presupuestos</th> @endif
                                                 @if($profesional->id_especialidad == 2)<th>Tratamientos </th> @endif
                                                 @if($profesional->id_especialidad == 2)<th>Evoluciones </th> @endif
