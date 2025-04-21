@@ -11,11 +11,11 @@
                 <form id="modal_pedido_materiales">
                     <div class="form-row">
                         <div class="form-group col-sm-12 col-md-12">
-                            <label class="floating-label">Nombre Material</label>
+                            <label class="floating-label-activo-sm">Nombre Material</label>
                             <input type="text" class="form-control form-control-sm" name="" id="">
                         </div>
                         <div class="form-group col-sm-12 col-md-12">
-                            <label class="floating-label">Pedir a :</label>
+                            <label class="floating-label-activo-sm">Pedir a :</label>
                             <select id="lugar_pedido" name="lugar_pedido" class="form-control form-control-sm">
                                 <option selected value="0">Seleccione una opción </option>
                                 <option>Bodega del Centro</option>
@@ -24,15 +24,15 @@
                             </select>
                         </div>
                         <div class="form-group col-sm-12 col-md-12">
-                            <label class="floating-label-activo-sm">Fecha</label>
+                            <label class="floating-label-activo-sm-activo-sm">Fecha</label>
                             <input type="date" class="form-control form-control-sm" name="" id="">
                         </div>
                         <div class="form-group col-sm-12 col-md-12">
-                            <label class="floating-label">Cantidad</label>
+                            <label class="floating-label-activo-sm">Cantidad</label>
                             <input type="person" class="form-control form-control-sm" name="" id="">
                         </div>
                         <div class="form-group col-sm-12 col-md-12">
-                            <label class="floating-label">Uso en:</label>
+                            <label class="floating-label-activo-sm">Uso en:</label>
                             <input type="number" class="form-control form-control-sm" name="" id="">
                         </div>
                     </div>
@@ -50,15 +50,15 @@
                         <form id="extsvb">
                             <div class="form-row">
                                 <div class="form-group col-sm-12 col-md-12">
-                                    <label class="floating-label">Nombre Proveedor</label>
+                                    <label class="floating-label-activo-sm">Nombre Proveedor</label>
                                     <input type="text" class="form-control form-control-sm" name="" id="">
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12">
-                                    <label class="floating-label">Dirección</label>
+                                    <label class="floating-label-activo-sm">Dirección</label>
                                     <input type="text" class="form-control form-control-sm" name="" id="">
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12">
-                                    <label class="floating-label">Email</label>
+                                    <label class="floating-label-activo-sm">Email</label>
                                     <textarea type="text" class="form-control form-control-sm" rows="2" name=""
                                         id=""></textarea>
                                 </div>

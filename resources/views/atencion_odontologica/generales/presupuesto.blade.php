@@ -16,7 +16,7 @@
             text-align: center;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            animation: pulse 1.5s infinite alternate;
+            /* animation: pulse 1.5s infinite alternate; */
             margin: 0px 10px 0px 10px;
     }
 
@@ -793,6 +793,12 @@
 
                                                                                 </div>
                                                                             </div>
+                                                                            <div class="form-row">
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                    <label class="floating-label-activo-sm">Observaciones </label>
+                                                                                    <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
 
@@ -836,18 +842,19 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <label class="floating-label-activo-sm">Observaciones </label>
+                                                                                <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
 
                                                                     @endforeach
                                                                     @endif
 
                                                                 </div>
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <label class="floating-label-activo-sm">Observaciones </label>
-                                                                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
-                                                                    </div>
-                                                                </div>
+
                                                             </div>
 
                                                         </div>
@@ -1105,7 +1112,7 @@
                                                                                 <td class="text-center align-middle">0</td>
                                                                                 <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
                                                                                 <td class="text-center align-middle status-circle">
-                                                                                    <div class="circle {{ $clase }}"></div>
+                                                                                    <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
                                                                                     {{ $estado }}
@@ -1153,7 +1160,7 @@
                                                                                 <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
 
                                                                                 <td class="text-center align-middle status-circle">
-                                                                                    <div class="circle"></div>
+                                                                                    <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
                                                                                     {{ $estado }}
@@ -1180,7 +1187,7 @@
                                                                             <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
 
                                                                             <td class="text-center align-middle status-circle">
-                                                                                <div class="circle"></div>
+                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
                                                                             </td>
                                                                             <td class="text-center align-middle">
                                                                                 {{ $estado }}
@@ -1190,58 +1197,58 @@
                                                                         @endif
                                                                     @endforeach
                                                                     @foreach ($maxilar_superior_gral_tratamientos_endo as $diagnostico)
-                                                                    @if($diagnostico->presupuesto == 1)
-                                                                    @php
-                                                                            if($diagnostico->estado == 0) {
-                                                                                $estado = 'PENDIENTE';
-                                                                            }elseif($diagnostico->estado == 1){
-                                                                                $estado = 'TERMINADO';
-                                                                                # code...
-                                                                            }
-                                                                        @endphp
-                                                                    <tr>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle">0</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            @php
+                                                                                if($diagnostico->estado == 0) {
+                                                                                    $estado = 'PENDIENTE';
+                                                                                }elseif($diagnostico->estado == 1){
+                                                                                    $estado = 'TERMINADO';
+                                                                                    # code...
+                                                                                }
+                                                                            @endphp
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
 
-                                                                        <td class="text-center align-middle status-circle">
-                                                                            <div class="circle"></div>
-                                                                        </td>
-                                                                        <td class="text-center align-middle">
-                                                                            {{ $estado }}
-                                                                        </td>
+                                                                                <td class="text-center align-middle status-circle">
+                                                                                    <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                                </td>
+                                                                                <td class="text-center align-middle">
+                                                                                    {{ $estado }}
+                                                                                </td>
 
-                                                                    </tr>
-                                                                    @endif
+                                                                            </tr>
+                                                                        @endif
                                                                     @endforeach
                                                                     @foreach ($maxilar_superior_gral_diagnosticos_endo as $diagnostico)
-                                                                    @if($diagnostico->presupuesto == 1)
-                                                                    @php
-                                                                            if($diagnostico->estado == 0) {
-                                                                                $estado = 'PENDIENTE';
-                                                                            }elseif($diagnostico->estado == 1){
-                                                                                $estado = 'TERMINADO';
-                                                                                # code...
-                                                                            }
-                                                                        @endphp
-                                                                    <tr>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle">0</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                        @if($diagnostico->presupuesto == 1)
+                                                                            @php
+                                                                                if($diagnostico->estado == 0) {
+                                                                                    $estado = 'PENDIENTE';
+                                                                                }elseif($diagnostico->estado == 1){
+                                                                                    $estado = 'TERMINADO';
+                                                                                    # code...
+                                                                                }
+                                                                            @endphp
+                                                                            <tr>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">0</td>
+                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
 
-                                                                        <td class="text-center align-middle status-circle">
-                                                                            <div class="circle"></div>
-                                                                        </td>
-                                                                        <td class="text-center align-middle">
-                                                                            {{ $estado }}
-                                                                        </td>
+                                                                                <td class="text-center align-middle status-circle">
+                                                                                    <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                                </td>
+                                                                                <td class="text-center align-middle">
+                                                                                    {{ $estado }}
+                                                                                </td>
 
-                                                                    </tr>
-                                                                    @endif
+                                                                            </tr>
+                                                                        @endif
                                                                     @endforeach
                                                                     @foreach ($maxilar_inferior_gral_diagnosticos as $diagnostico)
                                                                     @if($diagnostico->presupuesto == 1)
@@ -1261,7 +1268,8 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
 
                                                                         <td class="text-center align-middle status-circle">
-                                                                            <div class="circle"></div>
+                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : $diagnostico->clase }}"></div>
+
                                                                         </td>
                                                                         <td class="text-center align-middle">
                                                                             {{ $estado }}
@@ -1288,7 +1296,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
 
                                                                         <td class="text-center align-middle status-circle">
-                                                                            <div class="circle"></div>
+                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
                                                                         </td>
                                                                         <td class="text-center align-middle">
                                                                             {{ $estado }}
@@ -1315,7 +1323,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
 
                                                                         <td class="text-center align-middle status-circle">
-                                                                            <div class="circle"></div>
+                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
                                                                         </td>
                                                                         <td class="text-center align-middle">
                                                                             {{ $estado }}
@@ -1342,7 +1350,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
 
                                                                         <td class="text-center align-middle status-circle">
-                                                                            <div class="circle"></div>
+                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
                                                                         </td>
                                                                         <td class="text-center align-middle">
                                                                             {{ $estado }}
@@ -1369,7 +1377,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
 
                                                                         <td class="text-center align-middle status-circle">
-                                                                            <div class="circle"></div>
+                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
                                                                         </td>
                                                                         <td class="text-center align-middle">
                                                                             {{ $estado }}
@@ -1396,7 +1404,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
 
                                                                         <td class="text-center align-middle status-circle">
-                                                                            <div class="circle"></div>
+                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
                                                                         </td>
                                                                         <td class="text-center align-middle">
                                                                             {{ $estado }}
@@ -1423,7 +1431,7 @@
                                                                         <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
 
                                                                         <td class="text-center align-middle status-circle">
-                                                                            <div class="circle"></div>
+                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
                                                                         </td>
                                                                         <td class="text-center align-middle">
                                                                             {{ $estado }}
@@ -1450,7 +1458,7 @@
                                                                             <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
 
                                                                             <td class="text-center align-middle status-circle">
-                                                                                <div class="circle"></div>
+                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
                                                                             </td>
                                                                             <td class="text-center align-middle">
                                                                                 {{ $estado }}
@@ -2271,7 +2279,7 @@
 
         // Enviar los datos por AJAX
         $.ajax({
-            url: '{{ ROUTE("dental.confirmar_pago_presupuesto_dental") }}', // Reemplaza con la URL de tu endpoint en el controlador
+            url: '{{ ROUTE("dental.confirmar_pago_presupuesto_dental") }}',
             method: 'POST',
             data: data,
             success: function(response) {
@@ -2417,6 +2425,46 @@
                      $('#total_abonado_presupuesto').val(parseInt(response.suma_pagado));
                     $('#total_adeudado_presupuesto').val(parseInt(response.suma_adeudado));
                     $('#abonos_presup').val(formatoMoneda(response.suma_pagado));
+                    $('#valores_total_abonado_presupuesto_conf')
+                    let todos = response.todos;
+
+                    let table_ = $('#presup_estado_pago_gral').DataTable();
+
+                    // Limpiar la tabla antes de agregar nuevas filas
+                    table_.clear().draw();
+
+                    // Recorrer el odontograma y agregar nuevas filas
+                    todos.forEach(function(odonto) {
+
+                        if(odonto.presupuesto == 1){
+                            if(odonto.estado_pago == 'ok'){
+                                var clase = 'bg-success';
+                            }else if(odonto.estado_pago == 'intermedio'){
+                                var clase = 'bg-warning';
+                            }else{
+                                var clase = 'bg-danger';
+                            }
+                            if(odonto.estado == 0){
+                            var estado = 'PENDIENTE';
+                            }else{
+                                var estado = 'TERMINADO';
+                            }
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table_.row.add([
+                                odonto.localizacion,
+                                odonto.diagnostico_tratamiento,
+                                formatoMoneda(formatoMoneda(odonto.valor)),
+                                0,
+                                formatoMoneda(odonto.valor),
+                                ' <div class="circle '+clase+'"></div>',
+                                estado
+                            ]).draw(false).node();
+
+                            // Agregar clases a la fila
+                            $(rowNode).addClass('text-center align-middle status-circle');
+                        }
+
+                    });
                 }else{
                     swal({
                         title:'error',
@@ -2992,6 +3040,7 @@
                 $('#total_clinico').val(formatoMoneda(total_general));
                 // guardamos el total en un input hidden
                 $('#total_presupuesto_dental').val(total_general);
+                $('#subtotal_presup').val(formatoMoneda);
             },
             error: function(error){
                 console.log(error.responseText);
@@ -3183,6 +3232,7 @@
                 $('#total_clinico').val((total_general));
                 // guardamos el total en un input hidden
                 $('#total_presupuesto_dental').val(total_general);
+                $('#subtotal_presup').val(formatoMoneda(total_general));
             },
             error: function(error){
                 console.log(error.responseText);

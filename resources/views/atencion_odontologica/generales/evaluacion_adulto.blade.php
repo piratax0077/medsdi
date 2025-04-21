@@ -2724,6 +2724,7 @@
                         $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                         $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                        $('#subtotal_presup').val(formatoMoneda(total_general));
                         $('#odon_adults').empty();
                         $('#odon_adults').append(response.odontograma_paciente_vista);
                         let table = $('#presup_estado_pago').DataTable();

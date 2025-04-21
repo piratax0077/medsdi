@@ -1686,7 +1686,7 @@
 @include('atencion_odontologica.modals.infantil.tratamiento_maxilar_inferiorinf')
 @include('atencion_odontologica.modals.infantil.tratamiento_maxilar_superiorinf')
 @include('atencion_odontologica.modals.atencion_general.formularios_generales.m_info_lab')
-@include('atencion_odontologica.modal_insumos')
+@include('atencion_odontologica.modals.odontograma.modal_insumos')
 
 
 @section('page-script-ficha-atencion')
@@ -1912,7 +1912,7 @@
                         $('#total_presupuesto').val(formatoMoneda(total_general));
                         $('#total_insumos').val(formatoMoneda(valores_insumos));
                         $('#total_presupuesto_dental').val(total_general);
-
+                        $('#subtotal_presup').val(formatoMoneda(total_general));
                         $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
                             $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
                             //limpiar_formulario_insumo();
@@ -1986,7 +1986,7 @@
                                     <label class="floating-label-activo-sm">Total Prestación</label>
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
                                 </div>
-                                <div class="form-group col-md-2 d-flex justify-content-cemter">
+                                <div class="form-group col-md-2 d-flex justify-content-center">
 
                                     <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i> </button>
                                 </div>
@@ -2309,7 +2309,7 @@
                         $('#total_presupuesto').val(formatoMoneda(total_general));
                         $('#total_insumos').val(formatoMoneda(valores_insumos));
                         $('#total_presupuesto_dental').val(total_general);
-
+                        $('#subtotal_presup').val(formatoMoneda(total_general));
                         $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
                             $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
 
@@ -5591,7 +5591,7 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                 $('#total_clinico').val(formatoMoneda(valores_boca_general + valores_odontograma));
                 $('#total_presupuesto_dental').val(total_general);
                 $('#total_presupuesto').val(formatoMoneda(total_general));
-
+                $('#subtotal_presup').val(formatoMoneda(total_general));
                 $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
 
                 let table = $('#presup_estado_pago').DataTable();
@@ -6742,7 +6742,7 @@ function agregar_examenes_ficha() {
                             $('#total_clinico').val(formatoMoneda(total_general));
                             // guardamos el total en un input hidden
                             $('#total_presupuesto_dental').val(total_general);
-
+                            $('#subtotal_presup').val(formatoMoneda(total_general));
                             $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
 
                             let table = $('#presup_estado_pago').DataTable();

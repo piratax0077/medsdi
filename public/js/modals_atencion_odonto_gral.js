@@ -17,3 +17,15 @@ $('#formularios_odontologia').on('click', ".accion_modal_orden_trabajoM", functi
     }
     );
 
+    /* Pedido de insumos y materiales */
+    /* Pedido de insumos */
+    $('#formularios_odontologia').on('click', ".accion_modal_pedido_insumos", function () {
+        console.log("abrir modal accion_modal_pedido_insumos");
+        $('#modal_pedido_insumos').modal();
+        });
+        /* Pedido de materiales */
+        $('#formularios_odontologia').on('click', ".accion_modal_pedido_materiales", function () {
+            console.log("abrir modal accion_modal_pedido_materiales");
+        $('#modal_pedido_materiales').modal();
+    });
+

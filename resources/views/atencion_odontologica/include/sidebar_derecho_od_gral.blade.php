@@ -111,7 +111,7 @@
                         <h2 class="mb-0">
                             <button class="btn btn-light btn-block text-left collapsed" type="button"
                                 data-toggle="collapse" data-target="#collapse_materiales" aria-expanded="false" aria-controls="collapse_materiales"><i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
-                                PEDIDOS MATERIAL DE TRABAJO
+                                PEDIDOS MATERIAL A BODEGA
                             </button>
                         </h2>
                     </div>
@@ -119,11 +119,11 @@
 
                         <div class="card-body-sidebar">
                             <button type="button"
-                                class="btn btn-sm btn-info btn-block accion_modal_pedido_insumos">PEDIDO
-                                INSUMOS</button>
-                            <button type="button"
-                                class="btn btn-sm btn-info btn-block accion_modal_pedido_materiales">PEDIDO
-                                MATERIALES</button>
+                                class="btn btn-sm btn-info btn-block accion_modal_pedido_insumos" onclick="$('#modal_pedido_insumos').modal();">PEDIDO
+                                MATERIALES/INSUMOS</button>
+                            {{-- <button type="button"
+                                class="btn btn-sm btn-info btn-block accion_modal_pedido_materiales" onclick="$('#modal_pedido_materiales').modal();">PEDIDO
+                                MATERIALES</button> --}}
                         </div>
                     </div>
                 </div>

@@ -254,7 +254,9 @@
             responsive: 'true'
         });
 
-
+        $('#table_pedido_insumos_materiales').DataTable({
+            responsive: 'true'
+        });
 
         var formatoMoneda = (valor) => {
             return valor.toLocaleString('es-CL', {

@@ -648,7 +648,7 @@
         </div>
     </div>
 </div>
-@include('atencion_odontologica.modal_insumos')
+@include('atencion_odontologica.modals.odontograma.modal_insumos')
 <script>
     function abrir_modal_insumos(){
         $('#modal_insumos').modal('show');
@@ -867,7 +867,7 @@
                         $('#total_presupuesto').val(formatoMoneda(total_general));
                         $('#total_insumos').val(formatoMoneda(valores_insumos));
                         $('#total_presupuesto_dental').val(total_general);
-
+                        $('#subtotal_presup').val(formatoMoneda);
                         $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
                             $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
 
@@ -1051,7 +1051,7 @@
                         $('#total_presupuesto').val(formatoMoneda(total_general));
                         $('#total_insumos').val(formatoMoneda(valores_insumos));
                         $('#total_presupuesto_dental').val(total_general);
-
+                        $('#subtotal_presup').val(formatoMoneda(total_general));
                         $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
                             $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
                             //limpiar_formulario_insumo();
