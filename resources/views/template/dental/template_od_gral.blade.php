@@ -258,6 +258,10 @@
             responsive: 'true'
         });
 
+        $('#table_profesionales_tons').DataTable({
+            responsive: 'true'
+        });
+
         var formatoMoneda = (valor) => {
             return valor.toLocaleString('es-CL', {
                 style: 'currency',

@@ -2172,6 +2172,7 @@ class ficha_atencionController extends Controller
             $url_tratamientos_autocomplete = "{{ route('dental.getDiagnosticoDental') }}";
         }
 
+
         return view($ruta_blade)->with(
             [
                 'url_tratamientos_autocomplete' => $url_tratamientos_autocomplete,

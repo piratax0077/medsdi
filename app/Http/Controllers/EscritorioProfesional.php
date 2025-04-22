@@ -1099,16 +1099,27 @@ class EscritorioProfesional extends Controller
     }
 
     public function buscar_tons(Request $req){
-        $rut = $req->rut_tons;
-        $profesional = Profesional::where('rut','like',$rut)->where('id_especialidad',13)->first();
-        if($profesional){
-            $direccion = Direccion::where('id', $profesional->id_direccion)->first();
-            $profesional->direccion = $direccion;
-            $profesional->ciudad = $direccion->Ciudad()->first();
-            return ['estado' => 1,'tons' => $profesional];
-        }else{
-            return ['estado' => 0];
+        try {
+            $rut = $req->rut_tons;
+            $profesional = Profesional::where('rut','like',$rut)->where('id_especialidad',13)->first();
+            $odontologo = Profesional::where('id_usuario',Auth::user()->id)->first();
+            $profesionales_lugares_atencion = ProfesionalesLugaresAtencion::select('profesionales_lugares_atencion.*','lugares_atencion.nombre','lugares_atencion.id as id_lugar_atencion')
+                                                ->join('lugares_atencion','profesionales_lugares_atencion.id_lugar_atencion','=','lugares_atencion.id')
+                                                ->where('profesionales_lugares_atencion.id_profesional',$odontologo->id)
+                                                ->get();
+            if($profesional){
+                $direccion = Direccion::where('id', $profesional->id_direccion)->first();
+                $profesional->direccion = $direccion;
+                $profesional->ciudad = $direccion->Ciudad()->first();
+                return ['estado' => 1,'tons' => $profesional,'lugares_atencion' => $profesionales_lugares_atencion];
+            }else{
+                return ['estado' => 0];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return ['estado' => 0, 'mensaje' => $e->getMessage()];
         }
+
 
     }
 
@@ -1127,14 +1138,50 @@ class EscritorioProfesional extends Controller
             'profesionales1.nombre as nombre_profesional',
             'profesionales1.apellido_uno as apellido_profesional',
             'profesionales2.nombre as nombre_tons',
-            'profesionales2.apellido_uno as apellido_tons'
+            'profesionales2.apellido_uno as apellido_tons',
+            'lugares_atencion.nombre as nombre_lugar_atencion',
+            'profesionales2.rut as rut_tons',
+            'profesionales2.email as email_tons',
+            'profesionales2.telefono_uno as telefono_tons',
         )
         ->join('profesionales as profesionales1', 'profesional_tons.id_profesional', '=', 'profesionales1.id')
         ->join('profesionales as profesionales2', 'profesional_tons.id_tons', '=', 'profesionales2.id')
+        ->join('lugares_atencion', 'profesional_tons.id_lugar_atencion', '=', 'lugares_atencion.id')
         ->where('profesional_tons.id_profesional', $id_profesional)
         ->get();
 
         return $relaciones;
+    }
+
+    public function solicitar_tons_atencion(Request $req){
+        try {
+
+            $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+            $id_profesional = $profesional->id;
+            // revisamos si el profesional ya tiene una relacion con el tons
+            $existe = ProfesionalTons::where('id_profesional',$id_profesional)->where('estado',2)->first();
+
+            if($existe){
+                return ['estado' => 0, 'mensaje' => 'El profesional ya tiene una solicitud de atencion en espera para Tons'];
+            }
+            // buscamos el profesional tons
+            $relacion = ProfesionalTons::find($req->id_tons);
+
+            if($relacion){
+                $relacion->estado = 2;
+                if($relacion->save()){
+                    $tonss = $this->dame_relaciones_tons($id_profesional);
+                    return ['estado' => 1, 'mensaje' => 'Solicitud enviada correctamente','tonss' => $tonss];
+                }else{
+                    return ['estado' => 0, 'mensaje' => 'Error al enviar solicitud'];
+                }
+            }else{
+                return ['estado' => 0, 'mensaje' => 'No existe la relacion'];
+            }
+        } catch (\Exception $e) {
+            //throw $th;
+            return ['estado' => 0, 'mensaje' => $e->getMessage()];
+        }
     }
 
     public function eliminar_tons(Request $req){
@@ -1292,15 +1339,18 @@ class EscritorioProfesional extends Controller
 
     public function solicitar_tons(Request $req){
         try {
+
             $tons = Profesional::find($req->id_tons);
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-            $existe = ProfesionalTons::where('id_profesional', $profesional->id)->where('id_tons',$tons->id)->first();
+            $existe = ProfesionalTons::where('id_profesional', $profesional->id)->where('estado',2)->first();
+
             if($existe){
                 return ['estado' => 0,'msj' => 'Ya estan asociados con anterioridad.'];
             }
             $relacion = new ProfesionalTons;
             $relacion->id_profesional = $profesional->id;
             $relacion->id_tons = $tons->id;
+            $relacion->id_lugar_atencion = $req->lugar_atencion_profesional;
             $relacion->fecha = Carbon::now();
 
             if($relacion->save()){
@@ -1312,6 +1362,23 @@ class EscritorioProfesional extends Controller
         } catch (\Exception $e) {
             //throw $th;
             return ['estado' => 0,'msj' => $e->getMessage()];
+        }
+
+    }
+
+    public function desasociar_tons(Request $req){
+
+        $relacion = ProfesionalTons::find($req->id_tons);
+        if($relacion){
+            $relacion->estado = 1;
+            if($relacion->save()){
+                $relaciones = $this->dame_relaciones_tons($relacion->id_profesional);
+                return ['estado' => 1, 'msj' => 'Desasociado correctamente', 'tonss' => $relaciones];
+            }else{
+                return ['estado' => 0, 'msj' => 'Error al desasociar'];
+            }
+        }else{
+            return ['estado' => 0, 'msj' => 'No existe la relacion'];
         }
 
     }

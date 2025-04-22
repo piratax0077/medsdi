@@ -218,6 +218,12 @@
                     $('#cantidad_insumo_material').val('');
                     $('#uso_en_insumo_material').val(0);
                     // $('#modal_pedido_insumos').modal('hide');
+                    swal({
+                        title: "Pedido guardado",
+                        text: "El pedido ha sido guardado correctamente.",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    });
                 } else {
                     swal({
                         title: "Error",
@@ -305,7 +311,22 @@
             success: function (response) {
                 console.log(response);
                 if (response.status == 1) {
-                    window.open(response.ruta, '_blank');
+                    // window.open({
+                    //     url: response.url,
+                    //     target: '_blank'
+                    // });
+                    // Abrir el PDF en una ventana emergente
+                    var width = 800;
+                    var height = 600;
+                    var left = (screen.width - width) / 2;
+                    var top = (screen.height - height) / 2;
+                    window.open(response.ruta, 'Reporte Diario', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+                    swal({
+                        title: "PDF generado",
+                        text: "El PDF ha sido generado correctamente.",
+                        icon: "success",
+                        buttons: "Aceptar",
+                    });
                 } else {
                     swal({
                         title: "Error",

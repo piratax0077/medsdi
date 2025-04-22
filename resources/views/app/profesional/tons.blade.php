@@ -72,6 +72,7 @@
                                 <thead>
                                     <tr>
                                         <th class="align-middle">Lugar de atención</th>
+                                        <th class="align-middle">Rut</th>
                                         <th class="align-middle">Tons</th>
                                         <th class="align-middle">Deshabilitar</th>
                                         <th class="align-middle">Eliminar</th>
@@ -84,7 +85,8 @@
                                         @foreach ($relaciones as $r)
 
                                             <tr>
-                                                <td class="align-middle">{{ $r->lugar_atencion }}</td>
+                                                <td class="align-middle">{{ $r->nombre_lugar_atencion }}</td>
+                                                <td class="align-middle">{{ $r->rut_tons }}</td>
                                                 <td class="align-middle">{{ $r->nombre_tons }} {{ $r->apellido_tons }}</td>
 
                                                 <td class="align-middle">
@@ -310,7 +312,7 @@
                                     @if(isset($lugares_atencion))
                                     @foreach ($lugares_atencion as $lugar)
                                         @if (isset($lugar))
-                                            <option value="{{ $lugar->id }}">{{ $lugar->nombre }} </option>
+                                            <option value="{{ $lugar->id_lugar_atencion }}">{{ $lugar->nombre }} </option>
                                         @endif
                                     @endforeach
                                     @endif
@@ -336,6 +338,9 @@
 <script>
     function buscar_tons(){
         let rut_tons = $('#rut_tons').val();
+        let id_profesional = $('#id_profesional').val();
+        let id_lugar_atencion = $('#id_lugar_atencion').val();
+        let id_ficha_atencion = $('#id_fc').val();
         if(rut_tons == ''){
             swal({
                 title:'info',
@@ -346,6 +351,9 @@
         }
         let data = {
             rut_tons: rut_tons,
+            id_profesional: id_profesional,
+            id_lugar_atencion: id_lugar_atencion,
+            id_ficha_atencion: id_ficha_atencion,
             _token: CSRF_TOKEN
         }
 
@@ -370,6 +378,12 @@
                     $('#direccion_tons').val(tons.direccion.direccion+' '+tons.direccion.numero_dir);
                     $('#telefono_tons').val(tons.telefono_uno);
                     $('#sexo_tons').val(tons.sexo);
+                    $('#lugar_atencion_tons').empty();
+                    let lugares_atencion = resp.lugares_atencion;
+                    $('#lugar_atencion_tons').append('<option value="0">Seleccione</option>');
+                    lugares_atencion.forEach(lugar => {
+                        $('#lugar_atencion_tons').append('<option value="'+lugar.id_lugar_atencion+'">'+lugar.nombre+'</option>');
+                    });
                 }else{
                     $('#contenedor_datos_tons').addClass('d-none');
                     $('#contenedor_tons').removeClass('d-none');
@@ -385,9 +399,9 @@
 
     function solicitar_tons(){
         let id_tons = $('#id_tons').val();
-        let lugar_atencion = $('#lugar_atencion_tons').val();
+        let lugar_atencion_profesional = $('#lugar_atencion_tons').val();
 
-        if(lugar_atencion == 0){
+        if(lugar_atencion_profesional == 0){
             swal({
                 title:'info',
                 icon:'info',
@@ -399,7 +413,7 @@
         let url = "{{ ROUTE('profesional.solicitar_tons') }}";
         let data = {
             id_tons: id_tons,
-            lugar_atencion: lugar_atencion,
+            lugar_atencion_profesional: lugar_atencion_profesional,
             _token: CSRF_TOKEN
         };
 

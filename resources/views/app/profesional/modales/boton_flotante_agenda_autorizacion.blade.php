@@ -176,7 +176,7 @@
 </div>
 
 <div id="modal_tons_dental" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="Registro de Tons" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modal_autorizacion_fmuLabel">Registro de tons</h5>
@@ -275,7 +275,7 @@
                         <button type="button" class="btn btn-outline-success btn-sm my-3 w-100" onclick="solicitar_tons_profesional()">Seleccionar</button>
                     </div>
                 </div>
-                <table class="table table-responsive">
+                <table class="table table-responsive" id="table_profesionales_tons" style="width: 100%;">
                     <thead>
                         <tr>
                             <th scope="col">Nombre</th>
@@ -283,8 +283,8 @@
                             <th scope="col">Rut</th>
                             <th scope="col">Teléfono</th>
                             <th scope="col">Email</th>
-                            <th scope="col">Seleccionar</th>
-                            <th scope="col"></th>
+                            <th scope="col">Activar/Desactivar</th>
+                            <th scope="col">Estado</th>
                         </tr>
                     </thead>
                     <tbody id="tbody_tons">
@@ -295,15 +295,19 @@
                                 <td>{{ $tons->rut_tons }}</td>
                                 <td>{{ $tons->telefono_tons }}</td>
                                 <td>{{ $tons->email_tons }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="solicitar_tons_profesional({{ $tons->id }})">Seleccionar</button>
+                                <td class="d-flex justify-content-center">
+                                    @if($tons->estado == 2)
+                                    <button class="btn btn-outline-danger btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Ficha Médica Única" onclick="desasociar_tons_profesional({{ $tons->id }})"><i class="fas fa-trash"></i></button>
+                                    @else
+                                    <button type="button" class="btn btn-outline-success btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Ficha Médica Única" onclick="solicitar_tons_profesional({{ $tons->id }})"><i class="fas fa-check"></i></button>
+                                    @endif
                                 </td>
                                 <td>
                                     @if($tons->estado == 2)
 
-                                        <span class="badge badge-danger">Activo</span>
+                                        <span class="badge badge-success">Activo</span>
                                     @elseif($tons->estado == 1)
-                                        <span class="badge badge-success">Inactivo</span>
+                                        <span class="badge badge-danger">Inactivo</span>
                                     @else
                                         <span class="badge badge-warning">Inactivo</span>
                                     @endif
@@ -974,8 +978,10 @@
 
     }
 
-    function solicitar_tons_profesional(){
-        let id_tons = $('#id_tons').val();
+    function solicitar_tons_profesional(id_tons = null){
+        if(id_tons == null){
+            id_tons = $('#id_tons').val();
+        }
         let data = {
             id_tons: id_tons,
             _token: CSRF_TOKEN
@@ -988,11 +994,113 @@
             success: function(resp){
                 console.log(resp);
                 if(resp.estado == 1){
-                    $('#modal_tons_dental').modal('hide');
+                    // $('#modal_tons_dental').modal('hide');
                     swal({
                         title:'info',
                         icon:'success',
                         text:'Solicitud enviada'
+                    });
+                    let tons = resp.tonss;
+                    let table = $('#table_profesionales_tons').DataTable();
+                    table.clear().draw();
+                    tons.forEach(t => {
+                        let botones_html = '';
+                        let estado = '<span class="badge badge-danger">Inactivo</span>';
+                        if(t.estado == 2){
+                            botones_html = '<button class="btn btn-outline-danger btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Ficha Médica Única" onclick="desasociar_tons_profesional('+t.id+')"><i class="fas fa-trash"></i></button>';
+                            estado = '<span class="badge badge-success">Activo</span>';
+                        }else{
+                            botones_html = '<button class="btn btn-outline-success  btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Ficha Médica Única" onclick="solicitar_tons_profesional('+t.id+')"><i class="fas fa-check"> </i></button>';
+
+                        }
+                        let rowNode = table.row.add([
+                            t.nombre_tons,
+                            t.apellido_tons,
+                            t.rut_tons,
+                            t.telefono_tons,
+                            t.email_tons,
+                            botones_html,
+                            estado
+                        ]).draw(false).node();
+
+                        // Agregar clases a la fila
+                        $(rowNode).addClass('text-center align-middle');
+                    });
+                }else{
+                    $('#modal_tons_dental').modal('hide');
+                    swal({
+                        title:'info',
+                        icon:'error',
+                        text:resp.mensaje
+                    });
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+    }
+
+    function desasociar_tons_profesional(id_tons){
+        swal({
+            title: "¿Está seguro?",
+            text: "¿Desea desasociar el profesional?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                confirmar_desasociar_tons_profesional(id_tons);
+            } else {
+                swal("Cancelado");
+            }
+        });
+    }
+
+    function confirmar_desasociar_tons_profesional(id_tons){
+        let data = {
+            id_tons: id_tons,
+            _token: CSRF_TOKEN
+        }
+        let url = "{{ ROUTE('profesional.desasociar_tons') }}";
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.estado == 1){
+                    // $('#modal_tons_dental').modal('hide');
+                    let tons = resp.tonss;
+                    swal({
+                        title:'info',
+                        icon:'success',
+                        text:'Solicitud enviada'
+                    });
+                    let table = $('#table_profesionales_tons').DataTable();
+                    table.clear().draw();
+                    tons.forEach(t => {
+                        let botones_html = '';
+                        let estado = '<span class="badge badge-danger">Inactivo</span>';
+                        if(t.estado == 2){
+                            botones_html = '<button class="btn btn-outline-danger btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Ficha Médica Única" onclick="desasociar_tons_profesional('+t.id+')"><i class="fas fa-trash"></i></button>';
+                            estado = '<span class="badge badge-success">Activo</span>';
+                        }else{
+                            botones_html = '<button class="btn btn-outline-success  btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Ficha Médica Única" onclick="solicitar_tons_profesional('+t.id+')"><i class="fas fa-check"> </i></button>';
+                        }
+                        let rowNode = table.row.add([
+                            t.nombre_tons,
+                            t.apellido_tons,
+                            t.rut_tons,
+                            t.telefono_tons,
+                            t.email_tons,
+                            botones_html,
+                            estado
+                        ]).draw(false).node();
+
+                        // Agregar clases a la fila
+                        $(rowNode).addClass('text-center align-middle');
                     });
                 }else{
                     $('#modal_tons_dental').modal('hide');
