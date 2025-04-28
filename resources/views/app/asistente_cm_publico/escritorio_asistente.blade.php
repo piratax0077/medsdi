@@ -1529,6 +1529,8 @@
             var bono_profesional_nombre = $('#bono_profesional_nombre').val();
             var bono_profesional_rut = $('#bono_profesional_rut').val();
             var bono_numero = $('#bono_numero').val();
+            var bono_valor_seguro = $('#valor_seguro').val();
+            var bono_valor_bonificacion = $('#valor_bonificacion').val();
             var bono_valor_consulta = $('#bono_valor_consulta').val();
             var bono_prevision = $('#bono_prevision').val();
             var bono_prevision_nombre = $('#bono_prevision option:selected').text();
@@ -1577,6 +1579,14 @@
                 mensaje += 'Campo requerido VALOR TOTAL\n';
                 valido = 0;
             }
+            if(bono_valor_seguro == ''){
+                mensaje += 'Campo requerido VALOR SEGURO\n';
+                valido = 0;
+            }
+            if(bono_valor_bonificacion == ''){
+                mensaje += 'Campo requerido VALOR BONIFICACION\n';
+                valido = 0;
+            }
             if(bono_prevision == '' || bono_prevision == 0)
             {
                 mensaje += 'Campo requerido CONVENIO\n';
@@ -1596,6 +1606,8 @@
                         convenio_nombre: bono_prevision_nombre,
                         numero_bono: bono_numero,
                         valor_atencion: bono_valor_consulta,
+                        valor_seguro: bono_valor_seguro,
+                        valor_bonificacion: bono_valor_bonificacion,
                         glosa: '1',
                         id_profesional: bono_id_profesional,
                         id_asistente: '{{ $asistente->id }}',
@@ -1608,6 +1620,7 @@
                 })
                 .done(function(data)
                 {
+                    console.log(data);
                     if (data !== 'null')
                     {
                         //data = JSON.parse(data);

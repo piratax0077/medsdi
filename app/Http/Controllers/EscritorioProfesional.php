@@ -2816,7 +2816,7 @@ class EscritorioProfesional extends Controller
             $rx = new ImagenesDentalPaciente;
             $rx->id_ficha_atencion = $req->id_ficha_atencion;
             $rx->id_paciente = $req->id_paciente;
-            $rx->id_profesional = $req->id_profesional;
+            $rx->id_profesional = $profesional->id;
             $rx->id_lugar_atencion = $req->id_lugar_atencion;
             $rx->id_especialidad = $req->id_especialidad;
             $rx->id_tipo_especialidad = $profesional->id_tipo_especialidad;
@@ -3058,7 +3058,7 @@ class EscritorioProfesional extends Controller
         try {
 
             $examen = ExamenesDentalDolor::find($req->id);
-            return $examen;
+
         if($examen->delete()){
             if($req->tipo_examen == 'endo'){
                 $examenes = $this->dameExamenesPiezaDentalEndDolor($req->id_paciente);
@@ -3125,7 +3125,6 @@ class EscritorioProfesional extends Controller
 
     public function guardar_pieza_dental_examen_oral_rx_end(Request $req){
         try {
-
             if($req->tipo_examen == 'odontop'){
                 $tipo_examen = 3;
             }else if($req->tipo_examen == 'endo'){
@@ -3138,7 +3137,7 @@ class EscritorioProfesional extends Controller
             $rx->id_paciente = $req->id_paciente;
             $rx->id_profesional = $req->id_profesional;
             $rx->id_lugar_atencion = $req->id_lugar_atencion;
-            $rx->numero_pieza = $req->numero_pieza;
+            $rx->numero_piezas = json_encode($req->numero_pieza);
             $rx->espacio_periodontal = $req->espacio_periodontal_aplical;
             $rx->hueso_alveolal = $req->hueso_alveolar_apical;
             $rx->observaciones = $req->obs ? $req->obs : 'SIN OBSERVACIONES';
@@ -3324,7 +3323,8 @@ class EscritorioProfesional extends Controller
 
 
     public function dameExamenesPiezaDentalOraxRx($id_paciente){
-        $examenes = ExamenesDentalOralRx::where('id_paciente',$id_paciente)->get();
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $examenes = ExamenesDentalOralRx::where('id_paciente',$id_paciente)->where('id_profesional', $profesional->id)->get();
         foreach ($examenes as $e) {
             $imagenes = ImagenesDentalRxPaciente::where('id_examen', $e->id)->get();
             $e->imagenes = $imagenes;
@@ -3371,6 +3371,7 @@ class EscritorioProfesional extends Controller
 
             // Puedes asignar este array al objeto `$e` si lo necesitas
             $e->decoded_imagenes = $nueva_lista_imagenes; // Agregamos el array decodificado al examen
+            $e->numero_piezas = json_decode($e->numero_piezas);
         }
 
         return $examenes;
@@ -3404,8 +3405,9 @@ class EscritorioProfesional extends Controller
 
     public function dameInfoImagenesDentalPaciente($id_paciente,$seccion, $id_ficha_atencion = null)
     {
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         // Obtén las imágenes del paciente
-        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)->where('seccion',$seccion)
+        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)->where('id_profesional',$profesional->id)->where('seccion',$seccion)
         ->when($id_ficha_atencion, function ($query, $id_ficha_atencion) {
             return $query->where('id_ficha_atencion', $id_ficha_atencion);
         })
@@ -3531,7 +3533,7 @@ class EscritorioProfesional extends Controller
 
             $paciente = Paciente::where('id', $req->id_paciente)->first();
             $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();
-            $url_tratamientos = $profesional->id_tipo_especialidad == 18
+            $url_tratamientos = $profesional->id_tipo_especialidad != 16
             ? route('dental.getDiagnosticoDental')
             : route('dental.getTratamientoImplantologia');
             $vista_presupuestos = view('atencion_odontologica.include.cuadrantes',[
@@ -3905,12 +3907,14 @@ class EscritorioProfesional extends Controller
     }
 
     public function dameExamenesPiezaDentalEndDolor($id_paciente){
-        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('tipo_examen',2)->get();
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('id_profesional',$profesional->id)->where('tipo_examen',2)->get();
         return $examenes;
     }
 
     public function dameExamenesPiezaDentalOdontopDolor($id_paciente){
-        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('tipo_examen',3)->get();
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('id_profesional',$profesional->id)->where('tipo_examen',3)->get();
         return $examenes;
     }
 
@@ -5271,7 +5275,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         //$detalle_receta = $fichas->Recetas()->get();
         //dd($detalle_receta);
 
-        return view('app.profesional.atenciones_previas_paciente')->with(['fichas' => $fichas]);
+        return view('app.profesional.atenciones_previas_paciente')->with(['fichas' => $fichas,'profesional' => $profesional]);
     }
 
     public function buscar_receta_ficha(Request $request)
@@ -6645,6 +6649,13 @@ public function eliminarPiezaCoronaProtesis(Request $req){
 
         if($valido == 1)
         {
+            if($request->id_clase_bono == 6 || $request->id_clase_bono == 8){
+                $valor_bono = 40000;
+            }else if($request->id_clase_bono == 2){
+                $valor_bono = 0;
+            }else{
+                $valor_bono = 26830;
+            }
             /** registro bono */
             $bono = new Bono();
             $bono->convenio = $request->convenio;
@@ -6652,6 +6663,13 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             $bono->numero_bono = $request->numero_bono;
             $bono->fecha_atencion = date('Y-m-d H:i:s');
             $bono->valor_atencion = $request->valor_atencion==''?'0':$request->valor_atencion;
+            $bono->a_pagar =  $valor_bono;
+            if($request->id_clase_bono ==6 || $request->id_clase_bono ==8){
+                $bono->bonificacion = 0;
+            }else{
+                $bono->bonificacion = $request->valor_bonificacion;
+            }
+            $bono->aporte_seguro = $request->valor_seguro==''?'0':$request->valor_seguro;
             $bono->glosa = empty($request->glosa)?'0':$request->glosa;
             $bono->rendido = 0;
             $bono->id_profesional = $request->id_profesional;

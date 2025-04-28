@@ -1,46 +1,40 @@
 <div class="form-row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4">
+            <h6 class="t-aten d-inline"> Estudio Radiológico</h6>
+            <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-2"><i class="fas fa-plus"></i> Cargar nueva imagen</button>
+        </div>
     <div class="col-sm-8 mt-2">
-        <div class="card">
-            <div class="card text-center" id="img">
-                <H6>EVALUACIÓN RADIOLÓGICA GENERAL</H6>
-            </div>
+        <div class="card" id="img">
             <div class="card-body">
-                <!-- Contenedor de Imágenes -->
                 <div class="form-row" id="contenedor_piezas_ex_oral">
-                    <div class="col-md-10">
-                        <div class="card">
-                            <div class="card text-center" id="img">
-                               <H6>Imagen</H6>
-                            </div>
-
-                            <div class="aten-a">
-                                <!-- [ Main Content ] start -->
-                                <div class="dropzone" id="mis-imagenes-dentales-preimplante" action="{{ route('profesional.imagen.carga') }}"></div>
-                                <!-- [ file-upload ] end -->
-                            </div>
-
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-8">
+                        <div id="img">
+                            <h6 class="sub-aten">Imagen</h6>
+                        </div>
+                        <div class="aten-a">
+                            <div class="dropzone" id="mis-imagenes-dentales-preimplante" action="{{ route('profesional.imagen.carga') }}"></div>
                         </div>
                     </div>
                     @if($opt == 'preimplante')
-                    <div class="col-md-2">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
                         <div class="form-group">
                             <label for="numero_pieza_ex_impl{{ $count }}" class="floating-label-activo-sm">N° Pieza</label>
                             <input type="text" class="form-control form-control-sm" id="numero_pieza_ex_impl{{ $count }}">
                         </div>
                         <div class="form-group">
                             <label for="observaciones_ex_impl" class="floating-label-activo-sm">Observaciones</label>
-                            <textarea class="form-control caja-texto form-control-sm mb-9" id="observaciones_ex_impl{{ $count }}" name="observaciones_ex_impl{{ $count }}" onfocus="this.rows=4" onblur="this.rows=1;"></textarea>
+                            <textarea class="form-control caja-texto form-control-sm" id="observaciones_ex_impl{{ $count }}" name="observaciones_ex_impl{{ $count }}" onfocus="this.rows=4" onblur="this.rows=1;"></textarea>
                         </div>
                     </div>
                     @else
-                    <div class="col-md-2">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
                         <div class="form-group">
                             <label for="numero_pieza_ex_period" class="floating-label-activo-sm">N° Pieza</label>
                             <input type="text" class="form-control form-control-sm" id="numero_pieza_ex_period{{ $count }}">
                         </div>
                         <div class="form-group">
                             <label for="observaciones_ex_period" class="floating-label-activo-sm">Observaciones</label>
-                            <textarea class="form-control caja-texto form-control-sm mb-9" name="observaciones_ex_period{{ $count }}" onfocus="this.rows=4" onblur="this.rows=1;"></textarea>
+                            <textarea class="form-control caja-texto form-control-sm" name="observaciones_ex_period{{ $count }}" onfocus="this.rows=4" onblur="this.rows=1;"></textarea>
                         </div>
                     </div>
                     @endif
@@ -50,7 +44,7 @@
         </div>
     </div>
     @if($opt == 'preimplante' )
-    <div class="col-sm-4 mt-2" >
+    <div class="col-sm-4" >
         <div class="form-group fill">
             @if($opt == 'preimplante')
                 <div class="switch switch-success d-inline m-r-10">
@@ -90,7 +84,7 @@
             <hr>
                 <h6 style="text-align: center;color:blue;">ESTADO GENERAL DEL PERIODONTO</h6>
             <hr>
-            <div class="form-group fill m-50" >
+            <div class="form-group" >
                 <button type="button" class="btn btn-outline-success btn-sm " onclick="solicitar_ic_periodoncia()">SOLICITAR INTERCONSULTA PERIODÓNCIA</button>
             </div>
         </div>

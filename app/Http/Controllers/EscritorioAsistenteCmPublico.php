@@ -58,6 +58,7 @@ class EscritorioAsistenteCmPublico extends Controller
         $array_tipo_empleado = array('ASISTENTE ADMINISTRATIVO', 'ASISTENTE CONSULTA', 'ASISTENTE JEFA CAJA', 'ASISTENTE MANEJO DE AGENDA', 'ASISTENTE ONLINE', 'ASISTENTE PUBLICO');
 
         $contrato = ContratoDependiente::where($filtro)->whereIn('tipo_empleado',$array_tipo_empleado)->first();
+
         if($contrato)
         {
             $id_lugar_atencion = $contrato->id_lugar_atencion;
@@ -111,6 +112,7 @@ class EscritorioAsistenteCmPublico extends Controller
         }
         else
         {
+            return 'revisar el contrato';
             return back()->with('error','Contrato de usuario no encontado');
         }
 

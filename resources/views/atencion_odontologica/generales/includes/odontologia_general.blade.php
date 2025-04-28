@@ -646,7 +646,7 @@
                                         <div id="contenedor_pieza_dental_endo_gral" class="mb-3">
                                             @php $counter = 1; @endphp
                                             @foreach ($examenes_pieza as $examen)
-                                            <div class="card-informacion">
+                                            <div class="card">
                                                 <div class="card-body">
                                                     <div class="mb-3">
                                                         <div class="form-row align-items-center">

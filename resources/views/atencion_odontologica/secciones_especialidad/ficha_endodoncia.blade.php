@@ -37,10 +37,13 @@
                     <input type="hidden" name="rut_paciente_fc" value="{{ $paciente->rut }}" id="rut_paciente_fc">
                     <input type="hidden" name="prevision_paciente_fc" value="{{ $paciente->prevision->id }}" id="prevision_paciente_fc">
                     <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
+                    <input type="hidden" name="id_especialidad" id="id_especialidad" value="{{ $profesional->id_especialidad }}">
                     <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
                     <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
                     <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
                     <input type="hidden" name="tipo_examen_especial" id="tipo_examen_especial" value="{{ $lista_examen_especial }}">
+                    <input type="hidden" name="ficha_id_atencion_dental_odon" id="ficha_id_atencion_dental_odon" value="{{ $id_ficha_atencion }}">
+                    <input type="hidden" name="ficha_id_lugar_atencion" id="ficha_id_lugar_atencion" value="{{ $id_lugar_atencion }}">
                     @csrf
                     <div class="tab-content" id="od_endo-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
@@ -55,647 +58,8 @@
                           @include('atencion_odontologica.generales.motivo_consulta')
 
                             <!--EXAMEN ODONT GENERAL - PARAMETROS DE CONTROL-->
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="card-a">
-                                    <div class="card-header-a" id="exam_esp">
-                                        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_c" aria-expanded="false" aria-controls="exam_esp_c">
-                                            Examen Odontológico General
-                                        </button>
-                                    </div>
-                                    <div id="exam_esp_c" class="collapse" aria-labelledby="exam_esp" data-parent="#exam_esp">
-                                        <div class="card-body-aten-a shadow-none">
-                                            <div id="form-endo-adulto">
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <ul class="nav nav-tabs-aten nav-fill mb-10" id="orl_adulto" role="tablist">
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset active" id="examen_general_tab" data-toggle="tab" href="#examen_general" role="tab" aria-controls="examen_general" aria-selected="true">Dolor</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="ex_oral-tab" data-toggle="tab" href="#ex_oral" role="tab" aria-controls="ex_oral" aria-selected="true">Examen Oral</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="endo_pieza-tab" data-toggle="tab" href="#endo_pieza" role="tab" aria-controls="orl_flaringe" aria-selected="true">Examen Por Pieza</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link-aten text-reset" id="plan_endo-tab" data-toggle="tab" href="#plan_endo" role="tab" aria-controls="cuello" aria-selected="true">Planificación de tratamiento</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <div class="tab-content" id="odogeneral">
-                                                            <!--DOLOR-->
-                                                            <div class="tab-pane fade show active" id="examen_general" role="tabpanel" aria-labelledby="examen_general_tab">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="card">
-                                                                            <div class="card-body">
-                                                                                <div id="h_dental" class="row">
-                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-md-4">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label">Derivado por:</label>
-                                                                                                    <input type="text" class="form-control form-control-sm" name="ex_grl_deriv" id="ex_grl_deriv">
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-md-4">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label">Zona de Dolor</label>
-                                                                                                    <input type="text" class="form-control form-control-sm" name="ex_grl_zdolor" id="ex_grl_zdolor">
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-md-4">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label">Historia Anterior</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_grl_hp" id="ex_grl_hp"></textarea>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div id="contenedor_pieza_dental_endodolor">
-                                                                                    <div id="pieza_dental_dolor" class="row">
-                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                            <div class="form-row">
-                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                                        <input type="text" class="form-control form-control-sm" name="name="ex_grl_dol_pi_n" id="ex_grl_dol_pi_n"">
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm">Tipo de Dolor</label>
-                                                                                                        <select name="tipo_dolor" id="tipo_dolor" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tipo_dolor','div_tipo_dolor','obs_tipo_dolor',3);">
-                                                                                                            <option selected  value="1">Espontáneo</option>
-                                                                                                            <option value="2">Provocado</option>
-                                                                                                            <option value="3">Otro describir</option>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                    <div class="form-group" id="div_tipo_dolor" style="display:none;">
-                                                                                                        <label class="floating-label-activo-sm">Tipo de dolor</label>
-                                                                                                        <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tipo_dolor" id="obs_tipo_dolor"></textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm">Intensidad</label>
-                                                                                                        <select name="intensidad" id="intensidad" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('intensidad','div_intensidad','obs_intensidad',4);">
-                                                                                                            <option selected  value="1">Leve</option>
-                                                                                                            <option value="2">Moderado</option>
-                                                                                                            <option value="3">Intenso</option>
-                                                                                                            <option value="4">Otro describir</option>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                    <div class="form-group" id="div_intensidad" style="display:none;">
-                                                                                                        <label class="floating-label-activo-sm">Intensidad</label>
-                                                                                                        <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_intensidad" id="obs_intensidad"></textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm">Modo dolor</label>
-                                                                                                        <select name="modo_dolor"  id="modo_dolor" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('modo_dolor','div_modo_dolor','obs_modo_dolor',3);">
-                                                                                                            <option selected  value="1">Pulsátil</option>
-                                                                                                            <option value="2">Permanente</option>
-                                                                                                            <option value="3">Otro describir</option>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                    <div class="form-group" id="div_modo_dolor" style="display:none;">
-                                                                                                        <label class="floating-label-activo-sm">Modo dolor</label>
-                                                                                                        <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_modo_dolor" id="obs_modo_dolor"></textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm">Localización</label>
-                                                                                                        <select name="loc_dolor" id="loc_dolor" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('loc_dolor','div_loc_dolor','obs_loc_dolor',3);">
-                                                                                                            <option selected  value="1">Localizado</option>
-                                                                                                            <option value="2">Referido</option>
-                                                                                                            <option value="3">Otro describir</option>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                    <div class="form-group" id="div_loc_dolor" style="display:none;">
-                                                                                                        <label class="floating-label-activo-sm">Localización</label>
-                                                                                                        <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_loc_dolor" id="obs_loc_dolor"></textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm">Provocación del Dolor</label>
-                                                                                                        <select name="provocacion_dolor" data-titulo="General_endodoncia" data-seccion="General_endodoncia"  id="provocacion_dolor" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('provocacion_dolor','div_provocacion_dolor','obs_provocacion_dolor',5);">
-                                                                                                            <option selected  value="1">Frío</option>
-                                                                                                            <option value="2">Calor</option>
-                                                                                                            <option value="3">Actividad</option>
-                                                                                                            <option value="4">Masticación</option>
-                                                                                                            <option value="5">Otro describir</option>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                    <div class="form-group" id="div_provocacion_dolor" style="display:none;">
-                                                                                                        <label class="floating-label-activo-sm">Provocación del Dolor</label>
-                                                                                                        <textarea class="form-control form-control-sm" data-titulo="General_endodoncia"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_provocacion_dolor" id="obs_provocacion_dolor"></textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="form-row">
-                                                                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm">Cuando duele</label>
-                                                                                                        <select name="cdo_duele"  id="cdo_duele" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('cdo_duele','div_cdo_duele','obs_cdo_duele',3);">
-                                                                                                            <option selected  value="1">Palpación</option>
-                                                                                                            <option value="2">Decubito</option>
-                                                                                                            <option value="3">Otro describir</option>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                    <div class="form-group" id="div_cdo_duele" style="display:none;">
-                                                                                                        <label class="floating-label-activo-sm">Cuando duele</label>
-                                                                                                        <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_cdo_duele" id="obs_cdo_duele"></textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm">Tpo Evolución</label>
-                                                                                                        <select name="tpo_evolucion"  id="tpo_evolucion" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tpo_evolucion','div_tpo_evolucion','obs_tpo_evolucion',3);">
-                                                                                                            <option selected  value="1">Menos de 1 Semana</option>
-                                                                                                            <option value="2">Más de 1 Semana</option>
-                                                                                                            <option value="3">Otro describir</option>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                    <div class="form-group" id="div_tpo_evolucion" style="display:none;">
-                                                                                                        <label class="floating-label-activo-sm">Tpo Evolución</label>
-                                                                                                        <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_tpo_evolucionr" id="obs_tpo_evolucion"></textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm">Efecto Analgésicos</label>
-                                                                                                        <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_anal_dolor" id="obs_anal_dolor"></textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
+                            @include('atencion_odontologica.generales.odonto_gral')
 
-                                                                            <div class="row">
-                                                                                <div class="col-sm-4 col-md-4 mb-3">
-                                                                                    <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-pieza1" ><i class="fas fa-save"></i>Cargar Otra Pieza</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <!--EXAMEN  ORAL-->
-                                                            <div class="tab-pane fade show" id="ex_oral" role="tabpanel" aria-labelledby="ex_oral_tab">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="card">
-                                                                            <div class="card-body">
-                                                                                <div class="row">
-                                                                                    <div class="col-sm-2">
-                                                                                        <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                                                                            <a class="nav-link-aten text-reset active" id="intraoral_tab" data-toggle="tab" href="#intraoral" role="tab" aria-controls="intraoral" aria-selected="true">Intra-Oral</a>
-                                                                                            <a class="nav-link-aten text-reset" id="extra_oral_tab" data-toggle="tab" href="#extra_oral" role="tab" aria-controls="extra_oral" aria-selected="false">Extra Oral</a>
-                                                                                            <a class="nav-link-aten text-reset" id="radiologia_endo_tab" data-toggle="tab" href="#radiologia_endo" role="tab" aria-controls="radiologia_endo" aria-selected="false">Ex. Radiológico</a>
-                                                                                            <a class="nav-link-aten text-reset" id="imagenes_dent_tab" data-toggle="tab" href="#imagenes_dent" role="tab" aria-controls="imagenes_dent" aria-selected="false">Imagenes</a>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-sm-12 col-md-10 col-xl-10">
-                                                                                        <div class="tab-content" id="v-pills-tabContent">
-                                                                                            <div class="tab-pane fade show active" id="intraoral" role="tabpanel" aria-labelledby="intraoral_tab">
-                                                                                                <div class="col-sm-12 col-md-12">
-                                                                                                    <div class="form-row">
-                                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                                            <div class="form-group">
-                                                                                                                <label class="floating-label-activo-sm">Aspecto General</label>
-                                                                                                                <select name="intra_general" id="intra_general" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('intra_general','div_detalle_intra_general','det_intra_general',2)">
-                                                                                                                    <option value="0">Seleccione</option>
-                                                                                                                    <option value="1">Aceptable</option>
-                                                                                                                    <option value="2">Deficiente</option>
-                                                                                                                </select>
-                                                                                                            </div>
-                                                                                                            <div class="form-group"   id="div_detalle_intra_general" style="display:none">
-                                                                                                                <label class="floating-label-activo-sm">Detalle Aspecto General<i>(describir)</i></label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_intra_general" id="det_intra_general"></textarea>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                                            <div class="form-group">
-                                                                                                                <label class="floating-label-activo-sm">Periodonto</label>
-                                                                                                                <select name="periodonto" id="periodonto"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('periodonto','div_detalle_periodonto','aprec_periodonto',2)">
-                                                                                                                    <option value="0">Seleccione</option>
-                                                                                                                    <option value="1">Aceptable</option>
-                                                                                                                    <option value="2">Deficiente</option>
-                                                                                                                </select>
-                                                                                                            </div>
-                                                                                                            <div class="form-group"  id="div_detalle_periodonto" style="display:none">
-                                                                                                                <label class="floating-label-activo-sm">Periodonto<i>(describir)</i></label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="aprec_periodonto" id="aprec_periodonto"></textarea>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="tab-pane fade show" id="extra_oral" role="tabpanel" aria-labelledby="extra_oral_tab">
-                                                                                                <div class="col-sm-12 col-md-12">
-                                                                                                    <div class="form-row">
-                                                                                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                            <div class="form-group">
-                                                                                                                <label class="floating-label-activo-sm">Aumento de Volumen</label>
-                                                                                                                <select name="aum_vol" id="aum_vol" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('aum_vol','div_detalle_aum_vol','ex_aum_vol',2);">
-                                                                                                                    <option value="0">Seleccione</option>
-                                                                                                                    <option value="1">No</option>
-                                                                                                                    <option value="2">Si<i>(describir)</i></option>
-                                                                                                                </select>
-                                                                                                            </div>
-                                                                                                            <div class="form-group" id="div_detalle_aum_vol" style="display:none">
-                                                                                                                <label class="floating-label-activo-sm">Aumento de Volumen<i>(describir)</i></label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_aum_vol" id="ex_aum_vol"></textarea>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                            <div class="form-group">
-                                                                                                                <label class="floating-label-activo-sm">Fístula</label>
-                                                                                                                <select name="fistula_endo" id="fistula_endo"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('fistula_endo','div_detalle_fistula_endo','ex_fistula_endo',2);">
-                                                                                                                    <option value="0">Seleccione</option>
-                                                                                                                    <option value="1">No</option>
-                                                                                                                    <option value="2">Si</option>
-                                                                                                                </select>
-                                                                                                            </div>
-                                                                                                            <div class="form-group"  id="div_detalle_fistula_endo" style="display:none">
-                                                                                                                <label class="floating-label-activo-sm">Fístula<i>(describir)</i></label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_fistula_endo" id="ex_fistula_endo"></textarea>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                            <div class="form-group">
-                                                                                                                <label class="floating-label-activo-sm">Adenopatías</label>
-                                                                                                                <select name="adenopatias" id="adenopatias"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('adenopatias','div_detalle_adenopatias','ex_adenopatias',2);">
-                                                                                                                    <option value="0">Seleccione</option>
-                                                                                                                    <option value="1">Normal</option>
-                                                                                                                    <option value="2">Anormal</option>
-                                                                                                                </select>
-                                                                                                            </div>
-                                                                                                            <div class="form-group"  id="div_detalle_adenopatias" style="display:none">
-                                                                                                                <label class="floating-label-activo-sm">Adenopatías<i>(describir)</i></label>
-                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="ex_adenopatias" id="ex_adenopatias"></textarea>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="tab-pane fade show" id="radiologia_endo" role="tabpanel" aria-labelledby="radiologia_endo_tab">
-                                                                                                <div class="row">
-                                                                                                    <div class="col-md-12">
-                                                                                                        <div class="card">
-                                                                                                            <div class="card-body">
-                                                                                                                <div id="contenedor_pieza_dental_endorx">
-                                                                                                                    <div id="pieza_dentalrx" class="row">
-                                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                                            <div class="form-row">
-                                                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                                                    <div class="form-group">
-                                                                                                                                        <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                                                                        <input class="form-control form-control-sm" type="text" name=""id="">
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                                                                                                                    <div class="form-group">
-                                                                                                                                        <label class="floating-label-activo-sm">Espacio Periodontal Apical</label>
-                                                                                                                                        <select name="rx_esp_peri_apical" id="rx_esp_peri_apical" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('rx_esp_peri_apical','div_detalle_rx_esp_peri_apical','det_rx_esp_peri_apical',4)">
-                                                                                                                                            <option value="0">Seleccione</option>
-                                                                                                                                            <option value="1">Normal</option>
-                                                                                                                                            <option value="2">Engrosado</option>
-                                                                                                                                            <option value="3">Ausente</option>
-                                                                                                                                            <option value="4">Otro</option>
-                                                                                                                                        </select>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="form-group"   id="div_detalle_rx_esp_peri_apical" style="display:none">
-                                                                                                                                        <label class="floating-label-activo-sm">Espacio Periodontal Apical<i>(describir)</i></label>
-                                                                                                                                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_rx_esp_peri_apical" id="det_rx_esp_peri_apical"></textarea>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                                                                                                                    <div class="form-group">
-                                                                                                                                        <label class="floating-label-activo-sm">Hueso Alveolar Apical</label>
-                                                                                                                                        <select name="h_apical" id="h_apical"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('h_apical','div_detalle_h_apical','aprec_h_apical',5)">
-                                                                                                                                            <option value="0">Seleccione</option>
-                                                                                                                                            <option value="1">Normal</option>
-                                                                                                                                            <option value="2">Zona apical Difusa</option>
-                                                                                                                                            <option value="3">Zona apical Corticalizada</option>
-                                                                                                                                            <option value="4">Osteítis Condensante</option>
-                                                                                                                                            <option value="5">Otro<i>(describir)</i></option>
-                                                                                                                                        </select>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="form-group"  id="div_detalle_h_apical" style="display:none">
-                                                                                                                                        <label class="floating-label-activo-sm">Hueso Alveolar Apical<i>(describir)</i></label>
-                                                                                                                                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="aprec_h_apical" id="aprec_h_apical"></textarea>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                                <!--IMAGENES-->
-                                                                                                                            <div class="form-row">
-                                                                                                                                <div class="col-sm-6 col-md-6">
-                                                                                                                                    <div class="card">
-                                                                                                                                        <div class="form-row">
-                                                                                                                                            <div class="col-sm-12 col-md-12"
-                                                                                                                                                <h6 style="text-align: center;color:blue;bold">Rx Pieza</h6>
-                                                                                                                                            </div>
-                                                                                                                                        </div>
-
-                                                                                                                                            <div class="card-body-aten-a">
-                                                                                                                                                <!-- [ Main Content ] start -->
-                                                                                                                                                <div class="dropzone" id="mis-imagenes-imagenes-rx_dental" action="{{ route('profesional.imagen.carga') }}"></div>
-                                                                                                                                                <!-- [ file-upload ] end -->
-                                                                                                                                            </div>
-
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                                <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                                                                                                                    <div class="form-group">
-                                                                                                                                        <label class="floating-label-activo-sm">Observaciones Examen Pieza</label>
-                                                                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="1"  data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oral" id="obs_ex_oral"></textarea>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                            <hr>
-                                                                                                                            <div class="form-row">
-                                                                                                                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                                                    <div class="form-group">
-                                                                                                                                        <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-pieza3" ><i class="fas fa-save"></i> Cargar Otra Pieza</button>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="tab-pane fade show" id="imagenes_dent" role="tabpanel" aria-labelledby="imagenes_dent_tab">
-                                                                                                <div class="row mb-1">
-                                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                        <div class="form-row">
-                                                                                                            <div class="col-sm-4 mt-2">
-                                                                                                                <div class="card">
-                                                                                                                    <div class="card text-center" id="img">
-                                                                                                                       <H6>Imagenes Pre</H6>
-                                                                                                                    </div>
-
-                                                                                                                    <div class="aten-a">
-                                                                                                                        <!-- [ Main Content ] start -->
-                                                                                                                        <div class="dropzone" id="mis-imagenes-dentales" action="{{ route('profesional.imagen.carga') }}"></div>
-                                                                                                                        <!-- [ file-upload ] end -->
-                                                                                                                    </div>
-
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="col-sm-4 mt-2">
-                                                                                                                <div class="card">
-                                                                                                                    <div class="card text-center" id="img">
-                                                                                                                        <H6>Imagenes Post</H6>
-                                                                                                                    </div>
-
-
-                                                                                                                    <div class="aten-a">
-                                                                                                                        <!-- [ Main Content ] start -->
-                                                                                                                        <div class="dropzone" id="mis-imagenes-dentales-post" action="{{ route('profesional.imagen.carga') }}"></div>
-                                                                                                                        <!-- [ file-upload ] end -->
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="col-sm-4 mt-2">
-                                                                                                                <div class="form-group fill">
-                                                                                                                    <input type="hidden" name="biopsia_dermat" id="biopsia_dermat" value="">
-                                                                                                                    <div class="switch switch-success d-inline m-r-10">
-                                                                                                                        <input type="checkbox" onchange="biopsia('dermat');" id="biopsia_check_odont" name="biopsia_check_odont" value="">
-                                                                                                                        <label for="biopsia_check_odont" class="cr"></label>
-                                                                                                                    </div>
-                                                                                                                    <label>biopsia</label>
-                                                                                                                    <hr>
-                                                                                                                    <div class="form-group fill">
-                                                                                                                        <label id="" name="" class="floating-label-activo-sm">Zona y Motivo</label>
-                                                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="od_biop_zona" id="od_biop_zona"></textarea>
-                                                                                                                    </div>
-                                                                                                                    <div class="form-group fill">
-                                                                                                                        <label id="" name="" class="floating-label-activo-sm">Observaciones y Resultado</label>
-                                                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_result_biopsia" id="obs_result_biopsia"></textarea>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="form-row">
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                    <label class="floating-label-activo-sm">Observaciones Examen Oral</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_ex_oral" id="obs_ex_oral"></textarea>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!--EXAMEN  POR PIEZA-->
-                                                            <div class="tab-pane fade show" id="endo_pieza" role="tabpanel" aria-labelledby="endo_pieza-tab">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="card">
-                                                                            <div class="card-body">
-                                                                                <div id="contenedor_pieza_dental_endo">
-                                                                                    <div id="pieza_dental" class="row">
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                                    <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp" id="n_pieza_ex_pp">
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Resp.Calor</label>
-                                                                                                    <select id="sel_endo_resp_calor" name="sel_endo_resp_calor" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                                                                                                        <option><span>N/R </span> No realizada</option>
-                                                                                                        <option><span>↑ </span> Aumentado</option>
-                                                                                                        <option><span>↓ </span> Disminuido</option>
-                                                                                                        <option><span>N </span> Normal</a></option>
-                                                                                                        <option><span>(-) </span> No responde</a></option>
-                                                                                                    </select>
-                                                                                                </div>
-
-                                                                                            </div>
-                                                                                            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Resp.Frio</label>
-                                                                                                    <select id="sel_endo_resp_frio" name="sel_endo_resp_frio" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                                                                                                        <option><span>N/R </span> No realizada</option>
-                                                                                                        <option><span>↑ </span> Aumentado</option>
-                                                                                                        <option><span>↓ </span> Disminuido</option>
-                                                                                                        <option><span>N </span> Normal</a></option>
-                                                                                                        <option><span>(-) </span> No responde</a></option>
-                                                                                                    </select>
-                                                                                                </div>
-
-                                                                                            </div>
-                                                                                            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Eléctrico</label>
-                                                                                                    <select id="sel_endo_resp_elect" name="sel_endo_resp_elect" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                                                                                                        <option><span>N/R </span> No realizada</option>
-                                                                                                        <option><span>↑ </span> Aumentado</option>
-                                                                                                        <option><span>↓ </span> Disminuido</option>
-                                                                                                        <option><span>N </span> Normal</a></option>
-                                                                                                        <option><span>(-) </span> No responde</a></option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Percusión</label>
-                                                                                                    <select id="sel_endo_resp_perc" name="sel_endo_resp_perc" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                                                                                                        <option><span>N/R </span> No realizada</option>
-                                                                                                        <option><span>↑ </span> Aumentado</option>
-                                                                                                        <option><span>↓ </span> Disminuido</option>
-                                                                                                        <option><span>N </span> Normal</a></option>
-                                                                                                        <option><span>(-) </span> No responde</a></option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Exploración</label>
-                                                                                                    <select id="sel_endo_resp_expl" name="sel_endo_resp_expl" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                                                                                                        <option><span>N/R </span> No realizada</option>
-                                                                                                        <option><span>↑ </span> Aumentado</option>
-                                                                                                        <option><span>↓ </span> Disminuido</option>
-                                                                                                        <option><span>N </span> Normal</a></option>
-                                                                                                        <option><span>(-) </span> No responde</a></option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Cavitaria</label>
-                                                                                                    <select id="sel_endo_cavitaria" name="sel_endo_cavitaria" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                                                                                                        <option><span>N/R </span> No realizada</option>
-                                                                                                        <option><span>↑ </span> Aumentado</option>
-                                                                                                        <option><span>↓ </span> Disminuido</option>
-                                                                                                        <option><span>N </span> Normal</a></option>
-                                                                                                        <option><span>(-) </span> No responde</a></option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="row">
-                                                                                <div class="col-sm-4 col-md-4 mb-3">
-                                                                                    <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-pieza" ><i class="fas fa-save"></i>Cargar Otra Pieza</button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!--PLANIFICACION TRATAMIENTO-->
-                                                            <div class="tab-pane fade show" id="plan_endo" role="tabpanel" aria-labelledby="plan_endo-tab">
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <div class="card">
-                                                                            <div class="card-body">
-                                                                                <div id="contenedor_pieza_plan_endo">
-                                                                                    <div id="pieza_dental" class="row">
-                                                                                        <div class="col-sm-12 col-md-12 col-xl-12">
-                                                                                            <div class="tab-content" id="v-pills-tabContent">
-                                                                                                <div class="tab-pane fade show active" id="faringe" role="tabpanel" aria-labelledby="faringe-tab"><br>
-                                                                                                    <div class="col-sm-12 col-md-12">
-                                                                                                        <div class="form-row">
-                                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                                <div class="form-group">
-                                                                                                                    <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                                                    <input type="text" class="form-control form-control-sm">
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                                <div class="form-group">
-                                                                                                                    <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
-                                                                                                                    <select name="piel_tegumnto" data-titulo="Ex_cuello" data-seccion="Cuello"  id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
-                                                                                                                        <option selected  value="1">Uniradicular</option>
-                                                                                                                        <option value="2">Biradicular</option>
-                                                                                                                        <option value="2">Triradicular</option>
-                                                                                                                    </select>
-                                                                                                                </div>
-                                                                                                                <div class="form-group" id="div_piel_tegumnto" style="display:none;">
-                                                                                                                    <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
-                                                                                                                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                                <div class="form-group">
-                                                                                                                    <label class="floating-label-activo-sm">Convenio</label>
-                                                                                                                    <select name="adenopatias" data-titulo="Ex_cuello" data-seccion="Cuello"  id="adenopatias" class="form-control form-control-sm">
-                                                                                                                        <option selected  value="1">Convenio</option>
-                                                                                                                        <option value="2">Sin Convenio</option>
-                                                                                                                    </select>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                                <div class="form-group">
-                                                                                                                    <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-save"></i> Cargar a presupuesto</button>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    <div class="col-sm-12 col-md-12 col-xl-12">
-                                                                                        <div class="col-sm-4 col-md-4 col-xl-4">
-                                                                                                <div class="form-row">
-                                                                                                <button type="button" class="btn btn-outline-primary btn-sm btn-agregar-pieza2"><i class="fas fa-save"></i> Cargar otra pieza</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <!--HOSPITALIZACION-->
-                                                            {{--  <div class="tab-pane fade show" id="hosp_endodoncia" role="tabpanel" aria-labelledby="hosp_endodoncia-tab">
-                                                                @include('general.hospitalizacion.hospitalizar')
-                                                            </div>  --}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
                                     <div class="card-header-a" id="exam_esp_end">
@@ -1050,88 +414,116 @@
                                                                                                                 <div id="contenedor_pieza_dental_endorx_endo">
                                                                                                                     @php $counter = 1; @endphp
                                                                                                                     @foreach($examenes_rx_oral_end as $e)
-                                                                                                                    <div id="pieza_dentalrx" class="row">
+                                                                                                                    <div id="pieza_dentalrx{{ $counter }}" class="row">
                                                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                                            <div class="form-row">
-                                                                                                                                <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                                                                    <div class="form-group">
-                                                                                                                                        <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                                                                        <input class="form-control form-control-sm" type="text" name="end_numero_pieza_{{ $counter }}"id="end_numero_pieza_{{ $counter }}" value="{{ $e->numero_pieza }}">
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                                                                                                                    <div class="form-group">
-                                                                                                                                        <label class="floating-label-activo-sm">Espacio Periodontal Apical</label>
-                                                                                                                                        <select name="end_rx_esp_peri_apical{{ $counter }}" id="end_rx_esp_peri_apical{{ $counter }}" data-titulo="Apreciación Respiratoria" data-seccion="Naríz" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('end_rx_esp_peri_apical','end_div_detalle_rx_esp_peri_apical','end_det_rx_esp_peri_apical',4)">
-                                                                                                                                            <option @if($e->espacio_periodontal == 0) selected @endif value="0">Seleccione</option>
-                                                                                                                                            <option @if($e->espacio_periodontal == 1) selected @endif value="1">Normal</option>
-                                                                                                                                            <option @if($e->espacio_periodontal == 2) selected @endif value="2">Engrosado</option>
-                                                                                                                                            <option @if($e->espacio_periodontal == 3) selected @endif value="3">Ausente</option>
-                                                                                                                                            <option @if($e->espacio_periodontal == 4) selected @endif value="4">Otro</option>
-                                                                                                                                        </select>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="form-group"   id="end_div_detalle_rx_esp_peri_apical" style="display:none">
-                                                                                                                                        <label class="floating-label-activo-sm">Espacio Periodontal Apical<i>(describir)</i></label>
-                                                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="end_det_rx_esp_peri_apical" id="end_det_rx_esp_peri_apical"></textarea>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5">
-                                                                                                                                    <div class="form-group">
-                                                                                                                                        <label class="floating-label-activo-sm">Hueso Alveolar Apical</label>
-                                                                                                                                        <select name="end_h_apical{{ $counter }}" id="end_h_apical{{ $counter }}" data-titulo="Apreciación Respiratoria" data-seccion="Naríz" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('end_h_apical','end_div_detalle_h_apical','end_aprec_h_apical',5)">
-                                                                                                                                            <option @if($e->hueso_alveolal == 0) selected @endif value="0">Seleccione</option>
-                                                                                                                                            <option @if($e->hueso_alveolal == 1) selected @endif value="1">Normal</option>
-                                                                                                                                            <option @if($e->hueso_alveolal == 2) selected @endif value="2">Zona apical Difusa</option>
-                                                                                                                                            <option @if($e->hueso_alveolal == 3) selected @endif value="3">Zona apical Corticalizada</option>
-                                                                                                                                            <option @if($e->hueso_alveolal == 4) selected @endif value="4">Osteítis Condensante</option>
-                                                                                                                                            <option @if($e->hueso_alveolal == 5) selected @endif value="5">Otro<i>(describir)</i></option>
-                                                                                                                                        </select>
-                                                                                                                                    </div>
-                                                                                                                                    <div class="form-group"  id="div_detalle_h_apical" style="display:none">
-                                                                                                                                        <label class="floating-label-activo-sm">Hueso Alveolar Apical<i>(describir)</i></label>
-                                                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="aprec_h_apical" id="aprec_h_apical"></textarea>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                            <div class="form-row">
-                                                                                                                                <div class="col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                                                                                                                                    <div class="form-group">
-                                                                                                                                            <label class="floating-label-activo-sm">Observaciones Examen Pieza</label>
-                                                                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="1" data-titulo="Observaciones Examen Nasal" data-seccion="Naríz" data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="end_obs_ex_oral{{ $counter }}" id="end_obs_ex_oral{{ $counter }}">{{ $e->observaciones }}</textarea>
+                                                                                                                            <div class="row">
+                                                                                                                                <div class="col-md-6">
+                                                                                                                                    <div class="form-row" id="contenedor_piezas_ex_oral_end">
+                                                                                                                                        <div class="col-sm-12 col-md-12">
+                                                                                                                                            {{-- <div class="card">
+                                                                                                                                                <div class="form-row">
+                                                                                                                                                    <div class="col-sm-12 col-md-12">
+                                                                                                                                                        <h6 style="text-align: center;color:blue;bold">Subir imagen radiológica</h6>
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                                <div class="card-body-aten-a">
+                                                                                                                                                    <div class="dropzone" id="mis-imagenes-imagenes-rx-dental_end_{{ $counter }}" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                                                                                </div>
+                                                                                                                                            </div> --}}
+
+                                                                                                                                            <!-- Vista previa de imágenes existentes -->
+                                                                                                                                            <div class="form-row mt-2">
+                                                                                                                                                @if (!empty($e->decoded_imagenes))
+                                                                                                                                                    @foreach ($e->decoded_imagenes as $imagen)
+                                                                                                                                                        @foreach ($imagen['paths_imagenes'] ?? [] as $path)
+                                                                                                                                                            <div>
+                                                                                                                                                                <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path }}')">
+                                                                                                                                                                    <img src="{{ asset('storage/' . str_replace('\\', '', $path)) }}" alt="Imagen del examen" class="img-fluid mx-2 imagen_rx">
+                                                                                                                                                                </a>
+                                                                                                                                                                <button type="button" class="btn btn-outline-danger btn-sm my-2" onclick="eliminar_rx_end({{ $imagen['id'] }})"><i class="fas fa-trash"></i></button>
+                                                                                                                                                            </div>
+                                                                                                                                                        @endforeach
+                                                                                                                                                    @endforeach
+                                                                                                                                                    @else
+                                                                                                                                                        <p>No hay imágenes disponibles para este examen.</p>
+                                                                                                                                                @endif
+                                                                                                                                            </div>
+                                                                                                                                        </div>
                                                                                                                                     </div>
                                                                                                                                 </div>
 
+                                                                                                                                <div class="col-md-6">
+                                                                                                                                    <div class="form-row">
+                                                                                                                                        <div class="col-12">
+                                                                                                                                            <div class="form-group">
+                                                                                                                                                <label class="floating-label-activo-sm">Piezas N°</label>
+                                                                                                                                                <select class="form-control form-control-sm select2" name="end_numero_pieza_{{ $counter }}[]" id="end_numero_pieza_{{ $counter }}" multiple>
+                                                                                                                                                    @foreach([11,12,13,14,15,16,17,18,21,22,23,24,25,26,27,28] as $pieza)
+                                                                                                                                                        <option value="{{ $pieza }}" {{ (isset($e->numero_piezas) && in_array($pieza, (array)$e->numero_piezas)) ? 'selected' : '' }}>{{ $pieza }}</option>
+                                                                                                                                                    @endforeach
+                                                                                                                                                </select>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+
+                                                                                                                                        <div class="col-12">
+                                                                                                                                            <div class="form-group">
+                                                                                                                                                <label class="floating-label-activo-sm">Espacio Periodontal Apical</label>
+                                                                                                                                                <select name="end_rx_esp_peri_apical{{ $counter }}" id="end_rx_esp_peri_apical{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('end_rx_esp_peri_apical','end_div_detalle_rx_esp_peri_apical_{{ $counter }}','end_det_rx_esp_peri_apical_{{ $counter }}',4)">
+                                                                                                                                                    <option value="0" @if($e->espacio_periodontal == 0) selected @endif>Seleccione</option>
+                                                                                                                                                    <option value="1" @if($e->espacio_periodontal == 1) selected @endif>Normal</option>
+                                                                                                                                                    <option value="2" @if($e->espacio_periodontal == 2) selected @endif>Engrosado</option>
+                                                                                                                                                    <option value="3" @if($e->espacio_periodontal == 3) selected @endif>Ausente</option>
+                                                                                                                                                    <option value="4" @if($e->espacio_periodontal == 4) selected @endif>Otro</option>
+                                                                                                                                                </select>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="form-group" id="end_div_detalle_rx_esp_peri_apical_{{ $counter }}" style="display:none">
+                                                                                                                                                <label class="floating-label-activo-sm">Espacio Periodontal Apical <i>(describir)</i></label>
+                                                                                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="end_det_rx_esp_peri_apical_{{ $counter }}" id="end_det_rx_esp_peri_apical_{{ $counter }}">{{ $e->detalle_espacio ?? '' }}</textarea>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+
+                                                                                                                                        <div class="col-12">
+                                                                                                                                            <div class="form-group">
+                                                                                                                                                <label class="floating-label-activo-sm">Hueso Alveolar Apical</label>
+                                                                                                                                                <select name="end_h_apical{{ $counter }}" id="end_h_apical{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('end_h_apical','end_div_detalle_h_apical_{{ $counter }}','aprec_h_apical_{{ $counter }}',5)">
+                                                                                                                                                    <option value="0" @if($e->hueso_alveolal == 0) selected @endif>Seleccione</option>
+                                                                                                                                                    <option value="1" @if($e->hueso_alveolal == 1) selected @endif>Normal</option>
+                                                                                                                                                    <option value="2" @if($e->hueso_alveolal == 2) selected @endif>Zona apical Difusa</option>
+                                                                                                                                                    <option value="3" @if($e->hueso_alveolal == 3) selected @endif>Zona apical Corticalizada</option>
+                                                                                                                                                    <option value="4" @if($e->hueso_alveolal == 4) selected @endif>Osteítis Condensante</option>
+                                                                                                                                                    <option value="5" @if($e->hueso_alveolal == 5) selected @endif>Otro</option>
+                                                                                                                                                </select>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="form-group" id="end_div_detalle_h_apical_{{ $counter }}" style="display:none">
+                                                                                                                                                <label class="floating-label-activo-sm">Hueso Alveolar Apical <i>(describir)</i></label>
+                                                                                                                                                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="aprec_h_apical_{{ $counter }}" id="aprec_h_apical_{{ $counter }}">{{ $e->detalle_hueso ?? '' }}</textarea>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+
+                                                                                                                            <div class="form-row">
+                                                                                                                                <div class="col-md-6">
+                                                                                                                                    <div class="form-group">
+                                                                                                                                        <label class="floating-label-activo-sm">Informe del radiólogo</label>
+                                                                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="inf_rad{{ $counter }}" id="inf_rad{{ $counter }}">{{ $e->informe_radiologo ?? '' }}</textarea>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                                <div class="col-md-6">
+                                                                                                                                    <div class="form-group">
+                                                                                                                                        <label class="floating-label-activo-sm">Observaciones Examen Pieza</label>
+                                                                                                                                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="end_obs_ex_oral{{ $counter }}" id="end_obs_ex_oral{{ $counter }}">{{ $e->observaciones ?? '' }}</textarea>
+                                                                                                                                    </div>
+                                                                                                                                </div>
                                                                                                                             </div>
                                                                                                                         </div>
 
-                                                                                                                    </div>
-                                                                                                                    <!-- Contenedor de Imágenes -->
-                                                                                                                    <div class="form-row" id="contenedor_piezas_ex_oral">
-                                                                                                                        @if (!empty($e->decoded_imagenes) && is_array($e->decoded_imagenes))
-                                                                                                                            @foreach ($e->decoded_imagenes as $imagen)
-                                                                                                                                @if (is_array($imagen) && isset($imagen['paths_imagenes']) && is_array($imagen['paths_imagenes']))
-
-                                                                                                                                    @foreach ($imagen['paths_imagenes'] as $path)
-                                                                                                                                    <div>
-                                                                                                                                        <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path }}')">
-                                                                                                                                            <img src="{{ asset('storage/' . str_replace('\\', '', $path)) }}"  alt="Imagen del examen"  class="img-fluid mx-2 imagen_rx">
-                                                                                                                                        </a>
-
-                                                                                                                                        <button type="button" class="btn btn-outline-danger btn-sm my-2" onclick="eliminar_rx_end({{ $imagen['id']}})"><i class="fas fa-trash"></i></button>
-                                                                                                                                    </div>
-
-                                                                                                                                    @endforeach
-                                                                                                                                @else
-                                                                                                                                    <p>Formato de imagen no válido.</p>
-                                                                                                                                @endif
-                                                                                                                            @endforeach
-                                                                                                                        @else
-                                                                                                                            <p>No hay imágenes disponibles para este examen.</p>
-                                                                                                                        @endif
+                                                                                                                        <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_rx_end({{ $e->id }})"><i class="fas fa-trash"></i></button>
                                                                                                                     </div>
                                                                                                                     @php $counter++; @endphp
-                                                                                                                    <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_rx_end({{ $e->id }})">X</button>
                                                                                                                     @endforeach
+
 
                                                                                                                 </div>
                                                                                                                 <div id="nueva_pieza_end"></div>
@@ -1171,93 +563,98 @@
                                                                                 <div id="contenedor_pieza_dental_endo">
                                                                                     @php $count = 1; @endphp
                                                                                     @foreach ($examenes_pieza_end as $examen)
-                                                                                    <div class="mb-3">
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Pieza N°</label>
-                                                                                                    <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp_end{{ $count }}" id="n_pieza_ex_pp_end{{ $count }}" value="{{ $examen->numero_pieza }}">
+                                                                                    <div class="card">
+                                                                                        <div class="card-body">
+                                                                                            <div class="mb-3">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">Pieza N°</label>
+                                                                                                            <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp_end{{ $count }}" id="n_pieza_ex_pp_end{{ $count }}" value="{{ $examen->numero_pieza }}">
+                                                                                                        </div>
+                                                                                                    </div>
                                                                                                 </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Resp.Calor</label>
-                                                                                                    <select id="sel_endo_resp_calor{{ $count }}" name="sel_endo_resp_calor{{ $count }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                                                                                                        <option @if($examen->resp_calor == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
-                                                                                                        <option @if($examen->resp_calor == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
-                                                                                                        <option @if($examen->resp_calor == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
-                                                                                                        <option @if($examen->resp_calor == 'N Normal') selected @endif><span>N </span> Normal</a></option>
-                                                                                                        <option @if($examen->resp_calor == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
-                                                                                                    </select>
-                                                                                                </div>
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">Resp.Calor</label>
+                                                                                                            <select id="sel_endo_resp_calor{{ $count }}" name="sel_endo_resp_calor{{ $count }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                                                                                                                <option @if($examen->resp_calor == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
+                                                                                                                <option @if($examen->resp_calor == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
+                                                                                                                <option @if($examen->resp_calor == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
+                                                                                                                <option @if($examen->resp_calor == 'N Normal') selected @endif><span>N </span> Normal</a></option>
+                                                                                                                <option @if($examen->resp_calor == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
+                                                                                                            </select>
+                                                                                                        </div>
 
-                                                                                            </div>
-                                                                                            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Resp.Frio</label>
-                                                                                                    <select id="sel_endo_resp_frio{{ $count }}" name="sel_endo_resp_frio{{ $count }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                                                                                                        <option @if($examen->resp_frio == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
-                                                                                                        <option @if($examen->resp_frio == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
-                                                                                                        <option @if($examen->resp_frio == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
-                                                                                                        <option @if($examen->resp_frio == 'N Normal') selected @endif><span>N </span> Normal</a></option>
-                                                                                                        <option @if($examen->resp_frio == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
-                                                                                                    </select>
-                                                                                                </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">Resp.Frio</label>
+                                                                                                            <select id="sel_endo_resp_frio{{ $count }}" name="sel_endo_resp_frio{{ $count }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                                                                                                                <option @if($examen->resp_frio == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
+                                                                                                                <option @if($examen->resp_frio == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
+                                                                                                                <option @if($examen->resp_frio == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
+                                                                                                                <option @if($examen->resp_frio == 'N Normal') selected @endif><span>N </span> Normal</a></option>
+                                                                                                                <option @if($examen->resp_frio == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
+                                                                                                            </select>
+                                                                                                        </div>
 
-                                                                                            </div>
-                                                                                            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Eléctrico</label>
-                                                                                                    <select id="sel_endo_resp_elect{{ $count }}" name="sel_endo_resp_elect{{ $count }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                                                                                                        <option @if($examen->electrico == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
-                                                                                                        <option @if($examen->electrico == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
-                                                                                                        <option @if($examen->electrico == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
-                                                                                                        <option @if($examen->electrico == 'N Normal') selected @endif><span>N </span> Normal</a></option>
-                                                                                                        <option @if($examen->electrico == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
-                                                                                                    </select>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">Eléctrico</label>
+                                                                                                            <select id="sel_endo_resp_elect{{ $count }}" name="sel_endo_resp_elect{{ $count }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                                                                                                                <option @if($examen->electrico == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
+                                                                                                                <option @if($examen->electrico == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
+                                                                                                                <option @if($examen->electrico == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
+                                                                                                                <option @if($examen->electrico == 'N Normal') selected @endif><span>N </span> Normal</a></option>
+                                                                                                                <option @if($examen->electrico == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">Percusión</label>
+                                                                                                            <select id="sel_endo_resp_perc{{ $count }}" name="sel_endo_resp_perc{{ $count }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                                                                                                                <option @if($examen->percusion == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
+                                                                                                                <option @if($examen->percusion == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
+                                                                                                                <option @if($examen->percusion == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
+                                                                                                                <option @if($examen->percusion == 'N Normal') selected @endif><span>N </span> Normal</a></option>
+                                                                                                                <option @if($examen->percusion == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">Exploración</label>
+                                                                                                            <select id="sel_endo_resp_expl{{ $count }}" name="sel_endo_resp_expl{{ $count }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                                                                                                                <option @if($examen->exploracion == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
+                                                                                                                <option @if($examen->exploracion == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
+                                                                                                                <option @if($examen->exploracion == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
+                                                                                                                <option @if($examen->exploracion == 'N Normal') selected @endif><span>N </span> Normal</a></option>
+                                                                                                                <option @if($examen->exploracion == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                                                                                        <div class="form-group">
+                                                                                                            <label class="floating-label-activo-sm">Cavitaria</label>
+                                                                                                            <select id="sel_endo_cavitaria{{ $count }}" name="sel_endo_cavitaria{{ $count }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                                                                                                                <option @if($examen->cavitaria == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
+                                                                                                                <option @if($examen->cavitaria == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
+                                                                                                                <option @if($examen->cavitaria == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
+                                                                                                                <option @if($examen->cavitaria == 'N Normal') selected @endif><span>N </span> Normal</a></option>
+                                                                                                                <option @if($examen->cavitaria == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
+                                                                                                            </select>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_pieza({{ $examen->id }},'endo')">X</button>
                                                                                                 </div>
                                                                                             </div>
-                                                                                            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Percusión</label>
-                                                                                                    <select id="sel_endo_resp_perc{{ $count }}" name="sel_endo_resp_perc{{ $count }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                                                                                                        <option @if($examen->percusion == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
-                                                                                                        <option @if($examen->percusion == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
-                                                                                                        <option @if($examen->percusion == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
-                                                                                                        <option @if($examen->percusion == 'N Normal') selected @endif><span>N </span> Normal</a></option>
-                                                                                                        <option @if($examen->percusion == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Exploración</label>
-                                                                                                    <select id="sel_endo_resp_expl{{ $count }}" name="sel_endo_resp_expl{{ $count }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                                                                                                        <option @if($examen->exploracion == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
-                                                                                                        <option @if($examen->exploracion == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
-                                                                                                        <option @if($examen->exploracion == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
-                                                                                                        <option @if($examen->exploracion == 'N Normal') selected @endif><span>N </span> Normal</a></option>
-                                                                                                        <option @if($examen->exploracion == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                                                                                                <div class="form-group">
-                                                                                                    <label class="floating-label-activo-sm">Cavitaria</label>
-                                                                                                    <select id="sel_endo_cavitaria{{ $count }}" name="sel_endo_cavitaria{{ $count }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                                                                                                        <option @if($examen->cavitaria == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
-                                                                                                        <option @if($examen->cavitaria == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>
-                                                                                                        <option @if($examen->cavitaria == '↓ Disminuido') selected @endif><span>↓ </span> Disminuido</option>
-                                                                                                        <option @if($examen->cavitaria == 'N Normal') selected @endif><span>N </span> Normal</a></option>
-                                                                                                        <option @if($examen->cavitaria == '(-) No responde') selected @endif><span>(-) </span> No responde</a></option>
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_pieza({{ $examen->id }},'endo')">X</button>
                                                                                         </div>
                                                                                     </div>
+
 
                                                                                     @php $count++; @endphp
                                                                                     @endforeach
@@ -1788,10 +1185,798 @@
 @include('atencion_odontologica.modals.infantil.tratamiento_maxilar_inferiorinf')
 @include('atencion_odontologica.modals.infantil.tratamiento_maxilar_superiorinf')
 @include('atencion_odontologica.modals.atencion_general.formularios_generales.m_info_lab')
-
+@include('atencion_odontologica.modals.odontograma.modal_insumos')
 
 @section('page-script-ficha-atencion')
 <script>
+    function abrir_modal_insumos(){
+        $('#modal_insumos').modal('show');
+    }
+    function dame_marcas_implantes(value){
+        let id_tipo_insumo = value.value;
+        let tipo_insumo_text = value.options[value.selectedIndex].text;
+        console.log(tipo_insumo_text);
+        $('#titulo_tipo_insumo').html(tipo_insumo_text);
+        if(id_tipo_insumo == 1){
+            // quitar la clase d-none al select de marcas
+            $('#marcas_implantes_select').removeClass('d-none');
+            $('#insumos_select').addClass('d-none');
+        }else{
+            // quitar la clase d-none al select de marcas
+            $('#marcas_implantes_select').addClass('d-none');
+            $('#insumos_select').removeClass('d-none');
+        }
+        let url = '{{ ROUTE("dental.dame_implantes_dental") }}';
+        let data = {
+            id_tipo_insumo: id_tipo_insumo,
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                $('#nombreInsumo').empty();
+                let insumos = resp;
+                insumos.forEach(e => {
+                    $('#nombreInsumo').append(`
+                    <option value="${e.id}"> ${e.descripcion} </option>
+                    `);
+                });
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        })
+    }
+
+    function dame_id_paciente(){
+        let id_paciente = $('#id_paciente').val();
+        return id_paciente;
+    }
+
+    function guardar_insumo(){
+        let nombreInsumo = $('#nombreInsumo option:selected').text();
+        let tipoInsumo = $('#tipoInsumo').val();
+        if(tipoInsumo == 1){
+            var marcaInsumo = $('#marcasImplantes option:selected').text();
+        }else{
+            var marcaInsumo = '';
+        }
+        var idMarcaInsumo = $('#marcasImplantes').val();
+        console.log(idMarcaInsumo);
+        let tipoInsumo_text = $('#tipoInsumo option:selected').text();
+        let cantidad = $('#cantidad').val();
+        let precio = $('#precio').val();
+        let total = $('#total').val();
+
+        console.log(tipoInsumo);
+
+        let mensaje = '';
+        let valido = 1;
+
+        if(nombreInsumo == ''){
+            valido = 0;
+            mensaje += '<li>Nombre insumo </li>';
+        }
+        if(tipoInsumo == 0){
+            valido = 0;
+            mensaje += '<li>Tipo de Insumo </li>';
+        }
+        if(cantidad == '' || cantidad <= 0){
+            valido = 0;
+            mensaje += '<li>Cantidad </li>';
+        }
+        if(precio == '' || cantidad <= 0){
+            valido = 0;
+            mensaje += '<li>Precio </li>';
+        }
+
+        if(valido == 1){
+            let data = {
+                insumos: nombreInsumo,
+                idTipoInsumo: tipoInsumo,
+                tipoInsumo: tipoInsumo_text,
+                marcaInsumo: marcaInsumo,
+                idMarcaInsumo: idMarcaInsumo,
+                cantidad: cantidad,
+                valor: precio,
+                total: total,
+                id_paciente: dame_id_paciente(),
+                id_ficha_atencion: $('#id_fc').val(),
+                _token: CSRF_TOKEN
+            }
+
+            console.log(data);
+            let url = '{{ ROUTE("dental.agregar_insumos_tto") }}';
+            $.ajax({
+                url: url,
+                type:'post',
+                data: data,
+                success: function(resp){
+                    console.log(resp);
+                    if(resp.mensaje == 'ok'){
+                        swal({
+                            icon:'success',
+                            text:'Se a agregado los insumos correctamente',
+                            title:'Exito'
+                        });
+                        let nuevo_insumo = resp.insumo;
+                        cargar_a_presupuesto_insumo(nuevo_insumo.id);
+                        $('#modal_insumos').modal('hide');
+                        //limpiar_formulario_insumo();
+                        let insumos = resp.insumos;
+                        console.log(insumos);
+                        let table = $('#table_insumos_odon_gral').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table.clear();
+
+
+
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                                                 // Botones de acción
+                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                    // Botones de acción
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>`;
+                            }else{
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>`;
+                            }
+                            table.row.add([
+                                insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
+                                insumo.cantidad,       // Cantidad utilizada
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
+                                botones
+                            ]);
+                        });
+
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table.draw();
+                    }
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+        }else{
+            swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: mensaje,
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+        }
+
+
+
+    }
+    function cargar_a_presupuesto_insumo(id){
+        let data = {
+            id: id,
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            id_paciente: dame_id_paciente(),
+            tipo:'insumo',
+            _token: CSRF_TOKEN
+        }
+
+        let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto') }}";
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.status == 1){
+                        swal({
+                            icon:'success',
+                            title:'Info',
+                            text: resp.mensaje
+                        });
+                        let valores_boca_general = resp.valores[0];
+                        let valores_odontograma = resp.valores[1];
+                        let valores_insumos = resp.valores[2];
+                        let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                        $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                        $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
+                        $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
+                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                        $('#subtotal_insumos').val(formatoMoneda(valores_insumos));
+                        $('#total_presupuesto').val(formatoMoneda(total_general));
+                        $('#total_insumos').val(formatoMoneda(valores_insumos));
+                        $('#total_presupuesto_dental').val(total_general);
+                        $('#subtotal_presup').val(formatoMoneda(total_general));
+                        $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
+                            $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
+                            //limpiar_formulario_insumo();
+                        let insumos = resp.insumos;
+                        console.log(insumos);
+                        let table = $('#table_insumos_odon_gral').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table.clear();
+
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                    // Botones de acción
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>`;
+                            }else{
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>`;
+                            }
+
+                            table.row.add([
+                                `${insumo.insumos} ${insumo.nombre_marca}`,
+                                insumo.cantidad,       // Cantidad utilizada
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
+                                botones
+                            ]);
+                        });
+
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table.draw();
+
+                        $('#contenedor_insumos').empty();
+                        insumos.forEach(insumo => {
+                            if(insumo.presupuesto == 1){
+                                let total = insumo.cantidad * insumo.valor;
+                                $('#contenedor_insumos').append(`
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-informacion">
+                                            <div class="card-body pb-0">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Insumo</label>
+                                                        <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                                                    </div>
+                                                    <div class="form-group col-md-3 fill">
+                                                        <label class="floating-label-activo-sm">Cantidad</label>
+                                                        <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-1">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Total Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 d-flex justify-content-center">
+
+                                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i> </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `);
+                            }
+
+                        });
+
+                        let table_insumos = $('#presup_insumos_pago').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table_insumos.clear();
+
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 1){
+                                if(insumo.estado_pago == 'ok'){
+                                    var clase = 'bg-success';
+                                }else if(insumo.estado_pago == 'intermedio'){
+                                    var clase = 'bg-warning';
+                                }else{
+                                    var clase = 'bg-danger';
+                                }
+                                let rowNode = table_insumos.row.add([
+                                `${insumo.insumos} ${insumo.nombre_marca}`,
+                                insumo.cantidad,         // Nombre del insumo
+                                formatoMoneda(insumo.valor),       // Cantidad utilizada
+                                0,         // Unidad de medida
+                                formatoMoneda(total),
+                                ' <div class="circle '+clase+'"></div>',
+                                ''
+
+                            ]).draw(false).node();
+                             // Agregar clases a la fila
+                             $(rowNode).addClass('text-center align-middle status-circle');
+                            }
+
+                        });
+
+                        $('#tratamiento_presupuesto tbody').empty();
+                        let presupuesto = resp.presupuesto;
+                        console.log(presupuesto);
+                        $('#tratamiento_presupuesto tbody').append(`
+                        <tr>
+                            <td class="text-center align-middle">${presupuesto.fecha}</td>
+                            <td class="text-center align-middle">${presupuesto.id}</td>
+                            <td class="text-center align-middle">${presupuesto.aprobado}</td>
+                            <td class="text-center align-middle">Sector I</td>
+                            <td class="text-center align-middle">${presupuesto.boca}</td>
+
+                            <td class="text-center align-middle">
+                                <div class="form-group col-md-4">
+                                    <div class="switch switch-success d-inline m-r-2">
+                                        <input type="checkbox" id="info_finalizado" checked="">
+                                        <label for="info_finalizado" class="cr"></label>
+                                    </div>
+                                    <label>Realizado?</label>
+                                </div>
+                            </td>
+                            <td class="text-center align-middle">
+                            ${presupuesto.fecha}
+                            </td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-info btn-sm" onclick="presupuesto()" ;="">
+                                    <i class="fa fa-plus"></i> Trabajar en pieza
+                                </button>
+                            </td>
+                        </tr>
+                        `);
+
+                        $('#table_pagos_reasignar_insumos tbody').empty();
+                        insumos.forEach(insumo => {
+                            if(insumo.presupuesto == 1){
+                                let total = insumo.cantidad * insumo.valor;
+                                $('#table_pagos_reasignar_insumos tbody').append(`
+                                <tr>
+                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${total}" data-id="${insumo.id}" data-info="insumo"></td>
+                                    <td>${insumo.insumos} ${insumo.nombre_marca}</td>
+                                    <td>${insumo.cantidad}</td>
+                                    <td>${formatoMoneda(insumo.valor)}</td>
+                                    <td>${formatoMoneda(total)}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `);
+                            }
+
+                        });
+                    }
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        });
+    }
+
+    function sacar_de_presupuesto_insumo(id){
+        let url = "{{ ROUTE('dental.sacar_tratamiento_presupuesto') }}";
+        let data = {
+            id: id,
+            tipo:'insumo',
+            id_paciente: dame_id_paciente(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+             _token: "{{ csrf_token() }}"
+        }
+        console.log(data);
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                    if(resp.status == 1){
+                        swal({
+                            icon:'success',
+                            title:'Info',
+                            text: resp.mensaje
+                        });
+
+                        let valores_boca_general = resp.valores[0];
+                        let valores_odontograma = resp.valores[1];
+                        let valores_insumos = resp.valores[2];
+                        let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                        $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                        $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
+                        $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
+                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                        $('#subtotal_insumos').val(formatoMoneda(valores_insumos));
+                        $('#total_insumos').val(formatoMoneda(valores_insumos));
+                        $('#total_presupuesto').val(formatoMoneda(total_general));
+                        $('#total_presupuesto_dental').val(total_general);
+                                //limpiar_formulario_insumo();
+
+                        let insumos = resp.insumos;
+                        let table = $('#table_insumos_odon_gral').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table.clear();
+
+
+
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                            // Botones de acción
+                            var botones = `
+                            <td>
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>`;
+                            }else{
+                                var botones = `
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>`;
+                            }
+                            table.row.add([
+                                `${insumo.insumos} ${insumo.nombre_marca}`,
+                                insumo.cantidad,       // Cantidad utilizada
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
+                                botones
+                            ]);
+                        });
+
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table.draw();
+
+                        $('#contenedor_insumos').empty();
+                        insumos.forEach(insumo => {
+                            if(insumo.presupuesto == 1){
+                                let total = insumo.cantidad * insumo.valor;
+                                $('#contenedor_insumos').append(`
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-informacion">
+                                            <div class="card-body pb-0">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Insumo</label>
+                                                        <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                                                    </div>
+                                                    <div class="form-group col-md-3 fill">
+                                                        <label class="floating-label-activo-sm">Cantidad</label>
+                                                        <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-1">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Total Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 d-flex justify-content-center">
+
+                                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i> </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `);
+                            }
+
+                        });
+
+                        console.log(insumos);
+                        let table_insumos = $('#presup_insumos_pago').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table_insumos.clear();
+
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 1){
+                                if(insumo.estado_pago == 'ok'){
+                                    var clase = 'bg-success';
+                                }else if(insumo.estado_pago == 'intermedio'){
+                                    var clase = 'bg-warning';
+                                }else{
+                                    var clase = 'bg-danger';
+                                }
+                                let rowNode = table_insumos.row.add([
+                                `${insumo.insumos} ${insumo.nombre_marca}`,
+                                insumo.cantidad,         // Nombre del insumo
+                                formatoMoneda(insumo.valor),       // Cantidad utilizada
+                                0,         // Unidad de medida
+                                formatoMoneda(total),
+                                ' <div class="circle '+clase+'"></div>',
+
+                            ]).draw(false).node();
+
+                            // Agregar clases a la fila
+                            $(rowNode).addClass('text-center align-middle status-circle');
+                            }
+
+                        });
+
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table_insumos.draw();
+                    }else{
+                        swal({
+                            icon:'error',
+                            title:'info',
+                            text: resp.mensaje
+                        });
+                    }
+
+
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        });
+    }
+    function eliminar_insumo(id){
+        swal({
+            title: "¿Esta seguro que desea ELIMINAR el insumo dental?",
+            text: "Favor confirme o cancele la solicitud",
+            icon: "warning",
+            buttons: ["Cancelar", "Solicitar"],
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if(willDelete){
+                confirmar_eliminar_insumo(id);
+            }
+        });
+    }
+
+    function confirmar_eliminar_insumo(id){
+        console.log(id);
+        let data = {
+            id: id,
+            id_paciente: $('#id_paciente').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            id_lugar_atencion: $('#id_lugar_atencion').val(),
+            _token: CSRF_TOKEN
+        }
+        let url = '{{ ROUTE("dental.eliminar_insumos_tto") }}';
+        $.ajax({
+            url: url,
+            type:'post',
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.mensaje == 'ok'){
+                    swal({
+                        icon:'success',
+                        text:'Se a eliminado insumos correctamente',
+                        title:'Exito'
+                    });
+                    let valores_boca_general = resp.valores[0];
+                        let valores_odontograma = resp.valores[1];
+                        let valores_insumos = resp.valores[2];
+                        let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+                        $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                        $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                        $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                        $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                        $('#valores_insumos_presupuesto').html(formatoMoneda(valores_insumos));
+                        $('#valores_insumos_presupuesto_conf').html(formatoMoneda(valores_insumos));
+                        $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                        $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                        $('#subtotal_insumos').val(formatoMoneda(valores_insumos));
+                        $('#total_presupuesto').val(formatoMoneda(total_general));
+                        $('#total_insumos').val(formatoMoneda(valores_insumos));
+                        $('#total_presupuesto_dental').val(total_general);
+                        $('#subtotal_presup').val(formatoMoneda(total_general));
+                        $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
+                            $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
+
+
+                    let insumos = resp.insumos;
+                        console.log(insumos);
+                        let table = $('#table_insumos_odon_gral').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table.clear();
+
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                    // Botones de acción
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>`;
+                            }else{
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>`;
+                            }
+                            table.row.add([
+                                insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
+                                insumo.cantidad,       // Cantidad utilizada
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
+                                botones
+                            ]);
+                        });
+
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table.draw();
+
+                        $('#contenedor_insumos').empty();
+                        insumos.forEach(insumo => {
+                            if(insumo.presupuesto == 1){
+                                let total = insumo.cantidad * insumo.valor;
+                                $('#contenedor_insumos').append(`
+                                <div class="form-group col-md-2 fill">
+                                    <label class="floating-label-activo-sm">Insumo</label>
+                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                                </div>
+                                <div class="form-group col-md-3 fill">
+                                    <label class="floating-label-activo-sm">Cantidad</label>
+                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                </div>
+                                <div class="form-group col-md-2 fill">
+                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor)}">
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <label class="floating-label-activo-sm">Descuento</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                </div>
+                                <div class="form-group col-md-2 fill">
+                                    <label class="floating-label-activo-sm">Total Prestación</label>
+                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                </div>
+                                <div class="form-group col-md-2 d-flex">
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i>  </button>
+
+                                </div>
+                            `);
+                            }
+
+                        });
+
+                        let table_insumos = $('#presup_insumos_pago').DataTable();
+
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table_insumos.clear();
+
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                            if(insumo.presupuesto == 1){
+                                if(insumo.estado_pago == 'ok'){
+                                    var clase = 'bg-success';
+                                }else if(insumo.estado_pago == 'intermedio'){
+                                    var clase = 'bg-warning';
+                                }else{
+                                    var clase = 'bg-danger';
+                                }
+                                let rowNode = table_insumos.row.add([
+                                `${insumo.insumos} ${insumo.nombre_marca}`,
+                                insumo.cantidad,         // Nombre del insumo
+                                formatoMoneda(insumo.valor),       // Cantidad utilizada
+                                0,         // Unidad de medida
+                                formatoMoneda(total),
+                                ' <div class="circle '+clase+'"></div>',
+                                ''
+
+                            ]).draw(false).node();
+                             // Agregar clases a la fila
+                             $(rowNode).addClass('text-center align-middle status-circle');
+                            }
+
+                        });
+
+                        table_insumos.draw();
+
+                        $('#table_pagos_reasignar_insumos tbody').empty();
+                        insumos.forEach(insumo => {
+                            if(insumo.presupuesto == 1){
+                                let total = insumo.cantidad * insumo.valor;
+                                $('#table_pagos_reasignar_insumos tbody').append(`
+                                <tr>
+                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${total}" data-id="${insumo.id}" data-info="insumo"></td>
+                                    <td>${insumo.insumos} ${insumo.nombre_marca}</td>
+                                    <td>${insumo.cantidad}</td>
+                                    <td>${formatoMoneda(insumo.valor)}</td>
+                                    <td>${formatoMoneda(total)}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `);
+                            }
+
+                        });
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+    }
+
+</script>
+<script>
+
     /** MENSAJE*/
     /** CARGAR mensaje */
     $('#mensaje_ficha').html(' El campo dignóstico y la actualización del Odontograma son Obligatorio el resto es  opcional');
@@ -1802,8 +1987,21 @@
 
     $(document).ready(function() {
         $('#tabla_odontologico_tratamiento').DataTable({
-        responsive: true,
-    });
+            responsive: true,
+        });
+        $('#paciente_piezas_dentales_ex').select2();
+        $('#paciente_piezas_dentales_ex_').select2();
+        $('#tpo_proc_imp').select2();
+        $('#prot_pieza_imp').select2();
+        $('#prot_pieza_imp_man').select2();
+        $('#prot_implante').select2();
+        $('#prot_implante_man').select2();
+
+        $('.select2').select2({
+            width: '100%',
+            placeholder: 'Seleccionar pieza(s)',
+            allowClear: true
+        });
     });
 
     $(document).ready(function() {
@@ -3645,6 +3843,407 @@
         });
     }
 
+    function mostrar_nueva_pieza_ex_radio(counter){
+    console.log(counter);
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_rx') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            counter: counter,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+            $('#contenedor_examenes_oral_rx').empty();
+            $('#contenedor_examenes_oral_rx').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function mostrar_nuevas_imagenes_dent(counter){
+    let url = "{{ ROUTE('profesional.mostrar_nuevas_imagenes_dental') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            counter: counter,
+            id_ficha_atencion: $('#id_fc').val(),
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+            $('#contenedor_nueva_imagen_dent').empty();
+            $('#contenedor_nueva_imagen_dent').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function ocultar_pieza_imagenes_rx(){
+    $('#contenedor_nueva_imagen_dent').empty();
+}
+
+
+
+    function eliminar_pieza_dental_rx(id){
+    swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar este examen?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_eliminar_pieza_dental_rx(id);
+            }
+        })
+}
+
+function editar_pieza_dental_rx(id){
+    // abrir_modal
+    $('#modal_agregar_imagenes_dental_paciente').modal('show');
+}
+
+
+function confirmar_eliminar_pieza_dental_rx(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_rx') }}";
+    let id_paciente = dame_id_paciente();
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data:{
+            id: id,
+            id_paciente: id_paciente,
+            _token: CSRF_TOKEN
+        },
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#pieza_dentalrx').empty();
+                $('#pieza_dentalrx').append(resp.v);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+
+function amplificar_imagen(path){
+    // abrir modal
+    $('#modal_imagen_dental_rx').modal('show');
+    $('.zoom-container').on('mousemove', function (e) {
+            const $img = $(this).find('img');
+            const offsetX = e.offsetX; // Posición X del mouse dentro del contenedor
+            const offsetY = e.offsetY; // Posición Y del mouse dentro del contenedor
+            const width = $(this).width();
+            const height = $(this).height();
+            const xPercent = (offsetX / width) * 100; // Porcentaje X
+            const yPercent = (offsetY / height) * 100; // Porcentaje Y
+
+            $img.css('transform-origin', `${xPercent}% ${yPercent}%`); // Ajusta el origen de transformación
+        });
+    $('#imagen_paciente_rx').attr('src',"{{ asset('storage') }}"+"/"+path);
+}
+
+function eliminar_rx(id){
+    swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar esta RX?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmarEliminarImagenRx(id);
+            }
+        })
+}
+
+function confirmarEliminarImagenRx(id){
+    let url = "{{ ROUTE('profesional.eliminar_imagen_rx_paciente') }}";
+    let data = {
+        _token: CSRF_TOKEN,
+        id:id,
+        id_paciente: dame_id_paciente()
+    }
+
+    $.ajax({
+        type:'post',
+        data: data,
+        url: url,
+        success: function(resp){
+            if(resp.mensaje == 'OK'){
+                $('#pieza_dentalrx').empty();
+                $('#pieza_dentalrx').append(resp.v);
+            }else{
+                $('#pieza_dentalrx').empty();
+                $('#pieza_dentalrx').append(resp.mensaje);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function eliminar_imagen_dental(id,path){
+    swal({
+        title: 'Advertencia',
+        text: '¿Está seguro de eliminar esta imagen?',
+        icon: 'warning',
+        buttons: ['Cancelar', 'Aceptar'],
+        dangerMode: true,
+        showCancelButton: true,
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+
+    })
+    .then((confirm) => {
+        if (confirm) {
+            confirmar_eliminar_imagen_dental(id,path);
+        } else {
+            swal('Cancelado', 'La imagen no fue eliminada :(', 'error');
+        }
+    });
+
+}
+
+function confirmar_eliminar_imagen_dental(id,path){
+    let url = "{{ route('profesional.eliminar_imagen_dental_paciente') }}";
+    let data = {
+        _token: CSRF_TOKEN,
+        id:id,
+        path: path,
+        id_paciente: dame_id_paciente()
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+
+            if(resp.mensaje == 'OK'){
+                let seccion = resp.seccion;
+                if(seccion == 'gral'){
+                    $('#contenedor_imagenes_dent').empty();
+                    $('#contenedor_imagenes_dent').append(resp.v);
+                }else if(seccion == 'implantologia'){
+                    $('#contenedor_imagenes_dent_estudio').empty();
+                    $('#contenedor_imagenes_dent_estudio').append(resp.v);
+                }else{
+                    $('#contenedor_imagenes_dent_period').empty();
+                    $('#contenedor_imagenes_dent_period').append(resp.v);
+                }
+
+            }else{
+                // $('#contenedor_imagenes_dent').empty();
+                // $('#contenedor_imagenes_dent').append(resp.mensaje);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function eliminar_pieza_dental_imagenes(id){
+    swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar esta información?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_eliminar_pieza_dental_imagenes(id);
+            }
+        })
+}
+
+function confirmar_eliminar_pieza_dental_imagenes(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_imagenes_paciente') }}";
+    let id_paciente = dame_id_paciente();
+
+    let data = {
+        _token: CSRF_TOKEN,
+        id_paciente: id_paciente,
+        id: id
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                let seccion = resp.seccion;
+                if(seccion == 'gral'){
+                    $('#contenedor_imagenes_dent').empty();
+                    $('#contenedor_imagenes_dent').append(resp.v);
+                }else if(seccion == 'implantologia'){
+                    $('#contenedor_imagenes_dent_estudio').empty();
+                    $('#contenedor_imagenes_dent_estudio').append(resp.v);
+                }else{
+                    $('#contenedor_imagenes_dent_period').empty();
+                    $('#contenedor_imagenes_dent_period').append(resp.v);
+                }
+
+                swal({
+                    title:'Exito',
+                    text:'Se ha guardado con exito',
+                    icon:'success'
+                })
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function eliminar_pieza_dental_imagenes_estudio(id){
+    swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar esta información?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_eliminar_pieza_dental_imagenes_estudio(id);
+            }
+        })
+}
+
+function confirmar_eliminar_pieza_dental_imagenes_estudio(id){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_imagenes_paciente') }}";
+    let id_paciente = dame_id_paciente();
+
+    let data = {
+        _token: CSRF_TOKEN,
+        id_paciente: id_paciente,
+        id: id
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_imagenes_dent_estudio').empty();
+                $('#contenedor_imagenes_dent_estudio').append(resp.v);
+                swal({
+                    title:'Exito',
+                    text:'Se ha guardado con exito',
+                    icon:'success'
+                })
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function mostrar_pieza_dental_examen(count){
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_examen') }}";
+    let data = {
+        count: count,
+        id_paciente: dame_id_paciente(),
+        _token: CSRF_TOKEN
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_nueva_pieza_dental').empty();
+                $('#contenedor_nueva_pieza_dental').append(resp.v);
+
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+    function pedir_autorizacion_presupuesto_dental(){
+        swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de solicitar la autorización del presupuesto?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_pedir_autorizacion_presupuesto_dental();
+            }
+        })
+    }
+
+    function  confirmar_pedir_autorizacion_presupuesto_dental()
+    {
+        $('#modal_autorizacion_presupuesto').modal('show');
+        $('#modal_autorizacion_imagen').html('');
+        $('#modal_autorizacion_mensaje').html('');
+        $('#modal_autorizacion_btn_solicitar').attr('disabled', false);
+    }
+
+    function  cerrar_autorizacion_presupuesto()
+    {
+        $('#modal_autorizacion_presupuesto').modal('hide');
+    }
+
+    function mostrar_nueva_pieza_dental_hist(count, tipo){
+        let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_hist') }}";
+        let data = {
+            count: count,
+            id_paciente: dame_id_paciente(),
+            seccion: tipo,
+            _token: CSRF_TOKEN
+        }
+
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(resp.mensaje == 'OK'){
+                    if(tipo == 'impl'){
+                        $('#contenedor_piezas_hist').empty();
+                        $('#contenedor_piezas_hist').append(resp.v);
+                    }else{
+                        $('#contenedor_piezas_hist_period').empty();
+                        $('#contenedor_piezas_hist_period').append(resp.v);
+                    }
+
+
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        })
+    }
+
 
     {{--  mostrar div   --}}
     function mostrar_div(div)
@@ -4213,6 +4812,713 @@
             agregarPieza3();
         });
     });
+</script>
+
+<script>
+    function mostrar_nueva_pieza_dental(counter){
+            let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental') }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    counter: counter,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(resp) {
+                    console.log(resp);
+                    $('#nueva_pieza_dental_odontodolor').empty();
+                    $('#nueva_pieza_dental_odontodolor').append(resp.v);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        var contador = 0;
+        var piezas_buscadas = new Set();
+
+function mostrar_nueva_pieza_dental_tto(pieza){
+    // Verificar si la pieza ya fue buscada
+    // if (piezas_buscadas.has(pieza)) {
+    //     console.log("La pieza ya ha sido buscada.");
+    //     return; // Salir de la función si la pieza ya está en el set
+    // }
+
+    // Agregar la pieza al set de piezas buscadas
+    // piezas_buscadas.add(pieza);
+
+    contador++;
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_tto') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            pieza: pieza,
+            seccion:'impl',
+            counter: contador,
+            id_paciente: $('#id_paciente').val(),
+            id_ficha_atencion: $('#id_fc').val(),
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+             $('#contenedor_pieza_tto_implante').empty();
+            $('#contenedor_pieza_tto_implante').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+
+function mostrar_nueva_pieza_dental_tto_period(counter){
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_tto') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            counter: counter,
+            seccion:'period',
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+            $('#contenedor_pieza_plan_implante').empty();
+            $('#contenedor_pieza_plan_implante').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function mostrar_nueva_pieza_dental_end(counter){
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_end') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            counter: counter,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+            $('#contenedor_nuevo_examen_end').empty();
+            $('#contenedor_nuevo_examen_end').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function ocultarExamen(counter){
+    $('#nueva_pieza_dental_odontodolor').empty();
+}
+
+function ocultarExamenEnd(counter){
+    $('#contenedor_nuevo_examen_end').empty();
+}
+
+function guardar_pieza_dental_dolor(count){
+    let derivado_por = $('#ex_grl_deriv').val();
+    let zona_dolor = $('#ex_grl_zdolor').val();
+    let historia_anterior = $('#ex_grl_hp').val();
+
+    let pieza_numero = $('#numero_pieza'+count).val();
+    let tipo_dolor = $('#tipo_dolor'+count).val();
+    let intensidad = $('#intensidad'+count).val();
+    let modo_dolor = $('#modo_dolor'+count).val();
+    let loc_dolor = $('#loc_dolor'+count).val();
+    let provocacion_dolor = $('#provocacion_dolor'+count).val();
+    let cdo_duele = $('#cdo_duele'+count).val();
+    let tpo_evolucion = $('#tpo_evolucion'+count).val();
+    let obs_anal_dolor = $('#obs_anal_dolor'+count).val();
+
+    let valido = 1;
+    let mensaje = '';
+
+    if(derivado_por == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Derivado por </li>';
+    }
+    if(zona_dolor == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Zona dolor </li>';
+    }
+    if(historia_anterior == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Historia anterior </li>';
+    }
+    if(pieza_numero == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido N° Pieza </li>';
+    }
+    if(tipo_dolor == 0){
+        valido = 0;
+        mensaje += '<li>Campo requerido Tipo Dolor </li>';
+    }
+    if(intensidad == 0){
+        valido = 0;
+        mensaje += '<li>Campo requerido Intensidad </li>';
+    }
+    if(obs_anal_dolor == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Observaciones analgesicos dolor </li>';
+    }
+
+    if(valido == 0){
+        swal({
+            title: "Campos requeridos",
+            content:{
+                element: "div",
+                attributes:{
+                    innerHTML: mensaje,
+                },
+            },
+            icon: "error",
+            buttons: "Aceptar",
+            DangerMode: true,
+        });
+        return false;
+    }
+
+    let data = {
+        _token: CSRF_TOKEN,
+        derivado_por: derivado_por,
+        zona_dolor: zona_dolor,
+        historia_anterior: historia_anterior,
+        pieza_numero: pieza_numero,
+        tipo_dolor: tipo_dolor,
+        intensidad: intensidad,
+        modo_dolor: modo_dolor,
+        loc_dolor: loc_dolor,
+        provocacion_dolor: provocacion_dolor,
+        cdo_duele: cdo_duele,
+        tpo_evolucion: tpo_evolucion,
+        obs_anal_dolor: obs_anal_dolor,
+        id_paciente: $('#id_paciente_fc').val(),
+        id_lugar_atencion : $('#id_lugar_atencion').val(),
+        id_ficha_atencion: $('#id_ficha_atencion').val(),
+        id_profesional: $('#id_profesional_fc').val(),
+        count: count
+    }
+
+    let url = "{{ ROUTE('profesional.adm_dental.guardar_pieza_dental_dolor') }}";
+
+    $.ajax({
+        url: url,
+        type:'post',
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            $('#contenedor_pieza_dental_odontodolor').empty();
+            $('#contenedor_pieza_dental_odontodolor').append(resp.v);
+            $('#nueva_pieza_dental_odontodolor').empty();
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
+
+function mostrar_pieza_dental_examen(count){
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_examen') }}";
+    let data = {
+        count: count,
+        id_paciente: dame_id_paciente(),
+        _token: CSRF_TOKEN
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_nueva_pieza_dental').empty();
+                $('#contenedor_nueva_pieza_dental').append(resp.v);
+
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function mostrar_pieza_dental_examen_end(count){
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_examen_end') }}";
+    let data = {
+        count: count,
+        id_paciente: dame_id_paciente(),
+        tipo_examen:'endo',
+        _token: CSRF_TOKEN
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#nueva_pieza_dental_endo').empty();
+                $('#nueva_pieza_dental_endo').append(resp.v);
+
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function mostrar_nueva_pieza_ex_radio_end(counter){
+    let url = "{{ ROUTE('profesional.mostrar_nueva_pieza_dental_rx_end') }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: {
+            counter: counter,
+            tipo_examen: 'endo',
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(resp) {
+            console.log(resp);
+            $('#nueva_pieza_end').empty();
+            $('#nueva_pieza_end').append(resp.v);
+        },
+        error: function(error) {
+            console.log(error);
+        }
+    });
+}
+
+function eliminar_pieza_dental_rx_end(id){
+    swal({
+        title: 'Advertencia',
+        text: '¿Está seguro de eliminar este RX?',
+        icon: 'warning',
+        buttons: ['Cancelar', 'Aceptar'],
+        dangerMode: true
+    })
+    .then((aceptar) => {
+        if (aceptar) {
+            confirmar_eliminar_pieza_dental_rx_end(id);
+        } else {
+            swal('Cancelado', 'El RX no fue eliminado :(', 'error');
+        }
+    });
+}
+
+function confirmar_eliminar_pieza_dental_rx_end(id){
+    let url = "{{ route('profesional.eliminar_pieza_dental_rx_end') }}";
+    let data = {
+        _token: CSRF_TOKEN,
+        id_paciente: dame_id_paciente(),
+        id: id
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                $('#contenedor_pieza_dental_endorx_endo').empty();
+                $('#contenedor_pieza_dental_endorx_endo').append(resp.v);
+                swal({
+                    title:'Exito',
+                    text:'Se ha eliminado con éxito',
+                    icon:'success'
+                })
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function eliminar_pieza_dental_pieza(id,tipo){
+    swal({
+        title: 'Advertencia',
+        text: '¿Está seguro de eliminar esta pieza?',
+        icon: 'warning',
+        buttons: ['Cancelar', 'Aceptar'],
+        dangerMode: true
+    })
+    .then((aceptar) => {
+        if (aceptar) {
+            confirmar_eliminar_pieza_dental_pieza(id, tipo);
+        } else {
+            Swal.fire('Cancelado', 'La pieza no fue eliminada :(', 'error');
+        }
+    });
+}
+
+function confirmar_eliminar_pieza_dental_pieza(id, tipo){
+    let url = "{{ ROUTE('profesional.eliminar_pieza_dental_pieza') }}";
+    let data = {
+        _token: CSRF_TOKEN,
+        id_paciente: dame_id_paciente(),
+        id: id,
+        id_ficha_atencion: $('#id_fc').val(),
+        id_lugar_atencion: $('#id_lugar_atencion').val(),
+        tipo: tipo
+    }
+
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.mensaje == 'OK'){
+                let examenes = resp.examenes;
+                if(tipo == 'gral'){
+                    $('#contenedor_pieza_dental_endo_gral').empty();
+                    $('#contenedor_pieza_dental_endo_gral').append(resp.v);
+
+                    $('#planificacion_examenes_gral').empty();
+                    examenes.forEach(examen => {
+                        $('#planificacion_examenes_gral').append(`
+                            <div class="form-row">
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Pieza N°</label>
+                                        <input type="text" class="form-control form-control-sm" value="${examen.numero_pieza}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                        <select name="piel_tegumnto" data-titulo="Ex_cuello" data-seccion="Cuello" id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
+                                            <option selected="" value="1">Uniradicular</option>
+                                            <option value="2">Biradicular</option>
+                                            <option value="2">Triradicular</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="div_piel_tegumnto" style="display:none;">
+                                        <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Convenio</label>
+                                        <select name="adenopatias" data-titulo="Ex_cuello" data-seccion="Cuello" id="adenopatias" class="form-control form-control-sm">
+                                            <option selected="" value="1">Convenio</option>
+                                            <option value="2">Sin Convenio</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        `);
+                    });
+                }else if(tipo == 'endo'){
+                    $('#contenedor_pieza_dental_endo').empty();
+                    $('#contenedor_pieza_dental_endo').append(resp.v);
+                    $('#planificacion_examenes_endo').empty();
+                    examenes.forEach(examen => {
+                        $('#planificacion_examenes_endo').append(`
+                            <div class="form-row">
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Pieza N°</label>
+                                        <input type="text" class="form-control form-control-sm" value="${examen.numero_pieza}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                        <select name="piel_tegumnto" data-titulo="Ex_cuello" data-seccion="Cuello" id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
+                                            <option selected="" value="1">Uniradicular</option>
+                                            <option value="2">Biradicular</option>
+                                            <option value="2">Triradicular</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="div_piel_tegumnto" style="display:none;">
+                                        <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                        <textarea class="form-control form-control-sm" data-titulo="Ex_cuello" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-group fill">
+                                        <label class="floating-label-activo-sm">Convenio</label>
+                                        <select name="adenopatias" data-titulo="Ex_cuello" data-seccion="Cuello" id="adenopatias" class="form-control form-control-sm">
+                                            <option selected="" value="1">Convenio</option>
+                                            <option value="2">Sin Convenio</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        `);
+                    });
+                }else{
+                    $('#contenedor_pieza_dental_odontop_examen').empty();
+                    $('#contenedor_pieza_dental_odontop_examen').append(resp.v);
+                    $('#planificacion_examenes_odontop').empty();
+                    examenes.forEach(examen => {
+                        $('#planificacion_examenes_odontop').append(`
+                        <div class="form-row">
+                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Pieza N°</label>
+                                    <input type="text" class="form-control form-control-sm" value="${examen.numero_pieza}">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                    <select name="piel_tegumnto" data-titulo="Ex_cuello" data-seccion="Cuello" id="piel_tegumnto" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);">
+                                        <option selected="" value="1">Uniradicular</option>
+                                        <option value="2">Biradicular</option>
+                                        <option value="2">Triradicular</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="div_piel_tegumnto" style="display:none;">
+                                    <label class="floating-label-activo-sm">Tipo de Tratamiento</label>
+                                    <textarea class="form-control form-control-sm" data-titulo="Ex_cuello" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_piel_tegumnto" id="obs_piel_tegumnto"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Convenio</label>
+                                    <select name="adenopatias" data-titulo="Ex_cuello" data-seccion="Cuello" id="adenopatias" class="form-control form-control-sm">
+                                        <option selected="" value="1">Convenio</option>
+                                        <option value="2">Sin Convenio</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        `);
+                    });
+                }
+                swal({
+                    title:'Exito',
+                    text:'Se ha eliminado con éxito',
+                    icon:'success'
+                });
+
+                $('#contenedor_examenes_grupos_dentales').empty();
+                $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    })
+}
+
+function eliminarExamenEndAgregado(id, tipo_examen) {
+        swal({
+            title: 'Advertencia',
+            text: '¿Está seguro de eliminar este examen?',
+            icon: 'warning',
+            buttons: ['Cancelar', 'Aceptar'],
+            dangerMode: true
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmarEliminarExamenEndAgregado(id, tipo_examen);
+            }
+        })
+    }
+
+    function confirmarEliminarExamenAgregado(id){
+        let url = "{{ route('profesional.eliminar_nueva_pieza_dental') }}";
+        var idPaciente = $('#id_paciente_fc').val();
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                id: id,
+                id_paciente: idPaciente,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(resp) {
+                console.log(resp);
+                let mensaje = resp.mensaje;
+                let vista = resp.vista;
+                if (mensaje == 'OK') {
+                    swal({
+                        title: 'Éxito',
+                        text: 'Evolución eliminada correctamente',
+                        icon: 'success',
+                        button: 'Aceptar'
+                    });
+                    $('#contenedor_pieza_dental_odontodolor').empty();
+                    $('#contenedor_pieza_dental_odontodolor').append(vista);
+                } else {
+                    swal({
+                        title: 'Error',
+                        text: 'mensaje',
+                        icon: 'error',
+                        button: 'Aceptar'
+                    })
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function confirmarEliminarExamenEndAgregado(id, tipo_examen){
+        let url = "{{ route('profesional.eliminar_nueva_pieza_dental_end') }}";
+        var idPaciente = $('#id_paciente_fc').val();
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {
+                id: id,
+                id_paciente: idPaciente,
+                tipo_examen: tipo_examen,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(resp) {
+                console.log(resp);
+                let mensaje = resp.mensaje;
+                let vista = resp.vista;
+                if (mensaje == 'OK') {
+                    swal({
+                        title: 'Éxito',
+                        text: 'Evolución eliminada correctamente',
+                        icon: 'success',
+                        button: 'Aceptar'
+                    });
+                    if(tipo_examen == 'endo'){
+                        $('#contenedor_examen_dolor_end').empty();
+                        $('#contenedor_examen_dolor_end').append(vista);
+                    }else if(tipo_examen == 'odontop'){
+                        $('#contenedor_pieza_dental_od_general').empty();
+                        $('#contenedor_pieza_dental_od_general').append(vista);
+                    }
+
+                } else {
+                    swal({
+                        title: 'Error',
+                        text: 'mensaje',
+                        icon: 'error',
+                        button: 'Aceptar'
+                    })
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function guardar_pieza_dental_end(count){
+    let derivado_por = $('#ex_end_derivado_por').val();
+    let zona_dolor = $('#ex_end_zona_dolor').val();
+    let historia_anterior = $('#ex_end_hist_ant').val();
+
+    let pieza_numero = $('#end_numero_pieza'+count).val();
+    let tipo_dolor = $('#end_tipo_dolor'+count).val();
+    let intensidad = $('#end_intensidad'+count).val();
+    let modo_dolor = $('#end_modo_dolor'+count).val();
+    let loc_dolor = $('#end_loc_dolor'+count).val();
+    let provocacion_dolor = $('#end_provocacion_dolor'+count).val();
+    let cdo_duele = $('#end_cdo_duele'+count).val();
+    let tpo_evolucion = $('#end_tpo_evolucion'+count).val();
+    let obs_anal_dolor = $('#end_obs_loc_dolor'+count).val();
+
+    let valido = 1;
+    let mensaje = '';
+
+    if(derivado_por == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Derivado por </li>';
+    }
+    if(zona_dolor == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Zona dolor </li>';
+    }
+    if(historia_anterior == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Historia anterior </li>';
+    }
+    if(pieza_numero == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido N° Pieza </li>';
+    }
+    if(tipo_dolor == 0){
+        valido = 0;
+        mensaje += '<li>Campo requerido Tipo Dolor </li>';
+    }
+    if(intensidad == 0){
+        valido = 0;
+        mensaje += '<li>Campo requerido Intensidad </li>';
+    }
+    if(obs_anal_dolor == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Observaciones analgesicos dolor </li>';
+    }
+
+    if(valido == 0){
+        swal({
+            title: "Campos requeridos",
+            content:{
+                element: "div",
+                attributes:{
+                    innerHTML: mensaje,
+                },
+            },
+            icon: "error",
+            buttons: "Aceptar",
+            DangerMode: true,
+        });
+        return false;
+    }
+
+    let data = {
+        _token: CSRF_TOKEN,
+        derivado_por: derivado_por,
+        zona_dolor: zona_dolor,
+        historia_anterior: historia_anterior,
+        pieza_numero: pieza_numero,
+        tipo_dolor: tipo_dolor,
+        intensidad: intensidad,
+        modo_dolor: modo_dolor,
+        loc_dolor: loc_dolor,
+        provocacion_dolor: provocacion_dolor,
+        cdo_duele: cdo_duele,
+        tpo_evolucion: tpo_evolucion,
+        obs_anal_dolor: obs_anal_dolor,
+        id_paciente: $('#id_paciente_fc').val(),
+        id_lugar_atencion : $('#id_lugar_atencion').val(),
+        id_ficha_atencion: $('#id_ficha_atencion').val(),
+        id_profesional: $('#id_profesional_fc').val(),
+        count: count
+    }
+
+    let url = "{{ ROUTE('profesional.adm_dental.guardar_pieza_dental_end_dolor') }}";
+
+    $.ajax({
+        url: url,
+        type:'post',
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            $('#contenedor_examen_dolor_end').empty();
+            $('#contenedor_examen_dolor_end').append(resp.v);
+            $('#contenedor_nuevo_examen_end').empty();
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
 </script>
 
 @endsection

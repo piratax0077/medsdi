@@ -1852,6 +1852,10 @@ class ficha_atencionController extends Controller
         $examenes_rx_oral = $this->dameExamenesPiezaDentalOraxRx($paciente->id, $profesional->id_tipo_especialidad);
 
         $examenes_rx_oral_endodoncia = $this->dameExamenesPiezaDentalOraxRxEnd($paciente->id, $profesional->id_tipo_especialidad);
+        foreach($examenes_rx_oral_endodoncia as $ero)
+        {
+            $ero->numero_piezas = json_decode($ero->numero_piezas);
+        }
         $examenes_rx_oral_odontop = $this->dameExamenesPiezaDentalOraxRxOdontop($paciente->id, $profesional->id_tipo_especialidad);
         $imagenes = $this->dameInfoImagenesDentalPaciente($paciente->id,'gral', $id_ficha_atencion);
         $imagenes_preimplante = $this->dameInfoImagenesDentalPaciente($paciente->id,'implantologia',$id_ficha_atencion);
@@ -3043,7 +3047,8 @@ class ficha_atencionController extends Controller
 
 
     public function dameExamenesPiezaDentalPiezaEnd($id_paciente){
-        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)->where('tipo_examen',2)->where('estado',1)->get();
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $examenes = ExamenesDentalPieza::where('id_paciente',$id_paciente)->where('id_profesional',$profesional->id)->where('tipo_examen',2)->where('estado',1)->get();
         return $examenes;
     }
 
@@ -3054,8 +3059,9 @@ class ficha_atencionController extends Controller
 
     public function dameInfoImagenesDentalPaciente($id_paciente,$seccion, $id_ficha_atencion = null)
     {
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         // Obtén las imágenes del paciente
-        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)->where('seccion',$seccion)
+        $imagenes = ImagenesDentalPaciente::where('id_paciente', $id_paciente)->where('id_profesional',$profesional->id)->where('seccion',$seccion)
         ->when($id_ficha_atencion, function ($query, $id_ficha_atencion) {
             return $query->where('id_ficha_atencion', $id_ficha_atencion);
         })
@@ -3082,7 +3088,8 @@ class ficha_atencionController extends Controller
 
 
     public function dameExamenesPiezaDentalOraxRx($id_paciente){
-        $examenes = ExamenesDentalOralRx::where('id_paciente',$id_paciente)->get();
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $examenes = ExamenesDentalOralRx::where('id_paciente',$id_paciente)->where('id_profesional',$profesional->id)->get();
         foreach ($examenes as $e) {
             $imagenes = ImagenesDentalRxPaciente::where('id_examen', $e->id)->get();
             $e->imagenes = $imagenes;
@@ -3158,7 +3165,8 @@ class ficha_atencionController extends Controller
     }
 
     public function dameExamenesPiezaDentalEndDolor($id_paciente){
-        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('tipo_examen',2)->get();
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        $examenes = ExamenesDentalDolor::where('id_paciente',$id_paciente)->where('id_profesional',$profesional->id)->where('tipo_examen',2)->get();
         return $examenes;
     }
 

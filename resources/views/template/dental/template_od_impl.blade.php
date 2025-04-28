@@ -191,6 +191,9 @@
 
             $('#table_trabajos_menores_dental').DataTable();
             $('#table_trabajos_mayores_dental').DataTable();
+            $('#table_profesionales_tons').DataTable({
+                responsive: 'true'
+            });
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
                 swal({

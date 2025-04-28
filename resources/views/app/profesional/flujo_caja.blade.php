@@ -212,14 +212,37 @@
                                                     <tbody>
                                                         @if( isset($rendiciones) )
                                                             @foreach($rendiciones as $key_b => $value_b)
+                                                                @php
+                                                                    if($value_b->estado == 1){
+                                                                        $value_b->estado = 'EN ESPERA';
+                                                                    }elseif($value_b->estado == 2){
+                                                                        $value_b->estado = 'OTRO';
+                                                                    }elseif($value_b->estado == 3){
+                                                                        $value_b->estado = 'APROBADA';
+                                                                    }else if($value_b->estado == 4){
+                                                                        $value_b->estado = 'RECHAZADA';
+                                                                    }
+                                                                @endphp
                                                                 <tr>
                                                                     <td class="align-middle">{{ $value_b->id }}</td>
                                                                     <td class="align-middle">{{ $value_b->fecha_rendicion }}</td>
                                                                     <td class="align-middle">{{ $value_b->Asistente()->first()->nombres }} {{ $value_b->Asistente()->first()->apellido_uno }} {{ $value_b->Asistente()->first()->apellido_dos }}</td>
                                                                     <td class="align-middle">2</td>
-                                                                    <td class="align-middle">{{ $value_b->estado }}</td>
+                                                                    <td class="align-middle">{{ $value_b->estado == 1 ? 'EN ESPERA' : $value_b->estado }}</td>
                                                                     <td class="align-middle">
                                                                         <button class="btn btn-primary-light-c btn-xxs" onclick="ver_rendicion({{ $value_b->id }})">Ver</button>
+                                                                        <button class="btn btn-secondary btn-xxs" onclick="ver_pdf_rendicion({{ $value_b->id }},{{ $value_b->Asistente()->first()->id }})">Ver PDF</button>
+
+                                                                        <div class="switch switch-success d-inline m-l-5">
+                                                                            <input type="checkbox"
+                                                                                   id="switch_rendicion_{{ $value_b->id }}"
+                                                                                   onchange="cambiarEstadoRendicion(this)"
+                                                                                   data-id="{{ $value_b->id }}"
+                                                                                   data-email="{{ $value_b->Asistente()->first()->email }}"
+                                                                                   {{ $value_b->estado == 'APROBADA' ? 'checked' : '' }}>
+                                                                            <label for="switch_rendicion_{{ $value_b->id }}" class="cr"></label>
+                                                                        </div>
+                                                                        <label style="font-size: 11px;">Aprobar</label>
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -281,7 +304,7 @@
                                     {{--  <button id="busqueda_avanzada_2" type="button" class="btn btn-primary btn-sm float-right d-inline shadow-sm" onclick="$('#busqueda_avanzada_aparecer_2').toggle();"><i class="feather icon-search"></i> Búsqueda avanzada</button>  --}}
                                 </div>
                             </div>
-                            
+
                             @if(Auth::user()->hasRole('Profesional'))
                                 <div id="busqueda_avanzada_aparecer_prof_2" style="display:none">
                             @elseif(Auth::user()->hasRole('Asistente'))
@@ -355,7 +378,7 @@
                                     </div>
                                 </div>
                             </div>
-                           
+
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card">
@@ -409,7 +432,7 @@
                                     </div>
                                 </div>
                             </div>
-                           
+
                         </div>
 
                         {{-- PESTAÑA DE GESTION DE BONOS --}}
@@ -592,7 +615,7 @@
                                                                                                 <span>{{ $value_br->Paciente()->first()->rut }}</span>
                                                                                             </td>
                                                                                             <td class="align-middle">${{ number_format($value_br->valor_atencion, 2, ",", ".") }}</td>
-                                                                                            <td class="align-middle">{{ $value_br->estado_consulta }}</td>
+                                                                                            <td class="align-middle">{{ $value_br->estado_consulta == 1 ? 'EN ESPERA' : 'OTRO' }}</td>
 
                                                                                         </tr>
                                                                                     @endforeach
@@ -678,7 +701,7 @@
                                             </div>
                                         </div>
                                     </div>
-                          
+
                         </div>
 
 
@@ -929,6 +952,7 @@
 @section('page-script')
     <script>
         $(document).ready(function(){
+            $('#rinde_asistente').select2();
             $('#tabla_rendir_caja').DataTable({
                 responsive: true,
             });
@@ -977,6 +1001,137 @@
 
             });
 
+        }
+
+        function ver_pdf_rendicion(id, id_asistente){
+            let url = "{{ route('flujo_caja.profesional.rendicion.pdf', [':id', ':id_asistente']) }}";
+            url = url.replace(':id', id).replace(':id_asistente', id_asistente);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(data){
+                    // return console.log(data);
+                    let url = data.ruta;
+                    let height = 800;
+                    let width = 1200;
+                    let left = (screen.width / 2) - (width / 2);
+                    let top = (screen.height / 2) - (height / 2);
+                    let options = 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left;
+                    window.open(url, 'pdf_rendicion', options);
+                },
+                error: function(error){
+                    console.log(error);
+                }
+
+            });
+        }
+
+        function aprobar_rendicion(id, email){
+            swal({
+                title: "¿Está seguro de aprobar la rendición?",
+                text: "Una vez aprobada la rendición, no podrá ser modificada.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((aceptar) => {
+                if (aceptar) {
+                    confirmar_aprobar_rendicion(id,email);
+                }
+            });
+        }
+
+        function rechazar_rendicion(id, email){
+            swal({
+                title: "¿Está seguro de rechazar la rendición?",
+                text: "Una vez rechazada la rendición, no podrá ser modificada.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((aceptar) => {
+                if (aceptar) {
+                    let url = "{{ route('flujo_caja.profesional.rendicion.rechazar', ':id') }}";
+                    url = url.replace(':id', id);
+
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        success: function(data) {
+                            $('#ver_rendicion').modal('hide');
+                            swal("¡Rendición rechazada!", {
+                                icon: "success",
+                            });
+                            let rendiciones = data.rendiciones;
+                            let table = $('#tabla_rendir_caja').DataTable();
+                            table.clear().draw();
+
+                            for (let i = 0; i < rendiciones.length; i++) {
+                                let r = rendiciones[i];
+                                let nombreCompleto = `${r.asistente.nombres} ${r.asistente.apellido_uno} ${r.asistente.apellido_dos}`;
+                                let acciones = generarAccionesRendicion(r.id, r.asistente.email, r.asistente.id, r.estado); // <-- ¡Importante!
+
+                                table.row.add([
+                                    r.id,
+                                    r.fecha_rendicion,
+                                    nombreCompleto,
+                                    "2", // Aquí puedes reemplazar si quieres cargar dinámicamente el tipo
+                                    r.estado,
+                                    acciones
+                                ]).draw(false);
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error);
+                            swal("Error al rechazar rendición", {
+                                icon: "error",
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function confirmar_aprobar_rendicion(id, email) {
+            let url = "{{ route('flujo_caja.profesional.rendicion.aprobar', ':id') }}";
+            url = url.replace(':id', id);
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(data) {
+                    let rendiciones = data.rendiciones;
+                    $('#ver_rendicion').modal('hide');
+
+                    swal("¡Rendición aprobada y correo enviado a " + email + "!", {
+                        icon: "success",
+                    });
+
+                    let table = $('#tabla_rendir_caja').DataTable();
+                    table.clear().draw();
+
+                    for (let i = 0; i < rendiciones.length; i++) {
+                        let r = rendiciones[i];
+                        let nombreCompleto = `${r.asistente.nombres} ${r.asistente.apellido_uno} ${r.asistente.apellido_dos}`;
+                        let acciones = generarAccionesRendicion(r.id, r.asistente.email, r.asistente.id, r.estado); // <-- ¡Importante!
+
+                        table.row.add([
+                            r.id,
+                            r.fecha_rendicion,
+                            nombreCompleto,
+                            "2", // Aquí puedes reemplazar si quieres cargar dinámicamente el tipo
+                            r.estado,
+                            acciones
+                        ]).draw(false);
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                    swal("Error al aprobar rendición", {
+                        icon: "error",
+                    });
+                }
+            });
         }
 
         function generarCSV(){
@@ -1079,29 +1234,24 @@
                 console.log(data);
                 if (data.estado == 1)
                 {
-                    $('#tabla_rendir_caja tbody').html('');
-                    for (i = 0; i < data.registros.length; i++) {
+                    let rendiciones = data.registros;
+                            let table = $('#tabla_rendir_caja').DataTable();
+                            table.clear().draw();
 
-                        var j = 1; //contador para asignar id al boton que borrara la fila
-                        var fila = '';
-                        fila += '<tr>';
-                        fila += '    <td class="align-middle text-center">'+data.registros[i].id+'</td>';
-                        fila += '    <td class="align-middle text-center">'+data.registros[i].fecha_rendicion+'</td>';
-                        fila += '    <td class="align-middle text-center">'+data.registros[i].asistente.nombres+' '+data.registros[i].asistente.apellido_uno+' '+data.registros[i].asistente.apellido_dos+'</td>';
-                        fila += '    <td class="align-middle text-center">2</td>';
-                        fila += '    <td class="align-middle text-center">'+data.registros[i].estado+'</td>';
-                        fila += '    <td class="align-middle text-center">';
-                        fila += '        <div class="form-group">';
-                        fila += '            <button class="btn btn-outline-primary btn-sm" onclick="ver_rendicion('+data.registros[i].id+')"><i class="fas fa-eye"></i>Ver</button>';
-                        fila += '        </div>';
-                        fila += '    </td>';
-                        fila += '</tr>';
+                            for (let i = 0; i < rendiciones.length; i++) {
+                                let r = rendiciones[i];
+                                let nombreCompleto = `${r.asistente.nombres} ${r.asistente.apellido_uno} ${r.asistente.apellido_dos}`;
+                                let acciones = generarAccionesRendicion(r.id, r.asistente.email, r.asistente.id, r.estado); // <-- ¡Importante!
 
-                        j++;
-
-                        $('#tabla_rendir_caja tbody').append(fila);
-
-                    }
+                                table.row.add([
+                                    r.id,
+                                    r.fecha_rendicion,
+                                    nombreCompleto,
+                                    "2", // Aquí puedes reemplazar si quieres cargar dinámicamente el tipo
+                                    r.estado,
+                                    acciones
+                                ]).draw(false);
+                            }
                 }
                 else
                 {
@@ -1115,6 +1265,28 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         }
+
+        function generarAccionesRendicion(id, email, idAsistente, estado) {
+            const aprobado = estado === "APROBADA";
+
+            return `
+                <button class="btn btn-primary-light-c btn-xxs" onclick="ver_rendicion(${id})">Ver</button>
+                <button class="btn btn-secondary btn-xxs" onclick="ver_pdf_rendicion(${id}, ${idAsistente})">Ver PDF</button>
+
+                <div class="switch switch-success d-inline m-l-5">
+                    <input type="checkbox"
+                        id="switch_rendicion_${id}"
+                        onchange="cambiarEstadoRendicion(this)"
+                        data-id="${id}"
+                        data-email="${email}"
+                        ${aprobado ? "checked" : ""}>
+                    <label for="switch_rendicion_${id}" class="cr"></label>
+                </div>
+                <label style="font-size: 11px;">Aprobar</label>
+            `;
+        }
+
+
 
         function cargar_flujo_caja_programa() {
             var fecha = $('#rinde_progr_fecha').val();
@@ -1297,6 +1469,45 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         }
+
+        function cambiarEstadoRendicion(element) {
+    const id = element.getAttribute('data-id');
+    const email = element.getAttribute('data-email');
+    const checked = element.checked;
+
+    if (checked) {
+        swal({
+            title: "¿Aprobar rendición?",
+            text: "Una vez aprobada, no podrá ser modificada.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: false,
+        }).then((aceptar) => {
+            if (aceptar) {
+                confirmar_aprobar_rendicion(id, email);
+            } else {
+                // Si el usuario cancela, revertimos el switch
+                element.checked = false;
+            }
+        });
+    } else {
+        swal({
+            title: "¿Rechazar rendición?",
+            text: "Una vez rechazada, no podrá ser modificada.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((aceptar) => {
+            if (aceptar) {
+                rechazar_rendicion(id, email);
+            } else {
+                // Si el usuario cancela, revertimos el switch
+                element.checked = true;
+            }
+        });
+    }
+}
+
     </script>
 @endsection
 

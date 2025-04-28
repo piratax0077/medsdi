@@ -20,7 +20,7 @@
                     </div>
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <label class="floating-label-activo-sm" for="indicaciones">Indicaciones</label>
-                        <input type="text" class="form-control form-control-sm" name="indicaciones" id="indicaciones">
+                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=5" onblur="this.rows=1;" name="indicaciones" id="indicaciones"></textarea>
                     </div>
                 </div>
             </div>

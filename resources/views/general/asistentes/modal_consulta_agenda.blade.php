@@ -392,10 +392,10 @@
                             href="#pills-recibir-bono" role="tab" aria-controls="pills-home"
                             aria-selected="true">Recibir Pago</a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link-modal" id="pills-venta-tab" data-toggle="pill" href="#pills-venta"
                             role="tab" aria-controls="pills-venta" aria-selected="false">Venta de Bonos</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item d-none" id="link_pago_presupuesto_dental">
                         <a class="nav-link-modal" id="pills-venta-dental-tab" data-toggle="pill"
                             href="#pills-venta-dental" role="tab" aria-controls="pills-venta-dental"
@@ -446,15 +446,17 @@
                                     <select id="bono_id_clase_bono" name="bono_id_clase_bono"
                                         class="form-control form-control-sm" onchange="evaluar_clase_pago(this)">
                                         <option value="0">Seleccione</option>
-                                        <option value="9">Bono Físico</option>
-                                        <option value="4">Bono Web</option>
-                                        {{-- <option value="5">Bono Web Pre-Pago</option> --}}
-                                        <option value="3">Caja Vecina</option>
-                                        {{-- <option value="7">COPAGO Fonasa</option> --}}
-                                        <option value="2">Control sin costo</option>
                                         <option value="1">Emitido por Institucion</option>
-                                        <option value="8">Garantía</option>
+                                        <option value="9">Bono Físico</option>
                                         <option value="6">Particular</option>
+                                        <option value="2">Control sin costo</option>
+                                        <option value="8">Garantía</option>
+                                        {{-- <option value="4">Bono Web</option> --}}
+                                        {{-- <option value="5">Bono Web Pre-Pago</option> --}}
+                                        {{-- <option value="3">Caja Vecina</option> --}}
+                                        {{-- <option value="7">COPAGO Fonasa</option> --}}
+
+
                                     </select>
                                 </div>
                             </div>
@@ -475,6 +477,18 @@
                                             <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Valor Bonificación</label>
+                                    <input type="number" class="form-control form-control-sm" name="valor_bonificacion" id="valor_bonificacion" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Aporte Seguro</label>
+                                    <input type="number" class="form-control form-control-sm" name="valor_seguro" id="valor_seguro" value="0" onblur="calcular_valor_pago(this);">
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -1723,6 +1737,10 @@
 </div>
 <!-- FIN MODAL agenda_validar_auto_menor_edad -->
 
+
+<!-- DATOS IMPORTANTES -->
+<input type="hidden" name="valor_total_rendir" id="valor_total_rendir" value="0">
+
 @include('general.asistentes.m_esperando_api')
 @include('general.asistentes.m_pago')
 
@@ -2516,6 +2534,7 @@
                             var valor_bon = resp.valor_bon_fonasa;
                         }
 
+                        $('#valor_total_rendir').val(valor);
                         $('#bono_valor_consulta').val(valor);
                         $('#valor_bonificacion').val(valor_bon);
 
@@ -2805,6 +2824,26 @@
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
+    }
+
+    function calcular_valor_pago(val){
+        let valor = val.value;
+        console.log(valor);
+        let valor_consulta = $('#valor_total_rendir').val();
+        let result = parseInt(valor_consulta) - parseInt(valor);
+        console.log(result);
+        if(result < 0){
+            $('#valor_seguro').val(0);
+            swal({
+                title: "Error",
+                text: "El valor ingresado no puede ser mayor al valor de la consulta.",
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            })
+        }else{
+            $('#bono_valor_consulta').val(result);
+        }
     }
 </script>
 

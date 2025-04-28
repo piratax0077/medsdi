@@ -250,6 +250,21 @@
         let id_especialidad = $('#id_especialidad').val();
         let tipo_examen = 'endo';
 
+        if(numero_pieza == ''){
+            return swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "div",
+                    attributes:{
+                        innerHTML: 'El número de pieza es obligatorio.',
+                    },
+                },
+                icon: "error",
+                buttons: "Aceptar",
+                DangerMode: true,
+            });
+        }
+
         let data = {
             _token: CSRF_TOKEN,
             numero_pieza : numero_pieza,

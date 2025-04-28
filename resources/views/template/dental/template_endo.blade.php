@@ -17,6 +17,13 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
 
+     <!-- select2 selectbonito css -->
+     <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+     <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
+
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+
     <!-- data tables css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
@@ -64,6 +71,7 @@
 
     </style>
     @yield('css-btn-autorizacion')
+    @yield('styles')
 </head>
 <body>
     @include('template.dental.header')
@@ -115,9 +123,10 @@
     <!--Sidebars-->
     <script src="{{ asset('js/bs_canvas.js') }}"></script>
 
-
-    <!--Formularios Modals-->
-    <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
+      <!--Formularios Modals-->
+      <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
+      <!--Formularios Modals-->
+      <script src="{{ asset('js/modals_atencion_odonto_gral.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!--Form wizard-->
     <script src="{{ asset('js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
@@ -165,11 +174,23 @@
     <!--Tablas y Toggle atención ginecobstetrica-->
     <script src="{{ asset('js/atencion_especialidades.js') }}?upd={{ random_int(1111,9999) }}"></script>
     <script src="{{ asset('js/cara_dental.js') }}?upd={{ random_int(1111,9999) }}"></script>
-
+    <!-- Tratamientos dental autocomplete -->
+    <script>
+        window.getDiagnosticoDentalUrl = "{{ route('dental.getDiagnosticoDental') }}";
+    </script>
+    @routes
+    <script src="{{asset('js/dental/tratamientos_dental.js')}}"></script>
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         $(document).ready(function () {
+            $('#table_profesionales_tons').DataTable({
+                responsive: 'true'
+            });
+            $('#table_pedido_insumos_materiales').DataTable({
+                responsive: 'true'
+            });
+            $('#table_insumos_odon_gral').DataTable();
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
                 swal({
@@ -309,6 +330,166 @@
         }
         /** FIN METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
     </script>
+    <script>
+        var formatoMoneda = (valor) => {
+            return valor.toLocaleString('es-CL', {
+                style: 'currency',
+                currency: 'CLP',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).replace(/\./g, ',').replace(/,/g, '.');
+        };
+
+
+        function editarInformacionPaciente(){
+            $('#modal_editar_paciente').modal('show');
+            $('#info_paciente').css('display', 'none');
+            $('#info_paciente-edit').css('display', 'block');
+        }
+
+        function cancelarInformacionPaciente(){
+            $('#info_paciente').css('display', 'block');
+            $('#info_paciente-edit').css('display', 'none');
+        }
+
+        function guardarInformacionPaciente(){
+            let id_paciente = $('#id_paciente').val();
+            let nombres = $('#paciente_nombre_edit').val();
+            let apellido_uno = $('#paciente_apellido_uno_edit').val();
+            let apellido_dos = $('#paciente_apellido_dos_edit').val();
+            let fecha_nac = $('#paciente_fn_edit').val();
+            let sexo = $('#paciente_sexo_edit').val();
+            let direccion = $('#paciente_dir_edit').val();
+            let region = $('#paciente_region_edit').val();
+            let comuna = $('#paciente_comuna_edit').val();
+            let email = $('#paciente_email_edit').val();
+            let telefono = $('#paciente_telefono_edit').val();
+
+            let data = {
+                id: id_paciente,
+                nombre: nombres,
+                apellido_uno: apellido_uno,
+                apellido_dos: apellido_dos,
+                fecha_nacimiento: fecha_nac,
+                sexo: sexo,
+                direccion: direccion,
+                region: region,
+                ciudad: comuna,
+                email: email,
+                telefono: telefono,
+                _token: CSRF_TOKEN
+            }
+
+            console.log(data);
+            let url = "{{ route('asistente.paciente.modificar') }}";
+
+            $.ajax({
+
+                url: url,
+                type: "get",
+                data: data,
+                })
+                .done(function(data) {
+                console.log(data);
+                if (data.estado == 1)
+                {
+                    if (data.estado == 1)
+                    {
+                        let paciente = data.paciente;
+                        $('#nombre_completo_paciente').text(paciente.nombres + ' ' + paciente.apellido_uno + ' ' + paciente.apellido_dos);
+                        $('#fecha_nac_paciente').text(paciente.fecha_nac);
+                        if (paciente.sexo == 'M') {
+                            $('#sexo_paciente').text('Masculino');
+                        } else {
+                            $('#sexo_paciente').text('Femenino');
+                        }
+                        $('#email_paciente_').text(paciente.email);
+                        $('#telefono_paciente').text(paciente.telefono_uno);
+                        $('#comuna_region_paciente').html(paciente.ciudad + '<br> ' + paciente.region);
+
+                        // $('.paciente_view_asistente').show();
+                        // $('.paciente_edit_asistente').hide();
+                        // $('#modificando_paciente_asistente').val(0);
+
+                        swal({
+                            title: "Actualización de Paciente",
+                            text: "Actualización Exitosa",
+                            icon: "success",
+                        });
+                        cancelarInformacionPaciente();
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Actualización de Paciente",
+                            text: "Falla en Actualización.\nIntente de nuevo.",
+                            icon: "error",
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Actualización de Paciente",
+                        text: "Falla en Actualización.\nIntente de nuevo.",
+                        icon: "error",
+                    });
+                }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
+
+        function buscar_ciudad_paciente(id_ciudad = 0) {
+
+            let region = $('#paciente_region_edit').val();
+            let url = "{{ route('profesional.buscar_ciudad_region') }}";
+            $.ajax({
+
+                    url: url,
+                    type: "get",
+                    data: {
+                        //_token: _token,
+                        region: region,
+                    },
+                })
+                .done(function(data) {
+                    if (data != null) {
+                        data = JSON.parse(data);
+
+                        let ciudades = $('#paciente_comuna_edit');
+
+                        ciudades.find('option').remove();
+                        ciudades.append('<option value="0">seleccione</option>');
+                        $(data).each(function(i, v) { // indice, valor
+                            ciudades.append('<option value="' + v.id + '">' + v.nombre +
+                                '</option>');
+                        })
+
+                        if (id_ciudad != 0)
+                            ciudades.val(id_ciudad);
+
+                    } else {
+
+                        swal({
+                            title: "Error",
+                            text: "Error al cargar las ciudades",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        })
+                        // alert('No se pudo Cargar las ciudades');
+                    }
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+
+
+        };
+    </script>
 
     @yield('js_inferior')
     @yield('page-script')
@@ -319,6 +500,10 @@
     @yield('js-sidebar') {{-- seccion js side bar --}}
     @yield('js-lic') {{-- seccion js side bar --}}
 	@yield('page-script-btn-autorizacion')
+    @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajoM')
+    @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajo')
+
+    @include('atencion_odontologica.formularios_dentales_tons.pedido_material_trabajo.pedido_insumos_materiales')
 </body>
 
 </html>

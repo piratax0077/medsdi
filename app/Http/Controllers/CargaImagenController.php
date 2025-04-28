@@ -189,7 +189,6 @@ class CargaImagenController extends Controller
 
     public function guardarImagenesDental(Request $request)
     {
-
         // Validar archivos
         $request->validate([
             'file' => 'required|array|min:1',

@@ -2150,9 +2150,14 @@ Route::group([
     Route::get('data_rendidos_programas', [App\Http\Controllers\FlujoCajaController::class, 'dataFlujoCajaRendidosProgramas'])->name('flujo_caja.data_flujo_caja_rendidos_programa');
 
 	Route::get('dame_rendicion/{id}', [App\Http\Controllers\FlujoCajaController::class, 'dameRendicion'])->name('flujo_caja.profesional.rendicion.show');
+    Route::get('dame_rendicion_pdf/{id}/{id_asistente}', [App\Http\Controllers\FlujoCajaController::class, 'dameRendicionPdf'])->name('flujo_caja.profesional.rendicion.pdf');
+    Route::get('aprobar_rendicion/{id}', [App\Http\Controllers\FlujoCajaController::class, 'aprobarRendicion'])->name('flujo_caja.profesional.rendicion.aprobar');
+    Route::get('rechazar_rendicion/{id}', [App\Http\Controllers\FlujoCajaController::class, 'rechazarRendicion'])->name('flujo_caja.profesional.rendicion.rechazar');
     Route::post('cambiar_estado', [App\Http\Controllers\FlujoCajaController::class, 'cambiarEstado'])->name('flujo_caja.profesional.rendicion.cambiar_estado');
 
 	Route::get('caja/rendir/bonos', [App\Http\Controllers\FlujoCajaController::class, 'cargaBonosAsistenteDia'])->name('asistentecm.rendicion_carga_bonos');
+    Route::get('caja/pdf/bonos/cm/dia',[App\Http\Controllers\FlujoCajaController::class, 'pdfBonosDia'])->name('asistentecm.pdf_bonos_cm_dia');
+    Route::get('caja/pdf/bonos/prof/dia/{id}',[App\Http\Controllers\FlujoCajaController::class, 'pdfBonosDiaProf'])->name('asistentecm.pdf_bonos_profesional_dia');
 });
 
 /** BUSCADOR DE PROFESIONAL */

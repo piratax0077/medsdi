@@ -10,13 +10,11 @@
                                 <h6 style="text-align: center;color:blue;bold">Subir imagen radiológica</h6>
                             </div>
                         </div>
-
-                            <div class="card-body-aten-a">
-                                <!-- [ Main Content ] start -->
-                                <div class="dropzone" id="mis-imagenes-imagenes-rx-dental" action="{{ route('profesional.imagen.carga') }}"></div>
-                                <!-- [ file-upload ] end -->
-                            </div>
-
+                        <div class="card-body-aten-a">
+                            <!-- [ Main Content ] start -->
+                            <div class="dropzone" id="mis-imagenes-imagenes-rx-dental" action="{{ route('profesional.imagen.carga') }}"></div>
+                            <!-- [ file-upload ] end -->
+                        </div>
                     </div>
                 </div>
 
@@ -101,7 +99,7 @@
     </div>
 
     <button type="button" class="btn btn-outline-primary btn-sm" onclick="guardar_nueva_pieza_ex_radio({{ $counter }})"><i class="fas fa-save"></i>Guardar</button>
-    <button class="btn btn-icon btn-danger-light-c" onclick="ocultar_nueva_pieza_dental_rx()">X</button>
+    <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_nueva_pieza_dental_rx({{ $counter }})">X</button>
     <hr>
 
 </div>

@@ -428,7 +428,7 @@
                                             <div class="circle bg-success"></div>
                                         </td>
                                     </tr>
-                                    <tr class="paciente_view">
+                                    {{-- <tr class="paciente_view">
                                         <th scope="row">
                                             <strong>Información pagos</strong>
                                         </th>
@@ -447,7 +447,7 @@
                                             </div>
                                         </td>
 
-                                    </tr>
+                                    </tr> --}}
                                    <!-- <tr class="paciente_edit" style="display: none;">
                                         <hr>
                                     </tr>-->

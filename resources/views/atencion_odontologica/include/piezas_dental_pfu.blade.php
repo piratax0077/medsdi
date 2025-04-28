@@ -1,8 +1,8 @@
 <div class="card-informacion">
     <div class="card-body">
-        <div class="form-row">
+        <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <h6 class="sub-aten">PFU</h6>
+                <h6 class="t-aten d-inline"> PFU</h6>
                 <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-3"><i class="fas fa-plus"></i> Añadir pieza</button>
             </div>
         </div>
@@ -89,8 +89,8 @@
         </div>
     </div>
     <div class="card-footer">
-        <button type="button" class="btn btn-danger btn-icon" onclick="ocultar_pieza_dental_pfu()">X</button>
-        <button type="button" class="btn btn-primary btn-icon" onclick="guardar_pieza_dental_pfu({{ $counter }})"><i class="fas fa-save"></i></button>
+        <button type="button" class="btn btn-danger-light-c btn-icon" onclick="ocultar_pieza_dental_pfu()"><i class="feather icon-x"></i></button>
+        <button type="button" class="btn btn-primary-light-c btn-icon" onclick="guardar_pieza_dental_pfu({{ $counter }})"><i class="feather icon-save"></i></button>
     </div>
 </div>
 

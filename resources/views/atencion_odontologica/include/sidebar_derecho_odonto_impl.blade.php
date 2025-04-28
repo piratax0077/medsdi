@@ -127,31 +127,35 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-sidebar">
+                @php
+                    $clase = collect($tons_dental)->contains('estado', 2) ? '' : 'disabled';
+                @endphp
+                <div class="card-sidebar" id="card_sidebar_tons">
                     <div class="card-header-sidebar" id="heading_ayudante">
                         <h2 class="mb-0">
-                            <button class="btn btn-light btn-block text-left collapsed" type="button"
-                                data-toggle="collapse" data-target="#collapse_ayudante" aria-expanded="false"
-                                aria-controls="collapse_ayudante"><i
-                                    class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
-                                AYUDANTE DENTAL
-                            </button>
+                            <button class="btn btn-light btn-block text-left collapsed {{ $clase }}" type="button"
+                            @if($clase == 'desactivado') disabled @endif
+                            data-toggle="collapse" data-target="#collapse_ayudante"
+                            aria-expanded="false" aria-controls="collapse_ayudante">
+                            <i class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                            AYUDANTE DENTAL
+                        </button>
                         </h2>
                     </div>
                     <div id="collapse_ayudante" class="collapse" aria-labelledby="heading_ayudante"
                         data-parent="#accordion_side_bar">
                         <div class="card-body-sidebar">
                             <button type="button"
-                                class="btn btn-sm btn-info btn-block accion_modal_gastosmaterial_gen">GASTO
+                                class="btn btn-sm btn-info btn-block accion_modal_gastosmaterial_gen {{ $clase }}">GASTO
                                 MATERIALES</button>
                             <button type="button"
-                                class="btn btn-sm btn-info btn-block accion_modal_control_trabajo">CONTROL DE ENVIOS A
+                                class="btn btn-sm btn-info btn-block accion_modal_control_trabajo {{ $clase }}">CONTROL DE ENVIOS A
                                 LABORATORIO</button>
                                 <button type="button"
-                                class="btn btn-sm btn-info btn-block accion_modal_pedido_insumos">PEDIDO
+                                class="btn btn-sm btn-info btn-block accion_modal_pedido_insumos {{ $clase }}">PEDIDO
                                 INSUMOS</button>
                             <button type="button"
-                                class="btn btn-sm btn-info btn-block accion_modal_pedido_materiales">PEDIDO
+                                class="btn btn-sm btn-info btn-block accion_modal_pedido_materiales {{ $clase }}">PEDIDO
                                 MATERIALES</button>
                         </div>
                     </div>

@@ -1,341 +1,343 @@
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-0 px-1">
         <div class="row mx-0">
-
-            <div class="col-sm-12 col-md-12">
-                <ul class="nav nav-tabs-secciones mb-3 mt-3" id="uro" role="tablist">
-                    <li class="nav-item-secciones">
-                        <a class="nav-secciones active text-uppercase" id="atencion_uro-tab" data-toggle="tab" href="#atencion_uro" role="tab" aria-controls="atencion_uro" aria-selected="true">Atención Especialidad</a>
-                    </li>
-                    <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="cisto-tab" data-toggle="tab" href="#cisto" role="tab" aria-controls="cisto" aria-selected="false">Cistoscopía</a>
-                    </li>
-                    <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="uroflujo-tab" data-toggle="tab" href="#uroflujo" role="tab" aria-controls="uroflujo" aria-selected="false">Uroflujometría</a>
-                    </li>
-                    <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="in-ven-urologia-tab" data-toggle="tab" href="#in-ven-urologia" role="tab" aria-controls="in-ven-urologia" aria-selected="false">Venéreas</a>
-                    </li>
-                </ul>
-            </div>
-
-            <!--ALERTA-->
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert"><strong>Solo el campo DIAGNÓSTICO ES OBLIGATORIO, el resto es opcional</strong>
-                </div>
-            </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <ul class="nav nav-tabs-secciones mb-3 mt-3" id="uro" role="tablist">
+                            <li class="nav-item-secciones">
+                                <a class="nav-secciones active text-uppercase" id="atencion_uro-tab" data-toggle="tab" href="#atencion_uro" role="tab" aria-controls="atencion_uro" aria-selected="true">Atención Especialidad</a>
+                            </li>
+                            <li class="nav-item-secciones">
+                                <a class="nav-secciones text-uppercase" id="cisto-tab" data-toggle="tab" href="#cisto" role="tab" aria-controls="cisto" aria-selected="false">Cistoscopía</a>
+                            </li>
+                            <li class="nav-item-secciones">
+                                <a class="nav-secciones text-uppercase" id="uroflujo-tab" data-toggle="tab" href="#uroflujo" role="tab" aria-controls="uroflujo" aria-selected="false">Uroflujometría</a>
+                            </li>
+                            <li class="nav-item-secciones">
+                                <a class="nav-secciones text-uppercase" id="in-ven-urologia-tab" data-toggle="tab" href="#in-ven-urologia" role="tab" aria-controls="in-ven-urologia" aria-selected="false">Venéreas</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--ALERTA-->
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                        <div class="alert-atencion alert alert-success alert-dismissible fade show" role="alert" id="mensaje_historias"></div>
+                    </div>
 
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <form action="{{ route('fichaAtencion.registrar_ficha_uro') }}" method="POST">
-                    <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
-                    <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
-                    <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
-                    <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
-                    <input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">
-                    <input type="hidden" name="id_paciente_fc" value="{{ $paciente->id }}" id="id_paciente_fc">
-                    <input type="hidden" name="rut_paciente_fc" value="{{ $paciente->rut }}" id="rut_paciente_fc">
-                    <input type="hidden" name="prevision_paciente_fc" value="{{ $paciente->prevision->id }}" id="prevision_paciente_fc">
-                    <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
-                    <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
-                    <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
-                    <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
-                    <input type="hidden" name="tipo_examen_especial" id="tipo_examen_especial" value="{{ $lista_examen_especial }}">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <form action="{{ route('fichaAtencion.registrar_ficha_uro') }}" method="POST">
+                            <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
+                            <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
+                            <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">
+                            <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
+                            <input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">
+                            <input type="hidden" name="id_paciente_fc" value="{{ $paciente->id }}" id="id_paciente_fc">
+                            <input type="hidden" name="rut_paciente_fc" value="{{ $paciente->rut }}" id="rut_paciente_fc">
+                            <input type="hidden" name="prevision_paciente_fc" value="{{ $paciente->prevision->id }}" id="prevision_paciente_fc">
+                            <input type="hidden" name="id_profesional_fc" value="{{ $profesional->id }}" id="id_profesional_fc">
+                            <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $id_lugar_atencion }}">
+                            <input type="hidden" name="cerrarsession" id="cerrarsession" value="0">
+                            <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">
+                            <input type="hidden" name="tipo_examen_especial" id="tipo_examen_especial" value="{{ $lista_examen_especial }}">
 
-                    @php
-                        /** carga de id examen de espcialidad tipo  */
-                        $temp = $lista_examen_especial;
+                            @php
+                                /** carga de id examen de espcialidad tipo  */
+                                $temp = $lista_examen_especial;
 
-                        $array_temp = explode('|',$temp);
-                        $array_temp2 = array();
-                        foreach($array_temp as $key=>$value)
-                        {
-                            $array_temp2[] = explode(',',$value);
-                        }
-                        $array_examen_especialidad_tipo = array();
-                        foreach($array_temp2 as $key=>$value)
-                        {
-                            $array_examen_especialidad_tipo[$value[0]] = $value[1];
-                        }
-                    @endphp
+                                $array_temp = explode('|',$temp);
+                                $array_temp2 = array();
+                                foreach($array_temp as $key=>$value)
+                                {
+                                    $array_temp2[] = explode(',',$value);
+                                }
+                                $array_examen_especialidad_tipo = array();
+                                foreach($array_temp2 as $key=>$value)
+                                {
+                                    $array_examen_especialidad_tipo[$value[0]] = $value[1];
+                                }
+                            @endphp
 
-                    @csrf
-                    <div class="tab-content" id="uro-contenido">
-                        <!--ATENCIÓN ESPECIALIDAD GENERAL-->
-                        <div class="tab-pane fade show active" id="atencion_uro" role="tabpanel" aria-labelledby="atencion_uro-tab">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <!--FORMULARIOS-->
+                            @csrf
+                            <div class="tab-content" id="uro-contenido">
+                                <!--ATENCIÓN ESPECIALIDAD GENERAL-->
+                                <div class="tab-pane fade show active" id="atencion_uro" role="tabpanel" aria-labelledby="atencion_uro-tab">
                                     <div class="row">
-
-                                        <!--Formulario / Menor de edad-->
-                                        @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
-                                        <!--Cierre: Formulario / Menor de edad-->
-
-                                        <!--Motivo consulta-->
-                                        @include('general.secciones_ficha.motivo')
-
-                                        <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="card-a">
-                                                <div class="card-header-a" id="exam_esp_urol">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_urol_c" aria-expanded="false" aria-controls="exam_esp_urol_c">
-                                                        Examen especialidad Urología
-                                                    </button>
-                                                </div>
-                                                <div id="exam_esp_urol_c" class="collapse" aria-labelledby="exam_esp_urol" data-parent="#exam_esp_urol">
-                                                    <div class="card-body-aten-a">
-                                                        <div class="row">
-                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                <ul class="nav nav-tabs-aten nav-fill" id="cir_dig" role="tablist">
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link-aten text-reset active" id="uro_sint_tab" data-toggle="tab" href="#uro_sint" role="tab" aria-controls="uro_sint" aria-selected="true">Examen general</a>
-                                                                    </li>
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link-aten text-reset" id="uro_dg_tab" data-toggle="tab" href="#uro_dg" role="tab" aria-controls="uro_dg" aria-selected="true">Lab.y fotos Especialidad</a>
-                                                                    </li>
-                                                                    <li class="nav-item">
-                                                                        <a class="nav-link-aten text-reset" id="ex_plan_tto-tab" data-toggle="tab" href="#ex_plan_tto" role="tab" aria-controls="ex_plan_tto" aria-selected="true">Plan de tratamiento</a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                <div class="tab-content" id="urologia">
-                                                                    <!--SINTOMAS GENERALES-->
-                                                                    <div class="tab-pane fade show active" id="uro_sint" role="tabpanel" aria-labelledby="uro_sint_tab">
-                                                                        <div class="row">
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <div class="tab-content" id="v-pills-tabContent">
-                                                                                    <div class="tab-pane fade show active" id="sint_dol" role="tabpanel" aria-labelledby="sint_dol-tab">
-                                                                                        <div id="form-cdb">
-                                                                                            <div class="form-row">
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-2">
-                                                                                                    <h6 class="t-aten">Examen general</h6>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="form-row">
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm" for="mc_ex_fisico_cons">Motivo de consulta y Examen general </label>
-                                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="2"  onfocus="this.rows=3" onblur="this.rows=2;" data-titulo="Motivo de consulta y Examen general" data-seccion="Urología" data-tipo="urología" name="mc_ex_fisico_cons" id="mc_ex_fisico_cons" placeholder="ZONA DOLOROSA, CUANDO DUELE, CEG,EXAMEN DEABDOMEN INGLE Y ZONA COSTO-VERTEBRAL "></textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm" for="uro_gen_ext">Examen físico - Genitales Externos</label>
-                                                                                                        <textarea class="form-control caja-texto form-control-sm"rows="2"  onfocus="this.rows=3" onblur="this.rows=2;" data-titulo="Examen físico - Genitales Externos" data-seccion="Urología" data-tipo="urología"  onfocus="this.rows=3" onblur="this.rows=2;" name="uro_gen_ext" id="uro_gen_ext" placeholder="URETRA, PRESENCIA DE SANGRE,GENITALES INTERNOS"></textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm" for="uro_gen_int">Examen físico - Genitales Internos</label>
-                                                                                                        <textarea class="form-control caja-texto form-control-sm" rows="2"  onfocus="this.rows=3" onblur="this.rows=2;" data-titulo="Examen físico - Genitales Internos" data-seccion="Urología" data-tipo="urología" name="uro_gen_int" id="uro_gen_int" placeholder="TACTO RECTAL, ESPECULOSCOPÍA OTROS HALLAZGOS"></textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm" for="urgencia_uro">Es Urgencia Qx.?</label>
-                                                                                                        <select name="urgencia_uro" id="urgencia_uro" data-titulo="Es Urgencia Qx.?" data-seccion="Urología" data-tipo="urología" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_uro','div_detalle_urgencia_uro','obs_urgencia_uro',2);">
-                                                                                                            <option value="1" selected>No</option>
-                                                                                                            <option value="2">Si</option>
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-md-8 col-lg-8">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm" for="obs_egp_uro">Estado General del Paciente</label>
-                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado General del Paciente" data-seccion="Urología" data-tipo="urología" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_uro" id="obs_egp_uro" placeholder="ANOTE APRECIACIÓN SOBRE ESTADO GENERAL DEL PACIENTE"></textarea>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="form-row mb-1"  id="div_detalle_urgencia_uro" style="display:none">
-                                                                                                <div class="col-sm-12 col-md-12 col-md-6 col-lg-6 mb-2">
-                                                                                                    <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="ingresohosp()" ;=""><i class="feather icon-file"></i> Orden de Hospitalización </button>
-                                                                                                </div>
-                                                                                                <div class="col-sm-12 col-md-12 col-md-6 col-lg-6">
-                                                                                                    <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_pabellon()" ;=""><i class="feather icon-file"></i> Solicitar Pabellón</button>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <hr>
-                                                                                            <div class="row mb-2">
-                                                                                                <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                                    <div class="form-group">
-                                                                                                        <label class="floating-label-activo-sm"> Carga Ficha Tipo</label>
-                                                                                                        <select class="form-control form-control-sm" id="select_ficha_tipo_ex_especialidad_cdg" onchange="cargar_info_ficha_tipo_cdg('select_ficha_tipo_ex_especialidad_cdg','descripcion_ficha_tipo_ex_especialidad_cdg');">
-                                                                                                            <option value="">Seleccione</option>
-                                                                                                            @if(!empty($fichaTipo['cdg']))
-                                                                                                                @foreach ($fichaTipo['cdg'] as $ft )
-                                                                                                                    <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
-                                                                                                                @endforeach
-                                                                                                            @endif
-                                                                                                        </select>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div class="col-sm-4 col-md-4">
-                                                                                                    <span id="descripcion_ficha_tipo_ex_especialidad_cdb"></span>
-                                                                                                </div>
-                                                                                                <div class="col-sm-4 col-md-4">
-                                                                                                    <button type="button" class="btn btn-sm btn-block btn-info-light-c" onclick="abrir_modal_guardar_tipo('form-cdb','registro_f_t_cg_detalle','cdg');"><i class="feather icon-save"></i> Guardar Nueva Ficha Tipo <span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -30.5938px; left: 13.625px;"></span></button>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!--LAB. ESPECIALIDAD-->
-                                                                    <div class="tab-pane fade" id="uro_dg" role="tabpanel" aria-labelledby="uro_dg_tab">
-                                                                        <div class="form-row mt-2">
-                                                                            <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                                                                                <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                                                                    <a class="nav-link-aten text-reset" id="est_mic_uro-tab" data-toggle="tab" href="#est_mic_uro" role="tab" aria-controls="est_mic_uro" aria-selected="false">Ex. Especialidad</a>
-                                                                                    <a class="nav-link-aten text-reset" id="fotos_uro-tab" data-toggle="tab" href="#fotos_uro" role="tab" aria-controls="fotos_uro" aria-selected="false">Fotos</a>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
-                                                                                <div class="tab-content" id="v-pills-tabContent">
-                                                                                    <div class="tab-pane fade show active" id="est_mic_uro" role="tabpanel" aria-labelledby="est_mic_uro-tab">
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                <h6 class="t-aten">Exámen especialidad</h6>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-md-12">
-                                                                                                <div class="form-group" id="div_detalle_transito_intest" >
-                                                                                                    <label class="floating-label-activo-sm" for="uro_res_exam">Estudios de Lab. resultado exámenes</label>
-                                                                                                    <textarea class="form-control caja-texto form-control-sm" rows="2"  onfocus="this.rows=3" onblur="this.rows=2;" data-titulo="Estudios de Lab. resultado exámenes" data-seccion="Urología" data-tipo="urología" name="uro_res_exam" id="uro_res_exam" placeholder="ESTUDIO HORMONAL ANTIGENO PROSTÁTICO OTROS EXÁMENES"></textarea>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
-                                                                                                <div class="form-group">
-                                                                                                    <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_cistoscopia()";><i class="feather icon-edit-1"></i> Solicitar Cistoscopía</button>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                <div class="form-group">
-                                                                                                    <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_urodin()";><i class="feather icon-edit-1"></i> Solicitar Est. Urodinámico</button>
-                                                                                                </div>
-                                                                                            </div>
+                                            <!--FORMULARIOS-->
+                                            <div class="row">
 
-                                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                <div class="form-group">
-                                                                                                     <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_esp_uro()";><i class="feather icon-edit-1"></i> Solicitar Est.Hormonal</button>
+                                                <!--Formulario / Menor de edad-->
+                                                @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
+                                                <!--Cierre: Formulario / Menor de edad-->
+
+                                                <!--Motivo consulta-->
+                                                @include('general.secciones_ficha.motivo')
+
+                                                <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-a">
+                                                        <div class="card-header-a" id="exam_esp_urol">
+                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_urol_c" aria-expanded="false" aria-controls="exam_esp_urol_c">
+                                                                Examen especialidad Urología
+                                                            </button>
+                                                        </div>
+                                                        <div id="exam_esp_urol_c" class="collapse" aria-labelledby="exam_esp_urol" data-parent="#exam_esp_urol">
+                                                            <div class="card-body-aten-a">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                        <ul class="nav nav-tabs-aten nav-fill" id="cir_dig" role="tablist">
+                                                                            <li class="nav-item">
+                                                                                <a class="nav-link-aten text-reset active" id="uro_sint_tab" data-toggle="tab" href="#uro_sint" role="tab" aria-controls="uro_sint" aria-selected="true">Examen general</a>
+                                                                            </li>
+                                                                            <li class="nav-item">
+                                                                                <a class="nav-link-aten text-reset" id="uro_dg_tab" data-toggle="tab" href="#uro_dg" role="tab" aria-controls="uro_dg" aria-selected="true">Lab.y fotos Especialidad</a>
+                                                                            </li>
+                                                                            <li class="nav-item">
+                                                                                <a class="nav-link-aten text-reset" id="ex_plan_tto-tab" data-toggle="tab" href="#ex_plan_tto" role="tab" aria-controls="ex_plan_tto" aria-selected="true">Plan de tratamiento</a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                        <div class="tab-content" id="urologia">
+                                                                        SINTOMAS GENERALES
+                                                                            <div class="tab-pane fade show active" id="uro_sint" role="tabpanel" aria-labelledby="uro_sint_tab">
+                                                                                <div class="row">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div class="tab-content" id="v-pills-tabContent">
+                                                                                            <div class="tab-pane fade show active" id="sint_dol" role="tabpanel" aria-labelledby="sint_dol-tab">
+                                                                                                <div id="form-cdb">
+                                                                                                    <div class="form-row">
+                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-2">
+                                                                                                            <h6 class="t-aten">Examen general</h6>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="form-row">
+                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="floating-label-activo-sm" for="mc_ex_fisico_cons">Motivo de consulta y Examen general </label>
+                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="2"  onfocus="this.rows=3" onblur="this.rows=2;" data-titulo="Motivo de consulta y Examen general" data-seccion="Urología" data-tipo="urología" name="mc_ex_fisico_cons" id="mc_ex_fisico_cons" placeholder="ZONA DOLOROSA, CUANDO DUELE, CEG,EXAMEN DEABDOMEN INGLE Y ZONA COSTO-VERTEBRAL "></textarea>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="floating-label-activo-sm" for="uro_gen_ext">Examen físico - Genitales Externos</label>
+                                                                                                                <textarea class="form-control caja-texto form-control-sm"rows="2"  onfocus="this.rows=3" onblur="this.rows=2;" data-titulo="Examen físico - Genitales Externos" data-seccion="Urología" data-tipo="urología"  onfocus="this.rows=3" onblur="this.rows=2;" name="uro_gen_ext" id="uro_gen_ext" placeholder="URETRA, PRESENCIA DE SANGRE,GENITALES INTERNOS"></textarea>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="floating-label-activo-sm" for="uro_gen_int">Examen físico - Genitales Internos</label>
+                                                                                                                <textarea class="form-control caja-texto form-control-sm" rows="2"  onfocus="this.rows=3" onblur="this.rows=2;" data-titulo="Examen físico - Genitales Internos" data-seccion="Urología" data-tipo="urología" name="uro_gen_int" id="uro_gen_int" placeholder="TACTO RECTAL, ESPECULOSCOPÍA OTROS HALLAZGOS"></textarea>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="floating-label-activo-sm" for="urgencia_uro">Es Urgencia Qx.?</label>
+                                                                                                                <select name="urgencia_uro" id="urgencia_uro" data-titulo="Es Urgencia Qx.?" data-seccion="Urología" data-tipo="urología" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_uro','div_detalle_urgencia_uro','obs_urgencia_uro',2);">
+                                                                                                                    <option value="1" selected>No</option>
+                                                                                                                    <option value="2">Si</option>
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-12 col-md-8 col-lg-8">
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="floating-label-activo-sm" for="obs_egp_uro">Estado General del Paciente</label>
+                                                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado General del Paciente" data-seccion="Urología" data-tipo="urología" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_uro" id="obs_egp_uro" placeholder="ANOTE APRECIACIÓN SOBRE ESTADO GENERAL DEL PACIENTE"></textarea>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="form-row mb-1"  id="div_detalle_urgencia_uro" style="display:none">
+                                                                                                        <div class="col-sm-12 col-md-12 col-md-6 col-lg-6 mb-2">
+                                                                                                            <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="ingresohosp()" ;=""><i class="feather icon-file"></i> Orden de Hospitalización </button>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-12 col-md-12 col-md-6 col-lg-6">
+                                                                                                            <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_pabellon()" ;=""><i class="feather icon-file"></i> Solicitar Pabellón</button>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <hr>
+                                                                                                    <div class="row mb-2">
+                                                                                                        <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                                                                            <div class="form-group">
+                                                                                                                <label class="floating-label-activo-sm"> Carga Ficha Tipo</label>
+                                                                                                                <select class="form-control form-control-sm" id="select_ficha_tipo_ex_especialidad_cdg" onchange="cargar_info_ficha_tipo_cdg('select_ficha_tipo_ex_especialidad_cdg','descripcion_ficha_tipo_ex_especialidad_cdg');">
+                                                                                                                    <option value="">Seleccione</option>
+                                                                                                                    @if(!empty($fichaTipo['cdg']))
+                                                                                                                        @foreach ($fichaTipo['cdg'] as $ft )
+                                                                                                                            <option value="{{ $ft->id }}" data-descripcion="{{ $ft->descripcion }}">{{ $ft->nombre }}</option>
+                                                                                                                        @endforeach
+                                                                                                                    @endif
+                                                                                                                </select>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-4 col-md-4">
+                                                                                                            <span id="descripcion_ficha_tipo_ex_especialidad_cdb"></span>
+                                                                                                        </div>
+                                                                                                        <div class="col-sm-4 col-md-4">
+                                                                                                            <button type="button" class="btn btn-sm btn-block btn-info-light-c" onclick="abrir_modal_guardar_tipo('form-cdb','registro_f_t_cg_detalle','cdg');"><i class="feather icon-save"></i> Guardar Nueva Ficha Tipo <span class="ripple ripple-animate" style="height: 99.2656px; width: 99.2656px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -30.5938px; left: 13.625px;"></span></button>
+                                                                                                        </div>
+                                                                                                    </div>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-sm-12 col-md-12">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            LAB. ESPECIALIDAD
+                                                                            <div class="tab-pane fade" id="uro_dg" role="tabpanel" aria-labelledby="uro_dg_tab">
+                                                                                <div class="form-row mt-2">
+                                                                                    <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
+                                                                                        <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                                                                            <a class="nav-link-aten text-reset" id="est_mic_uro-tab" data-toggle="tab" href="#est_mic_uro" role="tab" aria-controls="est_mic_uro" aria-selected="false">Ex. Especialidad</a>
+                                                                                            <a class="nav-link-aten text-reset" id="fotos_uro-tab" data-toggle="tab" href="#fotos_uro" role="tab" aria-controls="fotos_uro" aria-selected="false">Fotos</a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-10 col-lg-10 col-xl-10">
+                                                                                        <div class="tab-content" id="v-pills-tabContent">
+                                                                                            <div class="tab-pane fade show active" id="est_mic_uro" role="tabpanel" aria-labelledby="est_mic_uro-tab">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                        <h6 class="t-aten">Exámen especialidad</h6>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-md-12">
+                                                                                                        <div class="form-group" id="div_detalle_transito_intest" >
+                                                                                                            <label class="floating-label-activo-sm" for="uro_res_exam">Estudios de Lab. resultado exámenes</label>
+                                                                                                            <textarea class="form-control caja-texto form-control-sm" rows="2"  onfocus="this.rows=3" onblur="this.rows=2;" data-titulo="Estudios de Lab. resultado exámenes" data-seccion="Urología" data-tipo="urología" name="uro_res_exam" id="uro_res_exam" placeholder="ESTUDIO HORMONAL ANTIGENO PROSTÁTICO OTROS EXÁMENES"></textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 ">
+                                                                                                        <div class="form-group">
+                                                                                                            <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_cistoscopia()";><i class="feather icon-edit-1"></i> Solicitar Cistoscopía</button>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_urodin()";><i class="feather icon-edit-1"></i> Solicitar Est. Urodinámico</button>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                                                                        <div class="form-group">
+                                                                                                            <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_esp_uro()";><i class="feather icon-edit-1"></i> Solicitar Est.Hormonal</button>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-sm-12 col-md-12">
+                                                                                                    <div class="form-row">
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="tab-pane fade" id="fotos_uro" role="tabpanel" aria-labelledby="fotos_uro-tab">
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                        <h6 class="t-aten">Fotos</h6>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="form-row">
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                                                                                                        <p class="f-12 mb-0 font-weight-bold" style="text-align:center">Imagenes pre</p>
+                                                                                                        <input type="hidden" name="imagen_uro_pre" id="imagen_uro_pre" value="">
+                                                                                                        <div class="dropzone" id="mi-imagen-uro-pre" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                                    </div>
+                                                                                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
+                                                                                                        <p class="f-12 mb-0 font-weight-bold"style="text-align:center"> Imagenes post</p>
+                                                                                                        <input type="hidden" name="imagen_uro_post" id="imagen_uro_post" value="">
+                                                                                                        <div class="dropzone" id="mi-imagen-uro-post" action="{{ route('profesional.imagen.carga') }}"></div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="form-row">
+                                                                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                        <label class="floating-label-activo-sm" for="obs_fotos_uro">Comentarios</label>
+                                                                                                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" data-titulo="Comentarios" data-seccion="Urología" data-tipo="urología" name="obs_fotos_uro" id="obs_fotos_uro"></textarea>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            PLAN DE TRATAMIENTO
+                                                                            <div class="tab-pane fade show" id="ex_plan_tto" role="tabpanel" aria-labelledby="ex_plan_tto-tab">
+                                                                                <script type="text/javascript">
+                                                                                    $(document).ready(function() {
+                                                                                        });
+                                                                                </script>
+                                                                                <div class="form-row mt-2">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0">
+                                                                                        <h6 class="t-aten">Plan de Tratamiento</h6>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 mt-0">
+                                                                                        <label class="ml-0"><strong>Tratamiento médico</strong></label>
+                                                                                        <div class="switch switch-success d-inline m-r-10">
+                                                                                            <input type="checkbox" id="tto_uro" name="tto_uro" value="1" onchange="javascript:showContenturo()" />
+                                                                                            <label for="tto_uro" class="cr"></label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div id="contentTto_uro" style="display: none;">
                                                                                             <div class="form-row">
+                                                                                                <div class="form-group col-md-12 mt-1">
+                                                                                                    <label class="floating-label-activo-sm" for="rec_tto_uro">Recomendaciones</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Recomendaciones" data-seccion="Urología" data-tipo="urología"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="rec_tto_uro" id="rec_tto_uro"></textarea>
+                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="tab-pane fade" id="fotos_uro" role="tabpanel" aria-labelledby="fotos_uro-tab">
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                <h6 class="t-aten">Fotos</h6>
+                                                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 mt-0">
+                                                                                        <label class="ml-0"><strong>Procedimiento</strong></label>
+                                                                                        <div class="switch switch-success d-inline m-r-10">
+                                                                                            <input type="checkbox" id="pr_uro" name="pr_uro" value="1" onchange="javascript: showContentProc_uro()" />
+                                                                                            <label for="pr_uro" class="cr"></label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div id="contentProc_uro" style="display: none;">
+                                                                                            <div class="form-row">
+                                                                                                <div class="form-group col-md-4">
+                                                                                                    <label class="floating-label-activo-sm" for="tipo_proc_uro"> Tipo</label>
+                                                                                                    <input type="text" class="form-control form-control-sm" name="tipo_proc_uro" id="tipo_proc_uro">
+                                                                                                </div>
+                                                                                                <div class="form-group col-md-8">
+                                                                                                    <label class="floating-label-activo-sm" for="plan_proc_uro"> Plan</label>
+                                                                                                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Procedimiento" data-seccion="Tipo Procedimiento" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="plan_proc_uro" id="plan_proc_uro"></textarea>
+                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="form-row">
-                                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
-                                                                                                <p class="f-12 mb-0 font-weight-bold" style="text-align:center">Imagenes pre</p>
-                                                                                                <input type="hidden" name="imagen_uro_pre" id="imagen_uro_pre" value="">
-                                                                                                <div class="dropzone" id="mi-imagen-uro-pre" action="{{ route('profesional.imagen.carga') }}"></div>
-                                                                                            </div>
-                                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-3">
-                                                                                                <p class="f-12 mb-0 font-weight-bold"style="text-align:center"> Imagenes post</p>
-                                                                                                <input type="hidden" name="imagen_uro_post" id="imagen_uro_post" value="">
-                                                                                                <div class="dropzone" id="mi-imagen-uro-post" action="{{ route('profesional.imagen.carga') }}"></div>
-                                                                                            </div>
+                                                                                    </div>
+                                                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0">
+                                                                                        <label class="ml-0"><strong>Cirugía</strong></label>
+                                                                                        <div class="switch switch-success d-inline m-r-10">
+                                                                                            <input type="checkbox" class="custom-control-input" id="urogen_cir" name="urogen_cir" value="{!! old('urogen_cir') !!}">
+                                                                                            <label class="cr" for="urogen_cir"></label>
                                                                                         </div>
-                                                                                        <div class="form-row">
-                                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                <label class="floating-label-activo-sm" for="obs_fotos_uro">Comentarios</label>
-                                                                                                <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" data-titulo="Comentarios" data-seccion="Urología" data-tipo="urología" name="obs_fotos_uro" id="obs_fotos_uro"></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div id="contentTto_uro" style="display: none;">
+                                                                                            <div class="form-row">
+                                                                                                <div class="form-group col-md-12">
+                                                                                                    <h6 class="text-center">Tratamiento médico</h6>
+                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!--PLAN DE TRATAMIENTO-->
-                                                                    <div class="tab-pane fade show" id="ex_plan_tto" role="tabpanel" aria-labelledby="ex_plan_tto-tab">
-                                                                        <script type="text/javascript">
-                                                                               $(document).ready(function() {
-                                                                                });
-                                                                        </script>
-                                                                        <div class="form-row mt-2">
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0">
-                                                                                <h6 class="t-aten">Plan de Tratamiento</h6>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-row">
-                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 mt-0">
-                                                                                <label class="ml-0"><strong>Tratamiento médico</strong></label>
-                                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                                    <input type="checkbox" id="tto_uro" name="tto_uro" value="1" onchange="javascript:showContenturo()" />
-                                                                                    <label for="tto_uro" class="cr"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <div id="contentTto_uro" style="display: none;">
-                                                                                    <div class="form-row">
-                                                                                        <div class="form-group col-md-12 mt-1">
-                                                                                            <label class="floating-label-activo-sm" for="rec_tto_uro">Recomendaciones</label>
-                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Recomendaciones" data-seccion="Urología" data-tipo="urología"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="rec_tto_uro" id="rec_tto_uro"></textarea>
-                                                                                        </div>
+                                                                                <hr>
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <label class="floating-label-activo-sm" for="obs_gen_plan_tto">Obs. Plan de tratamiento</label>
+                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Plan de tratamiento" data-seccion=" Plan de tratamiento" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_gen_plan_tto" id="obs_gen_plan_tto"></textarea>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
-                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 mt-0">
-                                                                                <label class="ml-0"><strong>Procedimiento</strong></label>
-                                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                                    <input type="checkbox" id="pr_uro" name="pr_uro" value="1" onchange="javascript: showContentProc_uro()" />
-                                                                                    <label for="pr_uro" class="cr"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <div id="contentProc_uro" style="display: none;">
-                                                                                    <div class="form-row">
-                                                                                        <div class="form-group col-md-4">
-                                                                                            <label class="floating-label-activo-sm" for="tipo_proc_uro"> Tipo</label>
-                                                                                            <input type="text" class="form-control form-control-sm" name="tipo_proc_uro" id="tipo_proc_uro">
-                                                                                        </div>
-                                                                                        <div class="form-group col-md-8">
-                                                                                            <label class="floating-label-activo-sm" for="plan_proc_uro"> Plan</label>
-                                                                                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Procedimiento" data-seccion="Tipo Procedimiento" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="plan_proc_uro" id="plan_proc_uro"></textarea>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0">
-                                                                                <label class="ml-0"><strong>Cirugía</strong></label>
-                                                                                <div class="switch switch-success d-inline m-r-10">
-                                                                                    <input type="checkbox" class="custom-control-input" id="urogen_cir" name="urogen_cir" value="{!! old('urogen_cir') !!}">
-                                                                                    <label class="cr" for="urogen_cir"></label>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-row">
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <div id="contentTto_uro" style="display: none;">
-                                                                                    <div class="form-row">
-                                                                                        <div class="form-group col-md-12">
-                                                                                            <h6 class="text-center">Tratamiento médico</h6>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <hr>
-                                                                        <div class="form-row">
-                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <label class="floating-label-activo-sm" for="obs_gen_plan_tto">Obs. Plan de tratamiento</label>
-                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Plan de tratamiento" data-seccion=" Plan de tratamiento" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_gen_plan_tto" id="obs_gen_plan_tto"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -343,117 +345,117 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                </div>-->
 
-                                        <!-- hospitalizar -->
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="card-a">
-                                                <div class="card-header-a" id="hospitalizar_paciente">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open " type="button" data-toggle="collapse" data-target="#hospitalizar_paciente-c" aria-expanded="false" aria-controls="hospitalizar_paciente-c">
-                                                        Hospitalizar Paciente
-                                                    </button>
-                                                </div>
-                                                <div id="hospitalizar_paciente-c" class="collapse" aria-labelledby="hospitalizar_paciente" data-parent="#hospitalizar_paciente">
-                                                    <div class="card-body-aten-a shadow-none">
-                                                        @include('general.hospitalizacion.hospitalizar')
+                                                {{-- hospitalizar 
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-a">
+                                                        <div class="card-header-a" id="hospitalizar_paciente">
+                                                            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open " type="button" data-toggle="collapse" data-target="#hospitalizar_paciente-c" aria-expanded="false" aria-controls="hospitalizar_paciente-c">
+                                                                Hospitalizar Paciente
+                                                            </button>
+                                                        </div>
+                                                        <div id="hospitalizar_paciente-c" class="collapse" aria-labelledby="hospitalizar_paciente" data-parent="#hospitalizar_paciente">
+                                                            <div class="card-body-aten-a shadow-none">
+                                                                @include('general.hospitalizacion.hospitalizar')
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>--}}
+
+                                                {{--
+                                                @include('general.secciones_ficha.control_cirugia_gen')
+                                                cierre control post qx --}}
+
+                                                <!--Formulario / Signos vitales y otros-->
+                                                {{-- @include('general.secciones_ficha.signos_vitales') --}}
+                                                <!--Cierre: Formulario / Signos vitales y otros-->
+
+                                                <!-- ENFERMO CRÓNICO O GES -->
+                                                @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                                                <!-- CIERRE ENFERMO CRÓNICO O GES -->
+
+                                                <!-- Diagnóstico -->
+                                                @include('general.secciones_ficha.diagnostico')
+                                                <!-- cierre Diagnóstico -->
+
+                                                {{--  div de botones  --}}
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
+                                                            @include('general.secciones_ficha.seccion_receta_examen_comunes')
+                                                            <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
 
-                                        <!-- control post qx -->
-                                        @include('general.secciones_ficha.control_cirugia_gen')
-										<!-- cierre control post qx -->
-
-                                        <!--Formulario / Signos vitales y otros-->
-                                         {{-- @include('general.secciones_ficha.signos_vitales') --}}
-                                        <!--Cierre: Formulario / Signos vitales y otros-->
-
-                                        <!-- ENFERMO CRÓNICO O GES -->
-                                        @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
-                                        <!-- CIERRE ENFERMO CRÓNICO O GES -->
-
-                                        <!-- Diagnóstico -->
-                                        @include('general.secciones_ficha.diagnostico')
-                                        <!-- cierre Diagnóstico -->
-
-                                        {{--  div de botones  --}}
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES -->
-                                                    @include('general.secciones_ficha.seccion_receta_examen_comunes')
-                                                    <!--SECCION DE MEDICAMENTOS Y EXAMENES GENERALES FIN  -->
+                                                <div class="col-md-12 text-center">
+                                                    <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
+                                                    <input type="submit" class="btn btn-purple mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    <!--GUARDAR O IMPRIMIR FICHA-->
+                                </div>
+                                <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
 
-                                        <div class="col-md-12 text-center">
-                                            <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
-                                            <input type="submit" class="btn btn-purple mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
+
+                                <!-- CISTOSCOPÍA-->
+                                <div class="tab-pane fade" id="cisto" role="tabpanel" aria-labelledby="cisto-tab">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <h6 class="tit-gen">Citoscopía</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row div_form_examen_cisto">
+                                        <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_cisto" id="id_examen_especialidad_tipo_cisto" value="{{ $array_examen_especialidad_tipo['cisto'] }}">
+                                        {!! $examen['cisto'] !!}
+                                    </div>
+                                    <!--GUARDAR EXAMEN-->
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
+                                            <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar e ir a su Agenda">
+                                            <button type="button" class="btn btn-secondary mt-1" onclick="visualizar_pdf_examen('cisto');">Ver Examen PDF</button>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--GUARDAR O IMPRIMIR FICHA-->
-                        </div>
-                        <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
+                                <!--CIERRE: CISTOSCOPÍA-->
 
+                                <!--UROFLUJO-->
+                                <div class="tab-pane fade" id="uroflujo" role="tabpanel" aria-labelledby="uroflujo-tab">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <h6 class="tit-gen">Uroflujometría</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row div_form_examen_uro_flujo">
+                                        <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_uro_flujo" id="id_examen_especialidad_tipo_uro_flujo" value="{{ $array_examen_especialidad_tipo['uro_flujo'] }}">
+                                        {!! $examen['uro_flujo'] !!}
+                                    </div>
+                                    <!--GUARDAR EXAMEN-->
+                                    <div class="row">
+                                        <div class="col-md-12 text-center mb-3">
+                                            <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
+                                            <button type="button" class="btn btn-secondary mt-1" onclick="visualizar_pdf_examen('uro_flujo');">Ver Examen PDF</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--CIERRE UROFLUJO-->
 
-                        <!-- CISTOSCOPÍA-->
-						<div class="tab-pane fade" id="cisto" role="tabpanel" aria-labelledby="cisto-tab">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <h6 class="tit-gen">Citoscopía</h6>
+                                <div class="tab-pane fade" id="in-ven-urologia" role="tabpanel" aria-labelledby="in-ven-urologia-tab">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            @include('general.venereas.venereas')
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row div_form_examen_cisto">
-                                <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_cisto" id="id_examen_especialidad_tipo_cisto" value="{{ $array_examen_especialidad_tipo['cisto'] }}">
-                                {!! $examen['cisto'] !!}
-                            </div>
-                            <!--GUARDAR EXAMEN-->
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
-                                    <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar e ir a su Agenda">
-                                    <button type="button" class="btn btn-secondary mt-1" onclick="visualizar_pdf_examen('cisto');">Ver Examen PDF</button>
-                                </div>
-                            </div>
-                        </div>
-                        <!--CIERRE: CISTOSCOPÍA-->
 
-						<!--UROFLUJO-->
-						<div class="tab-pane fade" id="uroflujo" role="tabpanel" aria-labelledby="uroflujo-tab">
-							<div class="row">
-								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <h6 class="tit-gen">Uroflujometría</h6>
-                                </div>
                             </div>
-                            <div class="row div_form_examen_uro_flujo">
-                                <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_uro_flujo" id="id_examen_especialidad_tipo_uro_flujo" value="{{ $array_examen_especialidad_tipo['uro_flujo'] }}">
-                                {!! $examen['uro_flujo'] !!}
-                            </div>
-                            <!--GUARDAR EXAMEN-->
-                            <div class="row">
-                                <div class="col-md-12 text-center mb-3">
-                                    <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
-                                    <button type="button" class="btn btn-secondary mt-1" onclick="visualizar_pdf_examen('uro_flujo');">Ver Examen PDF</button>
-                                </div>
-                            </div>
-						</div>
-                        <!--CIERRE UROFLUJO-->
-
-                        <div class="tab-pane fade" id="in-ven-urologia" role="tabpanel" aria-labelledby="in-ven-urologia-tab">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    @include('general.venereas.venereas')
-                                </div>
-                            </div>
-                        </div>
-
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -494,14 +496,7 @@
             element.style.display='none';
         }
     }
-	/** MENSAJE*/
-    /** CARGAR mensaje */
-    $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-    $('#mensaje_ficha').show();
-    setTimeout(function(){
-        $('#mensaje_ficha').hide();
-    }, 5000);
-
+	
     $(document).ready(function() {
 
         {{--  mensaje de exito al registrar ficha clinica  --}}
@@ -613,6 +608,23 @@
                 return false;
             }
         });
+/** MENSAJE*/
+            /** CARGAR mensaje */
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
+            $('#mensaje_ficha').show();
+            setTimeout(function(){
+                $('#mensaje_ficha').hide();
+            }, 5000);
+
+            @if($fichas->count()>0)
+                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+            @else
+                $('#mensaje_historias').html(' es la primera consulta del paciente. ');
+            @endif
+                $('#mensaje_historias').show();
+                setTimeout(function(){
+                    $('#mensaje_historias').hide();
+                }, 6000);
 
         // $("#lic_descripcion_cie").autocomplete({
         //     source: function(request, response) {

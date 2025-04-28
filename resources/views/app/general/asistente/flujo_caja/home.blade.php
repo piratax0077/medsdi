@@ -15,11 +15,11 @@
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
+                                    <a href="{{ route('asistentecm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
                                         <i class="feather icon-home"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Flujo de caja</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('asistentecm.home') }}">Flujo de caja</a></li>
                             </ul>
                         </div>
                     </div>
@@ -118,11 +118,14 @@
                                                             <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="observaciones_rendicion" id="observaciones_rendicion"></textarea>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-1 col-xxxl-1">
+                                                    <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxxl-1">
                                                          <button class="btn btn-block btn-sm btn-outline-primary" onclick="$('#up_archivo_cm').toggle();"> <i class="feather icon-upload"></i> Subir archivo</button>
                                                     </div>
-                                                    <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-1 col-xxxl-1">
+                                                    <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxxl-1">
                                                         <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Rendir caja</button>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
+                                                        <button class="btn btn-block btn-sm btn-outline-secondary" onclick="generar_pdf_rendicion_cm();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Generar PDF</button>
                                                     </div>
                                                     <div id="up_archivo_cm" style="display:none" class="col-sm-12 col-md-12">
                                                         <input type="hidden" name="input_lista_archivo" id="input_lista_archivo" value="">
@@ -152,15 +155,16 @@
                                                                     <th class="align-middle">Tipo</th>
                                                                     <th class="align-middle">Código</th>
                                                                     <th class="align-middle">Convenio</th>
-                                                                    <th class="align-middle">Clase bono</th>
-                                                                    <th class="align-middle">Tipo bono</th>
-                                                                    <th class="align-middle">Aporte convenio</th>
+                                                                    <th class="align-middle">Tipo pago</th>
                                                                     <th class="align-middle">Aporte seguros</th>
+                                                                    <th class="align-middle">Aporte convenio</th>
+
                                                                     <th class="align-middle">Copago paciente</th>
                                                                     <th class="align-middle">Valor total</th>
                                                                     <th class="align-middle">F/Atención</th>
                                                                     <th class="align-middle">Paciente</th>
                                                                     <th class="align-middle">Profesional</th>
+                                                                    <th class="align-middle">Responsable</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -172,27 +176,31 @@
                                                                             <td class="align-middle">{{ $value_b->Convenio()->first()->nombre }}</td>
                                                                             <td class="align-middle">
                                                                                 @if($value_b->id_clase_bono == 1)
-                                                                                    Bono Fisico
-                                                                                @elseif($value_b->id_clase_bono == 2)
-                                                                                    Sencillito
-                                                                                @elseif($value_b->id_clase_bono == 3)
+                                                                                    Emitido por la institución
+                                                                                 @elseif($value_b->id_clase_bono == 2)
+                                                                                    Control sin costo
+                                                                                {{--@elseif($value_b->id_clase_bono == 3)
                                                                                     Caja Vecina
                                                                                 @elseif($value_b->id_clase_bono == 4)
                                                                                     Bono Web
                                                                                 @elseif($value_b->id_clase_bono == 5)
-                                                                                    Bono Web Pre-Pago
+                                                                                    Bono Web Pre-Pago --}}
                                                                                 @elseif($value_b->id_clase_bono == 6)
                                                                                     Particular
+                                                                                @elseif($value_b->id_clase_bono == 8)
+                                                                                    Garantía
+                                                                                @elseif($value_b->id_clase_bono == 9)
+                                                                                    Bono físico
                                                                                 @else
                                                                                     Otro
                                                                                 @endif
                                                                             </td>
-                                                                            <td class="align-middle">Bono consulta</td>
-                                                                            <td></td>
+                                                                            <td class="align-middle">@if($value_b->id_clase_bono != 6) ${{ number_format($value_b->aporte_seguro,0,',','.') }} <button class="btn btn-outline-success btn-xxs" data-toggle="tooltip" data-placement="top" title="Pago mediante: Efectivo, Tarjeta"><i class="fas fa-search"></i></button> @else $0  @endif </td>
+                                                                            <td>${{ number_format($value_b->bonificacion,0,',','.') }}</td>
+                                                                            <td class="align-middle">${{ number_format($value_b->valor_atencion, 0, ",", ".") }} <button class="btn btn-outline-success btn-xxs" data-toggle="tooltip" data-placement="top" title="Pago mediante: Efectivo, Tarjeta"><i class="fas fa-search"></i></button> </td>
+                                                                            <td class="align-middle">${{ number_format($value_b->a_pagar,0,',','.') }}</td>
 
-                                                                            <td></td>
-                                                                            <td class="align-middle">$10.000 <button class="btn btn-outline-success btn-xxs" data-toggle="tooltip" data-placement="top" title="Pago mediante: Efectivo, Tarjeta"><i class="fas fa-search"></i></button> </td>
-                                                                            <td class="align-middle">${{ number_format($value_b->valor_atencion, 2, ",", ".") }}</td>
+
                                                                             <td class="align-middle">{{ $value_b->fecha_atencion }}</td>
 
 
@@ -205,6 +213,7 @@
                                                                                 <span>{{ $value_b->Profesional()->first()->nombres }} {{ $value_b->Profesional()->first()->apellido_uno }} {{ $value_b->Profesional()->first()->apellido_dos }}</span><br>
                                                                                 <span>{{ $value_b->Profesional()->first()->rut }}</span>
                                                                             </td>
+                                                                            <td class="align-middle">{{ $value_b->responsable }}</td>
                                                                         </tr>
                                                                     @endforeach
                                                                 @endif
@@ -276,11 +285,14 @@
                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;"></textarea>
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
                                                             <button class="btn btn-block btn-sm btn-outline-primary" onclick="$('#up_archivo_prof').toggle();"> <i class="feather icon-upload"></i> Subir archivo</button>
                                                         </div>
-                                                        <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 col-xxl-1 col-xxx-1">
+                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
                                                             <button class="btn btn-block btn-sm btn-info" onclick="rendir_caja_prof();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Rendir Caja</button>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-1 col-xxx-1">
+                                                            <button class="btn btn-block btn-sm btn-outline-secondary" onclick="generar_pdf_rendicion_prof();" id="btn_rendicion_caja_diaria"><i class="feather icon-check"></i> Generar PDF</button>
                                                         </div>
                                                     </div>
                                                     <div class="form-row">
@@ -310,16 +322,14 @@
                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                     <div class="dt-responsive table-responsive">
                                                         <table id="tabla_rendir_caja_prof" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
-                                                        <!--<table id="tabla_rendir_caja_prof" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">-->
                                                             <thead>
                                                                 <tr>
                                                                     <th class="align-middle">Tipo</th>
                                                                     <th class="align-middle">Código</th>
                                                                     <th class="align-middle">Convenio</th>
-                                                                    <th class="align-middle">Clase bono</th>
-                                                                    <th class="align-middle">Tipo bono</th>
-                                                                    <th class="align-middle">Aporte convenio</th>
+                                                                    <th class="align-middle">Tipo pago</th>
                                                                     <th class="align-middle">Aporte seguros</th>
+                                                                    <th class="align-middle">Aporte convenio</th>
                                                                     <th class="align-middle">Copago paciente</th>
                                                                     <th class="align-middle">Valor total</th>
                                                                     <th class="align-middle">F/Atención</th>
@@ -432,6 +442,7 @@
 </div>
 
 <input type="hidden" name="numero_rendicion_hidde" id="numero_rendicion_hidde" value="">
+<input type="hidden" name="id_profesional" id="id_profesional" value="">
     <!--Cierre: Container Completo-->
 @endsection
 
@@ -455,6 +466,11 @@
             var conteo_activo = 0; // valida si conteo esta activo
 
             $(document).ready(function(){
+                $('#id_asistente_receptor').select2();
+                $('#id_asistente_receptor_prof').select2();
+                $('#id_asistente_receptor_prof').on('select2:select', function (e) {
+                    cargar_registros_prof(); // tu función
+                });
                 $('#tabla_rendir_caja').DataTable({
                     responsive: true,
                 });
@@ -1199,48 +1215,42 @@
                         $('#otros_prof').val(data.total_otros);
                         $('#total_prof').val(data.total);
 
-                        // var lista_bonos = '';
+
                         $('#tabla_rendir_caja_prof tbody').html('');
-                        $(data.bono).each(function(index, value) { // indice, valor
-                            console.log(value);
-                            var html = '';
-                            let clase_bono = ['','Bono Fisico','Sencillito','Caja Vecina','Bono Web','Bono Web Pre-Pago','Particular','Otro'];
-                            html +='<tr >';
-                            html +='    <td class="align-middle text-center">'+value.tipo_bono.nombre+'</td>';
 
-                            if(value.numero_bono == null)
-                                html +='    <td class="align-middle text-center"></td>';
-                            else
-                                html +='    <td class="align-middle text-center">'+value.numero_bono+'</td>';
-                                html +='    <td class="align-middle text-center">'+value.convenio.nombre+'</td>';
-                                html +='    <td class="align-middle text-center">'+clase_bono[value.id_clase_bono]+'</td>';
-                            html +='    <td class="align-middle text-center"></td>';
-                            html +='    <td class="align-middle text-center"></td>';
-                            html +='    <td class="align-middle text-center"></td>';
-                            html +='    <td class="align-middle text-center"></td>';
-                            html +='    <td class="align-middle text-center">'+value.valor_atencion+'</td>';
-                            html +='    <td class="align-middle text-center">'+value.fecha_atencion+'</td>';
-                            html +='    <td class="align-middle text-center">';
-                            html +='        <span>'+value.paciente.nombres+' '+value.paciente.apellido_uno+' '+value.paciente.apellido_dos+'</span><br>';
-                            html +='        <span>'+value.paciente.rut+'</span>';
-                            html +='    </td>';
+                        for (var i = 0; i < data.bono.length; i++) {
 
-                            html +='    <td class="align-middle text-center">';
-                            html +='        <span>'+value.profesional.nombre+' '+value.profesional.apellido_uno+' '+value.profesional.apellido_dos+'</span><br>';
-                            html +='        <span>'+value.profesional.rut+'</span>';
-                            html +='    </td>';
-                            html +='    <td>';
-                            html +='        <input type="checkbox" data-id="'+value.id+'" class="id_check_bono" name="id_check_bono_'+value.id+'" id="id_check_bono_'+value.id+'" onchange="seleccionar_bono_prof();" checked="checked">';
-                            html +='    </td>';
-                            html +='</tr>';
-                            $('#tabla_rendir_caja_prof tbody').append(html);
-                            // lista_bonos +='|'+value.id+'' ;
-                        });
+                            var fila = '';
+                            fila += '<tr>';
+                            fila += '    <td class="align-middle text-center">' + data.bono[i].tipo_bono.nombre + '</td>';
+                            fila += '    <td class="align-middle text-center">' + data.bono[i].numero_bono + '</td>';
+                            fila += '    <td class="align-middle text-center">' + data.bono[i].convenio.nombre + '</td>';
+                            fila += '    <td class="align-middle text-center">' + (data.bono[i].id_clase_bono || '') + '</td>';
+                            fila += '    <td class="align-middle text-center">$' + (data.bono[i].aporte_seguro || 0) + '</td>';
+                            fila += '    <td class="align-middle text-center">$' + (data.bono[i].bonificacion || 0) + '</td>';
 
+                            fila += '    <td class="align-middle text-center">$' + (data.bono[i].valor_atencion || 0) + '</td>';
+                            fila += '    <td class="align-middle text-center">$' + (data.bono[i].a_pagar || data.bono[i].valor_atencion) + '</td>';
+                            fila += '    <td class="align-middle text-center">' + data.bono[i].fecha_atencion + '</td>';
+                            fila += '    <td class="align-middle text-center">';
+                            fila += '        <span>' + data.bono[i].paciente.nombres + ' ' + data.bono[i].paciente.apellido_uno + ' ' + data.bono[i].paciente.apellido_dos + '</span><br>';
+                            fila += '        <span>' + data.bono[i].paciente.rut + '</span>';
+                            fila += '    </td>';
+                            fila += '    <td class="align-middle text-center">';
+                            fila += '        <span>' + data.bono[i].profesional.nombre + ' ' + data.bono[i].profesional.apellido_uno + ' ' + data.bono[i].profesional.apellido_dos + '</span>';
+                            fila += '    </td>';
+                            fila += '</tr>';
 
+                            $('#tabla_rendir_caja_prof tbody').append(fila);
+                        }
+
+                        // Reactivar el DataTable
                         $('#tabla_rendir_caja_prof').DataTable({
                             responsive: true,
+                            destroy: true // importante para evitar errores si recargas la tabla
                         });
+
+
 
                         $('#lista_bonos_prof').val(data.lista_bonos)
 
@@ -1315,7 +1325,50 @@
                 });
             }
 
+            function generar_pdf_rendicion_cm(){
+                let url = "{{ route('asistentecm.pdf_bonos_cm_dia') }}";
 
+                $.ajax({
+                    url: url,
+                    type: "get",
+                })
+                .done(function(data) {
+                     console.log(data);
+                    // Abrir el PDF en una ventana emergente
+                    var width = 800;
+                    var height = 600;
+                    var left = (screen.width - width) / 2;
+                    var top = (screen.height - height) / 2;
+                    window.open(data.ruta, 'Rendición Caja', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
+
+            function generar_pdf_rendicion_prof(){
+                let id_profesional = $('#id_asistente_receptor_prof').val();
+                let url = "{{ url('flujo_caja/caja/pdf/bonos/prof/dia') }}"+"/"+id_profesional;
+
+                $.ajax({
+                    url: url,
+                    type: "get",
+                })
+                .done(function(data) {
+                     console.log(data);
+                   // Abrir el PDF en una ventana emergente
+                   var width = 800;
+                            var height = 600;
+                            var left = (screen.width - width) / 2;
+                            var top = (screen.height - height) / 2;
+                            window.open(data.ruta, 'Rendición Caja', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
+            }
     </script>
 @endsection
 

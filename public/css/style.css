@@ -2805,7 +2805,7 @@ textarea.form-control {
     background-color: transparent;
     border: 1px solid transparent;
     padding: 0.5rem 1.1875rem;
-    font-size: 0.95rem;
+    font-size: 0.90rem;
     line-height: 1.5;
     border-radius: 3px;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -5823,6 +5823,12 @@ a.badge-dark:focus, a.badge-dark.focus {
     border-color: #e3f1d4;
 }
 
+.alert-success-b {
+    color: #516a35;
+    background-color: #ebf5e0;
+    border-color: #96b078;
+}
+
 .alert-success hr {
     border-top-color: #d6ebc1;
 }
@@ -7368,6 +7374,10 @@ button.bg-dark:focus {
 
 .rounded-sm {
     border-radius: 0.25rem !important;
+}
+
+.rounded-xl {
+    border-radius: 0.6rem !important;
 }
 
 .rounded {

@@ -318,7 +318,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-sm btn-danger" onclick="cerrar_autorizacion_fmu();">Cerrar</button>
+                <button class="btn btn-sm btn-danger" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -1026,6 +1026,8 @@
                         // Agregar clases a la fila
                         $(rowNode).addClass('text-center align-middle');
                     });
+                    actualizarEstadoSidebarTons(tons);
+
                 }else{
                     $('#modal_tons_dental').modal('hide');
                     swal({
@@ -1101,7 +1103,12 @@
 
                         // Agregar clases a la fila
                         $(rowNode).addClass('text-center align-middle');
+
+                        // eliminar todas las clases disabled del div con id card_sidebar_tons
+
                     });
+                    actualizarEstadoSidebarTons(tons);
+
                 }else{
                     $('#modal_tons_dental').modal('hide');
                     swal({
@@ -1116,6 +1123,31 @@
             }
         });
     }
+    function actualizarEstadoSidebarTons(tons) {
+        let algunoActivo = tons.some(t => t.estado == 2);
+
+        if (algunoActivo) {
+            // Habilita botón del colapsable
+            $('#heading_ayudante button').removeClass('disabled').prop('disabled', false);
+
+            // Muestra el contenido colapsable
+            // $('#collapse_ayudante').collapse('show');
+
+            // Habilita todos los botones internos
+            $('#collapse_ayudante .btn').removeClass('disabled').prop('disabled', false);
+        } else {
+            // Desactiva botón principal (colapsable)
+            $('#heading_ayudante button').addClass('disabled').prop('disabled', true);
+
+            // Oculta el contenido si está abierto
+            $('#collapse_ayudante').collapse('hide');
+
+            // Desactiva botones internos
+            $('#collapse_ayudante .btn').addClass('disabled').prop('disabled', true);
+        }
+    }
+
+
     </script>
 
 

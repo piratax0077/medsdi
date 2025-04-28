@@ -56,8 +56,8 @@
 </div>
 
 <script>
-    if (typeof dropzone === 'undefined') {
-        var dropzone;
+    if (typeof dropzone_pre === 'undefined') {
+        var dropzone_pre;
     }
     if(typeof dropzone_post == 'undefined'){
         var dropzone_post;
@@ -71,16 +71,16 @@
     function init_dropzone_imagenes()
     {
         // Inicializa Dropzone sobre el nuevo elemento
-        dropzone = new Dropzone("#mis-imagenes-dentales", {
+        dropzone_pre = new Dropzone("#mis-imagenes-dentales", {
             url: "{{ ROUTE('profesional.imagenes.guardar_dental')  }}",
             method: 'post',
-            autoProcessQueue: false, // Desactiva el procesamiento automático
+            autoProcessQueue: false,
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
             paramName: "file[]",
             acceptedFiles: "image/*",
-            maxFilesize: 4, // Tamaño máximo en MB
+            maxFilesize: 4,
             maxFiles: 12,
             addRemoveLinks: true,
             dictDefaultMessage: "Arrastra una imagen aquí o haz clic para subirla.",
@@ -92,27 +92,26 @@
                 console.error("Error al subir imagen:", message);
             },
             sending: function (file, xhr, formData) {
-                // Verifica si formData es válido antes de agregar los datos
-                if (formData) {
-                    const idExamenRx = document.querySelector('#id_imagenes_dental').value;
-                    const idImagePre = document.querySelector('#id_image_pre').value;
-                    const detalle = "Pre";
+                const idExamenRx = document.querySelector('#id_imagenes_dental')?.value;
+                const idImagePre = document.querySelector('#id_image_pre')?.value;
+                const detalle = "Pre";
+
+                if (idExamenRx) {
                     formData.append("id_examen", idExamenRx);
-                    formData.append("id_image_pre",idImagePre);
+                    formData.append("id_image_pre", idImagePre);
                     formData.append("detalle", detalle);
 
                     console.log("Datos adicionales enviados:", {
                         id_examen: idExamenRx,
+                        id_image_pre: idImagePre,
                         detalle: detalle
                     });
                 } else {
-                    console.error("formData no está disponible");
+                    console.error("id_imagenes_dental no encontrado en el DOM.");
                 }
-            },
-            init: function () {
-                console.log("Dropzone configurado para procesar la cola manualmente.");
             }
         });
+
 
         dropzone_post = new Dropzone("#mis-imagenes-dentales-post", {
             url: "{{ ROUTE('profesional.imagenes.guardar_dental')  }}",
@@ -135,22 +134,22 @@
                 console.error("Error al subir imagen:", message);
             },
             sending: function (file, xhr, formData) {
-                // Verifica si formData es válido antes de agregar los datos
-                if (formData) {
-                    const idExamenRx = document.querySelector('#id_imagenes_dental').value;
-                    const idImagePost = document.querySelector('#id_image_post').value;
-                    const detalle = "Post";
+                const idExamenRx = document.querySelector('#id_imagenes_dental')?.value;
+                const idImagePre = document.querySelector('#id_image_post')?.value;
+                const detalle = "Post";
+
+                if (idExamenRx) {
                     formData.append("id_examen", idExamenRx);
+                    formData.append("id_image_post", idImagePre);
                     formData.append("detalle", detalle);
-                    formData.append("id_image_post", idImagePost);
 
                     console.log("Datos adicionales enviados:", {
                         id_examen: idExamenRx,
-                        detalle: detalle,
-                        id_image_post: idImagePost
+                        id_image_pre: idImagePre,
+                        detalle: detalle
                     });
                 } else {
-                    console.error("formData no está disponible");
+                    console.error("id_imagenes_dental no encontrado en el DOM.");
                 }
             },
             init: function () {
@@ -205,16 +204,16 @@
                     $('#id_image_post').val(id_image_post);
 
                     // Una vez que el envío de datos ha sido exitoso, procesamos la cola de imágenes
-                    if (dropzone.getQueuedFiles().length > 0) {
+                    if (dropzone_pre.getQueuedFiles().length > 0) {
                         console.log("Iniciando carga de imágenes...");
                         // Desvinculamos el evento "queuecomplete" antes de procesar la cola
-                        dropzone.off("queuecomplete");
+                        dropzone_pre.off("queuecomplete");
 
                         // Procesar la cola de imágenes
-                        dropzone.processQueue();  // Esto procesará la cola y subirá las imágenes
+                        dropzone_pre.processQueue();  // Esto procesará la cola y subirá las imágenes
 
                         // Usamos un evento para esperar a que se complete la carga de imágenes
-                        dropzone.on("queuecomplete", function() {
+                        dropzone_pre.on("queuecomplete", function() {
                             // Una vez que la cola esté completa, podemos realizar más acciones si es necesario
                             console.log("Carga de imágenes completada.");
                         });
@@ -223,9 +222,9 @@
                         alert("No has seleccionado imágenes para subir.");
 
                         // Si el Dropzone no está funcionando correctamente, puedes destruirlo y volver a inicializarlo
-                        if (dropzone) {
+                        if (dropzone_pre) {
                             // Destruir la instancia actual de Dropzone
-                            dropzone.destroy();
+                            dropzone_pre.destroy();
                         }
                     }
                     // Una vez que el envío de datos ha sido exitoso, procesamos la cola de imágenes

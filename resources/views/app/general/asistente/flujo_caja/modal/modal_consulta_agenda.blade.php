@@ -197,10 +197,10 @@
                             href="#pills-recibir-bono" role="tab" aria-controls="pills-home"
                             aria-selected="true">Recibir Pago</a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link-modal" id="pills-venta-tab" data-toggle="pill" href="#pills-venta"
                             role="tab" aria-controls="pills-venta" aria-selected="false">Venta de Bonos</a>
-                    </li>
+                    </li> --}}
                 </ul>
                 {{--  PESTAÑAS  --}}
                 <div class="tab-content" id="pills-tabContent-interconsulta">
@@ -246,8 +246,8 @@
                                     <select id="bono_id_clase_bono" name="bono_id_clase_bono"
                                         class="form-control form-control-sm">
                                         <option value="1">Bono Fisico</option>
-                                        <option value="2">Sencillito</option>
-                                        <option value="3">Caja Vecina</option>
+                                        {{-- <option value="2">Sencillito</option>
+                                        <option value="3">Caja Vecina</option> --}}
                                         <option value="4">Bono Web</option>
                                         <option value="5">Bono Web Pre-Pago</option>
                                         <option value="6">Particular</option>
@@ -261,6 +261,7 @@
                                         id="bono_numero">
                                 </div>
                             </div>
+
                             <div class="col-sm-6">
                                 <div class="form-group fill">
                                     <label class="floating-label-activo-sm">Convenio</label>
@@ -271,6 +272,18 @@
                                             <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Valor Bonificación</label>
+                                    <input type="number" class="form-control form-control-sm" name="valor_bonificacion" id="valor_bonificacion" value="">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group fill">
+                                    <label class="floating-label-activo-sm">Aporte Seguro</label>
+                                    <input type="number" class="form-control form-control-sm" name="valor_seguro" id="valor_seguro" value="0">
                                 </div>
                             </div>
                             <div class="col-sm-6">

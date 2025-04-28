@@ -18,7 +18,7 @@
                                         <i class="feather icon-home"></i>
                                     </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="#">Flujo de Caja</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('asistentecm.ma.home') }}">Flujo de Caja</a></li>
                             </ul>
                         </div>
                     </div>

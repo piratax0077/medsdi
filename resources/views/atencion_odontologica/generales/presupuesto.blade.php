@@ -31,33 +31,40 @@
         }
     }
 </style>
-<div class="card">
-    <div class="card-body">
+
         <div id="form-presup_dent">
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <ul class="nav nav-tabs-aten nav-fill mb-10" id="od_grl" role="tablist">
-                        @if(!$paciente->es_adulto)
-                        <li class="nav-item">
-                            <a class="nav-link-aten text-reset " id="od_pac_depend_tab" data-toggle="tab" href="#od_pac_depend" role="tab" aria-controls="od_pac_depend" aria-selected="true">Paciente Menor de edad y Dependientes</a>
-                        </li>
-                        @endif
-                        <li class="nav-item">
-                            <a class="nav-link-aten text-reset" id="od_convenios_vigentes-tab" data-toggle="tab" href="#od_convenios_vigentes" role="tab" aria-controls="od_convenios_vigentes" aria-selected="true">Convenios vigentes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link-aten text-reset active" id="od_presup_clinico-tab" data-toggle="tab" href="#od_presup_clinico" role="tab" aria-controls="od_presup_clinico" aria-selected="true">Presupuesto Clinico</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link-aten text-reset" id="od_laboratorio-tab" data-toggle="tab" href="#od_laboratorio" role="tab" aria-controls="od_laboratorio" aria-selected="true">Laboratorio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link-aten text-reset" id="od__presup_gral-tab" data-toggle="tab" href="#od__presup_gral" role="tab" aria-controls="od__presup_gral" aria-selected="true">Presupuesto General</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link-aten text-reset" id="od_abonos_pres-tab" data-toggle="tab" href="#od_abonos_pres" role="tab" aria-control="od_abonos_pres" aria-selected="false">Abonos y Estados de Pago</a>
-                        </li>
-                    </ul>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <ul class="nav nav-tabs-aten nav-fill mb-10" id="od_grl" role="tablist">
+                                        @if(!$paciente->es_adulto)
+                                        <li class="nav-item">
+                                            <a class="nav-link-aten text-reset " id="od_pac_depend_tab" data-toggle="tab" href="#od_pac_depend" role="tab" aria-controls="od_pac_depend" aria-selected="true">Paciente Menor de edad y Dependientes</a>
+                                        </li>
+                                        @endif
+                                        <li class="nav-item">
+                                            <a class="nav-link-aten text-reset" id="od_convenios_vigentes-tab" data-toggle="tab" href="#od_convenios_vigentes" role="tab" aria-controls="od_convenios_vigentes" aria-selected="true">Convenios vigentes</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link-aten text-reset active" id="od_presup_clinico-tab" data-toggle="tab" href="#od_presup_clinico" role="tab" aria-controls="od_presup_clinico" aria-selected="true">Presupuesto Clinico</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link-aten text-reset" id="od_laboratorio-tab" data-toggle="tab" href="#od_laboratorio" role="tab" aria-controls="od_laboratorio" aria-selected="true">Laboratorio</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link-aten text-reset" id="od__presup_gral-tab" data-toggle="tab" href="#od__presup_gral" role="tab" aria-controls="od__presup_gral" aria-selected="true">Presupuesto General</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link-aten text-reset" id="od_abonos_pres-tab" data-toggle="tab" href="#od_abonos_pres" role="tab" aria-control="od_abonos_pres" aria-selected="false">Abonos y Estados de Pago</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -221,8 +228,44 @@
                                 </div>
                             </div>
                         </div>
-                        <!--CONVENIOS-->
+                        <!--CONVENIOS VIGENTES-->
                         <div class="tab-pane fade show" id="od_convenios_vigentes" role="tabpanel" aria-labelledby="od_convenios_vigentes_tab">
+                            <h3>DANI ACA NO HACER NADA</h3>
+                            <div class="form-row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <h6 class="tit-gen">Convenios Vigentes</h6>
+                                </div>
+                            </div>
+                            <div class="form-row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5">
+                                <div class="col mb-2">
+                                    <div class="card-informacion">
+                                        <div class="card-body">
+                                            <div class="media">
+                                                <img src="{{ asset('images/iconos/usuario_profesional.svg') }}" class="mr-3 mt-2 wid-70 rounded-circle" alt="...">
+                                                <div class="media-body">
+                                                    <h5 class="mt-0 mb-1">Fonasa</h5>
+                                                    <p class="mb-2">Porcentaje - Descripcion</p>
+                                                    <a href="#" class="btn btn-primary btn-sm"><i class="feather icon-check"></i> Aplicar</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>    
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="card-informacion">
+                                        <div class="card-body">
+                                            <div class="media">
+                                                <img src="{{ asset('images/iconos/usuario_profesional.svg') }}" class="mr-3 mt-2 wid-70 rounded-circle" alt="...">
+                                                <div class="media-body">
+                                                    <h5 class="mt-0 mb-1">Fonasa</h5>
+                                                    <p class="mb-2">Porcentaje - Descripcion</p>
+                                                    <a href="#" class="btn btn-primary btn-sm"><i class="feather icon-check"></i> Aplicar</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>    
+                                </div>
+                            </div>
                             <div class="card">
                                 <div class="card-body">
                                     <p>convenios</p>
@@ -263,37 +306,49 @@
                                 </div>
                             </div>
                         </div>
-                        <!--TRABAJOS-->
+                        <!--PRESUPUESTO CLÍNICO-->
                         <div class="tab-pane fade show active" id="od_presup_clinico" role="tabpanel" aria-labelledby="od_presup_clinico_tab">
-                            <div class="card">
-                                <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <h6 class="tit-gen">Presupuesto Clínico</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <form>
                                         <div class="form-row" id="contenedor_piezas_dentales_presupuesto">
                                             @foreach ($odontograma as $o)
                                                 @if($o->presupuesto == 1)
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Pieza</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ $o->pieza }}">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $o->descripcion }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${{ number_format($o->valor,0,',','.') }}" >
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${{ number_format($o->valor,0,',','.') }}" >
-                                                </div>
-                                                <div class="form-group col-md-2 d-flex justify-content-center">
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma({{ $o->id }})"><i class="fas fa-trash"></i> </button>
-
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-1 col-xl-1">
+                                                                    <label class="floating-label-activo-sm">Pieza</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ $o->pieza }}">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-9 col-lg-4 col-xl-4">
+                                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $o->descripcion }}">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2">
+                                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${{ number_format($o->valor,0,',','.') }}" >
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-2 col-xl-2">
+                                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2">
+                                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${{ number_format($o->valor,0,',','.') }}" >
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-1 col-lg-1 col-xl-1 d-flex">
+                                                                    <button type="button" class="btn btn-danger-light-c btn-icon" onclick="eliminar_odontograma({{ $o->id }})"><i class="feather icon-x"></i> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -301,59 +356,73 @@
                                         <div class="form-row" id="contenedor_maxilar_superior_gral_diagnosticos_presupuesto">
                                             @foreach ($maxilar_superior_gral_diagnosticos as $diagnostico)
                                                 @if($diagnostico->presupuesto == 1)
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-1">
+                                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                                    <button type="button" class="btn btn-danger-light-c btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="feather icon-x"></i> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-group col-md-3">
-                                                        <label class="floating-label-activo-sm">Prestación</label>
-                                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Sub-Total</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-1">
-                                                        <label class="floating-label-activo-sm">Descuento</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Total prestación</label>
-                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-2 d-flex justify-content-center">
-                                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
-
-                                                    </div>
+                                                </div>
                                                 @endif
                                             @endforeach
                                         </div>
                                         <div class="form-row" id="contenedor_maxilar_superior_gral_tratamientos_presupuesto">
                                             @foreach ($maxilar_superior_gral_tratamientos as $diagnostico)
                                             @if($diagnostico->presupuesto == 1)
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-2 d-flex">
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
-
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-1">
+                                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2 d-flex">
+                                                                    <button type="button" class="btn btn-danger-light-c btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -361,29 +430,36 @@
                                         <div class="form-row" id="contenedor_maxilar_superior_endo_tratamientos_presupuesto">
                                             @foreach ($maxilar_superior_gral_tratamientos_endo as $diagnostico)
                                             @if($diagnostico->presupuesto == 1)
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-2 d-flex">
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
-
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-1">
+                                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2 d-flex">
+                                                                    <button type="button" class="btn btn-danger-light-c btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="feather icon-x"></i> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -391,29 +467,36 @@
                                         <div class="form-row" id="contenedor_maxilar_superior_endo_diagnosticos_presupuesto">
                                             @foreach ($maxilar_superior_gral_diagnosticos_endo as $diagnostico)
                                             @if($diagnostico->presupuesto == 1)
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-2 d-flex">
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
-
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-1">
+                                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2 d-flex">
+                                                                    <button type="button" class="btn btn-danger-light-c btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="feather icon-x"></i> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -421,29 +504,37 @@
                                         <div class="form-row" id="contenedor_maxilar_inferior_gral_diagnosticos_presupuesto">
                                             @foreach ($maxilar_inferior_gral_diagnosticos as $diagnostico)
                                             @if($diagnostico->presupuesto == 1)
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-1">
+                                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
+                                                                    <button type="button" class="btn btn-danger-light-c btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="feather icon-x"></i> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -451,29 +542,37 @@
                                         <div class="form-row" id="contenedor_maxilar_inferior_gral_tratamientos_presupuesto">
                                             @foreach ($maxilar_inferior_gral_tratamientos as $diagnostico)
                                             @if($diagnostico->presupuesto == 1)
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-1">
+                                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
+                                                                    <button type="button" class="btn btn-danger-light-c  btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="feather icon-x"></i> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -481,29 +580,37 @@
                                         <div class="form-row" id="contenedor_maxilar_inferior_endo_diagnosticos_presupuesto">
                                             @foreach ($maxilar_inferior_gral_diagnosticos_endo as $diagnostico)
                                             @if($diagnostico->presupuesto == 1)
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-1">
+                                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
+                                                                    <button type="button" class="btn btn-danger-light-c btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="feather icon-x"></i> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -511,29 +618,37 @@
                                         <div class="form-row" id="contenedor_maxilar_inferior_endo_tratamientos_presupuesto">
                                             @foreach ($maxilar_inferior_gral_tratamientos_endo as $diagnostico)
                                             @if($diagnostico->presupuesto == 1)
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-1">
+                                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
+                                                                    <button type="button" class="btn btn-danger-light-c btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="feather icon-x"></i> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -541,29 +656,36 @@
                                         <div class="form-row" id="contenedor_boca_completa_gral_tratamientos_presupuesto">
                                             @foreach ($boca_completa_gral_tratamientos as $diagnostico)
                                             @if($diagnostico->presupuesto == 1)
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-2 d-flex justify-content-center">
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
-
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-1">
+                                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                                    <button type="button" class="btn btn-danger-light-c btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="feather icon-x"></i> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -571,29 +693,37 @@
                                         <div class="form-row" id="contenedor_boca_completa_gral_diagnosticos_presupuesto">
                                             @foreach ($boca_completa_gral_diagnosticos as $diagnostico)
                                             @if($diagnostico->presupuesto == 1)
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                            <div class="form-group col-md-2">
+                                                                <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
+                                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label class="floating-label-activo-sm">Prestación</label>
+                                                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
+                                                            </div>
+                                                            <div class="form-group col-md-2">
+                                                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                            </div>
+                                                            <div class="form-group col-md-1">
+                                                                <label class="floating-label-activo-sm">Descuento</label>
+                                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                            </div>
+                                                            <div class="form-group col-md-2">
+                                                                <label class="floating-label-activo-sm">Total prestación</label>
+                                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                            </div>
+                                                            <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
+                                                                <button type="button" class="btn btn-danger-light-c btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="feather icon-x"></i> </button>
+                                                            </div>
+                                                                </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -601,29 +731,37 @@
                                         <div class="form-row" id="contenedor_boca_completa_endo_tratamientos_presupuesto">
                                             @foreach ($boca_completa_gral_tratamiento_endo as $diagnostico)
                                             @if($diagnostico->presupuesto == 1)
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-1">
+                                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
+                                                                    <button type="button" class="btn btn-danger-light-c btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="feather icon-x"></i> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -631,29 +769,36 @@
                                         <div class="form-row" id="contenedor_boca_completa_endo_diagnosticos_presupuesto">
                                             @foreach ($boca_completa_gral_diagnostico_endo as $diagnostico)
                                             @if($diagnostico->presupuesto == 1)
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ $diagnostico->localizacion }}">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ $diagnostico->descuento }}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
-                                                </div>
-                                                <div class="form-group col-md-2 d-flex justify-content-center">
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
-
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">{{ $diagnostico->localizacion }}</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ $diagnostico->localizacion }}">
+                                                                </div>
+                                                                <div class="form-group col-md-3">
+                                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="{{ $diagnostico->diagnostico_tratamiento }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-1">
+                                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ $diagnostico->descuento }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2">
+                                                                    <label class="floating-label-activo-sm">Total Prestación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="{{ number_format($diagnostico->valor,0,',','.') }}">
+                                                                </div>
+                                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                                    <button type="button" class="btn btn-danger-light-c btn-icon" onclick="sacar_de_presupuesto({{ $diagnostico->id }},'gral')"><i class="feather icon-x"></i> </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             @endforeach
@@ -661,6 +806,10 @@
                                         <div class="form-row" id="contenedor_insumos">
                                             @foreach ($insumos_tratamientos as $diagnostico)
                                                 @if($diagnostico->presupuesto == 1)
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body pb-0">
+                                                            <div class="form-row">
                                                 <div class="form-group col-md-2">
                                                     <label class="floating-label-activo-sm">Insumo</label>
                                                     <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="{{ $diagnostico->insumos }} {{ $diagnostico->nombre_marca }}">
@@ -683,69 +832,86 @@
                                                 </div>
                                                 <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo({{ $diagnostico->id }},'gral')"><i class="fas fa-trash"></i> </button>
+                                                    <button type="button" class="btn btn-danger-light-c btn-icon" onclick="eliminar_insumo({{ $diagnostico->id }},'gral')"><i class="feather icon-x"></i> </button>
+                                                </div>
+                                                    </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 @endif
                                             @endforeach
                                         </div>
                                     </form>
                                     <div id="valores">
-                                         </br>
-
+                                        </br>
                                     </div>
-                                    <div class="container mt-4">
-                                        <div class="row bg-light border p-3 text-center">
+                                    <div class="container mt-3 mb-2">
+                                    <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <h6 class="tit-gen">Detalle de valores del Presupuesto Clínico</h6>
+                                </div>
+                            </div>
+                                        <div class="row align-items-center bg-light p-3 text-center rounded-xl text-white" style="border: 2px solid #4268b0 !important;box-shadow: 0px 0px 8px 1px rgb(48 65 148 / 25%), 0px 10px 9px -6px rgb(69 75 135 / 10%) !important;">
                                             <!-- Total -->
-                                            <div class="col-md-2">
-                                                <h5>Total Grupo/Boca</h5>
+                                            <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
+                                                <h5 class="text-c-blue mb-0">Total Grupo/Boca</h5>
                                                 <p id="valores_examenes_presupuesto">$ {{ number_format($valores,0,',','.') }}</p>
                                             </div>
 
                                             <!-- Total Piezas -->
-                                            <div class="col-md-2">
-                                                <h5>Total Piezas</h5>
+                                            <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
+                                                <h5 class="text-c-blue mb-0">Total Piezas</h5>
                                                 <p id="valores_piezas_presupuesto">$ {{ number_format($valores_piezas,0,',','.') }}</p>
                                             </div>
 
                                             <!-- Descuentos -->
-                                            <div class="col-md-2">
-                                                <h5>Descuentos</h5>
+                                            <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
+                                                <h5 class="text-c-blue mb-0">Descuentos</h5>
                                                 <p id="valores_descuentos_presupuesto">$0.00</p>
                                             </div>
 
                                             <!-- Insumos -->
-                                            <div class="col-md-2">
-                                                <h5>Insumos</h5>
+                                            <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
+                                                <h5 class="text-c-blue mb-0">Insumos</h5>
                                                 <p id="valores_insumos_presupuesto">$ {{ number_format($valores_insumos,0,',','.') }}</p>
                                             </div>
 
                                             <!-- Total Final -->
-                                            <div class="col-md-2">
-                                                <h5>Total Final</h5>
-                                                <p id="valores_total_final_presupuesto">$ {{ number_format($valores + $valores_piezas + $valores_insumos,0,',','.') }}</p>
+                                            <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-2 bg-naranjo rounded-pill py-1 my-1">
+                                                <h5 class="text-white mb-0">Total Final</h5>
+                                                <p class="text-white" id="valores_total_final_presupuesto">$ {{ number_format($valores + $valores_piezas + $valores_insumos,0,',','.') }}</p>
                                             </div>
 
                                             <!-- Abonos -->
-                                            <div class="col-md-2">
-                                                <h5>Abonado</h5>
-                                                <p id="valores_abonado_presupuesto">$ {{ number_format($valor_abonado,0,',','.') }}</p>
+                                            <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2 col-xxl-2 bg-naranjo bg-success rounded-pill py-1 my-1">
+                                                <h5 class="text-white mb-0">Abonado</h5>
+                                                <p class="text-white" id="valores_abonado_presupuesto">$ {{ number_format($valor_abonado,0,',','.') }}</p>
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-success btn-sm my-2" onclick="pedir_autorizacion_presupuesto_dental()">Pedir autorización de presupuesto</button>
-                                    <button type="button" class="btn btn-primary btn-sm" onclick="generar_pdf()">
-                                        <i class="fa fa-file"></i> PDF
-                                    </button>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                            <button type="button" class="btn btn-info my-2" onclick="pedir_autorizacion_presupuesto_dental()"><i class="fas fa-check"></i> Solicitar autorización de presupuesto</button>
+                                            <button type="button" class="btn btn-primary" onclick="generar_pdf()">
+                                                <i class="fa fa-file"></i> Documento PDF
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <!--LABORATORIO-->
                         <div class="tab-pane fade show" id="od_laboratorio" role="tabpanel" aria-labelledby="od_laboratorio-tab">
-                            <div class="row">
-                                <div class="col-md-12">
+                            <div class="form-row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <h6 class="tit-gen">Laboratorio</h6>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="card">
                                         <div class="card-body">
-                                            <div class="row">
+                                            <div class="form-row">
                                                 <div class="col-sm-2">
                                                     <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                                         <a class="nav-link-aten text-reset" id="od_laboratorio_trab-tab" data-toggle="tab" href="#od_laboratorio_trab" role="tab" aria-controls="od_laboratorio_trab" aria-selected="false">Estados Trabajos</a>
@@ -755,63 +921,67 @@
                                                 </div>
                                                 <div class="col-sm-12 col-md-10 col-xl-10">
                                                     <div class="tab-content" id="v-pills-tabContent">
+                                                        <!--ESTADOS DE TRABAJO-->
                                                         <div class="tab-pane fade show active" id="od_laboratorio_trab" role="tabpanel" aria-labelledby="od_laboratorio_trab-tab">
-                                                            <div class="row">
+                                                            <div class="form-row">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <h6 class="sub-aten">Estados de trabajo</h6>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-row">
                                                                 <div class="col-sm-12 col-md-12" id="contenedor_ordenes_trabajos_menores_dental">
                                                                     @if(isset($ordenes_tm))
                                                                     @foreach ($ordenes_tm as $o)
-                                                                    <div class="card">
-                                                                        <div class="card-body">
-                                                                            <div class="form-row">
-
-                                                                                <div class="form-group col-md-2">
-                                                                                    <label class="floating-label-activo-sm">Nombre Laboratorio</label>
-                                                                                    <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom" value="{{ $o->nombre_lab }}">
-                                                                                </div>
-                                                                                <div class="form-group col-md-2">
-                                                                                    <label class="floating-label-activo-sm">Trabajo Requerido</label>
-                                                                                    <input type="text" class="form-control form-control-sm" name="lab_ord_trab" id="lab_ord_trab" value="{{ $o->trabajo_realizar }}">
-                                                                                </div>
-                                                                                <div class="form-group col-md-2">
-                                                                                    <label class="floating-label-activo-sm">F.envío</label>
-                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv" value="{{ $o->fecha_envio }}">
-                                                                                </div>
-                                                                                <div class="form-group col-md-2">
-                                                                                    <label class="floating-label-activo-sm">F.entrega</label>
-                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent" value="{{ $o->fecha_entrega }}">
-                                                                                </div>
-                                                                                <div class="form-group col-md-2">
-                                                                                    <label class="floating-label-activo-sm">Estado</label>
-                                                                                    <input type="text" class="form-control form-control-sm" name="lab_est" id="lab_est" value="{{ $o->estado == 1 ? 'Pendiente' : 'Otro' }}">
-                                                                                </div>
-                                                                                <div class="form-group col-md-2">
-                                                                                    <label class="floating-label-activo-sm">N° Identificación</label>
-                                                                                    <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="{{ $o->nro_orden }}">
-                                                                                </div>
-                                                                                <div class="form-group col-md-2 d-flex">
-
-
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                    <label class="floating-label-activo-sm">Observaciones </label>
-                                                                                    <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="card-informacion">
+                                                                                    <div class="card-body">
+                                                                                        <div class="form-row">
+                                                                                            <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label class="floating-label-activo-sm">Nombre Laboratorio</label>
+                                                                                                <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom" value="{{ $o->nombre_lab }}">
+                                                                                            </div>
+                                                                                            <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label class="floating-label-activo-sm">Trabajo Requerido</label>
+                                                                                                <input type="text" class="form-control form-control-sm" name="lab_ord_trab" id="lab_ord_trab" value="{{ $o->trabajo_realizar }}">
+                                                                                            </div>
+                                                                                            <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label class="floating-label-activo-sm">F.envío</label>
+                                                                                                <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv" value="{{ $o->fecha_envio }}">
+                                                                                            </div>
+                                                                                            <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label class="floating-label-activo-sm">F.entrega</label>
+                                                                                                <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent" value="{{ $o->fecha_entrega }}">
+                                                                                            </div>
+                                                                                            <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label class="floating-label-activo-sm">Estado</label>
+                                                                                                <input type="text" class="form-control form-control-sm" name="lab_est" id="lab_est" value="{{ $o->estado == 1 ? 'Pendiente' : 'Otro' }}">
+                                                                                            </div>
+                                                                                            <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-2">
+                                                                                                <label class="floating-label-activo-sm">N° Identificación</label>
+                                                                                                <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="{{ $o->nro_orden }}">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="form-row">
+                                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                                <label class="floating-label-activo-sm">Observaciones</label>
+                                                                                                <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
-
                                                                     @endforeach
                                                                     @endif
                                                                 </div>
+                                                    
                                                                 <div class="col-sm-12 col-md-12" id="contenedor_ordenes_trabajos_mayores_dental">
                                                                     @if(isset($ordenes_tmy))
                                                                     @foreach ($ordenes_tmy as $o)
-                                                                    <div class="card">
+                                                                    <div class="card-informacion">
                                                                         <div class="card-body">
                                                                             <div class="form-row">
-
                                                                                 <div class="form-group col-md-2">
                                                                                     <label class="floating-label-activo-sm">Nombre Laboratorio</label>
                                                                                     <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom" value="{{ $o->nombre_lab }}">
@@ -835,10 +1005,6 @@
                                                                                 <div class="form-group col-md-2">
                                                                                     <label class="floating-label-activo-sm">N° Identificación</label>
                                                                                     <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab" value="{{ $o->nro_orden }}">
-                                                                                </div>
-                                                                                <div class="form-group col-md-2 d-flex">
-
-
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -849,653 +1015,679 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-
                                                                     @endforeach
                                                                     @endif
-
                                                                 </div>
-
                                                             </div>
-
                                                         </div>
+                                                        <!--PRESUPUESTO LAB-->
                                                         <div class="tab-pane fade show" id="costo_presupuesto_trab" role="tabpanel" aria-labelledby="costo_presupuesto_trab-tab">
-                                                            <div class="col-sm-12 col-md-12">
-                                                                <div class="form-row">
-                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                        <div class="form-row">
-                                                                            <div class="form-group col-md-2">
-                                                                                <label class="floating-label-activo-sm">N° Identificación</label>
-                                                                                <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab">
+                                                            <div class="form-row">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <h6 class="sub-aten">Presupuesto Laboratorio</h6>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="col-md-12">
+                                                                    <div class="card-informacion">
+                                                                        <div class="card-body">
+                                                                            <div class="form-row">
+                                                                                <div class="form-group col-md-3">
+                                                                                    <label class="floating-label-activo-sm">N° Identificación</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm"> Valor Total</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_cost_tot" id="lab_cost_tot">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm"> Abonos</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_abon" id="lab_abon">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm"> Valor Pendiente</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_val_pend" id="lab_val_pend">
+                                                                                </div>
+                                                                                <div class="form-group col-md-3">
+                                                                                    <button type="button" class="btn btn-info-light-c btn-block btn-xs btn-block mb-2"onclick="info_lab();"><i class="fas fa-info-circle"></i> Info Laboratorio</button>
+                                                                                </div>
+                                                                                {{-- <div class="form-group col-md-3">
+                                                                                    <button type="button" class="btn btn-info-light-c btn-block btn-xs btn-block mb-2"onclick="info_lab();"><i class="fa fa-plus"></i>  Ingresar abono</button><!--este boton hace el calculo del abono y lo anota-->
+                                                                                </div> --}}
                                                                             </div>
-                                                                            <div class="form-group col-md-2">
-                                                                                <label class="floating-label-activo-sm"> Valor Total</label>
-                                                                                <input type="text" class="form-control form-control-sm" name="lab_cost_tot" id="lab_cost_tot">
-                                                                            </div>
-                                                                            <div class="form-group col-md-2">
-                                                                                <label class="floating-label-activo-sm"> Abonos</label>
-                                                                                <input type="text" class="form-control form-control-sm" name="lab_abon" id="lab_abon">
-                                                                            </div>
-                                                                            <div class="form-group col-md-2">
-                                                                                <label class="floating-label-activo-sm"> Valor Pendiente</label>
-                                                                                <input type="text" class="form-control form-control-sm" name="lab_val_pend" id="lab_val_pend">
-                                                                            </div>
-                                                                            <div class="form-group col-md-3">
-                                                                                <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2"onclick="info_lab();"><i class="fa fa-plus"></i>  Info Laboratorio</button>
-                                                                            </div>
-                                                                            {{-- <div class="form-group col-md-3">
-                                                                                <button type="button" class="btn btn-info-light-c btn-block btn-xs mb-2"onclick="info_lab();"><i class="fa fa-plus"></i>  Ingresar abono</button><!--este boton hace el calculo del abono y lo anota-->
-                                                                            </div> --}}
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
                                                             </div>
-
                                                         </div>
+                                                        <!--ESTADOS DE PAGO-->
                                                         <div class="tab-pane fade show " id="od_lab_estadopago" role="tabpanel" aria-labelledby="od_lab_estadopago-tab">
-                                                            <div class="col-sm-12 col-md-12">
-
-                                                                <div class="form-row">
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm">N° de presupuesto</label>
-                                                                        <select name="n_presupuesto" id="n_presupuesto" class="form-control form-control-sm">
-                                                                            <option value="0">Seleccione</option>
-                                                                            @if(isset($presupuesto))
-                                                                            <option value="{{ $presupuesto->id }}">{{ $presupuesto->id }}</option>
-                                                                            @endif
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm">Nombre Laboratorio</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm">N° Identificación</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm">F.pago</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm">Cantidad</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm"> Valor Total</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_cost_tot" id="lab_cost_tot">
-                                                                    </div>
-                                                                    <div class="form-group col-md-2">
-                                                                        <label class="floating-label-activo-sm"> Valor Pendiente</label>
-                                                                        <input type="text" class="form-control form-control-sm" name="lab_cost_tot" id="lab_cost_tot">
-                                                                    </div>
-                                                                    <div class="col-sm-10 col-md-10 col-lg-10 col-xl-10">
-                                                                        <label class="floating-label-activo-sm">Observaciones</label>
-                                                                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                            <div class="form-row">
+                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <h6 class="sub-aten">Estados de pago</h6>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="col-md-12">
+                                                                    <div class="card-informacion">
+                                                                        <div class="card-body">
+                                                                            <div class="form-row">
+                                                                                <div class="form-group col-md-4">
+                                                                                    <label class="floating-label-activo-sm">N° de presupuesto</label>
+                                                                                    <select name="n_presupuesto" id="n_presupuesto" class="form-control form-control-sm">
+                                                                                        <option value="0">Seleccione</option>
+                                                                                        @if(isset($presupuesto))
+                                                                                        <option value="{{ $presupuesto->id }}">{{ $presupuesto->id }}</option>
+                                                                                        @endif
+                                                                                    </select>
+                                                                                </div>
+                                                                                <div class="form-group col-md-8">
+                                                                                    <label class="floating-label-activo-sm">Nombre Laboratorio</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_nom" id="lab_nom">
+                                                                                </div>
+                                                                                <div class="form-group col-md-3">
+                                                                                    <label class="floating-label-activo-sm">N° Identificación</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_id_trab" id="lab_id_trab">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">F.pago</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fenv" id="lab_fenv">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm">Cantidad</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_fent" id="lab_fent">
+                                                                                </div>
+                                                                                <div class="form-group col-md-2">
+                                                                                    <label class="floating-label-activo-sm"> Valor Total</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_cost_tot" id="lab_cost_tot">
+                                                                                </div>
+                                                                                <div class="form-group col-md-3">
+                                                                                    <label class="floating-label-activo-sm"> Valor Pendiente</label>
+                                                                                    <input type="text" class="form-control form-control-sm" name="lab_cost_tot" id="lab_cost_tot">
+                                                                                </div>
+                                                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                    <label class="floating-label-activo-sm">Observaciones</label>
+                                                                                    <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_est_trab_lab" id="obs_est_trab_lab"></textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                                </div> 
+                                            </div> 
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!--EXAMEN CUELLO-->
+                        <!--PRESUPUESTO GENERAL-->
                         <div class="tab-pane fade show" id="od__presup_gral" role="tabpanel" aria-labelledby="od__presup_gral-tab">
-                            <div class="row">
-                                <div class="col-md-12">
+                            <div class="form-row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <h6 class="tit-gen">Presupuesto general</h6>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 col-xxl-8">
                                     <div class="card">
                                         <div class="card-body">
                                             <form>
                                                 <div class="form-row">
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Laboratorio</label>
+                                                    <div class="form-group col-md-3">
+                                                        <h6 class="text-c-blue pt-2">Laboratorio</h6>
                                                     </div>
-                                                    <div class="form-group col-md-2">
+                                                    <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
                                                         <input type="text" class="form-control form-control-sm" name="subtotal_lab" id="subtotal_lab">
                                                     </div>
-                                                    <div class="form-group col-md-2">
+                                                    <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Descuento</label>
                                                         <input type="text" class="form-control form-control-sm" name="descuento_lab" id="descuento_lab">
                                                     </div>
-                                                    <div class="form-group col-md-2">
+                                                    <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Total Laboratorio</label>
                                                         <input type="text" class="form-control form-control-sm" name="total_lab" id="total_lab">
                                                     </div>
 
                                                 </div>
                                                 <div class="form-row">
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Clínico</label>
+                                                    <div class="form-group col-md-3">
+                                                        <h6 class="text-c-blue pt-2">Clínico</h6>
                                                     </div>
-                                                    <div class="form-group col-md-2">
+                                                    <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
                                                         <input type="text" class="form-control form-control-sm" name="subtotal_clinico" id="subtotal_clinico" value="{{ number_format($valores + $valores_piezas,0,',','.') }}">
                                                     </div>
-                                                    <div class="form-group col-md-2">
+                                                    <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Descuento</label>
                                                         <input type="text" class="form-control form-control-sm" name="descuento_clinico" id="   descuento_clinico" value="0">
                                                     </div>
-                                                    <div class="form-group col-md-2">
+                                                    <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Total Clínico</label>
                                                         <input type="text" class="form-control form-control-sm" name="total_clinico" id="total_clinico" value="{{ number_format($valores + $valores_piezas,0,',','.') }}">
                                                     </div>
 
                                                 </div>
                                                 <div class="form-row">
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Insumos no incluidos</label>
+                                                    <div class="form-group col-md-3">
+                                                        <h6 class="text-c-blue pt-2">Insumos no incluidos</h6>
                                                     </div>
-                                                    <div class="form-group col-md-2">
+                                                    <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
                                                         <input type="text" class="form-control form-control-sm" name="subtotal_insumos" id="subtotal_insumos" value="{{ number_format($valores_insumos,0,',','.') }}">
                                                     </div>
-                                                    <div class="form-group col-md-2">
+                                                    <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Descuento</label>
                                                         <input type="text" class="form-control form-control-sm" name="descuento_insumos" id="descuento_insumos" value="0">
                                                     </div>
-                                                    <div class="form-group col-md-2">
+                                                    <div class="form-group col-md-3">
                                                         <label class="floating-label-activo-sm">Total Insumos</label>
                                                         <input type="text" class="form-control form-control-sm" name="total_insumos" id="total_insumos" value="{{ number_format($valores_insumos,0,',','.') }}">
                                                     </div>
 
                                                 </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Valor final</label>
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Total presupuesto</label>
-                                                        @php $suma = $valores + $valores_piezas + $valores_insumos; @endphp
-                                                        <input type="text" class="form-control form-control-sm" name="total_presupuesto" id="total_presupuesto" value="{{ number_format($suma,0,',','.') }}">
-                                                    </div>
-                                                </div>
+                                                
                                             </form>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-4">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                    <div class="card" style="border: 2px solid #4268b0 !important;box-shadow: 0px 0px 8px 1px rgb(48 65 148 / 25%), 0px 10px 9px -6px rgb(69 75 135 / 10%) !important;">
+                                        <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <h5 class="tit-gen">Valor final</h5>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <label class="floating-label-activo-sm">Total presupuesto</label>
+                                                @php $suma = $valores + $valores_piezas + $valores_insumos; @endphp
+                                                <input type="text" class="form-control" name="total_presupuesto" id="total_presupuesto" value="{{ number_format($suma,0,',','.') }}">
+                                            </div>
+                                            </div> 
+                                        </div>  
+                                        </div> 
+                                    </div>      
+                                </div>
+                                </div>
                             </div>
                         </div>
+                        <!--ABONOS Y ESTADOS DE PAGO-->
                         <div class="tab-pane fade show" id="od_abonos_pres" role="tabpanel" aria-labelledby="od_abonos_pres-tab">
                             <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <h6 class="tit-gen">Abonos y estados de pago</h6>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <form>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Presupuesto N°</label>
-                                                        <input type="text" class="form-control form-control-sm" name="" id="" value="{{ $presupuesto ? $presupuesto->id : ''}}">
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Sub-Total</label>
-                                                        <input type="text" class="form-control form-control-sm" name="subtotal_presup" id="subtotal_presup" value="{{ $presupuesto ? number_format($presupuesto->valor_total,0,',','.') : '' }}">
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Descuento</label>
-                                                        <input type="text" class="form-control form-control-sm" name="descuento_presup" id="descuento_presup">
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Total</label>
-                                                        <input type="text" class="form-control form-control-sm" name="total_presup" id="total_presup">
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <label class="floating-label-activo-sm">Abonos</label>
-                                                        <input type="text" class="form-control form-control-sm" name="abonos_presup" id="abonos_presup" value="{{ number_format($valor_abonado,0,',','.') }}">
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <button type="button" class="btn btn-success btn-block btn-sm"
-                                                        onclick="pagar_presupuesto();"><i class="fa fa-plus"></i>Ingresar Abono</button>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        @foreach ($convenios_prevision as $c)
-                                                            @if( $paciente->prevision->nombre == $c->nombre_convenio)
-                                                            <p class="promo-banner my-3">{{ $paciente->prevision->nombre }} {{ $c->porcentaje }} % {{ $c->descripcion }}
-                                                                <button type="button" class="btn btn-outline-light btn-sm btn-icon" onclick="aplicar_convenio_tratamiento({{ $c->id }})"><i class="fas fa-check"></i></button>
-                                                                <button type="button" class="btn btn-outline-primary btn-sm btn-icon" onclick="generar_pdf()"><i class="fas fa-print"></i></button>
-                                                                <span id="mensaje" class="badge badge-success"></span>
-                                                                <input type="hidden" name="tiene_dcto" id="tiene_dcto" value="0">
-                                                            </p>
-
-                                                            @endif
-                                                        @endforeach
-                                                    </div>
-
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <h2 style="font-size: 25px; text-align: center;">Presupuesto por pieza</h2>
-                                                        <div class="dt-responsive table-responsive pb-4">
-                                                            <table id="presup_estado_pago"
-                                                                class="display table table-striped table-hover dt-responsive nowrap table-sm"
-                                                                style="width:100%">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th class="text-center align-middle">Prestación</th>
-                                                                        <th class="text-center align-middle">Pieza</th>
-                                                                        <th class="text-center align-middle">Valor total</th>
-                                                                        <th class="text-center align-middle">Descuento</th>
-                                                                        <th class="text-center align-middle">Valor a pagar</th>
-                                                                        <th class="text-center align-middle">Estado de pago</th>
-                                                                        <th class="text-center align-middle">Estado Prestación</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @foreach ($odontograma as $o)
-                                                                        @if($o->presupuesto == 1)
-                                                                            @php
-                                                                            if($o->estado == 0) {
-                                                                                $estado = 'PENDIENTE';
-                                                                            }elseif($o->estado == 1){
-                                                                                $estado = 'TERMINADO';
-                                                                                # code...
-                                                                            }
-                                                                            if($o->estado_pago == 'ok'){
-                                                                                $clase = 'bg-success';
-                                                                            }else if($o->estado_pago == 'incompleto'){
-                                                                                $clase = 'bg-warning';
-                                                                            }else{
-                                                                                $clase = 'bg-danger';
-                                                                            }
-                                                                            @endphp
-                                                                            <tr>
-                                                                                <td class="text-center align-middle">{{ $o->descripcion }}</td>
-                                                                                <td class="text-center align-middle">{{ $o->pieza }}</td>
-                                                                                <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
-                                                                                <td class="text-center align-middle">0</td>
-                                                                                <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
-                                                                                <td class="text-center align-middle status-circle">
-                                                                                    <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                                </td>
-                                                                                <td class="text-center align-middle">
-                                                                                    {{ $estado }}
-                                                                                </td>
-
-                                                                            </tr>
-                                                                        @endif
-                                                                    @endforeach
-
-                                                                </tbody>
-                                                            </table>
+                                    <form>
+                                        <div class="form-row">
+                                   
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                <div class="card mb-0">
+                                                    <div class="card-body pb-1 mb-0">
+                                                        <div class="form-row">
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Presupuesto N°</label>
+                                                            <input type="text" class="form-control form-control-sm" name="" id="" value="{{ $presupuesto ? $presupuesto->id : ''}}">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Sub-Total</label>
+                                                            <input type="text" class="form-control form-control-sm" name="subtotal_presup" id="subtotal_presup" value="{{ $presupuesto ? number_format($presupuesto->valor_total,0,',','.') : '' }}">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Descuento</label>
+                                                            <input type="text" class="form-control form-control-sm" name="descuento_presup" id="descuento_presup">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Total</label>
+                                                            <input type="text" class="form-control form-control-sm" name="total_presup" id="total_presup">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Abonos</label>
+                                                            <input type="text" class="form-control form-control-sm" name="abonos_presup" id="abonos_presup" value="{{ number_format($valor_abonado,0,',','.') }}">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <button type="button" class="btn btn-info btn-block btn-sm"
+                                                            onclick="pagar_presupuesto();"><i class="fa fa-plus"></i> Ingresar Abono</button>
+                                                        </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-12 mt-3">
-                                                        <h2 style="font-size: 25px; text-align: center;">Presupuesto por grupos</h2>
-                                                        <div class="dt-responsive table-responsive pb-4">
-                                                            <table id="presup_estado_pago_gral" class="display table table-striped table-hover dt-responsive nowrap table-sm w-100">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th class="text-center align-middle">Prestación</th>
-                                                                        <th class="text-center align-middle">Grupo</th>
-                                                                        <th class="text-center align-middle">Valor total</th>
-                                                                        <th class="text-center align-middle">Descuento</th>
-                                                                        <th class="text-center align-middle">Valor a pagar</th>
-                                                                        <th class="text-center align-middle">Estado Pago</th>
-                                                                        <th class="text-center align-middle">Estado Prestación</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @foreach ($maxilar_superior_gral_diagnosticos as $diagnostico)
-                                                                        @if($diagnostico->presupuesto == 1)
-                                                                            @php
-                                                                                if($diagnostico->estado == 0) {
-                                                                                    $estado = 'PENDIENTE';
-                                                                                }elseif($diagnostico->estado == 1){
-                                                                                    $estado = 'TERMINADO';
-                                                                                    # code...
-                                                                                }
-                                                                            @endphp
-                                                                            <tr>
-                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                                <td class="text-center align-middle">0</td>
-                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                </div>    
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @foreach ($convenios_prevision as $c)
+                                                    @if( $paciente->prevision->nombre == $c->nombre_convenio)
+                                                    <p class="promo-banner my-3">{{ $paciente->prevision->nombre }} {{ $c->porcentaje }} % {{ $c->descripcion }}
+                                                        <button type="button" class="btn btn-outline-light btn-sm btn-icon" onclick="aplicar_convenio_tratamiento({{ $c->id }})"><i class="fas fa-check"></i></button>
+                                                        <button type="button" class="btn btn-outline-primary btn-sm btn-icon" onclick="generar_pdf()"><i class="fas fa-print"></i></button>
+                                                        <span id="mensaje" class="badge badge-success"></span>
+                                                        <input type="hidden" name="tiene_dcto" id="tiene_dcto" value="0">
+                                                    </p>
 
-                                                                                <td class="text-center align-middle status-circle">
-                                                                                    <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                                </td>
-                                                                                <td class="text-center align-middle">
-                                                                                    {{ $estado }}
-                                                                                </td>
+                                                    @endif
+                                                @endforeach
+                                            </div>
 
-                                                                            </tr>
-                                                                        @endif
-                                                                    @endforeach
-                                                                    @foreach ($maxilar_superior_gral_tratamientos as $diagnostico)
-                                                                        @if($diagnostico->presupuesto == 1)
-                                                                        @php
-                                                                                if($diagnostico->estado == 0) {
-                                                                                    $estado = 'PENDIENTE';
-                                                                                }elseif($diagnostico->estado == 1){
-                                                                                    $estado = 'TERMINADO';
-                                                                                    # code...
-                                                                                }
-                                                                            @endphp
-                                                                        <tr>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                            <td class="text-center align-middle">0</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                            <td class="text-center align-middle status-circle">
-                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                {{ $estado }}
-                                                                            </td>
-
-                                                                        </tr>
-                                                                        @endif
-                                                                    @endforeach
-                                                                    @foreach ($maxilar_superior_gral_tratamientos_endo as $diagnostico)
-                                                                        @if($diagnostico->presupuesto == 1)
-                                                                            @php
-                                                                                if($diagnostico->estado == 0) {
-                                                                                    $estado = 'PENDIENTE';
-                                                                                }elseif($diagnostico->estado == 1){
-                                                                                    $estado = 'TERMINADO';
-                                                                                    # code...
-                                                                                }
-                                                                            @endphp
-                                                                            <tr>
-                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                                <td class="text-center align-middle">0</td>
-                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                                <td class="text-center align-middle status-circle">
-                                                                                    <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                                </td>
-                                                                                <td class="text-center align-middle">
-                                                                                    {{ $estado }}
-                                                                                </td>
-
-                                                                            </tr>
-                                                                        @endif
-                                                                    @endforeach
-                                                                    @foreach ($maxilar_superior_gral_diagnosticos_endo as $diagnostico)
-                                                                        @if($diagnostico->presupuesto == 1)
-                                                                            @php
-                                                                                if($diagnostico->estado == 0) {
-                                                                                    $estado = 'PENDIENTE';
-                                                                                }elseif($diagnostico->estado == 1){
-                                                                                    $estado = 'TERMINADO';
-                                                                                    # code...
-                                                                                }
-                                                                            @endphp
-                                                                            <tr>
-                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                                <td class="text-center align-middle">0</td>
-                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                                <td class="text-center align-middle status-circle">
-                                                                                    <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                                </td>
-                                                                                <td class="text-center align-middle">
-                                                                                    {{ $estado }}
-                                                                                </td>
-
-                                                                            </tr>
-                                                                        @endif
-                                                                    @endforeach
-                                                                    @foreach ($maxilar_inferior_gral_diagnosticos as $diagnostico)
-                                                                    @if($diagnostico->presupuesto == 1)
-                                                                    @php
-                                                                            if($diagnostico->estado == 0) {
-                                                                                $estado = 'PENDIENTE';
-                                                                            }elseif($diagnostico->estado == 1){
-                                                                                $estado = 'TERMINADO';
-                                                                                # code...
-                                                                            }
-                                                                        @endphp
-                                                                    <tr>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle">0</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                        <td class="text-center align-middle status-circle">
-                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : $diagnostico->clase }}"></div>
-
-                                                                        </td>
-                                                                        <td class="text-center align-middle">
-                                                                            {{ $estado }}
-                                                                        </td>
-
-                                                                    </tr>
-                                                                    @endif
-                                                                    @endforeach
-                                                                    @foreach ($maxilar_inferior_gral_tratamientos as $diagnostico)
-                                                                    @if($diagnostico->presupuesto == 1)
-                                                                    @php
-                                                                            if($diagnostico->estado == 0) {
-                                                                                $estado = 'PENDIENTE';
-                                                                            }elseif($diagnostico->estado == 1){
-                                                                                $estado = 'TERMINADO';
-                                                                                # code...
-                                                                            }
-                                                                        @endphp
-                                                                    <tr>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle">0</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                        <td class="text-center align-middle status-circle">
-                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                        </td>
-                                                                        <td class="text-center align-middle">
-                                                                            {{ $estado }}
-                                                                        </td>
-
-                                                                    </tr>
-                                                                    @endif
-                                                                    @endforeach
-                                                                    @foreach ($maxilar_inferior_gral_diagnosticos_endo as $diagnostico)
-                                                                    @if($diagnostico->presupuesto == 1)
-                                                                    @php
-                                                                            if($diagnostico->estado == 0) {
-                                                                                $estado = 'PENDIENTE';
-                                                                            }elseif($diagnostico->estado == 1){
-                                                                                $estado = 'TERMINADO';
-                                                                                # code...
-                                                                            }
-                                                                        @endphp
-                                                                    <tr>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle">0</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                        <td class="text-center align-middle status-circle">
-                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                        </td>
-                                                                        <td class="text-center align-middle">
-                                                                            {{ $estado }}
-                                                                        </td>
-
-                                                                    </tr>
-                                                                    @endif
-                                                                    @endforeach
-                                                                    @foreach ($maxilar_inferior_gral_tratamientos_endo as $diagnostico)
-                                                                    @if($diagnostico->presupuesto == 1)
-                                                                    @php
-                                                                            if($diagnostico->estado == 0) {
-                                                                                $estado = 'PENDIENTE';
-                                                                            }elseif($diagnostico->estado == 1){
-                                                                                $estado = 'TERMINADO';
-                                                                                # code...
-                                                                            }
-                                                                        @endphp
-                                                                    <tr>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle">0</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                        <td class="text-center align-middle status-circle">
-                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                        </td>
-                                                                        <td class="text-center align-middle">
-                                                                            {{ $estado }}
-                                                                        </td>
-
-                                                                    </tr>
-                                                                    @endif
-                                                                    @endforeach
-                                                                    @foreach ($boca_completa_gral_tratamientos as $diagnostico)
-                                                                    @if($diagnostico->presupuesto == 1)
-                                                                    @php
-                                                                            if($diagnostico->estado == 0) {
-                                                                                $estado = 'PENDIENTE';
-                                                                            }elseif($diagnostico->estado == 1){
-                                                                                $estado = 'TERMINADO';
-                                                                                # code...
-                                                                            }
-                                                                        @endphp
-                                                                    <tr>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle">0</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                        <td class="text-center align-middle status-circle">
-                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                        </td>
-                                                                        <td class="text-center align-middle">
-                                                                            {{ $estado }}
-                                                                        </td>
-
-                                                                    </tr>
-                                                                    @endif
-                                                                    @endforeach
-                                                                    @foreach ($boca_completa_gral_diagnosticos as $diagnostico)
-                                                                    @if($diagnostico->presupuesto == 1)
-                                                                    @php
-                                                                            if($diagnostico->estado == 0) {
-                                                                                $estado = 'PENDIENTE';
-                                                                            }elseif($diagnostico->estado == 1){
-                                                                                $estado = 'TERMINADO';
-                                                                                # code...
-                                                                            }
-                                                                        @endphp
-                                                                    <tr>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle">0</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                        <td class="text-center align-middle status-circle">
-                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                        </td>
-                                                                        <td class="text-center align-middle">
-                                                                            {{ $estado }}
-                                                                        </td>
-
-                                                                    </tr>
-                                                                    @endif
-                                                                    @endforeach
-                                                                    @foreach ($boca_completa_gral_tratamiento_endo as $diagnostico)
-                                                                    @if($diagnostico->presupuesto == 1)
-                                                                    @php
-                                                                            if($diagnostico->estado == 0) {
-                                                                                $estado = 'PENDIENTE';
-                                                                            }elseif($diagnostico->estado == 1){
-                                                                                $estado = 'TERMINADO';
-                                                                                # code...
-                                                                            }
-                                                                        @endphp
-                                                                    <tr>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                        <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                        <td class="text-center align-middle">0</td>
-                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                        <td class="text-center align-middle status-circle">
-                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                        </td>
-                                                                        <td class="text-center align-middle">
-                                                                            {{ $estado }}
-                                                                        </td>
-
-                                                                    </tr>
-                                                                    @endif
-                                                                    @endforeach
-                                                                    @foreach ($boca_completa_gral_diagnostico_endo as $diagnostico)
-                                                                    @if($diagnostico->presupuesto == 1)
-                                                                        @php
-                                                                                if($diagnostico->estado == 0) {
-                                                                                    $estado = 'PENDIENTE';
-                                                                                }elseif($diagnostico->estado == 1){
-                                                                                    $estado = 'TERMINADO';
-                                                                                    # code...
-                                                                                }
-                                                                            @endphp
-                                                                        <tr>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                            <td class="text-center align-middle">0</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                            <td class="text-center align-middle status-circle">
-                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                {{ $estado }}
-                                                                            </td>
-
-                                                                        </tr>
-                                                                        @endif
-                                                                    @endforeach
-                                                                </tbody>
-                                                            </table>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                            <div class="card-informacion">
+                                                <div class="card-top">
+                                                <h5 class="text-uppercase text-c-blue">Presupuesto por pieza</h5>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-12 mt-3">
-                                                        <h2 style="font-size: 25px; text-align: center;">Insumos y gastos generales</h2>
-                                                        <table id="presup_insumos_pago" class="display table table-striped table-hover dt-responsive nowrap table-sm w-100">
+                                            <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                        
+                                                    <div class="dt-responsive table-responsive pb-4">
+                                                        <table id="presup_estado_pago"
+                                                            class="display table table-striped dt-responsive nowrap table-sm"
+                                                            style="width:100%">
                                                             <thead>
                                                                 <tr>
-                                                                    <td class="text-center align-middle">Insumo</td>
-                                                                    <td class="text-center align-middle">Cantidad</td>
-                                                                    <td class="text-center align-middle">Sub-total</td>
-                                                                    <td class="text-center align-middle">Descuento</td>
-                                                                    <td class="text-center align-middle">Total</td>
-                                                                    <td class="text-center align-middle">Estado de pago</td>
+                                                                    <th class="text-center align-middle">Prestación</th>
+                                                                    <th class="text-center align-middle">Pieza</th>
+                                                                    <th class="text-center align-middle">Valor total</th>
+                                                                    <th class="text-center align-middle">Descuento</th>
+                                                                    <th class="text-center align-middle">Valor a pagar</th>
+                                                                    <th class="text-center align-middle">Estado de pago</th>
+                                                                    <th class="text-center align-middle">Estado Prestación</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                @foreach ($insumos_tratamientos as $t)
-                                                                    @if($t->presupuesto == 1)
-                                                                    @php $total = $t->cantidad * $t->valor @endphp
+                                                                @foreach ($odontograma as $o)
+                                                                    @if($o->presupuesto == 1)
+                                                                        @php
+                                                                        if($o->estado == 0) {
+                                                                            $estado = 'PENDIENTE';
+                                                                        }elseif($o->estado == 1){
+                                                                            $estado = 'TERMINADO';
+                                                                            # code...
+                                                                        }
+                                                                        if($o->estado_pago == 'ok'){
+                                                                            $clase = 'bg-success';
+                                                                        }else if($o->estado_pago == 'incompleto'){
+                                                                            $clase = 'bg-warning';
+                                                                        }else{
+                                                                            $clase = 'bg-danger';
+                                                                        }
+                                                                        @endphp
+                                                                        <tr>
+                                                                            <td class="text-center align-middle">{{ $o->descripcion }}</td>
+                                                                            <td class="text-center align-middle">{{ $o->pieza }}</td>
+                                                                            <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
+                                                                            <td class="text-center align-middle">0</td>
+                                                                            <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
+                                                                            <td class="text-center align-middle status-circle">
+                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                            </td>
+                                                                            <td class="text-center align-middle">
+                                                                                {{ $estado }}
+                                                                            </td>
+
+                                                                        </tr>
+                                                                    @endif
+                                                                @endforeach
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                            <div class="card">
+                                            <div class="card-top">
+                                                <h5 class="text-uppercase text-c-blue">Presupuesto por grupos</h5>
+                                                        </div>
+                                            <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-12 mt-3">
+                                                    
+                                                    <div class="dt-responsive table-responsive pb-4">
+                                                        <table id="presup_estado_pago_gral" class="display table table-striped dt-responsive nowrap table-sm w-100">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-center align-middle">Prestación</th>
+                                                                    <th class="text-center align-middle">Grupo</th>
+                                                                    <th class="text-center align-middle">Valor total</th>
+                                                                    <th class="text-center align-middle">Descuento</th>
+                                                                    <th class="text-center align-middle">Valor a pagar</th>
+                                                                    <th class="text-center align-middle">Estado Pago</th>
+                                                                    <th class="text-center align-middle">Estado Prestación</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($maxilar_superior_gral_diagnosticos as $diagnostico)
+                                                                    @if($diagnostico->presupuesto == 1)
+                                                                        @php
+                                                                            if($diagnostico->estado == 0) {
+                                                                                $estado = 'PENDIENTE';
+                                                                            }elseif($diagnostico->estado == 1){
+                                                                                $estado = 'TERMINADO';
+                                                                                # code...
+                                                                            }
+                                                                        @endphp
+                                                                        <tr>
+                                                                            <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                            <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                            <td class="text-center align-middle">0</td>
+                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+
+                                                                            <td class="text-center align-middle status-circle">
+                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                            </td>
+                                                                            <td class="text-center align-middle">
+                                                                                {{ $estado }}
+                                                                            </td>
+
+                                                                        </tr>
+                                                                    @endif
+                                                                @endforeach
+                                                                @foreach ($maxilar_superior_gral_tratamientos as $diagnostico)
+                                                                    @if($diagnostico->presupuesto == 1)
+                                                                    @php
+                                                                            if($diagnostico->estado == 0) {
+                                                                                $estado = 'PENDIENTE';
+                                                                            }elseif($diagnostico->estado == 1){
+                                                                                $estado = 'TERMINADO';
+                                                                                # code...
+                                                                            }
+                                                                        @endphp
                                                                     <tr>
-                                                                        <td class="text-center align-middle">{{ $t->insumos }} {{ $t->nombre_marca }}</td>
-                                                                        <td class="text-center align-middle">{{ $t->cantidad }}</td>
-                                                                        <td class="text-center align-middle">{{ number_format($t->valor)  }}</td>
+                                                                        <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                        <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
                                                                         <td class="text-center align-middle">0</td>
-                                                                        <td class="text-center align-middle">{{ number_format($total)  }}</td>
+                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+
                                                                         <td class="text-center align-middle status-circle">
-                                                                            <div class="circle {{ $t->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                        </td>
+                                                                        <td class="text-center align-middle">
+                                                                            {{ $estado }}
+                                                                        </td>
+
+                                                                    </tr>
+                                                                    @endif
+                                                                @endforeach
+                                                                @foreach ($maxilar_superior_gral_tratamientos_endo as $diagnostico)
+                                                                    @if($diagnostico->presupuesto == 1)
+                                                                        @php
+                                                                            if($diagnostico->estado == 0) {
+                                                                                $estado = 'PENDIENTE';
+                                                                            }elseif($diagnostico->estado == 1){
+                                                                                $estado = 'TERMINADO';
+                                                                                # code...
+                                                                            }
+                                                                        @endphp
+                                                                        <tr>
+                                                                            <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                            <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                            <td class="text-center align-middle">0</td>
+                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+
+                                                                            <td class="text-center align-middle status-circle">
+                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                            </td>
+                                                                            <td class="text-center align-middle">
+                                                                                {{ $estado }}
+                                                                            </td>
+
+                                                                        </tr>
+                                                                    @endif
+                                                                @endforeach
+                                                                @foreach ($maxilar_superior_gral_diagnosticos_endo as $diagnostico)
+                                                                    @if($diagnostico->presupuesto == 1)
+                                                                        @php
+                                                                            if($diagnostico->estado == 0) {
+                                                                                $estado = 'PENDIENTE';
+                                                                            }elseif($diagnostico->estado == 1){
+                                                                                $estado = 'TERMINADO';
+                                                                                # code...
+                                                                            }
+                                                                        @endphp
+                                                                        <tr>
+                                                                            <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                            <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                            <td class="text-center align-middle">0</td>
+                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+
+                                                                            <td class="text-center align-middle status-circle">
+                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                            </td>
+                                                                            <td class="text-center align-middle">
+                                                                                {{ $estado }}
+                                                                            </td>
+
+                                                                        </tr>
+                                                                    @endif
+                                                                @endforeach
+                                                                @foreach ($maxilar_inferior_gral_diagnosticos as $diagnostico)
+                                                                @if($diagnostico->presupuesto == 1)
+                                                                @php
+                                                                        if($diagnostico->estado == 0) {
+                                                                            $estado = 'PENDIENTE';
+                                                                        }elseif($diagnostico->estado == 1){
+                                                                            $estado = 'TERMINADO';
+                                                                            # code...
+                                                                        }
+                                                                    @endphp
+                                                                <tr>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                    <td class="text-center align-middle">0</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+
+                                                                    <td class="text-center align-middle status-circle">
+                                                                        <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : $diagnostico->clase }}"></div>
+
+                                                                    </td>
+                                                                    <td class="text-center align-middle">
+                                                                        {{ $estado }}
+                                                                    </td>
+
+                                                                </tr>
+                                                                @endif
+                                                                @endforeach
+                                                                @foreach ($maxilar_inferior_gral_tratamientos as $diagnostico)
+                                                                @if($diagnostico->presupuesto == 1)
+                                                                @php
+                                                                        if($diagnostico->estado == 0) {
+                                                                            $estado = 'PENDIENTE';
+                                                                        }elseif($diagnostico->estado == 1){
+                                                                            $estado = 'TERMINADO';
+                                                                            # code...
+                                                                        }
+                                                                    @endphp
+                                                                <tr>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                    <td class="text-center align-middle">0</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+
+                                                                    <td class="text-center align-middle status-circle">
+                                                                        <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                    </td>
+                                                                    <td class="text-center align-middle">
+                                                                        {{ $estado }}
+                                                                    </td>
+
+                                                                </tr>
+                                                                @endif
+                                                                @endforeach
+                                                                @foreach ($maxilar_inferior_gral_diagnosticos_endo as $diagnostico)
+                                                                @if($diagnostico->presupuesto == 1)
+                                                                @php
+                                                                        if($diagnostico->estado == 0) {
+                                                                            $estado = 'PENDIENTE';
+                                                                        }elseif($diagnostico->estado == 1){
+                                                                            $estado = 'TERMINADO';
+                                                                            # code...
+                                                                        }
+                                                                    @endphp
+                                                                <tr>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                    <td class="text-center align-middle">0</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+
+                                                                    <td class="text-center align-middle status-circle">
+                                                                        <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                    </td>
+                                                                    <td class="text-center align-middle">
+                                                                        {{ $estado }}
+                                                                    </td>
+
+                                                                </tr>
+                                                                @endif
+                                                                @endforeach
+                                                                @foreach ($maxilar_inferior_gral_tratamientos_endo as $diagnostico)
+                                                                @if($diagnostico->presupuesto == 1)
+                                                                @php
+                                                                        if($diagnostico->estado == 0) {
+                                                                            $estado = 'PENDIENTE';
+                                                                        }elseif($diagnostico->estado == 1){
+                                                                            $estado = 'TERMINADO';
+                                                                            # code...
+                                                                        }
+                                                                    @endphp
+                                                                <tr>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                    <td class="text-center align-middle">0</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+
+                                                                    <td class="text-center align-middle status-circle">
+                                                                        <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                    </td>
+                                                                    <td class="text-center align-middle">
+                                                                        {{ $estado }}
+                                                                    </td>
+
+                                                                </tr>
+                                                                @endif
+                                                                @endforeach
+                                                                @foreach ($boca_completa_gral_tratamientos as $diagnostico)
+                                                                @if($diagnostico->presupuesto == 1)
+                                                                @php
+                                                                        if($diagnostico->estado == 0) {
+                                                                            $estado = 'PENDIENTE';
+                                                                        }elseif($diagnostico->estado == 1){
+                                                                            $estado = 'TERMINADO';
+                                                                            # code...
+                                                                        }
+                                                                    @endphp
+                                                                <tr>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                    <td class="text-center align-middle">0</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+
+                                                                    <td class="text-center align-middle status-circle">
+                                                                        <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                    </td>
+                                                                    <td class="text-center align-middle">
+                                                                        {{ $estado }}
+                                                                    </td>
+
+                                                                </tr>
+                                                                @endif
+                                                                @endforeach
+                                                                @foreach ($boca_completa_gral_diagnosticos as $diagnostico)
+                                                                @if($diagnostico->presupuesto == 1)
+                                                                @php
+                                                                        if($diagnostico->estado == 0) {
+                                                                            $estado = 'PENDIENTE';
+                                                                        }elseif($diagnostico->estado == 1){
+                                                                            $estado = 'TERMINADO';
+                                                                            # code...
+                                                                        }
+                                                                    @endphp
+                                                                <tr>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                    <td class="text-center align-middle">0</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+
+                                                                    <td class="text-center align-middle status-circle">
+                                                                        <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                    </td>
+                                                                    <td class="text-center align-middle">
+                                                                        {{ $estado }}
+                                                                    </td>
+
+                                                                </tr>
+                                                                @endif
+                                                                @endforeach
+                                                                @foreach ($boca_completa_gral_tratamiento_endo as $diagnostico)
+                                                                @if($diagnostico->presupuesto == 1)
+                                                                @php
+                                                                        if($diagnostico->estado == 0) {
+                                                                            $estado = 'PENDIENTE';
+                                                                        }elseif($diagnostico->estado == 1){
+                                                                            $estado = 'TERMINADO';
+                                                                            # code...
+                                                                        }
+                                                                    @endphp
+                                                                <tr>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                    <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                    <td class="text-center align-middle">0</td>
+                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+
+                                                                    <td class="text-center align-middle status-circle">
+                                                                        <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                    </td>
+                                                                    <td class="text-center align-middle">
+                                                                        {{ $estado }}
+                                                                    </td>
+
+                                                                </tr>
+                                                                @endif
+                                                                @endforeach
+                                                                @foreach ($boca_completa_gral_diagnostico_endo as $diagnostico)
+                                                                @if($diagnostico->presupuesto == 1)
+                                                                    @php
+                                                                            if($diagnostico->estado == 0) {
+                                                                                $estado = 'PENDIENTE';
+                                                                            }elseif($diagnostico->estado == 1){
+                                                                                $estado = 'TERMINADO';
+                                                                                # code...
+                                                                            }
+                                                                        @endphp
+                                                                    <tr>
+                                                                        <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
+                                                                        <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
+                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                        <td class="text-center align-middle">0</td>
+                                                                        <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+
+                                                                        <td class="text-center align-middle status-circle">
+                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                        </td>
+                                                                        <td class="text-center align-middle">
+                                                                            {{ $estado }}
                                                                         </td>
 
                                                                     </tr>
@@ -1505,49 +1697,123 @@
                                                         </table>
                                                     </div>
                                                 </div>
-                                                <div class="row mt-3 bg-light border p-3 text-center">
-                                                    <!-- Total -->
-                                                    <div class="col-md-2">
-                                                        <h5>Total Grupo/Boca</h5>
-                                                        <p id="valores_examenes_presupuesto_conf">$ {{ number_format($valores,0,',','.') }}</p>
-                                                    </div>
-
-                                                    <!-- Total Piezas -->
-                                                    <div class="col-md-2">
-                                                        <h5>Total Piezas</h5>
-                                                        <p id="valores_piezas_presupuesto_conf">$ {{ number_format($valores_piezas,0,',','.') }}</p>
-                                                    </div>
-
-                                                    <!-- Descuentos -->
-                                                    <div class="col-md-2">
-                                                        <h5>Descuentos</h5>
-                                                        <p id="valores_descuentos_presupuesto_conf">$0.00</p>
-                                                    </div>
-
-                                                    <!-- Insumos -->
-                                                    <div class="col-md-2">
-                                                        <h5>Insumos</h5>
-                                                        <p id="valores_insumos_presupuesto_conf">$ {{ number_format($valores_insumos,0,',','.') }}</p>
-                                                    </div>
-
-                                                    <!-- Total Final -->
-                                                    <div class="col-md-4 d-flex justify-content-between">
-                                                        <div>
-                                                            <h5>Total Final</h5>
-                                                            <p id="valores_total_final_presupuesto_conf">$ {{ number_format($valores + $valores_piezas + $valores_insumos,0,',','.') }}</p>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                            <div class="card">
+                                            <div class="card-top">
+                                                <h5 class="text-uppercase text-c-blue">Insumos y gastos generales</h5>
                                                         </div>
-                                                        <div>
-                                                            <h5>Abonado</h5>
-                                                            <p id="valores_total_abonado_presupuesto_conf">${{ number_format($valor_abonado,0,',','.') }}</p>
-                                                        </div>
-                                                        @php $total_pago = $valores + $valores_piezas + $valores_insumos; @endphp
-                                                        <button type="button" class="btn btn-outline-primary btn-sm" style="width: 85px;" onclick="reasignar_presupuesto({{ $total_pago }}, {{ $valor_abonado }},{{ $valores_insumos }})">Reasignar Pago</button>
-                                                        <button type="button" class="btn btn-outline-success btn-sm" onclick="pagar_presupuesto()">Pagar</button>
-                                                    </div>
+                                            <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-12 mt-3">
+                                                    <table id="presup_insumos_pago" class="display table table-striped dt-responsive nowrap table-sm w-100">
+                                                        <thead>
+                                                            <tr>
+                                                                <td class="text-center align-middle">Insumo</td>
+                                                                <td class="text-center align-middle">Cantidad</td>
+                                                                <td class="text-center align-middle">Sub-total</td>
+                                                                <td class="text-center align-middle">Descuento</td>
+                                                                <td class="text-center align-middle">Total</td>
+                                                                <td class="text-center align-middle">Estado de pago</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($insumos_tratamientos as $t)
+                                                                @if($t->presupuesto == 1)
+                                                                @php $total = $t->cantidad * $t->valor @endphp
+                                                                <tr>
+                                                                    <td class="text-center align-middle">{{ $t->insumos }} {{ $t->nombre_marca }}</td>
+                                                                    <td class="text-center align-middle">{{ $t->cantidad }}</td>
+                                                                    <td class="text-center align-middle">{{ number_format($t->valor)  }}</td>
+                                                                    <td class="text-center align-middle">0</td>
+                                                                    <td class="text-center align-middle">{{ number_format($total)  }}</td>
+                                                                    <td class="text-center align-middle status-circle">
+                                                                        <div class="circle {{ $t->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                    </td>
+
+                                                                </tr>
+                                                                @endif
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
                                                 </div>
-                                            </form>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="form-row align-items-center bg-light mx-1 p-3 text-center rounded-xl text-white" style="border: 2px solid #4268b0 !important;box-shadow: 0px 0px 8px 1px rgb(48 65 148 / 25%), 0px 10px 9px -6px rgb(69 75 135 / 10%) !important;">
+                                            <!-- Total -->
+                                            <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
+                                                <h5 class="mb-0 text-c-blue">Total Grupo/Boca</h5>
+                                                <p id="valores_examenes_presupuesto_conf">$ {{ number_format($valores,0,',','.') }}</p>
+                                            </div>
+
+                                            <!-- Total Piezas -->
+                                            <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
+                                                <h5 class="mb-0 text-c-blue">Total Piezas</h5>
+                                                <p id="valores_piezas_presupuesto_conf">$ {{ number_format($valores_piezas,0,',','.') }}</p>
+                                            </div>
+
+                                            <!-- Descuentos -->
+                                            <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
+                                                <h5 class="mb-0 text-c-blue">Descuentos</h5>
+                                                <p id="valores_descuentos_presupuesto_conf">$0.00</p>
+                                            </div>
+
+                                            <!-- Insumos -->
+                                            <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2">
+                                                <h5 class="mb-0 text-c-blue">Insumos</h5>
+                                                <p id="valores_insumos_presupuesto_conf">$ {{ number_format($valores_insumos,0,',','.') }}</p>
+                                            </div>
+
+                                        
+
+                                            <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2 bg-naranjo  rounded-pill py-1 my-1">
+                                            <h5 class="text-white">Total Final</h5>
+                                            <p class="text-white" id="valores_total_final_presupuesto_conf">$ {{ number_format($valores + $valores_piezas + $valores_insumos,0,',','.') }}</p>
+                                            </div>
+
+
+                                            <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-2 my-2 bg-success rounded-pill py-1 my-1">
+                                            <h5 class="text-white">Abonado</h5>
+                                            <p class="text-white" id="valores_total_abonado_presupuesto_conf">${{ number_format($valor_abonado,0,',','.') }}</p>
+                                            </div>
+
+
+                                            {{-- <div class="col-sm-12 col-md-6 col-lg-2 col-xl-2 col-xxl-3 my-2">
+                                            @php $total_pago = $valores + $valores_piezas + $valores_insumos; @endphp
+                                                <button type="button" class="btn btn-outline-primary btn-sm" style="width: 85px;" onclick="reasignar_presupuesto({{ $total_pago }}, {{ $valor_abonado }},{{ $valores_insumos }})">Reasignar Pago</button>
+                                                <button type="button" class="btn btn-outline-success btn-sm" onclick="pagar_presupuesto()">Pagar</button>
+                                            </div>--}}
+
+
+                                            <!-- Total Final -->
+                                            {{--<div class="col-md-12 d-flex justify-content-between">
+                                                <div class="bg-naranjo bg-naranjo rounded-pill py-1 my-1">
+                                                    <h5 class="text-white">Total Final</h5>
+                                                    <p class="text-white" id="valores_total_final_presupuesto_conf">$ {{ number_format($valores + $valores_piezas + $valores_insumos,0,',','.') }}</p>
+                                                </div>
+                                                <div class="bg-sucess bg-success rounded-pill py-1 my-1">
+                                                    <h5 class="text-white">Abonado</h5>
+                                                    <p class="text-white" id="valores_total_abonado_presupuesto_conf">${{ number_format($valor_abonado,0,',','.') }}</p>
+                                                </div>
+                                                @php $total_pago = $valores + $valores_piezas + $valores_insumos; @endphp
+                                                <button type="button" class="btn btn-outline-primary btn-sm" style="width: 85px;" onclick="reasignar_presupuesto({{ $total_pago }}, {{ $valor_abonado }},{{ $valores_insumos }})">Reasignar Pago</button>
+                                                <button type="button" class="btn btn-outline-success btn-sm" onclick="pagar_presupuesto()">Pagar</button>
+                                            </div>--}}
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="form-row  mx-auto mt-3">
+                                @php $total_pago = $valores + $valores_piezas + $valores_insumos; @endphp
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                    <button type="button" class="btn btn-purple text-center" onclick="reasignar_presupuesto({{ $total_pago }}, {{ $valor_abonado }},{{ $valores_insumos }})">Reasignar Pago</button>
+                                    <button type="button" class="btn btn-info text-center" onclick="pagar_presupuesto()">Pagar</button>
                                 </div>
                             </div>
                         </div>
@@ -1555,8 +1821,7 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
 
 <input type="hidden" id="total_presupuesto_dental" value="{{ $valores + $valores_piezas + $valores_insumos }}">
 
