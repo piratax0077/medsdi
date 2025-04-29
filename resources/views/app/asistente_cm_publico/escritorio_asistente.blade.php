@@ -1656,7 +1656,7 @@
                         else
                         {
                             var mensaje = '';
-                            if(isset(data.bono))
+                            if((data.bono))
                             {
                                 if(data.bono.estado == 0)
                                 {

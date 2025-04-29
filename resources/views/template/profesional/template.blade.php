@@ -6175,10 +6175,10 @@
             //         valido = 0;
             //     }
             // }
-            if( bono_valor_bonificacion == '') {
-                mensaje += 'Campo requerido VALOR BONIFICACION\n';
-                valido = 0;
-            }
+            // if( bono_valor_bonificacion == '') {
+            //     mensaje += 'Campo requerido VALOR BONIFICACION\n';
+            //     valido = 0;
+            // }
 
 
 

@@ -25,7 +25,7 @@
                 <div class="col-sm-12 col-md-12 col-lg-2 col-xl-12">
                     <div class="form-group">
                         <label class="floating-label-activo-sm">Piezas N°</label>
-                        <select class="form-control form-control-sm select2" name="rx_numero_pieza{{ $counter }}[]" id="rx_numero_pieza{{ $counter }}" multiple>
+                        <select class="form-control form-control-sm select2" name="rx_numero_pieza" id="rx_numero_pieza" multiple>
                             <option value="11">11</option>
                             <option value="12">12</option>
                             <option value="13">13</option>
@@ -112,7 +112,7 @@ if (typeof dropzone === 'undefined') {
     var dropzone_rx;
 }
 $(document).ready(function(){
-    $('.select2').select2({
+    $('#rx_numero_pieza').select2({
         width: '100%',
         placeholder: 'Seleccionar pieza(s)',
         allowClear: true
@@ -232,7 +232,7 @@ function initDropzone() {
 function guardar_nueva_pieza_ex_radio(counter){
     console.log('hola');
     // Verifica los datos antes de procesar la cola de imágenes
-    let numero_pieza = $('#rx_numero_pieza'+counter).val();
+    let numero_pieza = $('#rx_numero_pieza').val();
     let espacio_periodontal_aplical = $('#rx_esp_peri_apical'+counter).val();
     let hueso_alveolar_apical = $('#h_apical'+counter).val();
     let obs = $('#obs_ex_oral'+counter).val();
@@ -305,6 +305,8 @@ function guardar_nueva_pieza_ex_radio(counter){
             if(resp.mensaje == 'OK'){
                 $('#pieza_dentalrx').empty();
                 $('#pieza_dentalrx').append(resp.v);
+                // Inicializamos select2 SOLO para los nuevos elementos agregados
+                $('#pieza_dentalrx').find('.select2').select2();
                 swal({
                     icon:'success',
                     title:'Exito',
@@ -383,7 +385,7 @@ function recargar_imagenes_rx(){
             if(resp.mensaje == 'OK'){
                 $('#pieza_dentalrx').empty();
                 $('#pieza_dentalrx').append(resp.v);
-
+                $('#pieza_dentalrx').find('.select2').select2();
             }
         },
         error: function(error){

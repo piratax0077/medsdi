@@ -6579,6 +6579,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
 
     public function recibir_bono(Request $request)
     {
+
         $datos = array();
         $error = array();
         $valido = 1;
@@ -6656,6 +6657,8 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             }else{
                 $valor_bono = 26830;
             }
+            // $profesional = Profesional::where('id_usuario',$request->id_profesional)->first();
+            // return $profesional;
             /** registro bono */
             $bono = new Bono();
             $bono->convenio = $request->convenio;
@@ -6664,11 +6667,12 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             $bono->fecha_atencion = date('Y-m-d H:i:s');
             $bono->valor_atencion = $request->valor_atencion==''?'0':$request->valor_atencion;
             $bono->a_pagar =  $valor_bono;
-            if($request->id_clase_bono ==6 || $request->id_clase_bono ==8){
+            if($request->id_clase_bono ==6 || $request->id_clase_bono ==8 ){
                 $bono->bonificacion = 0;
             }else{
                 $bono->bonificacion = $request->valor_bonificacion;
             }
+
             $bono->aporte_seguro = $request->valor_seguro==''?'0':$request->valor_seguro;
             $bono->glosa = empty($request->glosa)?'0':$request->glosa;
             $bono->rendido = 0;
@@ -6896,12 +6900,13 @@ public function eliminarPiezaCoronaProtesis(Request $req){
     public function dame_valor_consulta(Request $request){
         try {
             if($request->id_profesional){
-                $profesional = Profesional::where('id_usuario',$request->id_profesional)->first();
+                $profesional = Profesional::find($request->id_profesional);
             }else{
                 $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
             }
 
             $profesional_convenio = ProfesionalConvenio::where('id_profesional',$profesional->id)->where('id_lugar_atencion',$request->id_lugar_atencion)->first();
+            //$profesional_convenio = ProfesionalConvenio::where('id_profesional',$profesional->id)->first();
             return $profesional_convenio;
         } catch (\Exception $e) {
             //throw $th;

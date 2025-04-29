@@ -94,6 +94,8 @@ Route::post('/insertPaciente', [DentalController::class, 'insertPaciente'])->nam
 Route::get('/buscar_ciudad_region', [App\Http\Controllers\DentalController::class, 'buscar_ciudad_region'])->name('api.buscar_ciudad_region');
 Route::get('/dame_regiones', [App\Http\Controllers\DentalController::class, 'dameRegiones'])->name('api.dame_regiones');
 Route::get('/buscar_paciente', [App\Http\Controllers\DentalController::class, 'buscarPaciente'])->name('api.buscar_paciente');
+Route::get('/horas_medicas_profesional_lugar_atencion', [App\Http\Controllers\DentalController::class, 'horas_medicas_profesional_lugar_atencion'])->name('api.horas_medicas_profesional_lugar_atencion');
+Route::get('/horas_disponibles_profesional_lugar_atencion', [App\Http\Controllers\DentalController::class, 'horasDisponiblesProfesionalLugarAtencionBuscador'])->name('api.HorasDisponiblesProfesionalLugarAtencionBuscador');
 Route::post('/buscar_profesionales_cm',[App\Http\Controllers\CentroMedicoController::class, 'buscarProfesional'])->name('api.buscar_profesionales_cm');
 Route::post('/buscar_especialidades_cm',[App\Http\Controllers\CentroMedicoController::class, 'buscarEspecialidades'])->name('api.buscar_especialidades_cm');
 Route::post('/buscar_sub_especialidades_cm',[App\Http\Controllers\CentroMedicoController::class, 'buscarSubEspecialidades'])->name('api.buscar_sub_especialidades_cm');

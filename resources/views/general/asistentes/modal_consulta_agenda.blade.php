@@ -2510,10 +2510,10 @@
                 let data = {
                     id_profesional: $('#id_profesional').val(),
                     id_clase_bono: id_clase_bono,
-                    id_lugar_atencion: $('#id_lugar_atencion').val(),
+                    id_lugar_atencion: $('#agenda_lugar_atencion_asistente').val(),
                     _token: CSRF_TOKEN
                 }
-
+                console.log(data);
                 $.ajax({
                     url: url,
                     type: "post",

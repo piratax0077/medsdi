@@ -1021,6 +1021,20 @@
                                     class="form-control form-control-sm">
                             </div>
                         </div>
+                        <div class="col-sm-6 d-none">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Abono</label>
+                                <input name="bono_valor_bonificacion" id="bono_valor_bonificacion" type="number"
+                                    class="form-control form-control-sm" value="0">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 d-none">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Abono</label>
+                                <input name="valor_bonificacion" id="valor_bonificacion" type="number"
+                                    class="form-control form-control-sm" value="0">
+                            </div>
+                        </div>
                         <div class="col-sm-6">
                             <div class="form-group fill">
                                 <label class="floating-label-activo-sm">Saldo</label>

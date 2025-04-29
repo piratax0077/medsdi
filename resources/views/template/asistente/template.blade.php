@@ -1548,6 +1548,7 @@
                 })
                 .done(function(data)
                 {
+                    console.log(data);
                     if (data !== 'null')
                     {
                         if(data.estado == 1)
@@ -1577,7 +1578,7 @@
                         else
                         {
                             var mensaje = '';
-                            if(isset(data.bono))
+                            if((data.bono))
                             {
                                 if(data.bono.estado == 0)
                                 {

@@ -1509,6 +1509,8 @@
             var bono_profesional_rut = $('#bono_profesional_rut').val();
             var bono_numero = $('#bono_numero').val();
             var bono_valor_consulta = $('#bono_valor_consulta').val();
+            var bono_valor_bonificacion = $('#valor_bonificacion').val();
+            var bono_valor_aporte = $('#valor_seguro').val();
             var bono_prevision = $('#bono_prevision').val();
             var bono_prevision_nombre = $('#bono_prevision option:selected').text();
             var recepcion_programa = $('#recepcion_programa').val();
@@ -1575,6 +1577,8 @@
                         convenio_nombre: bono_prevision_nombre,
                         numero_bono: bono_numero,
                         valor_atencion: bono_valor_consulta,
+                        valor_bonificacion: bono_valor_bonificacion,
+                        valor_seguro: bono_valor_aporte,
                         glosa: '1',
                         id_profesional: bono_id_profesional,
                         id_asistente: '{{ $asistente->id }}',
@@ -1587,6 +1591,7 @@
                 })
                 .done(function(data)
                 {
+                    console.log(data);
                     if (data !== 'null')
                     {
                         //data = JSON.parse(data);
@@ -1622,7 +1627,7 @@
                         else
                         {
                             var mensaje = '';
-                            if(isset(data.bono))
+                            if((data.bono))
                             {
                                 if(data.bono.estado == 0)
                                 {

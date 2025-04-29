@@ -2453,105 +2453,105 @@ function mostrar_pieza_dental_examen(count){
 }
 
 function guardar_pieza_dental_end(count){
-let derivado_por = $('#ex_end_derivado_por').val();
-let zona_dolor = $('#ex_end_zona_dolor').val();
-let historia_anterior = $('#ex_end_hist_ant').val();
+    let derivado_por = $('#ex_end_derivado_por').val();
+    let zona_dolor = $('#ex_end_zona_dolor').val();
+    let historia_anterior = $('#ex_end_hist_ant').val();
 
-let pieza_numero = $('#end_numero_pieza'+count).val();
-let tipo_dolor = $('#end_tipo_dolor'+count).val();
-let intensidad = $('#end_intensidad'+count).val();
-let modo_dolor = $('#end_modo_dolor'+count).val();
-let loc_dolor = $('#end_loc_dolor'+count).val();
-let provocacion_dolor = $('#end_provocacion_dolor'+count).val();
-let cdo_duele = $('#end_cdo_duele'+count).val();
-let tpo_evolucion = $('#end_tpo_evolucion'+count).val();
-let obs_anal_dolor = $('#end_obs_loc_dolor'+count).val();
+    let pieza_numero = $('#end_numero_pieza'+count).val();
+    let tipo_dolor = $('#end_tipo_dolor'+count).val();
+    let intensidad = $('#end_intensidad'+count).val();
+    let modo_dolor = $('#end_modo_dolor'+count).val();
+    let loc_dolor = $('#end_loc_dolor'+count).val();
+    let provocacion_dolor = $('#end_provocacion_dolor'+count).val();
+    let cdo_duele = $('#end_cdo_duele'+count).val();
+    let tpo_evolucion = $('#end_tpo_evolucion'+count).val();
+    let obs_anal_dolor = $('#end_obs_loc_dolor'+count).val();
 
-let valido = 1;
-let mensaje = '';
+    let valido = 1;
+    let mensaje = '';
 
-if(derivado_por == ''){
-    valido = 0;
-    mensaje += '<li>Campo requerido Derivado por </li>';
-}
-if(zona_dolor == ''){
-    valido = 0;
-    mensaje += '<li>Campo requerido Zona dolor </li>';
-}
-if(historia_anterior == ''){
-    valido = 0;
-    mensaje += '<li>Campo requerido Historia anterior </li>';
-}
-if(pieza_numero == ''){
-    valido = 0;
-    mensaje += '<li>Campo requerido N° Pieza </li>';
-}
-if(tipo_dolor == 0){
-    valido = 0;
-    mensaje += '<li>Campo requerido Tipo Dolor </li>';
-}
-if(intensidad == 0){
-    valido = 0;
-    mensaje += '<li>Campo requerido Intensidad </li>';
-}
-if(obs_anal_dolor == ''){
-    valido = 0;
-    mensaje += '<li>Campo requerido Observaciones analgesicos dolor </li>';
-}
-
-if(valido == 0){
-    swal({
-        title: "Campos requeridos",
-        content:{
-            element: "div",
-            attributes:{
-                innerHTML: mensaje,
-            },
-        },
-        icon: "error",
-        buttons: "Aceptar",
-        DangerMode: true,
-    });
-    return false;
-}
-
-let data = {
-    _token: CSRF_TOKEN,
-    derivado_por: derivado_por,
-    zona_dolor: zona_dolor,
-    historia_anterior: historia_anterior,
-    pieza_numero: pieza_numero,
-    tipo_dolor: tipo_dolor,
-    intensidad: intensidad,
-    modo_dolor: modo_dolor,
-    loc_dolor: loc_dolor,
-    provocacion_dolor: provocacion_dolor,
-    cdo_duele: cdo_duele,
-    tpo_evolucion: tpo_evolucion,
-    obs_anal_dolor: obs_anal_dolor,
-    id_paciente: $('#id_paciente_fc').val(),
-    id_lugar_atencion : $('#id_lugar_atencion').val(),
-    id_ficha_atencion: $('#id_ficha_atencion').val(),
-    id_profesional: $('#id_profesional_fc').val(),
-    count: count
-}
-
-let url = "{{ ROUTE('profesional.adm_dental.guardar_pieza_dental_end_dolor') }}";
-
-$.ajax({
-    url: url,
-    type:'post',
-    data: data,
-    success: function(resp){
-        console.log(resp);
-        $('#contenedor_examen_dolor_end').empty();
-        $('#contenedor_examen_dolor_end').append(resp.v);
-        $('#contenedor_nuevo_examen_end').empty();
-    },
-    error: function(error){
-        console.log(error);
+    if(derivado_por == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Derivado por </li>';
     }
-});
+    if(zona_dolor == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Zona dolor </li>';
+    }
+    if(historia_anterior == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Historia anterior </li>';
+    }
+    if(pieza_numero == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido N° Pieza </li>';
+    }
+    if(tipo_dolor == 0){
+        valido = 0;
+        mensaje += '<li>Campo requerido Tipo Dolor </li>';
+    }
+    if(intensidad == 0){
+        valido = 0;
+        mensaje += '<li>Campo requerido Intensidad </li>';
+    }
+    if(obs_anal_dolor == ''){
+        valido = 0;
+        mensaje += '<li>Campo requerido Observaciones analgesicos dolor </li>';
+    }
+
+    if(valido == 0){
+        swal({
+            title: "Campos requeridos",
+            content:{
+                element: "div",
+                attributes:{
+                    innerHTML: mensaje,
+                },
+            },
+            icon: "error",
+            buttons: "Aceptar",
+            DangerMode: true,
+        });
+        return false;
+    }
+
+    let data = {
+        _token: CSRF_TOKEN,
+        derivado_por: derivado_por,
+        zona_dolor: zona_dolor,
+        historia_anterior: historia_anterior,
+        pieza_numero: pieza_numero,
+        tipo_dolor: tipo_dolor,
+        intensidad: intensidad,
+        modo_dolor: modo_dolor,
+        loc_dolor: loc_dolor,
+        provocacion_dolor: provocacion_dolor,
+        cdo_duele: cdo_duele,
+        tpo_evolucion: tpo_evolucion,
+        obs_anal_dolor: obs_anal_dolor,
+        id_paciente: $('#id_paciente_fc').val(),
+        id_lugar_atencion : $('#id_lugar_atencion').val(),
+        id_ficha_atencion: $('#id_ficha_atencion').val(),
+        id_profesional: $('#id_profesional_fc').val(),
+        count: count
+    }
+
+    let url = "{{ ROUTE('profesional.adm_dental.guardar_pieza_dental_end_dolor') }}";
+
+    $.ajax({
+        url: url,
+        type:'post',
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            $('#contenedor_examen_dolor_end').empty();
+            $('#contenedor_examen_dolor_end').append(resp.v);
+            $('#contenedor_nuevo_examen_end').empty();
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
 }
 
 function eliminarExamenAgregado(id) {

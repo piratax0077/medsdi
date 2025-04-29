@@ -370,7 +370,7 @@
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
-                                                                                
+
 
                                                                                 <div class="form-row">
                                                                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
@@ -516,7 +516,7 @@
                                                                                         <h6 class="sub-aten">Control<h6>
                                                                                     </div>
                                                                                 </div>
-                                            
+
                                                                                 <div id="contenedor_pieza_dental_endorx">
                                                                                     <div id="pieza_dentalrx" class="form-row">
                                                                                         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
@@ -546,7 +546,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>   
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -927,7 +927,7 @@
                                                                                                         <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-2"><i class="fas fa-plus"></i> Añadir pieza</button>
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                    
+
                                                                                                     <div class="form-row">
                                                                                                         <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1">
                                                                                                             <div class="form-group">
@@ -1373,8 +1373,8 @@
                                                                                                             </div>
                                                                                                          </div>
                                                                                                     </div>
- 
-                                                                                                   
+
+
 
                                                                                                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
                                                                                                         <div class="form-group">
@@ -1583,7 +1583,7 @@
                                                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                         <h6 class="sub-aten">Indicaciones</h6>
                                                                                                     </div>
-                                                                                                </div> 
+                                                                                                </div>
                                                                                                 <div class="form-row">
                                                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
                                                                                                         <div class="form-group">
@@ -1634,7 +1634,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div> 
+                                                                    </div>
                                                                 </div>
                                                         </div>
                                                         </div>
@@ -3196,11 +3196,8 @@
 
         const piezasSelect = $('#paciente_piezas_dentales_ex');
 
-        // Inicializar Select2
-        piezasSelect.select2({
-            placeholder: "Seleccione las piezas",
-            allowClear: true
-        });
+        // // Inicializar Select2
+        // piezasSelect.select2();
 
         // Control de selección de piezas en el odontograma
         $('.pieza').on('click', function () {
@@ -5658,6 +5655,7 @@ function confirmar_eliminar_pieza_dental_rx(id){
             if(resp.mensaje == 'OK'){
                 $('#pieza_dentalrx').empty();
                 $('#pieza_dentalrx').append(resp.v);
+                $('#pieza_dentalrx').find('select.select2').select2();
             }
         },
         error: function(error){
