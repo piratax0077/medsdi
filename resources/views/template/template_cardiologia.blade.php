@@ -2,11 +2,16 @@
 <html lang="es">
 
 <head>
-    @include('atencion_odontologica.include.head_od_endodoncia')
+
+
+    @include('atencion_medica.include.head_cardiologia')
+
     <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/style_index.css') }}?t={{ time() }}">
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Links del REG-->
     <link rel="stylesheet" href="{{ asset('css/escritorio_profesional.css') }}?t={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/card_estilo.css') }}?t={{ time() }}">
@@ -17,21 +22,16 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
 
-     <!-- select2 selectbonito css -->
-     <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
-     <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
-
-
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
-
     <!-- data tables css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
+
 
     <!-- fileupload-custom css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
-    <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
+
+	<!--boton azul-->
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
 
     <!--Accordion-->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -50,6 +50,8 @@
 
     <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}?t=<?= time() ?>">
 
+	<!-- Select2 css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
     <!-- fancy box -->
     <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
     <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
@@ -60,36 +62,31 @@
     <!--formulario sm-->
     <link rel="stylesheet" href="{{ asset('css/formulario_sm.css') }}">
     {{--  /** agregar css */  --}}
-    <!--cara dental-->
-    <link rel="stylesheet" href="{{ asset('css/cara_dental.css') }}">
+
     <style>
         .ui-front {
             position: absolute;
-            z-index: 2006;
+            z-index: 3000;
             overflow: auto;
         }
 
     </style>
     @yield('css-btn-autorizacion')
-    @yield('styles')
 </head>
 <body>
-    @include('template.dental.header')
+    @include('template.header')
     @include('template.menuProfesional')
     @yield('Content')
 
     <!-- Modal de la vista -->
     @yield('Modals')
-    @yield('Modals-med-exa')
+    @yield('modals-med-exa')
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
-
-
+    @include('atencion_medica.secciones_especialidad.ficha_orl_tipo')
 
     <!-- Modal de la vista fin -->
-    <footer>
-        {{--  @include('template.include.footer')  --}}
-    </footer>
+
 
 
     <!-- Required Js -->
@@ -122,11 +119,14 @@
 
     <!--Sidebars-->
     <script src="{{ asset('js/bs_canvas.js') }}"></script>
+	<!--SELECT 2-->
+    <script src="{{ asset('js/plugins/select2.full.min.js') }}"></script>
+    <!-- form-select-custom Js -->
+    <script src="{{ asset('js/pages/form-select-custom.js') }}"></script>
+    <!-- select2 css -->
 
-      <!--Formularios Modals-->
-      <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
-      <!--Formularios Modals-->
-      <script src="{{ asset('js/modals_atencion_odonto_gral.js') }}?upd={{ random_int(1111,9999) }}"></script>
+    <!--Formularios Modals-->
+    <script src="{{ asset('js/modals_atencion_medica.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!--Form wizard-->
     <script src="{{ asset('js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
@@ -150,14 +150,11 @@
     <!-- mensajes -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
-   {{-- autocomplete
+    {{-- autocomplete
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
-
-
     {{--  @include('template.templateAutorizacion')  --}}
-
 
     <!-- form-advance custom js -->
     {{--  <script src="{{ asset('js/pages/form-advance-custom.js') }}?upd={{ random_int(1111,9999) }}"></script>  --}}
@@ -173,31 +170,29 @@
 
     <!--Tablas y Toggle atención ginecobstetrica-->
     <script src="{{ asset('js/atencion_especialidades.js') }}?upd={{ random_int(1111,9999) }}"></script>
-    <script src="{{ asset('js/cara_dental.js') }}?upd={{ random_int(1111,9999) }}"></script>
-    <!-- Tratamientos dental autocomplete -->
-    <script>
-        window.getDiagnosticoDentalUrl = "{{ route('dental.getDiagnosticoDental') }}";
-    </script>
-    @routes
-    <script src="{{asset('js/dental/tratamientos_dental.js')}}"></script>
+
+    <!-- rut -->
+    <script src="{{ asset('js/rut.js') }}"></script>
+
+    <!-- funciones generales -->
+    <script src="{{ asset('js/funciones.js') }}"></script>
+
+    {{-- zoom  --}}
+    <script src="{{ asset('js/app.js') }}" ></script>
+    {{-- <script src="{{ asset('js/react.production.min.js') }}" ></script> --}}
+    {{-- <script src="{{ asset('js/react-dom.production.min.js') }}" ></script> --}}
+    {{-- <script src="{{ asset('js/redux.min.js') }}" ></script> --}}
+    {{-- <script src="{{ asset('js/redux-thunk.min.js') }}" ></script> --}}
+    {{-- <script src="{{ asset('js/lodash.min.js') }}" ></script> --}}
+    {{-- en desarrollo --}}
+    {{-- <script src="{{ asset('zoom/tool.js') }}"></script> --}}
+    {{-- <script src="{{ asset('zoom/vconsole.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('zoom/index.js') }}"></script> --}}
+
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         $(document).ready(function () {
-            $('#presup_estado_pago').DataTable();
-
-            $('#presup_estado_pago_gral').DataTable();
-
-            $('#presup_insumos_pago').DataTable({
-                responsive: 'true'
-            });
-            $('#table_profesionales_tons').DataTable({
-                responsive: 'true'
-            });
-            $('#table_pedido_insumos_materiales').DataTable({
-                responsive: 'true'
-            });
-            $('#table_insumos_odon_gral').DataTable();
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
                 swal({
@@ -240,113 +235,36 @@
 					//SuccessMode: true,
 				});
 			@endif
-        });
-        function presupuesto(){
 
-            $('#modal_presupuesto').modal('show');
-        }
-        function abrir_modal_clasificacion_colon(){
-            $('#m_clasificacion').modal('show');
-        }
-        function mostrar_modal_ex_rx_cirugia(){
-            $('#modal_indicar_examen_rx').modal('show');
-        }
-	</script>
-    <script>
-        /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
-        function  envio_indicaciones_pdf(id_modal){
-            let url = "{{ route('indicacion.medica.registro.envio') }}";
-            var id_tipo_documento = 1;
-            var id_paciente = $('#id_paciente_fc').val();
-            var id_profesional = $('#id_profesional_fc').val();
-            var id_ficha_atencion = $('#id_fc').val();
-            var id_lugar_atencion = $('#id_lugar_atencion').val();
-            var observacion = '';
-            // var observacion = $('#observacion').val();
-            var documento = '';
-            var url_documento = '';
-            var cuerpo = '';
-            var otro = '';
-            var token = CSRF_TOKEN;
+            @if (request('tab'))
+                let li = $('a[id="{{ request('tab') }}"]');
+                li.tab('show');
+            @endif
 
-            if(id_tipo_documento == 1)
-            {
-                documento = $('#'+id_modal+' embed').attr('data-documento');
-                url_documento = $('#'+id_modal+' embed').attr('data-url');
-            }
-            else
-            {
-                // cuerpo = $('#cuerpo').val();
-            }
-            var datos = {};
-            datos._token = token;
-            datos.id_tipo_documento = id_tipo_documento;
-            datos.id_paciente = id_paciente;
-            datos.id_profesional = id_profesional;
-            datos.id_ficha_atencion = id_ficha_atencion;
-            datos.id_lugar_atencion = id_lugar_atencion;
-            datos.observacion = observacion;
-            datos.documento = documento;
-            datos.url = url_documento;
-            datos.cuerpo = cuerpo;
-            datos.otro = otro;
-
-            $.ajax({
-                url: url,
-                type: 'post',
-                dataType: "json",
-                data: datos,
-                success: function(data) {
-                    // console.log(data);
-                    if(data.estado == 1)
-                    {
-                        var mensaje = '';
-                        mensaje = 'Documento asignado al Paciente para visualizar en su escritorio.\n';
-                        if(data.update_correo.estado == 1)
-                            mensaje = 'Documento enviado por correo al Paciente.\n';
-                        else
-                            mensaje = 'Problema al enviar Documento por correo al Paciente.\n';
-
-                        swal({
-                            title: "Indicación Enviada al Paciente",
-                            text: mensaje,
-                            icon: "success",
-                        });
-                    }
-                    else
-                    {
-                        var texto_error = '';
-
-                        if(data.estado ==  0)
-                        {
-                            if('error' in data)
-                            {
-                                $.each(data.error, function (indexInArray, valueOfElement) {
-                                    texto_error += indexInArray+': '+valueOfElement+'\n';
-                                });
-                            }
-                        }
-                        swal({
-                            title: "Indicación Enviada al Paciente",
-                            text: data.msj+'\n'+texto_error,
-                            icon: "warning",
-                        });
+            $('#tabla_examen_cirugia_d').DataTable({
+                "paging": false,
+                "info": false,
+                "searching": true,
+                "ordering": false,
+                "responsive": true,
+                "autoWidth": false,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "No se encontraron resultados",
+                    "info": "Mostrando la página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrando de _MAX_ registros)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
                     }
                 }
             });
-        }
-        /** FIN METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
-    </script>
-    <script>
-        var formatoMoneda = (valor) => {
-            return valor.toLocaleString('es-CL', {
-                style: 'currency',
-                currency: 'CLP',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).replace(/\./g, ',').replace(/,/g, '.');
-        };
 
+        });
 
         function editarInformacionPaciente(){
             $('#modal_editar_paciente').modal('show');
@@ -496,21 +414,81 @@
 
 
         };
-    </script>
 
+        $('#tipo_examen_d').change(function(e) {
+            e.preventDefault();
+            tipo_examen = $('#tipo_examen_d').val();
+
+            $("#sub_tipo_examen_d").empty();
+            $("#examen_d").empty();
+            $.ajax({
+                    url: '{{ route('listar.sub_tipo_examen') }}',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        tipo_examen: tipo_examen
+                    },
+                })
+                .done(function(response) {
+
+                    $('#sub_tipo_examen_d').append(
+                        `<option value="0">Seleccione... </option>`);
+                    for (var i = 0; i < response.length; i++) {
+                        $('#sub_tipo_examen_d').append(`<option value="${response[i].cod_examen}">
+                                    ${response[i].nombre_examen}
+                                </option>`);
+                    }
+
+                    /** ACTIVAR CHECHBOK DE CON  CONTRASTE */
+                    if($('#tipo_examen_d').val() == 362) $('#imagenologia_con_contraste').removeAttr('disabled');
+                    else  $('#imagenologia_con_contraste').attr('disabled','disabled');
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+
+        });
+
+        {{--  buscar examenes por el sub tipo de examen  --}}
+        $('#sub_tipo_examen_d').change(function(e) {
+
+            e.preventDefault();
+            sub_tipo_examen = $('#sub_tipo_examen_d').val();
+
+            $("#examen_d").empty();
+            $.ajax({
+                    url: '{{ route('listar.examen') }}',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        sub_tipo_examen: sub_tipo_examen
+                    },
+                })
+                .done(function(response) {
+
+                    $('#examen_d').append(
+                        `<option value="0">Seleccione... </option>`);
+                    for (var i = 0; i < response.length; i++) {
+                        $('#examen_d').append(`<option value="${response[i].cod_examen}">
+                                    ${response[i].nombre_examen}
+                                </option>`);
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+
+        });
+	</script>
     @yield('js_inferior')
     @yield('page-script')
-    @yield('page-script-ficha-atencion'){{-- ficha_orl.blade --}}
+    @yield('page-script-ficha-atencion'){{-- ficha_cardio.blade --}}
     @yield('js-ficha-general-espc') {{-- seccion js fiche general especialidad --}}
     @yield('page-script-med-exa') {{--  seccion receta y exmaenes --}}
     @yield('page-script-med-exa-esp') {{-- seccion receta y exmaenes especiales --}}
     @yield('js-sidebar') {{-- seccion js side bar --}}
     @yield('js-lic') {{-- seccion js side bar --}}
-	@yield('page-script-btn-autorizacion')
-    @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajoM')
-    @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajo')
-
-    @include('atencion_odontologica.formularios_dentales_tons.pedido_material_trabajo.pedido_insumos_materiales')
+    @yield('page-script-btn-autorizacion')
 </body>
 
 </html>

@@ -2441,6 +2441,7 @@ Route::post('/importar/diagnosticos/dentales', [App\Http\Controllers\DentalContr
 Route::post('/guardar/diagnostico/laboratorio', [App\Http\Controllers\DentalController::class, 'guardarDiagnosticoLaboratorio'])->name('dental.guardarLaboratorio');
 Route::post('/cargar/tratamiento',[App\Http\Controllers\DentalController::class, 'cargar_tratamiento_presupuesto'])->name('dental.cargar_tratamiento_presupuesto');
 Route::post('/cargar/tratamiento/period',[App\Http\Controllers\DentalController::class, 'cargar_tratamiento_presupuesto_period'])->name('dental.cargar_tratamiento_presupuesto_period');
+Route::post('/cargar/tratamiento/endo',[App\Http\Controllers\DentalController::class, 'cargar_tratamiento_presupuesto_endo'])->name('dental.cargar_tratamiento_presupuesto_endo');
 Route::post('/sacar/tratamiento',[App\Http\Controllers\DentalController::class, 'sacar_tratamiento_presupuesto'])->name('dental.sacar_tratamiento_presupuesto');
 Route::post('/agregar/insumos/tratamiento',[App\Http\Controllers\DentalController::class, 'agregar_insumos_tratamiento'])->name('dental.agregar_insumos_tto');
 Route::post('/dame/insumos/tratamiento',[App\Http\Controllers\DentalController::class, 'dame_insumos_tratamiento'])->name('dental.dame_insumos_tratamiento');

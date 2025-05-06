@@ -231,79 +231,34 @@
                         <!--CONVENIOS VIGENTES-->
                         <div class="tab-pane fade show" id="od_convenios_vigentes" role="tabpanel" aria-labelledby="od_convenios_vigentes_tab">
                             <h3>DANI ACA NO HACER NADA</h3>
+                            <p>Convenio Paciente: {{ $paciente->prevision->nombre }}</p>
                             <div class="form-row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <h6 class="tit-gen">Convenios Vigentes</h6>
                                 </div>
                             </div>
                             <div class="form-row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5">
-                                <div class="col mb-2">
-                                    <div class="card-informacion">
-                                        <div class="card-body">
-                                            <div class="media">
-                                                <img src="{{ asset('images/iconos/usuario_profesional.svg') }}" class="mr-3 mt-2 wid-70 rounded-circle" alt="...">
-                                                <div class="media-body">
-                                                    <h5 class="mt-0 mb-1">Fonasa</h5>
-                                                    <p class="mb-2">Porcentaje - Descripcion</p>
-                                                    <a href="#" class="btn btn-primary btn-sm"><i class="feather icon-check"></i> Aplicar</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col mb-2">
-                                    <div class="card-informacion">
-                                        <div class="card-body">
-                                            <div class="media">
-                                                <img src="{{ asset('images/iconos/usuario_profesional.svg') }}" class="mr-3 mt-2 wid-70 rounded-circle" alt="...">
-                                                <div class="media-body">
-                                                    <h5 class="mt-0 mb-1">Fonasa</h5>
-                                                    <p class="mb-2">Porcentaje - Descripcion</p>
-                                                    <a href="#" class="btn btn-primary btn-sm"><i class="feather icon-check"></i> Aplicar</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-body">
-                                    <p>convenios</p>
-                                    <p>{{ $paciente->prevision->nombre }}</p>
-                                    <div class="row">
-                                        @if($convenios_prevision->count() > 0)
+                                    @if($convenios_prevision->count() > 0)
                                         @foreach ($convenios_prevision as $c)
-                                        <div class="col-md-3">
-                                            <div class="card-informacion {{ $paciente->prevision->nombre == $c->nombre_convenio ? 'bg-success' : '' }}" >
-                                                <img class="card-img-top" src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="Card image cap">
-                                                <div class="card-body">
-                                                  <h5 class="card-title">{{ $c->nombre_convenio }}</h5>
-                                                  <p class="card-text">{{ $c->porcentaje }} % {{ $c->descripcion }}</p>
-                                                  <a href="#" class="btn btn-primary" @if($paciente->prevision->nombre == $c->nombre_convenio) onclick="aplicar_convenio_tratamiento({{ $c->id }})" @endif>Aplicar</a>
+                                            <div class="col-md-3 mb-2">
+                                                <div class="card-informacion">
+                                                    <div class="card-body">
+                                                        <div class="media">
+                                                            <img src="{{ asset('images/iconos/usuario_profesional.svg') }}" class="mr-3 mt-2 wid-70 rounded-circle" alt="...">
+                                                            <div class="media-body">
+                                                                <h5 class="mt-0 mb-1">{{ $c->nombre_convenio }}</h5>
+                                                                <p class="mb-2">{{ $c->porcentaje }} % {{ $c->descripcion }}</p>
+                                                                <a href="#" class="btn btn-primary" @if($paciente->prevision->nombre == $c->nombre_convenio) onclick="aplicar_convenio_tratamiento({{ $c->id }})" @endif>Aplicar</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                              </div>
-                                        </div>
+                                            </div>
                                         @endforeach
-                                        @else
+                                    @else
                                         <span class="badge badge-danger">No ha configurado sus convenios. Puede ir directamente desde este <a href="{{ route('profesional.mis_propios_convenios') }}">link </a></span>
-                                        @endif
-                                    </div>
-                                    {{-- <div class="row">
-                                        @foreach ($convenios_empresas as $c)
-                                        <div class="col-md-3">
-                                            <div class="card {{ $paciente->prevision->nombre == $c->nombre_convenio ? 'bg-success' : '' }}" >
-                                                <img class="card-img-top" src="{{ asset('images/iconos/usuario_profesional.svg') }}" alt="Card image cap">
-                                                <div class="card-body">
-                                                  <h5 class="card-title">{{ $c->nombre_convenio }}</h5>
-                                                  <p class="card-text">{{ $c->porcentaje }} % {{ $c->descripcion }}</p>
-                                                  <a href="#" class="btn btn-primary">Aplicar</a>
-                                                </div>
-                                              </div>
-                                        </div>
-                                        @endforeach
+                                    @endif
 
-                                    </div> --}}
-                                </div>
                             </div>
                         </div>
                         <!--PRESUPUESTO CLÍNICO-->
@@ -1311,12 +1266,17 @@
                                                                                         $estado = 'TERMINADO';
                                                                                         # code...
                                                                                     }
-                                                                                    if($o->estado_pago == 'ok'){
-                                                                                        $clase = 'bg-success';
-                                                                                    }else if($o->estado_pago == 'incompleto'){
-                                                                                        $clase = 'bg-warning';
-                                                                                    }else{
-                                                                                        $clase = 'bg-danger';
+
+                                                                                    switch ($o->estado_pago) {
+                                                                                        case 'ok':
+                                                                                            $color = 'bg-success';
+                                                                                            break;
+                                                                                        case 'incompleto':
+                                                                                            $color = 'bg-warning';
+                                                                                            break;
+                                                                                        default:
+                                                                                            $color = 'bg-danger';
+                                                                                            break;
                                                                                     }
                                                                                     @endphp
                                                                                     <tr>
@@ -1326,7 +1286,7 @@
                                                                                         <td class="text-center align-middle">0</td>
                                                                                         <td class="text-center align-middle">{{ number_format($o->valor,0,',','.') }}</td>
                                                                                         <td class="text-center align-middle status-circle">
-                                                                                            <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                                            <div class="circle {{ $color }}"></div>
                                                                                         </td>
                                                                                         <td class="text-center align-middle">
                                                                                             {{ $estado }}
@@ -1367,330 +1327,42 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        @foreach ($maxilar_superior_gral_diagnosticos as $diagnostico)
-                                                                            @if($diagnostico->presupuesto == 1)
-                                                                                @php
-                                                                                    if($diagnostico->estado == 0) {
-                                                                                        $estado = 'PENDIENTE';
-                                                                                    }elseif($diagnostico->estado == 1){
-                                                                                        $estado = 'TERMINADO';
-                                                                                        # code...
-                                                                                    }
-                                                                                @endphp
-                                                                                <tr>
-                                                                                    <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                                    <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                                    <td class="text-center align-middle">0</td>
-                                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
+                                                                        @foreach ($todos as $o)
+                                                                        @if($o->presupuesto == 1)
+                                                                        @php
+                                                                            if($o->estado == 0) {
+                                                                                $estado = 'PENDIENTE';
+                                                                            }elseif($o->estado == 1){
+                                                                                $estado = 'TERMINADO';
+                                                                                # code...
+                                                                            }
 
-                                                                                    <td class="text-center align-middle status-circle">
-                                                                                        <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                                    </td>
-                                                                                    <td class="text-center align-middle">
-                                                                                        {{ $estado }}
-                                                                                    </td>
-
-                                                                                </tr>
-                                                                            @endif
-                                                                        @endforeach
-                                                                        @foreach ($maxilar_superior_gral_tratamientos as $diagnostico)
-                                                                            @if($diagnostico->presupuesto == 1)
-                                                                            @php
-                                                                                    if($diagnostico->estado == 0) {
-                                                                                        $estado = 'PENDIENTE';
-                                                                                    }elseif($diagnostico->estado == 1){
-                                                                                        $estado = 'TERMINADO';
-                                                                                        # code...
-                                                                                    }
-                                                                                @endphp
+                                                                            switch ($o->estado_pago) {
+                                                                                case 'ok':
+                                                                                    $color = 'bg-success';
+                                                                                    break;
+                                                                                case 'incompleto':
+                                                                                    $color = 'bg-warning';
+                                                                                    break;
+                                                                                default:
+                                                                                    $color = 'bg-danger';
+                                                                                    break;
+                                                                            }
+                                                                        @endphp
                                                                             <tr>
-                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                                <td class="text-center align-middle">0</td>
-                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
+                                                                                <td class="text-center align-middle">{{ $o->diagnostico_tratamiento }}</td>
+                                                                                <td class="text-center align-middle">{{ $o->localizacion }}</td>
+                                                                                <td class="text-center align-middle">${{ number_format($o->valor,0,',','.') }}</td>
+                                                                                <td class="text-center align-middle">$0</td>
+                                                                                <td class="text-center align-middle">${{ number_format($o->valor,0,',','.') }}</td>
                                                                                 <td class="text-center align-middle status-circle">
-                                                                                    <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                                    <div class="circle {{ $color }}"></div>
                                                                                 </td>
                                                                                 <td class="text-center align-middle">
                                                                                     {{ $estado }}
                                                                                 </td>
-
                                                                             </tr>
-                                                                            @endif
-                                                                        @endforeach
-                                                                        @foreach ($maxilar_superior_gral_tratamientos_endo as $diagnostico)
-                                                                            @if($diagnostico->presupuesto == 1)
-                                                                                @php
-                                                                                    if($diagnostico->estado == 0) {
-                                                                                        $estado = 'PENDIENTE';
-                                                                                    }elseif($diagnostico->estado == 1){
-                                                                                        $estado = 'TERMINADO';
-                                                                                        # code...
-                                                                                    }
-                                                                                @endphp
-                                                                                <tr>
-                                                                                    <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                                    <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                                    <td class="text-center align-middle">0</td>
-                                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                                    <td class="text-center align-middle status-circle">
-                                                                                        <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                                    </td>
-                                                                                    <td class="text-center align-middle">
-                                                                                        {{ $estado }}
-                                                                                    </td>
-
-                                                                                </tr>
-                                                                            @endif
-                                                                        @endforeach
-                                                                        @foreach ($maxilar_superior_gral_diagnosticos_endo as $diagnostico)
-                                                                            @if($diagnostico->presupuesto == 1)
-                                                                                @php
-                                                                                    if($diagnostico->estado == 0) {
-                                                                                        $estado = 'PENDIENTE';
-                                                                                    }elseif($diagnostico->estado == 1){
-                                                                                        $estado = 'TERMINADO';
-                                                                                        # code...
-                                                                                    }
-                                                                                @endphp
-                                                                                <tr>
-                                                                                    <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                                    <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                                    <td class="text-center align-middle">0</td>
-                                                                                    <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                                    <td class="text-center align-middle status-circle">
-                                                                                        <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                                    </td>
-                                                                                    <td class="text-center align-middle">
-                                                                                        {{ $estado }}
-                                                                                    </td>
-
-                                                                                </tr>
-                                                                            @endif
-                                                                        @endforeach
-                                                                        @foreach ($maxilar_inferior_gral_diagnosticos as $diagnostico)
-                                                                        @if($diagnostico->presupuesto == 1)
-                                                                        @php
-                                                                                if($diagnostico->estado == 0) {
-                                                                                    $estado = 'PENDIENTE';
-                                                                                }elseif($diagnostico->estado == 1){
-                                                                                    $estado = 'TERMINADO';
-                                                                                    # code...
-                                                                                }
-                                                                            @endphp
-                                                                        <tr>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                            <td class="text-center align-middle">0</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                            <td class="text-center align-middle status-circle">
-                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : $diagnostico->clase }}"></div>
-
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                {{ $estado }}
-                                                                            </td>
-
-                                                                        </tr>
                                                                         @endif
-                                                                        @endforeach
-                                                                        @foreach ($maxilar_inferior_gral_tratamientos as $diagnostico)
-                                                                        @if($diagnostico->presupuesto == 1)
-                                                                        @php
-                                                                                if($diagnostico->estado == 0) {
-                                                                                    $estado = 'PENDIENTE';
-                                                                                }elseif($diagnostico->estado == 1){
-                                                                                    $estado = 'TERMINADO';
-                                                                                    # code...
-                                                                                }
-                                                                            @endphp
-                                                                        <tr>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                            <td class="text-center align-middle">0</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                            <td class="text-center align-middle status-circle">
-                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                {{ $estado }}
-                                                                            </td>
-
-                                                                        </tr>
-                                                                        @endif
-                                                                        @endforeach
-                                                                        @foreach ($maxilar_inferior_gral_diagnosticos_endo as $diagnostico)
-                                                                        @if($diagnostico->presupuesto == 1)
-                                                                        @php
-                                                                                if($diagnostico->estado == 0) {
-                                                                                    $estado = 'PENDIENTE';
-                                                                                }elseif($diagnostico->estado == 1){
-                                                                                    $estado = 'TERMINADO';
-                                                                                    # code...
-                                                                                }
-                                                                            @endphp
-                                                                        <tr>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                            <td class="text-center align-middle">0</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                            <td class="text-center align-middle status-circle">
-                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                {{ $estado }}
-                                                                            </td>
-
-                                                                        </tr>
-                                                                        @endif
-                                                                        @endforeach
-                                                                        @foreach ($maxilar_inferior_gral_tratamientos_endo as $diagnostico)
-                                                                        @if($diagnostico->presupuesto == 1)
-                                                                        @php
-                                                                                if($diagnostico->estado == 0) {
-                                                                                    $estado = 'PENDIENTE';
-                                                                                }elseif($diagnostico->estado == 1){
-                                                                                    $estado = 'TERMINADO';
-                                                                                    # code...
-                                                                                }
-                                                                            @endphp
-                                                                        <tr>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                            <td class="text-center align-middle">0</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                            <td class="text-center align-middle status-circle">
-                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                {{ $estado }}
-                                                                            </td>
-
-                                                                        </tr>
-                                                                        @endif
-                                                                        @endforeach
-                                                                        @foreach ($boca_completa_gral_tratamientos as $diagnostico)
-                                                                        @if($diagnostico->presupuesto == 1)
-                                                                        @php
-                                                                                if($diagnostico->estado == 0) {
-                                                                                    $estado = 'PENDIENTE';
-                                                                                }elseif($diagnostico->estado == 1){
-                                                                                    $estado = 'TERMINADO';
-                                                                                    # code...
-                                                                                }
-                                                                            @endphp
-                                                                        <tr>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                            <td class="text-center align-middle">0</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                            <td class="text-center align-middle status-circle">
-                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                {{ $estado }}
-                                                                            </td>
-
-                                                                        </tr>
-                                                                        @endif
-                                                                        @endforeach
-                                                                        @foreach ($boca_completa_gral_diagnosticos as $diagnostico)
-                                                                        @if($diagnostico->presupuesto == 1)
-                                                                        @php
-                                                                                if($diagnostico->estado == 0) {
-                                                                                    $estado = 'PENDIENTE';
-                                                                                }elseif($diagnostico->estado == 1){
-                                                                                    $estado = 'TERMINADO';
-                                                                                    # code...
-                                                                                }
-                                                                            @endphp
-                                                                        <tr>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                            <td class="text-center align-middle">0</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                            <td class="text-center align-middle status-circle">
-                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                {{ $estado }}
-                                                                            </td>
-
-                                                                        </tr>
-                                                                        @endif
-                                                                        @endforeach
-                                                                        @foreach ($boca_completa_gral_tratamiento_endo as $diagnostico)
-                                                                        @if($diagnostico->presupuesto == 1)
-                                                                        @php
-                                                                                if($diagnostico->estado == 0) {
-                                                                                    $estado = 'PENDIENTE';
-                                                                                }elseif($diagnostico->estado == 1){
-                                                                                    $estado = 'TERMINADO';
-                                                                                    # code...
-                                                                                }
-                                                                            @endphp
-                                                                        <tr>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                            <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                            <td class="text-center align-middle">0</td>
-                                                                            <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                            <td class="text-center align-middle status-circle">
-                                                                                <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                            </td>
-                                                                            <td class="text-center align-middle">
-                                                                                {{ $estado }}
-                                                                            </td>
-
-                                                                        </tr>
-                                                                        @endif
-                                                                        @endforeach
-                                                                        @foreach ($boca_completa_gral_diagnostico_endo as $diagnostico)
-                                                                        @if($diagnostico->presupuesto == 1)
-                                                                            @php
-                                                                                    if($diagnostico->estado == 0) {
-                                                                                        $estado = 'PENDIENTE';
-                                                                                    }elseif($diagnostico->estado == 1){
-                                                                                        $estado = 'TERMINADO';
-                                                                                        # code...
-                                                                                    }
-                                                                                @endphp
-                                                                            <tr>
-                                                                                <td class="text-center align-middle">{{ $diagnostico->diagnostico_tratamiento }}</td>
-                                                                                <td class="text-center align-middle">{{ $diagnostico->localizacion }}</td>
-                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-                                                                                <td class="text-center align-middle">0</td>
-                                                                                <td class="text-center align-middle">{{ number_format($diagnostico->valor,0,',','.') }}</td>
-
-                                                                                <td class="text-center align-middle status-circle">
-                                                                                    <div class="circle {{ $diagnostico->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
-                                                                                </td>
-                                                                                <td class="text-center align-middle">
-                                                                                    {{ $estado }}
-                                                                                </td>
-
-                                                                            </tr>
-                                                                            @endif
                                                                         @endforeach
                                                                     </tbody>
                                                                 </table>
@@ -1724,6 +1396,15 @@
                                                                         @foreach ($insumos_tratamientos as $t)
                                                                             @if($t->presupuesto == 1)
                                                                             @php $total = $t->cantidad * $t->valor @endphp
+                                                                            @php
+                                                                                $color = 'bg-danger'; // por defecto: error
+                                                                                if ($t->estado_pago == 'ok') {
+                                                                                    $color = 'bg-success';
+                                                                                } elseif ($t->estado_pago == 'incompleto') {
+                                                                                    $color = 'bg-warning';
+                                                                                }
+                                                                            @endphp
+
                                                                             <tr>
                                                                                 <td class="align-middle">{{ $t->insumos }} {{ $t->nombre_marca }}</td>
                                                                                 <td class="align-middle">{{ $t->cantidad }}</td>
@@ -1731,7 +1412,7 @@
                                                                                 <td class="align-middle">0</td>
                                                                                 <td class="align-middle">{{ number_format($total)  }}</td>
                                                                                 <td class="align-middle status-circle">
-                                                                                    <div class="circle {{ $t->estado_pago == 'ok' ? 'bg-success' : '' }}"></div>
+                                                                                    <div class="circle {{ $color }}"></div>
                                                                                 </td>
 
                                                                             </tr>
@@ -2494,7 +2175,7 @@
             url: url,
             data: data,
             success: function(resp){
-                return console.log(resp);
+                console.log(resp);
                 let valor_presupuesto = $('#total_presupuesto_dental').val();
                 let valor_abonado = resp.valor_atencion;
                 let deuda = valor_presupuesto - valor_abonado;
@@ -2685,13 +2366,12 @@
 
                     });
                     table_insumos_pagos.draw();
-                     $('#montoAbonado').val(formatoMoneda(parseInt(response.suma_pagado)));
-                     $('#valores_abonado_presupuesto').html(formatoMoneda(parseInt(response.suma_pagado)));
-                     $('#valores_total_abonado_presupuesto_conf').html(formatoMoneda(parseInt(response.suma_pagado)));
-                     $('#total_abonado_presupuesto').val(parseInt(response.suma_pagado));
+                    $('#montoAbonado').val(formatoMoneda(parseInt(response.suma_pagado)));
+                    $('#valores_abonado_presupuesto').html(formatoMoneda(parseInt(response.suma_pagado)));
+                    $('#valores_total_abonado_presupuesto_conf').html(formatoMoneda(parseInt(response.suma_pagado)));
+                    $('#total_abonado_presupuesto').val(parseInt(response.suma_pagado));
                     $('#total_adeudado_presupuesto').val(parseInt(response.suma_adeudado));
                     $('#abonos_presup').val(formatoMoneda(response.suma_pagado));
-                    $('#valores_total_abonado_presupuesto_conf')
                     let todos = response.todos;
 
                     let table_ = $('#presup_estado_pago_gral').DataTable();
@@ -2761,12 +2441,14 @@
 
     function confirmar_eliminar_pago_dental(id){
         let url = "{{ ROUTE('dental.eliminar_pago_presupuesto_dental') }}";
+        const id_dcto = $('#tiene_dcto').val();
         let data = {
             id: id,
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
             id_paciente: $('#id_paciente').val(),
             total_presupuesto: $('#total_presupuesto_dental').val(),
+            id_dcto: id_dcto,
             _token: CSRF_TOKEN
         }
 
@@ -3177,9 +2859,9 @@
                         let rowNode = table_piezas_odontograma.row.add([
                             odonto.descripcion,
                             odonto.pieza,
-                            formatoMoneda(formatoMoneda(odonto.valor)),
-                            formatoMoneda(formatoMoneda(odonto.valor - odonto.valor_descuento)),
-                            formatoMoneda(formatoMoneda(odonto.valor_descuento)),
+                            formatoMoneda(odonto.valor),
+                            formatoMoneda(odonto.valor_descuento),
+                            formatoMoneda(odonto.valor - odonto.valor_descuento),
                             '<div class="circle '+clase+'"></div>',
                             estado, // Columna vacía
 
@@ -3209,8 +2891,8 @@
                         insumo.insumos + ' ' + insumo.nombre_marca,
                         insumo.cantidad,         // Nombre del insumo
                         formatoMoneda(insumo.valor),       // Cantidad utilizada
-                        formatoMoneda(insumo.valor - insumo.valor_descuento),         // Unidad de medida
-                        formatoMoneda(insumo.valor_descuento),
+                        formatoMoneda(insumo.valor_descuento),         // Unidad de medida
+                        formatoMoneda(insumo.nuevo_valor),
                         ' <div class="circle '+clase+'"></div>',
 
                     ]).draw(false).node();
@@ -3226,29 +2908,37 @@
                 odontograma.forEach(function(odonto){
                     if(odonto.presupuesto == 1){
                         $('#contenedor_piezas_dentales_presupuesto').append(`
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Pieza</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="floating-label-activo-sm">Prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Sub-Total</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
-                            </div>
-                            <div class="form-group col-md-1">
-                                <label class="floating-label-activo-sm">Descuento</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor - odonto.valor_descuento)}">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Total prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor_descuento)}" >
-                            </div>
-                            <div class="form-group col-md-2 d-flex justify-content-center">
-                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
-                            </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-informacion">
+                                        <div class="card-body pb-0">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Pieza</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                </div>
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                         `);
                     }
                 });
@@ -3306,7 +2996,46 @@
                 $('#total_clinico').val(formatoMoneda(total_general));
                 // guardamos el total en un input hidden
                 $('#total_presupuesto_dental').val(total_general);
-                $('#subtotal_presup').val(formatoMoneda);
+                $('#subtotal_presup').val(formatoMoneda(resp.total_general));
+                let todos = resp.todos;
+
+                let table = $('#presup_estado_pago_gral').DataTable();
+
+                // Limpiar la tabla antes de agregar nuevas filas
+                table.clear().draw();
+
+                // Recorrer el odontograma y agregar nuevas filas
+                todos.forEach(function(odonto) {
+
+                    if(odonto.presupuesto == 1){
+                        if(odonto.estado_pago == 'ok'){
+                            var clase = 'bg-success';
+                        }else if(odonto.estado_pago == 'incompleto'){
+                            var clase = 'bg-warning';
+                        }else{
+                            var clase = 'bg-danger';
+                        }
+                        if(odonto.estado == 0){
+                            var estado = 'PENDIENTE';
+                        }else{
+                            var estado = 'TERMINADO';
+                        }
+                        // Agregar una nueva fila a la tabla
+                        let rowNode = table.row.add([
+                            odonto.localizacion,
+                            odonto.diagnostico_tratamiento,
+                            formatoMoneda(odonto.valor),
+                            formatoMoneda(odonto.valor_descuento),
+                            formatoMoneda(odonto.nuevo_valor),
+                            ' <div class="circle '+clase+'"></div>',
+                            estado
+                        ]).draw(false).node();
+
+                        // Agregar clases a la fila
+                        $(rowNode).addClass('text-center align-middle status-circle');
+                    }
+
+                });
             },
             error: function(error){
                 console.log(error.responseText);
@@ -3322,6 +3051,8 @@
             id_ficha_atencion: $('#id_fc').val(),
             id_lugar_atencion: $('#id_lugar_atencion').val(),
             id_paciente: $('#id_paciente').val(),
+            monto_abonado: $('#abonos_presup').val(),
+            tiene_dcto: $('#tiene_dcto').val(),
             monto_abonado: $('#abonos_presup').val(),
             _token: CSRF_TOKEN
         }
@@ -3385,29 +3116,37 @@
                 odontograma.forEach(function(odonto){
                     if(odonto.presupuesto == 1){
                         $('#contenedor_piezas_dentales_presupuesto').append(`
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Pieza</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="floating-label-activo-sm">Prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Sub-Total</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
-                            </div>
-                            <div class="form-group col-md-1">
-                                <label class="floating-label-activo-sm">Descuento</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="0">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Total prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
-                            </div>
-                            <div class="form-group col-md-2 d-flex justify-content-center">
-                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
-                            </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-informacion">
+                                        <div class="card-body pb-0">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Pieza</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                </div>
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                         `);
                     }
                 });
@@ -3432,7 +3171,7 @@
                         insumo.cantidad,         // Nombre del insumo
                         formatoMoneda(insumo.valor),       // Cantidad utilizada
                         0,         // Unidad de medida
-                        formatoMoneda(insumo.valor),
+                        formatoMoneda(total),
                         ' <div class="circle '+clase+'"></div>',
 
                     ]).draw(false).node();
@@ -3499,6 +3238,45 @@
                 // guardamos el total en un input hidden
                 $('#total_presupuesto_dental').val(total_general);
                 $('#subtotal_presup').val(formatoMoneda(total_general));
+                let todos = resp.todos;
+
+                let table_todos = $('#presup_estado_pago_gral').DataTable();
+
+                // Limpiar la tabla antes de agregar nuevas filas
+                table_todos.clear().draw();
+
+                // Recorrer el odontograma y agregar nuevas filas
+                todos.forEach(function(odonto) {
+
+                    if(odonto.presupuesto == 1){
+                        if(odonto.estado_pago == 'ok'){
+                            var clase = 'bg-success';
+                        }else if(odonto.estado_pago == 'incompleto'){
+                            var clase = 'bg-warning';
+                        }else{
+                            var clase = 'bg-danger';
+                        }
+                        if(odonto.estado == 0){
+                            var estado = 'PENDIENTE';
+                        }else{
+                            var estado = 'TERMINADO';
+                        }
+                        // Agregar una nueva fila a la tabla
+                        let rowNode = table_todos.row.add([
+                            odonto.localizacion,
+                            odonto.diagnostico_tratamiento,
+                            formatoMoneda(odonto.valor),
+                            0,
+                            formatoMoneda(odonto.valor),
+                            ' <div class="circle '+clase+'"></div>',
+                            estado
+                        ]).draw(false).node();
+
+                        // Agregar clases a la fila
+                        $(rowNode).addClass('text-center align-middle status-circle');
+                    }
+
+                });
             },
             error: function(error){
                 console.log(error.responseText);

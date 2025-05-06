@@ -669,6 +669,9 @@ class EscritorioPaciente extends Controller
         /* ATENCIONES MEDICAS */
 		$profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         $fichas = FichaAtencion::where('id_paciente', $paciente->id)->where('id_profesional', $profesional->id)->where('finalizada', 1)->get();
+        if($fichas->count() == 0){
+             $fichas = FichaAtencion::where('id_paciente', $paciente->id)->where('finalizada', 1)->get();
+        }
         // $fichas = FichaAtencion::where('id_paciente', $paciente->id)->where('finalizada', 1)->get();
         $especialidad = Especialidad::where('estado',1)->get();
         $sub_tipo_especialidad = SubTipoEspecialidad::where('estado',1)->get();

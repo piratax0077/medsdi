@@ -4,12 +4,17 @@
             <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-2"><i class="fas fa-plus"></i> Cargar nueva imagen</button>
         </div>
     <div class="col-sm-8 mt-2">
-        <div class="card" id="img">
+        <div class="card-informacion" id="img">
             <div class="card-body">
+            <div class="form-row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <h6 class="sub-aten">Imagen</h6>
+                    </div>
+                </div>
                 <div class="form-row" id="contenedor_piezas_ex_oral">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-8">
                         <div id="img">
-                            <h6 class="sub-aten">Imagen</h6>
+               
                         </div>
                         <div class="aten-a">
                             <div class="dropzone" id="mis-imagenes-dentales-preimplante" action="{{ route('profesional.imagen.carga') }}"></div>
@@ -44,50 +49,54 @@
         </div>
     </div>
     @if($opt == 'preimplante' )
+
     <div class="col-sm-4" >
-        <div class="form-group fill">
-            @if($opt == 'preimplante')
-                <div class="switch switch-success d-inline m-r-10">
-                    <input type="checkbox" onchange="biopsia_check_implantologia({{ $count }})" id="biopsia_check_implantologia{{ $count }}" name="biopsia_check_implantologia{{ $count }}" value=""  >
-                    <label for="biopsia_check_implantologia{{ $count }}" class="cr"></label>
+        <div class="card-informacion">
+            <div class="card-body">
+                <div class="form-group">
+                    @if($opt == 'preimplante')
+                        <div class="switch switch-success d-inline m-r-10">
+                            <input type="checkbox" onchange="biopsia_check_implantologia({{ $count }})" id="biopsia_check_implantologia{{ $count }}" name="biopsia_check_implantologia{{ $count }}" value=""  >
+                            <label for="biopsia_check_implantologia{{ $count }}" class="cr"></label>
+                        </div>
+                    @else
+                        <div class="switch switch-success d-inline m-r-10">
+                            <input type="checkbox" onchange="biopsia_check_period({{ $count }})" id="biopsia_check_period{{ $count }}" name="biopsia_check_period{{ $count }}" value="" >
+                            <label for="biopsia_check_period{{ $count }}" class="cr"></label>
+                        </div>
+                    @endif
+                    <label>Biopsia</label>
+                    @if($opt == 'preimplante')
+                        <div class="form-group mt-3">
+                            <label id="" name="" class="floating-label-activo-sm">Zona y Motivo</label>
+                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="im_biop_zona{{ $count }}" id="im_biop_zona{{ $count }}" disabled></textarea>
+                        </div>
+                    @else
+                        <div class="form-group fill">
+                            <label id="" name="" class="floating-label-activo-sm">Zona y Motivo</label>
+                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="period_biop_zona{{ $count }}" id="period_biop_zona{{ $count }}" disabled></textarea>
+                        </div>
+                    @endif
+                    @if($opt == 'preimplante')
+                        <div class="form-group fill">
+                            <label id="" name="" class="floating-label-activo-sm">Observaciones y Resultado</label>
+                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="im_obs_result_biopsia{{ $count }}" id="im_obs_result_biopsia{{ $count }}" disabled></textarea>
+                        </div>
+                    @else
+                    <div class="form-group fill">
+                        <label id="" name="" class="floating-label-activo-sm">Observaciones y Resultado</label>
+                        <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="period_obs_result_biopsia{{ $count }}" id="period_obs_result_biopsia{{ $count }}" disabled></textarea>
+                    </div>
+                    @endif
+                    <hr>
+                        <h6 style="subt-aten">Estado general del periodonto</h6>
+                    <hr>
+                    <div class="form-group text-center">
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="solicitar_ic_periodoncia()"><i class="feather icon-check"></i> Solicitar Interconsulta Peridóncia</button>
+                    </div>
                 </div>
-            @else
-                <div class="switch switch-success d-inline m-r-10">
-                    <input type="checkbox" onchange="biopsia_check_period({{ $count }})" id="biopsia_check_period{{ $count }}" name="biopsia_check_period{{ $count }}" value="" >
-                    <label for="biopsia_check_period{{ $count }}" class="cr"></label>
-                </div>
-            @endif
-            <label>biopsia</label>
-            <hr>
-            @if($opt == 'preimplante')
-                <div class="form-group fill">
-                    <label id="" name="" class="floating-label-activo-sm">Zona y Motivo</label>
-                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="im_biop_zona{{ $count }}" id="im_biop_zona{{ $count }}" disabled></textarea>
-                </div>
-            @else
-                <div class="form-group fill">
-                    <label id="" name="" class="floating-label-activo-sm">Zona y Motivo</label>
-                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=2" onblur="this.rows=1;" name="period_biop_zona{{ $count }}" id="period_biop_zona{{ $count }}" disabled></textarea>
-                </div>
-            @endif
-            @if($opt == 'preimplante')
-                <div class="form-group fill">
-                    <label id="" name="" class="floating-label-activo-sm">Observaciones y Resultado</label>
-                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="im_obs_result_biopsia{{ $count }}" id="im_obs_result_biopsia{{ $count }}" disabled></textarea>
-                </div>
-            @else
-            <div class="form-group fill">
-                <label id="" name="" class="floating-label-activo-sm">Observaciones y Resultado</label>
-                <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="period_obs_result_biopsia{{ $count }}" id="period_obs_result_biopsia{{ $count }}" disabled></textarea>
             </div>
-            @endif
-            <hr>
-                <h6 style="text-align: center;color:blue;">ESTADO GENERAL DEL PERIODONTO</h6>
-            <hr>
-            <div class="form-group" >
-                <button type="button" class="btn btn-outline-success btn-sm " onclick="solicitar_ic_periodoncia()">SOLICITAR INTERCONSULTA PERIODÓNCIA</button>
-            </div>
-        </div>
+        </div>    
     </div>
     @endif
 </div>

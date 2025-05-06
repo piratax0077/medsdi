@@ -130,6 +130,88 @@
                                         </td>
                                         </th>
                                     </tr>
+                                    {{-- direccion --}}
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Dirección</strong>
+                                        <td>
+
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_direcion"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            id="input_reserva_hora_direccion_asistente" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Número</strong>
+                                        <td>
+
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_numero"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <input type="text" class="form-control form-control-sm"
+                                                            id="input_reserva_hora_numero_asistente" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Región</strong>
+                                        <td>
+
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_region"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <select name="input_reserva_hora_region_asistente" id="input_reserva_hora_region_asistente" class="form-control" onchange="buscar_ciudad_general('input_reserva_hora_region_asistente', 'input_reserva_hora_ciudad_asistente', 0);">
+                                                            <option value="0">Seleccione región</option>
+                                                            @foreach ($region as $reg)
+                                                                <option value="{{ $reg->id }}">{{ $reg->nombre }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <strong>Ciudad</strong>
+                                        <td>
+
+                                            <div class="paciente_view_asistente">
+                                                <span id="datos_consulta_ciudad"></span>
+                                            </div>
+                                            <div class="paciente_edit_asistente" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                        <select name="input_reserva_hora_ciudad_asistente" id="input_reserva_hora_ciudad_asistente" class="form-control">
+                                                            <option value="0">Seleccione comuna</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        </th>
+                                    </tr>
                                     <tr class="paciente_edit_asistente" style="display:none">
 
                                         <td>

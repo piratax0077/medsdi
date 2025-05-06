@@ -1058,45 +1058,173 @@ class EscritorioProfesional extends Controller
 
     }
 
-    public function aplicar_convenio_tratamiento(Request $request){
-
+    public function aplicar_convenio_tratamiento(Request $request)
+    {
         $convenio = EmpresasConvenios::find($request->id);
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-        $odontograma = $this->dameOdontogramaPaciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
 
-        $valores = $this->dameValoresOdontograma($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
-        // $valores[0] = $valores[0] - $valores[0] * (intval($convenio->porcentaje) / 100);
-        // $valores[1] = $valores[1] - $valores[1] * (intval($convenio->porcentaje) / 100);
-        // $valores[2] = $valores[2] - $valores[2] * (intval($convenio->porcentaje) / 100);
+        $porcentaje_descuento = intval($convenio->porcentaje);
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        $odontograma = $this->dameOdontogramaPaciente(
+            $request->id_paciente,
+            $request->id_ficha_atencion,
+            $request->id_lugar_atencion,
+            $profesional->id_tipo_especialidad
+        );
+
+        $valores = $this->dameValoresOdontograma(
+            $request->id_paciente,
+            $request->id_ficha_atencion,
+            $request->id_lugar_atencion,
+            $profesional->id_tipo_especialidad
+        );
+
+        $insumos = $this->dame_insumos_tratamiento(
+            $request->id_paciente,
+            $request->id_ficha_atencion
+        );
+
+        $todos = $this->dameTratamientosBocaGeneral(
+            $request->id_ficha_atencion
+        );
 
 
         $descuentos = 0;
 
-        foreach($odontograma as $o){
-            $o->valor_descuento = $o->valor - $o->valor * (intval($convenio->porcentaje) / 100);
-            $descuentos += $o->valor * (intval($convenio->porcentaje) / 100);
-            $o->nuevo_valor = $o->valor - $o->valor_descuento;
+        // Aplicamos el descuento a insumos
+        foreach ($insumos as $i) {
+            $total_insumo = $i->cantidad * $i->valor;
+            $descuento = $total_insumo * ($porcentaje_descuento / 100);
+            $i->valor_descuento = $descuento;
+            $i->nuevo_valor = $total_insumo - $descuento;
+            $descuentos += $descuento;
         }
-        $insumos = $this->dame_insumos_tratamiento($request->id_paciente, $request->id_ficha_atencion);
-        foreach($insumos as $i){
-            $i->valor_descuento = $i->valor - $i->valor * (intval($convenio->porcentaje) / 100);
-            $descuentos += $i->valor * (intval($convenio->porcentaje) / 100);
-            $i->nuevo_valor = $i->valor - $i->valor_descuento;
+
+        // Aplicamos el descuento a odontograma
+        foreach ($odontograma as $o) {
+            $descuento = $o->valor * ($porcentaje_descuento / 100);
+            $o->valor_descuento = $descuento;
+            $o->nuevo_valor = $o->valor - $descuento;
+            $descuentos += $descuento;
         }
+
+        // Aplicamos el descuento a tratamientos generales
+        foreach($todos as $o){
+            $descuento = $o->valor * ($porcentaje_descuento / 100);
+            $o->valor_descuento = $descuento;
+            $o->nuevo_valor = $o->valor - $descuento;
+            $descuentos += $descuento;
+        }
+
+
 
         $total_general = $valores[0] + $valores[1] + $valores[2];
         $total_con_descuento = $total_general - $descuentos;
         $total_abonado = intval(str_replace('.', '', $request->monto_abonado));
+        $resto_pago = $total_abonado;
 
-        if($total_con_descuento <= $total_abonado){
-            foreach($odontograma as $o){
+        // Primero Insumos
+        foreach ($insumos as $i) {
+            $valor = intval($i->nuevo_valor) * intval($i->cantidad);
+            if ($resto_pago >= $valor) {
+                $i->estado_pago = 'ok';
+                $resto_pago -= $valor;
+            } elseif ($resto_pago > 0) {
+                $i->estado_pago = 'incompleto';
+                $resto_pago = 0;
+            } else {
+                $i->estado_pago = 'error';
+            }
+        }
+
+        // PAGO PROGRESIVO - Luego Odontograma
+        foreach ($odontograma as $o) {
+            $valor = intval($o->nuevo_valor);
+            if ($resto_pago >= $valor) {
                 $o->estado_pago = 'ok';
+                $resto_pago -= $valor;
+            } elseif ($resto_pago > 0) {
+                $o->estado_pago = 'incompleto';
+                $resto_pago = 0;
+            } else {
+                $o->estado_pago = 'error';
             }
         }
 
 
-        return ['odontograma' => $odontograma, 'insumos' => $insumos,'valores' => $valores, 'descuentos' => $descuentos, 'total_general' => $total_general, 'total_con_descuento' => $total_con_descuento,'total_abonado' => $total_abonado];
+        foreach($todos as $o){
+            if($o->presupuesto == 1){
+                $valor = intval($o->nuevo_valor);
+                if ($resto_pago >= $valor) {
+                    $o->estado_pago = 'ok';
+                    $resto_pago -= $valor;
+                } elseif ($resto_pago > 0) {
+                    $o->estado_pago = 'incompleto';
+                    $resto_pago = 0;
+                } else {
+                    $o->estado_pago = 'error';
+                }
+            }
+        }
+
+        return [
+            'odontograma' => $odontograma,
+            'insumos' => $insumos,
+            'valores' => $valores,
+            'descuentos' => $descuentos,
+            'total_general' => $total_general,
+            'total_con_descuento' => $total_con_descuento,
+            'total_abonado' => $total_abonado,
+            'todos' => $todos
+        ];
     }
+
+    public function dameTratamientosBocaGeneral($id_ficha_atencion, $total = null)
+    {
+        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        if($profesional->id_tipo_especialidad !== 16){
+        $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*', 'diagnosticos_dental.valor')
+            ->join('diagnosticos_dental', 'examenes_boca_general.diagnostico_tratamiento', '=', 'diagnosticos_dental.descripcion')
+            ->where('examenes_boca_general.id_ficha_atencion', $id_ficha_atencion)
+            ->get();
+        }else{
+            $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*', 'tratamientos_implantologia.valor')
+            ->join('tratamientos_implantologia', 'examenes_boca_general.diagnostico_tratamiento', '=', 'tratamientos_implantologia.descripcion')
+            ->where('examenes_boca_general.id_ficha_atencion', $id_ficha_atencion)
+            ->get();
+        }
+
+        $total_gral = 0;
+
+        foreach ($examenes as $e) {
+            if($e->presupuesto == 1){
+                $valor = (float) $e->valor;
+                $total_gral += $valor;
+
+                if ($total === null) {
+                    $e->estado_pago = 'intermedio'; // o 'pendiente' si prefieres
+                    continue;
+                }
+
+                if ($total <= 0) {
+                    $e->estado_pago = 'error';
+                } elseif ($valor <= $total) {
+                    $e->estado_pago = 'ok';
+                    $total -= $valor;
+                } else {
+                    $e->estado_pago = 'intermedio';
+                    $total -= $valor; // puede quedar negativo
+                }
+            }
+
+        }
+
+        // Si quieres retornar también el total general, puedes incluirlo así:
+        // return ['examenes' => $examenes, 'total_gral' => $total_gral];
+
+        return $examenes;
+    }
+
 
     public function buscar_tons(Request $req){
         try {
@@ -2241,6 +2369,7 @@ class EscritorioProfesional extends Controller
             $tipo_examen = 3;
         }
 
+
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
 
         $examen_boca_general = new ExamenesBocaGeneral;
@@ -2260,19 +2389,20 @@ class EscritorioProfesional extends Controller
         $examen_boca_general->localizacion = $req->localizacion_examen;
 
         if($examen_boca_general->save()){
-            $maxilar_superior_gral_tratamiento = $this->dameMaxilarSuperiorGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_superior_gral_diagnostico = $this->dameMaxilarSuperiorGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_inferior_gral_tratamiento = $this->dameMaxilarInferiorGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_inferior_gral_diagnostico = $this->dameMaxilarInferiorGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
-            $boca_completa_gral_tratamiento = $this->dameBocaCompletaGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
-            $boca_completa_gral_diagnostico = $this->dameBocaCompletaGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
+            $ficha_atencionController = new ficha_atencionController;
+            $maxilar_superior_gral_tratamiento = $ficha_atencionController->dameMaxilarSuperiorGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_superior_gral_diagnostico = $ficha_atencionController->dameMaxilarSuperiorGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_inferior_gral_tratamiento = $ficha_atencionController->dameMaxilarInferiorGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_inferior_gral_diagnostico = $ficha_atencionController->dameMaxilarInferiorGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
+            $boca_completa_gral_tratamiento = $ficha_atencionController->dameBocaCompletaGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
+            $boca_completa_gral_diagnostico = $ficha_atencionController->dameBocaCompletaGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
 
-            $maxilar_superior_gral_tratamiento_endo = $this->dameMaxilarSuperiorGeneralTratamientoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_superior_gral_diagnostico_endo = $this->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_inferior_gral_tratamiento_endo = $this->dameMaxilarInferiorGeneralTratamientoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_inferior_gral_diagnostico_endo = $this->dameMaxilarInferiorGeneralDiagnosticoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
-            $boca_completa_gral_tratamiento_endo = $this->dameCompletaEndoTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
-            $boca_completa_gral_diagnostico_endo = $this->dameCompletaEndoDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_superior_gral_tratamiento_endo = $ficha_atencionController->dameMaxilarSuperiorGeneralTratamientoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_superior_gral_diagnostico_endo = $ficha_atencionController->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_inferior_gral_tratamiento_endo = $ficha_atencionController->dameMaxilarInferiorGeneralTratamientoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_inferior_gral_diagnostico_endo = $ficha_atencionController->dameMaxilarInferiorGeneralDiagnosticoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
+            $boca_completa_gral_tratamiento_endo = $ficha_atencionController->dameCompletaEndoTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
+            $boca_completa_gral_diagnostico_endo = $ficha_atencionController->dameCompletaEndoDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
             $valores_tratamientos = $this->dameValoresOdontograma($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
             return [
                 'mensaje' => 'OK',
@@ -2427,19 +2557,20 @@ class EscritorioProfesional extends Controller
         $diagnostico = ExamenesBocaGeneral::find($req->id);
         if($diagnostico->delete()){
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-            $maxilar_superior_gral_tratamiento = $this->dameMaxilarSuperiorGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_superior_gral_diagnostico = $this->dameMaxilarSuperiorGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_inferior_gral_tratamiento = $this->dameMaxilarInferiorGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_inferior_gral_diagnostico = $this->dameMaxilarInferiorGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
-            $boca_completa_gral_tratamiento = $this->dameBocaCompletaGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
-            $boca_completa_gral_diagnostico = $this->dameBocaCompletaGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
+            $ficha_atencionController = new ficha_atencionController;
+            $maxilar_superior_gral_tratamiento = $ficha_atencionController->dameMaxilarSuperiorGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_superior_gral_diagnostico = $ficha_atencionController->dameMaxilarSuperiorGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_inferior_gral_tratamiento = $ficha_atencionController->dameMaxilarInferiorGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_inferior_gral_diagnostico = $ficha_atencionController->dameMaxilarInferiorGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
+            $boca_completa_gral_tratamiento = $ficha_atencionController->dameBocaCompletaGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
+            $boca_completa_gral_diagnostico = $ficha_atencionController->dameBocaCompletaGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
 
-            $maxilar_superior_gral_tratamiento_endo = $this->dameMaxilarSuperiorGeneralTratamientoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_superior_gral_diagnostico_endo = $this->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_inferior_gral_tratamiento_endo = $this->dameMaxilarInferiorGeneralTratamientoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_inferior_gral_diagnostico_endo = $this->dameMaxilarInferiorGeneralDiagnosticoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
-            $boca_completa_gral_tratamiento_endo = $this->dameCompletaEndoTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
-            $boca_completa_gral_diagnostico_endo = $this->dameCompletaEndoDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_superior_gral_tratamiento_endo = $ficha_atencionController->dameMaxilarSuperiorGeneralTratamientoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_superior_gral_diagnostico_endo = $ficha_atencionController->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_inferior_gral_tratamiento_endo = $ficha_atencionController->dameMaxilarInferiorGeneralTratamientoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
+            $maxilar_inferior_gral_diagnostico_endo = $ficha_atencionController->dameMaxilarInferiorGeneralDiagnosticoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
+            $boca_completa_gral_tratamiento_endo = $ficha_atencionController->dameCompletaEndoTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
+            $boca_completa_gral_diagnostico_endo = $ficha_atencionController->dameCompletaEndoDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
 
             $valores_tratamientos = $this->dameValoresOdontograma($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
             return [
@@ -5547,6 +5678,8 @@ public function eliminarPiezaCoronaProtesis(Request $req){
                 if($profesional->id_especialidad == 2){
                     $presupuestos_dentales = PresupuestosDental::where('id_paciente',$paciente->id)->where('id_profesional', $profesional->id)->get();
                     if($presupuestos_dentales) $paciente['presupuestos'] = $presupuestos_dentales;
+                }else{
+                    $paciente['presupuestos'] = [];
                 }
 
             }
@@ -6579,7 +6712,6 @@ public function eliminarPiezaCoronaProtesis(Request $req){
 
     public function recibir_bono(Request $request)
     {
-
         $datos = array();
         $error = array();
         $valido = 1;
@@ -6667,7 +6799,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             $bono->fecha_atencion = date('Y-m-d H:i:s');
             $bono->valor_atencion = $request->valor_atencion==''?'0':$request->valor_atencion;
             $bono->a_pagar =  $valor_bono;
-            if($request->id_clase_bono ==6 || $request->id_clase_bono ==8 ){
+            if($request->id_clase_bono ==6 || $request->id_clase_bono ==8 || $request->valor_bonificacion == null){
                 $bono->bonificacion = 0;
             }else{
                 $bono->bonificacion = $request->valor_bonificacion;

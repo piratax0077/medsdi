@@ -376,7 +376,7 @@
                                                                                                                                                 <img src="{{ asset('storage/' . str_replace('\\', '', $path)) }}"  alt="Imagen del examen"  class="img-fluid mx-2 imagen_rx">
                                                                                                                                             </a>
 
-                                                                                                                                            <button type="button" class="btn btn-outline-danger btn-sm my-2" onclick="eliminar_rx({{ $imagen['id']}})"><i class="fas fa-trash"></i></button>
+                                                                                                                                            <button type="button" class="btn btn-danger btn-sm my-2" onclick="eliminar_rx({{ $imagen['id']}})"><i class="feather icon-x"></i></button>
                                                                                                                                         </div>
 
                                                                                                                                         @endforeach
@@ -525,9 +525,9 @@
                                                                                                                             @endif
                                                                                                                             <!-- Botón para eliminar imagen -->
                                                                                                                             <button type="button"
-                                                                                                                                    class="btn btn-outline-danger btn-sm my-2"
+                                                                                                                                    class="btn btn-danger btn-sm my-2"
                                                                                                                                     onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
-                                                                                                                                <i class="fas fa-trash"></i>
+                                                                                                                                <i class="feather icon-x"></i>
                                                                                                                             </button>
                                                                                                                         </div>
                                                                                                                     @endforeach
@@ -572,9 +572,9 @@
                                                                                                                             @endif
                                                                                                                             <!-- Botón para eliminar imagen -->
                                                                                                                             <button type="button"
-                                                                                                                                    class="btn btn-outline-danger btn-sm my-2"
+                                                                                                                                    class="btn btn-danger btn-sm my-2"
                                                                                                                                     onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
-                                                                                                                                <i class="fas fa-trash"></i>
+                                                                                                                                <i class="feather icon-x"></i>
                                                                                                                             </button>
                                                                                                                         </div>
                                                                                                                     @endforeach
@@ -784,7 +784,7 @@
 
                                 </div>
                                 <!--PLANIFICACION TRATAMIENTO-->
-                                <div class="tab-pane fade show" id="plan_endo" role="tabpanel" aria-labelledby="plan_endo-tab">
+                                {{-- <div class="tab-pane fade show" id="plan_endo" role="tabpanel" aria-labelledby="plan_endo-tab">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="card">
@@ -1078,9 +1078,9 @@
                                                                             @if($t->presupuesto == 0 || $t->presupuesto == null)
                                                                             <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo({{ $t->id }})"><i class="fas fa-save"></i></button>
                                                                             @else
-                                                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo({{ $t->id }})"><i class="fas fa-save"></i></button>
+                                                                            <button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto_insumo({{ $t->id }})"><i class="fas fa-save"></i></button>
                                                                             @endif
-                                                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo({{ $t->id }})"><i class="fas fa-trash"></i></button>
+                                                                            <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo({{ $t->id }})"><i class="feather icon-x"></i></button>
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
@@ -1090,6 +1090,191 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div> --}}
+                                <!--PLANIFICACION TRATAMIENTO-->
+                                <div class="tab-pane fade show" id="plan_endo" role="tabpanel" aria-labelledby="plan_endo">
+                                    <div class="form-row mt-2">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <h6 class="tit-gen">Planificación del tratamiento</h6>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-row">
+                                        <!--SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                            <div class="card-informacion">
+                                                <div class="card-top">
+                                                   <h6 class="text-uppercase text-c-blue">Seleccione por pieza o grupo de piezas</h6>
+                                                </div>
+                                                <div class="card-body">
+
+                                                    <div class="row">
+                                                        <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                            <div class="card-informacion">
+                                                                <div class="card-top">
+                                                                    <h6 class="text-uppercase text-c-blue">Tratamientos en piezas o grupos</h6>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                            <div class="table-responsive">
+                                                                                <table id="table_piezas_presupuesto_odonto" class="display table table-striped dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <td>Pieza o Grupo</td>
+                                                                                            <td>Tratamiento</td>
+                                                                                            <td>Valor</td>
+                                                                                            <td>Accion</td>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        @foreach ($odontograma as $o)
+                                                                                            <tr>
+                                                                                                <td>{{ $o->pieza }}</td>
+                                                                                                <td>{{ $o->descripcion }}</td>
+                                                                                                <td>${{ number_format($o->valor,0,',','.') }}</td>
+                                                                                                <td><button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma({{ $o->id }})"><i class="feather icon-x"></i></button></td>
+                                                                                            </tr>
+                                                                                        @endforeach
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row my-2">
+                                                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
+                                                            <div class="custom-control custom-switch">
+                                                                <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                                                                <label class="custom-control-label" for="customSwitch1">Seleccione maxilar superior</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
+                                                            <div class="custom-control custom-switch">
+                                                                <input type="checkbox" class="custom-control-input" id="customSwitch2">
+                                                                <label class="custom-control-label" for="customSwitch2">Seleccione maxilar inferior</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
+                                                            @include('atencion_odontologica.generales.odontograma_adulto_grupos')
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6 mt-2">
+                                                            <div class="form-row">
+                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <div class="form-group">
+                                                                <label for="" class="floating-label-activo-sm">Grupos</label>
+                                                                <select class="js-example-basic-multiple" name="paciente_piezas_dentales_ex" id="paciente_piezas_dentales_ex" multiple="multiple">
+                                                                    <option value="1.1">1.1</option>
+                                                                    <option value="1.2">1.2</option>
+                                                                    <option value="1.3">1.3</option>
+                                                                    <option value="1.4">1.4</option>
+                                                                    <option value="1.5">1.5</option>
+                                                                    <option value="1.6">1.6</option>
+                                                                    <option value="1.7">1.7</option>
+                                                                    <option value="1.8">1.8</option>
+                                                                    <option value="2.1">2.1</option>
+                                                                    <option value="2.2">2.2</option>
+                                                                    <option value="2.3">2.3</option>
+                                                                    <option value="2.4">2.4</option>
+                                                                    <option value="2.5">2.5</option>
+                                                                    <option value="2.6">2.6</option>
+                                                                    <option value="2.7">2.7</option>
+                                                                    <option value="2.8">2.8</option>
+                                                                    <option value="3.1">3.1</option>
+                                                                    <option value="3.2">3.2</option>
+                                                                    <option value="3.3">3.3</option>
+                                                                    <option value="3.4">3.4</option>
+                                                                    <option value="3.5">3.5</option>
+                                                                    <option value="3.6">3.6</option>
+                                                                    <option value="3.7">3.7</option>
+                                                                    <option value="3.8">3.8</option>
+                                                                    <option value="4.1">4.1</option>
+                                                                    <option value="4.2">4.2</option>
+                                                                    <option value="4.3">4.3</option>
+                                                                    <option value="4.4">4.4</option>
+                                                                    <option value="4.5">4.5</option>
+                                                                    <option value="4.6">4.6</option>
+                                                                    <option value="4.7">4.7</option>
+                                                                    <option value="4.8">4.8</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <div class="form-group">
+                                                                <label class="floating-label-activo-sm">Tratamiento</label>
+                                                                <input type="text" name="diag_presupuesto_pieza_g" id="diag_presupuesto_pieza_g" placeholder="DESCRIBA EL TRATAMIENTO POR PIEZA O GRUPO DE PIEZAS" class="form-control form-control-sm tratamiento-autocomplete ui-autocomplete-input" autocomplete="off">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_impl_g()"><i class="feather icon-save"></i> Guardar piezas</button>
+                                                        </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <!--TABLA INSUMOS-->
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                            <div class="card-informacion">
+                                                                <div class="card-top">
+                                                                    <h6 class="text-uppercase text-c-blue d-inline">Insumos</h6>
+                                                                    <button type="button" class="btn btn-info btn-xxs float-md-right d-inline d-inline"  onclick="abrir_modal_insumos()"><i class="fas fa-plus"></i> Agregar Insumos</button>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="form-row">
+                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                            <div class="table-responsive">
+                                                                                <table id="table_insumos_odon_gral" class="display table table-striped dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <td>Insumo</td>
+                                                                                            <td>Cantidad</td>
+                                                                                            <td>Valor</td>
+                                                                                            <td>Total</td>
+                                                                                            <td>Acciones</td>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        @foreach ($insumos_tratamientos as $t)
+                                                                                            @php $total = $t->cantidad * $t->valor @endphp
+                                                                                            <tr>
+                                                                                                <td>{{ $t->insumos }} {{ $t->nombre_marca }}</td>
+                                                                                                <td>{{ $t->cantidad }}</td>
+                                                                                                <td>{{ number_format($t->valor)  }}</td>
+                                                                                                <td>{{ number_format($total)  }}</td>
+                                                                                                <td>
+                                                                                                    @if($t->presupuesto == 0 || $t->presupuesto == null)
+                                                                                                    <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo({{ $t->id }})"><i class="feather icon-save"></i></button>
+                                                                                                    @else
+                                                                                                    <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo({{ $t->id }})"><i class="fas fa-minus"></i></button>
+                                                                                                    @endif
+                                                                                                    <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo({{ $t->id }})"><i class="feather icon-x"></i></button>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        @endforeach
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                 </div>
                                 <!--HOSPITALIZACION-->

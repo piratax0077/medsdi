@@ -34,8 +34,8 @@
 .redes a{
     margin-bottom: -15px!important;
     opacity: 0!important;
-    visibility: hidden!important;
-    
+    visibility: visible!important;
+
 }
 #btn-mas:checked~ .redes a{
     margin-bottom: 10px!important;

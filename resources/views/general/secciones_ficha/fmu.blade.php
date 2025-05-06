@@ -115,7 +115,12 @@
                                                     <div class="tab-pane fade show active" id="seccion_ident_contacto" role="tabpanel" aria-labelledby="seccion_ident_contacto-tab">
                                                         <div class="row">
                                                             <div class="col-sm-6 col-md-4">
-                                                                <p><i class="feather icon-home"></i><strong> Dirección</strong> <br>{{$direccion->direccion}} {{$direccion->numero}}, {{$direccion->ciudad->nombre}}, {{$direccion->ciudad->region->nombre}}</p>
+																@if( $direccion )
+																	<p><i class="feather icon-home"></i><strong> Dirección</strong> <br>{{$direccion->direccion}} {{$direccion->numero}}, {{$direccion->ciudad->nombre}}, {{$direccion->ciudad->region->nombre}}</p>
+																@else
+																	<p><i class="feather icon-home"></i><strong> Dirección</strong> <br></p>
+																@endif
+																	
                                                             </div>
                                                             <div class="col-sm-6 col-md-4">
                                                                 <p><i class="feather icon-phone"></i><strong> Telefono</strong> <br>{{$paciente->telefono_uno}} / {{$paciente->telefono_dos}}</p>

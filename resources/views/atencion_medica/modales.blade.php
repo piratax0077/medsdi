@@ -38,8 +38,12 @@
                 <a id="boton_2" class="fas fa-notes-medical fa-2x" data-toggle="canvas" data-target="#formularios_atencion" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios de atención" data-placement="left" style="cursor:pointer;"></a>
                 <a id="boton_4" class="fas fa-bed fa-2x" data-toggle="canvas" data-target="#formularios_signos_vitales" aria-expanded="false" aria-controls="bs-canvas-right" title="formularios Signos Vitales" data-placement="left" style="cursor:pointer;"></a>
 
+                @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cardiología Adultos' )
+                <a id="boton_3" class="fas fa-heart fa-2x" data-toggle="canvas" data-target="#formularios_cardiologicos" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cardiología" data-placement="left" style="cursor:pointer;"></a>
+                 @endif
+
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Otorrinolaringología' )
-                    <a id="boton_3" class="fas fa-deaf fa-2x" data-toggle="canvas" data-target="#formularios_orl" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Otorrinolaringología" data-placement="left"></a>
+                    <a id="boton_3" class="fas fa-deaf fa-2x" data-toggle="canvas" data-target="#formularios_orl" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Otorrinolaringología" data-placement="left" ></a>
                 @endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Dermatología' )
@@ -50,8 +54,16 @@
                     <a id="boton_3" class="fas fa-eye-slash fa-2x" data-toggle="canvas" data-target="#formularios_ojo" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Oftalmología" data-placement="left"></a>
                 @endif
 
+                @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Broncopulmonar' )
+                    <a id="boton_3" class="fas fa-bold fa-2x" data-toggle="canvas" data-target="#formularios_broncopulmonar" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios broncopulmonar" data-placement="left"></a>
+                @endif
+
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía Gástrica' )
 					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_cir_dalta" aria-expanded="false" aria-controls="bs-canvas-right" title="Formularios Cirugia Alta" data-placement="left"></a>
+				@endif
+
+                @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Gastroenterología' )
+					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_cir_dalta" aria-expanded="false" aria-controls="bs-canvas-right" title="Gastroenterología" data-placement="left"></a>
 				@endif
 
 				@if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía Coloproctológica' )
@@ -95,6 +107,7 @@
 @include('atencion_medica.sidebars.formularios_signos_vitales')
 
 @section('js-sidebar')
+
     <script>
         $(document).ready(function(){
             var bsDefaults = {
@@ -187,6 +200,8 @@
                 validateOn: 'change',
                 useThousandsSeparator : false
             });
+
+
         });
 
         function registrar_cetificado_reposo() {

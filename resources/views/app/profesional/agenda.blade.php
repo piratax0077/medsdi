@@ -1848,6 +1848,10 @@
         var sexo_paciente = $('#input_reserva_sexo_asistente').val();
         var email_paciente = $('#input_reserva_hora_email_asistente').val();
         var telefono_paciente = $('#input_reserva_hora_telefono_asistente').val();
+        var direccion_paciente = $('#input_reserva_hora_direccion_asistente').val();
+        var direccion_numero_paciente = $('#input_reserva_hora_numero_asistente').val();
+        var region_paciente = $('#input_reserva_hora_region_asistente').val();
+
         var valido = 1;
         var mensaje = '';
 

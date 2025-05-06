@@ -440,7 +440,7 @@
                                                                                                                                                                 <a href="javascript:void(0)" onclick="amplificar_imagen('{{ $path }}')">
                                                                                                                                                                     <img src="{{ asset('storage/' . str_replace('\\', '', $path)) }}" alt="Imagen del examen" class="img-fluid mx-2 imagen_rx">
                                                                                                                                                                 </a>
-                                                                                                                                                                <button type="button" class="btn btn-outline-danger btn-sm my-2" onclick="eliminar_rx_end({{ $imagen['id'] }})"><i class="fas fa-trash"></i></button>
+                                                                                                                                                                <button type="button" class="btn btn-danger btn-sm my-2" onclick="eliminar_rx_end({{ $imagen['id'] }})"><i class="feather icon-x"></i></button>
                                                                                                                                                             </div>
                                                                                                                                                         @endforeach
                                                                                                                                                     @endforeach
@@ -519,7 +519,7 @@
                                                                                                                             </div>
                                                                                                                         </div>
 
-                                                                                                                        <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_rx_end({{ $e->id }})"><i class="fas fa-trash"></i></button>
+                                                                                                                        <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_rx_end({{ $e->id }})"><i class="feather icon-x"></i></button>
                                                                                                                     </div>
                                                                                                                     @php $counter++; @endphp
                                                                                                                     @endforeach
@@ -695,7 +695,7 @@
                                                                 </div>
                                                             </div>
                                                             <!--PLANIFICACION TRATAMIENTO-->
-                                                            <div class="tab-pane fade show" id="plan_endo_end" role="tabpanel" aria-labelledby="plan_endo_end-tab">
+                                                            {{-- <div class="tab-pane fade show" id="plan_endo_end" role="tabpanel" aria-labelledby="plan_endo_end-tab">
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <div class="card">
@@ -968,6 +968,184 @@
                                                                                     </div>
                                                                                 </div>
 
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div> --}}
+                                                            <div class="tab-pane fade show" id="plan_endo_end" role="tabpanel" aria-labelledby="plan_endo_end_tab">
+                                                                <div class="form-row mt-2">
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                        <h6 class="tit-gen">Planificación del tratamiento</h6>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class="form-row">
+                                                                    <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                        <div class="card-informacion">
+                                                                            <div class="card-top">
+                                                                                <h6 class="text-uppercase text-c-blue">Tratamientos en piezas o grupos</h6>
+                                                                            </div>
+                                                                            <div class="card-body">
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div class="table-responsive">
+                                                                                            <table id="table_piezas_presupuesto_endo" class="display table table-striped dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <td>Pieza o Grupo</td>
+                                                                                                        <td>Tratamiento</td>
+                                                                                                        <td>Valor</td>
+                                                                                                        <td>Accion</td>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                    @foreach ($odontograma as $o)
+                                                                                                        <tr>
+                                                                                                            <td>{{ $o->pieza }}</td>
+                                                                                                            <td>{{ $o->descripcion }}</td>
+                                                                                                            <td>${{ number_format($o->valor,0,',','.') }}</td>
+                                                                                                            <td><button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma({{ $o->id }})"><i class="feather icon-x"></i></button></td>
+                                                                                                        </tr>
+                                                                                                    @endforeach
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
+                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                        <div class="card-informacion">
+                                                                            <div class="card-top">
+                                                                               <h6 class="text-uppercase text-c-blue">Seleccione por pieza o grupo de piezas</h6>
+                                                                            </div>
+                                                                            <div class="card-body">
+                                                                                    <div class="row my-2">
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
+                                                                                            <div class="custom-control custom-switch">
+                                                                                                <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                                                                                                <label class="custom-control-label" for="customSwitch1">Seleccione maxilar superior</label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 col-xxl-6">
+                                                                                            <div class="custom-control custom-switch">
+                                                                                                <input type="checkbox" class="custom-control-input" id="customSwitch2">
+                                                                                                <label class="custom-control-label" for="customSwitch2">Seleccione maxilar inferior</label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
+                                                                                        @include('atencion_odontologica.generales.odontograma_adulto_grupos_endodoncia')
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6 mt-2">
+                                                                                        <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div class="form-group">
+                                                                                            <label for="" class="floating-label-activo-sm">Grupos</label>
+                                                                                            <select class="js-example-basic-multiple" name="paciente_piezas_dentales_end_ex_" id="paciente_piezas_dentales_end_ex_" multiple="multiple">
+                                                                                                <option value="1.1">1.1</option>
+                                                                                                <option value="1.2">1.2</option>
+                                                                                                <option value="1.3">1.3</option>
+                                                                                                <option value="1.4">1.4</option>
+                                                                                                <option value="1.5">1.5</option>
+                                                                                                <option value="1.6">1.6</option>
+                                                                                                <option value="1.7">1.7</option>
+                                                                                                <option value="1.8">1.8</option>
+                                                                                                <option value="2.1">2.1</option>
+                                                                                                <option value="2.2">2.2</option>
+                                                                                                <option value="2.3">2.3</option>
+                                                                                                <option value="2.4">2.4</option>
+                                                                                                <option value="2.5">2.5</option>
+                                                                                                <option value="2.6">2.6</option>
+                                                                                                <option value="2.7">2.7</option>
+                                                                                                <option value="2.8">2.8</option>
+                                                                                                <option value="3.1">3.1</option>
+                                                                                                <option value="3.2">3.2</option>
+                                                                                                <option value="3.3">3.3</option>
+                                                                                                <option value="3.4">3.4</option>
+                                                                                                <option value="3.5">3.5</option>
+                                                                                                <option value="3.6">3.6</option>
+                                                                                                <option value="3.7">3.7</option>
+                                                                                                <option value="3.8">3.8</option>
+                                                                                                <option value="4.1">4.1</option>
+                                                                                                <option value="4.2">4.2</option>
+                                                                                                <option value="4.3">4.3</option>
+                                                                                                <option value="4.4">4.4</option>
+                                                                                                <option value="4.5">4.5</option>
+                                                                                                <option value="4.6">4.6</option>
+                                                                                                <option value="4.7">4.7</option>
+                                                                                                <option value="4.8">4.8</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div class="form-group">
+                                                                                            <label class="floating-label-activo-sm">Tratamiento</label>
+                                                                                            <input type="text" name="diag_presupuesto_pieza_g_endo" id="diag_presupuesto_pieza_g_endo" placeholder="DESCRIBA EL TRATAMIENTO POR PIEZA O GRUPO DE PIEZAS" class="form-control form-control-sm tratamiento-autocomplete ui-autocomplete-input" autocomplete="off">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <button type="button" class="btn btn-primary btn-sm btn-block" onclick="cargar_a_presupuesto_end_g()"><i class="feather icon-save"></i> Guardar piezas</button>
+                                                                                    </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                     <!--TABLA INSUMOS-->
+                                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                                                        <div class="card-informacion">
+                                                                            <div class="card-top">
+                                                                                <h6 class="text-uppercase text-c-blue d-inline">Insumos</h6>
+                                                                                <button type="button" class="btn btn-info btn-xxs float-md-right d-inline d-inline"  onclick="abrir_modal_insumos()"><i class="fas fa-plus"></i> Agregar Insumos</button>
+                                                                            </div>
+                                                                            <div class="card-body">
+                                                                                <div class="form-row">
+                                                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                        <div class="table-responsive">
+                                                                                            <table id="table_insumos_endodoncia" class="display table table-striped dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <td>Insumo</td>
+                                                                                                        <td>Cantidad</td>
+                                                                                                        <td>Valor</td>
+                                                                                                        <td>Total</td>
+                                                                                                        <td>Acciones</td>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                                <tbody>
+                                                                                                    @foreach ($insumos_tratamientos as $t)
+                                                                                                        @php $total = $t->cantidad * $t->valor @endphp
+                                                                                                        <tr>
+                                                                                                            <td>{{ $t->insumos }} {{ $t->nombre_marca }}</td>
+                                                                                                            <td>{{ $t->cantidad }}</td>
+                                                                                                            <td>{{ number_format($t->valor)  }}</td>
+                                                                                                            <td>{{ number_format($total)  }}</td>
+                                                                                                            <td>
+                                                                                                                @if($t->presupuesto == 0 || $t->presupuesto == null)
+                                                                                                                <button type="button" class="btn btn-icon btn-primary" onclick="cargar_a_presupuesto_insumo({{ $t->id }})"><i class="feather icon-save"></i></button>
+                                                                                                                @else
+                                                                                                                <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo({{ $t->id }})"><i class="fas fa-minus"></i></button>
+                                                                                                                @endif
+                                                                                                                <button type="button" class="btn btn-icon btn-danger" onclick="eliminar_insumo({{ $t->id }})"><i class="feather icon-x"></i></button>
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    @endforeach
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -1310,12 +1488,8 @@
                         let insumos = resp.insumos;
                         console.log(insumos);
                         let table = $('#table_insumos_odon_gral').DataTable();
-
                         //Limpiar la tabla sin perder la configuración de DataTables
                         table.clear();
-
-
-
                         //Recorrer el array de insumos y agregarlos a la tabla
                         insumos.forEach(insumo => {
                             let total = insumo.cantidad * insumo.valor;
@@ -1327,18 +1501,18 @@
                                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
                                             <i class="fas fa-save"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>`;
                             }else{
                                 var botones = `
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
                                             <i class="fas fa-save"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>`;
                             }
@@ -1350,9 +1524,48 @@
                                 botones
                             ]);
                         });
-
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table.draw();
+
+                        let table_endo = $('#table_insumos_endodoncia').DataTable();
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table_endo.clear();
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                                                 // Botones de acción
+                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                    // Botones de acción
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
+                                        </button>
+                                    </td>`;
+                            }else{
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
+                                        </button>
+                                    </td>`;
+                            }
+                            table_endo.row.add([
+                                insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
+                                insumo.cantidad,       // Cantidad utilizada
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
+                                botones
+                            ]);
+                        });
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table_endo.draw();
                     }
                 },
                 error: function(error){
@@ -1437,18 +1650,18 @@
                                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
                                             <i class="fas fa-save"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>`;
                             }else{
                                 var botones = `
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
                                             <i class="fas fa-save"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>`;
                             }
@@ -1464,6 +1677,46 @@
 
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table.draw();
+
+                        let table_endo = $('#table_insumos_endodoncia').DataTable();
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table_endo.clear();
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                                                 // Botones de acción
+                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                    // Botones de acción
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
+                                        </button>
+                                    </td>`;
+                            }else{
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
+                                        </button>
+                                    </td>`;
+                            }
+                            table_endo.row.add([
+                                insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
+                                insumo.cantidad,       // Cantidad utilizada
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
+                                botones
+                            ]);
+                        });
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table_endo.draw();
 
                         $('#contenedor_insumos').empty();
                         insumos.forEach(insumo => {
@@ -1496,7 +1749,7 @@
                                                     </div>
                                                     <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i> </button>
+                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1581,8 +1834,8 @@
                                     <td>${formatoMoneda(insumo.valor)}</td>
                                     <td>${formatoMoneda(total)}</td>
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -1658,18 +1911,18 @@
                                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
                                     <i class="fas fa-save"></i>
                                 </button>
-                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                    <i class="fas fa-trash"></i>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                    <i class="feather icon-x"></i>
                                 </button>
                             </td>`;
                             }else{
                                 var botones = `
                                 <td>
-                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                    <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
                                         <i class="fas fa-save"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                        <i class="fas fa-trash"></i>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                        <i class="feather icon-x"></i>
                                     </button>
                                 </td>`;
                             }
@@ -1684,6 +1937,46 @@
 
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table.draw();
+
+                        let table_endo = $('#table_insumos_endodoncia').DataTable();
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table_endo.clear();
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                                                 // Botones de acción
+                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                    // Botones de acción
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
+                                        </button>
+                                    </td>`;
+                            }else{
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-icon btn-danger" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
+                                        </button>
+                                    </td>`;
+                            }
+                            table_endo.row.add([
+                                insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
+                                insumo.cantidad,       // Cantidad utilizada
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
+                                botones
+                            ]);
+                        });
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table_endo.draw();
 
                         $('#contenedor_insumos').empty();
                         insumos.forEach(insumo => {
@@ -1716,7 +2009,7 @@
                                                     </div>
                                                     <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i> </button>
+                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1834,7 +2127,7 @@
                             $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
 
 
-                    let insumos = resp.insumos;
+                        let insumos = resp.insumos;
                         console.log(insumos);
                         let table = $('#table_insumos_odon_gral').DataTable();
 
@@ -1851,18 +2144,18 @@
                                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
                                             <i class="fas fa-save"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>`;
                             }else{
                                 var botones = `
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
                                             <i class="fas fa-save"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>`;
                             }
@@ -1877,6 +2170,45 @@
 
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table.draw();
+                        let table_endo = $('#table_insumos_endodoncia').DataTable();
+                        //Limpiar la tabla sin perder la configuración de DataTables
+                        table_endo.clear();
+                        //Recorrer el array de insumos y agregarlos a la tabla
+                        insumos.forEach(insumo => {
+                            let total = insumo.cantidad * insumo.valor;
+                                                 // Botones de acción
+                            if(insumo.presupuesto == 0 || insumo.presupuesto == null){
+                                    // Botones de acción
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
+                                        </button>
+                                    </td>`;
+                            }else{
+                                var botones = `
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
+                                        </button>
+                                    </td>`;
+                            }
+                            table_endo.row.add([
+                                insumo.insumos + ' ' + insumo.nombre_marca,         // Nombre del insumo
+                                insumo.cantidad,       // Cantidad utilizada
+                                formatoMoneda(insumo.valor),         // Unidad de medida
+                                formatoMoneda(total),
+                                botones
+                            ]);
+                        });
+                        //Dibujar la tabla nuevamente con los nuevos datos
+                        table_endo.draw();
 
                         $('#contenedor_insumos').empty();
                         insumos.forEach(insumo => {
@@ -1904,7 +2236,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i>  </button>
+                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i>  </button>
 
                                 </div>
                             `);
@@ -1957,8 +2289,8 @@
                                     <td>${formatoMoneda(insumo.valor)}</td>
                                     <td>${formatoMoneda(total)}</td>
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -1989,7 +2321,12 @@
         $('#tabla_odontologico_tratamiento').DataTable({
             responsive: true,
         });
+        $('#table_insumos_endodoncia').DataTable();
+        $('#table_piezas_presupuesto_odonto').DataTable();
+        $('#table_piezas_presupuesto_endo').DataTable();
         $('#paciente_piezas_dentales_ex').select2();
+        $('#paciente_piezas_dentales_end_ex').select2();
+        $('#paciente_piezas_dentales_end_ex_').select2();
         $('#paciente_piezas_dentales_ex_').select2();
         $('#tpo_proc_imp').select2();
         $('#prot_pieza_imp').select2();
@@ -1997,10 +2334,61 @@
         $('#prot_implante').select2();
         $('#prot_implante_man').select2();
 
-        $('.select2').select2({
-            width: '100%',
-            placeholder: 'Seleccionar pieza(s)',
-            allowClear: true
+        // $('.select2').select2({
+        //     width: '100%',
+        //     placeholder: 'Seleccionar pieza(s)',
+        //     allowClear: true
+        // });
+
+        const piezasSelect = $('#paciente_piezas_dentales_ex');
+
+        // // Inicializar Select2
+        // piezasSelect.select2();
+
+        // Control de selección de piezas en el odontograma
+        $('.pieza').on('click', function () {
+            const piezaNumero = $(this).data('pieza').toString(); // Convertir a string por seguridad
+
+            if ($(this).hasClass('seleccionada')) {
+                // Si ya está seleccionada, deseleccionarla
+                $(this).removeClass('seleccionada');
+                const options = piezasSelect.val().filter(item => item !== piezaNumero); // Filtra el elemento a eliminar
+                piezasSelect.val(options).trigger('change');
+            } else {
+                // Si no está seleccionada, agregarla
+                $(this).addClass('seleccionada');
+
+                let opcionesSeleccionadas = piezasSelect.val() || [];
+                if (!opcionesSeleccionadas.includes(piezaNumero)) {
+                    opcionesSeleccionadas.push(piezaNumero);
+                }
+
+                piezasSelect.val(opcionesSeleccionadas).trigger('change');
+            }
+        });
+
+        const piezasSelect_ = $('#paciente_piezas_dentales_end_ex_');
+
+        // Control de selección de piezas en el odontograma
+        $('.pieza_endodoncia').on('click', function () {
+            const piezaNumero = $(this).data('pieza_end').toString(); // Convertir a string por seguridad
+
+            if ($(this).hasClass('seleccionada')) {
+                // Si ya está seleccionada, deseleccionarla
+                $(this).removeClass('seleccionada');
+                const options = piezasSelect_.val().filter(item => item !== piezaNumero); // Filtra el elemento a eliminar
+                piezasSelect_.val(options).trigger('change');
+            } else {
+                // Si no está seleccionada, agregarla
+                $(this).addClass('seleccionada');
+
+                let opcionesSeleccionadas = piezasSelect_.val() || [];
+                if (!opcionesSeleccionadas.includes(piezaNumero)) {
+                    opcionesSeleccionadas.push(piezaNumero);
+                }
+
+                piezasSelect_.val(opcionesSeleccionadas).trigger('change');
+            }
         });
     });
 
@@ -5516,6 +5904,300 @@ function eliminarExamenEndAgregado(id, tipo_examen) {
         },
         error: function(error){
             console.log(error);
+        }
+    });
+}
+
+function cargar_a_presupuesto_end_g() {
+    // preguntar si desea eliminar
+    swal({
+        title: "Cargar Piezas",
+        text: "¿Está seguro que desea cargar el grupo de piezas?",
+        icon: "warning",
+        buttons: ["Cancelar", "Aceptar"],
+        DangerMode: true,
+    })
+    .then((willLoad) => {
+        if (willLoad) {
+            cargar_a_presupuesto_end_g_confirmar();
+        }
+    });
+}
+
+function cargar_a_presupuesto_end_g_confirmar(){
+    // Obtener los valores seleccionados en el select
+    var piezasSeleccionadas = $('#paciente_piezas_dentales_end_ex_').val();
+    var ttoPiezas = $('#diag_presupuesto_pieza_g_endo').val();
+    var tipo = "endo";
+
+    let valido = 1;
+    let mensaje = '';
+
+    if(piezasSeleccionadas.length == 0){
+        valido = 0;
+        mensaje += '<li>Piezas seleccionadas </li>'
+    }
+    if(ttoPiezas == ''){
+        valido = 0;
+        mensaje += '<li>Tratamiento </li>';
+    }
+
+    if(valido == 0){
+        swal({
+                title: "Campos requeridos",
+                content:{
+                    element: "ul",
+                    attributes: {
+                        innerHTML: mensaje
+                    }
+                },
+                icon: "error",
+            });
+            return false;
+    }
+
+    let url = "{{ ROUTE('dental.cargar_tratamiento_presupuesto_endo') }}";
+    let data = {
+        piezas: piezasSeleccionadas,
+        tto: ttoPiezas,
+        id_ficha_atencion: $('#id_fc').val(),
+        id_lugar_atencion: $('#id_lugar_atencion').val(),
+        id_paciente: dame_id_paciente(),
+        tipo: tipo,
+        _token: "{{ csrf_token() }}"
+    }
+    console.log(data);
+    $.ajax({
+        type:'post',
+        url: url,
+        data: data,
+        success: function(resp){
+            console.log(resp);
+            if(resp.status == 1){
+                swal({
+                    icon:'success',
+                    title:'Info',
+                    text: resp.mensaje
+                });
+                let odontograma = resp.odontograma_paciente;
+                let html = '';
+                odontograma.forEach(function(odonto){
+                    html += '<tr>';
+                    html += '<td>'+odonto.fecha+'</td>';
+                    html += '<td>'+odonto.tratamiento+'</td>';
+                    html += '<td>'+odonto.caras+'</td>';
+                    html += '<td>'+odonto.pieza+'</td>';
+                    html += '<td>'+odonto.diagnostico+'</td>';
+                    html += '<td>'+formatoMoneda(odonto.valor)+'</td>';
+                    // html += '<td>';
+                    // html += '<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                    // if(odonto.presupuesto == 0){
+                    //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                    // }else{
+                    //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="feather icon-x"></i>Sacar de presupuesto</button>';
+                    // }
+
+                    // html += '</td>';
+                     // Checkbox para seleccionar el odontograma
+                    html += '<td>';
+                    html += '<div class="form-check">';
+                    html += '<input class="form-check-input" type="checkbox" value="' + odonto.id + '" '
+                    html += odonto.presupuesto == 1 ? 'checked ' : '';
+                    html += 'onchange="togglePresupuesto(' + odonto.id + ', this.checked)">';
+                    html += '<label class="form-check-label"></label>';
+                    html += '</div>';
+                    html += '</td>';
+                    html += '<td>';
+                    html += '<div class="form-check">';
+                    html += '<input class="form-check-input checkbox-seleccion" type="checkbox" value="' + odonto.id + '" ';
+                    html += 'id="seleccionCheck' + odonto.id + '" ';
+                    html += 'onchange="toggleSeleccion(' + odonto.id + ', this.checked)">';
+                    html += '<label class="form-check-label" for="seleccionCheck' + odonto.id + '"></label>';
+                    html += '</div>';
+                    html += '</td>';
+                    html += '</tr>';
+                });
+                $('#contenedor_examenes_grupos_dentales').empty();
+                $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+                $('#table_odontograma tbody').html(html);
+                $('#contenedor_piezas_dentales_presupuesto').empty();
+                $('#table_trabajos_presupuesto tbody').empty();
+                odontograma.forEach(function(odonto){
+                        if(odonto.presupuesto == 1){
+                                $('#contenedor_piezas_dentales_presupuesto').append(`
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-informacion">
+                                                <div class="card-body pb-0">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Pieza</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Prestación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Sub-Total</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                        </div>
+                                                        <div class="form-group col-md-1">
+                                                            <label class="floating-label-activo-sm">Descuento</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Total prestación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                        </div>
+                                                        <div class="form-group col-md-2 d-flex justify-content-center">
+                                                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"></i> </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                `);
+                            $('#table_trabajos_presupuesto tbody').append(`
+                                <tr>
+                                    <td>${odonto.fecha}</td>
+                                    <td>${odonto.diagnostico} </td>
+                                    <td>${odonto.caras} </td>
+                                    <td>${odonto.pieza} </td>
+                                    <td>${odonto.tratamiento} </td>
+                                    <td>${formatoMoneda(odonto.valor)} </td>
+                                    <td> </td>
+                                    <td>
+                                        <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                    </td>
+                                </tr>
+                            `);
+                        }
+                });
+                let valores_boca_general = resp.valores[0];
+                let valores_odontograma = resp.valores[1];
+                let valores_insumos = resp.valores[2];
+                let total_general = valores_boca_general + valores_odontograma + valores_insumos;
+                $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
+                $('#valores_examenes_presupuesto_conf').html(formatoMoneda(valores_boca_general));
+                $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
+                $('#valores_piezas_presupuesto_conf').html(formatoMoneda(valores_odontograma));
+                $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
+                $('#valores_total_final_presupuesto_conf').html(formatoMoneda(total_general));
+                $('#subtotal_clinico').val(formatoMoneda(valores_boca_general + valores_odontograma));
+                $('#total_clinico').val(formatoMoneda(valores_boca_general + valores_odontograma));
+                $('#total_presupuesto_dental').val(total_general);
+                $('#total_presupuesto').val(formatoMoneda(total_general));
+
+                $('#monto_total').html(formatoMoneda(valores_insumos)+' + '+formatoMoneda(valores_odontograma + valores_boca_general)+' = '+formatoMoneda(total_general));
+
+                let table = $('#presup_estado_pago').DataTable();
+                table.clear().draw();
+
+                // Recorrer el odontograma y agregar nuevas filas
+                odontograma.forEach(function(odonto) {
+
+                        if (odonto.presupuesto == 1) {
+                            if(odonto.estado_pago == 'ok'){
+                                var clase = 'bg-success';
+                            }else if(odonto.estado_pago == 'incompleto'){
+                                var clase = 'bg-warning';
+                            }else{
+                                var clase = 'bg-danger';
+                            }
+
+                            if(odonto.estado == 0){
+                                var estado = 'PENDIENTE';
+                            }else{
+                                var estado = 'TERMINADO';
+                            }
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table.row.add([
+                                odonto.descripcion,
+                                odonto.pieza,
+                                formatoMoneda(formatoMoneda(odonto.valor)),
+                                0,
+                                formatoMoneda(formatoMoneda(odonto.valor)),
+                                '<div class="circle '+clase+'"></div>',
+                                estado, // Columna vacía
+
+                            ]).draw(false).node(); // Obtener el nodo de la fila
+
+                            // Agregar clases a la fila
+                            $(rowNode).addClass('text-center align-middle status-circle');
+                        }
+                });
+                //limpiar_formulario_cargar_presupuesto_g();
+                $('#table_pagos_reasignar_odontograma tbody').empty();
+                odontograma.forEach(function(odonto) {
+                    if (odonto.presupuesto == 1) {
+                        let fila = `<tr>
+                            <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
+                            <td>${odonto.pieza}</td>
+                            <td>${formatoMoneda(odonto.valor)}</td>
+                            <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"> </i> </button></td>
+                        </tr>`;
+                        $('#table_pagos_reasignar_odontograma tbody').append(fila);
+                    }
+                });
+                // se cargan las piezas seleccionadas en tabla con id table_piezas_presupuesto_odonto
+                let table_odon_gral = $('#table_piezas_presupuesto_endo').DataTable();
+                table_odon_gral.clear().draw();
+
+                odontograma.forEach(function(pieza){
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table_odon_gral.row.add([
+                                pieza.pieza,
+                                pieza.descripcion,
+                                formatoMoneda(formatoMoneda(pieza.valor)),
+                                '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma('+pieza.id+')"><i class="feather icon-x"> </i> </button>'
+
+                            ]).draw(false).node(); // Obtener el nodo de la fila
+
+
+                });
+            }else{
+                swal({
+                    icon:'error',
+                    title:'info',
+                    text: resp.mensaje
+                });
+            }
+
+
+            $('#tratamiento_presupuesto tbody').empty();
+            let presupuesto = resp.presupuesto;
+            console.log(presupuesto);
+            $('#tratamiento_presupuesto tbody').append(`
+            <tr>
+                <td class="text-center align-middle">${presupuesto.fecha}</td>
+                <td class="text-center align-middle">${presupuesto.id}</td>
+                <td class="text-center align-middle">${presupuesto.aprobado}</td>
+                <td class="text-center align-middle">Sector I</td>
+                <td class="text-center align-middle">${presupuesto.boca}</td>
+
+                <td class="text-center align-middle">
+                    <div class="form-group col-md-4">
+                        <div class="switch switch-success d-inline m-r-2">
+                            <input type="checkbox" id="info_finalizado" checked="">
+                            <label for="info_finalizado" class="cr"></label>
+                        </div>
+                        <label>Realizado?</label>
+                    </div>
+                </td>
+                <td class="text-center align-middle">
+                    ${presupuesto.fecha}
+                </td>
+                <td class="text-center align-middle">
+                    <button type="button" class="btn btn-info btn-sm" onclick="presupuesto()" ;="">
+                        <i class="fa fa-plus"></i> Trabajar en pieza
+                    </button>
+                </td>
+            </tr>
+            `);
+
+        },
+        error: function(error){
+            console.log(error.responseText);
         }
     });
 }
