@@ -3117,378 +3117,137 @@ class DentalController extends Controller
         }
     }
 
-    public function eliminar_pago_presupuesto(Request $req){
+    public function eliminar_pago_presupuesto(Request $req)
+    {
         $pago = PagosPresupuestoDental::find($req->id);
-        $id_ficha_atencion = $req->id_ficha_atencion;
-        $pago_actual = $pago->total;
-        $total_presupuesto = $req->total_presupuesto;
-        if($req->id_dcto <> 0){
-            $convenio = EmpresasConvenios::find($req->id_dcto);
-        }
-        $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
-        if($pago->delete()){
-            $odontograma_paciente = $this->dame_odontograma_paciente($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
-            $pagos_presupuesto = $this->dame_pagos_presupuesto($req->id_paciente, $req->id_ficha_atencion);
-            $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_ficha_atencion', $req->id_ficha_atencion)->get();
-            $total_abonado = 0;
-            foreach($pagos_tratamientos_dentales as $p){
-                $total_abonado += intval($p->total);
-            }
-            $valores = $this->dameValoresOdontograma($req->id_paciente, $req->id_ficha_atencion,$req->id_lugar_atencion, $profesional->id_tipo_especialidad);
-            $suma_presupuesto = $valores[0] + $valores[1] + $valores[2];
 
-            $valor_insumos = $valores[2];
-            $total_abonado_sin_insumos = $total_abonado - $valor_insumos;
-            $valor_odontograma = $valores[1];
+        if ($pago && $pago->delete()) {
+            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
-            $total_piezas_odontograma = count($odontograma_paciente);
-            $resto = $total_abonado_sin_insumos;
-            $descuentos = 0;
-            if(intval($total_presupuesto) <= intval($pago_actual)){
-                foreach($odontograma_paciente as $o){
-                    if($o->presupuesto == 1){
-                        if($resto > 0 && $resto >= intval($o->valor)){
-                            $o->estado_pago = 'ok';
-                            $resto -= intval($o->valor);
-                            $o->save();
+            $pagos = $this->dame_pagos_presupuesto($req->id_paciente, $req->id_ficha_atencion);
+            $total_pagado = $pagos->sum('total');
 
-                        }else if($resto > 0 && $resto <= intval($o->valor)){
-                            $o->estado_pago = 'incompleto';
-                            $resto -= intval($o->valor);
-                            $o->save();
-                        }else if($resto <= 0){
-                            $o->estado_pago = 'error';
-                            $o->save();
-                        }
-                    }
+            $resultado = $this->recalcularPagosYDescuentos(
+                $req->id_paciente,
+                $req->id_ficha_atencion,
+                $req->id_lugar_atencion,
+                $profesional->id_tipo_especialidad,
+                $total_pagado,
+                $req->id_dcto // puede ser 0 si no hay convenio
+            );
 
-
-                }
-                if(isset($convenio)){
-                    foreach($odontograma_paciente as $o){
-                        $o->valor_descuento = $o->valor - $o->valor * (intval($convenio->porcentaje) / 100);
-                        $descuentos += $o->valor * (intval($convenio->porcentaje) / 100);
-                        $o->nuevo_valor = $o->valor - $o->valor_descuento;
-                    }
-                }
-            }
-
-            $fichaController = new ficha_atencionController;
-            $insumos_tratamientos = $fichaController->dame_insumos_tratamiento($req->id_paciente, $req->id_ficha_atencion);
-
-            if(intval($total_presupuesto) <= intval($pago_actual)){
-                foreach($insumos_tratamientos as $i){
-                    if($total_abonado >= $valor_insumos){
-                        $i->estado_pago = "ok";
-                    }else{
-                        $i->estado_pago = "error";
-                    }
-                    $i->save();
-                }
-                foreach($insumos_tratamientos as $i){
-                    if(isset($convenio)){
-                        $i->valor_descuento = $i->valor - $i->valor * (intval($convenio->porcentaje) / 100);
-                        $descuentos += $i->valor * (intval($convenio->porcentaje) / 100);
-                        $i->nuevo_valor = $i->valor - $i->valor_descuento;
-                    }
-                }
-            }
-            $maxilar_inferior_gral_diagnostico = $fichaController->dameMaxilarInferiorGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_inferior_gral_tratamiento = $fichaController->dameMaxilarInferiorGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_superior_gral_diagnostico = $fichaController->dameMaxilarSuperiorGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_superior_gral_tratamiento = $fichaController->dameMaxilarSuperiorGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
-            $boca_completa_gral_diagnostico = $fichaController->dameBocaCompletaGeneralDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
-            $boca_completa_gral_tratamiento = $fichaController->dameBocaCompletaGeneralTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_inferior_gral_tratamientos_endo = $fichaController->dameMaxilarInferiorGeneralTratamientoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_inferior_gral_diagnosticos_endo = $fichaController->dameMaxilarInferiorGeneralDiagnosticoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_superior_gral_tratamientos_endo = $fichaController->dameMaxilarSuperiorGeneralTratamientoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
-            $maxilar_superior_gral_diagnosticos_endo = $fichaController->dameMaxilarSuperiorGeneralDiagnosticoEndodoncia($req->id_paciente, $profesional->id_tipo_especialidad);
-            $boca_completa_gral_tratamiento_endo = $fichaController->dameCompletaEndoTratamiento($req->id_paciente, $profesional->id_tipo_especialidad);
-            $boca_completa_gral_diagnostico_endo = $fichaController->dameCompletaEndoDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
-
-            if(intval($total_presupuesto) <= intval($pago_actual) || intval($total_abonado) >= intval($total_presupuesto)){
-                foreach($maxilar_inferior_gral_diagnostico as $o){
-                    if($o->presupuesto == 1){
-                        if($resto > 0 && $resto >= intval($o->valor)){
-                            $o->estado_pago = 'ok';
-                            $o->clase = 'bg-success';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-
-                        }else if($resto > 0 && $resto <= intval($o->valor)){
-                            $o->estado_pago = 'incompleto';
-                            $o->clase = 'bg-warning';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-                        }else if($resto <= 0){
-                            $o->estado_pago = 'error';
-                            $o->clase = 'bg-danger';
-                            $o->resto = $resto;
-                        }
-                    }
-                }
-
-                foreach($maxilar_inferior_gral_tratamiento as $o){
-                    if($o->presupuesto == 1){
-                        if($resto > 0 && $resto >= intval($o->valor)){
-                            $o->estado_pago = 'ok';
-                            $o->clase = 'bg-success';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-
-                        }else if($resto > 0 && $resto <= intval($o->valor)){
-                            $o->estado_pago = 'incompleto';
-                            $o->clase = 'bg-warning';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-                        }else if($resto <= 0){
-                            $o->estado_pago = 'error';
-                            $o->clase = 'bg-danger';
-                            $o->resto = $resto;
-                        }
-                    }
-                }
-
-                foreach($maxilar_superior_gral_diagnostico as $o){
-                    if($o->presupuesto == 1){
-                        if($resto > 0 && $resto >= intval($o->valor)){
-                            $o->estado_pago = 'ok';
-                            $o->clase = 'bg-success';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-
-                        }else if($resto > 0 && $resto <= intval($o->valor)){
-                            $o->estado_pago = 'incompleto';
-                            $o->clase = 'bg-warning';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-                        }else if($resto <= 0){
-                            $o->estado_pago = 'error';
-                            $o->clase = 'bg-danger';
-                            $o->resto = $resto;
-                        }
-                    }
-                }
-
-                foreach($maxilar_superior_gral_tratamiento as $o){
-                    if($o->presupuesto == 1){
-                        if($resto > 0 && $resto >= intval($o->valor)){
-                            $o->estado_pago = 'ok';
-                            $o->clase = 'bg-success';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-
-                        }else if($resto > 0 && $resto <= intval($o->valor)){
-                            $o->estado_pago = 'incompleto';
-                            $o->clase = 'bg-warning';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-                        }else if($resto <= 0){
-                            $o->estado_pago = 'error';
-                            $o->clase = 'bg-danger';
-                            $o->resto = $resto;
-                        }
-                    }
-                }
-
-                foreach($boca_completa_gral_diagnostico as $o){
-                    if($o->presupuesto == 1){
-                        if($resto > 0 && $resto >= intval($o->valor)){
-                            $o->estado_pago = 'ok';
-                            $o->clase = 'bg-success';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-
-                        }else if($resto > 0 && $resto <= intval($o->valor)){
-                            $o->estado_pago = 'incompleto';
-                            $o->clase = 'bg-warning';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-                        }else if($resto <= 0){
-                            $o->estado_pago = 'error';
-                            $o->clase = 'bg-danger';
-                            $o->resto = $resto;
-                        }
-                    }
-                }
-
-                foreach($boca_completa_gral_tratamiento as $o){
-                    if($o->presupuesto == 1){
-                        if($resto > 0 && $resto >= intval($o->valor)){
-                            $o->estado_pago = 'ok';
-                            $o->clase = 'bg-success';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-
-                        }else if($resto > 0 && $resto <= intval($o->valor)){
-                            $o->estado_pago = 'incompleto';
-                            $o->clase = 'bg-warning';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-                        }else if($resto <= 0){
-                            $o->estado_pago = 'error';
-                            $o->clase = 'bg-danger';
-                            $o->resto = $resto;
-                        }
-                    }
-                }
-
-                foreach($maxilar_inferior_gral_diagnosticos_endo as $o){
-                    if($o->presupuesto == 1){
-                        if($resto > 0 && $resto >= intval($o->valor)){
-                            $o->estado_pago = 'ok';
-                            $o->clase = 'bg-success';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-
-                        }else if($resto > 0 && $resto <= intval($o->valor)){
-                            $o->estado_pago = 'incompleto';
-                            $o->clase = 'bg-warning';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-                        }else if($resto <= 0){
-                            $o->estado_pago = 'error';
-                            $o->clase = 'bg-danger';
-                            $o->resto = $resto;
-                        }
-                    }
-                }
-
-                foreach($maxilar_inferior_gral_tratamientos_endo as $o){
-                    if($o->presupuesto == 1){
-                        if($resto > 0 && $resto >= intval($o->valor)){
-                            $o->estado_pago = 'ok';
-                            $o->clase = 'bg-success';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-
-                        }else if($resto > 0 && $resto <= intval($o->valor)){
-                            $o->estado_pago = 'incompleto';
-                            $o->clase = 'bg-warning';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-                        }else if($resto <= 0){
-                            $o->estado_pago = 'error';
-                            $o->clase = 'bg-danger';
-                            $o->resto = $resto;
-                        }
-                    }
-                }
-
-                foreach($maxilar_superior_gral_diagnosticos_endo as $o){
-                    if($o->presupuesto == 1){
-                        if($resto > 0 && $resto >= intval($o->valor)){
-                            $o->estado_pago = 'ok';
-                            $o->clase = 'bg-success';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-
-                        }else if($resto > 0 && $resto <= intval($o->valor)){
-                            $o->estado_pago = 'incompleto';
-                            $o->clase = 'bg-warning';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-                        }else if($resto <= 0){
-                            $o->estado_pago = 'error';
-                            $o->clase = 'bg-danger';
-                            $o->resto = $resto;
-                        }
-                    }
-                }
-
-                foreach($maxilar_superior_gral_tratamientos_endo as $o){
-                    if($o->presupuesto == 1){
-                        if($resto > 0 && $resto >= intval($o->valor)){
-                            $o->estado_pago = 'ok';
-                            $o->clase = 'bg-success';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-
-                        }else if($resto > 0 && $resto <= intval($o->valor)){
-                            $o->estado_pago = 'incompleto';
-                            $o->clase = 'bg-warning';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-                        }else if($resto <= 0){
-                            $o->estado_pago = 'error';
-                            $o->clase = 'bg-danger';
-                            $o->resto = $resto;
-                        }
-                    }
-                }
-
-                foreach($boca_completa_gral_diagnostico_endo as $o){
-                    if($o->presupuesto == 1){
-                        if($resto > 0 && $resto >= intval($o->valor)){
-                            $o->estado_pago = 'ok';
-                            $o->clase = 'bg-success';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-
-                        }else if($resto > 0 && $resto <= intval($o->valor)){
-                            $o->estado_pago = 'incompleto';
-                            $o->clase = 'bg-warning';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-                        }else if($resto <= 0){
-                            $o->estado_pago = 'error';
-                            $o->clase = 'bg-danger';
-                            $o->resto = $resto;
-                        }
-                    }
-                }
-
-                foreach($boca_completa_gral_tratamiento_endo as $o){
-                    if($o->presupuesto == 1){
-                        if($resto > 0 && $resto >= intval($o->valor)){
-                            $o->estado_pago = 'ok';
-                            $o->clase = 'bg-success';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-
-                        }else if($resto > 0 && $resto <= intval($o->valor)){
-                            $o->estado_pago = 'incompleto';
-                            $o->clase = 'bg-warning';
-                            $resto -= intval($o->valor);
-                            $o->resto = $resto;
-                        }else if($resto <= 0){
-                            $o->estado_pago = 'error';
-                            $o->clase = 'bg-danger';
-                            $o->resto = $resto;
-                        }
-                    }
-                }
-            }
-
-
-            $suma_adeudado = $suma_presupuesto - $total_abonado;
+            return array_merge(
+                ['estado' => 'ok'],
+                $resultado,
+                ['pagos' => $pagos, 'total_abonado' => $total_pagado]
+            );
+        } else {
             return [
-                'estado' => 'ok',
-                'mensaje' => 'Se ha eliminado el Pago con éxito',
-                'pagos' => $pagos_presupuesto,
-                'suma_pagado' => $total_abonado,
-                'insumos' => $insumos_tratamientos,
-                'odontograma' => $odontograma_paciente,
-                'suma_presupuesto' => $suma_presupuesto,
-                'suma_adeudado' => $suma_adeudado,
-                'maxilar_superior_gral_tratamientos' => $maxilar_superior_gral_tratamiento,
-                'maxilar_superior_gral_diagnosticos' => $maxilar_superior_gral_diagnostico,
-                'maxilar_inferior_gral_tratamientos' => $maxilar_inferior_gral_tratamiento,
-                'maxilar_inferior_gral_diagnosticos' => $maxilar_inferior_gral_diagnostico,
-                'maxilar_inferior_gral_tratamientos_endo' => $maxilar_inferior_gral_tratamientos_endo,
-                'maxilar_inferior_gral_diagnosticos_endo' => $maxilar_inferior_gral_diagnosticos_endo,
-                'maxilar_superior_gral_tratamientos_endo' => $maxilar_superior_gral_tratamientos_endo,
-                'maxilar_superior_gral_diagnosticos_endo' => $maxilar_superior_gral_diagnosticos_endo,
-                'boca_completa_gral_tratamiento_endo' => $boca_completa_gral_tratamiento_endo,
-                'boca_completa_gral_diagnostico_endo' => $boca_completa_gral_diagnostico_endo,
-                'boca_completa_gral_tratamientos' => $boca_completa_gral_tratamiento,
-                'boca_completa_gral_diagnosticos' => $boca_completa_gral_diagnostico,
-                'todos' => $this->dameTratamientosBocaGeneral($id_ficha_atencion)
+                'estado' => 'error',
+                'mensaje' => 'Ha ocurrido un problema'
             ];
-        }else{
-            return ['estado' => 'error','mensaje' => 'Ha ocurrido un problema'];
         }
     }
+
+    private function recalcularPagosYDescuentos($id_paciente, $id_ficha, $id_lugar, $id_especialidad, $monto_abonado, $id_convenio = 0)
+    {
+        $ep = new EscritorioProfesional;
+
+        $odontograma = $ep->dameOdontogramaPaciente($id_paciente, $id_ficha, $id_lugar, $id_especialidad);
+        $valores = $ep->dameValoresOdontograma($id_paciente, $id_ficha, $id_lugar, $id_especialidad);
+        $insumos = $ep->dame_insumos_tratamiento($id_paciente, $id_ficha);
+        $todos = $ep->dameTratamientosBocaGeneral($id_ficha);
+
+        $descuentos = 0;
+        $porcentaje_descuento = 0;
+
+        if ($id_convenio != 0) {
+            $convenio = EmpresasConvenios::find($id_convenio);
+            $porcentaje_descuento = intval($convenio->porcentaje);
+        }
+
+        // Aplicar descuento
+        foreach ($insumos as $i) {
+            $total_insumo = $i->cantidad * $i->valor;
+            $descuento = $total_insumo * ($porcentaje_descuento / 100);
+            $i->valor_descuento = $descuento;
+            $i->nuevo_valor = $total_insumo - $descuento;
+            $descuentos += $descuento;
+        }
+
+        foreach ($odontograma as $o) {
+            $descuento = $o->valor * ($porcentaje_descuento / 100);
+            $o->valor_descuento = $descuento;
+            $o->nuevo_valor = $o->valor - $descuento;
+            $descuentos += $descuento;
+        }
+
+        foreach ($todos as $o) {
+            $descuento = $o->valor * ($porcentaje_descuento / 100);
+            $o->valor_descuento = $descuento;
+            $o->nuevo_valor = $o->valor - $descuento;
+            $descuentos += $descuento;
+        }
+
+        // Pago progresivo
+        $resto_pago = $monto_abonado;
+
+        foreach ($insumos as $i) {
+            $valor = intval($i->nuevo_valor);
+            if ($resto_pago >= $valor) {
+                $i->estado_pago = 'ok';
+                $resto_pago -= $valor;
+            } elseif ($resto_pago > 0) {
+                $i->estado_pago = 'incompleto';
+                $resto_pago = 0;
+            } else {
+                $i->estado_pago = 'error';
+            }
+        }
+
+        foreach ($odontograma as $o) {
+            $valor = intval($o->nuevo_valor);
+            if ($resto_pago >= $valor) {
+                $o->estado_pago = 'ok';
+                $resto_pago -= $valor;
+            } elseif ($resto_pago > 0) {
+                $o->estado_pago = 'incompleto';
+                $resto_pago = 0;
+            } else {
+                $o->estado_pago = 'error';
+            }
+        }
+
+        foreach ($todos as $o) {
+            if ($o->presupuesto == 1) {
+                $valor = intval($o->nuevo_valor);
+                if ($resto_pago >= $valor) {
+                    $o->estado_pago = 'ok';
+                    $resto_pago -= $valor;
+                } elseif ($resto_pago > 0) {
+                    $o->estado_pago = 'incompleto';
+                    $resto_pago = 0;
+                } else {
+                    $o->estado_pago = 'error';
+                }
+            }
+        }
+
+        $total_general = $valores[0] + $valores[1] + $valores[2];
+        $total_con_descuento = $total_general - $descuentos;
+
+        return [
+            'odontograma' => $odontograma,
+            'insumos' => $insumos,
+            'todos' => $todos,
+            'valores' => $valores,
+            'descuentos' => $descuentos,
+            'total_general' => $total_general,
+            'total_con_descuento' => $total_con_descuento,
+            'suma_pagado' => $monto_abonado - $resto_pago
+        ];
+    }
+
 
     public function registrar_pedidos_insumos(Request $req){
         return $req;

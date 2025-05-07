@@ -2748,6 +2748,39 @@ class EscritorioProfesional extends Controller
             return $odontogramas;
     }
 
+    public function dameTratamientosImplante($id_paciente, $id_ficha_atencion = null, $id_lugar_atencion = null, $id_presupuesto = null)
+    {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+
+        $query = OdontogramaPaciente::select(
+            'odontogramas_pacientes.*',
+            'tratamientos_implantologia.descripcion',
+            'tratamientos_implantologia.cantidad_bloques',
+            'tratamientos_implantologia.valor',
+            'tratamientos_dental.descripcion as diagnostico'
+        )
+        ->join('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
+        ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
+        ->where('odontogramas_pacientes.id_paciente', $id_paciente)
+        ->where('odontogramas_pacientes.id_profesional', $profesional->id)
+        ->where('odontogramas_pacientes.tratamiento', 'like', '%Implante%');
+
+        if (!is_null($id_ficha_atencion)) {
+            $query->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion);
+        }
+
+        if (!is_null($id_lugar_atencion)) {
+            $query->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion);
+        }
+
+        if (!is_null($id_presupuesto)) {
+            $query->where('odontogramas_pacientes.id_presupuesto', $id_presupuesto);
+        }
+
+        return $query->get();
+    }
+
+
     public function atender_tratamiento_presupuesto(Request $req){
         if(!$req->tipo){
             $pieza = OdontogramaPaciente::select('odontogramas_pacientes.*','diagnosticos_dental.descripcion','diagnosticos_dental.cantidad_bloques')

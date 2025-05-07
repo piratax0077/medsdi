@@ -148,7 +148,7 @@
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                             <h6 class="tit-gen">Antecedentes Dentales</h6>
                                                         </div>
-                                                    </div> 
+                                                    </div>
                                                     <div class="row">
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                             <div class="card">
@@ -176,7 +176,7 @@
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                 <h6 class="sub-aten">Anestesias</h6>
                                                                                             </div>
-                                                                                        </div> 
+                                                                                        </div>
                                                                                         <div class="form-row">
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                 <div class="table-responsive">
@@ -219,7 +219,7 @@
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                 <h6 class="sub-aten">Hemorragias</h6>
                                                                                             </div>
-                                                                                        </div> 
+                                                                                        </div>
                                                                                         <div class="form-row">
                                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                 <div class="table-responsive">
@@ -371,8 +371,8 @@
                                                             @endforeach --}}
                                                             <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3 col-xxl-2 mt-3">
 
-                                         
-                                                                        
+
+
 
                                                                 <div class="input-group mb-3">
                                                                 <label class="floating-label-activo-sm">Historia de la pieza N°</label>
@@ -381,9 +381,9 @@
                                                                         <button class="btn btn-info btn-sm" type="button"  onclick="dame_info_pieza()"><i class="fas fa-search"></i></button>
                                                                     </div>
                                                                     </div>
-                                                                   
-                                                                       
-                                                                  
+
+
+
                                                             </div>
                                                             <div class="col-md-12">
                                                             <div class="card-informacion">
@@ -410,10 +410,10 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                           
-                                               
+
+
                                             </div>
-                                        </div>    
+                                        </div>
 
 
 
@@ -1056,31 +1056,39 @@
                             if(insumo.presupuesto == 1){
                                 let total = insumo.cantidad * insumo.valor;
                                 $('#contenedor_insumos').append(`
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Insumo</label>
-                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
-                                </div>
-                                <div class="form-group col-md-3 fill">
-                                    <label class="floating-label-activo-sm">Cantidad</label>
-                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
-                                </div>
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor)}">
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label class="floating-label-activo-sm">Descuento</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
-                                </div>
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Total Prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
-                                </div>
-                                <div class="form-group col-md-2 d-flex">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i>  </button>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-informacion">
+                                            <div class="card-body pb-0">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Insumo</label>
+                                                        <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                                                    </div>
+                                                    <div class="form-group col-md-3 fill">
+                                                        <label class="floating-label-activo-sm">Cantidad</label>
+                                                        <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-1">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Total Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                </div>
-                            `);
+                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `);
                             }
 
                         });
@@ -1241,31 +1249,39 @@
                             if(insumo.presupuesto == 1){
                                 let total = insumo.cantidad * insumo.valor;
                                 $('#contenedor_insumos').append(`
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Insumo</label>
-                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
-                                </div>
-                                <div class="form-group col-md-3 fill">
-                                    <label class="floating-label-activo-sm">Cantidad</label>
-                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
-                                </div>
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label class="floating-label-activo-sm">Descuento</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
-                                </div>
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Total Prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
-                                </div>
-                                <div class="form-group col-md-2 d-flex">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-informacion">
+                                            <div class="card-body pb-0">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Insumo</label>
+                                                        <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                                                    </div>
+                                                    <div class="form-group col-md-3 fill">
+                                                        <label class="floating-label-activo-sm">Cantidad</label>
+                                                        <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-1">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Total Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i> </button>
-                                </div>
-                            `);
+                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `);
                             }
 
                         });
@@ -1453,31 +1469,39 @@
                             if(insumo.presupuesto == 1){
                                 let total = insumo.cantidad * insumo.valor;
                                 $('#contenedor_insumos').append(`
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Insumo</label>
-                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
-                                </div>
-                                <div class="form-group col-md-3 fill">
-                                    <label class="floating-label-activo-sm">Cantidad</label>
-                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
-                                </div>
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor)}">
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label class="floating-label-activo-sm">Descuento</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
-                                </div>
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Total Prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
-                                </div>
-                                <div class="form-group col-md-2 d-flex">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i> </button>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-informacion">
+                                            <div class="card-body pb-0">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Insumo</label>
+                                                        <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                                                    </div>
+                                                    <div class="form-group col-md-3 fill">
+                                                        <label class="floating-label-activo-sm">Cantidad</label>
+                                                        <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-1">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Total Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                </div>
-                            `);
+                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `);
                             }
 
                         });
