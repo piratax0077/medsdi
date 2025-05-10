@@ -2489,3 +2489,5 @@ Route::post('/profesional/eliminar_tons',[App\Http\Controllers\EscritorioProfesi
 Route::post('/profesional/solicitar_tons_atencion',[App\Http\Controllers\EscritorioProfesional::class, 'solicitar_tons_atencion'])->name('profesional.solicitar_tons_atencion_dental');
 Route::post('/profesional/devolucion_bono',[App\Http\Controllers\EscritorioProfesional::class, 'devolucion_bono'])->name('profesional.devolucion_bono');
 
+Route::get('/paciente/datos/cargar/prereserva/{token1}/{token2}/{token3}',[App\Http\Controllers\EscritorioPaciente::class, 'cargaDatosPacientePreReserva'])->name('paciente.datos.cargar.prereserva');
+Route::get('/paciente/datos/cargar/prereserva/registrar',[App\Http\Controllers\EscritorioPaciente::class, 'registrarCargaDatosPacientePreReserva'])->name('paciente.datos.cargar.prereserva.registrar');

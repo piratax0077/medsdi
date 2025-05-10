@@ -1502,6 +1502,7 @@ class EscritorioAsistente extends Controller
                             $asunto = 'MED-SDI - Pre Agendada';
                             $body = array(
                                 'nombre_paciente'=> $paciente->nombres . ' ' . $paciente->apellido_uno . ' ' . $paciente->apellido_dos,
+                                'token_paciente'=> $paciente->token,
                                 'fecha'=> $hora_medica->fecha_consulta,
                                 'hora'=> $hora_medica->hora_inicio,
                                 'profesional_nombre'=> $profesional->nombre . ' ' . $profesional->apellido_uno . ' ' . $profesional->apellido_dos,

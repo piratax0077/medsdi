@@ -57,9 +57,14 @@
     <!-- flatpickr -->
     <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+
     @yield('page-style')
 
     <style>
+        .select2-container--open{
+            z-index: 9999999 !important;
+        }
         .diagnostico_activo{
             background: #fff !important;
         }

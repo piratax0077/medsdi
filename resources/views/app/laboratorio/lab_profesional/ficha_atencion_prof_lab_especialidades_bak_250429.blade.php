@@ -1,31 +1,4 @@
-<!-- FICHA ATENCION tecn orl -->
-<style type="text/css">
-    .ng_esp {
-        /* Common */
-    font : 13px 'Wingdings 3';
-        color : #0000ff;
-        width: 60px; background-color: #f6faf9; color: #FF0000;text-align:center; font-weight: bold; font-size: x-large;
-        background-color: #f6faf9;
-        text-align:center;
-        font-weight: bold;
-        display: block;
-        width: 100%;
-        padding: 0.4rem 0.5rem 0.3rem 0.5rem!important;
-        font-size: 1.0rem;
-        font-weight: 400;
-        line-height: 1.5;
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 1px solid #ced4da;
-        border-radius: 3px;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    }
-
-    @font-face {
-        font-family: 'Wingdings 3';
-
-    }
-</style>
+<!-- FICHA ATENCION GENERAL -->
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 ">
         <div class="row">
