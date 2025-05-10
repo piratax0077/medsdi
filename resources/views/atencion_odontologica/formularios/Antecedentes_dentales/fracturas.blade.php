@@ -128,6 +128,7 @@
         data.procedimiento = $('#procedimiento_fractura_ficha_atencion').val();
         data.comentario = $('#comentario_fractura_ficha_atencion').val();
         data.fecha = $('#fecha_fractura_ficha_atencion').val();
+        data.nombre = $('#procedimiento_fractura_ficha_atencion').val();
 
         data.id_paciente = $('#id_paciente_fc').val();
         data.id_tipo_antecedente = 9;
@@ -138,7 +139,7 @@
         data.estado = 1;
         // data.token_ = CSRF_TOKEN;
 
-        // console.log(data);
+        console.log(data);
 
         jQuery.ajax({
 
@@ -147,6 +148,7 @@
             data: data
         })
         .done(function(data) {
+            console.log(data);
             if(data.estado==1)
             {
                 cargarRegistrosFractura(parseInt(tipo), 'table_antecedente_fractura_modal');

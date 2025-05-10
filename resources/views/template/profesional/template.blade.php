@@ -2528,8 +2528,8 @@
                             $('#contenedor_tratamientos_presupuesto').show();
                             $('#presupuesto_numero').empty();
                             $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
-                            console.log(data.presupuestos.length);
-                            if(data.presupuestos.length > 0){
+                            console.log(data.presupuestos);
+                            if(data.presupuestos?.length > 0){
                                 data.presupuestos.forEach(p => {
                                     $('#presupuesto_numero').append(`<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}</option>`);
                                 });

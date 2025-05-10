@@ -302,30 +302,37 @@ function cargar_a_presupuesto_impl(counter){
                 odontograma.forEach(function(odonto){
                     if(odonto.presupuesto == 1){
                         $('#contenedor_piezas_dentales_presupuesto').append(`
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Pieza</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label class="floating-label-activo-sm">Prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Sub-Total</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
-                            </div>
-                            <div class="form-group col-md-1">
-                                <label class="floating-label-activo-sm">Descuento</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                            </div>
-                            <div class="form-group col-md-2">
-                                <label class="floating-label-activo-sm">Total prestación</label>
-                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
-                            </div>
-                            <div class="form-group col-md-2 d-flex justify-content-center">
-
-                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
-                            </div>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-informacion">
+                                        <div class="card-body pb-0">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Pieza</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                </div>
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                         `);
                         $('#table_trabajos_presupuesto tbody').append(`
                             <tr>

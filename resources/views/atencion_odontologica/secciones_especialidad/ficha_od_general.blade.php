@@ -723,18 +723,18 @@
                                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
                                             <i class="fas fa-save"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>`;
                             }else{
                                 var botones = `
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
                                             <i class="fas fa-save"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>`;
                             }
@@ -833,18 +833,18 @@
                                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
                                             <i class="fas fa-save"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>`;
                             }else{
                                 var botones = `
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
                                             <i class="fas fa-save"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>`;
                             }
@@ -866,31 +866,39 @@
                             if(insumo.presupuesto == 1){
                                 let total = insumo.cantidad * insumo.valor;
                                 $('#contenedor_insumos').append(`
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Insumo</label>
-                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
-                                </div>
-                                <div class="form-group col-md-3 fill">
-                                    <label class="floating-label-activo-sm">Cantidad</label>
-                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
-                                </div>
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label class="floating-label-activo-sm">Descuento</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
-                                </div>
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Total Prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
-                                </div>
-                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-informacion">
+                                            <div class="card-body pb-0">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Insumo</label>
+                                                        <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                                                    </div>
+                                                    <div class="form-group col-md-3 fill">
+                                                        <label class="floating-label-activo-sm">Cantidad</label>
+                                                        <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-1">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Total Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i> </button>
-                                </div>
-                            `);
+                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `);
                             }
 
                         });
@@ -969,8 +977,8 @@
                                     <td>${formatoMoneda(insumo.valor)}</td>
                                     <td>${formatoMoneda(total)}</td>
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -1046,18 +1054,18 @@
                                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
                                     <i class="fas fa-save"></i>
                                 </button>
-                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                    <i class="fas fa-trash"></i>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                    <i class="feather icon-x"></i>
                                 </button>
                             </td>`;
                             }else{
                                 var botones = `
                                 <td>
-                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
                                         <i class="fas fa-save"></i>
                                     </button>
-                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                        <i class="fas fa-trash"></i>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                        <i class="feather icon-x"></i>
                                     </button>
                                 </td>`;
                             }
@@ -1078,31 +1086,39 @@
                             if(insumo.presupuesto == 1){
                                 let total = insumo.cantidad * insumo.valor;
                                 $('#contenedor_insumos').append(`
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Insumo</label>
-                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
-                                </div>
-                                <div class="form-group col-md-3 fill">
-                                    <label class="floating-label-activo-sm">Cantidad</label>
-                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
-                                </div>
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor)}">
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label class="floating-label-activo-sm">Descuento</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
-                                </div>
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Total Prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
-                                </div>
-                                <div class="form-group col-md-2 d-flex justify-content-center">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i> </button>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-informacion">
+                                            <div class="card-body pb-0">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Insumo</label>
+                                                        <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                                                    </div>
+                                                    <div class="form-group col-md-3 fill">
+                                                        <label class="floating-label-activo-sm">Cantidad</label>
+                                                        <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-1">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Total Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                </div>
-                            `);
+                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `);
                             }
 
                         });
@@ -1231,18 +1247,18 @@
                                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="cargar_a_presupuesto_insumo(${insumo.id})">
                                             <i class="fas fa-save"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>`;
                             }else{
                                 var botones = `
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto_insumo(${insumo.id})">
                                             <i class="fas fa-save"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>`;
                             }
@@ -1263,31 +1279,39 @@
                             if(insumo.presupuesto == 1){
                                 let total = insumo.cantidad * insumo.valor;
                                 $('#contenedor_insumos').append(`
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Insumo</label>
-                                    <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
-                                </div>
-                                <div class="form-group col-md-3 fill">
-                                    <label class="floating-label-activo-sm">Cantidad</label>
-                                    <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
-                                </div>
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(insumo.valor)}">
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label class="floating-label-activo-sm">Descuento</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
-                                </div>
-                                <div class="form-group col-md-2 fill">
-                                    <label class="floating-label-activo-sm">Total Prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
-                                </div>
-                                <div class="form-group col-md-2 d-flex">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="fas fa-trash"> </i>  </button>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-informacion">
+                                            <div class="card-body pb-0">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Insumo</label>
+                                                        <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
+                                                    </div>
+                                                    <div class="form-group col-md-3 fill">
+                                                        <label class="floating-label-activo-sm">Cantidad</label>
+                                                        <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-1">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
+                                                    </div>
+                                                    <div class="form-group col-md-2 fill">
+                                                        <label class="floating-label-activo-sm">Total Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
+                                                    </div>
+                                                    <div class="form-group col-md-2 d-flex justify-content-center">
 
-                                </div>
-                            `);
+                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `);
                             }
 
                         });
@@ -1337,8 +1361,8 @@
                                     <td>${formatoMoneda(insumo.valor)}</td>
                                     <td>${formatoMoneda(total)}</td>
                                     <td>
-                                        <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
-                                            <i class="fas fa-trash"></i>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_insumo(${insumo.id})">
+                                            <i class="feather icon-x"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -1397,11 +1421,11 @@
         $('#prot_implante').select2();
         $('#prot_implante_man').select2();
 
-        $('.select2').select2({
-            width: '100%',
-            placeholder: 'Seleccionar pieza(s)',
-            allowClear: true
-        });
+        // $('.select2').select2({
+        //     width: '100%',
+        //     placeholder: 'Seleccionar pieza(s)',
+        //     allowClear: true
+        // });
 
 
         const piezasSelect = $('#paciente_piezas_dentales_ex');
@@ -2811,7 +2835,7 @@ function indicar_procedimiento_sdi() {
                                 <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm"></td>
                                 <td class="text-center align-middle text-wrap">
                                     <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                        <i class="fas fa-trash"></i>Eliminar
+                                        <i class="feather icon-x"></i>Eliminar
                                     </button>
                                     <button type="button"
                                         class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -2832,7 +2856,7 @@ function indicar_procedimiento_sdi() {
                                 </td>
                                 <td class="text-center align-middle text-wrap">
                                     <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                        <i class="fas fa-trash"></i>Eliminar
+                                        <i class="feather icon-x"></i>Eliminar
                                     </button>
                                     <button type="button"
                                         class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -2880,7 +2904,7 @@ function indicar_procedimiento_sdi() {
                             <tr>
                                 <td class="text-center align-middle text-wrap">${datos.nombre_procedimiento}</td>
                                 <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm"></td>
-                                <td class="text-center align-middle text-wrap"><button type="button" class="btn btn-danger btn-sm" onclick="eliminarCuracion(${curacion.id})"><i class="fas fa-trash"></i></button></td>
+                                <td class="text-center align-middle text-wrap"><button type="button" class="btn btn-danger btn-sm" onclick="eliminarCuracion(${curacion.id})"><i class="feather icon-x"></i></button></td>
                             </tr>
                             `);
                         });
@@ -2984,7 +3008,7 @@ function suspender_procedimiento_sdi(id) {
                             </td>
                             <td class="text-center align-middle text-wrap">
                                 <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                    <i class="fas fa-trash"></i>Eliminar
+                                    <i class="feather icon-x"></i>Eliminar
                                 </button>
                                 <button type="button"
                                     class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -3005,7 +3029,7 @@ function suspender_procedimiento_sdi(id) {
                             </td>
                             <td class="text-center align-middle text-wrap">
                                 <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                    <i class="fas fa-trash"></i>Eliminar
+                                    <i class="feather icon-x"></i>Eliminar
                                 </button>
                                 <button type="button"
                                     class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -3111,7 +3135,7 @@ function eliminar_procedimiento_sdi_ajax(id) {
                                 <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm"></td>
                                 <td class="text-center align-middle text-wrap">
                                     <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                        <i class="fas fa-trash"></i>Eliminar
+                                        <i class="feather icon-x"></i>Eliminar
                                     </button>
                                     <button type="button"
                                         class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -3132,7 +3156,7 @@ function eliminar_procedimiento_sdi_ajax(id) {
                                 </td>
                                 <td class="text-center align-middle text-wrap">
                                     <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                        <i class="fas fa-trash"></i>Eliminar
+                                        <i class="feather icon-x"></i>Eliminar
                                     </button>
                                     <button type="button"
                                         class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -3248,8 +3272,8 @@ function eliminarCuracion(id) {
                                 <td class="text-center align-middle">
                                     <button type="button" class="btn btn-outline-warning btn-sm">
                                         <i class="fas fa-edit"></i>
-                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminarCuracion(${curacion.id})">
-                                        <i class="fas fa-trash"></i>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarCuracion(${curacion.id})">
+                                        <i class="feather icon-x"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -3325,7 +3349,7 @@ function eliminar_medicamento_sdi(id) {
                                         <td class="text-center align-middle text-wrap">${medicamento.indicaciones}</td>
                                         <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_via_administracion}</td>
                                         <td class="text-center align-middle text-wrap">${medicamento.via_administracion}</td>
-                                        <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="fas fa-trash"></i></div></td>
+                                        <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="feather icon-x"></i></div></td>
                                     </tr>`;
 
                             let fila_ = `<tr id="row${medicamento.id}">
@@ -3699,7 +3723,7 @@ $.ajax({
                                 <td class="text-center align-middle text-wrap">${medicamento.indicaciones}</td>
                                 <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_via_administracion}</td>
                                 <td class="text-center align-middle text-wrap">${medicamento.via_administracion}</td>
-                                <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="fas fa-trash"></i></div></td>
+                                <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="feather icon-x"></i></div></td>
                             </tr>`;
 
                 let fila_ = `<tr id="row${medicamento.id}">
@@ -4406,7 +4430,7 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                     // if(odonto.presupuesto == 0){
                     //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
                     // }else{
-                    //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                    //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="feather icon-x"></i>Sacar de presupuesto</button>';
                     // }
 
                     // html += '</td>';
@@ -4437,30 +4461,38 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                 odontograma.forEach(function(odonto){
                         if(odonto.presupuesto == 1){
                             $('#contenedor_piezas_dentales_presupuesto').append(`
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Pieza</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label class="floating-label-activo-sm">Prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label class="floating-label-activo-sm">Descuento</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
-                                </div>
-                                <div class="form-group col-md-2 d-flex justify-content-center">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
-                                </div>
-                            `);
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-informacion">
+                                                <div class="card-body pb-0">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Pieza</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Prestación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Sub-Total</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                        </div>
+                                                        <div class="form-group col-md-1">
+                                                            <label class="floating-label-activo-sm">Descuento</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Total prestación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                        </div>
+                                                        <div class="form-group col-md-2 d-flex justify-content-center">
+                                                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"></i> </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `);
                             $('#table_trabajos_presupuesto tbody').append(`
                                 <tr>
                                     <td>${odonto.fecha}</td>
@@ -4538,11 +4570,29 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                             <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
                             <td>${odonto.pieza}</td>
                             <td>${formatoMoneda(odonto.valor)}</td>
-                            <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"> </i> </button></td>
+                            <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"> </i> </button></td>
                         </tr>`;
                         $('#table_pagos_reasignar_odontograma tbody').append(fila);
                     }
                 });
+
+                // se cargan las piezas seleccionadas en tabla con id table_piezas_presupuesto_odonto
+                let table_odon_gral = $('#table_piezas_presupuesto_odonto').DataTable();
+                table_odon_gral.clear().draw();
+
+                odontograma.forEach(function(pieza){
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table_odon_gral.row.add([
+                                pieza.pieza,
+                                pieza.descripcion,
+                                formatoMoneda(formatoMoneda(pieza.valor)),
+                                '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma('+pieza.id+')"><i class="feather icon-x"> </i> </button>'
+
+                            ]).draw(false).node(); // Obtener el nodo de la fila
+
+
+                        });
+
             }else{
                 swal({
                     icon:'error',
@@ -5556,7 +5606,7 @@ function agregar_examenes_ficha() {
                             // if(odonto.presupuesto == 0){
                             //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
                             // }else{
-                            //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                            //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="feather icon-x"></i>Sacar de presupuesto</button>';
                             // }
 
                             // html += '</td>';
@@ -5586,32 +5636,39 @@ function agregar_examenes_ficha() {
                         $('#table_trabajos_presupuesto tbody').empty();
                         odontograma.forEach(function(odonto){
                             if(odonto.presupuesto == 1){
-                                    $('#contenedor_piezas_dentales_presupuesto').append(`
-                                        <div class="form-group col-md-2">
-                                            <label class="floating-label-activo-sm">Pieza</label>
-                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                $('#contenedor_piezas_dentales_presupuesto').append(`
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-informacion">
+                                        <div class="card-body pb-0">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Pieza</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                </div>
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="form-group col-md-3">
-                                            <label class="floating-label-activo-sm">Prestación</label>
-                                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label class="floating-label-activo-sm">Sub-Total</label>
-                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
-                                        </div>
-                                        <div class="form-group col-md-1">
-                                            <label class="floating-label-activo-sm">Descuento</label>
-                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label class="floating-label-activo-sm">Total prestación</label>
-                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
-                                        </div>
-                                        <div class="form-group col-md-2 d-flex justify-content-center">
-                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
-
-                                        </div>
-                                    `);
+                                    </div>
+                                </div>
+                        `);
                                     $('#table_trabajos_presupuesto tbody').append(`
                                         <tr>
                                             <td>${odonto.fecha}</td>
@@ -5690,7 +5747,7 @@ function agregar_examenes_ficha() {
                                     <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
                                     <td>${odonto.pieza}</td>
                                     <td>${formatoMoneda(odonto.valor)}</td>
-                                    <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"> </i> </button></td>
+                                    <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"> </i> </button></td>
                                 </tr>`;
                                 $('#table_pagos_reasignar_odontograma tbody').append(fila);
                             }
@@ -8629,7 +8686,7 @@ function ocultar_pieza_impl(counter){
                                         <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm"></td>
                                         <td class="text-center align-middle text-wrap">
                                             <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                                <i class="fas fa-trash"></i>Eliminar
+                                                <i class="feather icon-x"></i>Eliminar
                                             </button>
                                             <button type="button"
                                                 class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -8650,7 +8707,7 @@ function ocultar_pieza_impl(counter){
                                         </td>
                                         <td class="text-center align-middle text-wrap">
                                             <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                                <i class="fas fa-trash"></i>Eliminar
+                                                <i class="feather icon-x"></i>Eliminar
                                             </button>
                                             <button type="button"
                                                 class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -8698,7 +8755,7 @@ function ocultar_pieza_impl(counter){
                                     <tr>
                                         <td class="text-center align-middle text-wrap">${datos.nombre_procedimiento}</td>
                                         <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm"></td>
-                                        <td class="text-center align-middle text-wrap"><button type="button" class="btn btn-danger btn-sm" onclick="eliminarCuracion(${curacion.id})"><i class="fas fa-trash"></i></button></td>
+                                        <td class="text-center align-middle text-wrap"><button type="button" class="btn btn-danger btn-sm" onclick="eliminarCuracion(${curacion.id})"><i class="feather icon-x"></i></button></td>
                                     </tr>
                                     `);
                                 });
@@ -8802,7 +8859,7 @@ function ocultar_pieza_impl(counter){
                                     </td>
                                     <td class="text-center align-middle text-wrap">
                                         <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                            <i class="fas fa-trash"></i>Eliminar
+                                            <i class="feather icon-x"></i>Eliminar
                                         </button>
                                         <button type="button"
                                             class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -8823,7 +8880,7 @@ function ocultar_pieza_impl(counter){
                                     </td>
                                     <td class="text-center align-middle text-wrap">
                                         <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                            <i class="fas fa-trash"></i>Eliminar
+                                            <i class="feather icon-x"></i>Eliminar
                                         </button>
                                         <button type="button"
                                             class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -8929,7 +8986,7 @@ function ocultar_pieza_impl(counter){
                                         <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm"></td>
                                         <td class="text-center align-middle text-wrap">
                                             <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                                <i class="fas fa-trash"></i>Eliminar
+                                                <i class="feather icon-x"></i>Eliminar
                                             </button>
                                             <button type="button"
                                                 class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -8950,7 +9007,7 @@ function ocultar_pieza_impl(counter){
                                         </td>
                                         <td class="text-center align-middle text-wrap">
                                             <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                                <i class="fas fa-trash"></i>Eliminar
+                                                <i class="feather icon-x"></i>Eliminar
                                             </button>
                                             <button type="button"
                                                 class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -9066,8 +9123,8 @@ function ocultar_pieza_impl(counter){
                                         <td class="text-center align-middle">
                                             <button type="button" class="btn btn-outline-warning btn-sm">
                                                 <i class="fas fa-edit"></i>
-                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminarCuracion(${curacion.id})">
-                                                <i class="fas fa-trash"></i>
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="eliminarCuracion(${curacion.id})">
+                                                <i class="feather icon-x"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -9143,7 +9200,7 @@ function ocultar_pieza_impl(counter){
                                                 <td class="text-center align-middle text-wrap">${medicamento.indicaciones}</td>
                                                 <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_via_administracion}</td>
                                                 <td class="text-center align-middle text-wrap">${medicamento.via_administracion}</td>
-                                                <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="fas fa-trash"></i></div></td>
+                                                <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="feather icon-x"></i></div></td>
                                             </tr>`;
 
                                     let fila_ = `<tr id="row${medicamento.id}">
@@ -9517,7 +9574,7 @@ function ocultar_pieza_impl(counter){
                                         <td class="text-center align-middle text-wrap">${medicamento.indicaciones}</td>
                                         <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_via_administracion}</td>
                                         <td class="text-center align-middle text-wrap">${medicamento.via_administracion}</td>
-                                        <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="fas fa-trash"></i></div></td>
+                                        <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="feather icon-x"></i></div></td>
                                     </tr>`;
 
                         let fila_ = `<tr id="row${medicamento.id}">
@@ -9866,7 +9923,7 @@ function validar_via_administracion_sdi() {
                 //                 '<td class="text-center align-middle text-wrap hidden" hidden="hidden">' + id_via_administracion_ficha_dental + '</td>' +
                 //                 '<td class="text-center align-middle text-wrap">' + via_administracion_ficha_dental + '</td>' +
 
-                //                 '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(\'row' + i + '\');"><i class="fas fa-trash"></i></div></td>'+
+                //                 '<td class="text-center align-middle text-wrap"><div name="remove" id="' + i +'" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(\'row' + i + '\');"><i class="feather icon-x"></i></div></td>'+
                 //             '</tr>';
 
                 // i++;
@@ -9960,7 +10017,7 @@ function validar_via_administracion_sdi() {
                                         <td class="text-center align-middle text-wrap">${medicamento.indicaciones}</td>
                                         <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_via_administracion}</td>
                                         <td class="text-center align-middle text-wrap">${medicamento.via_administracion}</td>
-                                        <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="fas fa-trash"></i></div></td>
+                                        <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="feather icon-x"></i></div></td>
                                     </tr>`;
 
                         let fila_ = `<tr id="row${medicamento.id}">

@@ -129,6 +129,7 @@
         data.procedimiento = $('#procedimiento_hemorragia_ficha_atencion').val();
         data.comentario = $('#comentario_hemorragia_ficha_atencion').val();
         data.fecha = $('#fecha_hemorragia_ficha_atencion').val();
+        data.nombre = $('#procedimiento_hemorragia_ficha_atencion').val();
 
         data.id_paciente = $('#id_paciente_fc').val();
         data.id_tipo_antecedente = 4;

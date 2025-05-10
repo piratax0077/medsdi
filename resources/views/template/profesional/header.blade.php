@@ -19,8 +19,8 @@
                                     <i class="feather icon-mail" style="font-size: 1.2rem!important;"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right profile-notification">
-                                    <div class="pro-head">
-                                        <span>Mensajes !!({{ count($mensajes) }})</span>
+                                    <div class="pro-head font-weight-bold f-14">
+                                        Mensajes  <span class="badge badge-danger">{{ count($mensajes) }}</span>
                                     </div>
                                     <ul></ul>
                                     <ul class="pro-body">
@@ -60,7 +60,7 @@
                                     <i class="feather icon-refresh-cw" style="font-size: 1.2rem!important;"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right profile-notification">
-                                    <div class="pro-head">
+                                    <div class="pro-head font-weight-bold">
                                         <span>Cambiar escritorio</span>
                                     </div>
                                     <ul></ul>
@@ -81,13 +81,8 @@
                                                     Escritorio profesional
                                                 </a>
                                             </li>
-                                            <li>
-                                                <a href="{{ ROUTE('dental.index') }}" class="dropdown-item"><i
-                                                        class="feather icon-user"></i>
-                                                    Escritorio Dental
-                                                </a>
-                                            </li>
                                         @endif
+
 
                                         @if (Auth::user()->hasRole('Asistente') || Auth::user()->hasRole('Admin'))
                                             <li><a href="{{ ROUTE('asistente.home') }}" class="dropdown-item"><i
@@ -106,7 +101,7 @@
                                 <i class="feather icon-user" style="font-size: 1.2rem!important;"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right profile-notification">
-                                <div class="pro-head">
+                                <div class="pro-head font-weight-bold">
                                     <span>{{  @Auth::user()->name }}</span>
                                 </div>
                                 {{--  <ul></ul>  --}}
@@ -114,7 +109,7 @@
                                     <li>
                                         <form action="{{ ROUTE('logout') }}" method="post" id="closeSession">
                                             @csrf
-                                            <a data-toggle="tooltip" title="Cerrar sesión" class="text-danger" href="javascript:{}" onclick="document.getElementById('closeSession').submit();">
+                                            <a data-toggle="tooltip" title="Cerrar sesión" class="text-danger font-weight-bold" href="javascript:{}" onclick="document.getElementById('closeSession').submit();">
                                                 <i class="feather icon-power"></i> Cerrar sesión
                                             </a>
                                         </form>

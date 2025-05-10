@@ -184,7 +184,7 @@
                                 // if(odonto.presupuesto == 0){
                                 //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
                                 // }else{
-                                //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                                //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="feather icon-x"></i>Sacar de presupuesto</button>';
                                 // }
 
                                 // html += '</td>';
@@ -239,7 +239,7 @@
                                                             <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                                         </div>
                                                         <div class="form-group col-md-2 d-flex justify-content-center">
-                                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"></i> </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -364,7 +364,7 @@
                                                             <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                                         </div>
                                                         <div class="form-group col-md-2 d-flex justify-content-center">
-                                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -457,7 +457,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                 </div>
                             `);
@@ -504,7 +504,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                 </div>
                             `);
@@ -552,7 +552,7 @@
                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                     </div>
                                     <div class="form-group col-md-2 d-flex justify-content-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                     </div>
                                 `);
@@ -597,7 +597,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                 </div>
                             `);
@@ -643,7 +643,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                 </div>
                             `);
@@ -691,7 +691,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                 </div>
                             `);
@@ -741,7 +741,7 @@
                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                     </div>
                                     <div class="form-group col-md-2 d-flex">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                     </div>
                                 `);
@@ -786,7 +786,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                 </div>
                             `);
@@ -831,7 +831,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                 </div>
                             `);
@@ -877,7 +877,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                             <div class="form-group col-md-2 d-flex">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                 </div>
                             `);
@@ -1024,7 +1024,7 @@
                             // if(odonto.presupuesto == 0){
                             //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
                             // }else{
-                            //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                            //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="feather icon-x"></i>Sacar de presupuesto</button>';
                             // }
 
                             // html += '</td>';
@@ -1079,7 +1079,7 @@
                                                             <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                                         </div>
                                                         <div class="form-group col-md-2 d-flex justify-content-center">
-                                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"></i> </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1190,7 +1190,7 @@
                                                             <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                                         </div>
                                                         <div class="form-group col-md-2 d-flex justify-content-center">
-                                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                                         </div>
                                                     </div>
@@ -1239,7 +1239,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex justify-content-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                     </div>
                             `);
@@ -1286,7 +1286,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex justify-content-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                     </div>
                             `);
@@ -1333,7 +1333,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex justify-content-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                     </div>
                             `);
@@ -1381,7 +1381,7 @@
                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                     </div>
                                     <div class="form-group col-md-2 d-flex justify-content-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                     </div>
                                 `);
@@ -1426,7 +1426,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex justify-content-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                     </div>
                             `);
@@ -1472,7 +1472,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex justify-content-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                     </div>
                             `);
@@ -1520,7 +1520,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex justify-content-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                     </div>
                             `);
@@ -1569,7 +1569,7 @@
                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                     </div>
                                     <div class="form-group col-md-2 d-flex justify-content-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                     </div>
                                 `);
@@ -1614,7 +1614,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex justify-content-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                     </div>
                             `);
@@ -1659,7 +1659,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                <div class="form-group col-md-2 d-flex justify-content-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                     </div>
                             `);
@@ -1705,7 +1705,7 @@
                                     <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${diagnostico.valor}">
                                 </div>
                                 <div class="form-group col-md-2 d-flex justify-content-center">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="fas fa-trash"></i> </button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral')"><i class="feather icon-x"></i> </button>
 
                                     </div>
                             `);
@@ -1845,7 +1845,7 @@
                             // if(odonto.presupuesto == 0){
                             //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
                             // }else{
-                            //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                            //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="feather icon-x"></i>Sacar de presupuesto</button>';
                             // }
                             // html += '</td>';
                              // Checkbox para seleccionar el odontograma
@@ -1899,7 +1899,7 @@
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
                                                     </div>
                                                     <div class="form-group col-md-2 d-flex justify-content-center">
-                                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"></i> </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1929,7 +1929,74 @@
                         $('#valores_piezas_presupuesto').html(formatoMoneda(valores_odontograma));
                         $('#valores_total_final_presupuesto').html(formatoMoneda(total_general));
                         $('#odon_adults').empty();
-                    $('#odon_adults').append(response.odontograma_paciente_vista);
+                        $('#odon_adults').append(response.odontograma_paciente_vista);
+                        // se cargan las piezas seleccionadas en tabla con id table_piezas_presupuesto_odonto
+                        let table_odon_gral = $('#table_piezas_presupuesto_odonto').DataTable();
+                        table_odon_gral.clear().draw();
+
+                        odontograma.forEach(function(pieza){
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table_odon_gral.row.add([
+                                pieza.pieza,
+                                pieza.descripcion,
+                                formatoMoneda(formatoMoneda(pieza.valor)),
+                                '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma('+pieza.id+')"><i class="feather icon-x"> </i> </button>'
+
+                            ]).draw(false).node(); // Obtener el nodo de la fila
+                        });
+
+                        let table_endo = $('#table_piezas_presupuesto_endo').DataTable();
+                        table_endo.clear().draw();
+
+                        odontograma.forEach(function(pieza){
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table_endo.row.add([
+                                pieza.pieza,
+                                pieza.descripcion,
+                                formatoMoneda(formatoMoneda(pieza.valor)),
+                                '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma('+pieza.id+')"><i class="feather icon-x"> </i> </button>'
+
+                            ]).draw(false).node(); // Obtener el nodo de la fila
+                        });
+
+                        let table = $('#presup_estado_pago').DataTable();
+
+                        // Limpiar la tabla antes de agregar nuevas filas
+                        table.clear().draw();
+
+                        // Recorrer el odontograma y agregar nuevas filas
+                        odontograma.forEach(function(odonto) {
+
+                            if (odonto.presupuesto == 1) {
+                                if(odonto.estado_pago == 'ok'){
+                                    var clase = 'bg-success';
+                                }else if(odonto.estado_pago == 'incompleto'){
+                                    var clase = 'bg-warning';
+                                }else{
+                                    var clase = 'bg-danger';
+                                }
+
+                                if(odonto.estado == 0){
+                                    var estado = 'PENDIENTE';
+                                }else{
+                                    var estado = 'TERMINADO';
+                                }
+                                // Agregar una nueva fila a la tabla
+                                let rowNode = table.row.add([
+                                            odonto.descripcion,
+                                            odonto.pieza,
+                                            formatoMoneda(formatoMoneda(odonto.valor)),
+                                            0,
+                                            formatoMoneda(formatoMoneda(odonto.valor)),
+                                            '<div class="circle '+clase+'"></div>',
+                                            estado, // Columna vacía
+
+                                        ]).draw(false).node(); // Obtener el nodo de la fila
+
+                                        // Agregar clases a la fila
+                                        $(rowNode).addClass('text-center align-middle status-circle');
+                                    }
+                        });
                     }
                 },
                 error: function(error){

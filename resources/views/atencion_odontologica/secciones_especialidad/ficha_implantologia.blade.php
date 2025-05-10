@@ -874,7 +874,7 @@
                                                                                                 <div class="row">
                                                                                                     <div class="col-sm-12">
                                                                                                         <div class="form-group">
-                                                                                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_grupo_dental_post_impl({{ $examen->id }})">X</button>
+                                                                                                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_grupo_dental_post_impl({{ $examen->id }})">X</button>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
@@ -2106,9 +2106,9 @@
 
                                                                                                                         <!-- Botón para eliminar imagen -->
                                                                                                                         <button type="button"
-                                                                                                                                class="btn btn-outline-danger btn-sm my-2"
+                                                                                                                                class="btn btn-danger btn-sm my-2"
                                                                                                                                 onclick="eliminar_imagen_dental({{ $imagen->id }}, '{{ $path['path'] }}')">
-                                                                                                                            <i class="fas fa-trash"></i>
+                                                                                                                            <i class="feather icon-x"></i>
                                                                                                                         </button>
                                                                                                                     </div>
                                                                                                                 @else
@@ -4598,7 +4598,7 @@ function indicar_procedimiento_sdi() {
                                 <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm"></td>
                                 <td class="text-center align-middle text-wrap">
                                     <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                        <i class="fas fa-trash"></i>Eliminar
+                                        <i class="feather icon-x"></i>Eliminar
                                     </button>
                                     <button type="button"
                                         class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -4619,7 +4619,7 @@ function indicar_procedimiento_sdi() {
                                 </td>
                                 <td class="text-center align-middle text-wrap">
                                     <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                        <i class="fas fa-trash"></i>Eliminar
+                                        <i class="feather icon-x"></i>Eliminar
                                     </button>
                                     <button type="button"
                                         class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -4667,7 +4667,7 @@ function indicar_procedimiento_sdi() {
                             <tr>
                                 <td class="text-center align-middle text-wrap">${datos.nombre_procedimiento}</td>
                                 <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm"></td>
-                                <td class="text-center align-middle text-wrap"><button type="button" class="btn btn-danger btn-sm" onclick="eliminarCuracion(${curacion.id})"><i class="fas fa-trash"></i></button></td>
+                                <td class="text-center align-middle text-wrap"><button type="button" class="btn btn-danger btn-sm" onclick="eliminarCuracion(${curacion.id})"><i class="feather icon-x"></i></button></td>
                             </tr>
                             `);
                         });
@@ -4771,7 +4771,7 @@ function suspender_procedimiento_sdi(id) {
                             </td>
                             <td class="text-center align-middle text-wrap">
                                 <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                    <i class="fas fa-trash"></i>Eliminar
+                                    <i class="feather icon-x"></i>Eliminar
                                 </button>
                                 <button type="button"
                                     class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -4792,7 +4792,7 @@ function suspender_procedimiento_sdi(id) {
                             </td>
                             <td class="text-center align-middle text-wrap">
                                 <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                    <i class="fas fa-trash"></i>Eliminar
+                                    <i class="feather icon-x"></i>Eliminar
                                 </button>
                                 <button type="button"
                                     class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -4898,7 +4898,7 @@ function eliminar_procedimiento_sdi_ajax(id) {
                                 <td class="text-center align-middle text-wrap"><input type="text" id="ind_vig_sig${datos.id}" name="ind_vig_sig${datos.id}" class="form-control form-control-sm"></td>
                                 <td class="text-center align-middle text-wrap">
                                     <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                        <i class="fas fa-trash"></i>Eliminar
+                                        <i class="feather icon-x"></i>Eliminar
                                     </button>
                                     <button type="button"
                                         class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -4919,7 +4919,7 @@ function eliminar_procedimiento_sdi_ajax(id) {
                                 </td>
                                 <td class="text-center align-middle text-wrap">
                                     <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_procedimiento_sdi(${procedimiento.id})">
-                                        <i class="fas fa-trash"></i>Eliminar
+                                        <i class="feather icon-x"></i>Eliminar
                                     </button>
                                     <button type="button"
                                         class="btn btn-${procedimiento.estado === 0 ? 'success' : 'warning'} btn-sm"
@@ -5035,8 +5035,8 @@ function eliminarCuracion(id) {
                                 <td class="text-center align-middle">
                                     <button type="button" class="btn btn-outline-warning btn-sm">
                                         <i class="fas fa-edit"></i>
-                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminarCuracion(${curacion.id})">
-                                        <i class="fas fa-trash"></i>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="eliminarCuracion(${curacion.id})">
+                                        <i class="feather icon-x"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -5112,7 +5112,7 @@ function eliminar_medicamento_sdi(id) {
                                         <td class="text-center align-middle text-wrap">${medicamento.indicaciones}</td>
                                         <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_via_administracion}</td>
                                         <td class="text-center align-middle text-wrap">${medicamento.via_administracion}</td>
-                                        <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="fas fa-trash"></i></div></td>
+                                        <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="feather icon-x"></i></div></td>
                                     </tr>`;
 
                             let fila_ = `<tr id="row${medicamento.id}">
@@ -5486,7 +5486,7 @@ $.ajax({
                                 <td class="text-center align-middle text-wrap">${medicamento.indicaciones}</td>
                                 <td class="text-center align-middle text-wrap hidden" hidden="hidden">${medicamento.id_via_administracion}</td>
                                 <td class="text-center align-middle text-wrap">${medicamento.via_administracion}</td>
-                                <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="fas fa-trash"></i></div></td>
+                                <td class="text-center align-middle text-wrap"><div name="remove" id="${medicamento.id}" class="btn btn-danger btn_remove btn-sm" onclick="eliminar_medicamento_sdi(${medicamento.id});"><i class="feather icon-x"></i></div></td>
                             </tr>`;
 
                 let fila_ = `<tr id="row${medicamento.id}">
@@ -6111,17 +6111,17 @@ function ocultar_pieza_impl(counter){
 function cargar_a_presupuesto_impl_g() {
     // preguntar si desea eliminar
     swal({
-                title: "Cargar Piezas",
-                text: "¿Está seguro que desea cargar el grupo de piezas?",
-                icon: "warning",
-                buttons: ["Cancelar", "Aceptar"],
-                DangerMode: true,
-            })
-            .then((willLoad) => {
-                if (willLoad) {
-                    cargar_a_presupuesto_impl_g_confirmar();
-                }
-            });
+        title: "Cargar Piezas",
+        text: "¿Está seguro que desea cargar el grupo de piezas?",
+        icon: "warning",
+        buttons: ["Cancelar", "Aceptar"],
+        DangerMode: true,
+    })
+    .then((willLoad) => {
+        if (willLoad) {
+            cargar_a_presupuesto_impl_g_confirmar();
+        }
+    });
 }
 
 function cargar_a_presupuesto_impl_g_confirmar(){
@@ -6192,7 +6192,7 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                     // if(odonto.presupuesto == 0){
                     //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
                     // }else{
-                    //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                    //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="feather icon-x"></i>Sacar de presupuesto</button>';
                     // }
 
                     // html += '</td>';
@@ -6222,31 +6222,39 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                 $('#table_trabajos_presupuesto tbody').empty();
                 odontograma.forEach(function(odonto){
                         if(odonto.presupuesto == 1){
-                            $('#contenedor_piezas_dentales_presupuesto').append(`
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Pieza</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label class="floating-label-activo-sm">Prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
-                                </div>
-                                <div class="form-group col-md-1">
-                                    <label class="floating-label-activo-sm">Descuento</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
-                                </div>
-                                <div class="form-group col-md-2 d-flex">
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
-                                </div>
-                            `);
+                                $('#contenedor_piezas_dentales_presupuesto').append(`
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-informacion">
+                                                <div class="card-body pb-0">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Pieza</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                        </div>
+                                                        <div class="form-group col-md-3">
+                                                            <label class="floating-label-activo-sm">Prestación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Sub-Total</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                        </div>
+                                                        <div class="form-group col-md-1">
+                                                            <label class="floating-label-activo-sm">Descuento</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label class="floating-label-activo-sm">Total prestación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                        </div>
+                                                        <div class="form-group col-md-2 d-flex justify-content-center">
+                                                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"></i> </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                `);
                             $('#table_trabajos_presupuesto tbody').append(`
                                 <tr>
                                     <td>${odonto.fecha}</td>
@@ -6324,7 +6332,7 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                             <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
                             <td>${odonto.pieza}</td>
                             <td>${formatoMoneda(odonto.valor)}</td>
-                            <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"> </i> </button></td>
+                            <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"> </i> </button></td>
                         </tr>`;
                         $('#table_pagos_reasignar_odontograma tbody').append(fila);
                     }
@@ -7342,7 +7350,7 @@ function agregar_examenes_ficha() {
                             // if(odonto.presupuesto == 0){
                             //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
                             // }else{
-                            //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="fas fa-trash"></i>Sacar de presupuesto</button>';
+                            //     html += '<button type="button" class="btn btn-danger btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="feather icon-x"></i>Sacar de presupuesto</button>';
                             // }
 
                             // html += '</td>';
@@ -7372,32 +7380,39 @@ function agregar_examenes_ficha() {
                         $('#table_trabajos_presupuesto tbody').empty();
                         odontograma.forEach(function(odonto){
                             if(odonto.presupuesto == 1){
-                                    $('#contenedor_piezas_dentales_presupuesto').append(`
-                                        <div class="form-group col-md-2">
-                                            <label class="floating-label-activo-sm">Pieza</label>
-                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                $('#contenedor_piezas_dentales_presupuesto').append(`
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="card-informacion">
+                                        <div class="card-body pb-0">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Pieza</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label class="floating-label-activo-sm">Prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Sub-Total</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <label class="floating-label-activo-sm">Descuento</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label class="floating-label-activo-sm">Total prestación</label>
+                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                </div>
+                                                <div class="form-group col-md-2 d-flex justify-content-center">
+                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="form-group col-md-3">
-                                            <label class="floating-label-activo-sm">Prestación</label>
-                                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.tratamiento}">
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label class="floating-label-activo-sm">Sub-Total</label>
-                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
-                                        </div>
-                                        <div class="form-group col-md-1">
-                                            <label class="floating-label-activo-sm">Descuento</label>
-                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label class="floating-label-activo-sm">Total prestación</label>
-                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(odonto.valor)}" >
-                                        </div>
-                                        <div class="form-group col-md-2 d-flex">
-                                            <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
-
-                                        </div>
-                                    `);
+                                    </div>
+                                </div>
+                        `);
                                     $('#table_trabajos_presupuesto tbody').append(`
                                         <tr>
                                             <td>${odonto.fecha}</td>
@@ -7476,7 +7491,7 @@ function agregar_examenes_ficha() {
                                     <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
                                     <td>${odonto.pieza}</td>
                                     <td>${formatoMoneda(odonto.valor)}</td>
-                                    <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"> </i> </button></td>
+                                    <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"> </i> </button></td>
                                 </tr>`;
                                 $('#table_pagos_reasignar_odontograma tbody').append(fila);
                             }
@@ -7495,6 +7510,20 @@ function agregar_examenes_ficha() {
                                 `);
                             }
 
+                        });
+                        // se cargan las piezas seleccionadas en tabla con id table_piezas_presupuesto_odonto
+                        let table_odon_gral = $('#table_piezas_presupuesto_odonto').DataTable();
+                        table_odon_gral.clear().draw();
+
+                        odontograma.forEach(function(pieza){
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table_odon_gral.row.add([
+                                pieza.pieza,
+                                pieza.descripcion,
+                                formatoMoneda(formatoMoneda(pieza.valor)),
+                                '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma('+pieza.id+')"><i class="feather icon-x"> </i> </button>'
+
+                            ]).draw(false).node(); // Obtener el nodo de la fila
                         });
                     }else{
                         swal({

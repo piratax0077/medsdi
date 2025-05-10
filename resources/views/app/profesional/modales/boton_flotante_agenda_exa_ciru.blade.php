@@ -247,6 +247,7 @@
                                                 console.log(data);
                                                 if (data != null)
                                                 {
+                                                    console.log('hola2');
                                                     $('#reserva_hora_id_paciente_asistente').val(data.paciente.id);
                                                         $('#datos_consulta_rut').text(data.paciente.rut);
                                                         $('#datos_consulta_nombre').text(data.paciente.nombres + ' ' + data.paciente.apellido_uno + ' ' + data.paciente.apellido_dos);
@@ -254,9 +255,17 @@
                                                         $('#input_reserva_hora_apellido_uno_asistente').val(data.paciente.apellido_uno);
                                                         $('#input_reserva_hora_apellido_dos_asistente').val(data.paciente.apellido_dos);
                                                         $('#datos_consulta_edad').text(data.paciente.fecha_nac);
+                                                        $('#datos_consulta_direcion').text(data.paciente.direccion.direccion);
+                                                        $('#datos_consulta_numero').text(data.paciente.direccion.numero_dir);
+                                                        $('#datos_consulta_region').text(data.paciente.direccion.region.nombre);
+                                                        $('#datos_consulta_ciudad').text(data.paciente.direccion.ciudad.nombre);
                                                         $('#input_reserva_fecha_nacimiento_asistente').val(data.paciente.fecha_nac);
                                                         $('#datos_consulta_email').text(data.paciente.email);
                                                         $('#input_reserva_hora_email_asistente').val(data.paciente.email);
+                                                        $('#input_reserva_hora_direccion_asistente').val(data.paciente.direccion.direccion);
+                                                        $('#input_reserva_hora_numero_asistente').val(data.paciente.direccion.numero_dir);
+                                                        $('#input_reserva_hora_region_asistente').val(data.paciente.direccion.region.id);
+                                                        buscar_ciudad_general('input_reserva_hora_region_asistente', 'input_reserva_hora_ciudad_asistente', data.paciente.direccion.ciudad.id);
                                                         $('#datos_consulta_telefono').text(data.paciente.telefono_uno);
                                                         $('#input_reserva_hora_telefono_asistente').val(data.paciente.telefono_uno);
                                                         $('#datos_consulta_fecha_ultima').text(data.paciente.fecha_ultima_atencion);
