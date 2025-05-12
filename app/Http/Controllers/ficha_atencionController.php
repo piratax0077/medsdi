@@ -144,6 +144,7 @@ use App\Models\VideoConsultaInfo;
 use App\Models\TratamientosImplantologia;
 use App\Models\TiposReceta;
 use App\Models\MaterialesImplantologia;
+use Hamcrest\Type\IsNumeric;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -484,6 +485,9 @@ class ficha_atencionController extends Controller
         $placeholder_examen_fisico = '';
         $placeholder_motivo_consulta = '';
         $placeholder_antecedentes = '';
+        // Inicializar la variable que contendrá el resultado
+        $procedimientoCentroTem = null;
+
 		if($profesional->id_especialidad == 14)
         {
             //urgencia
@@ -1352,21 +1356,39 @@ class ficha_atencionController extends Controller
             {
                 if($profesional->id_tipo_especialidad == 55)
                 {
-                    $procedimientoCentroTem = ProcedimientosCentro::find($hora->id_procedimiento);
+                    // Obtener el valor de id_procedimiento
+                    $idProcedimiento = $hora->id_procedimiento;
 
-                    switch ($procedimientoCentroTem->otros) {
-                        case '1':
-                            $ruta_blade = 'app.laboratorio.atencion_prof_laboratorio_especialidades';
-                            break;
-                        case '2':
-                            // $ruta_blade = 'atencion_otros_prof.atencion_fono_octavopar';
-                            $ruta_blade = 'app.laboratorio.atencion_fono_octavopar';
-                            break;
+                    // Verificar si el valor contiene barras verticales (caso múltiples IDs)
+                    if (strpos($idProcedimiento, '|') !== false) {
+                        // Convertir la cadena en un array de IDs
+                        $array_id_procedimiento = explode('|', $idProcedimiento);
 
-                        default:
-                            $ruta_blade = 'app.laboratorio.atencion_prof_laboratorio_especialidades';
-                            break;
+                        // Obtener todos los procedimientos que coincidan con los IDs
+                        $procedimientoCentroTem = ProcedimientosCentro::whereIn('id', $array_id_procedimiento)->get();
+                    } else {
+                        // Caso de un solo ID (número)
+                        $procedimientoCentroTem = ProcedimientosCentro::where('id',$idProcedimiento)->get();
                     }
+
+
+                    $ruta_blade = 'app.laboratorio.atencion_prof_laboratorio_especialidades';
+
+
+                    // $procedimientoCentroTem = ProcedimientosCentro::find($hora->id_procedimiento);
+                    // switch ($procedimientoCentroTem->otros) {
+                    //     case '1':
+                    //         $ruta_blade = 'app.laboratorio.atencion_prof_laboratorio_especialidades';
+                    //         break;
+                    //     case '2':
+                    //         // $ruta_blade = 'atencion_otros_prof.atencion_fono_octavopar';
+                    //         $ruta_blade = 'app.laboratorio.atencion_fono_octavopar';
+                    //         break;
+
+                    //     default:
+                    //         $ruta_blade = 'app.laboratorio.atencion_prof_laboratorio_especialidades';
+                    //         break;
+                    // }
 
                     $fichaTipo = '';
                     $examen = '';
@@ -1420,7 +1442,31 @@ class ficha_atencionController extends Controller
             /** tecnologo medico */
             else if($profesional->id_especialidad == 11)
             {
-                $ruta_blade = 'atencion_otros_prof.atencion_tecn_orl';
+                /** TECNOLOGO RAYOS */
+                if($profesional->id_tipo_especialidad == 59)
+                {
+                    // Obtener el valor de id_procedimiento
+                    $idProcedimiento = $hora->id_procedimiento;
+
+                    // Verificar si el valor contiene barras verticales (caso múltiples IDs)
+                    if (strpos($idProcedimiento, '|') !== false) {
+                        // Convertir la cadena en un array de IDs
+                        $array_id_procedimiento = explode('|', $idProcedimiento);
+
+                        // Obtener todos los procedimientos que coincidan con los IDs
+                        $procedimientoCentroTem = ProcedimientosCentro::whereIn('id', $array_id_procedimiento)->get();
+                    } else {
+                        // Caso de un solo ID (número)
+                        $procedimientoCentroTem = ProcedimientosCentro::where('id',$idProcedimiento)->get();
+                    }
+
+
+                    $ruta_blade = 'app.laboratorio.atencion_prof_laboratorio_especialidades_rayox';
+                }
+                else
+                {
+                    $ruta_blade = 'atencion_otros_prof.atencion_tecn_orl';
+                }
             }
             else
             {
@@ -2568,6 +2614,7 @@ class ficha_atencionController extends Controller
                 'acompanantes'  => $acompanantes,
 
                 'reg_octavo_par'  => $reg_octavo_par,
+                'procedimientoCentro'  => $procedimientoCentroTem,
 
             ]
         );

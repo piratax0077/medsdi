@@ -3349,4 +3349,244 @@ class EscritorioPaciente extends Controller
         return $datos;
     }
 
+    public function cargaDatosPacientePreReserva(Request $request, $token1, $token2, $token3)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->token2))
+        {
+            $error['token'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $paciente = Paciente::where('token', $token2)->get()->first();
+
+            if($paciente)
+            {
+                $previsiones = Prevision::all();
+                $regiones = Region::all();
+
+
+                return view('general.paciente.carga_datos_paciente')->with([
+                    'estado' => 1,
+                    'paciente' => $paciente,
+                    'previsiones' => $previsiones,
+                    'regiones' => $regiones,
+                ]);
+            }
+            else
+            {
+                // $datos['estado'] = 0;
+                // $datos['msj'] = 'paciente no encontrado';
+                return view('general.paciente.carga_datos_paciente')->with([
+                    'estado' => 0,
+                    'mensaje' => 'Paciente no encontrado',
+                ]);
+            }
+        }
+        else
+        {
+            // $datos['estado'] = 0;
+            // $datos['msj'] = 'campos requeridos';
+            // $datos['error'] = $error;
+            return view('general.paciente.carga_datos_paciente')->with([
+                'estado' => 0,
+                'mensaje' => 'Paciente no encontrado',
+            ]);
+        }
+
+        // return $datos;
+    }
+
+    public function registrarCargaDatosPacientePreReserva(Request $request)
+    {
+        $datos = array();
+        $error = array();
+        $valido = 1;
+
+        if(empty($request->rut))
+        {
+            $error['rut'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->nombre))
+        {
+            $error['nombre'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->primer_apellido))
+        {
+            $error['primer_apellido'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->segundo_apellido))
+        {
+            $error['segundo_apellido'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->fecha_nacimiento))
+        {
+            $error['fecha_nacimiento'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->sexo))
+        {
+            $error['sexo'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->prevision))
+        {
+            $error['prevision'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->telefono))
+        {
+            $error['telefono'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->telefono_dos))
+        {
+            $error['telefono_dos'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->direccion))
+        {
+            $error['direccion'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->numero_dir))
+        {
+            $error['numero_dir'] = 'campo requerido';
+            $valido = 0;
+        }
+        if(empty($request->id_ciudad))
+        {
+            $error['id_ciudad'] = 'campo requerido';
+            $valido = 0;
+        }
+
+        if($valido)
+        {
+            $paciente = Paciente::find($request->id);
+
+            if($paciente)
+            {
+                $paciente->rut = $request->rut;
+                $paciente->nombres = $request->nombre;
+                $paciente->apellido_uno = $request->primer_apellido;
+                $paciente->apellido_dos = $request->segundo_apellido;
+                $paciente->fecha_nac = $request->fecha_nacimiento;
+                $paciente->sexo = $request->sexo;
+                // $paciente->id_usuario = @Auth::user()->id;
+                // $paciente->email = @Auth::user()->email;
+                $paciente->id_prevision = $request->prevision;
+                $paciente->telefono_uno = $request->telefono;
+                $paciente->telefono_dos = $request->telefono_dos;
+
+                $direccion = new Direccion();
+                $direccion->direccion = $request->direccion;
+                $direccion->numero_dir = $request->numero_dir;
+                $direccion->id_ciudad = $request->id_ciudad;
+                if (!$direccion->save()) {
+                    // return 'error';
+                    $paciente->id_direccion = 0;
+                    $datos['direccion']['estado'] = 0;
+                    $datos['direccion']['msj'] = 'falla al registrar';
+                } else {
+                    $paciente->id_direccion = $direccion->id;
+                    $datos['direccion']['estado'] = 1;
+                    $datos['direccion']['msj'] = 'registro exitoso';
+                }
+
+                if (!$paciente->save()) {
+                    $datos['estado'] = 0;
+                    $datos['msj'] = 'falla al registrar paciente';
+                } else {
+
+                    $user = new User();
+                    $user->email = $paciente->email;
+                    $pass_temp = rand(1111,9999);
+                    $user->password = Hash::make($pass_temp);
+                    $user->name = $request->nombre.' '.$request->primer_apellido.' '.$request->segundo_apellido;
+                    if ($user->save())
+                    {
+                        /** asignando rol de adminstrador de institucion */
+                        $user->assignRole('Paciente');
+
+                        $paciente_temp = Paciente::find($request->id);
+                        $paciente_temp->id_usuario = $user->id;
+                        if($paciente_temp->save())
+                        {
+                            $datos['user']['estado'] = 1;
+                            $datos['user']['msj'] = 'Usuario Creado';
+
+                            /** envio de correo de confirmacion  */
+                            $blade = 'bienvenida_paciente_usuario';
+                            $to = array(
+                                    array('email' => $paciente->email,'name' => $paciente->nombres . ' ' .$paciente->apellido_uno . ' ' .$paciente->apellido_dos),
+                                );
+                            $cc = array();
+                            $bcc = array();
+                            $asunto = 'MED-SDI - Bienvenido!';
+                            $body = array(
+                                        'nombre'=>$paciente->nombres . ' ' .$paciente->apellido_uno . ' ' .$paciente->apellido_dos,
+                                        'user' => $paciente->email,
+                                        'pass' => $pass_temp
+                                        );
+                            $archivo = '';/** pendiente */
+                            $id_institucion = '';
+
+                            $result_mail =  SendMailController::envioCorreo($blade, $to, $cc, $bcc, $asunto, $body, $archivo, $id_institucion);
+
+                            if($result_mail['estado'])
+                            {
+                                $datos['mail']['estado'] = 1;
+                                $datos['mail']['msj'] = 'Notificacion de bienvenida enviado';
+                            }
+                            else
+                            {
+                                $datos['mail']['estado'] = 0;
+                                $datos['mail']['msj'] = 'Falle en envio de Notificacion de bienvenida';
+                            }
+                        }
+                        else
+                        {
+                            $datos['user']['estado'] = 0;
+                            $datos['user']['msj'] = 'Falle en nuevo usuario';
+                        }
+                    }
+                    else
+                    {
+                        $datos['user']['estado'] = 0;
+                        $datos['user']['reuslt'] = $user;
+                    }
+
+                    $datos['estado'] = 1;
+                    $datos['msj'] = 'registro exitoso';
+                    $datos['email'] = $paciente->email;
+
+                }
+            }
+            else
+            {
+                $datos['estado'] = 0;
+                $datos['msj'] = 'paciente no encontrado';
+
+            }
+        }
+        else
+        {
+            $datos['estado'] = 0;
+            $datos['msj'] = 'campos requeridos';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
+
 }

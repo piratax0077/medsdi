@@ -9,9 +9,9 @@ class ProcedimientosCentroController extends Controller
 {
     public function registrar_r(Request $request)
     {
-        return static::registrar( $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->otros, $request->valor );
+        return static::registrar( $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->otros, $request->valor, $request->tipo_ficha_atencion );
     }
-    static public function registrar( $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $otros, $valor )
+    static public function registrar( $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $otros, $valor, $tipo_ficha_atencion )
     {
         $datos = array();
         $error = array();
@@ -59,6 +59,7 @@ class ProcedimientosCentroController extends Controller
             $registro->id_lugar_atencion = $id_lugar_atencion;
             $registro->nombre = $nombre;
             $registro->descripcion = $descripcion;
+            $registro->tipo_ficha_atencion = empty($tipo_ficha_atencion)?1:$tipo_ficha_atencion;
             $registro->minutos_bloque = $minutos_bloque;
             $registro->cantidad_bloques = $cantidad_bloques;
             $registro->valor = $valor;
@@ -89,9 +90,9 @@ class ProcedimientosCentroController extends Controller
 
     public function modificar_r( Request $request)
     {
-        return static::modificar($request->id, $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->valor, $request->otros, $request->estado );
+        return static::modificar($request->id, $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->valor, $request->otros, $request->estado, $request->tipo_ficha_atencion );
     }
-    static public function modificar($id, $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $valor, $otros, $estado )
+    static public function modificar($id, $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $valor, $otros, $estado, $tipo_ficha_atencion )
     {
         $datos = array();
         $error = array();
@@ -112,6 +113,8 @@ class ProcedimientosCentroController extends Controller
                 $registro->nombre = $nombre;
             if(!empty($descripcion))
                 $registro->descripcion = $descripcion;
+            if(!empty($tipo_ficha_atencion))
+                $registro->tipo_ficha_atencion = $tipo_ficha_atencion;
             if(!empty($minutos_bloque))
                 $registro->minutos_bloque = $minutos_bloque;
             if(!empty($cantidad_bloques))
@@ -189,10 +192,10 @@ class ProcedimientosCentroController extends Controller
 
     public function verRegistros_r(Request $request)
     {
-        return static::verRegistros($request->id, $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->valor, $request->otros, $request->estado);
+        return static::verRegistros($request->id, $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->valor, $request->otros, $request->estado), $request->tipo_ficha_atencion;
 
     }
-    static public function verRegistros($id, $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $valor, $otros, $estado)
+    static public function verRegistros($id, $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $valor, $otros, $estado, $tipo_ficha_atencion)
     {
         $datos = array();
         $error = array();
@@ -209,6 +212,8 @@ class ProcedimientosCentroController extends Controller
                 $filtro[] = array('nombre', $nombre);
             if(!empty($descripcion))
                 $filtro[] = array('descripcion', $descripcion);
+            if(!empty($tipo_ficha_atencion))
+                $filtro[] = array('tipo_ficha_atencion', $tipo_ficha_atencion);
             if(!empty($minutos_bloque))
                 $filtro[] = array('minutos_bloque', $minutos_bloque);
             if(!empty($cantidad_bloques))

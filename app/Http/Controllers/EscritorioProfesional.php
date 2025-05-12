@@ -897,17 +897,18 @@ class EscritorioProfesional extends Controller
         $paciente = [];
         foreach ($ficha_atencion as $f) {
             $paciente_temp = Paciente::find($f->id_paciente);
-
-            $ficha_atencion_paciente = FichaAtencion::where('id_profesional', $profesional->id)
-            ->where('id_paciente', $f->Paciente()->first()->id)
-            ->distinct()
-            ->get(['id_lugar_atencion']);
-
-            $lugares_atenm = LugarAtencion::whereIn('id', $ficha_atencion_paciente)->pluck('nombre')->toArray();
-
-            $paciente_temp->lugares_atencion = $lugares_atenm;
-
-            array_push($paciente, $paciente_temp);
+			if($paciente_temp){
+                $ficha_atencion_paciente = FichaAtencion::where('id_profesional', $profesional->id)
+                ->where('id_paciente', $f->Paciente()->first()->id)
+                ->distinct()
+                ->get(['id_lugar_atencion']);
+    
+                $lugares_atenm = LugarAtencion::whereIn('id', $ficha_atencion_paciente)->pluck('nombre')->toArray();
+    
+                $paciente_temp->lugares_atencion = $lugares_atenm;
+    
+                array_push($paciente, $paciente_temp);
+            }
         }
 
         // echo json_encode($paciente);
@@ -6835,7 +6836,7 @@ public function eliminarPiezaCoronaProtesis(Request $req){
             if($request->id_clase_bono ==6 || $request->id_clase_bono ==8 || $request->valor_bonificacion == null){
                 $bono->bonificacion = 0;
             }else{
-                $bono->bonificacion = $request->valor_bonificacion;
+                $bono->bonificacion = empty($request->valor_bonificacion)?'0':$request->valor_bonificacion;
             }
 
             $bono->aporte_seguro = $request->valor_seguro==''?'0':$request->valor_seguro;
