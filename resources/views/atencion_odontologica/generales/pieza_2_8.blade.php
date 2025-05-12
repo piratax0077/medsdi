@@ -104,7 +104,11 @@
     }
 
 </style>
-
+@php
+    $pieza28 = $piezas_periodonto->firstWhere('pieza', '28');
+    $cuerpo28 = $pieza28 ? $pieza28->cuerpo : [];
+    $pronostico28 = $cuerpo28['pronostico'] ?? '';
+@endphp
 <div class="col-md-12 bg-white shadow-sm rounded mx-1">
     <div class="col-md-12">
         <div class="row">
@@ -181,18 +185,18 @@
                                     <div class="col-sm-12 col-md-3">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">Movilidad</label>
-                                            <input  class="form-control form-control-xs"  type="number"  id="m28" name="m28" value="0" tabindex="1" onchange="rangoNumero('m28');"/>
+                                            <input  class="form-control form-control-xs"  type="number"  id="m28" name="m28" value="{{ $cuerpo28["movilidad"] ?? 0 }}" tabindex="1" onchange="rangoNumero('m28');"/>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="form-group">
                                             <label class="floating-label-activo-sm">Pronóstico</label>
                                             <select class="form-control form-control-xs" name="pi28" id="pi28">
-                                                <option value="" selected></option>
-                                                <option value="B">Buen pronóstico</option>
-                                                <option value="D">Dudoso</option>
-                                                <option value="M">Reservado</option>
-                                                <option value="I">Mal pronóstico</option>
+                                            <option value="" {{ $pronostico28 == '' ? 'selected' : '' }}></option>
+                                                <option value="B" {{ $pronostico28 == 'B' ? 'selected' : '' }}>Buen pronóstico</option>
+                                                <option value="D" {{ $pronostico28 == 'D' ? 'selected' : '' }}>Dudoso</option>
+                                                <option value="M" {{ $pronostico28 == 'M' ? 'selected' : '' }}>Reservado</option>
+                                                <option value="I" {{ $pronostico28 == 'I' ? 'selected' : '' }}>Mal pronóstico</option>
                                             </select>
                                         </div>
                                     </div>
@@ -251,7 +255,7 @@
                                         <h6 class="font-weight-bold text-c-blue pt-2">Plataforma</h6>
                                     </div>
                                     <div class="col-sm-12 col-md-8">
-                                        <input class="form-control form-control-xs" type="number" id="ae28" name="ae28" value="0" tabindex="33"/>
+                                        <input class="form-control form-control-xs" type="number" id="ae28" name="ae28" value="{{ $cuerpo28["plataforma"] ?? 0 }}" tabindex="33"/>
                                     </div>
                                 </div>
                                 <div class="form-row mb-2">
@@ -259,13 +263,13 @@
                                         <h6 class="font-weight-bold text-c-blue pt-2">Altura MG</h6>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg28-a" name="mg28-a" value="0" onchange="cargar28a();getDefectos();rangoNumeroMargen('mg28-a');cargar28a();" tabindex="49"/>
+                                        <input class="form-control form-control-xs" type="number" id="mg28-a" name="mg28-a" value="{{ $cuerpo28["vest_altura_mg_a"] ?? 0 }}" onchange="cargar28a();getDefectos();rangoNumeroMargen('mg28-a');cargar28a();" tabindex="49"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg28-b" name="mg28-b" value="0" onchange="cargar28a();getDefectos();rangoNumeroMargen('mg28-b');cargar28a();" tabindex="50"/>
+                                        <input class="form-control form-control-xs" type="number" id="mg28-b" name="mg28-b" value="{{ $cuerpo28["vest_altura_mg_b"] ?? 0 }}" onchange="cargar28a();getDefectos();rangoNumeroMargen('mg28-b');cargar28a();" tabindex="50"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg28-c" name="mg28-c" value="0" onchange="cargar28a();getDefectos();rangoNumeroMargen('mg28-c');cargar28a();" tabindex="50"/>
+                                        <input class="form-control form-control-xs" type="number" id="mg28-c" name="mg28-c" value="{{ $cuerpo28["vest_altura_mg_c"] ?? 0 }}" onchange="cargar28a();getDefectos();rangoNumeroMargen('mg28-c');cargar28a();" tabindex="50"/>
                                     </div>
                                 </div>
                                 <div class="form-row mb-2">
@@ -273,13 +277,13 @@
                                         <h6 class="font-weight-bold text-c-blue pt-2">P.Sondaje</h6>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps28-a" name="ps28-a" value="0" onchange="cargar28a();getDefectos();" tabindex="97"/>
+                                        <input class="form-control form-control-xs" type="number" id="ps28-a" name="ps28-a" value="{{ $cuerpo28["vest_psondaje_a"] ?? 0 }}" onchange="cargar28a();getDefectos();" tabindex="97"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps28-b" name="ps28-b" value="0" onchange="cargar28a();getDefectos();" tabindex="98"/>
+                                        <input class="form-control form-control-xs" type="number" id="ps28-b" name="ps28-b" value="{{ $cuerpo28["vest_psondaje_b"] ?? 0 }}" onchange="cargar28a();getDefectos();" tabindex="98"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps28-c" name="ps28-c" value="0" onchange="cargar28a();getDefectos();" tabindex="99"/>
+                                        <input class="form-control form-control-xs" type="number" id="ps28-c" name="ps28-c" value="{{ $cuerpo28["vest_psondaje_c"] ?? 0 }}" onchange="cargar28a();getDefectos();" tabindex="99"/>
                                     </div>
                                 </div>
                             </form>
@@ -383,13 +387,13 @@
                                     <h6 class="font-weight-bold text-c-blue pt-2">P.Sondaje</h6>
                                 </div>
                                 <div class="col">
-                                    <input class="form-control form-control-xs" type="number" id="ps28b-a" name="ps28b-a" value="0" onchange="cargar28b();getDefectos();" tabindex="145"/>
+                                    <input class="form-control form-control-xs" type="number" id="ps28b-a" name="ps28b-a" value="{{ $cuerpo28["pala_psondaje_a"] ?? 0 }}" onchange="cargar28b();getDefectos();" tabindex="145"/>
                                 </div>
                                 <div class="col">
-                                    <input class="form-control form-control-xs" type="number" id="ps28b-b" name="ps28b-a" value="0" onchange="cargar28b();getDefectos();" tabindex="146"/>
+                                    <input class="form-control form-control-xs" type="number" id="ps28b-b" name="ps28b-b" value="{{ $cuerpo28["pala_psondaje_b"] ?? 0 }}" onchange="cargar28b();getDefectos();" tabindex="146"/>
                                 </div>
                                 <div class="col">
-                                    <input class="form-control form-control-xs" type="number" id="ps28b-c" name="ps28b-a" value="0" onchange="cargar28b();getDefectos();" tabindex="147"//>
+                                    <input class="form-control form-control-xs" type="number" id="ps28b-c" name="ps28b-c" value="{{ $cuerpo28["pala_psondaje_c"] ?? 0 }}" onchange="cargar28b();getDefectos();" tabindex="147"//>
                                 </div>
                             </div>
                              <div class="form-row mb-2">
@@ -397,13 +401,13 @@
                                     <h6 class="font-weight-bold text-c-blue pt-2">Altura MG</h6>
                                 </div>
                                 <div class="col">
-                                    <input class="form-control form-control-xs" type="number" id="mg28b-a" name="mg28b-a" value="0" onchange="cargar28b();getDefectos();rangoNumeroMargen('mg28b-a');cargar28b();" tabindex="193"/>
+                                    <input class="form-control form-control-xs" type="number" id="mg28b-a" name="mg28b-a" value="{{ $cuerpo28["pala_altura_mg_a"] ?? 0 }}" onchange="cargar28b();getDefectos();rangoNumeroMargen('mg28b-a');cargar28b();" tabindex="193"/>
                                 </div>
                                 <div class="col">
-                                    <input class="form-control form-control-xs" type="number" id="mg28b-b" name="mg28b-b" value="0" onchange="cargar28b();getDefectos();rangoNumeroMargen('mg28b-b');cargar28b();" tabindex="194"/>
+                                    <input class="form-control form-control-xs" type="number" id="mg28b-b" name="mg28b-b" value="{{ $cuerpo28["pala_altura_mg_b"] ?? 0 }}" onchange="cargar28b();getDefectos();rangoNumeroMargen('mg28b-b');cargar28b();" tabindex="194"/>
                                 </div>
                                 <div class="col">
-                                    <input class="form-control form-control-xs" type="number" id="mg28b-c" name="mg28b-c" value="0" onchange="cargar28b();getDefectos();rangoNumeroMargen('mg28b-c');cargar28b();" tabindex="195"/>
+                                    <input class="form-control form-control-xs" type="number" id="mg28b-c" name="mg28b-c" value="{{ $cuerpo28["pala_altura_mg_c"] ?? 0 }}" onchange="cargar28b();getDefectos();rangoNumeroMargen('mg28b-c');cargar28b();" tabindex="195"/>
                                 </div>
                             </div>
                              <div class="form-row mb-2">
@@ -470,14 +474,14 @@
         <div class="card-body">
             <div class="form-group" id="obs_pieza2.8">
                 <label class="floating-label-activo-sm">Obs. Pieza 2.8</label>
-                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 2.8" data-seccion="Eval_periimplantar"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_op_bruxismo" id="det_op_bruxismo" placeholder="Describa observaciones"></textarea>
+                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 2.8" data-seccion="Eval_periimplantar"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_28" id="obs_28" placeholder="Describa observaciones">{{ $cuerpo28["observaciones"] ?? '' }}</textarea>
             </div>
         </div>
     </div>
 </div>
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
     <div id="obs_pieza2.8">
-            <button type="button" class="btn btn-info text-center"><i class="feather icon-save"></i>  Guardar evaluación 2.8</button>
+            <button type="button" class="btn btn-info text-center" onclick="guardar_pieza('28')"><i class="feather icon-save"></i>  Guardar evaluación 2.8</button>
     </div>
 </div>
 

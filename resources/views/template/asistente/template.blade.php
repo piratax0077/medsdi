@@ -155,6 +155,7 @@
 
     <!-- rut -->
     <script src="{{ asset('js/rut.js') }}"></script>
+   
 
     <!-- funciones generales -->
     <script src="{{ asset('js/funciones.js') }}"></script>
@@ -1548,7 +1549,6 @@
                 })
                 .done(function(data)
                 {
-                    console.log(data);
                     if (data !== 'null')
                     {
                         if(data.estado == 1)
@@ -1578,7 +1578,7 @@
                         else
                         {
                             var mensaje = '';
-                            if((data.bono))
+                            if(isset(data.bono))
                             {
                                 if(data.bono.estado == 0)
                                 {
@@ -4022,6 +4022,6 @@
     @yield('btn-script-agenda')
 
     @yield('modals')
-
+    <script src="{{ asset('js/validaRut.js') }}"></script>
 </body>
 </html>

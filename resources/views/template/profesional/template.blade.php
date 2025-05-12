@@ -139,6 +139,8 @@
     <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
 
     <script src="{{ asset('js/sidebar.js') }}"></script>
+    <script src="{{ asset('js/validaRut.js') }}"></script>
+    <script src="{{ asset('js/periodontograma.js') }}"></script>
 
     <!-- momnent -->
     <script src="{{ asset('js/moment.min.js') }}"></script>

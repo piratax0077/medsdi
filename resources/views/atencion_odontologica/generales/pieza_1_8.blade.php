@@ -106,7 +106,10 @@
         }
 
     </style>
-
+    @php
+        $pieza18 = $piezas_periodonto->firstWhere('pieza', '18');
+        $cuerpo18 = $pieza18 ? $pieza18->cuerpo : [];
+    @endphp
     <div class="col-md-12 bg-white shadow-sm rounded mx-1">
         <div class="col-md-12">
             <div class="row">
@@ -183,18 +186,28 @@
                                         <div class="col-sm-12 col-md-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Movilidad</label>
-                                                <input  class="form-control form-control-xs"  type="number"  id="m18" name="m18" value="0" tabindex="1" onchange="rangoNumero('m18');"/>
+                                                <input  class="form-control form-control-xs"  type="number"  id="m18" name="m18" value="{{ $cuerpo18["movilidad"] ?? '' }}" tabindex="1" onchange="rangoNumero('m18');"/>
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-md-6">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Pronóstico</label>
+                                                @php
+                                                    $pronostico_18 = '';
+                                                    foreach($piezas_periodonto as $p) {
+                                                        if($p->pieza == '18') {
+                                                            $pronostico_18 = $p->cuerpo["pronostico"];
+                                                            break;
+                                                        }
+                                                    }
+                                                @endphp
+
                                                 <select class="form-control form-control-xs" name="pi18" id="pi18">
-                                                    <option value="" selected></option>
-                                                    <option value="B">Buen pronóstico</option>
-                                                    <option value="D">Dudoso</option>
-                                                    <option value="M">Reservado</option>
-                                                    <option value="I">Mal pronóstico</option>
+                                                    <option value="" {{ $pronostico_18 == '' ? 'selected' : '' }}></option>
+                                                    <option value="B" {{ $pronostico_18 == 'B' ? 'selected' : '' }}>Buen pronóstico</option>
+                                                    <option value="D" {{ $pronostico_18 == 'D' ? 'selected' : '' }}>Dudoso</option>
+                                                    <option value="M" {{ $pronostico_18 == 'M' ? 'selecteed' : '' }}>Resrvado</option>
+                                                    <option value="I" {{ $pronostico_18 == 'I' ? 'selected' : '' }}>Mal pronóstico</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -253,35 +266,60 @@
                                             <h6 class="font-weight-bold text-c-blue pt-2">Plataforma</h6>
                                         </div>
                                         <div class="col-sm-12 col-md-8">
-                                            <input class="form-control form-control-xs" type="number" id="ae18" name="ae18" value="0" tabindex="33"/>
+                                            <input class="form-control form-control-xs"
+                                                   type="number"
+                                                   id="ae18"
+                                                   name="ae18"
+                                                   value="{{ $pieza18->cuerpo['plataforma_vestibular'] ?? '' }}"
+                                                   tabindex="33" />
                                         </div>
                                     </div>
+
                                     <div class="form-row mb-2">
                                         <div class="col-sm-12 col-md-4">
                                             <h6 class="font-weight-bold text-c-blue pt-2">Altura MG</h6>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="mg18-a" name="mg18-a" value="0" onchange="cargar18a();getDefectos();rangoNumeroMargen('mg18-a');cargar18a();" tabindex="49"/>
+                                            <input class="form-control form-control-xs"
+                                                   type="number"
+                                                   id="mg18-a"
+                                                   name="mg18-a"
+                                                   value="{{ $pieza18->cuerpo['vest_altura_mg_a'] ?? '' }}"
+                                                   onchange="cargar18a();getDefectos();rangoNumeroMargen('mg18-a');cargar18a();"
+                                                   tabindex="49" />
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="mg18-b" name="mg18-b" value="0" onchange="cargar18a();getDefectos();rangoNumeroMargen('mg18-b');cargar18a();" tabindex="50"/>
+                                            <input class="form-control form-control-xs"
+                                                   type="number"
+                                                   id="mg18-b"
+                                                   name="mg18-b"
+                                                   value="{{ $pieza18->cuerpo['vest_altura_mg_b'] ?? '' }}"
+                                                   onchange="cargar18a();getDefectos();rangoNumeroMargen('mg18-b');cargar18a();"
+                                                   tabindex="50" />
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="mg18-c" name="mg18-c" value="0" onchange="cargar18a();getDefectos();rangoNumeroMargen('mg18-c');cargar18a();" tabindex="50"/>
+                                            <input class="form-control form-control-xs"
+                                                   type="number"
+                                                   id="mg18-c"
+                                                   name="mg18-c"
+                                                   value="{{ $pieza18->cuerpo['vest_altura_mg_c'] ?? '' }}"
+                                                   onchange="cargar18a();getDefectos();rangoNumeroMargen('mg18-c');cargar18a();"
+                                                   tabindex="51" />
                                         </div>
                                     </div>
+
                                     <div class="form-row mb-2">
                                         <div class="col-sm-12 col-md-4">
                                             <h6 class="font-weight-bold text-c-blue pt-2">P.Sondaje</h6>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="ps18-a" name="ps18-a" value="0" onchange="cargar18a();getDefectos();" tabindex="97"/>
+                                            <input class="form-control form-control-xs" type="number" id="ps18-a" name="ps18-a" value="{{ $cuerpo18['vest_psondaje_a'] ?? 0 }}" onchange="cargar18a();getDefectos();" tabindex="97"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="ps18-b" name="ps18-b" value="0" onchange="cargar18a();getDefectos();" tabindex="98"/>
+                                            <input class="form-control form-control-xs" type="number" id="ps18-b" name="ps18-b" value="{{ $cuerpo18['vest_psondaje_b'] ?? 0 }}" onchange="cargar18a();getDefectos();" tabindex="98"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="ps18-c" name="ps18-c" value="0" onchange="cargar18a();getDefectos();" tabindex="99"/>
+                                            <input class="form-control form-control-xs" type="number" id="ps18-c" name="ps18-c" value="{{ $cuerpo18['vest_psondaje_c'] ?? 0 }}" onchange="cargar18a();getDefectos();" tabindex="98"/>
                                         </div>
                                     </div>
                                 </form>
@@ -319,60 +357,6 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                               {{--  <!-- <tr>
-                                                    <td class="titulo">P. sondaje</td>
-                                                    <td class="borde">
-                                                        <input style="width: 30%;height: 25px; margin-left: 7px" type="number" id="ps18b-a" name="ps18b-a" value="0" onchange="cargar18b();getDefectos();" tabindex="145"/>
-                                                        <input style="width: 30%;height: 25px;" type="number" id="ps18b-b" name="ps18b-b" value="0" onchange="cargar18b();getDefectos();" tabindex="146"/>
-                                                        <input style="width: 30%;height: 25px;" type="number" id="ps18b-c" name="ps18b-c" value="0" onchange="cargar18b();getDefectos();" tabindex="147"/></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="titulo">Altura MG</td>
-                                                    <td class="borde">
-                                                        <div class="row">
-                                                            <div class="col-md-4 text-center">
-                                                                <input class="form-control form-control-sm"  style=" margin-left: 7px" type="number" id="mg18b-a" name="mg18b-a" value="0" onchange="cargar18b();getDefectos();rangoNumeroMargen('mg18b-a');cargar18b();" tabindex="193"/>
-                                                            </div>
-                                                            <div class="col-md-4 text-center">
-                                                                <input class="form-control form-control-sm"  type="number" id="mg18b-b" name="mg18b-b" value="0" onchange="cargar18b();getDefectos();rangoNumeroMargen('mg18b-b');cargar18b();" tabindex="194"/>
-                                                            </div>
-                                                            <div class="col-md-4 text-center">
-                                                                <input class="form-control form-control-sm" style=" margin-right: 7px" type="number" id="mg18b-c" name="mg18b-c" value="0" onchange="cargar18b();getDefectos();rangoNumeroMargen('mg18b-c');cargar18b();" tabindex="195"/>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="titulo">Sangrado </td>
-                                                    <td class="borde">
-                                                        <div style="width: 30%;height: 20px;margin-left: 7px" id="s18b-a"></div>
-                                                        <div style="width: 30%;height: 20px;" id="s18b-b" ></div>
-                                                        <div style="width: 30%;height: 20px;" id="s18b-c" ></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="titulo">Supuraci&oacute;n</td>
-                                                    <td class="borde">
-                                                        <div style="width: 30%;height: 20px;margin-left: 7px" id="su18b-a"></div>
-                                                        <div style="width: 30%;height: 20px;"id="su18b-b" ></div>
-                                                        <div style="width: 30%;height: 20px;" id="su18b-c" ></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="titulo">Higiene</td>
-                                                    <td class="borde">
-                                                        <div style="width: 30%;height: 20px;margin-left: 7px" id="p18b-a"></div>
-                                                        <div style="width: 30%;height: 20px;" id="p18b-b"></div>
-                                                        <div style="width: 30%;height: 20px;" id="p18b-c"></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="titulo">Furca</td>
-                                                    <td class="borde"style="text-align:center">
-                                                        <div style="width: 20%;height: 25px;margin-left: 7px" id="f18b-a">F-1</div><div style="width: 20%;height: 25px;margin-left: 7px" id="f18b-b">F-2</div>
-
-                                                    </td>
-                                                </tr>-->  --}}
 
                                         </tbody>
                                     </table>
@@ -380,90 +364,97 @@
                             </div>
                             <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
                                 <form class="pl-2" name ="grafico3" id="grafico3" action="#">
-                                <div class="form-row mb-2">
-                                    <div class="col-sm-12 col-md-4">
-                                        <h6 class="font-weight-bold text-c-blue pt-2">P.Sondaje</h6>
-                                    </div>
-                                    <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps18b-a" name="ps18b-a" value="0" onchange="cargar18b();getDefectos();" tabindex="145"/>
-                                    </div>
-                                    <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps18b-b" name="ps18b-a" value="0" onchange="cargar18b();getDefectos();" tabindex="146"/>
-                                    </div>
-                                    <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps18b-c" name="ps18b-a" value="0" onchange="cargar18b();getDefectos();" tabindex="147"//>
-                                    </div>
-                                </div>
-                                 <div class="form-row mb-2">
-                                    <div class="col-sm-12 col-md-4">
-                                        <h6 class="font-weight-bold text-c-blue pt-2">Altura MG</h6>
-                                    </div>
-                                    <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg18b-a" name="mg18b-a" value="0" onchange="cargar18b();getDefectos();rangoNumeroMargen('mg18b-a');cargar18b();" tabindex="193"/>
-                                    </div>
-                                    <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg18b-b" name="mg18b-b" value="0" onchange="cargar18b();getDefectos();rangoNumeroMargen('mg18b-b');cargar18b();" tabindex="194"/>
-                                    </div>
-                                    <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg18b-c" name="mg18b-c" value="0" onchange="cargar18b();getDefectos();rangoNumeroMargen('mg18b-c');cargar18b();" tabindex="195"/>
-                                    </div>
-                                </div>
-                                 <div class="form-row mb-2">
+                                    <div class="form-row mb-2">
                                         <div class="col-sm-12 col-md-4">
-                                            <h6 class="font-weight-bold text-c-blue pt-2">Sangrado</h6>
+                                            <h6 class="font-weight-bold text-c-blue pt-2">P.Sondaje</h6>
                                         </div>
                                         <div class="col">
-                                            <div class="border py-2 pointer rounded-pill border-danger input-dental w-100" id="s18b-a"></div>
+                                            <input class="form-control form-control-xs" type="number" id="ps18b-a" name="ps18b-a" value="{{ $pieza18->cuerpo['pala_psondaje_a'] ?? 0 }}" onchange="cargar18b();getDefectos();" tabindex="145"/>
                                         </div>
                                         <div class="col">
-                                            <div class="border py-2 pointer rounded-pill border-danger input-dental w-100" id="s18b-b" ></div>
+                                            <input class="form-control form-control-xs" type="number" id="ps18b-b" name="ps18b-b" value="{{ $pieza18->cuerpo['pala_psondaje_b'] ?? 0 }}" onchange="cargar18b();getDefectos();" tabindex="146"/>
                                         </div>
                                         <div class="col">
-                                            <div class="border py-2 pointer rounded-pill border-danger input-dental w-100" id="s18b-c"></div>
+                                            <input class="form-control form-control-xs" type="number" id="ps18b-c" name="ps18b-c" value="{{ $pieza18->cuerpo['pala_psondaje_c'] ?? 0 }}" onchange="cargar18b();getDefectos();" tabindex="147"/>
                                         </div>
-                                </div>
-                                <div class="form-row mb-2">
-                                    <div class="col-sm-12 col-md-4">
-                                        <h6 class="font-weight-bold text-c-blue pt-2">Supuración</h6>
                                     </div>
-                                    <div class="col">
-                                        <div class="border py-2 pointer pointer rounded-pill border-warning input-dental" id="su18b-a"></div>
+
+                                    <div class="form-row mb-2">
+                                        <div class="col-sm-12 col-md-4">
+                                            <h6 class="font-weight-bold text-c-blue pt-2">Altura MG</h6>
+                                        </div>
+                                        <div class="col">
+                                            <input class="form-control form-control-xs" type="number" id="mg18b-a" name="mg18b-a"
+                                                   value="{{ $pieza18->cuerpo['pala_altura_mg_a'] ?? '' }}"
+                                                   onchange="cargar18b();getDefectos();rangoNumeroMargen('mg18b-a');cargar18b();" tabindex="193"/>
+                                        </div>
+                                        <div class="col">
+                                            <input class="form-control form-control-xs" type="number" id="mg18b-b" name="mg18b-b"
+                                                   value="{{ $pieza18->cuerpo['pala_altura_mg_b'] ?? '' }}"
+                                                   onchange="cargar18b();getDefectos();rangoNumeroMargen('mg18b-b');cargar18b();" tabindex="194"/>
+                                        </div>
+                                        <div class="col">
+                                            <input class="form-control form-control-xs" type="number" id="mg18b-c" name="mg18b-c"
+                                                   value="{{ $pieza18->cuerpo['pala_altura_mg_c'] ?? '' }}"
+                                                   onchange="cargar18b();getDefectos();rangoNumeroMargen('mg18b-c');cargar18b();" tabindex="195"/>
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <div class="border py-2 pointer rounded-pill border-warning input-dental" id="su18b-b" ></div>
+                                    <div class="form-row mb-2">
+                                            <div class="col-sm-12 col-md-4">
+                                                <h6 class="font-weight-bold text-c-blue pt-2">Sangrado</h6>
+                                            </div>
+                                            <div class="col">
+                                                <div class="border py-2 pointer rounded-pill border-danger input-dental w-100" id="s18b-a"></div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="border py-2 pointer rounded-pill border-danger input-dental w-100" id="s18b-b" ></div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="border py-2 pointer rounded-pill border-danger input-dental w-100" id="s18b-c"></div>
+                                            </div>
                                     </div>
-                                    <div class="col">
-                                        <div class="border py-2 pointer rounded-pill border-warning input-dental" id="su18b-c"></div>
+                                    <div class="form-row mb-2">
+                                        <div class="col-sm-12 col-md-4">
+                                            <h6 class="font-weight-bold text-c-blue pt-2">Supuración</h6>
+                                        </div>
+                                        <div class="col">
+                                            <div class="border py-2 pointer pointer rounded-pill border-warning input-dental" id="su18b-a"></div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="border py-2 pointer rounded-pill border-warning input-dental" id="su18b-b" ></div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="border py-2 pointer rounded-pill border-warning input-dental" id="su18b-c"></div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-row mb-2">
-                                    <div class="col-sm-12 col-md-4">
-                                        <h6 class="font-weight-bold text-c-blue pt-2">Higiene</h6>
+                                    <div class="form-row mb-2">
+                                        <div class="col-sm-12 col-md-4">
+                                            <h6 class="font-weight-bold text-c-blue pt-2">Higiene</h6>
+                                        </div>
+                                        <div class="col">
+                                            <div class="border py-2 pointer rounded-pill borde-celeste input-dental w-100" id="p18b-a"></div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="border py-2 pointer rounded-pill borde-celeste input-dental w-100" id="p18b-b"></div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="border py-2 pointer rounded-pill borde-celeste input-dental w-100" id="p18b-c"></div>
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <div class="border py-2 pointer rounded-pill borde-celeste input-dental w-100" id="p18b-a"></div>
+                                    <div class="form-row mt-3">
+                                        <div class="col-sm-12 col-md-4">
+                                                <h6 class="font-weight-bold text-c-blue pt-2">Furcas</h6>
+                                        </div>
+                                        <div class="col-sm-12 col-md-4">
+                                            <label class="floating-label-activo-sm">Furca 1</label>
+                                            <div class="border rounded input-dental pointer w-100" id="f18b-a"></div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-4">
+                                            <label class="floating-label-activo-sm">Furca 2</label>
+                                            <div class="border rounded input-dental pointer w-100" id="f18b-b"></div>
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <div class="border py-2 pointer rounded-pill borde-celeste input-dental w-100" id="p18b-b"></div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="border py-2 pointer rounded-pill borde-celeste input-dental w-100" id="p18b-c"></div>
-                                    </div>
-                                </div>
-                                <div class="form-row mt-3">
-                                    <div class="col-sm-12 col-md-4">
-                                            <h6 class="font-weight-bold text-c-blue pt-2">Furcas</h6>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4">
-                                        <label class="floating-label-activo-sm">Furca 1</label>
-                                        <div class="border rounded input-dental pointer w-100" id="f18b-a"></div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4">
-                                        <label class="floating-label-activo-sm">Furca 2</label>
-                                        <div class="border rounded input-dental pointer w-100" id="f18b-b"></div>
-                                    </div>
-                                </div>
-                            </form>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -476,7 +467,7 @@
                     <div class="card-body">
                         <div class="form-group" id="obs_pieza1.8">
                             <label class="floating-label-activo-sm">Obs. Pieza 1.8</label>
-                            <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 1.8" data-seccion="Eval_periimplantar"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_op_bruxismo" id="det_op_bruxismo" placeholder="Describa observaciones"></textarea>
+                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 1.8" data-seccion="Eval_periimplantar"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_18" id="obs_18" placeholder="Describa observaciones">{{ $pieza18->cuerpo['observaciones'] ?? '' }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -484,10 +475,10 @@
         </div>
     </div>
     <!--FORMULARIO DE OBS. Y BOTÓN GUARDAR-->
-    
+
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
         <div id="obs_pieza1.8">
-                <button type="button" class="btn btn-info text-center"><i class="feather icon-save"></i>  Guardar evaluación 1.8</button>
+                <button type="button" onclick="guardar_pieza('18')" class="btn btn-info text-center"><i class="feather icon-save"></i>  Guardar evaluación 1.8</button>
         </div>
     </div>
 
@@ -1162,8 +1153,6 @@
             $('#furca18-b').css("background","none");
         }
     );
-
-
 
 
 </script>

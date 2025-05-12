@@ -2364,6 +2364,7 @@ class FlujoCajaController extends Controller
             // generamos el pdf
             $pdf = \PDF::loadView('app.general.asistente.flujo_caja.PDF.pdf_bonos_dia', [
                 'bonos' => $bonos,
+                'fecha_rendicion' => $rendicion->fecha_rendicion,
                 'total' => $total,
                 'total_bonos' => $total_bonos,
                 'total_efectivo' => $total_efectivo,

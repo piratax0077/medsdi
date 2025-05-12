@@ -183,7 +183,10 @@
     </script>
     @routes
     <script src="{{asset('js/dental/tratamientos_dental.js')}}"></script>
-
+    <script>
+        const GUARDAR_PIEZA_URL = "{{ route('dental.guardar_pieza_periodonto') }}";
+    </script>
+    <script src="{{ asset('js/periodontograma.js') }}"></script>
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 

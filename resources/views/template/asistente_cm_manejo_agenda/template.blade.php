@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/formularios.css') }}" />
 
+
+
     <!-- data tables css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}"/>
@@ -159,6 +161,7 @@
 
     <!-- rut -->
     <script src="{{ asset('js/rut.js') }}"></script>
+  
 
     <!-- funciones generales -->
     <script src="{{ asset('js/funciones.js') }}"></script>
@@ -243,6 +246,7 @@
             });
         }
     </script>
+        <script src="{{ asset('js/validaRut.js') }}"></script>
     @yield('page-script')
     @yield('btn-script-agenda')
 

@@ -30,7 +30,7 @@
         <table>
             <tr>
                 <td class="align-left"><strong>IMED</strong></td>
-                <td colspan="3" class="align-left"><strong>FECHA:</strong> {{ \Carbon\Carbon::today()->format('d-m-Y') }}</td>
+                <td colspan="3" class="align-left"><strong>FECHA:</strong> {{ \Carbon\Carbon::parse($fecha_rendicion)->format('d-m-Y') }}</td>
                 <td><strong>PAGINA:</strong> 1</td>
             </tr>
             <tr>
@@ -42,7 +42,7 @@
     </div>
 
     <div class="subheader">
-        <strong>PERIODO:</strong> DESDE {{ \Carbon\Carbon::today()->format('d/m/Y') }} HASTA {{ \Carbon\Carbon::today()->format('d/m/Y') }}
+        <strong>PERIODO:</strong> DESDE {{ \Carbon\Carbon::parse($fecha_rendicion)->format('d-m-Y') }} HASTA {{ \Carbon\Carbon::parse($fecha_rendicion)->format('d-m-Y') }}
     </div>
 
     <table>

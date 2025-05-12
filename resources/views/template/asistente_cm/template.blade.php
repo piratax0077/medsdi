@@ -160,6 +160,7 @@
 
     <!-- rut -->
     <script src="{{ asset('js/rut.js') }}"></script>
+    <script src="{{ asset('js/validaRut.js') }}"></script>
 
     <!-- funciones generales -->
     <script src="{{ asset('js/funciones.js') }}"></script>
