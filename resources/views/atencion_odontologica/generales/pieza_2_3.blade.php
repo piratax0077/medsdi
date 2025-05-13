@@ -94,6 +94,11 @@
         }
 
     </style>
+    @php
+        $pieza23 = $piezas_periodonto->firstWhere('pieza', '23');
+        $cuerpo23 = $pieza23 ? $pieza23->cuerpo : [];
+        $pronostico23 = $cuerpo23['pronostico'] ?? '';
+    @endphp
     <div class="col-md-12 bg-white shadow-sm rounded mx-1">
         <div class="col-md-12">
             <div class="row">
@@ -170,18 +175,18 @@
                                         <div class="col-sm-12 col-md-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Movilidad</label>
-                                                <input  class="form-control form-control-xs"  type="number"  id="m23" name="m23" value="0" tabindex="1" onchange="rangoNumero('m23');"/>
+                                                <input  class="form-control form-control-xs"  type="number"  id="m23" name="m23" value="{{ $cuerpo23["movilidad"] ?? 0 }}" tabindex="1" onchange="rangoNumero('m23');"/>
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-md-9">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Pronóstico</label>
                                                 <select class="form-control form-control-xs" name="pi23" id="pi23">
-                                                    <option value="" selected></option>
-                                                    <option value="B">Buen pronóstico</option>
-                                                    <option value="D">Dudoso</option>
-                                                    <option value="M">Reservado</option>
-                                                    <option value="I">Mal pronóstico</option>
+                                                    <option value="" {{ $pronostico23 == '' ? 'selected' : '' }}></option>
+                                                    <option value="B" {{ $pronostico23 == 'B' ? 'selected' : '' }}>Buen pronóstico</option>
+                                                    <option value="D" {{ $pronostico23 == 'D' ? 'selected' : '' }}>Dudoso</option>
+                                                    <option value="M" {{ $pronostico23 == 'M' ? 'selected' : '' }}>Reservado</option>
+                                                    <option value="I" {{ $pronostico23 == 'I' ? 'selected' : '' }}>Mal pronóstico</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -235,7 +240,7 @@
                                             <h6 class="font-weight-bold text-c-blue pt-2">Plataforma</h6>
                                         </div>
                                         <div class="col-sm-12 col-md-8">
-                                            <input class="form-control form-control-xs" type="number" id="ae23" name="ae23" value="0" tabindex="33"/>
+                                            <input class="form-control form-control-xs" type="number" id="ae23" name="ae23" value="{{ $cuerpo23["plataforma"] ?? 0 }}" tabindex="33"/>
                                         </div>
                                     </div>
                                     <div class="form-row mb-2">
@@ -243,13 +248,13 @@
                                             <h6 class="font-weight-bold text-c-blue pt-2">Altura MG</h6>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="mg23-a" name="mg23-a" value="0" onchange="cargar23a();getDefectos();rangoNumeroMargen('mg23-a');cargar23a();" tabindex="49"/>
+                                            <input class="form-control form-control-xs" type="number" id="mg23-a" name="mg23-a" value="{{ $cuerpo23["vest_altura_mg_a"] ?? 0 }}" onchange="cargar23a();getDefectos();rangoNumeroMargen('mg23-a');cargar23a();" tabindex="49"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="mg23-b" name="mg23-b" value="0" onchange="cargar23a();getDefectos();rangoNumeroMargen('mg23-b');cargar23a();" tabindex="50"/>
+                                            <input class="form-control form-control-xs" type="number" id="mg23-b" name="mg23-b" value="{{ $cuerpo23["vest_altura_mg_b"] ?? 0 }}" onchange="cargar23a();getDefectos();rangoNumeroMargen('mg23-b');cargar23a();" tabindex="50"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="mg23-c" name="mg23-c" value="0" onchange="cargar23a();getDefectos();rangoNumeroMargen('mg23-c');cargar23a();" tabindex="50"/>
+                                            <input class="form-control form-control-xs" type="number" id="mg23-c" name="mg23-c" value="{{ $cuerpo23["vest_altura_mg_c"] ?? 0 }}" onchange="cargar23a();getDefectos();rangoNumeroMargen('mg23-c');cargar23a();" tabindex="50"/>
                                         </div>
                                     </div>
                                     <div class="form-row mb-2">
@@ -257,13 +262,13 @@
                                             <h6 class="font-weight-bold text-c-blue pt-2">P.Sondaje</h6>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="ps23-a" name="ps23-a" value="0" onchange="cargar23a();getDefectos();" tabindex="97"/>
+                                            <input class="form-control form-control-xs" type="number" id="ps23-a" name="ps23-a" value="{{ $cuerpo23["vest_psondaje_a"] ?? 0 }}" onchange="cargar23a();getDefectos();" tabindex="97"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="ps23-b" name="ps23-b" value="0" onchange="cargar23a();getDefectos();" tabindex="98"/>
+                                            <input class="form-control form-control-xs" type="number" id="ps23-b" name="ps23-b" value="{{ $cuerpo23["vest_psondaje_b"] ?? 0 }}" onchange="cargar23a();getDefectos();" tabindex="98"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="ps23-c" name="ps23-c" value="0" onchange="cargar23a();getDefectos();" tabindex="99"/>
+                                            <input class="form-control form-control-xs" type="number" id="ps23-c" name="ps23-c" value="{{ $cuerpo23["vest_psondaje_c"] ?? 0 }}" onchange="cargar23a();getDefectos();" tabindex="99"/>
                                         </div>
                                     </div>
                                 </form>
@@ -367,13 +372,13 @@
                                         <h6 class="font-weight-bold text-c-blue pt-2">P.Sondaje</h6>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps23b-a" name="ps23b-a" value="0" onchange="cargar23b();getDefectos();" tabindex="145"/>
+                                        <input class="form-control form-control-xs" type="number" id="ps23b-a" name="ps23b-a" value="{{ $cuerpo23["pala_psondaje_a"] ?? 0 }}" onchange="cargar23b();getDefectos();" tabindex="145"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps23b-b" name="ps23b-a" value="0" onchange="cargar23b();getDefectos();" tabindex="146"/>
+                                        <input class="form-control form-control-xs" type="number" id="ps23b-b" name="ps23b-b" value="{{ $cuerpo23["pala_psondaje_b"] ?? 0 }}" onchange="cargar23b();getDefectos();" tabindex="146"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps23b-c" name="ps23b-a" value="0" onchange="cargar23b();getDefectos();" tabindex="147"//>
+                                        <input class="form-control form-control-xs" type="number" id="ps23b-c" name="ps23b-c" value="{{ $cuerpo23["pala_psondaje_c"] ?? 0 }}" onchange="cargar23b();getDefectos();" tabindex="147"//>
                                     </div>
                                 </div>
                                  <div class="form-row mb-2">
@@ -381,13 +386,13 @@
                                         <h6 class="font-weight-bold text-c-blue pt-2">Altura MG</h6>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg23b-a" name="mg23b-a" value="0" onchange="cargar23b();getDefectos();rangoNumeroMargen('mg23b-a');cargar23b();" tabindex="193"/>
+                                        <input class="form-control form-control-xs" type="number" id="mg23b-a" name="mg23b-a" value="{{ $cuerpo23["pala_altura_mg_a"] ?? 0 }}" onchange="cargar23b();getDefectos();rangoNumeroMargen('mg23b-a');cargar23b();" tabindex="193"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg23b-b" name="mg23b-b" value="0" onchange="cargar23b();getDefectos();rangoNumeroMargen('mg23b-b');cargar23b();" tabindex="194"/>
+                                        <input class="form-control form-control-xs" type="number" id="mg23b-b" name="mg23b-b" value="{{ $cuerpo23["pala_altura_mg_b"] ?? 0 }}" onchange="cargar23b();getDefectos();rangoNumeroMargen('mg23b-b');cargar23b();" tabindex="194"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg23b-c" name="mg23b-c" value="0" onchange="cargar23b();getDefectos();rangoNumeroMargen('mg23b-c');cargar23b();" tabindex="195"/>
+                                        <input class="form-control form-control-xs" type="number" id="mg23b-c" name="mg23b-c" value="{{ $cuerpo23["pala_altura_mg_c"] ?? 0 }}" onchange="cargar23b();getDefectos();rangoNumeroMargen('mg23b-c');cargar23b();" tabindex="195"/>
                                     </div>
                                 </div>
                                  <div class="form-row mb-2">
@@ -450,14 +455,14 @@
             <div class="card-body">
                 <div class="form-group" id="obs_pieza2.3">
                     <label class="floating-label-activo-sm">Obs. Pieza 2.3</label>
-                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 2.3" data-seccion="Eval_periimplantar"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_op_bruxismo" id="det_op_bruxismo" placeholder="Describa observaciones"></textarea>
+                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 2.3" data-seccion="Eval_periimplantar"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_23" id="obs_23" placeholder="Describa observaciones">{{ $cuerpo23["observaciones"] ?? '' }}</textarea>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
         <div id="obs_pieza2.3">
-                <button type="button" class="btn btn-info text-center"><i class="feather icon-save"></i>  Guardar evaluación 2.3</button>
+                <button type="button" class="btn btn-info text-center" onclick="guardar_pieza('23')"><i class="feather icon-save"></i>  Guardar evaluación 2.3</button>
         </div>
     </div>
 

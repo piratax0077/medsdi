@@ -218,6 +218,7 @@
 
     <!-- rut -->
     <script src="{{ asset('js/rut.js') }}"></script>
+  
 
     <!-- funciones generales -->
     <script src="{{ asset('js/funciones.js') }}"></script>
@@ -231,6 +232,8 @@
     <script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
 	
 	<script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
+
+ 
 
     <script>
 
@@ -345,5 +348,6 @@
     @yield('btn-script-agenda')
 
     @yield('modales')
+    <script src="{{ asset('js/validaRut.js') }}"></script>
 </body>
 </html>

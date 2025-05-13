@@ -93,6 +93,11 @@
         }
 
     </style>
+    @php
+        $pieza22 = $piezas_periodonto->firstWhere('pieza', '22');
+        $cuerpo22 = $pieza22 ? $pieza22->cuerpo : [];
+        $pronostico22 = $cuerpo22['pronostico'] ?? '';
+    @endphp
     <div class="col-md-12 bg-white shadow-sm rounded mx-1">
         <div class="col-md-12">
             <div class="row">
@@ -169,18 +174,18 @@
                                         <div class="col-sm-12 col-md-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Movilidad</label>
-                                                <input  class="form-control form-control-xs"  type="number"  id="m22" name="m22" value="0" tabindex="1" onchange="rangoNumero('m22');"/>
+                                                <input  class="form-control form-control-xs"  type="number"  id="m22" name="m22" value="{{ $cuerpo22["movilidad"] ?? 0 }}" tabindex="1" onchange="rangoNumero('m22');"/>
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-md-9">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Pronóstico</label>
                                                 <select class="form-control form-control-xs" name="pi22" id="pi22">
-                                                    <option value="" selected></option>
-                                                    <option value="B">Buen pronóstico</option>
-                                                    <option value="D">Dudoso</option>
-                                                    <option value="M">Reservado</option>
-                                                    <option value="I">Mal pronóstico</option>
+                                                    <option value="" {{ $pronostico22 == '' ? 'selected' : '' }}></option>
+                                                    <option value="B" {{ $pronostico22 == 'B' ? 'selected' : '' }}>Buen pronóstico</option>
+                                                    <option value="D" {{ $pronostico22 == 'D' ? 'selected' : '' }}>Dudoso</option>
+                                                    <option value="M" {{ $pronostico22 == 'M' ? 'selected' : '' }}>Reservado</option>
+                                                    <option value="I" {{ $pronostico22 == 'I' ? 'selected' : '' }}>Mal pronóstico</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -234,7 +239,7 @@
                                             <h6 class="font-weight-bold text-c-blue pt-2">Plataforma</h6>
                                         </div>
                                         <div class="col-sm-12 col-md-8">
-                                            <input class="form-control form-control-xs" type="number" id="ae22" name="ae22" value="0" tabindex="33"/>
+                                            <input class="form-control form-control-xs" type="number" id="ae22" name="ae22" value="{{ $cuerpo22["plataforma"] ?? 0 }}" tabindex="33"/>
                                         </div>
                                     </div>
                                     <div class="form-row mb-2">
@@ -242,13 +247,13 @@
                                             <h6 class="font-weight-bold text-c-blue pt-2">Altura MG</h6>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="mg22-a" name="mg22-a" value="0" onchange="cargar22a();getDefectos();rangoNumeroMargen('mg22-a');cargar22a();" tabindex="49"/>
+                                            <input class="form-control form-control-xs" type="number" id="mg22-a" name="mg22-a" value="{{ $cuerpo22["vest_altura_mg_a"] ?? 0 }}" onchange="cargar22a();getDefectos();rangoNumeroMargen('mg22-a');cargar22a();" tabindex="49"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="mg22-b" name="mg22-b" value="0" onchange="cargar22a();getDefectos();rangoNumeroMargen('mg22-b');cargar22a();" tabindex="50"/>
+                                            <input class="form-control form-control-xs" type="number" id="mg22-b" name="mg22-b" value="{{ $cuerpo22["vest_altura_mg_b"] ?? 0 }}" onchange="cargar22a();getDefectos();rangoNumeroMargen('mg22-b');cargar22a();" tabindex="50"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="mg22-c" name="mg22-c" value="0" onchange="cargar22a();getDefectos();rangoNumeroMargen('mg22-c');cargar22a();" tabindex="50"/>
+                                            <input class="form-control form-control-xs" type="number" id="mg22-c" name="mg22-c" value="{{ $cuerpo22["vest_altura_mg_c"] ?? 0 }}" onchange="cargar22a();getDefectos();rangoNumeroMargen('mg22-c');cargar22a();" tabindex="50"/>
                                         </div>
                                     </div>
                                     <div class="form-row mb-2">
@@ -256,13 +261,13 @@
                                             <h6 class="font-weight-bold text-c-blue pt-2">P.Sondaje</h6>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="ps22-a" name="ps22-a" value="0" onchange="cargar22a();getDefectos();" tabindex="97"/>
+                                            <input class="form-control form-control-xs" type="number" id="ps22-a" name="ps22-a" value="{{ $cuerpo22["vest_psondaje_a"] ?? 0 }}" onchange="cargar22a();getDefectos();" tabindex="97"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="ps22-b" name="ps22-b" value="0" onchange="cargar22a();getDefectos();" tabindex="98"/>
+                                            <input class="form-control form-control-xs" type="number" id="ps22-b" name="ps22-b" value="{{ $cuerpo22["vest_psondaje_b"] ?? 0 }}" onchange="cargar22a();getDefectos();" tabindex="98"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="ps22-c" name="ps22-c" value="0" onchange="cargar22a();getDefectos();" tabindex="99"/>
+                                            <input class="form-control form-control-xs" type="number" id="ps22-c" name="ps22-c" value="{{ $cuerpo22["vest_psondaje_c"] ?? 0 }}" onchange="cargar22a();getDefectos();" tabindex="99"/>
                                         </div>
                                     </div>
                                 </form>
@@ -366,13 +371,13 @@
                                         <h6 class="font-weight-bold text-c-blue pt-2">P.Sondaje</h6>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps22b-a" name="ps22b-a" value="0" onchange="cargar22b();getDefectos();" tabindex="145"/>
+                                        <input class="form-control form-control-xs" type="number" id="ps22b-a" name="ps22b-a" value="{{ $cuerpo22["pala_psondaje_a"] ?? 0 }}" onchange="cargar22b();getDefectos();" tabindex="145"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps22b-b" name="ps22b-a" value="0" onchange="cargar22b();getDefectos();" tabindex="146"/>
+                                        <input class="form-control form-control-xs" type="number" id="ps22b-b" name="ps22b-a" value="{{ $cuerpo22["pala_psondaje_b"] ?? 0 }}" onchange="cargar22b();getDefectos();" tabindex="146"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps22b-c" name="ps22b-a" value="0" onchange="cargar22b();getDefectos();" tabindex="147"//>
+                                        <input class="form-control form-control-xs" type="number" id="ps22b-c" name="ps22b-a" value="{{ $cuerpo22["pala_psondaje_c"] ?? 0 }}" onchange="cargar22b();getDefectos();" tabindex="147"//>
                                     </div>
                                 </div>
                                  <div class="form-row mb-2">
@@ -380,13 +385,13 @@
                                         <h6 class="font-weight-bold text-c-blue pt-2">Altura MG</h6>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg22b-a" name="mg22b-a" value="0" onchange="cargar22b();getDefectos();rangoNumeroMargen('mg22b-a');cargar22b();" tabindex="193"/>
+                                        <input class="form-control form-control-xs" type="number" id="mg22b-a" name="mg22b-a" value="{{ $cuerpo22["pala_altura_mg_a"] ?? 0 }}" onchange="cargar22b();getDefectos();rangoNumeroMargen('mg22b-a');cargar22b();" tabindex="193"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg22b-b" name="mg22b-b" value="0" onchange="cargar22b();getDefectos();rangoNumeroMargen('mg22b-b');cargar22b();" tabindex="194"/>
+                                        <input class="form-control form-control-xs" type="number" id="mg22b-b" name="mg22b-b" value="{{ $cuerpo22["pala_altura_mg_b"] ?? 0 }}" onchange="cargar22b();getDefectos();rangoNumeroMargen('mg22b-b');cargar22b();" tabindex="194"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg22b-c" name="mg22b-c" value="0" onchange="cargar22b();getDefectos();rangoNumeroMargen('mg22b-c');cargar22b();" tabindex="195"/>
+                                        <input class="form-control form-control-xs" type="number" id="mg22b-c" name="mg22b-c" value="{{ $cuerpo22["pala_altura_mg_c"] ?? 0 }}" onchange="cargar22b();getDefectos();rangoNumeroMargen('mg22b-c');cargar22b();" tabindex="195"/>
                                     </div>
                                 </div>
                                  <div class="form-row mb-2">
@@ -449,14 +454,14 @@
             <div class="card-body">
                 <div class="form-group" id="obs_pieza2.2">
                     <label class="floating-label-activo-sm">Obs. Pieza 2.2</label>
-                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 2.2" data-seccion="Eval_periimplantar"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_op_bruxismo" id="det_op_bruxismo" placeholder="Describa observaciones"></textarea>
+                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 2.2" data-seccion="Eval_periimplantar"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_22" id="obs_22" placeholder="Describa observaciones">{{ $cuerpo22["observaciones"] ?? '' }}</textarea>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
         <div id="obs_pieza2.2">
-                <button type="button" class="btn btn-info text-center"><i class="feather icon-save"></i>  Guardar evaluación 2.2</button>
+                <button type="button" onclick="guardar_pieza('22')" class="btn btn-info text-center"><i class="feather icon-save"></i>  Guardar evaluación 2.2</button>
         </div>
     </div>
     <script>
@@ -466,7 +471,7 @@
             //anchuraValor();
             cargar22a();
             cargar22b();
-    
+
         });
         function rangoNumero(campo){
             var dato=document.getElementById(campo).value;
@@ -477,7 +482,7 @@
                 document.getElementById(campo).value='0';
             }
         }
-    
+
         function rangoNumeroMargen(campo){
             var dato=document.getElementById(campo).value;
             dato= parseInt(dato);
@@ -486,9 +491,9 @@
                 alert("El dato de margen gingival debe estar comprendido entre -9 y +9");
                 document.getElementById(campo).value='0';
             }
-    
+
         }
-    
+
         function drawVisualization22a(data22a) {
             // Create and draw the visualization.
             var ac22a = new google.visualization.AreaChart(document.getElementById('visualization22a'));
@@ -504,26 +509,26 @@
             hAxis: {},
             vAxis: {gridlines: {color: 'transparent', count: 31},baseline:0,textPosition:'none',viewWindowMode: 'explicit',viewWindow: {max:19,min:-12}}
             });
-    
+
             $('#visualization22a iframe').attr('allowTransparency', 'true');
             $('#visualization22a iframe').contents().find('body').css('background', 'transparent');
-    
+
         }
-    
+
         function cargar22a(){
-    
+
             var datoae22=document.getElementById('ae22').value;
-    
+
             var datomg22a=document.getElementById('mg22-a').value;
             var datomg22b=document.getElementById('mg22-b').value;
             var datomg22c=document.getElementById('mg22-c').value;
-    
+
             var datops22a=document.getElementById('ps22-a').value;
             var datops22b=document.getElementById('ps22-b').value;
             var datops22c=document.getElementById('ps22-c').value;
-    
+
             //alert(document.getElementById('ps22-a').value);
-    
+
             if(datops22a>3){
                 document.getElementById('ps22-a').style.color="red";
             }else{
@@ -539,21 +544,21 @@
             }else{
                 document.getElementById('ps22-c').style.color="black";
             }
-    
-    
+
+
             var data22a=google.visualization.arrayToDataTable([
                 ['',   'Margen Gingival', 'Profundidad de sondaje','Plataforma'],
                 ['',    0+(parseInt(datomg22a)+parseInt(datops22a)),      0-parseInt(datops22a), parseInt(datoae22)],
                 ['',    0+(parseInt(datomg22b)+parseInt(datops22b)),      0-parseInt(datops22b), parseInt(datoae22)],
                 ['',    0+(parseInt(datomg22c)+parseInt(datops22c)),      0-parseInt(datops22c), parseInt(datoae22)]
             ]);
-    
+
             drawVisualization22a(data22a);
-    
+
         }
-    
+
         function drawVisualization22b(data22b) {
-    
+
             // Create and draw the visualization.
             var ac22b = new google.visualization.AreaChart(document.getElementById('visualization22b'));
             ac22b.draw(data22b, {
@@ -571,17 +576,17 @@
             $('#visualization22b iframe').attr('allowTransparency', 'true');
             $('#visualization22b iframe').contents().find('body').css('background', 'transparent');
         }
-    
+
         function cargar22b(){
-    
+
             var datomg22ba=document.getElementById('mg22b-a').value;
             var datomg22bb=document.getElementById('mg22b-b').value;
             var datomg22bc=document.getElementById('mg22b-c').value;
-    
+
             var datops22ba=document.getElementById('ps22b-a').value;
             var datops22bb=document.getElementById('ps22b-b').value;
             var datops22bc=document.getElementById('ps22b-c').value;
-    
+
             if(datops22ba>3){
                 document.getElementById('ps22b-a').style.color="red";
             }else{
@@ -597,20 +602,20 @@
             }else{
                 document.getElementById('ps22b-c').style.color="black";
             }
-    
+
             var data22b=google.visualization.arrayToDataTable([
                 ['',   'Margen Gingival', 'Profundidad de sondaje'],
                 ['',    0-(parseInt(datomg22ba)+parseInt(datops22ba)),      0+parseInt(datops22ba)],
                 ['',    0-(parseInt(datomg22bb)+parseInt(datops22bb)),      0+parseInt(datops22bb)],
                 ['',    0-(parseInt(datomg22bc)+parseInt(datops22bc)),      0+parseInt(datops22bc)]
             ]);
-    
+
             drawVisualization22b(data22b);
-    
+
         }
-    
+
         arrstyle = ["i22","f22","f22b-a","f22b-b","s22-a","s22-b","s22-c","p22-a","p22-b","p22-c","s22b-a","s22b-b","s22b-c","p22b-a","p22b-b","p22b-c"];
-    
+
         //FUNCIONES PARA ANCHURA ENCÍA
         $('#ae22').change(function() {
             if(parseInt(document.getElementById('ae22').value)<3){
@@ -620,7 +625,7 @@
             }
             cargar22a();
         });
-    
+
         //FUNCIONES PARA SANGRADO
         $('#s22-a').toggle(
             function () {
@@ -667,7 +672,7 @@
                 getSangrado();
             }
         );
-    
+
         $('#s22b-a').toggle(
             function () {
                 $(this).css({"background":"#FA5858"});
@@ -713,7 +718,7 @@
                 getSangrado();
             }
         );
-    
+
         //FUNCIONES PARA SUPURACION
         $('#su22-a').toggle(
             function () {
@@ -760,7 +765,7 @@
                 getSupuracion();
             }
         );
-    
+
         $('#su22b-a').toggle(
             function () {
                 $(this).css({"background":"#f3e822"});
@@ -806,7 +811,7 @@
                 getSupuracion();
             }
         );
-    
+
         //PLACA
         $('#p22-a').toggle(
             function () {
@@ -880,7 +885,7 @@
                 getPlaca();
             }
         );
-    
+
         //TACHADOS
         $('#d22').toggle(
             function () {
@@ -909,7 +914,7 @@
                 $('#ps22-a').val('0');
                 $('#ps22-b').val('0');
                 $('#ps22-c').val('0');
-    
+
                 $('#diente22b-a').css("background","url('{{ asset('images/dental/periodontograma/img/tabla3/tachados/periodontograma-dientes-arriba-tachados-22b.png') }}')");
                 $('#diente22b-a').css("background-position","0 23px");
                 $('#diente22b-a').css("background-repeat","no-repeat");
@@ -935,18 +940,18 @@
                 $('#ps22b-a').val('0');
                 $('#ps22b-b').val('0');
                 $('#ps22b-c').val('0');
-    
+
                 $('#furca22').prop("disabled",true);
                 $('#furca22-a').prop("disabled",true);
                 $('#furca22-b').prop("disabled",true);
                 $('#ae22').prop("disabled",true);
                 $('#pi22').prop("disabled",true);
-    
+
                 totalDientes--;
                 getDefectos();
                 cargar22a();
                 cargar22b();
-    
+
                 {{--  cargar17a();
                 cargar16a();
                 cargar15a();
@@ -960,7 +965,7 @@
                 getSangrado();
                 getSupuracion();
                 getPlaca();
-    
+
             },
             function () {
                 $('#diente22-a').css("background","url('{{ asset('images/dental/periodontograma/img/tabla1/periodontograma-dientes-arriba-22.png') }}')");
@@ -981,7 +986,7 @@
                 $('#ps22-a').prop("disabled",false);
                 $('#ps22-b').prop("disabled",false);
                 $('#ps22-c').prop("disabled",false);
-    
+
                 $('#diente22b-a').css("background","url('{{ asset('images/dental/periodontograma/img/tabla3/periodontograma-dientes-abajo-22b.png') }}')");
                 $('#diente22b-a').css("background-position","0 23px");
                 $('#diente22b-a').css("background-repeat","no-repeat");
@@ -1001,15 +1006,15 @@
                 $('#ps22b-a').prop("disabled",false);
                 $('#ps22b-b').prop("disabled",false);
                 $('#ps22b-c').prop("disabled",false);
-    
+
                 $('#furca22').css("display","block");
                 $('#furca22-a').css("display","block");
                 $('#furca22-b').css("display","block");
                 $('#ae22').prop("disabled",false);
                 $('#pi22').prop("disabled",false);
-    
+
                 totalDientes++;
-    
+
                 {{--  cargar17a();
                 cargar16a();
                 cargar15a();
@@ -1024,7 +1029,7 @@
                 getPlaca();
             }
         );
-    
+
         //IMPLANTES
         $('#i22').toggle(
             function () {
@@ -1033,44 +1038,44 @@
                 $('#diente22-a').css("background","url('{{ asset('images/dental/periodontograma/img/dientes/implante/impl22.png') }}')");
                 $('#diente22-a').css("background-position","-38px -2px");
                 $('#diente22-a').css("background-repeat","no-repeat");
-    
+
                 $('#diente22b-a').css("background","url('{{ asset('images/dental/periodontograma/img/tabla3/implantes/periodontograma-dientes-arriba-tornillo-22b.png') }}')");
                 $('#diente22b-a').css("background-position","0 23px");
                 $('#diente22b-a').css("background-repeat","no-repeat");
-    
+
                 $('#furca22').css("background","none");
                 $('#furca22-a').css("background","none");
                 $('#furca22-b').css("background","none");
                 $('#f22').css("background","none");
                 $('#f22b-a').css("background","none");
                 $('#f22b-b').css("background","none");
-    
+
                 $("#f22").attr("id","f22desact");
                 $("#f22b-a").attr("id","f22b-adesact");
                 $("#f22b-b").attr("id","f22b-bdesact");
-    
+
             },
             function () {
                 $(this).css({"background":" url('{{ asset('images/dental/periodontograma/img/periodontograma-oblicuas.png') }}') repeat-x center"});
                 $('#diente22-a').css("background","url('{{ asset('images/dental/periodontograma/img/tabla1/periodontograma-dientes-arriba-22.png') }}')");
                 $('#diente22-a').css("background-position","0 -2px");
                 $('#diente22-a').css("background-repeat","no-repeat");
-    
+
                 $('#diente22b-a').css("background","url('{{ asset('images/dental/periodontograma/img/tabla3/periodontograma-dientes-arriba-22b.png') }}')");
                 $('#diente22b-a').css("background-position","0 23px");
                 $('#diente22b-a').css("background-repeat","no-repeat");
-    
+
                 $('#f22').css("background","#FFFFFF");
                 $('#f22b-a').css("background","#FFFFFF");
                 $('#f22b-b').css("background","#FFFFFF");
-    
+
                 $("#f22desact").attr("id","f22");
                 $("#f22b-adesact").attr("id","f22b-a");
                 $("#f22b-bdesact").attr("id","f22b-b");
                 $('#d22').trigger('click');
             }
         );
-    
+
         //FURCA
         $('#f22').toggle(
             function () {
@@ -1079,7 +1084,7 @@
                 $('#furca22').css("background","url('{{ asset('images/dental/periodontograma/img/vacio.png') }}')");
             },
             function () {
-    
+
                 $(this).css({"background":"#FFFFFF url('{{ asset('images/dental/periodontograma/img/mediolleno.png') }}') no-repeat center"});
                 $('#furca22').css("background","url('{{ asset('images/dental/periodontograma/img/mediolleno.png') }}')");
             },
@@ -1092,7 +1097,7 @@
                 $('#furca22').css("background","none");
             }
         );
-    
+
         //FURCAS TABLA 3
         $('#f22b-a').toggle(
             function () {
@@ -1130,8 +1135,8 @@
                 $('#furca22-b').css("background","none");
             }
         );
-    
-    
-    
-    
+
+
+
+
     </script>

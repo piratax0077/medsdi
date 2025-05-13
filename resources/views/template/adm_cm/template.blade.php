@@ -142,6 +142,7 @@
     <script src="{{ asset('js/plugins/jquery.peity.min.js') }}"></script>
     <!-- validador de rut -->
     <script src="{{ asset('js/rut.min.js') }}"></script>
+
         <!-- file-upload Js -->
         <script src="{{ asset('js/plugins/dropzone/dropzone.js') }}"></script>
         <!-- <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script> -->
@@ -821,6 +822,7 @@
     --}}
     @yield('page-script')
     @yield('js-profesionales')
+    <script src="{{ asset('js/validaRut.js') }}?t={{ time() }}"></script>
 </body>
 
 </html>

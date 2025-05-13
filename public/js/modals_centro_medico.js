@@ -22,8 +22,6 @@ function asociar_profesional() {
 
 /*-Modals asistentes-*/
 
-
-
 function rol_permisos_asistente() {
     $('#rol_permisos_asistente_cm').modal('show');
 }
@@ -102,7 +100,7 @@ function editar_proveedor(id) {
         $('#editar_proveedor_cm form').attr('action', '/editarProveedor');
         // agregar method post
         $('#editar_proveedor_cm form').attr('method', 'post');
-        
+
         $('#editar_proveedor_cm').modal('show');
         $('#editar_proveedor_cm #nombre').val(proveedor.nombre);
         $('#editar_proveedor_cm #prov_prod_').val(proveedor.id_tipo_producto);

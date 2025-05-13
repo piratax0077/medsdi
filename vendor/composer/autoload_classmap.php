@@ -498,6 +498,7 @@ return array(
     'App\\Models\\PedidoMateriales' => $baseDir . '/app/Models/PedidoMateriales.php',
     'App\\Models\\Permission' => $baseDir . '/app/Models/Permission.php',
     'App\\Models\\Personas' => $baseDir . '/app/Models/Personas.php',
+    'App\\Models\\PiezaPeriodontograma' => $baseDir . '/app/Models/PiezaPeriodontograma.php',
     'App\\Models\\PiezasDentalCoronaProtesis' => $baseDir . '/app/Models/PiezasDentalCoronaProtesis.php',
     'App\\Models\\PlanTratamientoTerapiaSicologica' => $baseDir . '/app/Models/PlanTratamientoTerapiaSicologica.php',
     'App\\Models\\Premium' => $baseDir . '/app/Models/Premium.php',

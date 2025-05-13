@@ -64,6 +64,7 @@ use App\Models\PacienteExterno;
 use App\Models\PagosPresupuestoDental;
 use App\Models\PedidoInsumos;
 use App\Models\PedidoMateriales;
+use App\Models\PiezaPeriodontograma;
 use App\Models\PresupuestosDental;
 use App\Models\Prevision;
 use App\Models\Profesional;
@@ -3247,6 +3248,39 @@ class DentalController extends Controller
             'suma_pagado' => $monto_abonado - $resto_pago
         ];
     }
+
+    public function guardar_pieza_periodonto(Request $req)
+    {
+        // Extraer solo los datos del cuerpo
+        $datosCuerpo = $req->except(['id_ficha_atencion', 'pieza']);
+
+        // Buscar si ya existe la pieza
+        $pieza = PiezaPeriodontograma::where('id_ficha_atencion', $req->id_ficha_atencion)
+            ->where('pieza', $req->pieza)
+            ->first();
+
+        if ($pieza) {
+            // Actualizar el cuerpo existente
+            $pieza->update([
+                'cuerpo' => $datosCuerpo
+            ]);
+        } else {
+            // Crear una nueva si no existe
+            $pieza = PiezaPeriodontograma::create([
+                'id_ficha_atencion' => $req->id_ficha_atencion,
+                'pieza' => $req->pieza,
+                'cuerpo' => $datosCuerpo
+            ]);
+        }
+
+
+        return response()->json([
+            'success' => true,
+            'pieza_guardada' => $pieza
+        ]);
+    }
+
+
 
 
     public function registrar_pedidos_insumos(Request $req){

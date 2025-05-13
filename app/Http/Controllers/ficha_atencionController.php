@@ -73,6 +73,7 @@ use App\Models\PacienteContactoEmergencia;
 use App\Models\PagosPresupuestoDental;
 use App\Models\PedidoInsumos;
 use App\Models\PiezasDentalCoronaProtesis;
+use App\Models\PiezaPeriodontograma;
 use App\Models\Presentacion;
 use App\Models\PresupuestosDental;
 use App\Models\Prevision;
@@ -2439,8 +2440,11 @@ class ficha_atencionController extends Controller
             $url_tratamientos_autocomplete = "{{ route('dental.getDiagnosticoDental') }}";
         }
 
+        $piezas_periodonto = PiezaPeriodontograma::where('id_ficha_atencion', $id_ficha_atencion)->get();
+
         return view($ruta_blade)->with(
-            [   'todos' => $todos,
+            [   'piezas_periodonto' => $piezas_periodonto,
+                'todos' => $todos,
                 'placeholder_antecedentes' => $placeholder_antecedentes,
                 'placeholder_motivo_consulta' => $placeholder_motivo_consulta,
                 'placeholder_examen_fisico' => $placeholder_examen_fisico,

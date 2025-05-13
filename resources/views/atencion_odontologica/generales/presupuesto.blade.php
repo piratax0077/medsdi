@@ -2685,7 +2685,7 @@
                                 odonto.localizacion,
                                 odonto.diagnostico_tratamiento,
                                 formatoMoneda(odonto.valor),
-                                formatoMoneda(odonto.valor_descuento),
+                                formatoMoneda(0),
                                 formatoMoneda(odonto.nuevo_valor),
                                 ' <div class="circle '+clase+'"></div>',
                                 estado

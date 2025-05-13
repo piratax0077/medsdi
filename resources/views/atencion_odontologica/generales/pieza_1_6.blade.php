@@ -105,7 +105,11 @@
         }
 
     </style>
-
+    @php
+        $pieza16 = $piezas_periodonto->firstWhere('pieza', '16');
+        $cuerpo16 = $pieza16 ? $pieza16->cuerpo : [];
+        $pronostico16 = $cuerpo16['pronostico'] ?? '';
+    @endphp
     <div class="col-md-12 bg-white shadow-sm rounded mx-1">
         <div class="col-md-12">
             <div class="row">
@@ -188,12 +192,13 @@
                                         <div class="col-sm-12 col-md-6">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm">Pronóstico</label>
+
                                                 <select class="form-control form-control-xs" name="pi16" id="pi16">
-                                                    <option value="" selected></option>
-                                                    <option value="B">Buen pronóstico</option>
-                                                    <option value="D">Dudoso</option>
-                                                    <option value="M">Reservado</option>
-                                                    <option value="I">Mal pronóstico</option>
+                                                    <option value="" {{ $pronostico16 == '' ? 'selected' : '' }}></option>
+                                                    <option value="B" {{ $pronostico16 == 'B' ? 'selected' : '' }}>Buen pronóstico</option>
+                                                    <option value="D" {{ $pronostico16 == 'D' ? 'selected' : '' }}>Dudoso</option>
+                                                    <option value="M" {{ $pronostico16 == 'M' ? 'selected' : '' }}>Reservado</option>
+                                                    <option value="I" {{ $pronostico16 == 'I' ? 'selected' : '' }}>Mal pronóstico</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -252,7 +257,7 @@
                                             <h6 class="font-weight-bold text-c-blue pt-2">Plataforma</h6>
                                         </div>
                                         <div class="col-sm-12 col-md-8">
-                                            <input class="form-control form-control-xs" type="number" id="ae16" name="ae16" value="0" tabindex="33"/>
+                                            <input class="form-control form-control-xs" type="number" id="ae16" name="ae16" value="{{ $cuerpo16["plataforma"] ?? 0 }}" tabindex="33"/>
                                         </div>
                                     </div>
                                     <div class="form-row mb-2">
@@ -260,13 +265,13 @@
                                             <h6 class="font-weight-bold text-c-blue pt-2">Altura MG</h6>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="mg16-a" name="mg16-a" value="0" onchange="cargar16a();getDefectos();rangoNumeroMargen('mg16-a');cargar16a();" tabindex="49"/>
+                                            <input class="form-control form-control-xs" type="number" id="mg16-a" name="mg16-a" value="{{ $cuerpo16["vest_altura_mg_a"] ?? 0 }}" onchange="cargar16a();getDefectos();rangoNumeroMargen('mg16-a');cargar16a();" tabindex="49"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="mg16-b" name="mg16-b" value="0" onchange="cargar16a();getDefectos();rangoNumeroMargen('mg16-b');cargar16a();" tabindex="50"/>
+                                            <input class="form-control form-control-xs" type="number" id="mg16-b" name="mg16-b" value="{{ $cuerpo16["vest_altura_mg_b"] ?? 0 }}" onchange="cargar16a();getDefectos();rangoNumeroMargen('mg16-b');cargar16a();" tabindex="50"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="mg16-c" name="mg16-c" value="0" onchange="cargar16a();getDefectos();rangoNumeroMargen('mg16-c');cargar16a();" tabindex="50"/>
+                                            <input class="form-control form-control-xs" type="number" id="mg16-c" name="mg16-c" value="{{ $cuerpo16["vest_altura_mg_c"] ?? 0 }}" onchange="cargar16a();getDefectos();rangoNumeroMargen('mg16-c');cargar16a();" tabindex="50"/>
                                         </div>
                                     </div>
                                     <div class="form-row mb-2">
@@ -274,13 +279,13 @@
                                             <h6 class="font-weight-bold text-c-blue pt-2">P.Sondaje</h6>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="ps16-a" name="ps16-a" value="0" onchange="cargar16a();getDefectos();" tabindex="97"/>
+                                            <input class="form-control form-control-xs" type="number" id="ps16-a" name="ps16-a" value="{{ $cuerpo16["vest_psondaje_a"] ?? 0 }}" onchange="cargar16a();getDefectos();" tabindex="97"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="ps16-b" name="ps16-b" value="0" onchange="cargar16a();getDefectos();" tabindex="98"/>
+                                            <input class="form-control form-control-xs" type="number" id="ps16-b" name="ps16-b" value="{{ $cuerpo16["vest_psondaje_b"] ?? 0 }}" onchange="cargar16a();getDefectos();" tabindex="98"/>
                                         </div>
                                         <div class="col">
-                                            <input class="form-control form-control-xs" type="number" id="ps16-c" name="ps16-c" value="0" onchange="cargar16a();getDefectos();" tabindex="99"/>
+                                            <input class="form-control form-control-xs" type="number" id="ps16-c" name="ps16-c" value="{{ $cuerpo16["vest_psondaje_c"] ?? 0 }}" onchange="cargar16a();getDefectos();" tabindex="99"/>
                                         </div>
                                     </div>
                                 </form>
@@ -318,60 +323,6 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                               <!-- <tr>
-                                                    <td class="titulo">P. sondaje</td>
-                                                    <td class="borde">
-                                                        <input style="width: 30%;height: 25px; margin-left: 7px" type="number" id="ps16b-a" name="ps16b-a" value="0" onchange="cargar16b();getDefectos();" tabindex="145"/>
-                                                        <input style="width: 30%;height: 25px;" type="number" id="ps16b-b" name="ps16b-b" value="0" onchange="cargar16b();getDefectos();" tabindex="146"/>
-                                                        <input style="width: 30%;height: 25px;" type="number" id="ps16b-c" name="ps16b-c" value="0" onchange="cargar16b();getDefectos();" tabindex="147"/></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="titulo">Altura MG</td>
-                                                    <td class="borde">
-                                                        <div class="row">
-                                                            <div class="col-md-4 text-center">
-                                                                <input class="form-control form-control-sm"  style=" margin-left: 7px" type="number" id="mg16b-a" name="mg16b-a" value="0" onchange="cargar16b();getDefectos();rangoNumeroMargen('mg16b-a');cargar16b();" tabindex="193"/>
-                                                            </div>
-                                                            <div class="col-md-4 text-center">
-                                                                <input class="form-control form-control-sm"  type="number" id="mg16b-b" name="mg16b-b" value="0" onchange="cargar16b();getDefectos();rangoNumeroMargen('mg16b-b');cargar16b();" tabindex="194"/>
-                                                            </div>
-                                                            <div class="col-md-4 text-center">
-                                                                <input class="form-control form-control-sm" style=" margin-right: 7px" type="number" id="mg16b-c" name="mg16b-c" value="0" onchange="cargar16b();getDefectos();rangoNumeroMargen('mg16b-c');cargar16b();" tabindex="195"/>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="titulo">Sangrado </td>
-                                                    <td class="borde">
-                                                        <div style="width: 30%;height: 20px;margin-left: 7px" id="s16b-a"></div>
-                                                        <div style="width: 30%;height: 20px;" id="s16b-b" ></div>
-                                                        <div style="width: 30%;height: 20px;" id="s16b-c" ></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="titulo">Supuraci&oacute;n</td>
-                                                    <td class="borde">
-                                                        <div style="width: 30%;height: 20px;margin-left: 7px" id="su16b-a"></div>
-                                                        <div style="width: 30%;height: 20px;"id="su16b-b" ></div>
-                                                        <div style="width: 30%;height: 20px;" id="su16b-c" ></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="titulo">Higiene</td>
-                                                    <td class="borde">
-                                                        <div style="width: 30%;height: 20px;margin-left: 7px" id="p16b-a"></div>
-                                                        <div style="width: 30%;height: 20px;" id="p16b-b"></div>
-                                                        <div style="width: 30%;height: 20px;" id="p16b-c"></div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="titulo">Furca123</td>
-                                                    <td class="borde"style="text-align:center">
-                                                        <div style="width: 20%;height: 25px;margin-left: 7px" id="f16b-a">F-1</div><div style="width: 20%;height: 25px;margin-left: 7px" id="f16b-b">F-2</div>
-
-                                                    </td>
-                                                </tr>-->
 
                                         </tbody>
                                     </table>
@@ -384,13 +335,13 @@
                                         <h6 class="font-weight-bold text-c-blue pt-2">P.Sondaje</h6>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps16b-a" name="ps16b-a" value="0" onchange="cargar16b();getDefectos();" tabindex="145"/>
+                                        <input class="form-control form-control-xs" type="number" id="ps16b-a" name="ps16b-a" value="{{ $cuerpo16["pala_psondaje_a"] ?? 0 }}" onchange="cargar16b();getDefectos();" tabindex="145"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps16b-b" name="ps16b-a" value="0" onchange="cargar16b();getDefectos();" tabindex="146"/>
+                                        <input class="form-control form-control-xs" type="number" id="ps16b-b" name="ps16b-b" value="{{ $cuerpo16["pala_psondaje_b"] ?? 0 }}" onchange="cargar16b();getDefectos();" tabindex="146"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="ps16b-c" name="ps16b-a" value="0" onchange="cargar16b();getDefectos();" tabindex="147"//>
+                                        <input class="form-control form-control-xs" type="number" id="ps16b-c" name="ps16b-c" value="{{ $cuerpo16["pala_psondaje_c"] ?? 0 }}" onchange="cargar16b();getDefectos();" tabindex="147">
                                     </div>
                                 </div>
                                  <div class="form-row mb-2">
@@ -398,13 +349,13 @@
                                         <h6 class="font-weight-bold text-c-blue pt-2">Altura MG</h6>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg16b-a" name="mg16b-a" value="0" onchange="cargar16b();getDefectos();rangoNumeroMargen('mg16b-a');cargar16b();" tabindex="193"/>
+                                        <input class="form-control form-control-xs" type="number" id="mg16b-a" name="mg16b-a" value="{{ $cuerpo16["pala_altura_mg_a"] ?? 0 }}" onchange="cargar16b();getDefectos();rangoNumeroMargen('mg16b-a');cargar16b();" tabindex="193"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg16b-b" name="mg16b-b" value="0" onchange="cargar16b();getDefectos();rangoNumeroMargen('mg16b-b');cargar16b();" tabindex="194"/>
+                                        <input class="form-control form-control-xs" type="number" id="mg16b-b" name="mg16b-b" value="{{ $cuerpo16["pala_altura_mg_b"] ?? 0 }}" onchange="cargar16b();getDefectos();rangoNumeroMargen('mg16b-b');cargar16b();" tabindex="194"/>
                                     </div>
                                     <div class="col">
-                                        <input class="form-control form-control-xs" type="number" id="mg16b-c" name="mg16b-c" value="0" onchange="cargar16b();getDefectos();rangoNumeroMargen('mg16b-c');cargar16b();" tabindex="195"/>
+                                        <input class="form-control form-control-xs" type="number" id="mg16b-c" name="mg16b-c" value="{{ $cuerpo16["pala_altura_mg_c"] ?? 0 }}" onchange="cargar16b();getDefectos();rangoNumeroMargen('mg16b-c');cargar16b();" tabindex="195"/>
                                     </div>
                                 </div>
                                  <div class="form-row mb-2">
@@ -453,7 +404,7 @@
                                     <div class="col-sm-12 col-md-2">
                                             <h6 class="font-weight-bold text-c-blue pt-2">Furca 1</h6>
                                     </div>
-                                   
+
                                     <div class="col-sm-12 col-md-2">
                                         <div class="border rounded input-dental pointer w-100" id="f16b-a"></div>
                                     </div>
@@ -478,14 +429,15 @@
             <div class="card-body">
                 <div class="form-group" id="obs_pieza1.6">
                     <label class="floating-label-activo-sm">Obs. Pieza 1.6</label>
-                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 1.6" data-seccion="Eval_periimplantar"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_op_bruxismo" id="det_op_bruxismo" placeholder="Describa observaciones"></textarea>
+                    <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs Pieza 1.6" data-seccion="Eval_periimplantar"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_16" id="obs_16" placeholder="Describa observaciones">{{ $cuerpo16["observaciones"] ?? '' }}</textarea>
+
                 </div>
             </div>
         </div>
     </div>
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
         <div id="obs_pieza1.6">
-                <button type="button" class="btn btn-info text-center"><i class="feather icon-save"></i>  Guardar evaluación 1.6</button>
+                <button type="button" onclick="guardar_pieza('16')" class="btn btn-info text-center"><i class="feather icon-save"></i>  Guardar evaluación 1.6</button>
         </div>
     </div>
 

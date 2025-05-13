@@ -1191,6 +1191,7 @@ class ComposerStaticInitab2ba9081f0e7ddd64625a40fa8f06d0
         'App\\Models\\PedidoMateriales' => __DIR__ . '/../..' . '/app/Models/PedidoMateriales.php',
         'App\\Models\\Permission' => __DIR__ . '/../..' . '/app/Models/Permission.php',
         'App\\Models\\Personas' => __DIR__ . '/../..' . '/app/Models/Personas.php',
+        'App\\Models\\PiezaPeriodontograma' => __DIR__ . '/../..' . '/app/Models/PiezaPeriodontograma.php',
         'App\\Models\\PiezasDentalCoronaProtesis' => __DIR__ . '/../..' . '/app/Models/PiezasDentalCoronaProtesis.php',
         'App\\Models\\PlanTratamientoTerapiaSicologica' => __DIR__ . '/../..' . '/app/Models/PlanTratamientoTerapiaSicologica.php',
         'App\\Models\\Premium' => __DIR__ . '/../..' . '/app/Models/Premium.php',
