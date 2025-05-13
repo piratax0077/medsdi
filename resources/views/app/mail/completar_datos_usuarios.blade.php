@@ -67,7 +67,7 @@
                                             <td height="30"> </td>
                                             <tr>
                                                 <td>
-                                                    <a target="_blank" href="" style="color: #ffffff; text-decoration: none; font-size: 20px; ">
+                                                    <a target="_blank" href="{{ route('paciente.datos.cargar.prereserva',[md5(uniqid()), $detalle['body']['token_paciente'], md5(uniqid()) ]) }}" style="color: #ffffff; text-decoration: none; font-size: 20px; ">
                                                         <div style="background: rgb(98,37,136);
                                                                     background: -moz-linear-gradient(108deg, rgba(98,37,136,1) 0%, rgba(160,108,193,1) 100%);
                                                                     background: -webkit-linear-gradient(108deg, rgba(98,37,136,1) 0%, rgba(160,108,193,1) 100%);
