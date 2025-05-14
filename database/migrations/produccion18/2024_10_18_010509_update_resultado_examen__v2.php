@@ -16,7 +16,7 @@ class UpdateResultadoExamenV2 extends Migration
         Schema::table('resultado_examen', function (Blueprint $table)
         {
             $table->bigInteger('id_profesional')->nullable()->after('email');
-            $table->string('profesional_rut')->nullable()->after('id_profesional');
+            $table->string('profesiona_rut')->nullable()->after('id_profesional');
             $table->string('profesional_nombre')->nullable()->after('profesiona_rut');
         });
     }

@@ -182,10 +182,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
 
         /** Simple QrCode */
-        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
-
-        /** ZOOM */
-        Jubaer\Zoom\ZoomServiceProvider::class,
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
 
     ],
 
@@ -247,10 +244,8 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
 
         /** Simple QrCode */
-        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
 
-        /** ZOOM */
-        'Zoom' => Jubaer\Zoom\Facades\Zoom::class,
     ],
 
 ];

@@ -1,21 +1,21 @@
 {
     "pct": {
-        "normal": "pct_normal_5eaf8d5d91f44187caafaac673b87fcf"
+        "normal": "pct_normal_647ac4ff0e348763a270a7ee96d74cad"
     },
     "feather": {
-        "normal": "feather_normal_735f53b795589509d4022450776bd024"
+        "normal": "feather_normal_369184c2d5f206c2f9a23811943fb7d0"
     },
     "font awesome 5 brands": {
-        "normal": "font_awesome_5_brands_normal_e937b8175686a019581faef33dba256a"
+        "normal": "font_awesome_5_brands_normal_d732a102a3ade5a8726e3befcced4235"
     },
     "font awesome 5 free": {
-        "normal": "C:\\laragon_7\\www\\medichile_sistema\\storage\\fonts\/font_awesome_5_free_normal_4e9eafc28bf9a937fce89d379ef366a9",
-        "900": "font_awesome_5_free_900_a85a4d9ff7eae8623b712f4314a527cd"
+        "normal": "\/home\/medsdi\/public_html\/storage\/fonts\/font_awesome_5_free_normal_fa7ac209724b0248b0b9dfd7ad34ad06",
+        "900": "font_awesome_5_free_900_bbdcc29a2f5148eaad1a1b49d679b204"
     },
     "cryptocoins": {
-        "normal": "cryptocoins_normal_eb050d55bc840c77b4eeecf6fd3eed55"
+        "normal": "cryptocoins_normal_37d5db5334411a00bbd8b0966aafa7fd"
     },
     "poppins": {
-        "bold": "poppins_bold_329c316416a587646abfbbab0a84d600"
+        "bold": "poppins_bold_26c0988d8fe8f6e90e5d73f8930ae09e"
     }
 }

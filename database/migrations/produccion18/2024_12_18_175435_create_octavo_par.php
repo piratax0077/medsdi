@@ -15,17 +15,16 @@ class CreateOctavoPar extends Migration
     {
         Schema::create('octavo_par', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_otros_profesionales');
-            $table->integer('id_examen')->nullable();
+            $table->integer('id_examen');
             $table->integer('id_lugar_atencion');
-            $table->integer('id_institucion')->nullable();
+            $table->integer('id_institucion');
             $table->string('token', 100);
             $table->integer('id_profesional')->nullable();
             $table->integer('id_paciente')->nullable();
-            $table->dateTime('fecha_ex')->nullable();
+            $table->integer('fecha_ex')->nullable();
             $table->string('profesional')->nullable();
             $table->string('derivado_por')->nullable();
-            $table->string('nombre_pcte')->nullable();
+            $table->string('Nombre_pcte')->nullable();
             $table->integer('edad')->nullable();
             $table->string('rut')->nullable();
             $table->string('direccion')->nullable();
