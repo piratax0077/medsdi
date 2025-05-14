@@ -38,17 +38,6 @@ paciente@gmail.com 123
 * 5->Bono Web Pre-Pago
 * 6->Particular
 
-## ESTADOS DE BONO (estado_consulta)
-* 1->
-* 2->
-* 3->
-* 4->
-* 5->
-* 6->
-* 7->
-* 8-> Bono Genereado en CSV
-
-
 # ESTADO DE RENDICIONES 
 0. NUEVO
 1. EN PROCESO
@@ -180,4 +169,3 @@ http://medichile_sistema.test/Acceso_Profesional_NI/847e7255aac405a25068034bb473
 2. EXAMEN PENDIENTE POR TRANSCRIBIR
 3. EXAMEN TRANSCRITO
 
-# TIPO FICHA ATENCION PROCEDIMIENTOS CENTRO LABORATORIO

@@ -175,7 +175,7 @@ class VentaBonoController extends Controller
             $datos['estado'] = 1;
             $datos['msj'] = 'exito';
             $datos['registro'] = array(
-                'numero' => random_int(11111,999999),
+                'numero' => random_int(11111,99999),
                 'total' => 80000,
                 'bonificacion' => 60000,
                 'aporte_seguro' => 10000,

@@ -12,18 +12,12 @@ class CargaArchivoController extends Controller
         $datos = array();
 
         $request->validate([
-            'file' => 'required|file|mimes:pdf,xls,xlsx,csv|max:10240'
+            'file' => 'required|file|mimes:pdf,xls,xlsx,csv|max:4096'
         ]);
 
-        $files = $request->file('file');
-        if(!is_array($files))
-        {
-            $files = [$files];
-        }
-
-        $file_extension = $request->file('file')->extension();
-        $file_mime_type = $request->file('file')->getClientMimeType();
-        $original_file_name = $request->file('file')->getClientOriginalName();
+        $file_extension = $request->file->extension();
+        $file_mime_type = $request->file->getClientMimeType();
+        $original_file_name = $request->file->getClientOriginalName();
 
         // $archivo = $request->file->store('public/archivo/temp'); /** ok */
         $archivo = $request->file('file')->store('public/archivo/temp');  /** ok */

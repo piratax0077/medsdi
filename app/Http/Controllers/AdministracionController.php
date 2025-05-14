@@ -1,10 +1,10 @@
-<?php
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-
-class AdministracionController extends Controller
-{
-    //
-}
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class AdministracionController extends Controller
+{
+    //
+}

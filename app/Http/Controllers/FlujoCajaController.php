@@ -201,6 +201,14 @@ class FlujoCajaController extends Controller
                     ->where('rendicion','0')
                     ->get();
 
+        $fecha = Carbon::now();
+
+        $bonos_diarios = Bono::where($filtro)
+        ->with('Asistente')
+        ->where('numero_sesiones', 0)
+        ->whereDate('fecha_atencion', $fecha)
+        ->get();
+
                              // agregar el rut del paciente a los bonos rendidos por el id_cliente
         foreach ($bonos_rendidos as $key => $value) {
                 $paciente = Paciente::where('id',$value->id_paciente)->first();
@@ -267,8 +275,6 @@ class FlujoCajaController extends Controller
             $value->rut_profesional = $profesional->rut;
         }
 
-
-
         // return view('page.flujo_cajas.profesional.flujo_caja')->with([
         return view('app.profesional.flujo_caja')->with([
             'bono' => $bonos,
@@ -284,6 +290,7 @@ class FlujoCajaController extends Controller
             'bonos_otros' => $bonos_otros,
             'bonos_agrupados_convenio' => $bonosAgrupadosPorConvenio,
             'bonos_rendidos_generados' => $bonos_rendidos_generados,
+            'bonos_diarios' => $bonos_diarios
         ]);
 
     }
@@ -2473,6 +2480,73 @@ class FlujoCajaController extends Controller
             return $e->getMessage();
         }
 
+    }
+
+    public function dameBonosDiarios(Request $req){
+        $fecha = $req->fecha;
+        if(Auth::user()->hasRole('Profesional'))
+        {
+            $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+            $filtro[] = array('id_profesional',$profesional->id);
+            $filtro_rendicion[] = array('id_profesional_receptor',$profesional->id);
+
+            /** Buscar Asistentes de profesional y/o profesional */
+            $profesional_lugar_atencion = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->where('estado',1)->pluck('id_lugar_atencion')->toArray();
+            $lista_lugares_atencion_activos = LugarAtencion::whereIn('id', $profesional_lugar_atencion)->get();
+            $asistentes_lugar_atencion = AsistenteLugarAtencion::whereIn('id_lugar_atencion', $profesional_lugar_atencion)->where('estado', 1)->pluck('id_asistente')->toArray();
+            $lista_asistente = Asistente::whereIn('id', $asistentes_lugar_atencion)->get();
+        }
+        else if(Auth::user()->hasRole('Institucion'))
+        {
+            $institucion = Instituciones::where('id_usuario',Auth::user()->id)->first();
+            $filtro[] = array();
+            $filtro_rendicion[] = array();
+        }
+        else if(Auth::user()->hasRole('Servicio'))
+        {
+            $servicio = Servicios::where('id_usuario',Auth::user()->id)->first();
+            $filtro[] = array();
+            $filtro_rendicion[] = array();
+        }
+        else if(Auth::user()->hasRole('Adm_Institucion'))
+        {
+            $servicio = Servicios::where('id_usuario',Auth::user()->id)->first();
+            $filtro[] = array();
+            $filtro_rendicion[] = array();
+        }
+        else if(Auth::user()->hasRole('Adm_Servicio'))
+        {
+            $servicio = AdminInstServ::where('id_usuario',Auth::user()->id)->first();
+            $filtro[] = array();
+            $filtro_rendicion[] = array();
+        }
+        else if(Auth::user()->hasRole('Contador'))
+        {
+            // $servicio = Servicios::where('id_usuario',Auth::user()->id)->first();
+            $filtro[] = array();
+            $filtro_rendicion[] = array();
+        }
+
+        $bonos_diarios = Bono::where($filtro)
+
+        ->with('Convenio')
+         ->with('TipoBono')
+         ->with('Paciente')
+         ->with('Asistente')
+         ->where('numero_sesiones', 0)
+        ->whereDate('fecha_atencion', $fecha)
+        ->get();
+
+        // foreach($bonos_diarios as $b){
+        //     $paciente = paciente::find($b->id_paciente);
+        //     if($paciente) $b->paciente = $paciente;
+        //     $convenio = Prevision::where('id',$b->id_clase_bono)->first();
+        //     if($convenio) $b->convenio = $convenio;
+        //     $tipo_bono = TipoBono::where('id',$b->id_tipo_bono)->first();
+        //     if($tipo_bono) $b->tipo = $tipo_bono;
+        // }
+
+        return ['estado' => 1, 'bonos' => $bonos_diarios];
     }
 
     public function dataProfesionalRendiciones(Request $request)

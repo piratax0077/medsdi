@@ -48,8 +48,6 @@ class EscritorioDependientesController extends Controller
                                                     ->with('Tipodependencia')
                                                     ->where('id_responsable',$paciente->id)
                                                     ->get();
-                // echo json_encode($registros);
-                // die();
 
                 foreach ($registros as $key_2 => $value_2)
                 {
@@ -379,7 +377,7 @@ class EscritorioDependientesController extends Controller
                 $direccion->save();
 
                 $paciente_dep = new Paciente();
-                $paciente_dep->token = md5(uniqid());
+				$paciente_dep->token = md5(uniqid());
                 $paciente_dep->rut = $request->rut;
                 $paciente_dep->nombres = $request->nombres_paciente;
                 $paciente_dep->apellido_uno = $request->apellido_uno;

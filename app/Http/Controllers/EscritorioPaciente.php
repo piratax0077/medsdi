@@ -3103,8 +3103,8 @@ class EscritorioPaciente extends Controller
                     $datos['usuario']['msj'] = 'no encontrado';
                 }
             }
-
-            /** modificar horas medicas */
+			
+			/** modificar horas medicas */
             HoraMedica::where('id_paciente', $paciente->id)
                 ->get()
                 ->each(function ($hora) use ($paciente) {

@@ -761,7 +761,7 @@ class FichaAtencionOtrosProfController extends Controller
         }
     }
 
-    public function store_fono(Request $request)//listo - revisado
+	public function store_fono(Request $request)//listo - revisado
     {
 
         $campos_requeridos = 1;
@@ -2115,6 +2115,7 @@ class FichaAtencionOtrosProfController extends Controller
 
     public function store_fono_octa_par(Request $request)
     {
+
         $campos_requeridos = 1;
         $tipo_mensaje = 'success';
         $mensaje = '';
@@ -2160,13 +2161,12 @@ class FichaAtencionOtrosProfController extends Controller
                     $profesional_provisorio = ProfesionalProvisorioController::registrar( $request->solicitado_nombre_oct_par, $request->solicitado_apellido_oct_par, '', '', $request->derivado_por_rut, $request->solicitado_email_oct_par, $request->solicitado_telefono_oct_par, '', '', '', '', '', '', '', '', '', 1);
                 }
             }
-
             /** FICHA ATENCION  */
             $id_profesional = $request->id_profesional_fc;
             $id_paciente = $request->id_paciente_fc;
 
             $hora_medica = HoraMedica::where('id', $request->hora_medica)->first();
-            $procedimiento = ProcedimientosCentro::find($hora_medica->id_procedimiento);
+			$procedimiento = ProcedimientosCentro::find($hora_medica->id_procedimiento);
             $ficha = FichaOtrosProfesionales::where('id', $hora_medica->id_ficha_otros_prof)->first();
 
             $ficha->dg_ingreso = $procedimiento->nombre;
@@ -2213,10 +2213,9 @@ class FichaAtencionOtrosProfController extends Controller
 
             $ficha->archivo = $registro_archivo;
 
-
             if ($ficha->save())
             {
-                //  finalizar hora medica
+				//  finalizar hora medica
                 $hora_medica->id_estado = 6;
                 $mensaje_estado_hora_medica = '';
                 if (!$hora_medica->save()) {
@@ -2247,7 +2246,6 @@ class FichaAtencionOtrosProfController extends Controller
                         $ficha_octavo_par->id_derivado_por = $request->solicitado_id_profesional_oct_par;
                     else
                         $ficha_octavo_par->id_derivado_por = $profesional_provisorio['last_id'];
-
                     $ficha_octavo_par->derivado_por = $request->derivado_por;
                     $ficha_octavo_par->nombre_pcte = $request->nombre_pcte;
                     $ficha_octavo_par->edad = $request->edad;

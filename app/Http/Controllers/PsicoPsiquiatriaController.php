@@ -96,7 +96,6 @@ class PsicoPsiquiatriaController extends Controller
             /** REGISTRO FICHA OTROS TEST SICOLOGICOS  */
             if($ficha)
             {
-
                 $ficha_sicootrostest = new FichaSicoOtrosTest();
                 $ficha_sicootrostest->id_ficha_otros_prof = $ficha->id;
                 $ficha_sicootrostest->id_especialidad = $profesional->id_especialidad;

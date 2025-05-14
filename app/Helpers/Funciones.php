@@ -16,7 +16,7 @@ class Funciones{
 
     }
 
-    static public function userData($id_usuario)
+    public function userData($id_usuario)
     {
         /*
         * profesionales
@@ -169,7 +169,7 @@ class Funciones{
         }
     }
 
-	static public function generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo = 'confirmacion'){
+	static public function generatePermApp($id_user_create,$id_user_recept,$evento,$nombre,$apellido_p,$apellido_m,$lugar,$profesional,$tipo = 'confirmacion',$tipo_id){
         $datos = array();
         /** calculo de periodo de vigencia para aprobacion */
         $fecha = date('Y-m-d');
@@ -199,8 +199,8 @@ class Funciones{
         $log_users_devices->id_user_create = $id_user_create;
         $log_users_devices->id_user_recept = $id_user_recept;
         $log_users_devices->msg = json_encode($msj);
-
-        if($id_user_recept==6 || $id_user_recept==38)
+        
+		if($id_user_recept==6 || $id_user_recept==38)
         {
             $log_users_devices->estado = 1;
         }
@@ -229,7 +229,7 @@ class Funciones{
                 $log_users_devices->estado = 0;
             }
         }
-
+		
         $log_users_devices->fecha_ingreso = $fecha_actual;
         $log_users_devices->fecha_termino = $fecha_vencimiento;
         $log_users_devices->tipo = $tipo_id; // check sdi // ESTRUCTURA DE TEXTO

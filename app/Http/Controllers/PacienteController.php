@@ -90,7 +90,7 @@ class PacienteController extends Controller
         $direccion = new Direccion();
 
         $paciente = new Paciente();
-        $paciente->token = md5(uniqid());
+		$paciente->token = md5(uniqid());
         $paciente->rut = $request->rut_paciente_agregar;
 
         $paciente->nombres = $request->nombres_paciente_agregar;
@@ -1122,7 +1122,6 @@ class PacienteController extends Controller
     public function guardarControlCiclo($id_cc, $id_paciente){
         return $id_cc;
     }
-
 	static public function generarEmailPacienteTemporal($nombre, $apellido_uno, $apellido_dos)
     {
         // Limpieza de caracteres especiales y espacios

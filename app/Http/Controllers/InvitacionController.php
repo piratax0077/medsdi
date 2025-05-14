@@ -49,7 +49,7 @@ class InvitacionController extends Controller
      * @param [type] $id_user_invitado
      * @return array
      */
-    public static function store($id_tipo_usuario, $tipo_invitacion, $id_lugar_atencion, $rut, $nombre, $apellido_uno, $apellido_dos, $telefono, $email, $id_especialidad, $id_tipo_especialidad, $id_sub_tipo_especialidad, $informado, $procesado, $fecha_informado, $fecha_procesado, $fecha_aprobacion, $fecha_rechazo, $id_user_solicitud, $id_user_invitado)
+    public function store($id_tipo_usuario, $tipo_invitacion, $id_lugar_atencion, $rut, $nombre, $apellido_uno, $apellido_dos, $telefono, $email, $id_especialidad, $id_tipo_especialidad, $id_sub_tipo_especialidad, $informado, $procesado, $fecha_informado, $fecha_procesado, $fecha_aprobacion, $fecha_rechazo, $id_user_solicitud, $id_user_invitado)
     {
         $datos = array();
 

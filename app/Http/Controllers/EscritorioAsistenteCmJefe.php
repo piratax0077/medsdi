@@ -37,6 +37,7 @@ class EscritorioAsistenteCmJefe extends Controller
     {
         $array_data = array();
         $asistente = Asistente::where('id_usuario', Auth::user()->id)->first();
+
         $region = Region::all();
         $prevision = Prevision::all();
         if (!isset($asistente))
@@ -50,11 +51,13 @@ class EscritorioAsistenteCmJefe extends Controller
         $filtro[] = array('estado',2) ;// contrato activo
         $filtro[] = array('id_empleado',$asistente->id) ;
         $contrato = ContratoDependiente::where($filtro)->first();
+
         if($contrato)
         {
             $id_lugar_atencion = $contrato->id_lugar_atencion;
 
             $lugares_atencion = LugarAtencion::where('id', $id_lugar_atencion)->first();
+
             $profesionales = $lugares_atencion->profesionales()->get();
             $reg_confirmacion_hora = RegistroConfirmacionHoraAgenda::where('estado',1)->get();
             $tipo_bonos = TipoBono::where('estado', 1)->get();
@@ -437,7 +440,7 @@ class EscritorioAsistenteCmJefe extends Controller
         $direccion->numero_dir = $request->reserva_hora_numero_dir;
         $direccion->id_ciudad = $request->reserva_hora_comuna;
         $direccion->save();
-        $paciente->token = md5(uniqid());
+		$paciente->token = md5(uniqid());
         $paciente->rut = $request->rut_paciente_reserva;
         $paciente->nombres = $request->reserva_hora_nombre;
         $paciente->apellido_uno = $request->reserva_hora_primer_apellido;

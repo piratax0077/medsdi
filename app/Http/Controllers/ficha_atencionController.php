@@ -2937,6 +2937,17 @@ class ficha_atencionController extends Controller
 
     public function dameBocaCompletaGeneralTratamiento($id_paciente, $tipo_especialidad, $id_ficha_atencion = null){
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        if($profesional->id_tipo_especialidad == 16){
+        $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','tratamientos_implantologia.valor')
+
+        ->join('tratamientos_implantologia','examenes_boca_general.diagnostico_tratamiento','=','tratamientos_implantologia.descripcion')
+        ->where('localizacion','Boca completa')
+        ->where('examenes_boca_general.tipo_examen',1)
+        ->where('especialidad_examen','tratamiento')
+        ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.id_profesional', $profesional->id)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad);
+        }else{
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
 
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
@@ -2946,6 +2957,8 @@ class ficha_atencionController extends Controller
         ->where('examenes_boca_general.id_paciente',$id_paciente)
         ->where('examenes_boca_general.id_profesional', $profesional->id)
         ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad);
+        }
+
 
         if(!is_null($id_ficha_atencion)){
             $examenes->where('examenes_boca_general.id_ficha_atencion',$id_ficha_atencion);
@@ -2956,6 +2969,17 @@ class ficha_atencionController extends Controller
 
     public function dameBocaCompletaGeneralDiagnostico($id_paciente, $tipo_especialidad, $id_ficha_atencion = null){
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+        if($profesional->id_tipo_especialidad == 16){
+        $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','tratamientos_implantologia.valor')
+
+        ->join('tratamientos_implantologia','examenes_boca_general.diagnostico_tratamiento','=','tratamientos_implantologia.descripcion')
+        ->where('localizacion','Boca completa')
+        ->where('examenes_boca_general.tipo_examen',1)
+        ->where('especialidad_examen','diagnostico')
+        ->where('examenes_boca_general.id_paciente',$id_paciente)
+        ->where('examenes_boca_general.id_profesional', $profesional->id)
+        ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad);
+        }else{
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*','diagnosticos_dental.valor')
 
         ->join('diagnosticos_dental','examenes_boca_general.diagnostico_tratamiento','=','diagnosticos_dental.descripcion')
@@ -2965,6 +2989,8 @@ class ficha_atencionController extends Controller
         ->where('examenes_boca_general.id_paciente',$id_paciente)
         ->where('examenes_boca_general.id_profesional', $profesional->id)
         ->where('examenes_boca_general.tipo_especialidad',$tipo_especialidad);
+        }
+
 
         if(!is_null($id_ficha_atencion)){
             $examenes->where('examenes_boca_general.id_ficha_atencion',$id_ficha_atencion);
@@ -12609,7 +12635,7 @@ class ficha_atencionController extends Controller
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
         if($profesional->id_tipo_especialidad !== 16){
         $examenes = ExamenesBocaGeneral::select('examenes_boca_general.*', 'diagnosticos_dental.valor')
-            ->join('diagnosticos_dental', 'examenes_boca_general.diagnostico_tratamiento', '=', 'diagnosticos_dental.descripcion')
+            ->leftjoin('diagnosticos_dental', 'examenes_boca_general.diagnostico_tratamiento', '=', 'diagnosticos_dental.descripcion')
             ->where('examenes_boca_general.id_ficha_atencion', $id_ficha_atencion)
             ->get();
         }else{

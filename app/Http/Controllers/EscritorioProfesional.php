@@ -902,11 +902,11 @@ class EscritorioProfesional extends Controller
                 ->where('id_paciente', $f->Paciente()->first()->id)
                 ->distinct()
                 ->get(['id_lugar_atencion']);
-    
+
                 $lugares_atenm = LugarAtencion::whereIn('id', $ficha_atencion_paciente)->pluck('nombre')->toArray();
-    
+
                 $paciente_temp->lugares_atencion = $lugares_atenm;
-    
+
                 array_push($paciente, $paciente_temp);
             }
         }
@@ -1061,6 +1061,7 @@ class EscritorioProfesional extends Controller
 
     public function aplicar_convenio_tratamiento(Request $request)
     {
+
         $convenio = EmpresasConvenios::find($request->id);
 
         $porcentaje_descuento = intval($convenio->porcentaje);
@@ -1094,27 +1095,36 @@ class EscritorioProfesional extends Controller
 
         // Aplicamos el descuento a insumos
         foreach ($insumos as $i) {
-            $total_insumo = $i->cantidad * $i->valor;
-            $descuento = $total_insumo * ($porcentaje_descuento / 100);
-            $i->valor_descuento = $descuento;
-            $i->nuevo_valor = $total_insumo - $descuento;
-            $descuentos += $descuento;
+            if($i->presupuesto == 1){
+                $total_insumo = $i->cantidad * $i->valor;
+                $descuento = $total_insumo * ($porcentaje_descuento / 100);
+                $i->valor_descuento = $descuento;
+                $i->nuevo_valor = $total_insumo - $descuento;
+                $descuentos += $descuento;
+            }
+
         }
 
         // Aplicamos el descuento a odontograma
         foreach ($odontograma as $o) {
-            $descuento = $o->valor * ($porcentaje_descuento / 100);
-            $o->valor_descuento = $descuento;
-            $o->nuevo_valor = $o->valor - $descuento;
-            $descuentos += $descuento;
+            if($o->presupuesto == 1){
+                $descuento = $o->valor * ($porcentaje_descuento / 100);
+                $o->valor_descuento = $descuento;
+                $o->nuevo_valor = $o->valor - $descuento;
+                $descuentos += $descuento;
+            }
+
         }
 
         // Aplicamos el descuento a tratamientos generales
         foreach($todos as $o){
-            $descuento = $o->valor * ($porcentaje_descuento / 100);
-            $o->valor_descuento = $descuento;
-            $o->nuevo_valor = $o->valor - $descuento;
-            $descuentos += $descuento;
+            if($o->presupuesto == 1){
+                $descuento = $o->valor * ($porcentaje_descuento / 100);
+                $o->valor_descuento = $descuento;
+                $o->nuevo_valor = $o->valor - $descuento;
+                $descuentos += $descuento;
+            }
+
         }
 
 
@@ -3756,6 +3766,7 @@ class EscritorioProfesional extends Controller
 
         $examen = ExamenesDentalPieza::find($req->id);
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+
         if($examen->delete()){
             if($req->tipo == 'gral'){
                 $examenes = $this->dameExamenesPiezaDentalPieza($req->id_paciente , $profesional->id_tipo_especialidad);
@@ -3783,9 +3794,10 @@ class EscritorioProfesional extends Controller
 
             $paciente = Paciente::where('id', $req->id_paciente)->first();
             $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();
-            $url_tratamientos = $profesional->id_tipo_especialidad == 18
+            $url_tratamientos = $profesional->id_tipo_especialidad != 16
             ? route('dental.getDiagnosticoDental')
             : route('dental.getTratamientoImplantologia');
+
             $vista_presupuestos = view('atencion_odontologica.include.cuadrantes',[
                 'url_tratamientos' => $url_tratamientos,
                 'primer_cuadrante' => $primer_cuadrante,

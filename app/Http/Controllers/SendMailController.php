@@ -88,7 +88,6 @@ class SendMailController extends Controller
                 // 'resultado_examen_lab',
             );
 
-
             if(in_array($blade, $listaBlade))
             {
                 //envio correo a destino origen y copia oculta
