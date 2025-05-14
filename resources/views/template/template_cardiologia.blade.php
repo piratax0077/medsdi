@@ -74,7 +74,7 @@
     @yield('css-btn-autorizacion')
 </head>
 <body>
-    @include('template.header')
+    @include('template.profesional.header')
     @include('template.menuProfesional')
     @yield('Content')
 

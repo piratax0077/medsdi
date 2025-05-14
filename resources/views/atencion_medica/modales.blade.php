@@ -63,7 +63,7 @@
 				@endif
 
                 @if($profesional->SubTipoEspecialidad()->first()->nombre == 'Gastroenterología' )
-					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_cir_dalta" aria-expanded="false" aria-controls="bs-canvas-right" title="Gastroenterología" data-placement="left"></a>
+					<a id="boton_3" class="fas fa-user-ninja fa-2x" data-toggle="canvas" data-target="#formularios_gastroenterologia" aria-expanded="false" aria-controls="bs-canvas-right" title="Gastroenterología" data-placement="left"></a>
 				@endif
 
 				@if($profesional->SubTipoEspecialidad()->first()->nombre == 'Cirugía Coloproctológica' )

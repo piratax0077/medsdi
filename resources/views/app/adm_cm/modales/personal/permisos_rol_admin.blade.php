@@ -2,19 +2,19 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Permisos para Asistentes Agregar/Modificar/Eliminar </h5>
+                <h5 class="modal-title text-white">Permisos para Asistentes <br>(Agregar / Modificar / Eliminar) </h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 <input type="hidden" name="permisos_rol_id" id="permisos_rol_id" value="">
             </div>
             <div class="modal-body">
                 <div class="row" >
                     @if(isset($lista_tipo_administrativo))
-                        @foreach ($lista_tipo_administrativo as $tipo_admin)
+                        @foreach ($lista_tipo_administrativo as $tipo_asistente)
                             <div class="col-md-12">
                                 <div class="custom-control custom-switch">
-                                    {{-- <input type="checkbox" class="custom-control-input" data-rol="{{ str_replace([' ', 'Publico', 'Consulta','Administrativo', 'ManejodeAgenda'], ['', 'Caja','','Adm', 'ManejoAgenda'], $tipo_admin->nombre) }}" id="rol_permiso_{{ $tipo_admin->id }}" onchange="modificar_rol({{ $tipo_admin->id }}, 'Asistente', 'rol_permiso_{{ $tipo_admin->id }}' )"> --}}
-                                    <input type="checkbox" class="custom-control-input" data-rol="{{ str_replace([' ', 'Publico', 'Consulta','Administrativo', 'ManejodeAgenda'], ['', 'Caja','','Adm', 'ManejoAgenda'], $tipo_admin->nombres) }}" data-id="{{ $tipo_admin->id }}" data-id_tipo_movimiento="Admin" id="rol_permiso_admin{{ $tipo_admin->id }}" onchange="confirmar_modificar_rol({{ $tipo_admin->id }}, 'Asistente', 'rol_permiso_admin{{ $tipo_admin->id }}' )">
-                                    <label class="custom-control-label" for="rol_permiso_admin{{ $tipo_admin->id }}">{{ $tipo_admin->nombres }}</label>
+                                    {{-- <input type="checkbox" class="custom-control-input" data-rol="{{ str_replace([' ', 'Publico', 'Consulta','Administrativo', 'ManejodeAgenda'], ['', 'Caja','','Adm', 'ManejoAgenda'], $tipo_asistente->nombre) }}" id="rol_permiso_{{ $tipo_asistente->id }}" onchange="modificar_rol({{ $tipo_asistente->id }}, 'Asistente', 'rol_permiso_{{ $tipo_asistente->id }}' )"> --}}
+                                    <input type="checkbox" class="custom-control-input" data-rol="{{ str_replace([' ', 'Publico', 'Consulta','Administrativo', 'ManejodeAgenda'], ['', 'Caja','','Adm', 'ManejoAgenda'], $tipo_asistente->nombres) }}" data-id="{{ $tipo_asistente->id }}" data-id_tipo_movimiento="Admin" id="rol_permiso_{{ $tipo_asistente->id }}" onchange="confirmar_modificar_rol({{ $tipo_asistente->id }}, 'Asistente', 'rol_permiso_{{ $tipo_asistente->id }}' )">
+                                    <label class="custom-control-label" for="rol_permiso_{{ $tipo_asistente->id }}">{{ $tipo_asistente->nombres }}</label>
                                 </div>
 
                             </div>
@@ -140,7 +140,6 @@
             },
         })
         .done(function(data) {
-            console.log(data);
             if (data != null) {
                 if(data.estado == 1)
                 {

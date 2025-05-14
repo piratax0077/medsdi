@@ -1,4 +1,5 @@
 @extends('template.template_bronco')
+
 @section('Content')
     <!--Container Completo-->
     <div class="pcoded-main-container">
@@ -7,10 +8,10 @@
             <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center pb-2">
-                        <div class="col-md-6">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="page-header-title">
-                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN FICHA BRONCOPULMONAR</strong></h5>
-                                <p class="font-italic mt-0 mb-0 text-white">
+                            <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN BRONCOPULMONAR</strong></h5>
+                                <p class="font-weight-bold mt-0 mb-0 text-white float-md-right">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                         $fecha = \Carbon\Carbon::parse(now());
@@ -19,9 +20,6 @@
                                     @endphp
                                     {{ $fecha }}
                                 </p>
-                                {{--  <p class="font-italic mt-0 mb-0 text-white">
-                                    <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
-                                </p>  --}}
                             </div>
                         </div>
                     </div>
@@ -109,12 +107,13 @@
         <!-- modales -->
         @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_broncoscopia')
         @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_espirometria')
+         @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_rx_bronco')
         @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
         @include('general.hospitalizacion.modals.in_solic_pabellon')
 
     </div>
     <!--Cierre: Container Completo-->
-	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
+	{{--  @include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")  --}}
 	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
 @endsection
 

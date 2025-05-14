@@ -63,7 +63,7 @@
             <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 mb-3">
                 <div class="card h-100 pb-0 mb-3">
                     <div class="card-header text-center bg-c-info">
-                        <h5 class="text-white d-inline text-center" style="font-size: 1.2rem;">Mis horas médicas del día</h5>
+                        <h4 class="text-white text-center f-20 pt-2">Mis horas médicas</h4>
                     </div>
                     <div class="card-body pt-4 pb-0">
                         <div class="dt-responsive table-responsive" style="height:247px;">

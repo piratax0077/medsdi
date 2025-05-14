@@ -152,7 +152,7 @@
                                                 <label  class="cr">Indefinido</label>
                                                 <input type="hidden" id="add_cont_indefinido" name="add_cont_indefinido" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
-                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_contrato_indef', 'add_cont_indefinido', 'add_empleado_fecha_termino');" id="add_empleado_check_contrato_indef" name="add_empleado_check_contrato_indef" value="">
+                                                    <input type="checkbox" onchange="activar_check('add_empleado_check_contrato_indef', 'add_cont_indefinido', ' ');" id="add_empleado_check_contrato_indef" name="add_empleado_check_contrato_indef" value="">
                                                     <label for="add_empleado_check_contrato_indef" class="cr"></label>
                                                 </div>
                                             </div>

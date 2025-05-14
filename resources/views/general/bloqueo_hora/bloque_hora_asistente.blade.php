@@ -620,10 +620,9 @@
 
     function carga_tipos_agendas(tipos_agendas)
     {
-        console.log('carga_tipos_agendas');
         console.log(tipos_agendas);
         $("#bloqueo_agenda").html('');
-        arrayTipoAgenda = ['', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes','Modular'];
+        arrayTipoAgenda = ['', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes'];
         $.each(tipos_agendas, function (key, value)
         {
             $("#bloqueo_agenda").append('<option value="'+value+'">'+arrayTipoAgenda[value]+'</option>');

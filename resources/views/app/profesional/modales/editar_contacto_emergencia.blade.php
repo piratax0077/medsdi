@@ -107,7 +107,7 @@
                                      <option>Primo/a</option>
                                      <option>Amigo/a</option>
                                      <option>Otro</option>
-                                     <!--Si se selecciona "otro"
+                                      <!--Si se selecciona "otro"
                                     deberia abrirse un input text para que el usuario escriba
                                     el parentezco-->
                                  </select>

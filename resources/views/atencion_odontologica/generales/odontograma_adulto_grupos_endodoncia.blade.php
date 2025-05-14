@@ -4,31 +4,37 @@
         display: flex;
         flex-direction: column;
         gap: 15px;
-        padding: 20px;
-    }
+        margin-bottom:20px;
+        margin-top:10px;
+
+}
+
 
     .fila {
         display: grid;
         grid-template-columns: repeat(8, 1fr);
         gap: 5px;
-    }
+}
 
     .pieza_endodoncia {
-        border: 2px solid #007bff;
-        background-color: #e3f2fd;
+        border: 1px solid #749ef1;
+        background-color: #ddecff;
         text-align: center;
-        padding: 10px;
+        padding: 3px 5px;
         cursor: pointer;
-        border-radius: 4px;
-        transition: background 0.3s ease;
-    }
+        border-radius: 13px;
+        transition: 0.1s ease;
+        font-size:0.95rem;
+        color: #2353b5;
+        font-weight: 600;
+}
+
 
     .pieza_endodoncia.seleccionada {
-        background-color: #28a745;
+        background-color: #a366d1;
         color: #fff;
-        border-color: #218838;
-    }
-
+        border-color: #601886;
+}
 
     </style>
     <div class="odontograma">

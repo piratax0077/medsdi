@@ -78,7 +78,8 @@
 		{{-- no mostrar nada  --}}
 	@endif
 
-        <!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION FMU) -->
+<!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION FMU) -->
+
 
         @if (Auth::user()->id == 3)
             @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)

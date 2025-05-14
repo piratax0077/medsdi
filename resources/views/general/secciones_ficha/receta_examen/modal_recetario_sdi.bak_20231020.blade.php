@@ -642,50 +642,51 @@
             });
     };
 
-    function getFrecuencia_sdi() {
 
-let id_dosis = $('#dosis_medicamento_ficha_dental').val();
-//console.log(dosis);
+    function getFrecuencia_sdi()
+    {
 
-let url = "{{ route('frecuencia.get') }}";
-$.ajax({
+        let id_dosis = $('#dosis_medicamento_ficha_dental').val();
+        //console.log(dosis);
 
-        url: url,
-        type: "get",
-        data: {
+        let url = "{{ route('dental.getFrecuencia') }}";
+        $.ajax({
 
-            id_dosis: id_dosis,
+                url: url,
+                type: "get",
+                data: {
 
-        },
-    })
-    .done(function(data) {
-        console.log(data)
+                    id_dosis: id_dosis,
 
-        if (data != null) {
-
-            data = JSON.parse(data);
-            console.log(data);
-            let dosis = $('#frecuencia_medicamento_ficha_dental');
-
-            dosis.find('option').remove();
-            dosis.append('<option value="1000">Por una vez</option>');
-            $(data).each(function(i, v) { // indice, valor
-                dosis.append('<option value="' + v.id + '">' + v.indic +
-                    '</option>');
+                },
             })
+            .done(function(data) {
+                console.log(data)
 
-        } else {
+                if (data != null) {
+
+                    data = JSON.parse(data);
+                    console.log(data)
+                    let dosis = $('#frecuencia_medicamento_ficha_dental');
+
+                    dosis.find('option').remove();
+                    dosis.append('<option value="0">Seleccione</option>');
+                    $(data).each(function(i, v) { // indice, valor
+                        dosis.append('<option value="' + v.id + '">' + v.indic +
+                            '</option>');
+                    })
+
+                } else {
 
 
 
-        }
+                }
 
-    })
-    .fail(function(jqXHR, ajaxOptions, thrownError) {
-        console.log(jqXHR, ajaxOptions, thrownError)
-    });
-};
-
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+            });
+    };
 
     function getCantComp_sdi()
     {

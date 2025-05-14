@@ -1,4 +1,4 @@
-<div class="tab-pane fade" id="ns" role="tabpanel" aria-labelledby="ns-tab">
+<div class="tab-pane fade show" id="ns" role="tabpanel" aria-labelledby="ns-tab">
     <div class="row">
         <div class="col-sm-12 col-md-12 ">
          <div class="card">
@@ -42,7 +42,7 @@
                                 @if ($loop->first)
                                     <div class="tab-pane fade show active" id="{{ $cns_temp->alias }}" role="tabpanel" aria-labelledby="{{ $cns_temp->alias }}-tab">
                                 @else
-                                    <div class="tab-pane fade" id="{{ $cns_temp->alias }}" role="tabpanel" aria-labelledby="{{ $cns_temp->alias }}-tab">
+                                    <div class="tab-pane fade show " id="{{ $cns_temp->alias }}" role="tabpanel" aria-labelledby="{{ $cns_temp->alias }}-tab">
                                 @endif
                                         <input type="hidden" name="{{ $cns_temp->alias }}_id_cns_tipo" id="{{ $cns_temp->alias }}_id_cns_tipo" value="{{ $cns_temp->CnsTipo->id }}">
                                         <input type="hidden" name="{{ $cns_temp->alias }}_id_cns_template" id="{{ $cns_temp->alias }}_id_cns_template" value="{{ $cns_temp->id }}">

@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white">Constancia GES (Artículo 24 Ley 19.966)</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close"  data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -42,6 +42,7 @@
                                             <h6 class="t-aten-dos">Información del Prestador</h6>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            @if(isset($lugar_atencion))
                                             <ul>
                                                 <li><strong>Nombre Institución:  </strong><span>{{ $lugar_atencion->nombre }}</span>
                                                     <input type="hidden" name="nombre_institucion_ficha_ges" id="nombre_institucion_ficha_ges" value="{{ $lugar_atencion->nombre }}"></li>
@@ -52,6 +53,7 @@
                                                     <input type="hidden" name="direccion_institucion_ficha_ges" id="direccion_institucion_ficha_ges" value="{{ $lugar_atencion->Direccion()->first()->direccion .' ' .$lugar_atencion->Direccion()->first()->numero_dir .', Región de ' .$lugar_atencion->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre .' ' .$lugar_atencion->Direccion()->first()->Ciudad()->first()->nombre }}">
                                                 </li>
                                             </ul>
+                                            @endif
                                         </div>
 
                                     </div>
@@ -74,16 +76,25 @@
                                                 <li>
                                                     <strong>Previsión:  </strong>
                                                     <span>
+                                                        @if(isset($prevision))
                                                         @foreach ($prevision as $previ)
                                                             @if ($previ->id == $paciente->Prevision()->first()->id)
                                                                 {{ $previ->nombre }}
                                                                 <input type="hidden" name="prevision_ficha_ges" id="prevision_ficha_ges" value="{{ $paciente->Prevision()->first()->id }}">
                                                             @endif
                                                         @endforeach
+                                                        @endif
                                                     </span>
                                                 </li>
-                                                <li><strong>Dirección:  </strong><span>{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}</span>
-                                                    <input type="hidden" name="direccion_paciente" id="direccion_paciente" value="{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}" ></li>
+                                                <li>
+													<strong>Dirección:  </strong>
+													@if( $paciente->id_direccion )
+														<span>{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}</span>
+														<input type="hidden" name="direccion_paciente" id="direccion_paciente" value="{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}" ></li>
+													@else
+														<span></span>
+														<input type="hidden" name="direccion_paciente" id="direccion_paciente" value="" ></li>
+													@endif
                                                 <li><strong>Correo electrónico:  </strong><span>{{ $paciente->email }}</span>
                                                     <input type="hidden" name="email_paciente" value="{{ $paciente->email }}" id="email_paciente" >
                                                 </li>

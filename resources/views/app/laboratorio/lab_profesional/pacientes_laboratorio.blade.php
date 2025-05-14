@@ -37,35 +37,37 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-6 col-md-12">
-                                    <table id="tabla_pacientes_laboratorio" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center align-middle">Paciente</th>
-                                            <th class="text-center align-middle">Nacimiento</th>
-                                            <th class="text-center align-middle">Sexo</th>
-                                            <th class="text-center align-middle">Contacto</th>
-                                            <th class="text-center align-middle">Convenio</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="text-center align-middle">Pepita Vargas Díaz<br>
-                                            22.234.455-0</td>
-                                            <td class="text-center align-middle">24/01/1986</td>
-                                            <td class="text-center align-middle">Femenino</td>
-                                            <td class="text-center align-middle">Las Cruces #124 Viña del Mar, Chile<br>paciente@gmail.com<br>+569 4324343</td>
-                                            <td class="text-center align-middle">Colmena</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center align-middle">Alonso Peña Díaz<br>
-                                            18.564.455-0</td>
-                                            <td class="text-center align-middle">24/01/1986</td>
-                                            <td class="text-center align-middle">Masculino</td>
-                                            <td class="text-center align-middle">Villarrica #14 Valparaíso, Chile<br>paciente@gmail.com<br>+569 4324343</td>
-                                            <td class="text-center align-middle">Colmena</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                    <div class="table-responsive">
+                                        <table id="tabla_pacientes_laboratorio" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center align-middle">Paciente</th>
+                                                <th class="text-center align-middle">Nacimiento</th>
+                                                <th class="text-center align-middle">Sexo</th>
+                                                <th class="text-center align-middle">Contacto</th>
+                                                <th class="text-center align-middle">Convenio</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-center align-middle">Pepita Vargas Díaz<br>
+                                                22.234.455-0</td>
+                                                <td class="text-center align-middle">24/01/1986</td>
+                                                <td class="text-center align-middle">Femenino</td>
+                                                <td class="text-center align-middle">Las Cruces #124 Viña del Mar, Chile<br>paciente@gmail.com<br>+569 4324343</td>
+                                                <td class="text-center align-middle">Colmena</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center align-middle">Alonso Peña Díaz<br>
+                                                18.564.455-0</td>
+                                                <td class="text-center align-middle">24/01/1986</td>
+                                                <td class="text-center align-middle">Masculino</td>
+                                                <td class="text-center align-middle">Villarrica #14 Valparaíso, Chile<br>paciente@gmail.com<br>+569 4324343</td>
+                                                <td class="text-center align-middle">Colmena</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

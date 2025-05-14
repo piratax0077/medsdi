@@ -1,94 +1,104 @@
 <div class="form-row">
-    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-        <div class="form-group">
-            <label class="floating-label-activo-sm">Pieza N°</label>
-            <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp_end{{ $counter }}" id="n_pieza_ex_pp_end{{ $counter }}">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+        <div class="card-informacion">
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                        <label class="floating-label-activo-sm">Pieza N°</label>
+                        <input type="text" class="form-control form-control-sm" name="n_pieza_ex_pp_end{{ $counter }}" id="n_pieza_ex_pp_end{{ $counter }}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-2">
+                        <div class="form-group">
+                            <label class="floating-label-activo-sm">Resp.Calor</label>
+                            <select id="sel_endo_resp_calor_end{{ $counter }}" name="sel_endo_resp_calor_end{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                                <option><span>N/R </span> No realizada</option>
+                                <option><span>↑ </span> Aumentado</option>
+                                <option><span>↓ </span> Disminuido</option>
+                                <option><span>N </span> Normal</a></option>
+                                <option><span>(-) </span> No responde</a></option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-2">
+                        <div class="form-group">
+                            <label class="floating-label-activo-sm">Resp.Frio</label>
+                            <select id="sel_endo_resp_frio_end{{ $counter }}" name="sel_endo_resp_frio_end{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                                <option><span>N/R </span> No realizada</option>
+                                <option><span>↑ </span> Aumentado</option>
+                                <option><span>↓ </span> Disminuido</option>
+                                <option><span>N </span> Normal</a></option>
+                                <option><span>(-) </span> No responde</a></option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-2">
+                        <div class="form-group">
+                            <label class="floating-label-activo-sm">Eléctrico</label>
+                            <select id="sel_endo_resp_elect_end{{ $counter }}" name="sel_endo_resp_elect_end{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                                <option><span>N/R </span> No realizada</option>
+                                <option><span>↑ </span> Aumentado</option>
+                                <option><span>↓ </span> Disminuido</option>
+                                <option><span>N </span> Normal</a></option>
+                                <option><span>(-) </span> No responde</a></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-2">
+                        <div class="form-group">
+                            <label class="floating-label-activo-sm">Percusión</label>
+                            <select id="sel_endo_resp_perc_end{{ $counter }}" name="sel_endo_resp_perc_end{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                                <option><span>N/R </span> No realizada</option>
+                                <option><span>↑ </span> Aumentado</option>
+                                <option><span>↓ </span> Disminuido</option>
+                                <option><span>N </span> Normal</a></option>
+                                <option><span>(-) </span> No responde</a></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-2">
+                        <div class="form-group">
+                            <label class="floating-label-activo-sm">Exploración</label>
+                            <select id="sel_endo_resp_expl_end{{ $counter }}" name="sel_endo_resp_expl_end{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                                <option><span>N/R </span> No realizada</option>
+                                <option><span>↑ </span> Aumentado</option>
+                                <option><span>↓ </span> Disminuido</option>
+                                <option><span>N </span> Normal</a></option>
+                                <option><span>(-) </span> No responde</a></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-2">
+                        <div class="form-group">
+                            <label class="floating-label-activo-sm">Cavitaria</label>
+                            <select id="sel_endo_cavitaria_end{{ $counter }}" name="sel_endo_cavitaria_end{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
+                                <option><span>N/R </span> No realizada</option>
+                                <option><span>↑ </span> Aumentado</option>
+                                <option><span>↓ </span> Disminuido</option>
+                                <option><span>N </span> Normal</a></option>
+                                <option><span>(-) </span> No responde</a></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+            @if($tipo_examen == 'endo')
+                    <button type="button" class="btn btn-icon btn-danger" onclick="ocultar_pieza_examen_pieza_end()"><i class="feather icon-x"></i></button>
+                    <button type="button" class="btn btn-icon btn-info" onclick="guardar_pieza_examen_pieza_end_({{ $counter }})"><i class="feather icon-save"></i></button>
+                    @else
+                    <button type="button" class="btn btn-icon btn-danger" onclick="ocultar_pieza_examen_pieza_odontop()"><i class="feather icon-x"></i></button>
+                    <button type="button" class="btn btn-icon btn-info" onclick="guardar_pieza_examen_pieza_odontop({{ $counter }})"><i class="feather icon-save"></i></button>
+                    @endif
+            </div>
         </div>
     </div>
 </div>
-<div class="form-row">
-    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-        <div class="form-group">
-            <label class="floating-label-activo-sm">Resp.Calor</label>
-            <select id="sel_endo_resp_calor_end{{ $counter }}" name="sel_endo_resp_calor_end{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                <option><span>N/R </span> No realizada</option>
-                <option><span>↑ </span> Aumentado</option>
-                <option><span>↓ </span> Disminuido</option>
-                <option><span>N </span> Normal</a></option>
-                <option><span>(-) </span> No responde</a></option>
-            </select>
-        </div>
 
-    </div>
-    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-        <div class="form-group">
-            <label class="floating-label-activo-sm">Resp.Frio</label>
-            <select id="sel_endo_resp_frio_end{{ $counter }}" name="sel_endo_resp_frio_end{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                <option><span>N/R </span> No realizada</option>
-                <option><span>↑ </span> Aumentado</option>
-                <option><span>↓ </span> Disminuido</option>
-                <option><span>N </span> Normal</a></option>
-                <option><span>(-) </span> No responde</a></option>
-            </select>
-        </div>
 
-    </div>
-    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-        <div class="form-group">
-            <label class="floating-label-activo-sm">Eléctrico</label>
-            <select id="sel_endo_resp_elect_end{{ $counter }}" name="sel_endo_resp_elect_end{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                <option><span>N/R </span> No realizada</option>
-                <option><span>↑ </span> Aumentado</option>
-                <option><span>↓ </span> Disminuido</option>
-                <option><span>N </span> Normal</a></option>
-                <option><span>(-) </span> No responde</a></option>
-            </select>
-        </div>
-    </div>
-    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-        <div class="form-group">
-            <label class="floating-label-activo-sm">Percusión</label>
-            <select id="sel_endo_resp_perc_end{{ $counter }}" name="sel_endo_resp_perc_end{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                <option><span>N/R </span> No realizada</option>
-                <option><span>↑ </span> Aumentado</option>
-                <option><span>↓ </span> Disminuido</option>
-                <option><span>N </span> Normal</a></option>
-                <option><span>(-) </span> No responde</a></option>
-            </select>
-        </div>
-    </div>
-    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-        <div class="form-group">
-            <label class="floating-label-activo-sm">Exploración</label>
-            <select id="sel_endo_resp_expl_end{{ $counter }}" name="sel_endo_resp_expl_end{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                <option><span>N/R </span> No realizada</option>
-                <option><span>↑ </span> Aumentado</option>
-                <option><span>↓ </span> Disminuido</option>
-                <option><span>N </span> Normal</a></option>
-                <option><span>(-) </span> No responde</a></option>
-            </select>
-        </div>
-    </div>
-    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-        <div class="form-group">
-            <label class="floating-label-activo-sm">Cavitaria</label>
-            <select id="sel_endo_cavitaria_end{{ $counter }}" name="sel_endo_cavitaria_end{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
-                <option><span>N/R </span> No realizada</option>
-                <option><span>↑ </span> Aumentado</option>
-                <option><span>↓ </span> Disminuido</option>
-                <option><span>N </span> Normal</a></option>
-                <option><span>(-) </span> No responde</a></option>
-            </select>
-        </div>
-    </div>
-    @if($tipo_examen == 'endo')
-    <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_examen_pieza_end()">X</button>
-    <button type="button" class="btn btn-icon btn-primary-light-c" onclick="guardar_pieza_examen_pieza_end_({{ $counter }})"><i class="fas fa-save"></i></button>
-    @else
-    <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_examen_pieza_odontop()">X</button>
-    <button type="button" class="btn btn-icon btn-primary-light-c" onclick="guardar_pieza_examen_pieza_odontop({{ $counter }})"><i class="fas fa-save"></i></button>
-    @endif
-</div>
 <input type="hidden" name="tipo_examen" id="tipo_examen" value="{{ $tipo_examen }}">
 
 <script>
@@ -423,6 +433,11 @@
                     $('#nueva_pieza_dental_endo').empty();
                     $('#contenedor_examenes_grupos_dentales').empty();
                     $('#contenedor_examenes_grupos_dentales').append(resp.vista_presupuestos);
+                    swal({
+                        title:'Exito',
+                        text:'Se ha guardado la pieza.',
+                        icon:'success'
+                    });
                 }
             },
             error: function(error){

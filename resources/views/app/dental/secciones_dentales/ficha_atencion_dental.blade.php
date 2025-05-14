@@ -397,7 +397,7 @@
                                             <div class="diente_adulto" id="t18">
                                                 <img src="{{ asset('images/dental/dientes/d18.png') }}"
                                                     class="wid-40 img-fluid" role="button"
-                                                    onclick="info_odontograma('1.8');">
+                                                    onclick="info_odontograma(1-8);">
                                             </div>
                                             <label data-ndiente="18" class="nav-label-dent">1.8</label>
                                         </td>
@@ -405,7 +405,7 @@
                                             <div class="diente_adulto px-0 py-0" id="t17">
                                                 <img src="{{ asset('images/dental/dientes/d17.png') }}"
                                                     class="wid-40 img-fluid" role="button"
-                                                    onclick="info_odontograma('1.7');">
+                                                    onclick="info_odontograma(1-7);">
                                             </div>
                                             <label data-ndiente="17" class="nav-label-dent">1.7</label>
                                         </td>
@@ -413,7 +413,7 @@
                                             <div class="diente_adulto" id="t16">
                                                 <img src="{{ asset('images/dental/dientes/d16.png') }}"
                                                     class="wid-40 img-fluid" role="button"
-                                                    onclick="info_odontograma('1.6');">
+                                                    onclick="info_odontograma(1-5);">
                                             </div>
                                             <label data-ndiente="16" class="nav-label-dent">1.6</label>
                                         </td>
@@ -421,7 +421,7 @@
                                             <div class="relative diente_adulto" id="t15">
                                                 <img src="{{ asset('images/dental/dientes/d15.png') }}"
                                                     class="wid-40 img-fluid" role="button"
-                                                    onclick="info_odontograma('1.5');">
+                                                    onclick="info_odontograma();">
                                             </div>
                                             <label data-ndiente="15" class="nav-label-dent">1.5</label>
                                         </td>
@@ -429,7 +429,7 @@
                                             <div class="relative diente_adulto" id="t14">
                                                 <img src="{{ asset('images/dental/dientes/d14.png') }}"
                                                     class="wid-40 img-fluid" role="button"
-                                                    onclick="info_odontograma('1.4');">
+                                                    onclick="info_odontograma();">
                                             </div>
                                             <label data-ndiente="14" class="nav-label-dent">1.4</label>
                                         </td>
@@ -437,7 +437,7 @@
                                             <div class="relative diente_adulto" id="t13">
                                                 <img src="{{ asset('images/dental/dientes/d13.png') }}"
                                                     class="wid-40 img-fluid" role="button"
-                                                    onclick="info_odontograma('1.3');">
+                                                    onclick="info_odontograma();">
                                             </div>
                                             <label data-ndiente="13" class="nav-label-dent">1.3</label>
                                         </td>
@@ -445,14 +445,14 @@
                                             <div class="diente_adulto" id="t12">
                                                 <img src="{{ asset('images/dental/dientes/d12.png') }}"
                                                     class="wid-40 img-fluid" role="button"
-                                                    onclick="info_odontograma('1.2');">
+                                                    onclick="info_odontograma();">
                                             </div>
                                             <label data-ndiente="12" class="nav-label-dent">1.2</label>
                                         </td>
                                         <td class="text-center px-0 py-0">
                                             <div class="diente_adulto" id="t11">
                                                 <img src="{{ asset('images/dental/dientes/d11.png') }}"
-                                                    class="wid-40" role="button" onclick="info_odontograma('1.1');">
+                                                    class="wid-40" role="button" onclick="info_odontograma();">
                                             </div>
                                             <label data-ndiente="11" class="nav-label-dent">1.1</label>
                                         </td>
@@ -460,56 +460,56 @@
                                         <td class="text-center px-0 py-0">
                                             <div class="diente_adulto" id="t21">
                                                 <img src="{{ asset('images/dental/dientes/d21.png') }}"
-                                                    class="wid-40" role="button" onclick="info_odontograma('2.1');">
+                                                    class="wid-40" role="button" onclick="info_odontograma();">
                                             </div>
                                             <label data-ndiente="21" class="nav-label-dent">2.1</label>
                                         </td>
                                         <td class="text-center px-0 py-0">
                                             <div class="diente_adulto px-1 py-1" id="t22">
                                                 <img src="{{ asset('images/dental/dientes/d22.png') }}"
-                                                    class="wid-40" role="button" onclick="info_odontograma('2.2');">
+                                                    class="wid-40" role="button" onclick="info_odontograma();">
                                             </div>
                                             <label data-ndiente="22" class="nav-label-dent">2.2</label>
                                         </td>
                                         <td class="text-center px-0 py-0">
                                             <div class="diente_adulto" id="t23">
                                                 <img src="{{ asset('images/dental/dientes/d23.png') }}"
-                                                    class="wid-40" role="button" onclick="info_odontograma('2.3');">
+                                                    class="wid-40" role="button" onclick="info_odontograma();">
                                             </div>
                                             <label data-ndiente="23" class="nav-label-dent">2.3</label>
                                         </td>
                                         <td class="text-center px-0 py-0">
                                             <div class="diente_adulto" id="t24">
                                                 <img src="{{ asset('images/dental/dientes/d24.png') }}"
-                                                    class="wid-40" role="button" onclick="info_odontograma('2.4');">
+                                                    class="wid-40" role="button" onclick="info_odontograma();">
                                             </div>
                                             <label data-ndiente="24" class="nav-label-dent">2.4</label>
                                         </td>
                                         <td class="text-center px-0 py-0">
                                             <div class="relative diente_adulto" id="t25">
                                                 <img src="{{ asset('images/dental/dientes/d25.png') }}"
-                                                    class="wid-40" role="button" onclick="info_odontograma('2.5');">
+                                                    class="wid-40" role="button" onclick="info_odontograma();">
                                             </div>
                                             <label data-ndiente="25" class="nav-label-dent">2.5</label>
                                         </td>
                                         <td class="text-center px-0 py-0">
                                             <div class="relative diente_adulto" id="t26">
                                                 <img src="{{ asset('images/dental/dientes/d26.png') }}"
-                                                    class="wid-40" role="button" onclick="info_odontograma('2.6');">
+                                                    class="wid-40" role="button" onclick="info_odontograma();">
                                             </div>
                                             <label data-ndiente="26" class="nav-label-dent">2.6</label>
                                         </td>
                                         <td class="text-center px-0 py-0">
                                             <div class="relative diente_adulto" id="t27">
                                                 <img src="{{ asset('images/dental/dientes/d27.png') }}"
-                                                    class="wid-40" role="button" onclick="info_odontograma('2.7');">
+                                                    class="wid-40" role="button" onclick="info_odontograma();">
                                             </div>
                                             <label data-ndiente="27" class="nav-label-dent">2.7</label>
                                         </td>
                                         <td class="text-center px-0 py-0">
                                             <div class="relative diente_adulto" id="t28">
                                                 <img src="{{ asset('images/dental/dientes/d28.png') }}"
-                                                    class="wid-40" role="button" onclick="info_odontograma('2.8');">
+                                                    class="wid-40" role="button" onclick="info_odontograma();">
                                             </div>
                                             <label data-ndiente="28" class="nav-label-dent">2.8</label>
                                         </td>

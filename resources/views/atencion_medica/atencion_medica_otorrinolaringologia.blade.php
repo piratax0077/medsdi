@@ -4,14 +4,14 @@
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
-            <!--Header-->
+            <!--HEADER-->
             <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center pb-2">
-                        <div class="col-md-6">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="page-header-title">
-                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN OTORRINOLARINGOLOGÍA</strong></h5>
-                                <p class="font-italic mt-0 mb-0 text-white">
+                            <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN OTORRINOLARINGOLOGÍA</strong></h5>
+                                <p class="font-weight-bold mt-0 mb-0 text-white float-md-right">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                         $fecha = \Carbon\Carbon::parse(now());
@@ -20,21 +20,12 @@
                                     @endphp
                                     {{ $fecha }}
                                 </p>
-                                <p class="font-italic mt-0 mb-0 text-white">
-                                    <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
-                                    <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
-                                </p>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            {{--  <div class="page-header-title">
-                                <button type="button" class="btn btn-outline-light btn-sm d-inline float-md-right mr-4 mb-1">Finalizar atención</button>
-                            </div>  --}}
                         </div>
                     </div>
                 </div>
             </div>
-            <!--Cierre: Header-->
+            <!--CIERRE: HEADER-->
             <!-- TAB ATENCIÓN -->
             <div class="user-profile user-card pt-0">
                 <div class="card-body py-0">

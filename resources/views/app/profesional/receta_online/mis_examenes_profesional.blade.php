@@ -68,7 +68,7 @@
                                                     <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Examen a Paciente"><i class="feather icon-navigation"></i></button>
                                                 </td>-->
                                                  <!--<td class="align-middle text-center">Enviado</td>-->
-                                               <td class="align-middle"> <div onclick="ver_pdf_orden_examenes('{{ $examen['id_ficha_atencion']  }}')"><img src="{{ asset('images/documento.png') }}" alt="Documento" height="35px"></div></td>
+                                               <td class="align-middle"> <div onclick="ver_pdf_orden_examenes('{{ $examen['id_ficha_atencion']  }}')" class="btn btn-success-light-c btn-xxs"><i class="feather icon-activity"></i> Ver examen</div></td>
                                             </tr>
                                         @endforeach
                                     @endif

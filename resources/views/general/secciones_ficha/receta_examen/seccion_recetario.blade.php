@@ -3,9 +3,9 @@
 <div class="row">
     <div class="col-sm-12 col-md-12 text-center">
         <div class="btn-group btn-group-sm w-100" data-toggle="buttons">
-            <button type="button" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar
+            <button type="button" id="btn_agregar_medicamento" class=" btn_agregar_medicamento btn btn-info btn-sm mt-1 wid-80" onclick="i_medicamento();"><i class="feather icon-plus"></i> Indicar
                 medicamento</button>
-            <button type="button" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-warning btn-sm mt-1" id="btn_medicamento_pdf"><i class="feather icon-file"></i>Ver PDF</button>
+            <button type="button" onclick="ver_pdf_receta($('#id_fc').val());" class=" btn_medicamento_pdf btn btn-warning btn-sm mt-1 wid-20" id="btn_medicamento_pdf"><i class="feather icon-file"></i>Ver PDF</button>
         </div>
     </div>
 </div>

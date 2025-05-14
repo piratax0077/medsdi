@@ -3,8 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Solicitar pabellón</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                </button>
+                <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close" onclick="cerrarspab();"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -104,7 +103,13 @@
                                     </div>
                                     <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                         <label class="label"><strong>Especialidad: </strong></label>
-                                        <label class="label">@if($profesional->SubTipoEspecialidad()->first()) {{ $profesional->SubTipoEspecialidad()->first()->nombre }} @else {{ $profesional->TipoEspecialidad()->first()->nombre }}  @endif </label>
+                                        <label class="label">
+                                            @if($profesional->SubTipoEspecialidad()->first())
+                                                {{ $profesional->SubTipoEspecialidad()->first()->nombre }}
+                                            @else
+                                                {{ $profesional->TipoEspecialidad()->first()->nombre }}
+                                            @endif
+                                        </label>
                                     </div>
                                 </div>
                                 <hr>
@@ -233,6 +238,18 @@
 
 
 <script>
+
+/*CERRAR MODAL*/
+    function cerrarspab()
+    {
+        $('#ingreso_sol_pab_modal').modal('show');
+    }
+    function cerrarspab() {
+        $('#ingreso_sol_pab_modal').modal ('hide');
+      }
+
+
+
     $(document).ready(function ()
     {
         /** autocomplete de tipo cirugia */
@@ -633,6 +650,12 @@
         var comentarios = $('#ingreso_sol_pab_modal_comentarios').val();
         var _token = CSRF_TOKEN;
 
+        var especialidad = '';
+        especialidad = '{{ $profesional->TipoEspecialidad->first()->nombre }}';
+        @if(!empty($profesional->SubTipoEspecialidad) )
+            especialidad += ' {{ $profesional->SubTipoEspecialidad->first()->nombre }}';
+        @endif
+
         let url = "{{ route('solicitud.pabellon.registrar') }}";
             $.ajax({
                 url: url,
@@ -646,7 +669,7 @@
                     operacion : operacion,
                     codigo_cirugia : cirugia,
                     equipamiento_especial : equipamiento_especial,
-                    especialidad_1 : '{{ $profesional->TipoEspecialidad->first()->nombre }} @if($profesional->SubTipoEspecialidad->first()) {{ $profesional->SubTipoEspecialidad->first()->nombre }} @endif',
+                    especialidad_1 : especialidad,
                     comentarios : comentarios,
                     tipo_cirugia : tipo_cirugia,
                     patalogias_cronicas : patalogias_cronicas,

@@ -51,7 +51,7 @@
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
     <!--boton azul-->
-	<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
 
     <!--Estilo tab secciones -->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/tabs-secciones.css') }}">
@@ -62,9 +62,10 @@
     @yield('page-styles')
 
     <style>
-        .diagnostico_activo{
+        .diagnostico_activo {
             background: #fff !important;
         }
+
         #loading {
             display: none;
             position: absolute;
@@ -788,7 +789,7 @@
             var antecedentes_medicamento_cronico_paciente = $('#antecedentes_medicamento_cronico_paciente').val();
             var id_antecedentes_medicamento_cronico_paciente = $('#id_antecedentes_medicamento_cronico_paciente').val();
             var antecedentes_dosis_medicamento_cronico_paciente = $('#antecedentes_dosis_medicamento_cronico_paciente')
-            .val();
+                .val();
             var nombre_antecedentes_dosis_medicamento_cronico_paciente = $(
                 '#antecedentes_dosis_medicamento_cronico_paciente option:selected').text();
             let paciente = id_paciente;
@@ -1181,65 +1182,60 @@
             let url = "{{ route('profesional.lugares_atencion_profesional_agenda') }}";
 
             $.ajax({
-                url: url,
-                type: "get",
-                data: {}
-            })
-            .done(function(data) {
+                    url: url,
+                    type: "get",
+                    data: {}
+                })
+                .done(function(data) {
 
-                if (data == 'fail') {
-                    console.log('fail');
-                    swal("Advertencia",
-                        "Bienvenido!!\n Debe ingresar en la pestaña Panel de Configuración, Mis Lugares de Atención y registrar por lo menos un lugar de atención.",
-                        "warning");
-                    //  alert('No tiene lugares de atención asignados, favor registrar uno');
-                } else {
-
-                    let lugares_atencion = $('#lugares_atencion');
-
-                    data = JSON.parse(data);
-                    console.log(data);
-                    lugares_atencion.find('option').remove();
-                    lugares_atencion.append('<option value="0">Seleccione</option>');
-                    let contador = 0;
-                    console.log(data.length);
-                    for (let i = 0; i < data.length; i++)
-                    {
-                        if (data[i].pivot.estado == '1')
-                        {
-                            lugares_atencion.append('<option value="' + data[i].id + '">' + data[i].nombre + '</option>');
-                            contador++;
-                        }
-                    }
-
-                    if (contador == 0) {
-                        swal("Oops", "No tiene lugares de atención asignados, favor registrar uno", "error")
+                    if (data == 'fail') {
+                        console.log('fail');
+                        swal("Advertencia",
+                            "Bienvenido!!\n Debe ingresar en la pestaña Panel de Configuración, Mis Lugares de Atención y registrar por lo menos un lugar de atención.",
+                            "warning");
                         //  alert('No tiene lugares de atención asignados, favor registrar uno');
-                    }
-                    else
-                    {
-                        if(contador == 1)
-                        {
-                            lugares_atencion.val(data[0].id);
-                            window.location.href = "{{ route('profesional.mi_agenda') }}?lugares_atencion="+data[0].id;
-                        }
-                        else
-                        {
-                            $('#modal_seleccionar_lugar_atencion').modal('show');
-                            validar_seleccionar_lugar_atencion();
-                        }
-                    }
-                }
-                // $(data).each(function(i, v) { // indice, valor
+                    } else {
 
-                //     lugares_atencion.append('<option value="' + v.id + '">' + v.nombre +
-                //         '</option>');
-                // })
+                        let lugares_atencion = $('#lugares_atencion');
 
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
+                        data = JSON.parse(data);
+                        console.log(data);
+                        lugares_atencion.find('option').remove();
+                        lugares_atencion.append('<option value="0">Seleccione</option>');
+                        let contador = 0;
+                        console.log(data.length);
+                        for (let i = 0; i < data.length; i++) {
+                            if (data[i].pivot.estado == '1') {
+                                lugares_atencion.append('<option value="' + data[i].id + '">' + data[i].nombre +
+                                    '</option>');
+                                contador++;
+                            }
+                        }
+
+                        if (contador == 0) {
+                            swal("Oops", "No tiene lugares de atención asignados, favor registrar uno", "error")
+                            //  alert('No tiene lugares de atención asignados, favor registrar uno');
+                        } else {
+                            if (contador == 1) {
+                                lugares_atencion.val(data[0].id);
+                                window.location.href = "{{ route('profesional.mi_agenda') }}?lugares_atencion=" + data[
+                                    0].id;
+                            } else {
+                                $('#modal_seleccionar_lugar_atencion').modal('show');
+                                validar_seleccionar_lugar_atencion();
+                            }
+                        }
+                    }
+                    // $(data).each(function(i, v) { // indice, valor
+
+                    //     lugares_atencion.append('<option value="' + v.id + '">' + v.nombre +
+                    //         '</option>');
+                    // })
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
         }
 
         function validar_seleccionar_lugar_atencion() {
@@ -2218,9 +2214,9 @@
 
         function validar_email_agenda() {
 
-            if($("#reserva_hora_correo").val() != '')
-            {
-                if ($("#reserva_hora_correo").val().indexOf('@', 0) == -1 || $("#reserva_hora_correo").val().indexOf( '.', 0) == -1) {
+            if ($("#reserva_hora_correo").val() != '') {
+                if ($("#reserva_hora_correo").val().indexOf('@', 0) == -1 || $("#reserva_hora_correo").val().indexOf('.',
+                    0) == -1) {
                     // swal({
                     //     title: "El correo electrónico introducido no es correcto.",
                     //     icon: "error",
@@ -2234,9 +2230,7 @@
                     //$("#guardar_reserva_paciente").prop('disabled', true);
                     return false;
                 }
-            }
-            else
-            {
+            } else {
                 if (validarEdad($('#reserva_hora_fecha_nac').val())) {
                     console.log("La edad es válida.");
                     let fechaNacimiento = new Date($('#reserva_hora_fecha_nac').val());
@@ -2244,27 +2238,23 @@
                     let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
 
                     // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
-                    if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
+                    if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy
+                            .getDate() < fechaNacimiento.getDate())) {
                         edad--;
                     }
 
-                    if (edad > 17)
-                    {
+                    if (edad > 17) {
                         //$('#mensaje_email_reserva').text('Debe Ingresar un email.');
                         //$('#mensaje_email_reserva').show();
                         //$("#guardar_reserva_paciente").prop('disabled', true);
-                        $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',false);
-                    }
-                    else
-                    {
+                        $('#btn_reserva_hora_telefono_uno_validar').attr('disabled', false);
+                    } else {
                         // $('#mensaje_email_reserva').text('');
                         // $('#mensaje_email_reserva').hide();
                     }
-                }
-                else
-                {
+                } else {
                     console.log("La edad no es válida.");
-                    $('#btn_reserva_hora_telefono_uno_validar').attr('disabled',true);
+                    $('#btn_reserva_hora_telefono_uno_validar').attr('disabled', true);
                     //$("#guardar_reserva_paciente").prop('disabled', true);
                 }
                 return false;
@@ -2294,8 +2284,7 @@
 
                     } else {
 
-                        if ( validarEdad($('#reserva_hora_fecha_nac').val()) )
-                        {
+                        if (validarEdad($('#reserva_hora_fecha_nac').val())) {
                             console.log("La edad es válida.");
                             $('#mensaje_reserva_hora_fecha_nac').html('');
                             $('#mensaje_reserva_hora_fecha_nac').hide();
@@ -2304,9 +2293,7 @@
                             $('#mensaje_email_reserva').hide();
                             $("#guardar_reserva_paciente").prop('disabled', false);
 
-                        }
-                        else
-                        {
+                        } else {
                             console.log("La edad no es válida.");
                             $("#guardar_reserva_paciente").prop('disabled', true);
                             $('#mensaje_reserva_hora_fecha_nac').html('');
@@ -2325,7 +2312,8 @@
 
         function validar_email_agenda_representante() {
 
-            if ($("#reserva_hora_representante_correo").val().indexOf('@', 0) == -1 || $("#reserva_hora_representante_correo")
+            if ($("#reserva_hora_representante_correo").val().indexOf('@', 0) == -1 || $(
+                    "#reserva_hora_representante_correo")
                 .val().indexOf(
                     '.', 0) == -1) {
                 swal({
@@ -2420,208 +2408,209 @@
 
             let rut = $('#rut_paciente_reserva').val();
 
-            if(rut != '')
-            {
+            if (rut != '') {
                 $('#reserva_agregar_paciente_hora').hide();
                 $('#reserva_datos_paciente').hide();
                 let url = "{{ route('profesional.buscar_rut_paciente') }}";
 
                 $.ajax({
 
-                    url: url,
-                    type: "get",
-                    data: {
-                        rut: rut,
-                        id_lugar_atencion: $('#id_lugar_atencion').val()
-                    },
-                })
-                .done(function(data) {
-                    console.log(data);
-                    console.log(JSON.parse(data));
-                    if (data !== 'null') {
+                        url: url,
+                        type: "get",
+                        data: {
+                            rut: rut,
+                            id_lugar_atencion: $('#id_lugar_atencion').val()
+                        },
+                    })
+                    .done(function(data) {
+                        console.log(data);
+                        console.log(JSON.parse(data));
+                        if (data !== 'null') {
 
-                        $('#div_procedimiento').show();
+                            $('#div_procedimiento').show();
 
-                        data = JSON.parse(data);
-                        if (data.tipo_paciente == 'SI') {
+                            data = JSON.parse(data);
+                            if (data.tipo_paciente == 'SI') {
 
-                            {{-- validacion para especialidad de pediatria --}}
-                            @if (isset($profesional))
-                                @if ($profesional->id_tipo_especialidad == 11)
-                                    if (data.edad > 18) {
-                                        swal({
-                                            title: "Reserva de hora",
-                                            text: "El paciente es mayor de edad, el profesional es Pediatrico",
-                                            icon: "warning",
-                                            buttons: "Aceptar",
-                                        });
-                                    }
+                                {{-- validacion para especialidad de pediatria --}}
+                                @if (isset($profesional))
+                                    @if ($profesional->id_tipo_especialidad == 11)
+                                        if (data.edad > 18) {
+                                            swal({
+                                                title: "Reserva de hora",
+                                                text: "El paciente es mayor de edad, el profesional es Pediatrico",
+                                                icon: "warning",
+                                                buttons: "Aceptar",
+                                            });
+                                        }
+                                    @endif
                                 @endif
-                            @endif
 
 
-                            $('.paciente_view').show();
-                            $('.paciente_edit').hide();
+                                $('.paciente_view').show();
+                                $('.paciente_edit').hide();
 
-                            {{--  console.log(data);  --}}
-                            $('#reserva_datos_paciente').show();
-                            $('#reserva_hora_id_paciente').val(data.id);
-                            $('#reserva_rut_paciente').text(data.rut);
+                                {{--  console.log(data);  --}}
+                                $('#reserva_datos_paciente').show();
+                                $('#reserva_hora_id_paciente').val(data.id);
+                                $('#reserva_rut_paciente').text(data.rut);
 
-                            $('#reserva_hora_nombre').text(data.nombres + ' ' + data.apellido_uno + ' ' + data.apellido_dos);
-                            $('#input_reserva_hora_nombre').val(data.nombres);
-                            $('#input_reserva_hora_apellido_uno').val(data.apellido_uno);
-                            $('#input_reserva_hora_apellido_dos').val(data.apellido_dos);
+                                $('#reserva_hora_nombre').text(data.nombres + ' ' + data.apellido_uno + ' ' + data
+                                    .apellido_dos);
+                                $('#input_reserva_hora_nombre').val(data.nombres);
+                                $('#input_reserva_hora_apellido_uno').val(data.apellido_uno);
+                                $('#input_reserva_hora_apellido_dos').val(data.apellido_dos);
 
-                            $('#reserva_fecha_ultima_consulta').html(data.fecha_ultima_atencion);
+                                $('#reserva_fecha_ultima_consulta').html(data.fecha_ultima_atencion);
 
-                            let bonos = data.bonos;
-                            let suma_pagado = 0;
+                                let bonos = data.bonos;
+                                let suma_pagado = 0;
 
-                            bonos.forEach(b => {
-                                suma_pagado += b.valor_atencion;
-                            });
-                            $('#estado_pago').empty();
-                            var clase = 'bg-success';
-                            if(suma_pagado < 16750){
-                                clase = 'bg-danger';
-                                $('#estado_pago').append(`
+                                bonos.forEach(b => {
+                                    suma_pagado += b.valor_atencion;
+                                });
+                                $('#estado_pago').empty();
+                                var clase = 'bg-success';
+                                if (suma_pagado < 16750) {
+                                    clase = 'bg-danger';
+                                    $('#estado_pago').append(`
                                     <div class="circle ${clase}"></div>
                                 `);
-                            }else{
-                                $('#estado_pago').append(`
+                                } else {
+                                    $('#estado_pago').append(`
                                     <div class="circle ${clase}"></div>
                                 `);
-                            }
+                                }
 
-                            $('#reserva_fecha_nacimiento').text(data.fecha_nac);
-                            $('#input_reserva_fecha_nacimiento').val(DateFormatVista(data.fecha_nac));
+                                $('#reserva_fecha_nacimiento').text(data.fecha_nac);
+                                $('#input_reserva_fecha_nacimiento').val(DateFormatVista(data.fecha_nac));
 
-                            if (data.sexo == 'M') {
-                                $('#reserva_sexo').text('Masculino');
+                                if (data.sexo == 'M') {
+                                    $('#reserva_sexo').text('Masculino');
+                                } else {
+                                    $('#reserva_sexo').text('Femenino');
+                                }
+                                $('#input_reserva_hora_sexo').val(data.sexo);
+
+                                $('#reserva_hora_email').text(data.email);
+                                $('#input_reserva_hora_email').val(data.email);
+
+                                $('#reserva_hora_telefono').text(data.telefono_uno);
+                                $('#input_reserva_hora_telefono').val(data.telefono_uno);
+
+                                $('#reserva_convenio').text(data.prevision.nombre);
+                                $('#input_reserva_convenio').val(data.prevision.id);
+
+                                $('#reserva_direccion').text(data.direccion.direccion + ' ' + data.direccion
+                                    .numero_dir + ', ' + data.direccion.ciudad.nombre);
+                                $('#input_reserva_direccion_direccion').val(data.direccion.direccion);
+                                $('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir);
+
+                                $('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
+                                // $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
+                                buscar_ciudad_general('input_reserva_direccion_region',
+                                    'input_reserva_direccion_ciudad', data.direccion.ciudad.id);
+
+                                $('#rut_paciente_reserva').val('');
+                                $('.div_rut_buscar').hide();
+
+                                $('#reserva_hora_edad').val(data.edad);
+
+                                // $('#id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
+                                $('#contenedor_tratamientos_presupuesto').show();
+                                $('#presupuesto_numero').empty();
+                                $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
+                                console.log(data.presupuestos);
+                                if (data.presupuestos?.length > 0) {
+                                    data.presupuestos.forEach(p => {
+                                        $('#presupuesto_numero').append(
+                                            `<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}</option>`
+                                            );
+                                    });
+                                } else {
+                                    $('#presupuesto_numero').append(`<option value="0">Primera consulta</option>`);
+                                }
+
+                                if (data.edad < 18) {
+                                    $('#acompanante_representante').prop("checked", true);
+                                    $('#acompanante_acompanante').prop("checked", false);
+                                    $('#autorizacion_atencion').prop("checked", false);
+
+                                    $('#div_info_representante').html(data.nombre_responsable);
+
+                                    $('#reserva_hora_id_acompanante').html('');
+                                    $.each(data.acompanante, function(indexInArray, valueOfElement) {
+                                        console.log(valueOfElement);
+                                        var html = '';
+                                        html = '<option value="' + valueOfElement.id_acompanante + '">' +
+                                            valueOfElement.acompanante.nombre + ' ' + valueOfElement.acompanante
+                                            .apellido_uno + ' - ' + valueOfElement.acompanante.rut +
+                                            '</option>';
+                                        $('#reserva_hora_id_acompanante').append(html);
+                                    });
+                                    $('#reserva_hora_id_acompanante').select2();
+
+                                    $('#reserva_hora_id_responsable').val(data.id_responsable);
+
+                                    $('#seccion_acompanante').show();
+                                    $('#seccion_autorizacion').show();
+                                } else {
+                                    $('#acompanante_representante').prop("checked", false);
+                                    $('#acompanante_acompanante').prop("checked", false);
+                                    $('#autorizacion_atencion').prop("checked", false);
+                                    $('#reserva_hora_id_acompanante').val('');
+
+
+                                    $('#reserva_hora_id_responsable').val('');
+
+                                    $('#seccion_acompanante').hide();
+                                    $('#seccion_autorizacion').hide();
+                                }
+
                             } else {
-                                $('#reserva_sexo').text('Femenino');
-                            }
-                            $('#input_reserva_hora_sexo').val(data.sexo);
+                                $('#reserva_datos_paciente').hide();
+                                $('#reserva_agregar_paciente_hora').show();
 
-                            $('#reserva_hora_email').text(data.email);
-                            $('#input_reserva_hora_email').val(data.email);
+                                $('#reserva_hora_nombres_paciente').val(data.nombres);
+                                $('#reserva_hora_apellido_uno').val(data.apellido_uno);
+                                $('#reserva_hora_apellido_dos').val(data.apellido_dos);
 
-                            $('#reserva_hora_telefono').text(data.telefono_uno);
-                            $('#input_reserva_hora_telefono').val(data.telefono_uno);
+                                $('#reserva_hora_fecha_nac').val((DateFormatVista(data.fecha_nac)));
 
-                            $('#reserva_convenio').text(data.prevision.nombre);
-                            $('#input_reserva_convenio').val(data.prevision.id);
-
-                            $('#reserva_direccion').text(data.direccion.direccion+' '+data.direccion.numero_dir+', '+data.direccion.ciudad.nombre);
-                            $('#input_reserva_direccion_direccion').val(data.direccion.direccion);
-                            $('#input_reserva_direccion_numero_dir').val(data.direccion.numero_dir);
-
-                            $('#input_reserva_direccion_region').val(data.direccion.ciudad.id_region);
-                            // $('#input_reserva_direccion_ciudad_agregar').val(data.direccion.ciudad.id);
-                            buscar_ciudad_general('input_reserva_direccion_region', 'input_reserva_direccion_ciudad', data.direccion.ciudad.id);
-
-                            $('#rut_paciente_reserva').val('');
-                            $('.div_rut_buscar').hide();
-
-                            $('#reserva_hora_edad').val(data.edad);
-
-                            // $('#id_lugar_atencion').val($('#agenda_lugar_atencion_asistente').val());
-                            $('#contenedor_tratamientos_presupuesto').show();
-                            $('#presupuesto_numero').empty();
-                            $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
-                            console.log(data.presupuestos);
-                            if(data.presupuestos?.length > 0){
-                                data.presupuestos.forEach(p => {
-                                    $('#presupuesto_numero').append(`<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}</option>`);
-                                });
-                            }else{
-                                $('#presupuesto_numero').append(`<option value="0">Primera consulta</option>`);
-                            }
-
-                            if (data.edad < 18) {
-                                $('#acompanante_representante').prop("checked", true);
-                                $('#acompanante_acompanante').prop("checked", false);
-                                $('#autorizacion_atencion').prop("checked", false);
-
-                                $('#div_info_representante').html(data.nombre_responsable);
-
-                                $('#reserva_hora_id_acompanante').html('');
-                                $.each(data.acompanante, function(indexInArray, valueOfElement) {
-                                    console.log(valueOfElement);
-                                    var html = '';
-                                    html = '<option value="' + valueOfElement.id_acompanante + '">' +
-                                        valueOfElement.acompanante.nombre + ' ' + valueOfElement.acompanante
-                                        .apellido_uno + ' - ' + valueOfElement.acompanante.rut + '</option>';
-                                    $('#reserva_hora_id_acompanante').append(html);
-                                });
-                                $('#reserva_hora_id_acompanante').select2();
-
-                                $('#reserva_hora_id_responsable').val(data.id_responsable);
-
-                                $('#seccion_acompanante').show();
-                                $('#seccion_autorizacion').show();
-                            } else {
-                                $('#acompanante_representante').prop("checked", false);
-                                $('#acompanante_acompanante').prop("checked", false);
-                                $('#autorizacion_atencion').prop("checked", false);
-                                $('#reserva_hora_id_acompanante').val('');
+                                if (data.sexo != null)
+                                    $('#reserva_hora_sexo').val(data.sexo);
+                                else
+                                    $('#reserva_hora_sexo').val(0);
 
 
-                                $('#reserva_hora_id_responsable').val('');
+                                $('#reserva_hora_correo').val(data.email);
+                                $('#region_agregar').val(data.direccion.ciudad.id_region);
+                                buscar_ciudad(data.direccion.id_ciudad);
+                                $('#reserva_hora_direccion').val(data.direccion.direccion);
+                                $('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
 
-                                $('#seccion_acompanante').hide();
-                                $('#seccion_autorizacion').hide();
-                            }
+                                $('#reserva_hora_telefono_uno').val(data.telefono_uno);
 
-                        }
-                        else
-                        {
-                            $('#reserva_datos_paciente').hide();
-                            $('#reserva_agregar_paciente_hora').show();
-
-                            $('#reserva_hora_nombres_paciente').val(data.nombres);
-                            $('#reserva_hora_apellido_uno').val(data.apellido_uno);
-                            $('#reserva_hora_apellido_dos').val(data.apellido_dos);
-
-                            $('#reserva_hora_fecha_nac').val((DateFormatVista(data.fecha_nac)));
-
-                            if (data.sexo != null)
-                                $('#reserva_hora_sexo').val(data.sexo);
-                            else
-                                $('#reserva_hora_sexo').val(0);
-
-
-                            $('#reserva_hora_correo').val(data.email);
-                            $('#region_agregar').val(data.direccion.ciudad.id_region);
-                            buscar_ciudad(data.direccion.id_ciudad);
-                            $('#reserva_hora_direccion').val(data.direccion.direccion);
-                            $('#reserva_hora_numero_dir').val(data.direccion.numero_dir);
-
-                            $('#reserva_hora_telefono_uno').val(data.telefono_uno);
-
-                            {{--
+                                {{--
                             $('#reserva_hora_profesion').val();
                             $('#reserva_hora_convenio').val();
                             $('#reserva_hora_descripcion').val();
                             --}}
-                            validar_email_agenda();
-                            validar_campo_telefono();
+                                validar_email_agenda();
+                                validar_campo_telefono();
+                            }
+
+                        } else {
+                            $('#reserva_datos_paciente').hide();
+                            $('#reserva_agregar_paciente_hora').show();
+
                         }
 
-                    } else {
-                        $('#reserva_datos_paciente').hide();
-                        $('#reserva_agregar_paciente_hora').show();
-
-                    }
-
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
-            }
-            else
-            {
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        console.log(jqXHR, ajaxOptions, thrownError)
+                    });
+            } else {
                 swal({
                     title: "Buscar Paciente",
                     text: 'Debe ingresar RUT para buscar.',
@@ -3018,14 +3007,12 @@
                 });
         };
 
-        function buscar_hora_medica()
-        {
+        function buscar_hora_medica() {
             let buscar_horas = $('#buscar_horas').val();
-            if(buscar_horas == '')
-            {
+            if (buscar_horas == '') {
                 @if (isset($fecha_carga))
-                buscar_horas = '{{ $fecha_carga }}';
-                $('#buscar_horas').val('{{ $fecha_carga }}');
+                    buscar_horas = '{{ $fecha_carga }}';
+                    $('#buscar_horas').val('{{ $fecha_carga }}');
                 @endif
             }
 
@@ -3051,7 +3038,8 @@
                             var hora_inicio = data[i].hora_inicio;
                             // var salida = formato(fecha);
                             var fecha_consulta = data[i].fecha_consulta;
-                            var paciente = data[i].id_paciente.nombres + ' ' + data[i].id_paciente.apellido_uno + ' ' + data[i].id_paciente.apellido_dos;
+                            var paciente = data[i].id_paciente.nombres + ' ' + data[i].id_paciente.apellido_uno + ' ' +
+                                data[i].id_paciente.apellido_dos;
 
                             var j = 1; //contador para asignar id al boton que borrara la fila
                             var fila = '';
@@ -3108,11 +3096,10 @@
             var tipo_agenda_text = 'C';
             var procedimiento = '';
             var proc_bloque = '';
-            if($('#form_reseva_de_horas_id_procedimiento').length == 1)
-            {
+            if ($('#form_reseva_de_horas_id_procedimiento').length == 1) {
                 procedimiento = $('#form_reseva_de_horas_id_procedimiento').val();
                 proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
-            }else{
+            } else {
                 proc_bloque = parseInt($('#cantidad_bloques_atencion').text());
             }
 
@@ -3261,8 +3248,7 @@
             console.log(tipo_agenda_text);
 
             let rut_paciente_reserva = $('#rut_paciente_reserva').val();
-            if (rut_paciente_reserva == '')
-            {
+            if (rut_paciente_reserva == '') {
                 swal({
                     title: "Error!",
                     text: "Debe ingresar el Rut",
@@ -3330,9 +3316,7 @@
 
                 });
                 return;
-            }
-            else
-            {
+            } else {
                 reserva_hora_fecha_nac = formatDateDB(reserva_hora_fecha_nac);
             }
 
@@ -3395,7 +3379,8 @@
             }
             --}}
             let reserva_hora_comuna = $('#ciudad_agregar').val();
-            if (reserva_hora_comuna == '' || reserva_hora_comuna == '0' || reserva_hora_comuna == 'null' || reserva_hora_comuna == null) {
+            if (reserva_hora_comuna == '' || reserva_hora_comuna == '0' || reserva_hora_comuna == 'null' ||
+                reserva_hora_comuna == null) {
 
                 swal({
                     title: "Error!",
@@ -3418,17 +3403,17 @@
             let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
 
             // Comprobamos si el mes y el día de la fecha de nacimiento ya pasaron en el año actual
-            if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() < fechaNacimiento.getDate())) {
+            if (hoy.getMonth() < fechaNacimiento.getMonth() || (hoy.getMonth() === fechaNacimiento.getMonth() && hoy
+                    .getDate() < fechaNacimiento.getDate())) {
                 edad--;
             }
 
             // if( edad > 18 )
-            if( $('#paciente_dependiente').prop('checked') == false )
-            {
+            if ($('#paciente_dependiente').prop('checked') == false) {
                 if (reserva_hora_email == '') {
 
-                    if(reserva_hora_telefono_uno == '' && (reserva_result_codigo_validacion =='' || reserva_result_codigo_validacion =='0') )
-                    {
+                    if (reserva_hora_telefono_uno == '' && (reserva_result_codigo_validacion == '' ||
+                            reserva_result_codigo_validacion == '0')) {
                         swal({
                             title: "Error!",
                             text: "Debe ingresar el email o teléfono",
@@ -3437,13 +3422,10 @@
                             DangerMode: true,
                         });
                         return;
-                    }
-                    else
-                    {
-                        if(reserva_result_codigo_validacion =='0')
-                        {
+                    } else {
+                        if (reserva_result_codigo_validacion == '0') {
                             var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-                            if (caract.test(reserva_hora_email) == false){
+                            if (caract.test(reserva_hora_email) == false) {
                                 swal({
                                     title: "Error!",
                                     text: "Debe ingresar el email o teléfono",
@@ -3455,12 +3437,9 @@
                             }
                         }
                     }
-                }
-                else
-                {
+                } else {
 
-                    if (reserva_hora_telefono_uno == '')
-                    {
+                    if (reserva_hora_telefono_uno == '') {
                         swal({
                             title: "Error!",
                             text: "Debe ingresar el teléfono",
@@ -3469,11 +3448,9 @@
                             DangerMode: true,
                         });
                         return;
-                    }
-                    else
-                    {
-                        if(reserva_hora_email == '' && (reserva_result_codigo_validacion =='' || reserva_result_codigo_validacion =='0'))
-                        {
+                    } else {
+                        if (reserva_hora_email == '' && (reserva_result_codigo_validacion == '' ||
+                                reserva_result_codigo_validacion == '0')) {
                             swal({
                                 title: "Error!",
                                 text: "Debe validar el teléfono",
@@ -3508,15 +3485,13 @@
 
 
             var dependiente = 0;
-            if($('#paciente_dependiente').prop('checked')  == true)
+            if ($('#paciente_dependiente').prop('checked') == true)
                 dependiente = 1;
-            else if($('#paciente_dependiente').prop('checked')  == false)
+            else if ($('#paciente_dependiente').prop('checked') == false)
                 dependiente = 0;
 
-            if( edad < 18 || $('#paciente_dependiente').prop('checked')==true)
-            {
-                if(reserva_hora_representante_agregar_relacion == '')
-                {
+            if (edad < 18 || $('#paciente_dependiente').prop('checked') == true) {
+                if (reserva_hora_representante_agregar_relacion == '') {
                     swal({
                         title: "Error!",
                         text: "Debe seleccionar Relación",
@@ -3526,11 +3501,9 @@
                     });
                     return;
                 }
-                if(reserva_representante_nuevo_exitente == '1')
-                {
+                if (reserva_representante_nuevo_exitente == '1') {
                     /** existente */
-                    if(reserva_representante_id == '')
-                    {
+                    if (reserva_representante_id == '') {
                         swal({
                             title: "Error!",
                             text: "Información del Representante con problemas",
@@ -3553,12 +3526,9 @@
                     //     });
                     //     return;
                     // }
-                }
-                else
-                {
+                } else {
                     /** nuevo */
-                    if( reserva_hora_representante_nombres_paciente == '' )
-                    {
+                    if (reserva_hora_representante_nombres_paciente == '') {
                         swal({
                             title: "Error!",
                             text: "Nombre del Representante requerido",
@@ -3569,8 +3539,7 @@
                         });
                         return;
                     }
-                    if( reserva_hora_representante_apellido_uno == '' )
-                    {
+                    if (reserva_hora_representante_apellido_uno == '') {
                         swal({
                             title: "Error!",
                             text: "Apellido Paterno del Representante requerido",
@@ -3581,8 +3550,7 @@
                         });
                         return;
                     }
-                    if( reserva_hora_representante_apellido_dos == '' )
-                    {
+                    if (reserva_hora_representante_apellido_dos == '') {
                         swal({
                             title: "Error!",
                             text: "Apellido Materno del Representante requerido",
@@ -3593,8 +3561,7 @@
                         });
                         return;
                     }
-                    if( reserva_hora_representante_fecha_nac == '' )
-                    {
+                    if (reserva_hora_representante_fecha_nac == '') {
                         swal({
                             title: "Error!",
                             text: "Fecha Nacimiento del Representante requerido",
@@ -3604,13 +3571,10 @@
 
                         });
                         return;
-                    }
-                    else
-                    {
+                    } else {
                         reserva_hora_representante_fecha_nac = formatDateDB(reserva_hora_representante_fecha_nac);
                     }
-                    if( reserva_hora_representante_sexo == '' )
-                    {
+                    if (reserva_hora_representante_sexo == '') {
                         swal({
                             title: "Error!",
                             text: "Sexo del Representante requerido",
@@ -3621,8 +3585,7 @@
                         });
                         return;
                     }
-                    if( reserva_hora_representante_direccion == '' )
-                    {
+                    if (reserva_hora_representante_direccion == '') {
                         swal({
                             title: "Error!",
                             text: "Direccion del Representante requerido",
@@ -3657,8 +3620,9 @@
                     //     });
                     //     return;
                     // }
-                    if( reserva_hora_representante_ciudad_agregar == '' || reserva_hora_representante_ciudad_agregar == '0' || reserva_hora_representante_ciudad_agregar == 'null' || reserva_hora_representante_ciudad_agregar == null )
-                    {
+                    if (reserva_hora_representante_ciudad_agregar == '' || reserva_hora_representante_ciudad_agregar ==
+                        '0' || reserva_hora_representante_ciudad_agregar == 'null' ||
+                        reserva_hora_representante_ciudad_agregar == null) {
                         swal({
                             title: "Error!",
                             text: "Ciudad del Representante requerido",
@@ -3670,12 +3634,12 @@
                         return;
                     }
 
-                    if( $('#paciente_dependiente').prop('checked') == true )
-                    {
+                    if ($('#paciente_dependiente').prop('checked') == true) {
                         if (reserva_hora_representante_correo == '') {
 
-                            if(reserva_hora_representante_telefono_uno == '' && (reserva_hora_representante_result_codigo_validacion =='' || reserva_hora_representante_result_codigo_validacion =='0') )
-                            {
+                            if (reserva_hora_representante_telefono_uno == '' && (
+                                    reserva_hora_representante_result_codigo_validacion == '' ||
+                                    reserva_hora_representante_result_codigo_validacion == '0')) {
                                 swal({
                                     title: "Error!",
                                     text: "Debe ingresar el email o teléfono del representante",
@@ -3684,13 +3648,11 @@
                                     DangerMode: true,
                                 });
                                 return;
-                            }
-                            else
-                            {
-                                if(reserva_hora_representante_result_codigo_validacion =='0')
-                                {
-                                    var caract = new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
-                                    if (caract.test(reserva_hora_representante_correo) == false){
+                            } else {
+                                if (reserva_hora_representante_result_codigo_validacion == '0') {
+                                    var caract = new RegExp(
+                                    /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/);
+                                    if (caract.test(reserva_hora_representante_correo) == false) {
                                         swal({
                                             title: "Error!",
                                             text: "Debe ingresar el email o teléfono del representante",
@@ -3702,12 +3664,9 @@
                                     }
                                 }
                             }
-                        }
-                        else
-                        {
+                        } else {
 
-                            if (reserva_hora_representante_telefono_uno == '')
-                            {
+                            if (reserva_hora_representante_telefono_uno == '') {
                                 swal({
                                     title: "Error!",
                                     text: "Debe ingresar el teléfono del representante",
@@ -3716,11 +3675,10 @@
                                     DangerMode: true,
                                 });
                                 return;
-                            }
-                            else
-                            {
-                                if(reserva_hora_representante_correo == '' && (reserva_hora_representante_result_codigo_validacion =='' || reserva_hora_representante_result_codigo_validacion =='0'))
-                                {
+                            } else {
+                                if (reserva_hora_representante_correo == '' && (
+                                        reserva_hora_representante_result_codigo_validacion == '' ||
+                                        reserva_hora_representante_result_codigo_validacion == '0')) {
                                     swal({
                                         title: "Error!",
                                         text: "Debe validar el teléfono del representante",
@@ -3801,7 +3759,8 @@
 
                             @if (isset($profesional) && isset($lugar_atencion))
                                 // cargarAgendaProfesional('{{ $profesional->id }}',fecha_consulta);
-                                cargarAgendaProfesional($('#id_tipo_agenda').val(), '{{ $lugar_atencion }}','{{ $profesional->id }}', fecha_consulta);
+                                cargarAgendaProfesional($('#id_tipo_agenda').val(), '{{ $lugar_atencion }}',
+                                    '{{ $profesional->id }}', fecha_consulta);
                             @endif
                             $('#agenda_agregar_paciente').modal('hide');
                         } else {
@@ -4016,9 +3975,10 @@
 
         };
 
-        function mi_horario_lugar_atencion(id)
-        {
-            let array_tipo_agenda = ['', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes', 'Procedimiento']
+        function mi_horario_lugar_atencion(id) {
+            let array_tipo_agenda = ['', 'Atención General', 'Atención Dental', 'Atención Telemedicina', 'Exámenes',
+                'Procedimiento'
+            ]
             let id_lugar_atencion = id;
             let url = "{{ route('profesional.mi_horario_lugar_atencion') }}";
 
@@ -4077,19 +4037,21 @@
                             let fila = '';
                             fila += '<tr class="tr_horario" id="row' + j + '">';
                             fila += '   <td class="text-center align-middle">';
-                            fila +=         array_tipo_agenda[data[i].tipo_agenda]
+                            fila += array_tipo_agenda[data[i].tipo_agenda]
                             fila += '   </td>';
                             fila += '   <td class="text-center align-middle">';
-                            fila +=         hora_inicio
+                            fila += hora_inicio
                             fila += '   </td>';
                             fila += '   <td class="text-center align-middle">';
-                            fila +=         hora_termino;
+                            fila += hora_termino;
                             fila += '   </td>';
                             fila += '   <td class="text-center align-middle">';
-                            fila +=         dia;
+                            fila += dia;
                             fila += '   </td>';
                             fila += '   <td class="text-center align-middle">';
-                            fila += '       <input class="btn btn-danger btn-sm btn-icon" title="Eliminar día" type="button" id="btn_eliminar_dia" name="btn_eliminar_dia" onclick="eliminar_dia_horario(' + id + ',' + id_lugar_atencion + ' );" value="X" >';
+                            fila +=
+                                '       <input class="btn btn-danger btn-sm btn-icon" title="Eliminar día" type="button" id="btn_eliminar_dia" name="btn_eliminar_dia" onclick="eliminar_dia_horario(' +
+                                id + ',' + id_lugar_atencion + ' );" value="X" >';
                             fila += '   </td>';
                             fila += '</tr>';
 
@@ -4211,8 +4173,7 @@
 
                         $('#editar_asistentes').modal('show');
                         $('#mi_asistente_id_lugar_atencion').val(id);
-                        for (i = 0; i < data.length; i++)
-                        {
+                        for (i = 0; i < data.length; i++) {
                             var checked = 'checked';
                             let nombres = data[i].nombres + ' ' + data[i].apellido_uno + ' ' + data[i].apellido_dos;
                             let rut = data[i].rut;
@@ -4224,11 +4185,13 @@
                             fila += '    <td>';
                             fila += '       <div class="form-group">';
                             fila += '           <div class="switch switch-success d-inline m-r-10">';
-                            if(data[i].estado == 0) checked = '';
-                            else                    checked = 'checked';
-                            fila += '               <input type = "checkbox" id="estado_asistente" onclick="cambio_estado_asistente(' + id + ');" '+checked+'> ';
+                            if (data[i].estado == 0) checked = '';
+                            else checked = 'checked';
+                            fila +=
+                                '               <input type = "checkbox" id="estado_asistente" onclick="cambio_estado_asistente(' +
+                                id + ');" ' + checked + '> ';
                             fila += '               <label for = "estado_asistente" class = "cr"> </label>';
-                            fila += '           </div>' ;
+                            fila += '           </div>';
                             fila += '      </div>';
                             fila += '   </td>';
                             fila += '   <td>' + rut + '</td>';
@@ -5354,39 +5317,36 @@
 
             $('#nombre_procedimiento').autocomplete({
                 source: function(request, response) {
-                // Fetch data
-                $.ajax({
-                    url: "{{ route('dental.getDiagnosticoDental') }}",
-                    type: 'post',
-                    dataType: "json",
-                    data: {
-                        _token: CSRF_TOKEN,
-                        search: request.term
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        if( data.length == 0 )
-                        {
-                            $('.diagnostico_activo').hide();
-                            $('.diagnostico_inactivo').show();
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getDiagnosticoDental') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            if (data.length == 0) {
+                                $('.diagnostico_activo').hide();
+                                $('.diagnostico_inactivo').show();
+                            } else {
+                                $('.diagnostico_activo').show();
+                                $('.diagnostico_inactivo').hide();
+                            }
+                            response(data);
                         }
-                        else
-                        {
-                            $('.diagnostico_activo').show();
-                            $('.diagnostico_inactivo').hide();
-                        }
-                        response(data);
-                    }
-                });
-            },
-            select: function(event, ui) {
-                console.log(ui.item);
-                $('#id_procedimiento').val(ui.item.value);
-                 // Set selection
-                 $('#nombre_procedimiento').val(ui.item.label); // display the selected text
-                return false;
-            }
-        });
+                    });
+                },
+                select: function(event, ui) {
+                    console.log(ui.item);
+                    $('#id_procedimiento').val(ui.item.value);
+                    // Set selection
+                    $('#nombre_procedimiento').val(ui.item.label); // display the selected text
+                    return false;
+                }
+            });
 
             $('#recepcion_programa').click(function() {
                 $('#sesiones_programa').toggle();
@@ -5831,14 +5791,14 @@
                     reserva_hora_telefono_uno: {
                         required: false,
                         celular: true,
-                        minlength:9,
-                        maxlength:9
+                        minlength: 9,
+                        maxlength: 9
                     },
                     reserva_hora_representante_telefono_uno: {
                         required: false,
                         celular: true,
-                        minlength:12,
-                        maxlength:12
+                        minlength: 12,
+                        maxlength: 12
                     },
 
                 },
@@ -5905,16 +5865,13 @@
                 },
             });
 
-            $.validator.addMethod( "celular",function(value, element, pattern) {
-                    if(value != '')
-                    {
-                        var re = new RegExp(/^\d{9}$/);
-                        return re.test(value);
-                    }
-                    else
+            $.validator.addMethod("celular", function(value, element, pattern) {
+                if (value != '') {
+                    var re = new RegExp(/^\d{9}$/);
+                    return re.test(value);
+                } else
                     return true;
-                },"Numero no valido. Ejemplo: 912341234"
-            );
+            }, "Numero no valido. Ejemplo: 912341234");
 
         });
     </script>
@@ -6423,21 +6380,17 @@
             }
         }
 
-		function validar_donante_organo_parcial()
-		{
-			if($('input:radio[name=edit_donante_parcial]:checked').val() == 1)
-			{
-				$('.div_edit_comentario').show();
-				$('.div_edit_comentario_impedimento').hide();
-				$('#comentarios_impedimento').val('');
-			}
-			else
-			{
-				$('.div_edit_comentario').hide();
-				$('.div_edit_comentario_impedimento').show();
-				$('#comentarios_organo').val('');
-			}
-		}
+        function validar_donante_organo_parcial() {
+            if ($('input:radio[name=edit_donante_parcial]:checked').val() == 1) {
+                $('.div_edit_comentario').show();
+                $('.div_edit_comentario_impedimento').hide();
+                $('#comentarios_impedimento').val('');
+            } else {
+                $('.div_edit_comentario').hide();
+                $('.div_edit_comentario_impedimento').show();
+                $('#comentarios_organo').val('');
+            }
+        }
 
         function antecedente_cambiar_enfermedad_cronica() {
             $('#id_ant_nombre_patologia_cronica').val($('#ant_nombre_patologia_cronica').val());
@@ -6692,147 +6645,197 @@
 
             $.ajax({
 
-                url: url,
-                type: "POST",
-                data: {
-                    _token: CSRF_TOKEN,
-                    id: id,
-                    nombre: profesion,
-                    universidad: universidad,
-                    anio: anio,
-                    ciudad_pais: ciudad_pais,
-                    supersalud: supersalud,
-                    numero_colegio: numero_colegio,
-                },
-            })
-            .done(function(data) {
+                    url: url,
+                    type: "POST",
+                    data: {
+                        _token: CSRF_TOKEN,
+                        id: id,
+                        nombre: profesion,
+                        universidad: universidad,
+                        anio: anio,
+                        ciudad_pais: ciudad_pais,
+                        supersalud: supersalud,
+                        numero_colegio: numero_colegio,
+                    },
+                })
+                .done(function(data) {
 
-                if (data.estado == 1) {
+                    if (data.estado == 1) {
 
-                    swal({
-                        title: "se modifico antecedentes académicos",
-                        icon: "success",
-                        buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                    setTimeout(function() {
-                        location.reload()
-                    }, 100);
-                    // alert('se modifico antecedentes del paciente');
-                    // location.reload();
+                        swal({
+                            title: "se modifico antecedentes académicos",
+                            icon: "success",
+                            buttons: "Aceptar",
+                            //SuccessMode: true,
+                        })
+                        setTimeout(function() {
+                            location.reload()
+                        }, 100);
+                        // alert('se modifico antecedentes del paciente');
+                        // location.reload();
 
-                } else {
-                    swal({
-                        title: "Error al modificar los antecedentes académicos",
-                        icon: "error",
-                        buttons: "Aceptar",
-                        DangerMode: true,
-                    })
-                    // alert('Error al modificar los antecedentes');
-                }
+                    } else {
+                        swal({
+                            title: "Error al modificar los antecedentes académicos",
+                            icon: "error",
+                            buttons: "Aceptar",
+                            DangerMode: true,
+                        })
+                        // alert('Error al modificar los antecedentes');
+                    }
 
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    console.log(jqXHR, ajaxOptions, thrownError)
+                });
         }
 
-        function carga_tipo_especialidad(input_origen, input_destino, id)
-        {
-            var id_especialidad = $('#'+input_origen).val();
+        function carga_tipo_especialidad(input_origen, input_destino, id) {
+            var id_especialidad = $('#' + input_origen).val();
 
-            if( id_especialidad )
-            {
+            if (id_especialidad) {
                 let url = "{{ route('web.profesional.buscar_tipo_especialidad') }}";
 
                 $.ajax({
-                    url: url,
-                    type: "GET",
-                    data: {
-                        id_especialidad: id_especialidad
-                    },
-                })
-                .done(function(data) {
+                        url: url,
+                        type: "GET",
+                        data: {
+                            id_especialidad: id_especialidad
+                        },
+                    })
+                    .done(function(data) {
 
-                    if (data.estado == 1)
-                    {
-                        let tipo_especialidades = $('#'+input_destino);
+                        if (data.estado == 1) {
+                            let tipo_especialidades = $('#' + input_destino);
 
-                        tipo_especialidades.find('option').remove();
-                        tipo_especialidades.append('<option value="">Seleccione</option>');
-                        if(data.registros.length > 0)
-                        {
-                            $(data.registros).each(function(i, v) { // indice, valor
-                                tipo_especialidades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
-                            })
+                            tipo_especialidades.find('option').remove();
+                            tipo_especialidades.append('<option value="">Seleccione</option>');
+                            if (data.registros.length > 0) {
+                                $(data.registros).each(function(i, v) { // indice, valor
+                                    tipo_especialidades.append('<option value="' + v.id + '">' + v.nombre +
+                                        '</option>');
+                                })
+                            } else {
+                                tipo_especialidades.append('<option value="0">No Aplica</option>');
+                                tipo_especialidades.val(0);
+                            }
+                            if (id != '')
+                                tipo_especialidades.val(id);
+                        } else {
+                            console.log('sin registros');
                         }
-                        else
-                        {
-                            tipo_especialidades.append('<option value="0">No Aplica</option>');
-                            tipo_especialidades.val(0);
-                        }
-                        if(id != '')
-                            tipo_especialidades.val(id);
-                    }
-                    else
-                    {
-                        console.log('sin registros');
-                    }
 
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
-                });
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        console.log(jqXHR, ajaxOptions, thrownError)
+                    });
             }
         }
 
-        function carga_sub_tipo_especialidad(input_origen, input_destino, id)
-        {
-            var id_tipo_especialidad = $('#'+input_origen).val();
+        function carga_sub_tipo_especialidad(input_origen, input_destino, id) {
+            var id_tipo_especialidad = $('#' + input_origen).val();
 
-            if( id_tipo_especialidad )
-            {
+            if (id_tipo_especialidad) {
                 let url = "{{ route('web.profesional.buscar_sub_tipo_especialidad') }}";
 
                 $.ajax({
+                        url: url,
+                        type: "GET",
+                        data: {
+                            id_tipo_especialidad: id_tipo_especialidad
+                        },
+                    })
+                    .done(function(data) {
+
+                        if (data.estado == 1) {
+                            let sub_tipo_especialidades = $('#' + input_destino);
+
+                            sub_tipo_especialidades.find('option').remove();
+                            sub_tipo_especialidades.append('<option value="">Seleccione</option>');
+                            if (data.registros.length > 0) {
+                                $(data.registros).each(function(i, v) { // indice, valor
+                                    sub_tipo_especialidades.append('<option value="' + v.id + '">' + v.nombre +
+                                        '</option>');
+                                })
+                            } else {
+                                sub_tipo_especialidades.append('<option value="0">No Aplica</option>');
+                                sub_tipo_especialidades.val(0);
+                            }
+                            if (id != '')
+                                sub_tipo_especialidades.val(id);
+                        } else {
+                            console.log('sin registros');
+                        }
+
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        console.log(jqXHR, ajaxOptions, thrownError)
+                    });
+            }
+        }
+
+        function cargar_flujo_caja_rendicion_diario() {
+            var fecha = $('#gestion_diario_fecha').val();
+            var asistente = $('#gestion_diario_asistente').val();
+            var convenio = $('#gestion_diario_convenio').val();
+            var estado_consulta = $('#gestion_diario_estado_consulta').val();
+
+            let url = "{{ route('flujo_caja.data_flujo_caja_diario') }}";
+            let data = {
+                fecha: fecha,
+                asistente: asistente,
+                convenio: convenio,
+                estado_consulta: estado_consulta,
+                _token: CSRF_TOKEN
+            };
+
+            $.ajax({
                     url: url,
-                    type: "GET",
-                    data: {
-                        id_tipo_especialidad: id_tipo_especialidad
-                    },
+                    type: "POST",
+                    data: data
                 })
                 .done(function(data) {
+                    if (data.estado == 1) {
+                        let bonos = data.bonos;
+                        let table = $('#tabla_gestion_bonos_diarios').DataTable();
+                        table.clear();
 
-                    if (data.estado == 1)
-                    {
-                        let sub_tipo_especialidades = $('#'+input_destino);
+                        bonos.forEach(bono => {
+                            let paciente = bono.paciente;
+                            let convenio = bono.convenio;
+                            let tipo = bono.tipo_bono;
+                            let switchId = 'switch_' + paciente.rut;
+                            let nombre_convenio = convenio ? convenio.nombre : 'FONASA';
 
-                        sub_tipo_especialidades.find('option').remove();
-                        sub_tipo_especialidades.append('<option value="">Seleccione</option>');
-                        if(data.registros.length > 0)
-                        {
-                            $(data.registros).each(function(i, v) { // indice, valor
-                                sub_tipo_especialidades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
-                            })
-                        }
-                        else
-                        {
-                            sub_tipo_especialidades.append('<option value="0">No Aplica</option>');
-                            sub_tipo_especialidades.val(0);
-                        }
-                        if(id != '')
-                            sub_tipo_especialidades.val(id);
+                            let asistente_nombre = bono.asistente
+                                ? `${bono.asistente.nombres} ${bono.asistente.apellido_uno}`
+                                : 'Sin asistente';
+                            let asistente_rut = bono.asistente
+                                ? bono.asistente.rut
+                                : '';
+
+                            table.row.add([
+                                nombre_convenio,
+                                bono.numero_sesiones,
+                                bono.numero_bono,
+                                tipo.nombre,
+                                bono.fecha_atencion,
+                                `${paciente.nombres} ${paciente.apellido_uno} ${paciente.apellido_dos}<br><span>${paciente.rut}</span>`,
+                                `$${Number(bono.valor_atencion).toLocaleString('es-CL', {minimumFractionDigits: 2})}`,
+                                bono.estado_consulta,
+                                `<span>${asistente_nombre}</span> <br><span>${asistente_rut}</span>`
+                            ]);
+                        });
+
+                        table.draw();
+
+                    } else {
+                        alert('No se encontraron datos.');
                     }
-                    else
-                    {
-                        console.log('sin registros');
-                    }
-
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    console.log(jqXHR, ajaxOptions, thrownError)
+                    console.error(jqXHR, ajaxOptions, thrownError);
                 });
-            }
         }
     </script>
 

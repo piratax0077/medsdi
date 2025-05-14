@@ -148,7 +148,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-info pt-3 pb-2">
-                    <h5 class="modal-title text-white text-center">Tomar hora</h5>
+                    <h5 class="modal-title text-white text-center">Tomar hora 2</h5>
                     <button id="cerrar_tomar_hora" type="button" class="close text-white close_agenda_agregar_paciente" onclick="$('#agenda_agregar_paciente').modal('hide');" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
@@ -1212,16 +1212,6 @@
         let tipo_agenda = $('#modal_reserva_hora_tipo_agenda').val();
         var tipo_agenda_text = 'C';
 
-        var procedimiento = '';
-            var proc_bloque = '';
-            if($('#form_reseva_de_horas_id_procedimiento').length == 1)
-            {
-                procedimiento = $('#form_reseva_de_horas_id_procedimiento').val();
-                proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
-            }else{
-                proc_bloque = parseInt($('#cantidad_bloques_atencion').text());
-            }
-
         console.log(tipo_agenda);
         console.log(tipo_agenda_text);
 
@@ -1253,8 +1243,6 @@
                     id_asistente: id_asistente,
                     origen: origen,
                     tipo_hora_medica: tipo_agenda_text,
-                    procedimiento: procedimiento,
-                    proc_bloque: proc_bloque,
                 }
             })
             .done(function(data) {

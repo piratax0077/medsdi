@@ -42,8 +42,6 @@
                                         <th>Fecha</th>
                                         <th>Paciente</th>
                                         <th>Diagnóstico</th>
-                                        <!--th class="text-center align-middle">Acción</th>-->
-                                        <!-- <th class="text-center align-middle">Estado</th>-->
                                         <th>Receta</th>
                                     </tr>
                                 </thead>
@@ -59,14 +57,9 @@
                                                 {{ $fic->Paciente->first()->rut }}
                                             </td>
                                             <td>{{ $fic->motivo }}</td>
-                                            <!--<td class="align-middle text-center">
-                                                <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Receta a Paciente"><i class="feather icon-navigation"></i></button>
-                                            </td>-->
-                                            <!--<td class="align-middle text-center">
-                                            </td>-->
                                             <td>
                                                 {{-- <a href="{{ route('profesional.ver_recetas_pdf', $fic->id) }}"><img src="{{ asset('images/documento.png') }}" alt="Documento" height="35px"> Ver receta</a> --}}
-                                                <div onclick="ver_pdf_receta('{{ $fic->id }}')"><img src="{{ asset('images/documento.png') }}" alt="Documento" height="35px"></div>
+                                                <div onclick="ver_pdf_receta('{{ $fic->id }}')" class="btn btn-warning-light-c btn-xxs"><i class="feather icon-activity"></i> Ver Receta</div>
                                             </td>
                                         </tr>
                                         @endif

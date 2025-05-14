@@ -67,6 +67,9 @@
                                             <li class="nav-item">
                                                 <a class="nav-link text-reset" id="gestion-programas-prof-tab" data-toggle="tab" href="#gestion-programas-prof" role="tab" aria-controls="gestion-programas-prof" aria-selected="true">Gestión de bonos programas</a>
                                             </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link text-reset" id="gestion-bonos-diarios-prof-tab" data-toggle="tab" href="#gestion-bonos-diarios-prof" role="tab" aria-controls="gestion-bonos-diarios-prof" aria-selected="true">Gestión de bonos diarios</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -936,6 +939,133 @@
                                 </table>
                             </div>
                         </div>
+                        {{--  PESTAÑA DE BONOS DIARIOS A PROFESIONAL --}}
+                        <div class="tab-pane" id="gestion-bonos-diarios-prof" role="tabpanel" aria-labelledby="gestion-bonos-diarios-prof-tab">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12 mt-3 mb-2">
+                                    <h5 class="text-c-blue d-inline float-left f-20 pt-1">Gestión de bonos diarios</h5>
+                                    <button id="busqueda_avanzada_4" type="button" class="btn btn-primary btn-sm float-right d-inline shadow-sm" onclick="$('#busqueda_avanzada_aparecer_5').toggle();"><i class="feather icon-search"></i> Búsqueda avanzada</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12" id="busqueda_avanzada_aparecer_5" style="display:none">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-3 col-lg-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Fecha de atención</label>
+                                                        <input type="date" class="form-control form-control-sm" name="gestion_diario_fecha" id="gestion_diario_fecha">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-9 col-lg-4">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Asistente</label>
+                                                        <select id="gestion_diario_asistente" name="gestion_diario_asistente" class="form-control form-control-sm">
+                                                            <option value="">Seleccione</option>
+                                                            @if($lista_asistente)
+                                                                @foreach($lista_asistente as $key_asistente => $value_asistente)
+                                                                    <option value="{{ $value_asistente->id }}">{{ $value_asistente->nombres }} {{ $value_asistente->apellido_uno }} {{ $value_asistente->apellido_dos }} </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-4 col-lg-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Convenio</label>
+                                                        <select id="gestion_diario_convenio" name="gestion_diario_convenio" class="form-control form-control-sm">
+                                                            <option value="">Seleccione</option>
+                                                            @if($lista_prevision)
+                                                                @foreach($lista_prevision as $key_prevision => $value_prevision)
+                                                                    <option value="{{ $value_prevision->id }}">{{ $value_prevision->nombre }} </option>
+                                                                @endforeach
+                                                            @endif
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-4 col-lg-2">
+                                                    <div class="form-group">
+                                                        <label class="floating-label-activo-sm">Estado consulta</label>
+                                                        <select id="gestion_diario_estado_consulta" name="gestion_diario_estado_consulta" class="form-control form-control-sm">
+                                                            <option value="">Seleccione</option>
+                                                            @if($lista_estado_consulta)
+                                                                @foreach($lista_estado_consulta as $key_estado_consulta => $value_estado_consulta)
+                                                                    <option value="{{ $value_estado_consulta->id }}">{{ $value_estado_consulta->valor }} </option>
+                                                                @endforeach
+                                                            @endif
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-3 col-lg-2 text-center">
+                                                    <button class="btn btn-block btn-sm btn-block btn-info" onclick="cargar_flujo_caja_rendicion_diario();"><i class="feather icon-search"></i> Buscar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12 col-xxxl-12">
+                                                    <div class="dt-responsive table-responsive">
+                                                        <table id="tabla_gestion_bonos_diarios" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="align-middle">Convenio</th>
+                                                                    <th class="align-middle">Nº de programa</th>
+                                                                    <th class="align-middle">Código</th>
+                                                                    <th class="align-middle">Tipo</th>
+                                                                    <th class="align-middle">Fecha de atención</th>
+                                                                    <th class="align-middle">Paciente</th>
+                                                                    <th class="align-middle">Valor total</th>
+                                                                    <th class="align-middle">Estado consulta</th>
+                                                                    <th class="align-middle">Asistente</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if( isset($bonos_diarios) )
+                                                                    @foreach($bonos_diarios as $key_br => $value_br)
+                                                                        <tr >
+                                                                            <td class="align-middle">{{ $value_br->Convenio()->first()->nombre }}</td>
+                                                                            <td class="align-middle">{{ $value_br->numero_sesiones }}</td>
+                                                                            <td class="align-middle">{{ $value_br->numero_bono }}</td>
+                                                                            <td class="align-middle">{{ $value_br->TipoBono()->first()->nombre }}</td>
+                                                                            <td class="align-middle">{{ $value_br->fecha_atencion }}</td>
+                                                                            <td class="align-middle">
+                                                                                <span>{{ $value_br->Paciente()->first()->nombres }} {{ $value_br->Paciente()->first()->apellido_uno }} {{ $value_br->Paciente()->first()->apellido_dos }}</span><br>
+                                                                                <span>{{ $value_br->Paciente()->first()->rut }}</span>
+                                                                            </td>
+                                                                            <td class="align-middle">${{ number_format($value_br->valor_atencion, 2, ",", ".") }}</td>
+                                                                            <td class="align-middle">{{ $value_br->estado_consulta }}</td>
+                                                                            <td class="align-middle">
+                                                                            @if ($value_br->Asistente()->first())
+                                                                                <span>{{ $value_br->Asistente()->first()->nombres }} {{ $value_br->Asistente()->first()->apellido_uno }}</span><br>
+                                                                                <span>{{ $value_br->Asistente()->first()->rut }}</span>
+                                                                            @else
+                                                                                <span>Sin asistente</span>
+                                                                            @endif
+                                                                            </td>
+
+                                                                        </tr>
+                                                                    @endforeach
+                                                                @endif
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -969,6 +1099,11 @@
         });
         $(document).ready(function(){
             $('#tabla_gestion_bonos_programa').DataTable({
+                responsive: true,
+            });
+        });
+        $(document).ready(function(){
+            $('#tabla_gestion_bonos_diarios').DataTable({
                 responsive: true,
             });
         });

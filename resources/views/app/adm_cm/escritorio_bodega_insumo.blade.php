@@ -9,11 +9,11 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Escritorio Bodega</h5>
+                            <h5 class="m-b-10 font-weight-bold">Escritorio bodega</h5>
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="{{ route('asistente_adm.home') }}">Mi Escritorio </a>
+                                <a href="{{ route('asistente_adm.home') }}">Mi escritorio </a>
                             </li>
                         </ul>
                     </div>

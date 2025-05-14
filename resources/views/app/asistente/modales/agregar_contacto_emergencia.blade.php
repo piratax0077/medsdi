@@ -73,7 +73,6 @@
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label class="floating-label-activo">Regi&oacute;n</label>
-
                                 <select id="region_agregar_emergencia" onchange="buscar_ciudad_general('region_agregar_emergencia', 'ciudad_agregar_emergencia', 0);" name="region_agregar_emergencia" class="form-control" required>
                                     <option value="">Seleccione</option>
                                     @foreach ($region as $reg)

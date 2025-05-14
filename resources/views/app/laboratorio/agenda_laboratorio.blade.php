@@ -226,8 +226,7 @@
 
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Procedimiento</label>
-                                    <input type="hidden" name="total_bloques_procedimientos" id="total_bloques_procedimientos" value="">
-                                    <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento" id="form_reseva_de_horas_id_procedimiento" multiple="multiple">
+                                    <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento" id="form_reseva_de_horas_id_procedimiento">
                                         {{-- <option value="">Seleccione</option> --}}
                                         @if ( isset($procedimientos) && !empty($procedimientos) )
                                             @foreach ($procedimientos as $proced )
@@ -1044,31 +1043,7 @@
 @section('page-script')
     <script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
     <script>
-        var sumaBloques = 0;
         $(document).ready(function () {
-
-            $('#form_reseva_de_horas_id_procedimiento').select2();
-
-            // Evento al cambiar selección
-            $('#form_reseva_de_horas_id_procedimiento').on('change', function() {
-                sumaBloques = 0;
-
-                const seleccionados = $(this).find('option:selected');
-                const idsSeleccionados = [];
-
-                seleccionados.each(function() {
-                    // Sumar los bloques (convertir a número con +)
-                    sumaBloques += +$(this).data('cant_bloque');
-                    idsSeleccionados.push($(this).val());
-                });
-
-                // Resultados
-                // console.log("IDs seleccionados:", idsSeleccionados);
-                // console.log("Total de bloques:", sumaBloques);
-
-                $('#total_bloques_procedimientos').val(sumaBloques);
-            });
-
             $('.mask_date').mask("dd/mm/0000", {
                 'translation': {
                     0: {pattern: /[0-9]/},
@@ -2006,8 +1981,8 @@
                             $('#contenedor_tratamientos_presupuesto').hide();
                             $('#presupuesto_numero').empty();
                             $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
-                            console.log(data.presupuestos);
-                            if(data.presupuestos?.length > 0){
+                            console.log(data.presupuestos.length);
+                            if(data.presupuestos.length > 0){
                                 data.presupuestos.forEach(p => {
                                     $('#presupuesto_numero').append(`<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}</option>`);
                                 });
@@ -2780,7 +2755,7 @@
             let id_box = $('#agenda_box').val();
             var tipo_agenda_text = 'C';
             var procedimiento = $('#form_reseva_de_horas_id_procedimiento').val();
-            var proc_bloque = sumaBloques;
+            var proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
 
             console.log(tipo_agenda);
             console.log(tipo_agenda_text);

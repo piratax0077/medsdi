@@ -151,6 +151,7 @@
             cargarAgendaProfesional(1,'');
         });
     </script>
+    
 @endsection
 
 @include('app.general.asistente.agenda.boton_flotante_agenda_exa_ciru')

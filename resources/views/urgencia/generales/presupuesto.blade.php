@@ -210,7 +210,7 @@
                                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
                                             </div>
                                             <div class="form-group col-md-2">
-
+                                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                                             </div>
                                         </div>
                                         <div class="form-row">
@@ -235,7 +235,7 @@
                                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
                                             </div>
                                             <div class="form-group col-md-2">
-
+                                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)">Ver Estado Trabajo</button>
                                             </div>
                                         </div>
                                         <div class="form-row">
@@ -260,7 +260,7 @@
                                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
                                             </div>
                                             <div class="form-group col-md-2">
-
+                                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)"> Ver Estado Trabajo</button>
                                             </div>
                                         </div>
                                         <div class="form-row">
@@ -285,7 +285,7 @@
                                                 <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
                                             </div>
                                             <div class="form-group col-md-2">
-
+                                                <button class="btn btn-light btn-sm rounded m-0 float-right has-ripple feather icon-edit" onclick="verModalAgregar('show',1,0)"> Ver Estado Trabajo</button>
                                             </div>
                                         </div>
                                     </form>

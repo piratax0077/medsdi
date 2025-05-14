@@ -22,6 +22,13 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
 
+    <!-- select2 selectbonito css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+
     <!-- data tables css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
@@ -29,7 +36,9 @@
 
     <!-- fileupload-custom css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
-    <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
+
+	<!--boton azul-->
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
 
     <!--Accordion-->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -48,6 +57,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}?t=<?= time() ?>">
 
+ 
     <!-- fancy box -->
     <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
     <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
@@ -62,39 +72,35 @@
     <style>
         .ui-front {
             position: absolute;
-            z-index: 2006;
+            z-index: 3000;
             overflow: auto;
         }
 
     </style>
     @yield('css-btn-autorizacion')
+       @yield('styles')
 </head>
 <body>
-    @include('template.header')
+    @include('template.profesional.header')
     @include('template.menuProfesional')
     @yield('Content')
 
     <!-- Modal de la vista -->
     @yield('Modals')
-    @yield('Modals-med-exa')
+    @yield('modals-med-exa')
     @yield('Modals-med-exa-esp')
     @yield('modal-ficha-general-espc')
-    @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_tipo')
-    @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_clasif_colon')
-	@include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia')
-
+    @include('atencion_medica.secciones_especialidad.ficha_orl_tipo')
 
     <!-- Modal de la vista fin -->
-    <footer>
-        {{--  @include('template.include.footer')  --}}
-    </footer>
+
 
 
     <!-- Required Js -->
     <script src="{{ asset('js/vendor-all.min.js') }}"></script>
     <script src="{{ asset('js/plugins/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/ripple.js') }}"></script>
-    <script src="{{ asset('js/pcoded.min.js') }}"></script>
+    {{--  <script src="{{ asset('js/pcoded.min.js') }}"></script>  --}}
     <script src="{{ asset('js/documentos.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
     <!-- datatable Js -->
@@ -147,14 +153,11 @@
     <!-- mensajes -->
     <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
-   {{-- autocomplete
+    {{-- autocomplete
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
     <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
-
-
     {{--  @include('template.templateAutorizacion')  --}}
-
 
     <!-- form-advance custom js -->
     {{--  <script src="{{ asset('js/pages/form-advance-custom.js') }}?upd={{ random_int(1111,9999) }}"></script>  --}}
@@ -175,7 +178,11 @@
     <script src="{{ asset('js/rut.js') }}"></script>
 
     <!-- funciones generales -->
-    <script src="{{ asset('js/funciones.js') }}"></script>
+    {{--  <script src="{{ asset('js/funciones.js') }}"></script>  --}}
+
+
+
+ 
 
     {{-- zoom  --}}
     <script src="{{ asset('js/app.js') }}" ></script>
@@ -191,8 +198,20 @@
 
     <script>
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        
 
         $(document).ready(function () {
+            $('#ex-rx_bp').select2({
+                dropdownParent: $('#m_rx_brpul .modal-body')
+            });
+
+            $('#ex-func-bronco').select2({
+                dropdownParent: $('#m_espiro .modal-body')
+            });
+              $('#ex-endosc-bronco').select2({
+                dropdownParent: $('#m_bronco .modal-body')
+            });
+        
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
                 swal({
@@ -493,3 +512,4 @@
 </body>
 
 </html>
+  

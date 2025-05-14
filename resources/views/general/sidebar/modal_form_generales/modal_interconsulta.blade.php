@@ -4,7 +4,7 @@
 
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Interconsulta</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close text-white"  data-bs-dismiss="modal"aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>

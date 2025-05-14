@@ -17,7 +17,14 @@
 
             <!--ALERTA-->
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                <div class="form-row mb-1">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-success-b alert-dismissible fade show"  role="alert" id="mensaje_historias"></div>
+                    </div>
+                </div>
             </div>
 
             <div class="col-sm-12 col-md-12">
@@ -62,7 +69,7 @@
                                 <div class="col-md-12">
                                     <!--FORMULARIOS-->
                                     <div class="row">
-
+                                        
                                         <!--Formulario / Menor de edad-->
                                         @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
                                         <!--Cierre: Formulario / Menor de edad-->
@@ -71,7 +78,7 @@
                                         @include('general.secciones_ficha.motivo')
 
                                         <!-- Examen especialidad cirugia digestivo -->
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        {{--  <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="card-a">
                                                 <div class="card-header-a" id="exam_esp_cdg">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_cdg_c" aria-expanded="false" aria-controls="exam_esp_cdg_c">
@@ -138,7 +145,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <hr>
-                                                                        <div class="row mb-2">
+                                                                        <!--<div class="row mb-2">
                                                                             <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                                                                 <div class="form-group">
                                                                                     <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
@@ -158,7 +165,7 @@
                                                                             <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 text-center">
                                                                                 <button type="button" class="btn btn-info-light-c btn-sm" onclick="abrir_modal_guardar_tipo('form-oft-g','registro_f_t_oft_detalle','oft_g');"><i class="feather icon-save"></i> Guardar nueva ficha tipo</button>
                                                                             </div>
-                                                                        </div>
+                                                                        </div>-->
                                                                     </div>
                                                                     <!--PLAN DE TRATAMIENTO-->
                                                                     <div class="tab-pane fade show" id="ex_plan_tto" role="tabpanel" aria-labelledby="ex_plan_tto-tab">
@@ -238,7 +245,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>  --}}
                                         <!--CIRUGIA GENERAL-->
                                         @include('general.secciones_ficha.cirugia_general.cirugia_adulto')
 										<!--cierre CIRUGIA GENERAL-->
@@ -385,13 +392,24 @@
             }
         }
 
-        /** MENSAJE*/
-        /** CARGAR mensaje */
-        $('#mensaje_ficha').html('<strong>Solo el campo Hipótesis diagnóstica es obligatorio el resto es opcional</strong>');
-        $('#mensaje_ficha').show();
-        setTimeout(function(){
-            $('#mensaje_ficha').hide();
-        }, 5000);
+            /** MENSAJE*/
+           /** CARGAR mensaje */
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio el resto es opcional.');
+            $('#mensaje_ficha').show();
+            setTimeout(function(){
+                $('#mensaje_ficha').hide();
+            }, 5000);
+
+            @if($fichas->count()>0)
+                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+            @else
+                $('#mensaje_historias').html(' Primera consulta del paciente. ');
+            @endif
+                $('#mensaje_historias').show();
+                setTimeout(function(){
+                    $('#mensaje_historias').hide();
+                }, 6000);
+
 
         $(document).ready(function() {
             /* formatear rut */

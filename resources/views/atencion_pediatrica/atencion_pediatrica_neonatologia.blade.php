@@ -125,5 +125,6 @@
 
     </div>
     <!--Cierre: Container Completo-->
+	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
 @endsection
-@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
+

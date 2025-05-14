@@ -3,14 +3,14 @@
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
-            <!--Header-->
+            <!--HEADER-->
             <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center pb-2">
-                        <div class="col-md-6">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="page-header-title">
-                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN FICHA CIRUGIA DIGESTIVA </strong></h5>
-                                <p class="font-italic mt-0 mb-0 text-white">
+                            <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN CIRUGIA DIGESTIVA </strong></h5>
+                                <p class="font-weight-bold mt-0 mb-0 text-white float-md-right">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                         $fecha = \Carbon\Carbon::parse(now());
@@ -19,20 +19,12 @@
                                     @endphp
                                     {{ $fecha }}
                                 </p>
-                                <p class="font-italic mt-0 mb-0 text-white">
-                                    <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
-                                </p>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            {{--  <div class="page-header-title">
-                                <button type="button" class="btn btn-outline-light btn-sm d-inline float-md-right mr-4 mb-1">Finalizar atención</button>
-                            </div>  --}}
                         </div>
                     </div>
                 </div>
             </div>
-            <!--Cierre: Header-->
+            <!--CIERRE: HEADER-->
             <!-- TAB ATENCIÓN -->
             <div class="user-profile user-card pt-0">
                 <div class="card-body py-0">
@@ -43,7 +35,7 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
-                                    <li class="nav-item" id="nav-licencia">
+                                    {{--  <li class="nav-item" id="nav-licencia">
                                         @if(!empty(session('lic_token')) && session('lic_estado') == 1)
                                             <a class="nav-link text-reset" id="licencia-tab" data-toggle="tab" href="#licencia" role="tab" aria-controls="licencia" aria-selected="false" onclick="cargar_licencias();">Licencia</a>
                                         @else
@@ -56,16 +48,16 @@
                                         @else
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
                                         @endif
-                                    </li>
+                                    </li>  --}}
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="band_exam-tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
                                     </li>
-                                    <li class="nav-item">
+                                    {{--  <li class="nav-item">
                                         <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="hospitalizacion" aria-selected="false">Hospitalización</a>
-                                    </li>
+                                    </li>  --}}
                                 </ul>
                             </div>
                         </div>
@@ -120,5 +112,7 @@
     @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_edb')
     @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
     @include('general.hospitalizacion.modals.in_solic_pabellon')
+	
+	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
 @endsection
-@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
+

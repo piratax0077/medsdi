@@ -2,8 +2,6 @@
 
 @include('general.secciones_ficha.video_llamada.seccion_jaas_container')
 
-	
-
 	<div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
 		<div class="col-md-12 py-0 px-2">
 			<div class="row mx-0">
@@ -161,7 +159,7 @@
 																					<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="tabaco" id="tabaco"></textarea>
 																				</div>
 																				<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																					<label class="floating-label-activo-sm" for="sustancias_ilicitas">Consumo de sust. ilicitas</label>
+																					<label class="floating-label-activo-sm" for="sustancias_ilicitas">Consumo de sust. ilícitas</label>
 																					<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="sustancias_ilicitas" id="sustancias_ilicitas"></textarea>
 																				</div>
 																				<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -202,7 +200,7 @@
 																			<div class="form-row">
 
 																				<div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-																					<label class="floating-label-activo-sm" for="obs_generales" >Observaciones Generales</label>
+																					<label class="floating-label-activo-sm" for="obs_generales" >Observaciones generales</label>
 																					<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="obs_generales" id="obs_generales"></textarea>
 																				</div>
 																			</div>
@@ -363,13 +361,13 @@
 																							<div class="form-row">
 																								<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 																									<div class="form-group">
-																										<label class="floating-label-activo-sm"for="nombre_hno">Nombre Hermano</label>
+																										<label class="floating-label-activo-sm"for="nombre_hno">Nombre hermano</label>
 																										<input type="text" class="form-control form-control-sm" name="nombre_hno" id="nombre_hno">
 																									</div>
 																								</div>
 																								<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 																									<div class="form-group">
-																										<label class="floating-label-activo-sm"for="rel_hf_hno">Relación con Hermano</label>
+																										<label class="floating-label-activo-sm"for="rel_hf_hno">Relación con hermano</label>
 																										<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="rel_hf_hno" id="rel_hf_hno"></textarea>
 																									</div>
 																								</div>
@@ -380,7 +378,7 @@
 																					<div class="form-row">
 																						<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 																							<div class="form-group">
-																								<label class="floating-label-activo-sm"for="rel_entre_hnos">Relación entre Hermanos</label>
+																								<label class="floating-label-activo-sm"for="rel_entre_hnos">Relación entre hermanos</label>
 																								<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="rel_entre_hnos" id="rel_entre_hnos"></textarea>
 																							</div>
 																						</div>
@@ -451,7 +449,7 @@
 																							<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
 
 																								<div class="form-group">
-																									<label class="floating-label-activo-sm" for="rel_hijo">Relación con Nombre Hijo/a</label>
+																									<label class="floating-label-activo-sm" for="rel_hijo">Relación con nombre hijo/a</label>
 																									<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="rel_hijo" id="rel_hijo"></textarea>
 																								</div>
 																							</div>
@@ -462,7 +460,7 @@
 																			<div class="form-row">
 																				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 																					<div class="form-group">
-																						<label class="floating-label-activo-sm" for="rel_entre_hijo">Relación entre Hermanos</label>
+																						<label class="floating-label-activo-sm" for="rel_entre_hijo">Relación entre hermanos</label>
 																						<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=8" onblur="this.rows=1;"name="rel_entre_hijos" id="rel_entre_hijos"></textarea>
 																					</div>
 																				</div>
@@ -542,7 +540,7 @@
 																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="enf_mentales" id="enf_mentales" ></textarea>
 																</div>
 																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-																	<label class="floating-label-activo-sm" for="trat_psicologicos_prev">Tratamientos psicologicos previos</label>
+																	<label class="floating-label-activo-sm" for="trat_psicologicos_prev">Tratamientos psicológicos previos</label>
 																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;"name="trat_psicologicos_prev" id="trat_psicologicos_prev"></textarea>
 																</div>
 																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
@@ -722,11 +720,11 @@
 															</div>
 															<div class="form-row">
 																<div class="form-group col-md-6">
-																	<label class="floating-label-activo-sm"for="dsm_5">DSM-5  (por Nombre)</label>
+																	<label class="floating-label-activo-sm"for="dsm_5">DSM-5  (Por nombre)</label>
 																	<input type="text" class="form-control form-control-sm"  data-input_igual="dsm_5_certificado,eno_dsm_5_confirmado" name="dsm_5" id="dsm_5" onchange="cargarIgual('dsm_5')">
 																</div>
 																{{--  <div class="form-group col-md-4">
-																	<label class="floating-label-activo-sm"for="indicaciones">DSM-5  (por grupo Patología)</label>
+																	<label class="floating-label-activo-sm"for="indicaciones">DSM-5  (Por grupo Patología)</label>
 																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="indicaciones" id="indicaciones"></textarea>
 																</div>  --}}
 																<div class="form-group col-md-6">
@@ -744,8 +742,8 @@
 											<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 												<div class="row mb-3">
 													<div class="col-md-12 text-center">
-														<input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-														<input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+														<input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
+														<input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
 													</div>
 												</div>
 											</div>

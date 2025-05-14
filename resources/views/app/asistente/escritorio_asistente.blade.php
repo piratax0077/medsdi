@@ -21,79 +21,65 @@
             </div>
         </div>
         <!--Cierre: Header-->
-        <!--Row Botones-->
-        <div class="row m-b-30">
-            <div class="col-md-12">
-                <div class="card-deck">
-                    <!--Cierre de Card-->
-                    <div class="card  subir py-auto">
-                        <a href="{{ ROUTE('asistente.buscar_paciente') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-50 text-center" src="{{ asset('images/iconos/pacientes.svg') }}">
-                                <h6 class="mt-1 mb-0">Buscar Pacientes</h6>
-                            </div>
-                        </a>
-                    </div>
-					<!--<div class="card  subir py-auto">
-                        <a href="{{ ROUTE('asistente.reservar_hora') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/profesional_2.svg') }}">
-                                <h5 class="mt-1 mb-0">Reservar Hora Médica</h5>
-                            </div>
-                        </a>
-                    </div>
-					-->
-                    <div class="card subir py-auto">
-                        <a href="{{ ROUTE('asistente.agenda_por_profesional') }}">
-                            <div class="card-body text-center px-0" style="cursor:pointer">
-                                <img class="wid-50 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
-                                <h6 class="mt-1 mb-0">Agenda de Mis Profesionales</h6>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="card subir py-auto">
-                        <a href="{{ ROUTE('asistente.flujo_caja') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-50 text-center" src="{{ asset('images/iconos/flujo_caja.svg') }}">
-                                <h6 class="mt-1 mb-0">Flujo de caja</h6>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="card subir py-auto">
-                        {{-- <a href="{{ ROUTE('asistente.cargar_hora_por_confirmar') }}"> --}}
-                        <a href="{{ ROUTE('asistente.cargar_hora_confirmar') }}">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-50 text-center" src="{{ asset('images/iconos/confirmar_hora.png') }}">
-                                <h6 class="mt-1 mb-0">Horas no confirmadas</h6>
-                            </div>
-                        </a>
-                    </div>
-					<!--
-                    <div class="card py-auto subir">
-                        <a href="{{ ROUTE('asistente.venta_productos') }}">
-                        <a href="{{ ROUTE('asistente.registro_paciente') }}" class="btn" type="button">
-                            <div class="card-body text-center" style="cursor:pointer">
-                                <img class="wid-60 text-center mb-1" src="{{ asset('images/iconos/otros_servicios_1.svg') }}">
-                                <h5 class="mt-1 mb-0"> Venta de Productos</h5>
-                            </div>
-                        </a>
-                    </div>
-					-->
-                </div>
-            </div>
-        </div>
-
-        <div class="row m-b-30">
+        <div class="row ">
             <div class="col-md-12">
                 @if(Session::has('mensaje'))
                     <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('mensaje') }}</p>
                 @endif
             </div>
         </div>
-
-        <!--CIERRE: Row Botones -->
+        <!--Módulos-->
+        <div class="row mt-n3">
+            <div class="col-md-12">
+                <div class="row row-cols-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4">
+                    <div class="col mb-1">
+                    <!--Cierre de Card-->
+                        <div class="card  subir py-auto">
+                            <a href="{{ ROUTE('asistente.buscar_paciente') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-50 text-center" src="{{ asset('images/iconos/pacientes.svg') }}">
+                                    <h6 class="mt-1 mb-0">Buscar pacientes</h6>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col mb-1">
+                        <div class="card subir py-auto">
+                            <a href="{{ ROUTE('asistente.agenda_por_profesional') }}">
+                                <div class="card-body text-center px-0" style="cursor:pointer">
+                                    <img class="wid-50 text-center" src="{{ asset('images/iconos/agenda.svg') }}">
+                                    <h6 class="mt-1 mb-0">Agenda de mis profesionales</h6>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col mb-1">
+                        <div class="card subir py-auto">
+                            <a href="{{ ROUTE('asistente.flujo_caja') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-50 text-center" src="{{ asset('images/iconos/flujo_caja.svg') }}">
+                                    <h6 class="mt-1 mb-0">Flujo de caja</h6>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col mb-1">
+                        <div class="card subir py-auto">
+                            {{-- <a href="{{ ROUTE('asistente.cargar_hora_por_confirmar') }}"> --}}
+                            <a href="{{ ROUTE('asistente.cargar_hora_confirmar') }}">
+                                <div class="card-body text-center" style="cursor:pointer">
+                                    <img class="wid-50 text-center" src="{{ asset('images/iconos/confirmar_hora.png') }}">
+                                    <h6 class="mt-1 mb-0">Confirmar horas</h6>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--CIERRE:-->
         <!--Tabla agenda del día y flujo de caja-->
-        <div class="row m-b-30">
+        <div class="row ">
             <div class="col-md-8">
                 <div class="card h-100 pb-0">
                     <div class="card-header bg-c-info">
@@ -142,8 +128,8 @@
                     <!--<a href="{{ ROUTE('asistente.registro_paciente') }}" class="btn" type="button">-->
 
 					<div class="card-body">
-						<h4 class="card-title f-20 pt-3">Inscripciones</h4>
-						<p class="card-text">Registre pacientes a Farmacrónicos</p>
+						<h4 class="card-title f-20 pt-3">Inscripción en Crónicos</h4>
+						<h6 class="text-dark">Inscriba a Pacientes en Cronicos.cl<br>El paciente obtendrá importantes novedades en el manejo de su Patoloía y en el uso de sus medicamentos.</h6>
 					</div>
 					</a>
                 </div>

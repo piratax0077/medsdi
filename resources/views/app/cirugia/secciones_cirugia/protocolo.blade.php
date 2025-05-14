@@ -18,7 +18,7 @@
                     @csrf
                     <input type="hidden" name="ficha_id_protocolo_operatorio_dental"
                         id="ficha_id_protocolo_operatorio_dental"
-                        value=" @if ($ficha != null) {{ $ficha->id }} @endif">
+                        value=" @if ($id_ficha_atencion != null) {{ $id_ficha_atencion }} @endif">
                     <input type="hidden" name="paciente_protocolo_operatorio_dental"
                         id="paciente_protocolo_operatorio_dental" value="{{ $paciente->id }}">
 
@@ -73,11 +73,11 @@
                                                 id="lugar_atencion_protocolo_operatorio_dental">
 
                                                 <option value="0">Seleccione...</option>
-                                                @foreach ($lugares_atenciones as $lugares)
+                                                {{--  @foreach ($lugares_atencion as $lugares)
                                                     <option value="{{ $lugares->id }}">
                                                         {{ $lugares->nombre }}
                                                     </option>
-                                                @endforeach
+                                                @endforeach  --}}
                                             </select>
                                         </div>
                                         <div class="form-group col-md-2">

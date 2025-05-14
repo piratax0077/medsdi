@@ -567,10 +567,8 @@
 
 
         <!--Card Datos medicos generales-->
+         <h5 class="text-c-blue f-22 mb-2">2. Antecedentes médicos generales</h5>
         <div class="card">
-            <div class="card-header  bg-primary">
-                <h5 class="text-white">Antecedentes II (Datos Médicos Generales)</h5>
-            </div>
              <div class="card-body info_antecedentes_patologicos">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -607,10 +605,10 @@
                             <!--ANESTESIAS PACIENTE-->
                             <div class="tab-pane fade show active" id="anest-pac" role="tabpanel" aria-labelledby="anest-pac-tab">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <h6 class="text-c-blue d-inline">ANESTESIAS PACIENTE</h6>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-inline mb-2">
+                                        <h6 class="text-c-blue d-inline float-left pt-3 f-16">ANESTESIAS PACIENTE</h6>
                                         @if(Auth::user()->hasRole('Profesional'))
-                                        <button type="button" class="btn btn-info btn-xxs feather icon-plus d-inline" onclick="verModalAgregar('show',1,0)"></button>
+                                        <button type="button" class="btn btn-info btn-sm float-right d-inline" onclick="verModalAgregar('show',1,0)"><i class="fas fa-plus"></i> Añadir antecedente</button>
                                         @endif
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">

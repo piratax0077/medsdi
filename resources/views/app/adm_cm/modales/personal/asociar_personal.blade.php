@@ -9,27 +9,27 @@
                 <div class="row">
                     <form>
                     <div class="col-sm-12 mb-3">
-                        <h6 class="text-c-blue">Escriba rut o nombre del asistente y seleccione la sucursal en que desea asociar</h6>
+                        <h6 class="t-modal">Escriba RUT o nombre del asistente y seleccione la sucursal en que desea asociar</h6>
                     </div>
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label class="floating-label">Rut o Nombre</label>
+                            <label class="floating-label-activo-sm">Rut o Nombre</label>
                             <input type="number" class="form-control form-control-sm" name="rut" id="rut">
                         </div>
                     </div>
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label class="floating-label">Funciones y roles</label>
+                            <label class="floating-label-activo-sm">Funciones y roles</label>
                             <select class="form-control form-control-sm">
                                 <option>Seleccione una opción</option>
-                                    <option>secretaria publico</option>
-                                    <option>secretaria administrativa</option>
+                                    <option>Secretaria publico</option>
+                                    <option>Secretaria administrativa</option>
                                     <option>Empresa aseo y mantención</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-12 text-center">
-                        <button type="submit" class="btn btn-info" >Enviar invitación
+                        <button type="submit" class="btn btn-info"><i class="feather icon-check"></i> Enviar invitación
                         </button>
                     </div>
                     </form>

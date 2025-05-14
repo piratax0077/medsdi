@@ -74,8 +74,13 @@
                     </div>
                 </div>
                 <div class="form-row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <h6 class="text-c-blue">Arrastre el archivo para adjuntar imágenes o archivos</h6>
+                    </div>
+                </div>
+                <div class="form-row">
                     <!--DROPZONE PARA SUBIR DIBUJOS U OTRO ARCHIVO-->
-                    <div class="form-group col-md-12">
+                    <div class="col-md-12 mb-3">
                         <div class=" text-justify pt-3 pb-1" role="alert">
                             <input type="hidden" name="#" id="#" value="">
                             <!-- [ Main Content ] start -->

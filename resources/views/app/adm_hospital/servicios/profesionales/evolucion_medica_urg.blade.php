@@ -1398,12 +1398,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-12">
-                                        <div class="d-flex justify-content-end">
-                                            <button type="button" class="btn btn-outline-success btn-sm mt-3" onclick="guardar_traslado()"><i class="fas fa-save"></i> Guardar</button>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2287,6 +2281,8 @@
             });
     }
 
+    {{-- MEDICAMENTO MANUAL --}}
+
     function validar_via_administracion_manual_sdi() {
         if ($('#manual_via_administracion_ficha_dental').val() == 11) {
             $('#div_manual_observaciones_via_administracion_ficha_dental').show();
@@ -2909,86 +2905,6 @@
                 //SuccessMode: true,
             });
         }
-    }
-
-    function guardar_traslado(){
-        let destino = $('#dest').val();
-        let traslado_en = $('#trasl_en').val();
-        let condicion = $('#cond_alt').val();
-        let observaciones = $('#obs_hospitalizar').val();
-        let resultado = $('#fl_resultado_ex').val();
-        let id_paciente = dame_id_paciente();
-
-        let id_servicio_interno = $('#id_servicio_interno').val();
-
-        let valido = 1;
-        let mensaje = '';
-
-        if(destino == 0){
-            valido = 0;
-            mensaje += '<li>Campo requerido Destino </li>';
-        }
-        if(traslado_en == 0){
-            valido = 0;
-            mensaje += '<li>Campo requerido Traslado en </li>';
-        }
-        if(condicion == 0){
-            valido = 0;
-            mensaje += '<li>Campo requerido Condición </li>';
-        }
-        if(resultado == ''){
-            valido = 0;
-            mensaje += '<li>Campo requerido Resultado </li>';
-        }
-
-        if(valido == 0){
-            swal({
-                title: "Campos requeridos",
-                content:{
-                    element: "div",
-                    attributes:{
-                        innerHTML: mensaje,
-                    },
-                },
-                icon: "error",
-                buttons: "Aceptar",
-                DangerMode: true,
-            });
-            return false;
-        }
-
-        let data = {
-            _token: CSRF_TOKEN,
-            destino: destino,
-            traslado_en: traslado_en,
-            condicion: condicion,
-            observaciones: observaciones,
-            resultado: resultado,
-            id_servicio_interno: id_servicio_interno,
-            id_paciente: id_paciente
-        }
-
-        let url = "{{ ROUTE('adm_hospital.registrar_alta_paciente') }}";
-
-        $.ajax({
-            type:'post',
-            url: url,
-            data: data,
-            success: function(resp){
-                console.log(resp);
-                if(resp.mensaje == 'OK'){
-                    swal({
-                        icon:'success',
-                        text:'Traslado registrado correctamente.',
-
-                    });
-                }
-            },
-            error: function(error){
-                console.log(error);
-            }
-        });
-
     }
 
     function agregar_componente() {
@@ -4078,16 +3994,6 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
         });
 
-    }
-
-    function evaluar_para_carga_detalle(select, div, input, valor)
-    {
-        var valor_select = $('#'+select+'').val();
-        if(valor_select == valor) $('#'+div+'').show();
-        else {
-            $('#'+div+'').hide();
-            $('#'+input+'').val('');
-        }
     }
 
 </script>

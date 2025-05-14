@@ -9,12 +9,12 @@
             <div class="modal-body">
             <div class="row">
                 <div class="col-md-12">
-                    <ul class="nav nav-pills mb-3" id="tablas_examenes" role="tablist">
+                    <ul class="nav nav-tabs-aten nav-fill mb-3" id="tablas_examenes" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link-modal active" id="uno_tab" data-toggle="pill" href="#uno" role="tab" aria-controls="uno" aria-selected="true">Horario de Trabajo</a>
+                            <a class="nav-link-aten active" id="uno_tab" data-toggle="pill" href="#uno" role="tab" aria-controls="uno" aria-selected="true">Horario de Trabajo</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link-modal" id="dos_tab" data-toggle="pill" href="#dos" role="tab" aria-controls="pills-home" aria-selected="true">Configurar Horario</a>
+                            <a class="nav-link-aten" id="dos_tab" data-toggle="pill" href="#dos" role="tab" aria-controls="pills-home" aria-selected="true">Configurar Horario</a>
                         </li>
 
                     </ul>
@@ -23,49 +23,81 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="tab-content" id="pills-tablas-remuneraciones">
-                        <!--INFORMACION DE ACCESO-->
+                        <!--HORARIO-->
                         <div class="tab-pane fade show active" id="uno" role="tabpanel" aria-labelledby="uno_tab">
                             <div class="row haberes collapse show" id="info_funcionario_admin-1">
                                 <div class="col-sm-12 col-md-12 mb-3">
                                     <div class="table-responsive">
-                                        <table id="info_funcionario_admin" class="display table-bordered table table-striped dt-responsive nowrap table-xs" style="width:100%">
+                                        <table id="info_funcionario_admin" class="display table-borderless table  dt-responsive nowrap table-xs" style="width:100%">
                                             <tbody>
                                                 <tr>
                                                     <th class="align-middle">Días Laborales</th>
-                                                    <th class="align-middle"></th>
+                                                    <td class="align-middle"></td>
                                                 </tr>
                                                 <tr>
                                                     <th class="align-middle">Hora Entrada</th>
-                                                    <th class="align-middle"></th>
+                                                    <td class="align-middle"></td>
                                                 </tr>
                                                 <tr>
                                                     <th class="align-middle">Hora Salida</th>
-                                                    <th class="align-middle"></th>
+                                                    <td class="align-middle"></td>
                                                 </tr>
                                                 <tr>
                                                     <th class="align-middle">Hora inicio colación</th>
-                                                    <th class="align-middle"></th>
+                                                    <td class="align-middle"></td>
                                                 </tr>
                                                 <tr>
                                                     <th class="align-middle">Hora término colación</th>
-                                                    <th class="align-middle"></th>
+                                                    <td class="align-middle"></td>
                                                 </tr>
                                             </tbody>
-
                                         </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!--DEBERES-->
+                        <!--CONFIGURAR HORARIO-->
                         <div class="tab-pane fade" id="dos" role="tabpanel" aria-labelledby="dos_tab">
                             <div class="row deberes collapse show" id="deberes-1">
-                                <div class="col-sm-12 col-md-12 text-center">
-                                    <h5 class="text-info">Configurar Horario</h5>
+                                <div class="col-sm-12 col-md-12">
                                     <input type="hidden" name="horario_id_personal" id="horario_id_personal" value="">
                                     <input type="hidden" name="horario_id_contrato_dependiente" id="horario_id_contrato_dependiente" value="">
                                 </div>
-                                <div class="col-sm-12 col-md-12">
+
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="form-row">
+                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <label class="floating-label-activo-sm">Días laborales</label>
+                                            <select class="js-example-basic-multiple" name="horario_dias_laborales" id="horario_dias_laborales" multiple="multiple">
+                                                <option value="">Seleccione</option>
+                                                <option value="1">Lunes</option>
+                                                <option value="2">Martes</option>
+                                                <option value="3">Miércoles</option>
+                                                <option value="4">Jueves</option>
+                                                <option value="5">Viernes</option>
+                                                <option value="6">Sábado</option>
+                                                <option value="7">Domingo</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                            <label class="floating-label-activo-sm">Hora de entrada</label>
+                                            <input type="time" class="form-control form-control-sm" id="horario_hora_entrada" name="horario_hora_entrada" aria-describedby="emailHelp" placeholder="Hora Entrada">
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                            <label class="floating-label-activo-sm">Hora de salida</label>
+                                            <input type="time" class="form-control form-control-sm" id="horario_hora_salida" name="horario_hora_salida" aria-describedby="emailHelp" placeholder="Hora Salida">
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                            <label class="floating-label-activo-sm">Hora inicio colación</label>
+                                            <input type="time" class="form-control form-control-sm" id="horario_hora_entrada_colacion" name="horario_hora_entrada_colacion" aria-describedby="emailHelp" placeholder="Hora inicio colación">
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                            <label class="floating-label-activo-sm">Hora término colación</label>
+                                            <input type="time" class="form-control form-control-sm" id="horario_hora_salida_colacion" name="horario_hora_salida_colacion" aria-describedby="emailHelp" placeholder="Hora término colación">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="col-sm-12 col-md-12">
                                     <div class="table-responsive">
                                         <table id="rend-caja-dental"
                                             class="display table-bordered table table-striped dt-responsive nowrap table-xs"
@@ -114,17 +146,16 @@
 
                                         </table>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="modificar_horario();">Guardar cambios</button>
-            </div>
-
+        <div class="modal-footer">
+            <button type="button" class="btn btn-info btn-sm" onclick="modificar_horario();"><i class="feather icon-save"></i> Guardar cambios</button>
+        </div>
         </div>
     </div>
 </div>
@@ -168,13 +199,13 @@
                         } else if (dias[i] == 2) {
                             dia += 'Martes '
                         } else if (dias[i] == 3) {
-                            dia += 'Miercoles '
+                            dia += 'Miércoles '
                         } else if (dias[i] == 4) {
                             dia += 'Jueves '
                         } else if (dias[i] == 5) {
                             dia += 'Viernes '
                         } else if (dias[i] == 6) {
-                            dia += 'Sabado '
+                            dia += 'Sábado '
                         } else if (dias[i] == 7) {
                             dia += 'Domingo '
                         }
@@ -183,23 +214,23 @@
                     var fila = '';
                     fila +='<tr>';
                     fila +='    <th class="align-middle">Días Laborales</th>';
-                    fila +='    <th class="align-middle">' + dia + '</th>';
+                    fila +='    <td class="align-middle">' + dia + '</td>';
                     fila +='</tr>';
                     fila +='<tr>';
                     fila +='    <th class="align-middle">Hora Entrada</th>';
-                    fila +='    <th class="align-middle">' + hora_ingreso + '</th>';
+                    fila +='    <td class="align-middle">' + hora_ingreso + '</td>';
                     fila +='</tr>';
                     fila +='<tr>';
                     fila +='    <th class="align-middle">Hora Salida</th>';
-                    fila +='    <th class="align-middle">' + hora_salida + '</th>';
+                    fila +='    <td class="align-middle">' + hora_salida + '</td>';
                     fila +='</tr>';
                     fila +='<tr>';
                     fila +='    <th class="align-middle">Hora inicio colación</th>';
-                    fila +='    <th class="align-middle">' + hora_inicio_colacion + '</th>';
+                    fila +='    <td class="align-middle">' + hora_inicio_colacion + '</td>';
                     fila +='</tr>';
                     fila +='<tr>';
                     fila +='    <th class="align-middle">Hora término colación</th>';
-                    fila +='    <th class="align-middle">' + hora_termino_colacion + '</th>';
+                    fila +='    <td class="align-middle">' + hora_termino_colacion + '</td>';
                     fila +='</tr>';
 
                     $('#horario_id_contrato_dependiente').val(id);
@@ -264,7 +295,7 @@
                 $('#horario_dependiente').modal('hide');
                 swal({
                     title: "Horario de Personal",
-                    text: "Horario Modificado con exito",
+                    text: "Horario modificado con éxito",
                     icon: "success",
                     buttons: "Aceptar"
                 });
@@ -290,7 +321,7 @@
                 }
                 else
                 {
-                    mensaje += 'No se encontro Horario solicitado';
+                    mensaje += 'No se encontró horario solicitado';
                 }
                 swal({
                     title: "Horario de Personal",

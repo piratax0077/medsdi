@@ -3,7 +3,7 @@
 	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Editar Empleado Nuevo Administrativo</h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Editar empleado Administrativo</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -16,14 +16,14 @@
                         <input type="hidden" name="edit_id_administrativo" id="edit_id_administrativo" value="">
                         <input type="hidden" name="edit_id_contrato_administrativo" id="edit_id_contrato_administrativo" value="">
                      <div class="row">
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                        <!--<div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <script>
                             var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
                             var f=new Date();
                             document.write( f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                             </script>
-                        </div>
+                        </div>-->
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
                                 <li class="nav-item">
@@ -50,44 +50,47 @@
                             <div class="tab-content" id="info-ingreso">
                                 <!---->
                                 <div class="tab-pane fade show active" id="edit_info-tipo_contrato_administrativo" role="tabpanel" aria-labelledby="edit_info-tipo_contrato-tab">
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <select class="form-control form-control-sm" name="edit_tipo_contrato_administrativo" id="edit_tipo_contrato_administrativo">
-                                            <option value="">Seleccione</option>
-                                            @if ($lista_tipo_administrativo)
-                                                @foreach ($lista_tipo_administrativo as $item)
-                                                    <option value="{{ $item['nombres'] }}" data-id="{{ $item['nombres'] }}">{{ $item['nombres'] }}</option>
-                                                @endforeach
-                                            @endif
-                                            {{--  asistente tipo  --}}
-                                            {{--  tipo institucion  --}}
-                                            {{--  tipo administrador  --}}
-                                        </select>
+                                    <div class="form-row">
+                                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                            <label class="floating-label-activo-sm">Tipo de contrato</label>
+                                            <select class="form-control" name="edit_tipo_contrato_administrativo" id="edit_tipo_contrato_administrativo">
+                                                <option value="">Seleccione</option>
+                                                @if ($lista_tipo_administrativo)
+                                                    @foreach ($lista_tipo_administrativo as $item)
+                                                        <option value="{{ $item['nombres'] }}" data-id="{{ $item['nombres'] }}">{{ $item['nombres'] }}</option>
+                                                    @endforeach
+                                                @endif
+                                                {{--  asistente tipo  --}}
+                                                {{--  tipo institucion  --}}
+                                                {{--  tipo administrador  --}}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                                     <!--INFO PERSONAL-->
                                 <div class="tab-pane fade show" id="edit_info_personal_cont_administrativo" role="tabpanel" aria-labelledby="edit_info_personal_cont-tab">
                                     <form>
                                         <div class="form-row">
-                                            <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">INFORMACIÓN Y DATOS DE CONTACTO</h6>
+                                            <div class="col-sm-12 col-md-12  col-lg-12 col-xl-12 mb-2">
+                                                <h6 class="t-modal">Información y datos de contacto</h6>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">RUT:</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-4">
+                                                <label class="floating-label-activo-sm">RUT</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_rut_administrativo" id="edit_rut_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-4">
                                                 <label class="floating-label-activo-sm">Nombres</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_nombre_administrativo" id="edit_nombre_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
                                                 <label class="floating-label-activo-sm">Apellido Paterno</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_apellido_uno_administrativo" id="edit_apellido_uno_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
                                                 <label class="floating-label-activo-sm">Apellido Materno</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_apellido_dos_administrativo" id="edit_apellido_dos_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
                                                 <label class="floating-label-activo-sm">Sexo</label>
                                                 <select class="form-control form-control-sm" name="edit_sexo_administrativo" id="edit_sexo_administrativo">
                                                     <option value="">Seleccione</option>
@@ -95,21 +98,21 @@
                                                     <option value="M">Masculino</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
                                                 <label class="floating-label-activo-sm">Fecha Nacimiento</label>
                                                 <input type="date" class="form-control form-control-sm" name="edit_fecha_nacimiento_administrativo" id="edit_fecha_nacimiento_administrativo">
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Email:</label>
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <label class="floating-label-activo-sm">Email</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_email_administrativo" id="edit_email_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Teléfono</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_telefono_administrativo" id="edit_telefono_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Región</label>
                                                 <select class="form-control form-control-sm" name="edit_region_administrativo" id="edit_region_administrativo" onchange="buscar_ciudad_nuevo_empleado_administrativo();">
                                                     <option value="">Seleccione</option>
@@ -121,18 +124,18 @@
                                                     @endif
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Ciudad</label>
                                                 <select class="form-control form-control-sm" name="edit_ciudad_administrativo" id="edit_ciudad_administrativo">
                                                     <option value="">Seleccione</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-8 col-lg-9 col-lg-9">
                                                 <label class="floating-label-activo-sm">Dirección</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_direccion_administrativo" id="edit_direccion_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Número</label>
+                                            <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                                <label class="floating-label-activo-sm">Nº</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_numero_administrativo" id="edit_numero_administrativo">
                                             </div>
                                         </div>
@@ -143,18 +146,18 @@
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">INFORMACIÓN Y DATOS DEL CONTRATO</h6>
+                                                <h6 class="t-modal">Información y datos del contrato</h6>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                                 <label class="floating-label-activo-sm">Fecha Inicio</label>
                                                 <input type="date" class="form-control form-control-sm" name="edit_fecha_inicio_administrativo" id="edit_fecha_inicio_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <label class="floating-label-activo-sm">Fecha Termino</label>
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                <label class="floating-label-activo-sm">Fecha Término</label>
                                                 <input type="date" class="form-control form-control-sm" name="edit_fecha_termino_administrativo" id="edit_fecha_termino_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-6"style="text-align:right">
-                                                <label  class="cr">Indefinido</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6"style="text-align:right">
+                                                <label  class="cr">Contrato indefinido</label>
                                                 <input type="hidden" id="add_cont_indefinido_administrativo" name="add_cont_indefinido_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
                                                     <input type="checkbox" onchange="activar_check('edit_check_contrato_indef_administrativo', 'add_cont_indefinido_administrativo_administrativo', ' ');" id="edit_check_contrato_indef_administrativo" name="edit_check_contrato_indef_administrativo" value="">
@@ -163,11 +166,11 @@
                                             </div>
 
 
-                                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                 <label class="floating-label-activo-sm">Monto Imponible</label>
                                                 <input type="number" class="form-control form-control-sm" name="edit_monto_imponible_administrativo" id="edit_monto_imponible_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <label  class="floating-label-activo-sm">Locomoción</label>
                                                 <input type="hidden" id="edit_locomocion_administrativo" name="edit_locomocion_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -175,12 +178,12 @@
                                                     <label for="edit_check_locomocion_administrativo" class="cr"></label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_locomocion_porcentaje_administrativo" id="edit_locomocion_porcentaje_administrativo" value="N/A">
                                             </div>
 
 
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <label class="floating-label-activo-sm">Colación</label>
                                                  <input type="hidden" id="edit_colacion_administrativo" name="edit_colacion_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -188,11 +191,11 @@
                                                     <label for="edit_check_colacion_administrativo" class="cr"></label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_colacion_porcentaje_administrativo" id="edit_colacion_porcentaje_administrativo" value="N/A">
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <label class="floating-label-activo-sm">Asignación Familar</label>
                                                 <input type="hidden" id="edit_asignacion_familiar_administrativo" name="edit_asignacion_familiar_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -200,10 +203,10 @@
                                                     <label for="edit_check_asignacion_familiar_administrativo" class="cr"></label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_asignacion_familiar_cantidad_administrativo" id="edit_asignacion_familiar_cantidad_administrativo" value="N/A">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <label class="floating-label-activo-sm">Cajas de Compensación</label>
                                                 <input type="hidden" id="edit_caja_compensacion_administrativo" name="edit_caja_compensacion_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -213,7 +216,7 @@
 
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_caja_compensacion_porcentaje_administrativo" id="edit_caja_compensacion_porcentaje_administrativo" value="N/A">
                                             </div>
                                         </div>
@@ -223,35 +226,35 @@
                                 <div class="tab-pane fade show" id="edit_horario_contrato_administrativo" role="tabpanel" aria-labelledby="edit_horario_contrato-tab">
                                     <form>
                                         <div class="form-row">
-                                            <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">HORARIO DE TRABAJO</h6>
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                                <h6 class="t-modal">Horario de trabajo</h6>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                 <label class="floating-label-activo-sm">Días de Trabajo</label>
                                                 <select class="js-example-basic-multiple" name="edit_dias_laborales_administrativo" id="edit_dias_laborales_administrativo" multiple="multiple">
                                                     <option value="1">Lunes</option>
                                                     <option value="2">Martes</option>
-                                                    <option value="3">Miercoles</option>
+                                                    <option value="3">Miércoles</option>
                                                     <option value="4">Jueves</option>
                                                     <option value="5">Viernes</option>
-                                                    <option value="6">Sabado</option>
+                                                    <option value="6">Sábado</option>
                                                     <option value="7">Domingo</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Hora entrada</label>
                                                 <input type="time" class="form-control form-control-sm" id="edit_hora_entrada_administrativo" name="edit_hora_entrada_administrativo" value="08:00">
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Hora salida</label>
                                                 <input type="time" class="form-control form-control-sm" id="edit_hora_salida_administrativo" name="edit_hora_salida_administrativo" value="19:00">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Hora Inicio Colación</label>
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <label class="floating-label-activo-sm">Hora inicio colación</label>
                                                 <input type="time" class="form-control form-control-sm" id="edit_hora_entrada_colacion_administrativo" name="edit_hora_entrada_colacion_administrativo" value="12:00">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Hora término colación</label>
                                                 <input type="time" class="form-control form-control-sm" id="edit_hora_salida_colacion_administrativo" name="edit_hora_salida_colacion_administrativo" value="13:00">
                                             </div>
@@ -260,8 +263,11 @@
                                 </div>
                                 <!-- LEYES SOCIALES -->
                                 <div class="tab-pane fade show" id="edit_leyes_sociales_administrativo" role="tabpanel" aria-labelledby="edit_leyes_sociales-tab">
-                                    <div class="form-group form-row">
-                                        <div class="col-md-3">
+                                    <div class="form-row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                            <h6 class="t-modal">Leyes sociales</h6>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <label class="floating-label-activo-sm" for="afp">Seguros</label>
                                             <select name="afp_administrativo" id="afp_administrativo" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
@@ -273,7 +279,7 @@
                                                 <option value="6">AFP Provida</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <label class="floating-label-activo-sm" for="salud">Seguros</label>
                                             <select name="salud_administrativo" id="salud_administrativo" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
@@ -286,13 +292,13 @@
                                                 <option value="7">Isapre Vida Tres</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="seguros">Seguros</label>
                                                 <input type="text" name="seguros_administrativo" id="seguros_administrativo" class="form-control form-control-sm">
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="cantidad">Cantidad</label>
                                                 <input type="number" name="cantidad_administrativo" id="cantidad_administrativo" class="form-control form-control-sm">
@@ -307,8 +313,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-sm mx-auto" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-warning btn-sm mx-auto" onclick="editar_nuevo_empleado_administrativo();">Editar</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="editar_nuevo_empleado_administrativo();"><i class="feather icon-save"></i> Guardar cambios</button>
                 {{--  <button type="button" class="btn btn-primary">Ver formulario (PDF)</button>  --}}
                 </form>
             </div>

@@ -14,7 +14,7 @@
                     </div>
                     <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
                         <label class="floating-label-activo-sm" for="antecedentes">Antecedentes Especialidad</label>
-                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=5" onblur="this.rows=1;" class="form-control form-control-sm" name="antecedentes" id="antecedentes"></textarea>
+                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=5" onblur="this.rows=1;" class="form-control form-control-sm" name="antecedentes" id="antecedentes" placeholder="{{ $placeholder_antecedentes }}"></textarea>
                     </div>
                 </div>
                 <div class="form-row">
@@ -28,3 +28,6 @@
         </div>
     </div>
 </div>
+
+
+

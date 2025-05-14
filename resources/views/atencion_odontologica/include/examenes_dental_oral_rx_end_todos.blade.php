@@ -61,7 +61,7 @@
 
                         <div class="col-12">
                             <div class="form-group">
-                                <label class="floating-label-activo-sm">Espacio Periodontal Apical</label>
+                                <label class="floating-label-activo-sm">Espacio Periodontal Apicalaa</label>
                                 <select name="end_rx_esp_peri_apical{{ $counter }}"
                                     id="end_rx_esp_peri_apical{{ $counter }}" class="form-control form-control-sm"
                                     onchange="evaluar_para_carga_detalle('end_rx_esp_peri_apical','end_div_detalle_rx_esp_peri_apical_{{ $counter }}','end_det_rx_esp_peri_apical_{{ $counter }}',4)">

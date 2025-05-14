@@ -629,7 +629,7 @@
     <script>
         $(document).ready(function(){
             $( "#editar_telefono_uno" ).focus(function() {
-                if($("#editar_telefono_uno").val() == '')
+				if($("#editar_telefono_uno").val() == '')
                 {
                     $("#editar_telefono_uno").val("+569");
                     $("#editar_telefono_uno").unbind();

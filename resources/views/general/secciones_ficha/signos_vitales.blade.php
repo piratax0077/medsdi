@@ -1,16 +1,16 @@
-<div class="col-sm-12 col-md-12">
+<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
     <div class="card-a">
         <div class="card-header-a" id="signosvit-otros">
-            <button class="accor-open btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#signosvit-otros-c" aria-expanded="false" aria-controls="signosvit-otros-c">
+            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open" type="button" data-toggle="collapse" data-target="#signosvit-otros-c" aria-expanded="false" aria-controls="signosvit-otros-c">
                 Signos vitales y otros
             </button>
         </div>
         <div id="signosvit-otros-c" class="collapse" aria-labelledby="signosvit-otros" data-parent="#signosvit-otros">
-            <div class="card-body-aten shadow-none">
+            <div class="card-body-aten-a">
                 <div class="form-row">
                     <div class="form-group col-md-1">
-                        @if (isset($fichaAtencion) && $fichaAtencion->temperatura !=
-                        null)
+                        @if (isset($fichaAtencion) && $fichaAtencion->temperatura !=null)
+                        
                         <label class="floating-label-activo-sm">Tº</label>
                         <input type="text" class="form-control form-control-sm" name="temperatura" id="temperatura" value="{{ $fichaAtencion->temperatura }}">
                         @else

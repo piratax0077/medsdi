@@ -31,16 +31,16 @@
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label>Desde</label>
-                            <span>{{ \Carbon\Carbon::parse($epicrisis_alta_medica->inicio_hospitalizacion)->format('Y-m-d') }}</span>
+                           {{-- <span>{{ \Carbon\Carbon::parse($epicrisis_alta_medica->inicio_hospitalizacion)->format('Y-m-d') }}</span>--}}
                         </div>
                         <div class="form-group col-md-4">
                             <label>Hasta</label>
-                            <span>{{ \Carbon\Carbon::parse($epicrisis_alta_medica->fin_hospitalizacion)->format('Y-m-d') }}</span>
+                             {{-- <span>{{ \Carbon\Carbon::parse($epicrisis_alta_medica->fin_hospitalizacion)->format('Y-m-d') }}</span>--}}
 
                         </div>
                         <div class="form-group col-md-4">
                             <label>Total de días</label>
-                            <span>{{ \Carbon\Carbon::parse($epicrisis_alta_medica->fin_hospitalizacion)->diff(\Carbon\Carbon::parse($epicrisis_alta_medica->inicio_hospitalizacion))->format('%d') }}</span>
+                             {{-- <span>{{ \Carbon\Carbon::parse($epicrisis_alta_medica->fin_hospitalizacion)->diff(\Carbon\Carbon::parse($epicrisis_alta_medica->inicio_hospitalizacion))->format('%d') }}</span>--}}
 
 
                         </div>
@@ -52,12 +52,12 @@
                         <div class="form-group col-md-6">
                             <label class="floating-label">Diagnósticos de ingreso</label>
                             <input class="form-control form-control-sm" name="" id=""
-                                value="{{ $epicrisis_alta_medica->diagnostico_ingreso }}">
+                               {{--   value="{{ $epicrisis_alta_medica->diagnostico_ingreso }}">--}}
                         </div>
                         <div class="form-group col-md-6">
                             <label class="floating-label">Diagnósticos de alta</label>
                             <input class="form-control form-control-sm" name="" id=""
-                                value="{{ $epicrisis_alta_medica->diagnostico_alta }}">
+                              {{--    value="{{ $epicrisis_alta_medica->diagnostico_alta }}">--}}
                         </div>
                     </div>
                     <div class="form-row">
@@ -67,19 +67,19 @@
                         <div class="form-group col-md-6">
                             <label class="floating-label">Tratamientos</label>
                             <input class="form-control form-control-sm" name="" id=""
-                                value="{{ $epicrisis_alta_medica->tratamientos_cirugias }}">
+                               {{--   value="{{ $epicrisis_alta_medica->tratamientos_cirugias }}">--}}
                         </div>
                         <div class="form-group col-md-6">
                             <label class="floating-label">Procedimientos quirúrgicos</label>
                             <input class="form-control form-control-sm" name="" id=""
-                                value="{{ $epicrisis_alta_medica->procedimientos_quirurgicos_cirugia }}">
+                              {{--    value="{{ $epicrisis_alta_medica->procedimientos_quirurgicos_cirugia }}">--}}
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label class="floating-label">Otros procedimientos y/o tratamientos</label>
                             <input class="form-control form-control-sm" name="" id=""
-                                value="{{ $epicrisis_alta_medica->otros_tratamientos_procedimientos }}">
+                              {{--    value="{{ $epicrisis_alta_medica->otros_tratamientos_procedimientos }}">--}}
                         </div>
                     </div>
                     <div class="form-row">
@@ -89,12 +89,12 @@
                         <div class="form-group col-md-6">
                             <label class="floating-label">Tratamientos</label>
                             <input class="form-control form-control-sm" name="" id=""
-                                value="{{ $epicrisis_alta_medica->tratamientos_controles }}">
+                                val{{-- ue="$epicrisis_alta_medica->tratamientos_controles --}}">--}}
                         </div>
                         <div class="form-group col-md-6">
                             <label class="floating-label">Procedimientos quirúrgicos</label>
                             <input class="form-control form-control-sm" name="" id=""
-                                value="{{ $epicrisis_alta_medica->procedimientos_quirurgicos_controles }}">
+                               {{-- value="{{ $epicri sis_alta_medica->procedimientos_quirurgicos_controles --}}">--}}
                         </div>
                     </div>
                     <div class="form-row">
@@ -104,31 +104,31 @@
                         <div class="form-group col-md-4">
                             <label class="floating-label-activo-sm">Fecha</label>
                             <input type="text" class="form-control form-control-sm" name="fecha" id="fecha"
-                                value="{{ \Carbon\Carbon::parse($epicrisis_alta_medica->fecha_control)->format('d-m-Y') }} "
+                                {{--value="{{ \Carbon\Carbon::parse($e picrisis_alta_medica->fecha_control)->format('d-m-Y') --}} "--}}
                                 disabled>
                         </div>
                         <div class="form-group col-md-8">
                             <label class="floating-label">Indicaciones</label>
                             <input class="form-control form-control-sm"
-                                value="{{ $epicrisis_alta_medica->indicaciones_alta }} ">
+                               {{-- value="$epicrisis_alta_medica->indicaciones_alta --}} ">--}}
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label class="floating-label">Rut</label>
                             <input type="text" class="form-control form-control-sm" name="rut_profesional"
-                                id="rut_profesional" value="{{ $profesional->rut }}">
+                           {{-- id="rut_profesional"value="$profesional->rut --}}">--}}
                         </div>
                         <div class="form-group col-md-4">
                             <label class="floating-label">Nombre y Apellidos</label>
                             <input type="text" class="form-control form-control-sm" name="nombre_profesional"
                                 id="nombre_profesional"
-                                value="{{ $profesional->nombre . ' ' . $profesional->apellido_uno }}">
+                               {{--  value="{{ $profesional->nombre.''.$profesional->apellido_uno ">--}}
                         </div>
                         <div class="form-group col-md-4">
                             <label class="floating-label">Email</label>
                             <input type="text" class="form-control form-control-sm" name="email_profesional"
-                                id="email_profesional" value="{{ $profesional->email }}">
+                               {{-- id="email_profesional"value="$profesional->email ">--}}
                         </div>
                     </div>
                 </form>

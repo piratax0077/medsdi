@@ -6,19 +6,17 @@
             <!--Header-->
             <div class="page-header">
                 <div class="page-block">
-                    <div class="row align-items-center">
+                    <div class="row align-items-center pt-2">
                         <div class="col-md-12">
-                            <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Buscar Pacientes</h5>
+                            <div class="page-header-title ">
+                              
                             </div>
-                            <ul class="breadcrumb">
-                                <li class="breadcrumb-item">
-                                    <a href="{{ ROUTE('asistente.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio">
-                                        <i class="feather icon-home"></i>
-                                    </a>
+                            <ul class="breadcrumb ">
+                                 <li class="breadcrumb-item"> <a href="{{ ROUTE('asistente.home') }}" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Volver a mi escritorio" aria-label="Volver a mi escritorio"><i class="feather icon-home text-white"></i></a>
+                                    
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="{{ ROUTE('asistente.buscar_paciente') }}">Buscar Pacientes Institucion</a>
+                                    <a  href="{{ ROUTE('asistente.buscar_paciente') }}">Buscar pacientes de la Institución</a>
                                 </li>
                             </ul>
                         </div>
@@ -44,78 +42,83 @@
                         </div>
                         <input type="hidden" name="id_lugar_atencion" id="id_lugar_atencion" value="{{ $lugares_atencion->id }}">
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-3 col-md-3">
-                                    {{--  <input class="form-control form-control-sm" type="text" name="busqueda_rut" id="busqueda_rut" placeholder="RUT" value="" oninput="formatoRut(this)">  --}}
-                                    <input class="form-control form-control-sm" type="text" name="busqueda_rut" id="busqueda_rut" placeholder="RUT" value="">
+                            <div class="form-row">
+                                <div class="form-group col-sm-3 col-md-3">
+                                    {{--  <input class="form-control form-control-sm" type="text" name="busqueda_rut" id="busqueda_rut"  value="" oninput="formatoRut(this)">  --}}
+                                    <label class="floating-label-activo-sm">RUT</label>
+                                    <input class="form-control form-control-sm mb-2" type="text" name="busqueda_rut" id="busqueda_rut"  value="">
+                                </div>
+                                <div class="form-group col-sm-3 col-md-3">
+                                    <label class="floating-label-activo-sm">Nombre</label>
+                                    <input class="form-control form-control-sm mb-2" type="text" name="busqueda_nombre" id="busqueda_nombre"  value="">
+                                </div>
+                                <div class="form-group col-sm-3 col-md-3">
+                                    <label class="floating-label-activo-sm">Apellido</label>
+                                    <input class="form-control form-control-sm mb-2" type="text" name="busqueda_apellido" id="busqueda_apellido" value="">
                                 </div>
                                 <div class="col-sm-3 col-md-3">
-                                    <input class="form-control form-control-sm" type="text" name="busqueda_nombre" id="busqueda_nombre" placeholder="Nombre" value="">
-                                </div>
-                                <div class="col-sm-3 col-md-3">
-                                    <input class="form-control form-control-sm" type="text" name="busqueda_apellido" id="busqueda_apellido" placeholder="Apellido" value="">
-                                </div>
-                                <div class="col-sm-3 col-md-3">
-                                    <button type="button" class="btn btn-info btn-sm has-ripple" onclick="buscar_paciente();">Buscar Paciente</button>
+                                    <button type="button" class="btn btn-info btn-block btn-sm" onclick="buscar_paciente();"><i class="feather icon-search"></i> Buscar paciente</button>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-sm-6 col-md-12">
-                                    <table id="tabla_pacientes_asistente" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center align-middle">Paciente</th>
-                                            <th class="text-center align-middle">Nacimiento</th>
-                                            <th class="text-center align-middle">Contacto</th>
-                                            <th class="text-center align-middle">Convenio</th>
-                                            <th class="text-center align-middle">Tipo de usuario</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{--  @foreach ($asistente->Paciente_normal() as $pa )
-                                            <tr>
-                                                <td class="text-center align-middle">
-                                                    {{ $pa->nombre }}
-                                                    {{ $pa->apellido_uno }}
-                                                    {{ $pa->apellido_dos }}
-                                                    <br>
-                                                    {{ $pa->rut }}
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                    {{ \Carbon\Carbon::parse($pa->fecha_nac)->format('d-m-Y') }}
-                                                </td>
-                                                <td class="text-center align-middle">
-                                                    {{ $pa->Direccion()->first()->direccion }}
-                                                    #{{ $pa->Direccion()->first()->numero_dir }},
-                                                    {{ $pa->Direccion()->first()->Ciudad()->first()->nombre }}
-                                                    <br>
-                                                    {{ $pa->email }}
-                                                    <br>
-                                                    {{ $pa->telefono_uno }}
-                                                    </td>
-                                                <td class="text-center align-middle">
-                                                {{ $pa->Prevision()->first()->nombre }}
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <span class="badge badge-primary">
-                                                        @if (isset($pa->Premium()->first()->id))
-                                                            Premiun
-                                                        @else
-                                                            Basico
-                                                        @endif
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        @endforeach  --}}
-                                    </tbody>
-                                </table>
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="table-responsive">
+                                        <table id="tabla_pacientes_asistente" class="display table table-striped  dt-responsive nowrap table-xs" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th class="align-middle">Paciente</th>
+                                                    <th class="align-middle">Nacimiento</th>
+                                                    <th class="align-middle">Contacto</th>
+                                                    <th class="align-middle">Convenio</th>
+                                                    <th class="align-middle">Tipo de usuario</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{--  @foreach ($asistente->Paciente_normal() as $pa )
+                                                    <tr>
+                                                        <td class="align-middle">
+                                                            {{ $pa->nombre }}
+                                                            {{ $pa->apellido_uno }}
+                                                            {{ $pa->apellido_dos }}
+                                                            <br>
+                                                            {{ $pa->rut }}
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            {{ \Carbon\Carbon::parse($pa->fecha_nac)->format('d-m-Y') }}
+                                                        </td>
+                                                        <td class="text-center align-middle">
+                                                            {{ $pa->Direccion()->first()->direccion }}
+                                                            #{{ $pa->Direccion()->first()->numero_dir }},
+                                                            {{ $pa->Direccion()->first()->Ciudad()->first()->nombre }}
+                                                            <br>
+                                                            {{ $pa->email }}
+                                                            <br>
+                                                            {{ $pa->telefono_uno }}
+                                                            </td>
+                                                        <td class="align-middle">
+                                                        {{ $pa->Prevision()->first()->nombre }}
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <span class="badge badge-primary">
+                                                                @if (isset($pa->Premium()->first()->id))
+                                                                    Premiun
+                                                                @else
+                                                                    Basico
+                                                                @endif
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach  --}}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
         </div>
     </div>
@@ -143,8 +146,8 @@
                 },
                 messages: {
                     rut_paciente_reserva: {
-                        required: "Debe Ingresar Rut",
-                        minlength: "Por favor ingrese un Rut valido 1111111-1"
+                        required: "Debe ingresar RUT",
+                        minlength: "Por favor ingrese un RUT válido. Ej: 9238115-0"
                     },
                 },
             });  --}}
@@ -159,8 +162,8 @@
             var apellido = $('#busqueda_apellido').val();
             if(rut == '' && nombre == '' && apellido == ''){
                 swal({
-                    title: "Busqueda de Paciente.",
-                    text:"Debe Ingresar al menos un datos de busqueda.",
+                    title: "Búsqueda de Paciente.",
+                    text:"Debe ingresar al menos un dato de búsqueda",
                     icon: "error",
                     // buttons: "Aceptar",
                     //SuccessMode: true,
@@ -191,17 +194,17 @@
                     $.each(data.registros, function(key, value){
                         var html = '';
                         html += '<tr>';
-                        html += '    <td class="text-center align-middle">';
+                        html += '    <td class="align-middle">';
                         html += '        '+value.nombres+'';
                         html += '        '+value.apellido_uno+'';
                         html += '        '+value.apellido_dos+'';
                         html += '        <br>';
                         html += '        '+value.rut+'';
                         html += '    </td>';
-                        html += '    <td class="text-center align-middle">';
+                        html += '    <td class="align-middle">';
                         html += '        '+value.fecha_nac+'';
                         html += '    </td>';
-                        html += '    <td class="text-center align-middle">';
+                        html += '    <td class="align-middle">';
                         html += '        '+value.direccion.direccion+'';
                         html += '        #'+value.direccion.numero_dir+',';
                         html += '        '+value.direccion.ciudad.nombre+'';
@@ -210,10 +213,10 @@
                         html += '        <br>';
                         html += '        '+value.telefono_uno+'';
                         html += '        </td>';
-                        html += '    <td class="text-center align-middle">';
+                        html += '    <td class="align-middle">';
                         html += '        '+value.prevision.nombre+'';
                         html += '    </td>';
-                        html += '    <td class="align-middle text-center">';
+                        html += '    <td class="align-middle">';
                         html += '        <span class="badge badge-primary">';
                         if(value.premiun == 1)
                             html += '                Premiun';
@@ -229,7 +232,7 @@
                 }
                 else
                 {
-                    $('#tabla_pacientes_asistente tbody').html('<tr><td colspan="5">Paciente no encotnrado</td></tr>');
+                    $('#tabla_pacientes_asistente tbody').html('<tr><td colspan="5">Paciente no encontrado</td></tr>');
                 }
 
             })

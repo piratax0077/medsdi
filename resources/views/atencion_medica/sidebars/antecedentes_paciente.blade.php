@@ -82,12 +82,16 @@
                                 <label class="col-2 text-dark font-weight-bolder">Comuna / Región</label>
                                 <div class="col-9 ml-2 text-secondary" id="comuna_region_paciente">
                                     @if (isset($paciente))
-                                        @if ($paciente->Direccion()->first()->Ciudad()->first() != null)
-                                            {{ $paciente->Direccion()->first()->Ciudad()->first()->nombre }}<br>
-                                            {{ $paciente->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
-                                        @else
-                                            <span class="error">No se ha registrado ciudad</span>
-                                        @endif
+										@if ( $paciente->id_direccion )
+											@if ($paciente->Direccion()->first()->Ciudad()->first() != null)
+												{{ $paciente->Direccion()->first()->Ciudad()->first()->nombre }}<br>
+												{{ $paciente->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
+											@else
+												<span class="error">No se ha registrado ciudad</span>
+											@endif
+										@else
+											<span class="error">NO se ha registrado ciudad</span>
+										@endif
                                     @else
                                         <span class="error">NO se ha registrado ciudad</span>
                                     @endif
@@ -170,7 +174,11 @@
                             <div class="form-row mt-1">
                                 <label class="col-2 text-dark font-weight-bolder">Dirección</label>
                                 <div class="col-9 ml-2 text-secondary">
-                                    <input type="text" class="form-control" id="paciente_dir_edit" value="{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}">
+									@if( $paciente->id_direccion )
+										<input type="text" class="form-control" id="paciente_dir_edit" value="{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}">
+									@else
+										<input type="text" class="form-control" id="paciente_dir_edit" value="">
+									@endif
                                 </div>
                             </div>
                             <hr class="mt-2">
@@ -180,7 +188,12 @@
                                     <select name="paciente_region_edit" id="paciente_region_edit" class="form-control" onchange="buscar_ciudad_paciente();">
                                         <option value="0">Seleccione región</option>
                                         @foreach ($regiones as $region)
-                                            <option value="{{ $region->id }}" @if ($paciente->Direccion()->first()->Ciudad()->first()->Region()->first()->id == $region->id) selected @endif>{{ $region->nombre }}</option>
+											@if( $paciente->id_direccion )
+												<option value="{{ $region->id }}" @if ($paciente->Direccion()->first()->Ciudad()->first()->Region()->first()->id == $region->id) selected @endif>{{ $region->nombre }}</option>
+											@else
+												<option value="{{ $region->id }}">{{ $region->nombre }}</option>
+											@endif
+                                            
                                         @endforeach
                                     </select>
                                 </div>
@@ -192,7 +205,11 @@
                                     <select name="paciente_comuna_edit" id="paciente_comuna_edit" class="form-control">
                                         <option value="0">Seleccione comuna</option>
                                         @foreach ($ciudades as $comuna)
-                                            <option value="{{ $comuna->id }}" @if ($paciente->Direccion()->first()->Ciudad()->first()->id == $comuna->id) selected @endif>{{ $comuna->nombre }}</option>
+											@if( $paciente->id_direccion )
+												<option value="{{ $comuna->id }}" @if ($paciente->Direccion()->first()->Ciudad()->first()->id == $comuna->id) selected @endif>{{ $comuna->nombre }}</option>
+											@else
+												<option value="{{ $comuna->id }}" >{{ $comuna->nombre }}</option>
+											@endif
                                         @endforeach
                                     </select>
                                 </div>

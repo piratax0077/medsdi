@@ -28,10 +28,10 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="row">
-
+										
                                             <!--Formulario / Menor de edad-->
-                                            @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
-                                            <!--Cierre: Formulario / Menor de edad-->
+											@include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
+											<!--Cierre: Formulario / Menor de edad-->
 
                                             <!--Motivo consulta-->
                                             @include('general.secciones_ficha.motivo')
@@ -108,11 +108,22 @@
     <script>
          /** MENSAJE*/
         /** CARGAR mensaje */
-        $('#mensaje_ficha').html('<strong>Solo el campo Hipótesis diagnóstica es obligatorio el resto es opcional</strong>');
-        $('#mensaje_ficha').show();
-        setTimeout(function(){
-            $('#mensaje_ficha').hide();
-        }, 5000);
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio el resto es opcional');
+            $('#mensaje_ficha').show();
+            setTimeout(function(){
+                $('#mensaje_ficha').hide();
+            }, 5000);
+
+            @if($fichas->count()>0)
+                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+            @else
+                $('#mensaje_historias').html(' Primera consulta del paciente. ');
+            @endif
+                $('#mensaje_historias').show();
+                setTimeout(function(){
+                    $('#mensaje_historias').hide();
+                }, 6000);
+
 
         $(document).ready(function() {
             $("#descripcion_cie").autocomplete({

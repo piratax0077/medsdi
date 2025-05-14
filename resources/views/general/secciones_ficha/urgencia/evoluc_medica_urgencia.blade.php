@@ -4,7 +4,7 @@
     <div class="card-a">
         <div class="card-header-a" id="med_urgen">
             <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#evol_med_urgencia" aria-expanded="false" aria-controls="evol_med_urgencia">
-                Atención Médica Urgencia
+                Atención Médica Urgencia 
             </button>
         </div>
         <div id="evol_med_urgencia" class="collapse" aria-labelledby="med_urgen" data-parent="#med_urgen">
@@ -71,13 +71,10 @@
                                                     <a class="nav-link-wizard active " id="rec_auto_tab" data-toggle="pill" href="#rec_auto" role="tab" aria-controls="rec_auto" aria-selected="true">Receta auto</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link-wizard" id="rec_manual_tab" data-toggle="pill" href="#rec_manual" role="tab" aria-controls="rec_manual" aria-selected="true" toogle="true">Receta Manual</a>
+                                                    <a class="nav-link-wizard" id="rec_manual_tab" data-toggle="pill" href="#rec_manual" role="tab" aria-controls="rec_manual" aria-selected="true" toogle="true" tooltip="No encontró medicamento">Receta Manual</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link-wizard" id="procedimiento_div_tab" data-toggle="pill" href="#procedimiento_div" role="tab" aria-controls="procedimiento_div" aria-selected="true" toogle="true">Procedimientos</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link-wizard" id="indicaciones_tab" data-toggle="pill" href="#indicaciones" role="tab" aria-controls="indicaciones" aria-selected="true" toogle="true">Otras Indicaciones</a>
+                                                    <a class="nav-link-wizard" id="otras_indic_tab" data-toggle="pill" href="#otras_indic" role="tab" aria-controls="otras_indic" aria-selected="true" toogle="true" tooltip="No encontró medicamento">Otras Indicaciones</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -243,13 +240,13 @@
                                                                 <label class="floating-label-activo-sm">Tipo Control</label>
                                                                 <select name="manual_tipo_control" id="manual_tipo_control" class="form-control form-control-sm">
                                                                     <option value="">Seleccione</option>
-                                                                     @if($receta_control)
+                                                                    {{--  @if($receta_control)
                                                                         @foreach ($receta_control as $control)
                                                                             @if($control->cod_control !== 8)
                                                                                 <option value="{{ $control->cod_control }}">{{ $control->descripcion }}</option>
                                                                             @endif
                                                                         @endforeach
-                                                                    @endif
+                                                                    @endif  --}}
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -368,9 +365,7 @@
 
                                                     </div>
                                                 </div>
-
-                                                <!--TAB 3-->
-                                                <div class="tab-pane fade show" id="procedimiento_div" role="tabpanel" aria-labelledby="procedimiento_div_tab">
+                                                <div class="tab-pane fade show" id="otras_indic" role="tabpanel" aria-labelledby="otras_indic_tab">
                                                     <div class="form-row">
                                                         <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-2">
                                                             <div class="form-group">
@@ -384,7 +379,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="form-group" id="div_ind_med_urg" style="display:none;">
-                                                                <label class="floating-label-activo-sm" for="obs_ind_med_urg">Descripción <i>Otra Indicación</i></label>
+                                                                <label class="floating-label-activo-sm" for="obs_b_com">Descripción <i>Otra Indicación</i></label>
                                                                 <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ind_med_urg" id="obs_ind_med_urg"></textarea>
                                                             </div>
                                                         </div>
@@ -401,7 +396,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="form-group" id="div_ind_proc_urg" style="display:none;">
-                                                                <label class="floating-label-activo-sm" for="obs_ind_proc_urg">Descripción <i>Otra Indicación</i></label>
+                                                                <label class="floating-label-activo-sm" for="obs_b_com">Descripción <i>Otra Indicación</i></label>
                                                                 <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ind_proc_urg" id="obs_ind_proc_urg"></textarea>
                                                             </div>
                                                         </div>
@@ -423,7 +418,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="form-group" id="div_ind_proc_urg" style="display:none;">
-                                                                <label class="floating-label-activo-sm" for="obs_ind_proc_urg">Descripción <i>Otra Indicación</i></label>
+                                                                <label class="floating-label-activo-sm" for="obs_b_com">Descripción <i>Otra Indicación</i></label>
                                                                 <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ind_proc_urg" id="obs_ind_proc_urg"></textarea>
                                                             </div>
                                                         </div>
@@ -443,7 +438,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="form-group" id="div_ind_inmmed_urg" style="display:none;">
-                                                                <label class="floating-label-activo-sm" for="obs_ind_inmmed_urg">Descripción <i>Otra Indicación</i></label>
+                                                                <label class="floating-label-activo-sm" for="obs_b_com">Descripción <i>Otra Indicación</i></label>
                                                                 <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ind_inmmed_urg" id="obs_ind_inmmed_urg"></textarea>
                                                             </div>
                                                         </div>
@@ -463,7 +458,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="form-group" id="div_ind_inmmed_urg" style="display:none;">
-                                                                <label class="floating-label-activo-sm" for="obs_ind_inmmed_urg">Descripción <i>Otra Indicación</i></label>
+                                                                <label class="floating-label-activo-sm" for="obs_b_com">Descripción <i>Otra Indicación</i></label>
                                                                 <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ind_inmmed_urg" id="obs_ind_inmmed_urg"></textarea>
                                                             </div>
                                                         </div>
@@ -489,38 +484,128 @@
                                                                 <input type="text" id="manual_nombre_composicion_farmaco" name="manual_nombre_composicion_farmaco" class="form-control form-control-sm">
                                                             </div>
                                                         </div>
-
-                                                        <div class="col-sm-12">
-                                                            <div class="row">
-                                                                <div class="col-sm-6">
-                                                                    <button type="button" onclick="indicar_indicacion_sdi()"
-                                                                        class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Agregar Indicación</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                                <!--TAB 4-->
-                                                <div class="tab-pane fade show" id="indicaciones" role="tabpanel" aria-labelledby="indicaciones_tab">
-                                                    <div class="form-row">
-                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 mt-2">
+{{--
+                                                        <div class="col-sm-6 mt-2">
                                                             <div class="form-group">
-                                                                <label class="floating-label-activo-sm" for="ind_med_urg" >Indicaciones</label>
-                                                                <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_ind_med_urg" id="obs_ind_med_urg"></textarea>
+                                                                <label class="floating-label-activo-sm">Tipo Control</label>
+                                                                <select name="manual_tipo_control" id="manual_tipo_control" class="form-control form-control-sm">
+                                                                    <option value="">Seleccione</option>
+                                                                    {{--  @if($receta_control)
+                                                                        @foreach ($receta_control as $control)
+                                                                            @if($control->cod_control !== 8)
+                                                                                <option value="{{ $control->cod_control }}">{{ $control->descripcion }}</option>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
                                                             </div>
                                                         </div>
 
                                                         <div class="col-sm-6 mt-2">
-                                                            <div class="form-group">
-                                                                <label class="floating-label-activo-sm">Observaciones</label>
-                                                                <input type="text" id="manual_nombre_composicion_farmaco" name="manual_nombre_composicion_farmaco" class="form-control form-control-sm">
+                                                            <div class="form-group fill">
+                                                                <label class="floating-label-activo-sm">Ingrese Presentación</label>
+                                                                <input type="text" id="manual_dosis_medicamento_ficha_dental" name="manual_dosis_medicamento_ficha_dental" class="form-control form-control-sm">
+
                                                             </div>
                                                         </div>
 
+                                                        <div class="col-sm-6 mt-2">
+                                                            <div class="form-group fill">
+                                                                <label class="floating-label-activo-sm">Ingrese Posología</label>
+                                                                <input type="text" id="manual_frecuencia_medicamento_ficha_dental" name="manual_frecuencia_medicamento_ficha_dental" class="form-control form-control-sm">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-6 mt-2">
+                                                            <div class="form-group fill">
+                                                                <label class="floating-label-activo-sm">Vía de Administración</label>
+                                                                <select class="form-control form-control-sm" id="manual_via_administracion_ficha_dental" name="manual_via_administracion_ficha_dental" onchange="validar_via_administracion_manual_sdi();">
+                                                                    <option value="0">Seleccione</option>
+                                                                    <option value="1">V&iacute;a Oral</option>
+                                                                    <option value="2">V&iacute;a Sublingual</option>
+                                                                    <option value="3">V&iacute;a T&oacute;pica</option>
+                                                                    <option value="4">V&iacute;a Oftalmol&oacute;gica</option>
+                                                                    <option value="5">V&iacute;a &Oacute;tica</option>
+                                                                    <option value="6">V&iacute;a Inhalatoria</option>
+                                                                    <option value="7">V&iacute;a Nasal</option>
+                                                                    <option value="8">V&iacute;a Rectal</option>
+                                                                    <option value="9">V&iacute;a Vaginal</option>
+                                                                    <option value="10">V&iacute;a parental</option>
+                                                                    <option value="11">Otra Vía</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group fill" id="div_manual_observaciones_via_administracion_ficha_dental" style="display: none;">
+                                                                <label class="floating-label-activo-sm">Otra vía de Administración</label>
+                                                                <input type="text" id="manual_observaciones_via_administracion_ficha_dental" name="manual_observaciones_via_administracion_ficha_dental" class="form-control form-control-sm " disabled >
+                                                            </div>
+                                                        </div>  --}}
+
+                                                        {{--  <div class="col-sm-3 mt-2">
+                                                            <div class="form-group fill">
+                                                                <label class="floating-label-activo-sm">Periodo</label>
+                                                                <select class="form-control form-control-sm" id="manual_periodo_ficha_dental" name="manual_periodo_ficha_dental" onchange="validar_periodo_manual_sdi();">
+                                                                    <option value="0">Seleccione</option>
+                                                                    <option value="1">SOS</option>
+                                                                    <option value="2">Dosis unica</option>
+                                                                    <option value="3">3 d&iacute;as</option>
+                                                                    <option value="4">5 d&iacute;as</option>
+                                                                    <option value="5">7 d&iacute;as</option>
+                                                                    <option value="6">10 d&iacute;as</option>
+                                                                    <option value="7">15 d&iacute;as</option>
+                                                                    <option value="8">30 d&iacute;as</option>
+                                                                    <option value="9">Permanente</option>
+                                                                    <option value="10">V&iacute;a parental</option>
+                                                                    <option value="11">Otro Periodo</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group fill" id="div_manual_observaciones_periodo_ficha_dental" style="display: none;">
+                                                                <label class="floating-label-activo-sm">Otro Periodo</label>
+                                                                <input type="text" id="manual_observaciones_periodo_ficha_dental" name="manual_observaciones_periodo_ficha_dental" class="form-control form-control-sm " disabled >
+                                                            </div>
+                                                        </div>  --}}
+
+                                                        {{--  <input type="hidden" id="manual_cantidad_comprar" name="manual_cantidad_comprar" value="">  --}}
+
+                                                        {{--  <div class="col-sm-3  mt-2">
+                                                            <label class="floating-label-activo-sm">Cantidad a Comprar</label>
+                                                            <select name="manual_cantidad_numero" id="manual_cantidad_numero" class="form-control form-control-sm" onchange="cargarCantidadComprar('manual_cantidad_numero', 'manual_cantidad_tipo_unidad', 'manual_cantidad_comprar')">
+                                                                <option value="1">(1) Uno</option>
+                                                                <option value="2">(2) Dos</option>
+                                                                <option value="3">(3) Tres</option>
+                                                                <option value="4">(4) Cuatro</option>
+                                                                <option value="5">(5) Cinco</option>
+                                                                <option value="6">(6) Seis</option>
+                                                                <option value="7">(7) Siete</option>
+                                                                <option value="8">(8) Ocho</option>
+                                                                <option value="9">(9) Nueve</option>
+                                                            </select>
+                                                        </div>  --}}
+
+                                                        {{--  <div class="col-sm-3  mt-2">
+                                                            <label class="floating-label-activo-sm">Presentación</label>
+                                                            <select name="manual_cantidad_tipo_unidad" id="manual_cantidad_tipo_unidad" class="form-control form-control-sm" onchange="cargarCantidadComprar('manual_cantidad_numero', 'manual_cantidad_tipo_unidad', 'manual_cantidad_comprar')">
+                                                                <option value="Ampolla(s)">Ampolla(s)</option>
+                                                                <option value="Caja(s)">Caja(s)</option>
+                                                                <option value="Franco(s)">Frasco(s)</option>
+                                                                <option value="Unidad(es)">Unidad(es)</option>
+                                                            </select>
+                                                        </div>  --}}
+                                                        {{--  <div class="col-sm-3  mt-2">
+                                                            <label id="manual_cantidad_comprar_label"></label>
+                                                        </div>  --}}
+
                                                         <div class="col-sm-12">
                                                             <div class="row">
+                                                                {{--  <div class="col-sm-6">
+                                                                    <div class="form-group mb-1">
+                                                                        <label><strong>Uso Crónico</strong></label>
+                                                                        <div class="switch switch-success d-inline m-r-10">
+                                                                            <input type="checkbox" id="manual_medicamento_uso_cronico">
+                                                                            <label for="manual_medicamento_uso_cronico" class="cr"></label>
+                                                                        </div>
+                                                                        <div class="alert-primary" id="manual_mensaje_uso_cronico" style="display:none;">Acaba de seleccionar medicamento como USO CRÓNICO </div>
+                                                                    </div>
+                                                                </div>  --}}
                                                                 <div class="col-sm-6">
                                                                     <button type="button" onclick="indicar_indicacion_sdi()"
                                                                         class="btn btn-success btn-sm float-right"><i class="fa fa-plus"></i> Agregar Indicación</button>
@@ -535,7 +620,7 @@
                                                 <div class="row">
                                                     <div class="col-sm-12">
                                                         <div class="col-sm-12 mt-3">
-                                                            {{-- MEDICAMENTOS --}}
+                                                            <!--**** Al agregar un medicamento, se debe cargar la tabla *****-->
                                                             <!--Tabla-->
                                                             <div class="table-responsive">
                                                                 <table id="tabla_medicamento_cirugia_sdi" class="table table-bordered table-xs">
@@ -551,43 +636,11 @@
                                                                             <td class="text-center align-middle text-wrap hidden">Posología</td>
                                                                             <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_via_administracion</td>
                                                                             <td class="text-center align-middle text-wrap">Vía Adm.</td>
-                                                                            <th class="text-center align-middle">Eliminar</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                            <!--Cierre: Tabla-->
-
-                                                            {{-- PROCEDIMIENTOS --}}
-                                                            <!--Tabla-->
-                                                            <div class="table-responsive">
-                                                                <table id="tabla_medicamento_cirugia_sdi" class="table table-bordered table-xs">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_procedimiento</td>
-                                                                            <td class="text-center align-middle text-wrap">Procedimiento</td>
-                                                                            <td class="text-center align-middle text-wrap">Vigilar Signos de Alerta</td>
-                                                                            <th class="text-center align-middle">Eliminar</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                            <!--Cierre: Tabla-->
-
-                                                            {{-- INDICACIONES --}}
-                                                            <!--Tabla-->
-                                                            <div class="table-responsive">
-                                                                <table id="tabla_medicamento_cirugia_sdi" class="table table-bordered table-xs">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <td class="text-center align-middle text-wrap">Indicaciones</td>
-                                                                            <td class="text-center align-middle text-wrap">Observaciones</td>
+                                                                            {{--  <td class="text-center align-middle text-wrap hidden" hidden="hidden">id_periodo</td>
+                                                                            <td class="text-center align-middle text-wrap">Periodo</td>
+                                                                            <td class="text-center align-middle text-wrap hidden" hidden="hidden">uso_cronico</td>
+                                                                            <td class="text-center align-middle text-wrap hidden" hidden="hidden">cantidad_compra</td>
+                                                                            <td class="text-center align-middle text-wrap">Comprar</td>  --}}
                                                                             <th class="text-center align-middle">Eliminar</th>
                                                                         </tr>
                                                                     </thead>
@@ -599,7 +652,9 @@
                                                             <!--Cierre: Tabla-->
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" onclick="Registrar_indicacion();" data-dismiss="modal" class="btn btn-info">Generar Indicaciones</button>
+                                                            {{--  <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>  --}}
+                                                            {{--  <button type="button" onclick="alerta_registro_medicamento_sdi();" data-dismiss="modal" class="btn btn-info">Generar Receta</button>  --}}
+                                                            <button type="button" onclick="registrar_medicamentos_ficha_sdi();" data-dismiss="modal" class="btn btn-info">Generar Indicaciones</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -860,7 +915,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>  
                                 </div>
                             </div>
                         </div>
@@ -983,7 +1038,7 @@
     {
 
         let id_medicamento = $('#id_medicamento_ficha_dental').val();
-        console.log('hola');;
+        console.log(id_medicamento);
 
         let url = "{{ route('dental.getDosis') }}";
         $.ajax({
@@ -1275,7 +1330,7 @@
 
             {{--  if($.trim(periodo_ficha_dental) == '' || periodo_ficha_dental == 0 || $.trim(periodo_ficha_dental) == 'Seleccione')
             {
-                //valido = 1;
+                valido = 1;
                 mensaje += 'Debe completar el campo Periodo.\n';
             }
             else if($('#periodo_ficha_dental').val() == 11)
@@ -1293,7 +1348,7 @@
 
             if($.trim(cantidad_comprar) == '' || cantidad_comprar == 0 || $.trim(cantidad_comprar) == 'Seleccione')
             {
-                //valido = 1;
+                valido = 1;
                 mensaje += 'Debe completar el campo Cantidad a Comprar.\n';
             }
             else if($('#cantidad_comprar').val() == '999')

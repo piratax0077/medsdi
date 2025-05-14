@@ -83,13 +83,13 @@
                                             <hr>
                                             <div class="form-row">
                                                 <div class="form-group col-md-4">
-                                                    <button type="button" class="btn btn-primary-light-c btn-sm btn-block" onclick="anestesia_local_dental();">Anestesia local</button>
+                                                    <button type="button" class="btn btn-primary btn-block" onclick="anestesia_local_dental();">Anestesia local</button>
                                                 </div>
                                                 <div class="form-group col-md-4">
-                                                    <button type="button" class="btn btn-primary-light-c btn-sm btn-block" onclick="hemorragia_dental();"><i class="feather icon-save"></i> Hemorragias</button>
+                                                    <button type="button" class="btn btn-primary btn-block" onclick="hemorragia_dental();"><i class="feather icon-save"></i> Hemorragias</button>
                                                 </div>
                                                 <div class="form-group col-md-4">
-                                                    <button type="button" class="btn btn-primary-light-c btn-sm btn-block" onclick="fractura_dental();"><i class="feather icon-save"></i> Fracturas</button>
+                                                    <button type="button" class="btn btn-primary btn-block" onclick="fractura_dental();"><i class="feather icon-save"></i> Fracturas</button>
                                                 </div>
                                             </div>
                                             <br>
@@ -870,29 +870,29 @@
                                         <div class="card-informacion">
                                             <div class="card-body pb-0">
                                                 <div class="form-row">
-                                                    <div class="form-group col-md-2 fill">
+                                                    <div class="form-group col-md-12 col-lg-4 fill">
                                                         <label class="floating-label-activo-sm">Insumo</label>
                                                         <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
                                                     </div>
-                                                    <div class="form-group col-md-3 fill">
+                                                    <div class="form-group col-md-3 col-lg-1 fill">
                                                         <label class="floating-label-activo-sm">Cantidad</label>
                                                         <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
                                                     </div>
-                                                    <div class="form-group col-md-2 fill">
+                                                    <div class="form-group col-md-3 col-lg-2 fill">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
                                                     </div>
-                                                    <div class="form-group col-md-1">
+                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2">
                                                         <label class="floating-label-activo-sm">Descuento</label>
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
                                                     </div>
-                                                    <div class="form-group col-md-2 fill">
+                                                    <div class="form-group col-md-3 col-lg-2 fill">
                                                         <label class="floating-label-activo-sm">Total Prestación</label>
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
                                                     </div>
-                                                    <div class="form-group col-md-2 d-flex justify-content-center">
+                                                    <div class="form-group col-md-1 col-lg-1 d-flex">
 
-                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
+                                                        <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1090,29 +1090,29 @@
                                         <div class="card-informacion">
                                             <div class="card-body pb-0">
                                                 <div class="form-row">
-                                                    <div class="form-group col-md-2 fill">
+                                                    <div class="form-group col-md-12 col-lg-4 fill">
                                                         <label class="floating-label-activo-sm">Insumo</label>
                                                         <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
                                                     </div>
-                                                    <div class="form-group col-md-3 fill">
+                                                    <div class="form-group col-md-3 col-lg-1 fill">
                                                         <label class="floating-label-activo-sm">Cantidad</label>
                                                         <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
                                                     </div>
-                                                    <div class="form-group col-md-2 fill">
+                                                    <div class="form-group col-md-3 col-lg-2 fill">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
                                                     </div>
-                                                    <div class="form-group col-md-1">
+                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2">
                                                         <label class="floating-label-activo-sm">Descuento</label>
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
                                                     </div>
-                                                    <div class="form-group col-md-2 fill">
+                                                    <div class="form-group col-md-3 col-lg-2 fill">
                                                         <label class="floating-label-activo-sm">Total Prestación</label>
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
                                                     </div>
-                                                    <div class="form-group col-md-2 d-flex justify-content-center">
+                                                    <div class="form-group col-md-1 col-lg-1 d-flex">
 
-                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
+                                                        <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1283,29 +1283,29 @@
                                         <div class="card-informacion">
                                             <div class="card-body pb-0">
                                                 <div class="form-row">
-                                                    <div class="form-group col-md-2 fill">
+                                                    <div class="form-group col-md-12 col-lg-4 fill">
                                                         <label class="floating-label-activo-sm">Insumo</label>
                                                         <input type="text" class="form-control form-control-sm" name="insumo_pres" id="insumo_pres" value="${insumo.insumos} ${insumo.nombre_marca}">
                                                     </div>
-                                                    <div class="form-group col-md-3 fill">
+                                                    <div class="form-group col-md-3 col-lg-1 fill">
                                                         <label class="floating-label-activo-sm">Cantidad</label>
                                                         <input type="text" class="form-control form-control-sm" name="cantidad_pres" id="cantidad_pres" value="${insumo.cantidad}">
                                                     </div>
-                                                    <div class="form-group col-md-2 fill">
+                                                    <div class="form-group col-md-3 col-lg-2 fill">
                                                         <label class="floating-label-activo-sm">Sub-Total</label>
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
                                                     </div>
-                                                    <div class="form-group col-md-1">
+                                                    <div class="form-group col-sm-12 col-md-2 col-lg-2">
                                                         <label class="floating-label-activo-sm">Descuento</label>
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="">
                                                     </div>
-                                                    <div class="form-group col-md-2 fill">
+                                                    <div class="form-group col-md-3 col-lg-2 fill">
                                                         <label class="floating-label-activo-sm">Total Prestación</label>
                                                         <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(total)}">
                                                     </div>
-                                                    <div class="form-group col-md-2 d-flex justify-content-center">
+                                                    <div class="form-group col-md-1 col-lg-1 d-flex">
 
-                                                        <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
+                                                        <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_insumo(${insumo.id})"><i class="feather icon-x"> </i> </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -4461,38 +4461,38 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                 odontograma.forEach(function(odonto){
                         if(odonto.presupuesto == 1){
                             $('#contenedor_piezas_dentales_presupuesto').append(`
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="card-informacion">
-                                                <div class="card-body pb-0">
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-2">
-                                                            <label class="floating-label-activo-sm">Pieza</label>
-                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
-                                                        </div>
-                                                        <div class="form-group col-md-3">
-                                                            <label class="floating-label-activo-sm">Prestación</label>
-                                                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
-                                                        </div>
-                                                        <div class="form-group col-md-2">
-                                                            <label class="floating-label-activo-sm">Sub-Total</label>
-                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
-                                                        </div>
-                                                        <div class="form-group col-md-1">
-                                                            <label class="floating-label-activo-sm">Descuento</label>
-                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                        </div>
-                                                        <div class="form-group col-md-2">
-                                                            <label class="floating-label-activo-sm">Total prestación</label>
-                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
-                                                        </div>
-                                                        <div class="form-group col-md-2 d-flex justify-content-center">
-                                                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"></i> </button>
-                                                        </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-informacion">
+                                            <div class="card-body pb-0">
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-1 col-xl-1 fill">
+                                                        <label class="floating-label-activo-sm">Pieza</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-9 col-lg-4 col-xl-4 fill">
+                                                        <label class="floating-label-activo-sm">Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2 fill">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-3 col-lg-2 col-xl-2">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-4 col-lg-2 col-xl-2 fill">
+                                                        <label class="floating-label-activo-sm">Total prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                    </div>
+                                                    <div class="form-group col-sm-12 col-md-1 col-lg-1 col-xl-1 d-flex">
+                                                        <button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"></i> </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    `);
+                                    </div>
+                                `);
                             $('#table_trabajos_presupuesto tbody').append(`
                                 <tr>
                                     <td>${odonto.fecha}</td>
@@ -5637,38 +5637,38 @@ function agregar_examenes_ficha() {
                         odontograma.forEach(function(odonto){
                             if(odonto.presupuesto == 1){
                                 $('#contenedor_piezas_dentales_presupuesto').append(`
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                    <div class="card-informacion">
-                                        <div class="card-body pb-0">
-                                            <div class="form-row">
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Pieza</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
-                                                </div>
-                                                <div class="form-group col-md-3">
-                                                    <label class="floating-label-activo-sm">Prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Sub-Total</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
-                                                </div>
-                                                <div class="form-group col-md-1">
-                                                    <label class="floating-label-activo-sm">Descuento</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                </div>
-                                                <div class="form-group col-md-2">
-                                                    <label class="floating-label-activo-sm">Total prestación</label>
-                                                    <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
-                                                </div>
-                                                <div class="form-group col-md-2 d-flex justify-content-center">
-                                                    <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="card-informacion">
+                                            <div class="card-body pb-0">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Pieza</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${odonto.pieza}">
+                                                    </div>
+                                                    <div class="form-group col-md-3">
+                                                        <label class="floating-label-activo-sm">Prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${odonto.descripcion}">
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Sub-Total</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                    </div>
+                                                    <div class="form-group col-md-1">
+                                                        <label class="floating-label-activo-sm">Descuento</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <label class="floating-label-activo-sm">Total prestación</label>
+                                                        <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(formatoMoneda(odonto.valor))}" >
+                                                    </div>
+                                                    <div class="form-group col-md-2 d-flex justify-content-center">
+                                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_odontograma(${odonto.id})"><i class="fas fa-trash"></i> </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                        `);
+                                `);
                                     $('#table_trabajos_presupuesto tbody').append(`
                                         <tr>
                                             <td>${odonto.fecha}</td>

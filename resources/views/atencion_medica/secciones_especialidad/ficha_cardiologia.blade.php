@@ -4,15 +4,20 @@
             <div class="col-sm-12 col-md-12">
                 <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones active text-uppercase" id="atencion_cirugia_gen-tab" data-toggle="tab" href="#atencion_cirugia_gen" role="tab" aria-controls="atencion_cirugia_gen" aria-selected="true">Atención Especialidad</a>
+                        <a class="nav-secciones active text-uppercase" id="atencion_cardiologia_gen-tab" data-toggle="tab" href="#atencion_cardiologia_gen" role="tab" aria-controls="atencion_cardiologia_gen" aria-selected="true">Atención Especialidad</a>
                     </li>
-                    <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="endosc_gastrica-tab" data-toggle="tab" href="#endosc_gastrica" role="tab" aria-controls="endosc_gastrica" aria-selected="false">Endoscopía Digestiva Alta</a>
-                    </li>
+                 
 				</ul>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                <div class="form-row mb-1">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-success-b alert-dismissible fade show"  role="alert" id="mensaje_historias"></div>
+                    </div>
+                </div>
             </div>
 
              <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -53,9 +58,9 @@
                     @endphp
 
                     @csrf
-                    <div class="tab-content" id="CDA-contenido">
+                    <div class="tab-content" id="cardio-contenido">
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
-                        <div class="tab-pane fade show active" id="atencion_cirugia_gen" role="tabpanel" aria-labelledby="atencion_cirugia_gen-tab">
+                        <div class="tab-pane fade show active" id="atencion_cardiologia_gen" role="tabpanel" aria-labelledby="atencion_cardiologia_gen-tab">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
                                     <!--FORMULARIOS-->
@@ -69,68 +74,70 @@
                                         @include('general.secciones_ficha.motivo')
 
                                         <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
-                                        <div class="col-sm-12 col-md-12">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="card-a">
-                                                <div class="card-header-a" id="exam_esp_cdg">
-                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_cdg_c" aria-expanded="false" aria-controls="exam_esp_cdg_c">
-                                                        Examen especialidad C.Digestiva Alta
+                                                <div class="card-header-a" id="exam_esp_cardio">
+                                                    <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left  card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_cardio_c" aria-expanded="false" aria-controls="exam_esp_cardio_c">
+                                                        Examen Cardiovascular
                                                     </button>
                                                 </div>
-                                                <div id="exam_esp_cdg_c" class="collapse" aria-labelledby="exam_esp_cdg" data-parent="#exam_esp_cdg">
+                                                <div id="exam_esp_cardio_c" class="collapse" aria-labelledby="exam_esp_cardio" data-parent="#exam_esp_cardio">
                                                     <div class="card-body-aten-a">
-                                                        <div class="row">
+                                                        <div class="form-row">
                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                <ul class="nav nav-tabs-aten nav-fill mb-2" id="cir_dig" role="tablist">
+                                                                <ul class="nav nav-tabs-aten nav-fill mb-3" id="orl" role="tablist">
                                                                     <li class="nav-item">
-                                                                        <a class="nav-link-aten text-reset active" id="cir_dig_sint_tab" data-toggle="tab" href="#cir_dig_sint" role="tab" aria-controls="cir_dig_sint" aria-selected="true">Motivo de consulta Sintomas Generales</a>
+                                                                        <a class="nav-link-aten text-reset active" id="cardio_sint_tab" data-toggle="tab" href="#cardio_sint" role="tab" aria-controls="cardio_sint" aria-selected="true">Ficha Cardiología</a>
                                                                     </li>
                                                                     <li class="nav-item">
-                                                                        <a class="nav-link-aten text-reset" id="ex_plan_tto-tab" data-toggle="tab" href="#ex_plan_tto" role="tab" aria-controls="ex_plan_tto" aria-selected="true">Plan de Tratamiento</a>
+                                                                        <a class="nav-link-aten text-reset" id="ex_plan_tto_cardio-tab" data-toggle="tab" href="#ex_plan_tto_cardio" role="tab" aria-controls="ex_plan_tto_cardio" aria-selected="true">Plan de Tratamiento</a>
                                                                     </li>
                                                                 </ul>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
+                                                        <div class="form-row">
                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                 <div class="tab-content" id="cir_digest_adulto">
                                                                     <!--SINTOMAS GENERALES-->
-                                                                    <div class="tab-pane fade show active" id="cir_dig_sint" role="tabpanel" aria-labelledby="cir_dig_sint_tab">
-                                                                        <div class="form-row">
-                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <h6 class="t-aten">Motivo de consulta</h6>
+                                                                    <div class="tab-pane fade show active" id="cardio_sint" role="tabpanel" aria-labelledby="cardio_sint_tab">
+                                                                        {{--  <div class="row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center ">
+                                                                                <h6 class="t-aten">Ficha Broncopulmonar</h6>
                                                                             </div>
-                                                                        </div>
+                                                                        </div>  --}}
+                                                                        
                                                                         <div class="form-row">
-                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12" id="div_detalle_transito_intest">
-                                                                                <label class="floating-label-activo-sm" for="cda_mc">Motivo de consulta</label>
-                                                                                <textarea class="form-control caja-texto form-control-sm" rows="2" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest alta" data-tipo="cirugia digest alta" onfocus="this.rows=3" onblur="this.rows=2;" name="cda_mc" id="cda_mc" placeholder=" RGE ,DOLOR, ZONA,SINTOMAS ACOMPAÑANTES "></textarea>
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <label class="floating-label-activo-sm" for="mc_cardio">Motivo de consulta</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" rows="2" onfocus="this.rows=3" onblur="this.rows=2;" name="mc_cardio" id="mc_cardio" placeholder="TOS,EDEMAS, CLAUDICACIÓN INTERMITENTE,DOLOR, ZONA,SINTOMAS ACOMPAÑANTES "></textarea>
                                                                             </div>
-                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12" id="div_detalle_transito_intest">
-                                                                                <label class="floating-label-activo-sm" for="cda_ex_fis">Examen Físico</label>
-                                                                                <textarea class="form-control caja-texto form-control-sm" rows="2" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest alta" data-tipo="cirugia digest alta" onfocus="this.rows=3" onblur="this.rows=2;" name="cda_ex_fis" id="cda_ex_fis" placeholder="CEG, PRESENCIA DE SANGRE,CEG, SOSP. DE ORGANO MASAS OTROS"></textarea>
+                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <label class="floating-label-activo-sm" for="ex_fis_cardio">Examen Físico</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" rows="2"  onfocus="this.rows=3" onblur="this.rows=2;" name="ex_fis_cardio" id="ex_fis_cardio" placeholder="CEG, PRESENCIA DE SANGRE, SOSP. DE ORGANO MASAS OTROS"></textarea>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm" for="urgencia_cda">¿Es Urgencia Qx.?</label>
-                                                                                <select name="urgencia_cda" id="urgencia_cda" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest alta" data-tipo="cirugia digest alta" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cda','div_detalle_urgencia_cda','obs_urgencia_cda',2);">
+                                                                                <label class="floating-label-activo-sm" for="urgencia_cardio">¿Es Urgencia Qx.?</label>
+                                                                                <select name="urgencia_cardio" id="urgencia_cardio"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('urgencia_cardio','div_detalle_urgencia_cardio','obs_urgencia_cardio',2);">
                                                                                     <option value="1" selected>No</option>
                                                                                     <option value="2">Si</option>
                                                                                 </select>
                                                                             </div>
-                                                                            <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 form-group">
-                                                                                <label class="floating-label-activo-sm" for="obs_egp_cda">Obs. Estado General Paciente</label>
-                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Estado General del Paciente" data-seccion="Cirugia digest alta" data-tipo="cirugia digest alta" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_egp_cda" id="obs_egp_cda" placeholder="ANOTE APRECIACIÓN SOBRE ESTADO GENERAL DEL PACIENTE"></textarea>
-                                                                            </div>
+                                                                    
                                                                         </div>
-                                                                        <div class="form-row" id="div_detalle_urgencia_cda" style="display:none">
-                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                                                        <div class="form-row" id="div_detalle_urgencia_cardio" style="display:none">
+                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 form-group">
+                                                                                <label class="floating-label-activo-sm" for="obs_cardio">Obs. Estado General Paciente</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="obs_cardio" id="obs_cardio" placeholder="ANOTE APRECIACIÓN SOBRE ESTADO GENERAL DEL PACIENTE"></textarea>
+                                                                            </div>
+                                                                            <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                 <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="ingresohosp();"><i class="feather icon-edit-1"></i> Orden de Hospitalización </button>
                                                                             </div>
-                                                                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                                                            <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                                                 <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_pabellon();"><i class="feather icon-edit-1"></i> Solicitar Pabellón</button>
                                                                             </div>
                                                                         </div>
-                                                                        <hr class="mt-2">
-                                                                        <div class="row mb-2">
+                                                                
+                                                                        {{--  <div class="row mb-2">
                                                                             <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                                                                 <div class="form-group">
                                                                                     <label class="floating-label-activo-sm">Carga Ficha Tipo</label>
@@ -150,31 +157,31 @@
                                                                             <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 text-center">
                                                                                 <button type="button" class="btn btn-info-light-c btn-sm" onclick="abrir_modal_guardar_tipo('form-oft-g','registro_f_t_oft_detalle','oft_g');"><i class="feather icon-save"></i> Guardar nueva ficha tipo</button>
                                                                             </div>
-                                                                        </div>
+                                                                        </div>  --}}
                                                                     </div>
                                                                     <!--PLAN DE TRATAMIENTO-->
-                                                                    <div class="tab-pane fade show" id="ex_plan_tto" role="tabpanel" aria-labelledby="ex_plan_tto-tab">
-                                                                        <div class="form-row">
+                                                                    <div class="tab-pane fade show" id="ex_plan_tto_cardio" role="tabpanel" aria-labelledby="ex_plan_tto_cardio-tab">
+                                                                        {{--  <div class="form-row">
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <h6 class="t-aten">Plan de tratamiento</h6>
+                                                                                <h6 class="tex-center">Plan de tratamiento</h6>
                                                                             </div>
-                                                                        </div>
-                                                                        <div class="row">
+                                                                        </div>  --}}
+                                                                        <div class="form-row m-2">
                                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                 <div class="form-row">
                                                                                     <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mb-0 mt-0">
                                                                                         <div class="form-group">
-                                                                                            <label class="ml-0" for="tto_med_cda"><strong>Tratamiento médico</strong></label>
+                                                                                            <label class="ml-0" for="tto_med_cardio"><strong>Tratamiento médico</strong></label>
                                                                                             <div class="switch switch-success d-inline m-r-10">
-                                                                                                <input type="checkbox" id="tto_med_cda" name="tto_med_cda" value="1" onchange="javascript:showContentTmcda()" />
-                                                                                                <label for="tto_med_cda" class="cr"></label>
+                                                                                                <input type="checkbox" id="tto_med_cardio" name="tto_med_cardio" value="1" onchange="javascript:showContentTmcardio()" />
+                                                                                                <label for="tto_med_cardio" class="cr"></label>
                                                                                             </div>
                                                                                         </div>
-                                                                                            <div id="contentTto_cda" style="display: none;">
+                                                                                            <div id="contentTto_cardio" style="display: none;">
                                                                                                 <div class="form-row">
                                                                                                     <div class="form-group col-md-12">
-                                                                                                        <label class="floating-label-activo-sm" for="rec_tto_cda">Recomendaciones</label>
-                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Recomendaciones" data-seccion="Plan de Tratamiento" data-tipo="recomendaciones médicas"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="rec_tto_cda" id="rec_tto_cda"></textarea>
+                                                                                                        <label class="floating-label-activo-sm" for="rec_tto_cardio">Recomendaciones</label>
+                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Recomendaciones" data-seccion="Plan de Tratamiento" data-tipo="recomendaciones médicas"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="rec_tto_cardio" id="rec_tto_cardio"></textarea>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
@@ -184,20 +191,20 @@
                                                                                         <div class="form-group">
                                                                                             <label class="ml-0"><strong>Procedimiento</strong></label>
                                                                                             <div class="switch switch-success d-inline m-r-10">
-                                                                                                <input type="checkbox" id="pr_cda" name="pr_cda" value="1" onchange="javascript: showContentProc_cda()" />
-                                                                                                <label for="pr_cda" class="cr"></label>
+                                                                                                <input type="checkbox" id="pr_cardio" name="pr_cardio" value="1" onchange="javascript: showContentProc_cardio()" />
+                                                                                                <label for="pr_cardio" class="cr"></label>
                                                                                             </div>
                                                                                         </div>
 
-                                                                                            <div id="contentProc_cda" style="display: none;">
+                                                                                            <div id="contentProc_cardio" style="display: none;">
                                                                                                 <div class="form-row">
                                                                                                     <div class="form-group col-md-4">
-                                                                                                        <label class="floating-label-activo-sm" for="tipo_proc_cda"> Tipo</label>
-                                                                                                        <input type="text" class="form-control form-control-sm" data-titulo="Tipo Procedimiento" data-seccion="Plan de Tratamiento" data-tipo="Tipo de procedimiento"  name="tipo_proc_cda" id="tipo_proc_cda">
+                                                                                                        <label class="floating-label-activo-sm" for="tipo_proc_cardio"> Tipo</label>
+                                                                                                        <input type="text" class="form-control form-control-sm" data-titulo="Tipo Procedimiento" data-seccion="Plan de Tratamiento" data-tipo="Tipo de procedimiento"  name="tipo_proc_cardio" id="tipo_proc_cardio">
                                                                                                     </div>
                                                                                                     <div class="form-group col-md-8">
-                                                                                                        <label class="floating-label-activo-sm" for="plan_proc_cda"> Plan</label>
-                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Plan Tratamiento" data-seccion="Plan de Tratamiento" data-tipo="Plan de procedimiento"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="plan_proc_cda" id="plan_proc_cda"></textarea>
+                                                                                                        <label class="floating-label-activo-sm" for="plan_proc_cardio"> Plan</label>
+                                                                                                        <textarea class="form-control caja-texto form-control-sm" data-titulo="Plan Tratamiento" data-seccion="Plan de Tratamiento" data-tipo="Plan de procedimiento"  rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="plan_proc_cardio" id="plan_proc_cardio"></textarea>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
@@ -206,9 +213,9 @@
                                                                                     <div class="col-sm-12 col-md-12 col-lg-3 col-xl-3 mb-0 mt-0">
                                                                                         <div class="form-group">
                                                                                             <div class="switch switch-success d-inline m-r-10">
-                                                                                                <label class="ml-0" for="tto_med_cda"><strong>Cirugía</strong></label>
-                                                                                                <input type="checkbox" class="custom-control-input" id="cirug_cda" name="cirug_cda" value="{!! old('cirug_cda') !!}">
-                                                                                                <label class="cr" for="cirug_cda"></label>
+                                                                                                <label class="ml-0" for="tto_med_cardio"><strong>Cirugía</strong></label>
+                                                                                                <input type="checkbox" class="custom-control-input" id="cirug_cardio" name="cirug_cardio" value="{!! old('cirug_cardio') !!}">
+                                                                                                <label class="cr" for="cirug_cardio"></label>
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -216,21 +223,19 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-row mb-3">
-                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-1">
-                                                                                <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_endosc_eda()";><i class="feather icon-edit-1"></i> Solicitar Endoscopía Alta</button>
+                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
+                                                                                <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_cardiologia()";><i class="feather icon-edit-1"></i> Solicitar Exámenes cardiológicos</button>
 
                                                                             </div>
-                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-1">
-                                                                                <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_endosc_edb()";><i class="feather icon-edit-1"></i> Solicitar Endoscopía Baja</button>
+                                                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
+                                                                                <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_rx_cardio()";><i class="feather icon-edit-1"></i> Solicitar Radiologia especialidad</button>
                                                                             </div>
-                                                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-1">
-                                                                                <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="mostrar_modal_examen_cirguria()";><i class="feather icon-edit-1"></i> Examenes</button>
-                                                                            </div>
+                                                                           
                                                                         </div>
                                                                         <div class="form-row">
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <label class="floating-label-activo-sm"for="obs_plan_trat_cda">Obs. Plan de tratamiento</label>
-                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Plan de tratamiento" data-seccion=" Plan de tratamiento" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_plan_trat_cda" id="obs_plan_trat_cda"></textarea>
+                                                                                <label class="floating-label-activo-sm"for="obs_plan_trat_cardio">Obs. Plan de tratamiento</label>
+                                                                                <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Plan de tratamiento" data-seccion=" Plan de tratamiento" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_plan_trat_cardio" id="obs_plan_trat_cardio"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -241,10 +246,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-										<!--CIRUGIA GENERAL-->
-                                        @include('general.secciones_ficha.cirugia_general.cirugia_adulto')
-										<!--cierre CIRUGIA GENERAL-->
 
                                         <!-- hospitalizacion -->
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -262,15 +263,6 @@
                                             </div>
                                         </div>
                                         <!-- cierre hospitalizacion -->
-
-                                        <!-- control post qx -->
-                                        @include('general.secciones_ficha.control_cirugia_gen')
-                                        <!-- cierre control post qx -->
-
-                                        <!--Formulario / Signos vitales y otros-->
-                                        {{-- @include('atencion_medica.generales.signos_vitales') --}}
-                                        <!--Cierre: Formulario / Signos vitales y otros-->
-
                                         <!-- ges -->
                                         @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
                                         <!-- cierre ges -->
@@ -343,63 +335,15 @@
 
 @section('page-script-ficha-atencion')
     <script>
-
-        function showContentTmcda() {
-            element = document.getElementById("contentTto_cda");
-            check = document.getElementById("tto_med_cda");
-            if (check.checked) {
-                element.style.display='block';
-            }
-            else {
-                element.style.display='none';
-            }
-        }
-
-
-        function showContentProc_cda() {
-            element = document.getElementById("contentProc_cda");
-            check = document.getElementById("pr_cda");
-            if (check.checked) {
-                element.style.display='block';
-            }
-            else {
-                element.style.display='none';
-            }
-        }
-         /** accion check sol Pabellon */
-         $('#cirug_cda').change(function() {
-            if ($('#cirug_cda').is(':checked')) {
-                $('#ingreso_sol_pab_modal').modal('show');
-            } else {
-                $('#ingreso_sol_pab_modal').modal('hide');
-            }
-        });
-
-        /** MENSAJE*/
-        /** CARGAR mensaje */
-        $('#mensaje_ficha').html('<strong>Solo el campo Hipótesis diagnóstica es obligatorio el resto es opcional</strong>');
-        $('#mensaje_ficha').show();
-        setTimeout(function(){
-            $('#mensaje_ficha').hide();
-        }, 5000);
-
         $(document).ready(function() {
-            /* formatear rut */
-            $("#solicitado_por_rut_eda").rut({
-                formatOn: 'keyup',
-                minimumLength: 2,
-                validateOn: 'change',
-                useThousandsSeparator : false
-            });
 
-             /* formatear rut */
-            $("#solicitado_por_rut_edb").rut({
+            /* formatear rut */
+            $("#solicitado_por_rut_rfl").rut({
                 formatOn: 'keyup',
                 minimumLength: 2,
                 validateOn: 'change',
                 useThousandsSeparator : false
             });
-            /** fin formulario pestaña 1 */
 
             $("#descripcion_cie").autocomplete({
                 source: function(request, response) {
@@ -421,6 +365,7 @@
                     // Set selection
                     $('#descripcion_cie').val(ui.item.label); // display the selected text
                     $('#id_descripcion_cie').val(ui.item.value); // save selected id to input
+                    $('#id_descripcion_cie').trigger('onchange');
                     return false;
                 }
             });
@@ -445,42 +390,453 @@
                     // Set selection
                     $('#lic_descripcion_cie').val(ui.item.label); // display the selected text
                     $('#id_lic_descripcion_cie').val(ui.item.value); // save selected id to input
+                    $('#id_lic_descripcion_cie').trigger('onchange');
+                    return false;
+                }
+            });
+			/** MENSAJE*/
+            /** CARGAR mensaje */
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio el resto es  opcional.');
+            $('#mensaje_ficha').show();
+            setTimeout(function(){
+                $('#mensaje_ficha').hide();
+            }, 5000);
+
+            @if($fichas->count()>0)
+                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+            @else
+                $('#mensaje_historias').html(' Primera consulta del paciente. ');
+            @endif
+                $('#mensaje_historias').show();
+                setTimeout(function(){
+                    $('#mensaje_historias').hide();
+                }, 6000);
+
+
+
+            /** cronico */
+            /** autocomplete de medicamentos generales */
+            $("#nombre_medicamentocron").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getArticulo') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            console.log(data.length);
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $('#nombre_medicamentocron').val(ui.item.label);
+                    $('#id_medicamento_cronico').val(ui.item.value);
+                    getDosis_cronico(ui.item.value, 'dosis_cronicomes');
                     return false;
                 }
             });
 
+            /** autocomplete de medicamentos patologia */
+            $("#nombre_medicamentocron_patologia").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getArticulo') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            console.log(data.length);
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    $('#nombre_medicamentocron_patologia').val(ui.item.label);
+                    $('#id_medicamentocron_patologia').val(ui.item.value);
+                    getDosis_cronico(ui.item.value, 'dosis_medicamentocron_patologia');
+                    return false;
+                }
+            });
+
+            /** accion check confidencial */
+            $('#confidencial').change(function() {
+                if ($('#confidencial').is(':checked')) {
+                    $('#confidencial_descripcion').show();
+                } else {
+                    $('#confidencial_descripcion').hide();
+                }
+            });
+
+            /** accion check ges */
+            $('#modal_ges').change(function() {
+                if ($('#modal_ges').is(':checked')) {
+                    $('#form_ges').modal('show');
+                } else {
+                    $('#form_ges').modal('hide');
+                }
+            });
+
+            /** busqueda de diagnostico GES */
+            $("#nombre_ges").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('ges.ver') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    // Set selection
+                    $('#nombre_ges').val(ui.item.label); // display the selected text
+                    $('#id_ges').val(ui.item.value); // save selected id to input
+                    return false;
+                }
+            });
         })
-        /** accion check sol Pabellon */
-        $('#cirug_cgd').change(function() {
-            if ($('#cirug_cgd').is(':checked')) {
-                $('#ingreso_sol_pab_modal').modal('show');
-            } else {
-                $('#ingreso_sol_pab_modal').modal('hide');
+
+        /** MANEJO DE IMAGENES */
+        var myDropzone ;
+        Dropzone.options.misImagenes = {
+            init:function()
+            {
+                myDropzone = this;
+            },
+            url: "{{ route('profesional.imagen.carga') }}",
+            method: 'post',
+            createImageThumbnails: true,
+            addRemoveLinks: true,
+            headers:{
+                'X-CSRF-TOKEN' : CSRF_TOKEN,
+                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
+            },
+
+            acceptedFiles: "image/*",
+            maxFilesize: 4,
+            maxFiles: 12,
+            /** El texto utilizado antes de que se eliminen los archivos. */
+            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
+
+            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
+            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
+
+            /**
+             * El texto que se agregará antes del formulario alternativo.
+             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
+             * ser ignorado.
+             */
+            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
+
+            /**
+             * Si el tamaño del archivo es demasiado grande.
+             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
+             */
+             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
+
+            /** Si el archivo no coincide con el tipo de archivo. */
+            dictInvalidFileType: "No puedes subir archivos de este tipo.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
+            dictCancelUpload: "Cancelar carga",
+
+            /** El texto que se muestra si una carga se canceló manualmente */
+            dictUploadCanceled: "Subida cancelada.",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
+            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
+
+            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
+            dictRemoveFile: "Eliminar archivo",
+
+            /**
+             * Se muestra si `maxFiles` es st y se excede.
+             */
+            dictMaxFilesExceeded: "No puede cargar más archivos.",
+
+            // accept(file, done) {
+            //     console.log('-------------accept-----------------------');
+            //     cargar_lista_imagenes();
+            //     return done();
+            // },
+            success: function(file, response){
+                // console.log('-------------success-----------------------');
+                cargar_lista_imagenes();
+
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-success");
+                }
+            },
+            error(file, message) {
+                // console.log('-------------error-----------------------');
+                if (file.previewElement) {
+                    file.previewElement.classList.add("dz-error");
+                    if (typeof message !== "string" && message.error)
+                    {
+                        message = message.error;
+                    }
+                    else
+                    {
+                        message = message.message;
+                    }
+                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
+                        node.textContent = message;
+                    }
+                }
+            },
+            removedfile(file) {
+                // console.log('-------------removedfile-----------------------');
+                cargar_lista_imagenes();
+                if (file.previewElement != null && file.previewElement.parentNode != null) {
+                    file.previewElement.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+            },
+            canceled: function canceled(file) {
+                cargar_lista_imagenes();
+                return this.emit("error", file, this.options.dictUploadCanceled);
+            },
+        };
+
+
+
+        var lista_imagenes = [];
+        function cargar_lista_imagenes()
+        {
+            // console.log('--------------cargar_lista_imagenes----------------------');
+            lista_imagenes = [];
+            let temp  = myDropzone.getAcceptedFiles();
+            $.each(temp, function( index, value )
+            {
+                if(value.status == "success")
+                {
+                    if(value.xhr !== undefined)
+                    {
+                        var img_temp = JSON.parse(value.xhr.response);
+                        lista_imagenes[index] = [
+                            url=img_temp.img.url,
+                            nombre_origian= img_temp.img.original_file_name,
+                            nombre_img = img_temp.img.nombre_img,
+                            file_extension = img_temp.img.file_extension,
+                        ];
+                        $('#input_lista_imagenes').val('');
+                        $('#input_lista_imagenes').val(JSON.stringify(lista_imagenes));
+                    }
+                }
+            });
+
+
+        }
+
+        /** MANEJO DE IMAGENES */
+
+        /** REGISTO ANTECEDENTES */
+        function carga_campos_antecedente_nuevo()
+        {
+            if($('#tipo_antecedente').val()!='')
+            {
+                $('#div_campos_antecedente_nuevo').html('');
+                var html = '';
+                if($('#tipo_antecedente').val() == 'alergia')
+                {
+                    html +='';
+
+                    html += '<div class="form-row">';
+                    html += '    <div class="form-group col-sm-6 col-md-6">';
+                    html += '        <label class="floating-label-activo-sm">Seleccione</label>';
+                    html += '        <input type="text" id="alergia_paciente" name="alergia_paciente" class="form-control form-control-sm"  value="">';
+                    html += '        <input type="hidden" name="id_alergia_paciente" id="id_alergia_paciente" value=""/>';
+                    html += '    </div>';
+                    html += '    <div class="form-group col-sm-6 col-md-6">';
+                    html += '        <label class="floating-label-activo-sm">Detalle</label>';
+                    html += '        <input type="text" name="alergia_comentario_paciente" id="alergia_comentario_paciente"  class="form-control form-control-sm"  value="">';
+                    html += '    </div>';
+                    html += '    <div class="form-group col-sm-6 col-md-6">';
+                    html += '       <button type="button" class="btn btn-success btn-sm" onclick="agregar_alergia_paciente();">Guardar</button>';
+                    html += '    </div>';
+                    html += '</div>';
+
+                    $('#div_campos_antecedente_nuevo').show();
+                    $('#div_campos_antecedente_nuevo').html(html);
+
+                     /** autocompletado de alergias */
+                    $("#alergia_paciente").autocomplete({
+                        source: function(request, response) {
+                            // Fetch data
+                            $.ajax({
+                                url: "{{ route('alergias.ver_autocomplete') }}",
+                                type: 'get',
+                                dataType: "json",
+                                data: {
+                                    search: request.term
+                                },
+                                success: function(data) {
+                                    console.log(data);
+                                    response(data);
+                                }
+                            });
+                        },
+                        select: function(event, ui) {
+                            // Set selection
+                            $('#alergia_paciente').val(ui.item.label); // display the selected text
+                            $('#id_alergia_paciente').val(ui.item.value); // save selected id to input
+
+                            return false;
+                        }
+                    });
+
+                }
+                if($('#tipo_antecedente').val() == 'enfermedades_cronicas')
+                {
+                    html +='';
+                }
+                if($('#tipo_antecedente').val() == 'anestesias')
+                {
+                    html +='';
+                }
+                if($('#tipo_antecedente').val() == 'cirugia')
+                {
+                    html +='';
+                }
             }
-        });
+            else
+            {
+                $('#div_campos_antecedente_nuevo').hide();
+                $('#div_campos_antecedente_nuevo').html('');
+            }
+        }
+
+        function agregar_alergia_paciente() {
+
+            let alergia = $('#alergia_paciente').val();
+            let id_alergia = $('#id_alergia_paciente').val();
+            let comentario = $('#alergia_comentario_paciente').val();
+            let paciente = $('#id_paciente_fc').val();
+            let token = CSRF_TOKEN;
+            var mensaje = '';
+            var valido = 0;
+
+            if(alergia=="")
+            {
+                mensaje +='Campo requerido alergia\n';
+                valido = 1;
+            }
+            // if(id_alergia=="")
+            // {
+            //     mensaje +='Campo requerido id alergia\n';
+            //     valido = 1;
+            // }
+            if(comentario=="")
+            {
+                mensaje +='Campo requerido Detalle\n';
+                valido = 1;
+            }
+            if(paciente=="")
+            {
+                mensaje +='Campo requerido paciente\n';
+                valido = 1;
+            }
+
+            if(valido == 0)
+            {
+                swal({
+                    title: "Alergia agregada correctamente. ***PENDIDENTE POR HACER***",
+                    icon: "success",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
+            else
+            {
+                swal({
+                    title: "Campo Requerido en registro de Alergia. ***PENDIDENTE POR HACER***",
+                    text: mensaje,
+                    icon: "error",
+                    buttons: "Aceptar",
+                    DangerMode: true,
+                });
+            }
 
 
-        function cargarIgual(input){
+            // let url = "{{ route('profesional.agregar_alergia_paciente') }}";
+
+            // $.ajax({
+            //     url: url,
+            //     type: 'POST',
+            //     dataType: 'json',
+            //     data: {
+            //         _token: CSRF_TOKEN,
+            //         alergia: alergia,
+            //         id_alergia: id_alergia,
+            //         comentario: comentario,
+            //         paciente: paciente
+            //     },
+            // })
+            // .done(function(response) {
+
+            //     if (response.success) {
+            //         swal({
+            //             title: "Alergia agregada correctamente",
+            //             icon: "success",
+            //             buttons: "Aceptar",
+            //             DangerMode: true,
+            //         });
+
+            //         $('#alergia_paciente').val('');
+            //         $('#id_alergia_paciente').val('');
+
+            //     }
+            //     else
+            //     {
+            //         swal({
+            //             title: "Error al agregar alergia",
+            //             icon: "error",
+            //             buttons: "Aceptar",
+            //             DangerMode: true,
+            //         })
+            //     }
+
+            //     return response;
+            // })
+            // .fail(function() {
+            //     console.log("error");
+            // });
+
+        }
+        /** FIN REGISTRO ANTECEDENTES  */
+
+
+        function cargarIgual(input)
+        {
 
             let actual = $('#'+input);
             let equivalentes = $('#'+input).attr('data-input_igual').split(',');
             $.each(equivalentes, function( index, value ) {
+                console.log(value);
                 var equivalente = $('#'+value);
                 equivalente.val(actual.val());
             });
-        }
 
+            // let actual = $('#'+input);
+            // let equivalente = $('#'+$('#'+input).attr('data-input_igual'));
 
-        function cargarCompletar(input)
-        {
-            let actual = $('#'+input);
-            let equivalentes = $('#'+input).attr('data-input_igual').split(',');
-            let seccion = $('#'+input).attr('data-input_seccion');
-            $.each(equivalentes, function( index, value ) {
-                var equivalente = $('#'+value);
-                var valor_prev = equivalente.val();
-                equivalente.val(valor_prev + ' - ' + seccion + ': ' + actual.val());
-            });
+            // equivalente.val(actual.val());
+
         }
 
         function evaluar_para_carga_detalle(select, div, input, valor)
@@ -493,47 +849,74 @@
             }
         }
 
-        function abrir_modal_guardar_tipo(div_id_data, div_id_detalle,tipo)
-        {
-            if(tipo == 'cdg')
-            {
-                $('#btn_modal_registrar_ficha_tipo_dg').click(function(){
-                    guardar_tipo_ficha_cdg();
-                });
-            }
-            else if(tipo == 'cg')
-            {
-                $('#btn_modal_registrar_ficha_tipo_dg').click(function(){
-                    guardar_tipo_ficha_cg();
-                });
-            }
-            $('#modal_registrar_ficha_tipo_dg').modal('show');
+        // function abrir_modal_guardar_tipo()
+        // {
+        //     $('#modal_registrar_ficha_tipo_orl').modal('show');
+        //     cargarSeccion('registro_f_t_orl_detalle');
+        // }
 
-            cargarSeccion(div_id_detalle,div_id_data);
+        function abrir_modal_guardar_tipo(div_id_data, div_id_detalle, tipo)
+        {
+            $('#f_t_orl_tipo').val(tipo);
+            $("#btn_modal_registrar_ficha_tipo_orl").unbind();
+
+            $('#modal_registrar_ficha_tipo_orl').modal('show');
+
+            cargarSeccion(div_id_detalle, div_id_data);
         }
 
-        function cargarSeccion(div_destino, div_data)
+        function cargarSeccion(div_destino, div_id_data)
         {
             // var tipo = $('#'+select+'').val();
             $('#'+div_destino).html('');
-            $('#'+div_data).find('select,textarea').each(function(key, elemento){
+            var seccion_actual = '';
+            var seccion_previa = '';
+            $('#'+div_id_data).find('select,textarea').each(function(key, elemento)
+            {
                 html ='';
+                // if(seccion_previa == '' && seccion_actual == '')
+                if(key == 0)
+                {
+                    seccion_actual = $(elemento).data('seccion').trim();
+                    seccion_previa = $(elemento).data('seccion').trim();
+
+                    html +='<hr>';
+                    html +='<div class="row"><div class="col-md-12 text-center"><h6 style="color: #3e55c3;">'+seccion_actual+'</h6></div></div>';
+                    html +='<hr>';
+                }
+                else
+                {
+                    if($(elemento).data('seccion'))
+                        seccion_actual = $(elemento).data('seccion').trim();
+                }
+
+                if(seccion_actual !== seccion_previa)
+                {
+                    html +='<hr>';
+                    html +='<div class="row"><div class="col-md-12 text-center"><h6 style="color: #3e55c3;">'+seccion_actual+'</h6></div></div>';
+                    html +='<hr>';
+                }
+
                 html +='<div class="row" style="margin-top:10px;">';
                 if($(elemento).prop('nodeName') == 'SELECT')
                 {
                     if($(elemento).val() == 0)
                         $(elemento).val(1)
 
-                    html +='<div class="col-md-4">'+$(elemento).data('titulo')+'</div>';
-                    html +='<div class="col-md-4">';
+                    html +='<div class="col-md-5">'+$(elemento).data('titulo')+'</div>';
+                    html +='<div class="col-md-5">';
                     html +='    '+$('#'+$(elemento).attr('id')+' option:selected').text()+'';
                     html +='    <input type="hidden" name="modal_agregar_tipo_'+$(elemento).attr('id')+'" id="modal_agregar_tipo_'+$(elemento).attr('id')+'" value="'+$(elemento).val()+'">';
                     html +='</div>';
+                    html +='<div class="col-md-2"></div>';
                 }
                 else if($(elemento).prop('nodeName') == 'TEXTAREA')
                 {
-                    html +='<div class="col-md-4">'+$(elemento).data('titulo')+'</div>';
-                    html +='<div class="col-md-6">';
+                    if($(elemento).data('tipo'))
+                        html +='<div class="col-md-5">'+$(elemento).data('titulo')+'</div>';
+                    else
+                        html +='<div class="col-md-5">Detalle</div>';
+                    html +='<div class="col-md-5">';
                     html +='    <textarea class="form-control caja-texto form-control-sm '+$(elemento).attr('id')+'_editar" style="display:none;" rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="observaciones_'+$(elemento).attr('id')+'" id="observaciones_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</textarea>';
                     html +='    <label class="'+$(elemento).attr('id')+'_mostrar" id="label_observacion_'+$(elemento).attr('id')+'">'+$(elemento).val()+'</label>';
                     html +='</div>';
@@ -541,25 +924,27 @@
                     html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_mostrar"  onclick="cambiar_div(\''+$(elemento).attr('id')+'_editar'+'\',\''+$(elemento).attr('id')+'_mostrar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Editar</button>';
                     html +='    <button class="btn btn-sm btn-success '+$(elemento).attr('id')+'_editar" style="display:none;" onclick="cambiar_div(\''+$(elemento).attr('id')+'_mostrar'+'\',\''+$(elemento).attr('id')+'_editar'+'\',\'label_observacion_'+$(elemento).attr('id')+'\',\'observaciones_'+$(elemento).attr('id')+'\')">Guardar</button>';
                     html +='</div>';
-
                 }
                 html +='</div>';
                 $('#'+div_destino).append(html);
+                seccion_previa = $(elemento).data('seccion');
             });
         }
 
-        function cambiar_div(mostrar, ocultar, label, textarea){
+        function cambiar_div(mostrar, ocultar, label, textarea)
+        {
             $('.'+mostrar).show();
             $('.'+ocultar).hide();
             $('#'+label).html( $('#'+textarea).val() );
         }
 
-        function guardar_tipo_ficha_cdg()
+        function guardar_tipo_ficha_otorrino()
         {
-            var registro_f_t_cg_nombre = $('#registro_f_t_cg_nombre').val();
-            var registro_f_t_cg_descripcion = $('#registro_f_t_cg_descripcion').val();
+            var f_t_orl_tipo = $('#f_t_orl_tipo').val();
+            var registro_f_t_orl_nombre = $('#registro_f_t_orl_nombre').val();
+            var registro_f_t_orl_descripcion = $('#registro_f_t_orl_descripcion').val();
             var _token = CSRF_TOKEN;
-            if(registro_f_t_cg_nombre == ''){
+            if(registro_f_t_orl_nombre == ''){
                 swal({
                         title: "Problema al Registrar Tipo Ficha.\n Campo requedido Nombre",
                         icon: "warning",
@@ -568,7 +953,7 @@
                     });
                     return false;
             }
-            if(registro_f_t_cg_descripcion == ''){
+            if(registro_f_t_orl_descripcion == ''){
                 swal({
                         title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
                         icon: "warning",
@@ -580,58 +965,98 @@
 
 
             var data = [];
-            data.registro_f_t_cg_nombre = registro_f_t_cg_nombre;
-            data.registro_f_t_cg_descripcion = registro_f_t_cg_descripcion;
+            data.registro_f_t_orl_nombre = registro_f_t_orl_nombre;
+            data.registro_f_t_orl_descripcion = registro_f_t_orl_descripcion;
 
-            $('#registro_f_t_cg_detalle').find('input,textarea').each(function(key, elemento){
-                {{--  console.log($(elemento).attr('id'));  --}}
-                {{--  console.log($(elemento).val());  --}}
-                {{--  console.log($(elemento).prop('nodeName'));  --}}
-                {{--  console.log('*******');  --}}
+            $('#registro_f_t_orl_detalle').find('input,textarea').each(function(key, elemento){
+                //console.log($(elemento).attr('id'));
+                //console.log($(elemento).val());
+                //console.log($(elemento).prop('nodeName'));
+                //console.log('*******');
 
                 data[$(elemento).attr('id')] = $(elemento).val();
 
             });
 
-            {{--  console.log(data);  --}}
-            url = "{{ route('profesional.ficha_tipo_cdg') }}";
+            console.log(data);
+
+            url = "{{ route('profesional.ficha_tipo_otorrino') }}";
             $.ajax({
 
                 url: url,
                 type: "POST",
                 data: {
                     _token: _token,
-                    id_profesional : $('#id_profesional_fc').val(),
-                    ind_esp_cirugia : '',
-                    nombre : data.registro_f_t_cg_nombre,
-                    descripcion : data.registro_f_t_cg_descripcion,
-                    dolor_cdg : data.modal_agregar_tipo_dolor_cdg,
-                    obs_dolor_cdg : data.observaciones_obs_dolor_cdg,
-                    dolor_cdg : data.modal_agregar_tipo_dolor_cdg,
-                    obs_dolor_cdg : data.observaciones_obs_dolor_cdg,
-                    otros_sintomas_cdg : data.modal_agregar_tipo_otros_sintomas_cdg,
-                    obs_otros_sintomas_cdg : data.observaciones_obs_otros_sintomas_cdg,
-                    ceg_cdg : data.modal_agregar_tipo_ceg_cdg,
-                    obs_ceg_cdg : data.observaciones_obs_ceg_cdg,
-                    masa_cdg : data.modal_agregar_tipo_masa_cdg,
-                    obs_masa_cdg : data.observaciones_obs_masa_cdg,
-                    urgencia_cdg : data.modal_agregar_tipo_urgencia_cdg,
-                    obs_urgencia_cdg : data.observaciones_obs_urgencia_cdg,
-                    so_cdg : data.modal_agregar_tipo_so_cdg,
-                    obs_so_cdg : data.observaciones_obs_so_cdg,
-                    obs_egp_cdg : data.observaciones_obs_egp_cdg,
-                    obs_gen_ex_esp_cdg : data.observaciones_obs_gen_ex_esp_cdg,
+                    id_profesional : $('#id_profesional').val(),
+
+                    tipo : f_t_orl_tipo,
+
+                    modal_agregar_tipo_apreciacion_auditiva :  data.modal_agregar_tipo_apreciacion_auditiva,
+                    modal_agregar_tipo_apreciacion_resp :  data.modal_agregar_tipo_apreciacion_resp,
+                    modal_agregar_tipo_disfonia :  data.modal_agregar_tipo_disfonia,
+                    modal_agregar_tipo_ex_boca :  data.modal_agregar_tipo_ex_boca,
+                    modal_agregar_tipo_examen_bio_od :  data.modal_agregar_tipo_examen_bio_od,
+                    modal_agregar_tipo_examen_bio_oi :  data.modal_agregar_tipo_examen_bio_oi,
+                    modal_agregar_tipo_examen_faringe :  data.modal_agregar_tipo_examen_faringe,
+                    modal_agregar_tipo_examen_fnd :  data.modal_agregar_tipo_examen_fnd,
+                    modal_agregar_tipo_examen_fni :  data.modal_agregar_tipo_examen_fni,
+                    modal_agregar_tipo_examen_laringe :  data.modal_agregar_tipo_examen_laringe,
+                    modal_agregar_tipo_examen_od :  data.modal_agregar_tipo_examen_od,
+                    modal_agregar_tipo_examen_oi :  data.modal_agregar_tipo_examen_oi,
+                    modal_agregar_tipo_nariz_general :  data.modal_agregar_tipo_nariz_general,
+                    modal_agregar_tipo_usa_audifono :  data.modal_agregar_tipo_usa_audifono,
+                    observaciones_aprec_auditiva_def :  data.observaciones_aprec_auditiva_def,
+                    observaciones_aprec_resp_def :  data.observaciones_aprec_resp_def,
+                    observaciones_audifono :  data.observaciones_audifono,
+                    observaciones_det_disfonia :  data.observaciones_det_disfonia,
+                    observaciones_det_nariz_general :  data.observaciones_det_nariz_general,
+                    observaciones_detalle_ex_boca :  data.observaciones_detalle_ex_boca,
+                    observaciones_ex_farige_anormal :  data.observaciones_ex_farige_anormal,
+                    observaciones_ex_fnd_anormal :  data.observaciones_ex_fnd_anormal,
+                    observaciones_ex_fni_anormal :  data.observaciones_ex_fni_anormal,
+                    observaciones_ex_larige_anormal :  data.observaciones_ex_larige_anormal,
+                    observaciones_ex_od_anormal :  data.observaciones_ex_od_anormal,
+                    observaciones_ex_oi_anormal :  data.observaciones_ex_oi_anormal,
+                    observaciones_obs_ex_biom :  data.observaciones_obs_ex_biom,
+                    observaciones_obs_ex_nasal :  data.observaciones_obs_ex_nasal,
+                    observaciones_obs_ex_oidos :  data.observaciones_obs_ex_oidos,
+                    observaciones_obs_ex_orl :  data.observaciones_obs_ex_orl,
+                    observaciones_obs_examen_bio_od :  data.observaciones_obs_examen_bio_od,
+                    observaciones_obs_examen_bio_oi :  data.observaciones_obs_examen_bio_oi,
+                    observaciones_obs_examen_laringe :  data.observaciones_obs_examen_laringe,
+                    registro_f_t_orl_descripcion :  data.registro_f_t_orl_descripcion,
+                    registro_f_t_orl_nombre :  data.registro_f_t_orl_nombre,
+
+                    modal_agregar_tipo_episodios: data.modal_agregar_tipo_episodios,
+                    observaciones_detalle_episodios: data.observaciones_detalle_episodios,
+                    modal_agregar_tipo_equilibrio: data.modal_agregar_tipo_equilibrio,
+                    observaciones_detalle_equilibrio: data.observaciones_detalle_equilibrio,
+                    modal_agregar_tipo_ng: data.modal_agregar_tipo_ng,
+                    observaciones_detalle_ng: data.observaciones_detalle_ng,
+                    modal_agregar_tipo_sint_acomp: data.modal_agregar_tipo_sint_acomp,
+                    observaciones_detalle_sint_acompanantes: data.observaciones_detalle_sint_acompanantes,
+                    modal_agregar_tipo_vertigo: data.modal_agregar_tipo_tipo_vertigo,
+                    observaciones_detalle_tipo_vertigo: data.observaciones_detalle_tipo_vertigo,
+                    observaciones_vestibular: data.observaciones_obs_vestibular,
+
+                    modal_agregar_tipo_piel_tegumnto: data.modal_agregar_tipo_piel_tegumnto,
+                    observaciones_obs_piel_tegumnto: data.observaciones_obs_piel_tegumnto,
+                    modal_agregar_tipo_adenopatias: data.modal_agregar_tipo_adenopatias,
+                    observaciones_obs_adenopatias: data.observaciones_obs_adenopatias,
+                    modal_agregar_tipo_tumores_masas: data.modal_agregar_tipo_tumores_masas,
+                    observaciones_obs_tumores_masas: data.observaciones_obs_tumores_masas,
+                    modal_agregar_tipo_gland_anexas: data.modal_agregar_tipo_gland_anexas,
+                    observaciones_obs_gland_anexas: data.observaciones_obs_gland_anexas,
                 },
             })
             .done(function(data)
             {
-                {{--  console.log('-----------------------');  --}}
-                {{--  console.log(data);  --}}
-                {{--  console.log('-----------------------');  --}}
+                // console.log('-----------------------');
+                // console.log(data);
+                // console.log('-----------------------');
                 if(data.estado == 1)
                 {
-                    cargar_lista_tipo_ficha_cdg();
-                    $('#modal_registrar_ficha_tipo_dg').modal('hide');
+                    $('#modal_registrar_ficha_tipo_orl').modal('hide');
                     swal({
                         title: "Tipo Ficha Registrado",
                         icon: "success",
@@ -639,9 +1064,8 @@
                         //SuccessMode: true,
                     })
                 }
-                else
-                {
-                    cargar_lista_tipo_ficha_cdg();
+                else{
+
                     swal({
                         title: "Problema al Registrar Tipo Ficha.",
                         icon: "warning",
@@ -657,51 +1081,13 @@
 
         }
 
-
-        function cargar_lista_tipo_ficha_cdg()
-        {
-            $('#select_ficha_tipo_ex_especialidad_cdg').html('<option value="">Seleccione</option>');
-
-            url = "{{ route('profesional.cargar_fichas_tipo_cdg') }}";
-            $.ajax({
-
-                url: url,
-                type: "GET",
-                data: {},
-            })
-            .done(function(data)
-            {
-                if(data.estado == 1)
-                {
-                    $.each(data.registros, function(index, value)
-                    {
-                        $('#select_ficha_tipo_ex_especialidad_cdg').append('<option value="'+value.id+'" data-descripcion="'+value.descripcion+'">'+value.nombre+'</option>');
-                    });
-                    cargar_info_ficha_tipo_cdg('select_ficha_tipo_ex_especialidad_cdg','descripcion_ficha_tipo_ex_especialidad_cdg');
-                }
-                else
-                {
-                    swal({
-                        title: "Problema al Cargar Tipo Ficha.",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                }
-
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }
-
-        function cargar_info_ficha_tipo_cdg(select, div_descripcion)
+        function cargar_info_ficha_tipo_orl(select, div_descripcion, seccion)
         {
             let id_ft = $('#'+select).val();
             if(id_ft == '')
             {
                 $('#'+div_descripcion).html('');
-                $('#form-cdg').find('select,textarea').each(function(key, elemento){
+                $('#'+seccion).find('select,textarea').each(function(key, elemento){
                     if($(elemento).prop('nodeName') == 'SELECT')
                     {
                         $(elemento).val(0);
@@ -712,123 +1098,110 @@
                     }
                 });
 
-                evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2);
-                evaluar_para_carga_detalle('otros_sintomas_cdg','div_detalle_cd_otros_sintomas','obs_otros_sintomas_cdg',2);
-                evaluar_para_carga_detalle('ceg_cdg','div_detalle_ceg_cdg','obs_ceg_cdg',2);
-                evaluar_para_carga_detalle('masa_cdg','div_detalle_masa_cdg','obs_masa_cdg',2);
-                evaluar_para_carga_detalle('urgencia_cdg','div_detalle_urgencia_cdg','obs_urgencia_cdg',2);
-                evaluar_para_carga_detalle('so_cdg','div_detale_sospecha__organo_cdg','obs_so_cdg',2);
+                evaluar_para_carga_detalle('usa_audifono','div_detalle_usa_audifono','audifono',5);
+                evaluar_para_carga_detalle('apreciacion_auditiva','div_detalle_apreciacion_auditiva','aprec_auditiva_def',2);
+                evaluar_para_carga_detalle('examen_oi','div_detalle_examen_oi','ex_oi_anormal',2);
+                evaluar_para_carga_detalle('examen_od','div_detalle_examen_od','ex_od_anormal',2);
+                evaluar_para_carga_detalle('examen_bio_oi','div_obs_examen_bio_oi','obs_examen_bio_oi',2);
+                evaluar_para_carga_detalle('examen_bio_od','div_obs_examen_bio_od','obs_examen_bio_od',2);
+                evaluar_para_carga_detalle('tipo_vertigo','div_detalle_tipo_vertigo','detalle_tipo_vertigo',3);
+                evaluar_para_carga_detalle('sint_acomp','div_detalle_sintomas_acompanantes','detalle_sint_acompanantes',3);
+                evaluar_para_carga_detalle('ng','div_detalle_ng','detalle_ng',2);
+                evaluar_para_carga_detalle('episodios','div_detalle_episodios','detalle_episodios',3);
+                evaluar_para_carga_detalle('equilibrio','div_detalle_equilibrio','detalle_equilibrio',2);
+                evaluar_para_carga_detalle('nariz_general','div_detalle_nariz_gen','det_nariz_general',2);
+                evaluar_para_carga_detalle('apreciacion_resp','div_detalle_nariz_resp','aprec_resp_def',2);
+                evaluar_para_carga_detalle('examen_fni','div_detalle_examen_fni','ex_fni_anormal',2);
+                evaluar_para_carga_detalle('examen_fnd','div_detalle_examen_fnd','ex_fnd_anormal',2);
+                evaluar_para_carga_detalle('disfonia','div_disfonia','det_disfonia',2);
+                evaluar_para_carga_detalle('ex_boca','div_detalle_ex_boca','detalle_ex_boca',2);
+                evaluar_para_carga_detalle('examen_faringe','div_detalle_examen_faringe','ex_farige_anormal',2);
+                evaluar_para_carga_detalle('examen_laringe','div_detalle_examen_laringe','ex_larige_anormal',2);
 
+                evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);
+                evaluar_para_carga_detalle('adenopatias','div_adenopatias','obs_adenopatias',2);
+                evaluar_para_carga_detalle('tumores_masas','div_tumores_masas','obs_tumores_masas',2);
+                evaluar_para_carga_detalle('gland_anexas','div_gland_anexas','obs_gland_anexas',2);
                 return false;
             }
             $('#'+div_descripcion).html($('#'+select+' option:selected').attr('data-descripcion'));
 
-            url = "{{ route('profesional.buscar_ficha_tipo_cdg') }}";
+            url = "{{ route('profesional.buscar_ficha_tipo_otorrino') }}";
             $.ajax({
 
                 url: url,
                 type: "GET",
                 data: {
-                    id_profesional : $('#id_profesional_fc').val(),
+                    id_profesional : $('#id_profesional').val(),
                     id_ficha_tipo :  id_ft,
                 },
             })
             .done(function(data)
             {
-                {{--  console.log('-----------------------');  --}}
-                {{--  console.log(data);  --}}
-                {{--  console.log('-----------------------');  --}}
                 if(data.estado == 1)
                 {
                     $.each(data.registros, function(index, value)
                     {
-                        {{--  console.log(index);  --}}
-                        {{--  console.log(value);  --}}
-                        {{--  console.log($('#'+index));  --}}
+                        if(index == 'id_usa_audifono')
+                            index = 'usa_audifono';
+
+                        if(index == 'id_tipo_episodios')
+                            index = 'episodios';
+
+                        if(index == 'id_tipo_equilibrio')
+                            index = 'equilibrio';
+
+                        if(index == 'id_tipo_ng')
+                            index = 'ng';
+
+                        if(index == 'id_tipo_sint_acomp')
+                            index = 'sint_acomp';
+
+                        if(index == 'id_tipo_vertigo')
+                            index = 'tipo_vertigo';
+
+                        if(index == 'obs_tipo_vertigo')
+                            index = 'detalle_tipo_vertigo';
+
+                        if(index == 'obs_sint_acomp')
+                            index = 'detalle_sint_acompanantes';
+
+                        if(index == 'obs_ng')
+                            index = 'detalle_ng';
+
+                        if(index == 'obs_episodios')
+                            index = 'detalle_episodios';
+
+                        if(index == 'obs_equilibrio')
+                            index = 'detalle_equilibrio';
 
                         $('#'+index).val(value);
                     });
-                    evaluar_para_carga_detalle('dolor_cdg','div_detalle_dolor','obs_dolor_cdg',2);
-                    evaluar_para_carga_detalle('otros_sintomas_cdg','div_detalle_cd_otros_sintomas','obs_otros_sintomas_cdg',2);
-                    evaluar_para_carga_detalle('ceg_cdg','div_detalle_ceg_cdg','obs_ceg_cdg',2);
-                    evaluar_para_carga_detalle('masa_cdg','div_detalle_masa_cdg','obs_masa_cdg',2);
-                    evaluar_para_carga_detalle('urgencia_cdg','div_detalle_urgencia_cdg','obs_urgencia_cdg',2);
-                    evaluar_para_carga_detalle('so_cdg','div_detale_sospecha__organo_cdg','obs_so_cdg',2);
 
-                }
-                else{
+                    evaluar_para_carga_detalle('usa_audifono','div_detalle_usa_audifono','audifono',5);
+                    evaluar_para_carga_detalle('apreciacion_auditiva','div_detalle_apreciacion_auditiva','aprec_auditiva_def',2);
+                    evaluar_para_carga_detalle('examen_oi','div_detalle_examen_oi','ex_oi_anormal',2);
+                    evaluar_para_carga_detalle('examen_od','div_detalle_examen_od','ex_od_anormal',2);
+                    evaluar_para_carga_detalle('examen_bio_oi','div_obs_examen_bio_oi','obs_examen_bio_oi',2);
+                    evaluar_para_carga_detalle('examen_bio_od','div_obs_examen_bio_od','obs_examen_bio_od',2);
+                    evaluar_para_carga_detalle('tipo_vertigo','div_detalle_tipo_vertigo','detalle_tipo_vertigo',3);
+                    evaluar_para_carga_detalle('sint_acomp','div_detalle_sintomas_acompanantes','detalle_sint_acompanantes',3);
+                    evaluar_para_carga_detalle('ng','div_detalle_ng','detalle_ng',2);
+                    evaluar_para_carga_detalle('episodios','div_detalle_episodios','detalle_episodios',3);
+                    evaluar_para_carga_detalle('equilibrio','div_detalle_equilibrio','detalle_equilibrio',2);
+                    evaluar_para_carga_detalle('nariz_general','div_detalle_nariz_gen','det_nariz_general',2);
+                    evaluar_para_carga_detalle('apreciacion_resp','div_detalle_nariz_resp','aprec_resp_def',2);
+                    evaluar_para_carga_detalle('examen_fni','div_detalle_examen_fni','ex_fni_anormal',2);
+                    evaluar_para_carga_detalle('examen_fnd','div_detalle_examen_fnd','ex_fnd_anormal',2);
+                    evaluar_para_carga_detalle('disfonia','div_disfonia','det_disfonia',2);
+                    evaluar_para_carga_detalle('ex_boca','div_detalle_ex_boca','detalle_ex_boca',2);
+                    evaluar_para_carga_detalle('examen_faringe','div_detalle_examen_faringe','ex_farige_anormal',2);
+                    evaluar_para_carga_detalle('examen_laringe','div_detalle_examen_laringe','ex_larige_anormal',2);
 
-                    swal({
-                        title: "Problema al Cargar Tipo Ficha.",
-                        icon: "warning",
-                        // buttons: "Aceptar",
-                        //SuccessMode: true,
-                    })
-                }
-
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                console.log(jqXHR, ajaxOptions, thrownError)
-            });
-        }
-
-        function cargar_info_ficha_tipo_cg(select, div_descripcion)
-        {
-            let id_ft = $('#'+select).val();
-            if(id_ft == '')
-            {
-                $('#'+div_descripcion).html('');
-                $('#form-cg').find('select,textarea').each(function(key, elemento){
-                    if($(elemento).prop('nodeName') == 'SELECT')
-                    {
-                        $(elemento).val(1);
-                    }
-                    else
-                    {
-                        $(elemento).val('');
-                    }
-                });
-
-                evaluar_para_carga_detalle('organo_cg','div_detalle_organo','obs_organo_cg',2);
-                evaluar_para_carga_detalle('ceg_cg','div_detalle_ceg_cg','obs_ceg_cg',2);
-                evaluar_para_carga_detalle('masa_cg','div_detalle_masa_cg','obs_masas_cg',2);
-                evaluar_para_carga_detalle('urgencia_cg','div_detalle_urgencia_cg','obs_urgencia_cg',2);
-                evaluar_para_carga_detalle('so_cg','div_detalle_so_cg','obs_so_cg',2);
-
-                return false;
-            }
-            $('#'+div_descripcion).html($('#'+select+' option:selected').attr('data-descripcion'));
-
-            url = "{{ route('profesional.buscar_ficha_tipo_cg') }}";
-            $.ajax({
-
-                url: url,
-                type: "GET",
-                data: {
-                    id_profesional : $('#id_profesional_fc').val(),
-                    id_ficha_tipo :  id_ft,
-                },
-            })
-            .done(function(data)
-            {
-                {{--  console.log('-----------------------');  --}}
-                {{--  console.log(data);  --}}
-                {{--  console.log('-----------------------');  --}}
-                if(data.estado == 1)
-                {
-                    $.each(data.registros, function(index, value)
-                    {
-                        {{--  console.log(index);  --}}
-                        {{--  console.log(value);  --}}
-                        {{--  console.log($('#'+index));  --}}
-
-                        $('#'+index).val(value);
-                    });
-                    evaluar_para_carga_detalle('organo_cg','div_detalle_organo','obs_organo_cg',2);
-                    evaluar_para_carga_detalle('ceg_cg','div_detalle_ceg_cg','obs_ceg_cg',2);
-                    evaluar_para_carga_detalle('masa_cg','div_detalle_masa_cg','obs_masas_cg',2);
-                    evaluar_para_carga_detalle('urgencia_cg','div_detalle_urgencia_cg','obs_urgencia_cg',2);
-                    evaluar_para_carga_detalle('so_cg','div_detalle_so_cg','obs_so_cg',2);
+                    evaluar_para_carga_detalle('piel_tegumnto','div_piel_tegumnto','obs_piel_tegumnto',2);
+                    evaluar_para_carga_detalle('adenopatias','div_adenopatias','obs_adenopatias',2);
+                    evaluar_para_carga_detalle('tumores_masas','div_tumores_masas','obs_tumores_masas',2);
+                    evaluar_para_carga_detalle('gland_anexas','div_gland_anexas','obs_gland_anexas',2);
 
                 }
                 else{
@@ -890,233 +1263,7 @@
             $('#examenes').val(JSON.stringify(rows));
         }
 
-
-        function biopsia(alias_examen)
-        {
-            if($('#biopsia_check_'+alias_examen).prop('checked'))
-			{
-				$('#m_biopsia_cir').modal('show');
-                $('#biopsia_'+alias_examen).val(1);
-			}
-            else
-            {
-                $('#biopsia_'+alias_examen).val(0);
-                $('#m_biopsia_cir').modal('hide');
-            }
-        }
-
-		// function biopsia_endo_gas() {
-        //     if($('#biopsia_end_gast').prop('checked'))
-		// 	{
-		// 		$('#m_biopsia_cir').modal('show');
-        //         $('#biopsia_end_gast_eda').val(1);
-		// 	}
-        // }
-
-        // function biopsia_endo_colon() {
-        //     if($('#biopsia_colon').prop('checked'))
-		// 	{
-		// 		$('#m_biopsia_cir').modal('show');
-		// 	}
-        // }
-
-		function muestra_hp_abrir_div(alias_examen)
-		{
-            var mensaje = ['Test de ureasa No tomado', 'Test de ureasa Negativo', 'Test de ureasa Positivo'];
-
-            var texto_diag_2 = '';
-
-			if($('#muestra_hp_check_'+alias_examen).prop('checked'))
-			{
-				$('#div_select_muestra_hp_'+alias_examen).show();
-                $('#muestra_hp_'+alias_examen).val(1);
-
-                var input_diagnostico = $('#muestra_hp_check_'+alias_examen).attr('data-diagnostico');
-                var texto_diag = $('#'+input_diagnostico).val();
-
-
-                var input_select = $('#muestra_hp_check_'+alias_examen).attr('data-select');
-                var value_selct = $('#'+input_select).val();
-
-
-                if(value_selct == 0)
-                    texto_diag_2 = texto_diag.replace(mensaje[0], mensaje[1]);
-                else
-                    texto_diag_2 = texto_diag.replace(mensaje[0], mensaje[2]);
-
-                $('#'+input_diagnostico).val(texto_diag_2);
-			}
-			else
-			{
-				$('#div_select_muestra_hp_'+alias_examen).hide();
-                $('#muestra_hp_'+alias_examen).val(0);
-				$('#muestra_hp_resultado_'+alias_examen).val('');
-
-                var input_diagnostico = $('#muestra_hp_check_'+alias_examen).attr('data-diagnostico');
-                var texto_diag = $('#'+input_diagnostico).val();
-
-                texto_diag_2 = texto_diag.replace('Test de ureasa Negativo', 'Test de ureasa No tomado');
-                texto_diag_2 = texto_diag_2.replace('Test de ureasa Positivo', 'Test de ureasa No tomado');
-
-                var input_diagnostico = $('#muestra_hp_check_'+alias_examen).attr('data-diagnostico');
-                $('#'+input_diagnostico).val(texto_diag_2);
-			}
-		}
-
-        function cambio_muestra_hp_resultado(select, input)
-        {
-            var mensaje = ['Test de ureasa No tomado', 'Test de ureasa Negativo', 'Test de ureasa Positivo'];
-
-            var value_selct = $('#'+select).val();
-            var texto_diag = $('#'+input).val();
-            var texto_diag_2 = '';
-
-            if(value_selct == 0)
-            {
-                texto_diag_2 = texto_diag.replace('Test de ureasa No tomado', 'Test de ureasa Negativo');
-                texto_diag_2 = texto_diag_2.replace('Test de ureasa Positivo', 'Test de ureasa Negativo');
-            }
-            else
-            {
-                texto_diag_2 = texto_diag.replace('Test de ureasa No tomado', 'Test de ureasa Positivo');
-                texto_diag_2 = texto_diag_2.replace('Test de ureasa Negativo', 'Test de ureasa Positivo');
-            }
-
-            $('#'+input).val(texto_diag_2);
-        }
-
-        /** MANEJO DE IMAGENES */
-        var myDropzone_eda ;
-        Dropzone.options.misImagenesEda = {
-            init:function()
-            {
-                myDropzone_eda = this;
-            },
-            url: "{{ route('profesional.imagen.carga') }}",
-            method: 'post',
-            createImageThumbnails: true,
-            addRemoveLinks: true,
-            headers:{
-                'X-CSRF-TOKEN' : CSRF_TOKEN,
-                // 'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content'),
-            },
-
-            acceptedFiles: "image/*",
-            maxFilesize: 4,
-            maxFiles: 12,
-            /** El texto utilizado antes de que se eliminen los archivos. */
-            dictDefaultMessage: "Arrastre una imagen al recuadro para subirlo.",
-
-            /** El texto que reemplaza el texto del mensaje predeterminado si el navegador no es compatible. */
-            dictFallbackMessage: "Su navegador no admite la carga de archivos mediante arrastrar y soltar.",
-
-            /**
-             * El texto que se agregará antes del formulario alternativo.
-             * Si usted mismo proporciona un elemento alternativo, o si esta opción es `nula`, esto
-             * ser ignorado.
-             */
-            dictFallbackText: "Utilice el formulario alternativo a continuación para cargar sus archivos como en los viejos tiempos.",
-
-            /**
-             * Si el tamaño del archivo es demasiado grande.
-             * `{ {filesize} }` y `{ {maxFilesize} }` serán reemplazados con los respectivos valores de configuración.
-             */
-             dictFileTooBig: "El archivo es demasiado grande. Max tamaño de archivo: 4 MiB.",
-
-            /** Si el archivo no coincide con el tipo de archivo. */
-            dictInvalidFileType: "No puedes subir archivos de este tipo.",
-
-            /** Si `addRemoveLinks` es verdadero, el texto que se usará para cancelar el enlace de carga. */
-            dictCancelUpload: "Cancelar carga",
-
-            /** El texto que se muestra si una carga se canceló manualmente */
-            dictUploadCanceled: "Subida cancelada.",
-
-            /** Si `addRemoveLinks` es verdadero, el texto que se utilizará para la confirmación al cancelar la carga. */
-            dictCancelUploadConfirmation: "¿Está seguro de que desea cancelar esta carga?",
-
-            /** Si `addRemoveLinks` es verdadero, el texto que se usará para eliminar un archivo. */
-            dictRemoveFile: "Eliminar archivo",
-
-            /**
-             * Se muestra si `maxFiles` es st y se excede.
-             */
-            dictMaxFilesExceeded: "No puede cargar más archivos.",
-
-            // accept(file, done) {
-            //     console.log('-------------accept-----------------------');
-            //     cargar_lista_imagenes();
-            //     return done();
-            // },
-            success: function(file, response){
-                // console.log('-------------success-----------------------');
-                cargar_lista_imagenes(myDropzone_eda,'eda');
-
-                if (file.previewElement) {
-                    return file.previewElement.classList.add("dz-success");
-                }
-            },
-            error(file, message) {
-                // console.log('-------------error-----------------------');
-                if (file.previewElement) {
-                    file.previewElement.classList.add("dz-error");
-                    if (typeof message !== "string" && message.error)
-                    {
-                        message = message.error;
-                    }
-                    else
-                    {
-                        message = message.message;
-                    }
-                    for (let node of file.previewElement.querySelectorAll( "[data-dz-errormessage]" )) {
-                        node.textContent = message;
-                    }
-                }
-            },
-            removedfile(file) {
-                // console.log('-------------removedfile-----------------------');
-                cargar_lista_imagenes(myDropzone_eda,'eda');
-                if (file.previewElement != null && file.previewElement.parentNode != null) {
-                    file.previewElement.parentNode.removeChild(file.previewElement);
-                }
-                return this._updateMaxFilesReachedClass();
-            },
-            canceled: function canceled(file) {
-                cargar_lista_imagenes(myDropzone_eda,'eda');
-                return this.emit("error", file, this.options.dictUploadCanceled);
-            },
-        };
-
-        var lista_imagenes = {};
-        function cargar_lista_imagenes(obj_dropzone, alias_examen)
-        {
-            // console.log('--------------cargar_lista_imagenes----------------------');
-            lista_imagenes[alias_examen] = [];
-            let temp  = obj_dropzone.getAcceptedFiles();
-            $.each(temp, function( index, value )
-            {
-                if(value.status == "success")
-                {
-                    if(value.xhr !== undefined)
-                    {
-                        var img_temp = JSON.parse(value.xhr.response);
-                        lista_imagenes[alias_examen][index] = [
-                            url=img_temp.img.url,
-                            nombre_origian= img_temp.img.original_file_name,
-                            nombre_img = img_temp.img.nombre_img,
-                            file_extension = img_temp.img.file_extension,
-                        ];
-                        $('#input_lista_imagenes').val('');
-                        $('#input_lista_imagenes').val(JSON.stringify(lista_imagenes));
-                    }
-                }
-            });
-
-
-        }
-        /** CIERRE MANEJO DE IMAGENES */
-
-        function cargar_profesional(rut, input_nombre_completo, input_id, div_solicitar, input_nombre, input_apellido, input_tel, input_email, div_mensaje, text_mensaje)
+        function cargar_profesional(rut, input_nombre, input_id, div_solicitar)
         {
             rut = $(rut).val();
 
@@ -1149,37 +1296,37 @@
                             var nombre = data.registros[0].nombre+' '+data.registros[0].apellido_uno;
                             var id = data.registros[0].id;
                             // $('#'+input_nombre).attr('readonly', true);
-                            $('#'+input_nombre_completo).val(nombre);
+                            $('#'+input_nombre).val(nombre);
                             $('#'+input_id).val(id);
                             $('#'+div_solicitar).hide();
                             mensaje = '';
-                            $('#'.div_mensaje).hide();
-                            $('#'+text_mensaje).html(mensaje);
-                            $('#'+input_nombre).val('');
-                            $('#'+input_apellido).val('');
-                            $('#'+input_tel).val('');
-                            $('#'+input_email).val('');
+                            $('#div_mensaje').hide();
+                            $('#mensaje_solicitado_por').html(mensaje);
+                            $('#solicitado_por_nombre_rfl').val('');
+                            $('#solicitado_por_apellido_rfl').val('');
+                            $('#solicitado_por_telefono_rfl').val('');
+                            $('#solicitado_por_email_rfl').val('');
                         }
                         else
                         {
                             mensaje = 'Profesional no encontrato, debe ingresar datos.';
-                            $('#'+input_nombre_completo).val('');
+                            $('#'+input_nombre).val('');
                             $('#'+input_id).val('');
                             $('#'+div_solicitar).show();
-                            $('#'.div_mensaje).show();
-                            $('#'+text_mensaje).html(mensaje);
-                            $('#'.input_nombre).val('');
-                            $('#'.input_apellido).val('');
-                            $('#'.input_tel).val('');
-                            $('#'.input_email).val('');
+                            $('#div_mensaje').show();
+                            $('#mensaje_solicitado_por').html(mensaje);
+                            $('#solicitado_por_nombre_rfl').val('');
+                            $('#solicitado_por_apellido_rfl').val('');
+                            $('#solicitado_por_telefono_rfl').val('');
+                            $('#solicitado_por_email_rfl').val('');
                             // $('#'+input_nombre).attr('readonly', true);
                         }
                     }
                     else
                     {
                         mensaje = 'Se presento un problema en la busqueda intente nuevamente';
-                        $('#'.div_mensaje).show();
-                        $('#'+text_mensaje).html(mensaje);
+                        $('#div_mensaje').show();
+                        $('#mensaje_solicitado_por').html(mensaje);
                         // $('#'+input_nombre).attr('readonly', false);
                     }
                 })
@@ -1214,7 +1361,28 @@
             }
         }
 
-        /** PERVISUALIZACION DE EXAMEN */
+        {{--  mostrar div   --}}
+        function mostrar_div(div)
+        {
+            if ($('.'+div).is(':visible')) {
+                $('.'+div).hide();
+                $('#senal_med_cronico').addClass('fa-angle-down');
+                $('#senal_med_cronico').removeClass('fa-angle-up');
+            } else {
+                $('.'+div).show();
+                $('#senal_med_cronico').removeClass('fa-angle-down');
+                $('#senal_med_cronico').addClass('fa-angle-up');
+            }
+        }
+
+        // ALERTA DE ATENCION
+        // window.setTimeout(function() {
+        //     $(".alert-atencion").fadeTo(500, 0).slideUp(600, function(){
+        //         $(this).remove();
+        //     });
+        // }, 5000);
+
+         /** PERVISUALIZACION DE EXAMEN */
         function visualizar_pdf_examen(tipo_examen)
         {
             if(tipo_examen!='')
@@ -1223,7 +1391,7 @@
                 $('.div_form_examen_'+tipo_examen).find('input,textarea,select').each(function (key, element){
                     var key_temp = element.id.replace('_'+tipo_examen,'');
 
-                    if(key_temp == 'biopsia' || key_temp == 'muestra_hp')
+                    if(key_temp == 'biopsia')
                     {
                         if(element.value == 1)
                         {
@@ -1232,17 +1400,6 @@
                         else
                         {
                             array_datos[key_temp] = 'NO';
-                        }
-                    }
-                    else if(key_temp == 'muestra_hp_resultado')
-                    {
-                        if(element.value == 1)
-                        {
-                            array_datos[key_temp] = 'Positivo';
-                        }
-                        else
-                        {
-                            array_datos[key_temp] = 'Negativa';
                         }
                     }
                     else
@@ -1258,7 +1415,6 @@
                     imagenes = JSON.stringify(JSON.stringify(imagenes[tipo_examen]));
                     console.log(imagenes );
                 }
-
 
                 var data ='id_ficha='+$('#id_fc').val()+'&contenido='+JSON.stringify(array_datos)+'&imagenes='+imagenes;
                 Fancybox.show(
@@ -1276,7 +1432,6 @@
                 console.log('tipo examen no especificado');
             }
         }
-
 
     </script>
 @endsection

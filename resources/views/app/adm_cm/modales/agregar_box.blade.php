@@ -1,24 +1,23 @@
 <div id="agreg_box_ad" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="agreg_box_ad" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white d-inline mt-1">Agregar Box Atención</h5>
+                <h5 class="modal-title text-white d-inline mt-1">Añadir box de atención</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="modal-body">
                         <form>
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group fill">
+                            <div class="form-row">
+                                <div class="col-md-12 col-md-12 col-lg-6 col-xl-6">
+                                    <div class="form-group">
                                         <label class="floating-label-activo-sm">Asignar N° al box</label>
                                         <input type="text" name="numero_box" id="numero_box" class="form-control form-control-sm">
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group fill">
+                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                    <div class="form-group">
                                         <label class="floating-label-activo-sm">Tipo Box</label>
                                         <select class="form-control form-control-sm" name="tpo_box_servicio" id="tpo_box_servicio" onchange="dame_especializacion_box()">
                                             <option value="0">Seleccione</option>
@@ -27,8 +26,8 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 d-none" id="contenedor_tpo_especializacion">
-                                    <div class="form-group fill">
+                                <div class="col-sm-12" id="contenedor_tpo_especializacion">
+                                    <div class="form-group">
                                         <label class="floating-label-activo-sm">Tipo de especialización</label>
                                         <select class="form-control form-control-sm" name="tpo_especializacion" id="tpo_especializacion">
                                             <option value="0">Seleccione</option>
@@ -42,31 +41,26 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="col-sm-6 d-none">
-
-                                    <div class="form-group fill">
-                                            <label class="floating-label-activo-sm">Equipamiento</label>
-                                            <select class="form-control form-control-sm" name="equip_ad" id="equip_ad" multiple="multiple">
-                                                <option value="Carro paro">Carro paro</option>
-                                                <option value="Oxigenoterápia">Oxigenoterápia</option>
-                                                <option value="Pabellon de yeso">Pabellon de yeso</option>
-                                            </select>
+                                    <div class="form-group">
+                                        <label class="floating-label-activo-sm">Equipamiento</label>
+                                        <select class="form-control form-control-sm" name="equip_ad" id="equip_ad" multiple="multiple">
+                                            <option value="Carro paro">Carro paro</option>
+                                            <option value="Oxigenoterápia">Oxigenoterápia</option>
+                                            <option value="Pabellon de yeso">Pabellon de yeso</option>
+                                        </select>
                                     </div>
-
-
                                 </div>
                                 <div class="col-sm-6 d-none">
-                                    <div class="form-group fill">
+                                    <div class="form-group">
                                         <label class="floating-label-activo-sm">Cantidad de camillas</label>
                                         <input type="number" class="form-control form-control-sm" name="n_camillas_box_servicio" id="n_camillas_box_servicio">
                                     </div>
-
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group fill">
+                            <div class="form-row">
+                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                    <div class="form-group">
                                         <label class="floating-label-activo-sm">Ubicación</label>
                                         <select class="form-control form-control-sm" name="tpo_equip_servicio" id="tpo_equip_servicio">
                                             <option value="0">Seleccione</option>
@@ -83,8 +77,8 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group fill">
+                                <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                                    <div class="form-group">
                                         <label class="floating-label-activo-sm">Sección</label>
                                         <select class="form-control form-control-sm" name="seccion_box" id="seccion_box">
                                             <option value="0">Seleccione</option>
@@ -96,11 +90,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-
-
-
-                                <div class="col-sm-12">
+                            <div class="form-row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="form-group fill">
                                         <label class="floating-label-activo-sm">Observaciones</label>
                                         <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="ot_pat_act_" id="ot_pat_act_"></textarea>
@@ -110,9 +101,9 @@
                         </form>
                     </div>
 
-					<div class="col-sm-12">
-                        <button type="button" onclick="guardar_box_servicio()" class="btn btn-info btn-sm float-right" data-toggle="collapse" data-target=".info-basica" aria-expanded="false" aria-controls="info-basica-1 info-basica-2">
-                            <i class="feather icon-check-square"></i> Guardar cambios
+					<div class="col-sm-12 text-center">
+                        <button type="button" onclick="guardar_box_servicio()" class="btn btn-info btn-sm mx-auto" data-toggle="collapse" data-target=".info-basica" aria-expanded="false" aria-controls="info-basica-1 info-basica-2">
+                            <i class="feather icon-plus"></i> Añadir
                         </button>
                     </div>
                 </div>

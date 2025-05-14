@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Editar Datos de Contrato Adm Profesional</h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Editar datos de contrato Adm. Profesional</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -10,325 +10,328 @@
                     <input type="hidden" name="edit_id_lugar_atencion" id="edit_id_lugar_atencion" value="{{ $institucion->id_lugar_atencion }}">
                     <input type="hidden" name="edit_id_admin_creador" id="edit_id_admin_creador" value="{{ Auth::user()->id }}">
                     <input type="hidden" name="edit_id_tipo_admin_creador" id="edit_id_tipo_admin_creador" value="{{ Auth::user()->Roles()->first()->id }}">
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link-aten text-reset active" id="edit_info-tipo_contrato-tab" data-toggle="tab" href="#edit_info-tipo_contrato" role="tab" aria-controls="edit_info-tipo_contrato" aria-selected="true">Tipo Contrato</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link-aten text-reset" id="edit_info_personal_cont-tab" data-toggle="tab" href="#edit_info_personal_cont" role="tab" aria-controls="edit_info_personal_cont" aria-selected="false">Información Personal</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link-aten text-reset" id="edit_info_contrato_pers-tab" data-toggle="tab" href="#edit_info_contrato_pers" role="tab" aria-controls="edit_info_contrato_pers" aria-selected="false">Información de Contrato</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link-aten text-reset" id="edit_leyes_sociales-tab" data-toggle="tab" href="#edit_leyes_sociales" role="tab" aria-controls="edit_leyes_sociales" aria-selected="false">Leyes Sociales</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link-aten text-reset" id="edit_horario_contrato-tab" data-toggle="tab" href="#edit_horario_contrato" role="tab" aria-controls="edit_horario_contrato" aria-selected="false">Horario</a>
-                        </li>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link-aten text-reset active" id="edit_info-tipo_contrato-tab" data-toggle="tab" href="#edit_info-tipo_contrato" role="tab" aria-controls="edit_info-tipo_contrato" aria-selected="true">Tipo Contrato</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-aten text-reset" id="edit_info_personal_cont-tab" data-toggle="tab" href="#edit_info_personal_cont" role="tab" aria-controls="edit_info_personal_cont" aria-selected="false">Información Personal</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-aten text-reset" id="edit_info_contrato_pers-tab" data-toggle="tab" href="#edit_info_contrato_pers" role="tab" aria-controls="edit_info_contrato_pers" aria-selected="false">Información de Contrato</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-aten text-reset" id="edit_leyes_sociales-tab" data-toggle="tab" href="#edit_leyes_sociales" role="tab" aria-controls="edit_leyes_sociales" aria-selected="false">Leyes Sociales</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link-aten text-reset" id="edit_horario_contrato-tab" data-toggle="tab" href="#edit_horario_contrato" role="tab" aria-controls="edit_horario_contrato" aria-selected="false">Horario</a>
+                            </li>
 
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="edit_info-tipo_contrato" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Profesi&oacute;n</label>
-                                    <select name="edit_profesion_nuevo_profesional" id="edit_profesion_nuevo_profesional" class="form-control" onchange="dame_tipo_especialidad()">
-                                        <option value="0">Seleccione opci&oacute;n</option>
-                                        @foreach($especialidades as $especialidad)
-                                            <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Especialidad</label>
-                                    <select name="edit_especialidad_nuevo_profesional" id="edit_especialidad_nuevo_profesional" class="form-control" onchange="dame_subtipo_especialidad()">
-
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Sub-especialidad</label>
-                                    <select name="edit_sub_especialidad_nuevo_profesional" id="edit_sub_especialidad_nuevo_profesional" class="form-control">
-                                        <option value="0">Seleccione opci&oacute;n</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade" id="edit_info_personal_cont" role="tabpanel" aria-labelledby="edit_info_personal_cont-tab">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Rut</label>
-                                    <input type="text" class="form-control form-control-sm" oninput="formatoRut(this)" name="edit_rut_nuevo_profesional" id="edit_rut_nuevo_profesional">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Fecha de Ingreso</label>
-                                    <input type="date" class="form-control form-control-sm" name="edit_f_ingreso_nuevo_profesional" id="edit_f_ingreso_nuevo_profesional" value="{{ date('Y-m-d') }}">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Nombre</label>
-                                    <input class="form-control form-control-sm" name="nombre_nuevo_profesional_edit" id="nombre_nuevo_profesional_edit" type="text" >
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Primer Apellido</label>
-                                    <input class="form-control form-control-sm" name="edit_apellido1_nuevo_profesional" id="edit_apellido1_nuevo_profesional" type="text" >
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Segundo Apellido</label>
-                                    <input class="form-control form-control-sm" name="edit_apellido2_nuevo_profesional" id="edit_apellido2_nuevo_profesional" type="text" >
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="floating-label-activo-sm">Sexo</label>
-                                <select class="form-control form-control-sm" name="edit_prof_sexo" id="edit_prof_sexo">
-                                    <option value="">Seleccione</option>
-                                    <option value="F">Femenino</option>
-                                    <option value="M">Masculino</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="floating-label-activo-sm">Fecha Nacimiento</label>
-                                <input type="date" class="form-control form-control-sm" name="edit_fecha_nacimiento" id="edit_fecha_nacimiento">
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
-                                    <input class="form-control form-control-sm" name="edit_email_nuevo_profesional" id="edit_email_nuevo_profesional" type="email" >
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Tel&eacute;fono</label>
-                                    <input class="form-control form-control-sm" name="edit_telefono1_nuevo_profesional" id="edit_telefono1_nuevo_profesional" type="number" >
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Tel&eacute;fono (opcional)</label>
-                                    <input class="form-control form-control-sm" name="edit_telefono2_nuevo_profesional" id="edit_telefono2_nuevo_profesional" type="number" >
-                                </div>
-                            </div>
-                            <div class="col-sm-8">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Direcci&oacute;n N&deg; / Calle</label>
-                                    <input class="form-control form-control-sm" name="edit_direccion_nuevo_profesional" id="edit_direccion_nuevo_profesional" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">N&deg; Casa / Depto</label>
-                                    <input class="form-control form-control-sm" name="edit_numero_nuevo_profesional" id="edit_numero_nuevo_profesional" type="text">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Regi&oacute;n</label>
-                                    <select class="form-control form-control-sm" onchange="buscar_ciudad_editar_prof();" id="edit_region_nuevo_profesional">
-                                            <option>Seleccione opci&oacute;n</option>
-                                            @foreach($regiones as $region) <option value="{{ $region->id }}">{{ $region->nombre }}</option> @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo-sm">Comuna</label>
-                                    <select class="form-control form-control-sm" id="edit_comuna_nuevo_profesional">
-
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <div class="switch switch-success d-inline m-r-10">
-                                        <input type="checkbox" id="edit_correo-cont" checked="">
-                                        <label for="edit_correo-cont" class="cr"></label>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="edit_info-tipo_contrato" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
+                                <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Profesi&oacute;n</label>
+                                            <select name="edit_profesion_nuevo_profesional" id="edit_profesion_nuevo_profesional" class="form-control" onchange="dame_tipo_especialidad()">
+                                                <option value="0">Seleccione opci&oacute;n</option>
+                                                @foreach($especialidades as $especialidad)
+                                                    <option value="{{ $especialidad->id }}">{{ $especialidad->nombre }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                    <label>Notificar por correo electr&oacute;nico</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Especialidad</label>
+                                            <select name="edit_especialidad_nuevo_profesional" id="edit_especialidad_nuevo_profesional" class="form-control" onchange="dame_subtipo_especialidad()">
 
-                    <div class="tab-pane fade" id="edit_info_contrato_pers" role="tabpanel" aria-labelledby="edit_info_contrato_pers-tab">
-                        <div class="row">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Sub-especialidad</label>
+                                            <select name="edit_sub_especialidad_nuevo_profesional" id="edit_sub_especialidad_nuevo_profesional" class="form-control">
+                                                <option value="0">Seleccione opci&oacute;n</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <h5>Datos Bancarios Para Dep&oacute;sito</h5>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Banco</label>
-                                    <select class="form-control form-control-sm" name="edit_banco_nuevo_profesional" id="edit_banco_nuevo_profesional">
-                                        <option value="0">Seleccione opci&oacute;n</option>
-                                        @foreach($bancos as $banco)
-                                            <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">N&deg; Cuenta</label>
-                                    <input class="form-control form-control-sm" name="edit_n_cta_nuevo_profesional" id="edit_n_cta_nuevo_profesional" type="number" >
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Sucursal</label>
-                                    <input class="form-control form-control-sm" name="edit_sucursal_nuevo_profesional" id="edit_sucursal_nuevo_profesional" type="text" >
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                            <div class="tab-pane fade" id="edit_info_personal_cont" role="tabpanel" aria-labelledby="edit_info_personal_cont-tab">
+                                <div class="form-row">
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Rut</label>
+                                            <input type="text" class="form-control form-control-sm" oninput="formatoRut(this)" name="edit_rut_nuevo_profesional" id="edit_rut_nuevo_profesional">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Fecha de Ingreso</label>
+                                            <input type="date" class="form-control form-control-sm" name="edit_f_ingreso_nuevo_profesional" id="edit_f_ingreso_nuevo_profesional" value="{{ date('Y-m-d') }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Nombre</label>
+                                            <input class="form-control form-control-sm" name="nombre_nuevo_profesional_edit" id="nombre_nuevo_profesional_edit" type="text" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Primer Apellido</label>
+                                            <input class="form-control form-control-sm" name="edit_apellido1_nuevo_profesional" id="edit_apellido1_nuevo_profesional" type="text" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Segundo Apellido</label>
+                                            <input class="form-control form-control-sm" name="edit_apellido2_nuevo_profesional" id="edit_apellido2_nuevo_profesional" type="text" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Sexo</label>
+                                        <select class="form-control form-control-sm" name="edit_prof_sexo" id="edit_prof_sexo">
+                                            <option value="">Seleccione</option>
+                                            <option value="F">Femenino</option>
+                                            <option value="M">Masculino</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <label class="floating-label-activo-sm">Fecha Nacimiento</label>
+                                        <input type="date" class="form-control form-control-sm" name="edit_fecha_nacimiento" id="edit_fecha_nacimiento">
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                                        <div class="form-group fill">
+                                            <label class="floating-label-activo-sm">Correo Electr&oacute;nico</label>
+                                            <input class="form-control form-control-sm" name="edit_email_nuevo_profesional" id="edit_email_nuevo_profesional" type="email" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group fill">
+                                            <label class="floating-label-activo-sm">Tel&eacute;fono</label>
+                                            <input class="form-control form-control-sm" name="edit_telefono1_nuevo_profesional" id="edit_telefono1_nuevo_profesional" type="number" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group fill">
+                                            <label class="floating-label-activo-sm">Tel&eacute;fono (opcional)</label>
+                                            <input class="form-control form-control-sm" name="edit_telefono2_nuevo_profesional" id="edit_telefono2_nuevo_profesional" type="number" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-8 col-lg-9 col-xl-9">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Dirección</label>
+                                            <input class="form-control form-control-sm" name="edit_direccion_nuevo_profesional" id="edit_direccion_nuevo_profesional" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Nº</label>
+                                            <input class="form-control form-control-sm" name="edit_numero_nuevo_profesional" id="edit_numero_nuevo_profesional" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group fill">
+                                            <label class="floating-label-activo-sm">Regi&oacute;n</label>
+                                            <select class="form-control form-control-sm" onchange="buscar_ciudad_editar_prof();" id="edit_region_nuevo_profesional">
+                                                    <option>Seleccione opci&oacute;n</option>
+                                                    @foreach($regiones as $region) <option value="{{ $region->id }}">{{ $region->nombre }}</option> @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group fill">
+                                            <label class="floating-label-activo-sm">Comuna</label>
+                                            <select class="form-control form-control-sm" id="edit_comuna_nuevo_profesional">
 
-                    <div class="tab-pane fade" id="edit_leyes_sociales" role="tabpanel" aria-labelledby="edit_leyes_sociales-tab">
-                        <div class="row">
-                            <div class="col-12">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="form-group">
+                                            <div class="switch switch-success d-inline m-r-10">
+                                                <input type="checkbox" id="edit_correo-cont" checked="">
+                                                <label for="edit_correo-cont" class="cr"></label>
+                                            </div>
+                                            <label>Notificar por correo electr&oacute;nico</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="edit_info_contrato_pers" role="tabpanel" aria-labelledby="edit_info_contrato_pers-tab">
+                                <div class="form-row">
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <h6 class="t-modal">Datos Bancarios Para Dep&oacute;sito</h6>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Banco</label>
+                                            <select class="form-control form-control-sm" name="edit_banco_nuevo_profesional" id="edit_banco_nuevo_profesional">
+                                                <option value="0">Seleccione opci&oacute;n</option>
+                                                @foreach($bancos as $banco)
+                                                    <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Nº Cuenta</label>
+                                            <input class="form-control form-control-sm" name="edit_n_cta_nuevo_profesional" id="edit_n_cta_nuevo_profesional" type="number" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <label class="floating-label-activo-sm">Sucursal</label>
+                                            <input class="form-control form-control-sm" name="edit_sucursal_nuevo_profesional" id="edit_sucursal_nuevo_profesional" type="text" >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="edit_leyes_sociales" role="tabpanel" aria-labelledby="edit_leyes_sociales-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <form>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                                    <h6 class="t-modal">Información y datos del contrato</h6>
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                    <label class="floating-label-activo-sm">Fecha inicio</label>
+                                                    <input type="date" class="form-control form-control-sm" name="edit_prof_fecha_inicio" id="edit_prof_fecha_inicio" value="{{ date('Y-m-d') }}">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                    <label class="floating-label-activo-sm">Fecha término</label>
+                                                    <input type="date" class="form-control form-control-sm" name="edit_prof_fecha_termino" id="edit_prof_fecha_termino">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6"style="text-align:right">
+                                                    <label  class="cr">Contrato Indefinido</label>
+                                                    <input type="hidden" id="edit_cont_indefinido" name="edit_cont_indefinido" value="0">
+                                                    <div class="switch switch-success d-inline m-r-10">
+                                                        <input type="checkbox" onchange="activar_check('edit_prof_check_contrato_indef', 'edit_cont_indefinido', ' ');" id="edit_prof_check_contrato_indef" name="edit_prof_check_contrato_indef" value="">
+                                                        <label for="edit_prof_check_contrato_indef" class="cr"></label>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                                    <label class="floating-label-activo-sm">Monto imponible</label>
+                                                    <input type="number" class="form-control form-control-sm" name="edit_prof_monto_imponible" id="edit_prof_monto_imponible">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                                                    <label  class="floating-label-activo-sm">Locomoción</label>
+                                                    <input type="hidden" id="edit_prof_locomocion" name="edit_prof_locomocion" value="0">
+                                                    <div class="switch switch-success d-inline m-r-10">
+                                                        <input type="checkbox" onchange="activar_check('edit_prof_check_locomocion', 'edit_prof_locomocion', 'edit_prof_locomocion_porcentaje');" id="edit_prof_check_locomocion" name="edit_prof_check_locomocion" value="">
+                                                        <label for="edit_prof_check_locomocion" class="cr"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                                                    <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_prof_locomocion_porcentaje" id="edit_prof_locomocion_porcentaje" value="N/A">
+                                                </div>
+
+
+                                                <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                                                    <label class="floating-label-activo-sm">Colación</label>
+                                                     <input type="hidden" id="edit_prof_colacion" name="edit_prof_colacion" value="0">
+                                                    <div class="switch switch-success d-inline m-r-10">
+                                                        <input type="checkbox" onchange="activar_check('edit_prof_check_colacion', 'edit_prof_colacion', 'edit_prof_colacion_porcentaje');" id="edit_prof_check_colacion" name="edit_prof_check_colacion" value="">
+                                                        <label for="edit_prof_check_colacion" class="cr"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                                                    <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_prof_colacion_porcentaje" id="edit_prof_colacion_porcentaje" value="N/A">
+                                                </div>
+
+                                                <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                                                    <label class="floating-label-activo-sm">Asignación familar</label>
+                                                    <input type="hidden" id="edit_prof_asignacion_familiar" name="edit_prof_asignacion_familiar" value="0">
+                                                    <div class="switch switch-success d-inline m-r-10">
+                                                        <input type="checkbox" onchange="activar_check('edit_prof_check_asignacion_familiar', 'edit_prof_asignacion_familiar', 'edit_prof_asignacion_familiar_cantidad');" id="edit_prof_check_asignacion_familiar" name="edit_prof_check_asignacion_familiar" value="">
+                                                        <label for="edit_prof_check_asignacion_familiar" class="cr"></label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                                                    <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_prof_asignacion_familiar_cantidad" id="edit_prof_asignacion_familiar_cantidad" value="N/A">
+                                                </div>
+                                                <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                                                    <label class="floating-label-activo-sm">Cajas de Compensación</label>
+                                                    <input type="hidden" id="edit_prof_caja_compensacion" name="edit_prof_caja_compensacion" value="0">
+                                                    <div class="switch switch-success d-inline m-r-10">
+                                                        <input type="checkbox" onchange="activar_check('edit_prof_check_caja_compensacion', 'edit_prof_caja_compensacion', 'edit_prof_caja_compensacion_porcentaje');" id="edit_prof_check_caja_compensacion" name="edit_prof_check_caja_compensacion" value="">
+                                                        <label for="edit_prof_check_caja_compensacion" class="cr"></label>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
+                                                    <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_prof_caja_compensacion_porcentaje" id="edit_prof_caja_compensacion_porcentaje" value="N/A">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="edit_horario_contrato" role="tabpanel" aria-labelledby="edit_horario_contrato-tab">
                                 <form>
                                     <div class="form-row">
-                                        <div class="col-sm-12 col-md-12 mb-2">
-                                            <h6 class="text-c-blue">INFORMACIÓN Y DATOS DEL CONTRATO</h6>
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                            <h6 class="t-modal">Horario de trabajo</h6>
                                         </div>
-                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                            <label class="floating-label-activo-sm">Fecha Inicio</label>
-                                            <input type="date" class="form-control form-control-sm" name="edit_prof_fecha_inicio" id="edit_prof_fecha_inicio" value="{{ date('Y-m-d') }}">
+                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <label class="floating-label-activo-sm">Días de trabajo</label>
+                                            <select class="js-example-basic-multiple" name="edit_dias_laborales" id="edit_dias_laborales" multiple="multiple">
+                                                <option value="1">Lunes</option>
+                                                <option value="2">Martes</option>
+                                                <option value="3">Miércoles</option>
+                                                <option value="4">Jueves</option>
+                                                <option value="5">Viernes</option>
+                                                <option value="6">Sábado</option>
+                                                <option value="7">Domingo</option>
+                                            </select>
                                         </div>
-                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                            <label class="floating-label-activo-sm">Fecha Termino</label>
-                                            <input type="date" class="form-control form-control-sm" name="edit_prof_fecha_termino" id="edit_prof_fecha_termino">
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-6 col-lg-6"style="text-align:right">
-                                            <label  class="cr">Indefinido</label>
-                                            <input type="hidden" id="edit_cont_indefinido" name="edit_cont_indefinido" value="0">
-                                            <div class="switch switch-success d-inline m-r-10">
-                                                <input type="checkbox" onchange="activar_check('edit_prof_check_contrato_indef', 'edit_cont_indefinido', ' ');" id="edit_prof_check_contrato_indef" name="edit_prof_check_contrato_indef" value="">
-                                                <label for="edit_prof_check_contrato_indef" class="cr"></label>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                            <label class="floating-label-activo-sm">Monto Imponible</label>
-                                            <input type="number" class="form-control form-control-sm" name="edit_prof_monto_imponible" id="edit_prof_monto_imponible">
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                            <label  class="floating-label-activo-sm">Locomoción</label>
-                                            <input type="hidden" id="edit_prof_locomocion" name="edit_prof_locomocion" value="0">
-                                            <div class="switch switch-success d-inline m-r-10">
-                                                <input type="checkbox" onchange="activar_check('edit_prof_check_locomocion', 'edit_prof_locomocion', 'edit_prof_locomocion_porcentaje');" id="edit_prof_check_locomocion" name="edit_prof_check_locomocion" value="">
-                                                <label for="edit_prof_check_locomocion" class="cr"></label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                            <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_prof_locomocion_porcentaje" id="edit_prof_locomocion_porcentaje" value="N/A">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                            <label class="floating-label-activo-sm">Hora entrada</label>
+                                            <input type="time" class="form-control form-control-sm" id="edit_hora_entrada" name="edit_hora_entrada" value="08:00">
                                         </div>
 
-
-                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                            <label class="floating-label-activo-sm">Colación</label>
-                                             <input type="hidden" id="edit_prof_colacion" name="edit_prof_colacion" value="0">
-                                            <div class="switch switch-success d-inline m-r-10">
-                                                <input type="checkbox" onchange="activar_check('edit_prof_check_colacion', 'edit_prof_colacion', 'edit_prof_colacion_porcentaje');" id="edit_prof_check_colacion" name="edit_prof_check_colacion" value="">
-                                                <label for="edit_prof_check_colacion" class="cr"></label>
-                                            </div>
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                            <label class="floating-label-activo-sm">Hora salida</label>
+                                            <input type="time" class="form-control form-control-sm" id="edit_hora_salida" name="edit_hora_salida" value="19:00">
                                         </div>
-                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                            <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_prof_colacion_porcentaje" id="edit_prof_colacion_porcentaje" value="N/A">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                            <label class="floating-label-activo-sm">Hora inicio colación</label>
+                                            <input type="time" class="form-control form-control-sm" id="edit_hora_entrada_colacion" name="edit_hora_entrada_colacion" value="12:00">
                                         </div>
-
-                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                            <label class="floating-label-activo-sm">Asignación Familar</label>
-                                            <input type="hidden" id="edit_prof_asignacion_familiar" name="edit_prof_asignacion_familiar" value="0">
-                                            <div class="switch switch-success d-inline m-r-10">
-                                                <input type="checkbox" onchange="activar_check('edit_prof_check_asignacion_familiar', 'edit_prof_asignacion_familiar', 'edit_prof_asignacion_familiar_cantidad');" id="edit_prof_check_asignacion_familiar" name="edit_prof_check_asignacion_familiar" value="">
-                                                <label for="edit_prof_check_asignacion_familiar" class="cr"></label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                            <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_prof_asignacion_familiar_cantidad" id="edit_prof_asignacion_familiar_cantidad" value="N/A">
-                                        </div>
-                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                            <label class="floating-label-activo-sm">Cajas de Compensación</label>
-                                            <input type="hidden" id="edit_prof_caja_compensacion" name="edit_prof_caja_compensacion" value="0">
-                                            <div class="switch switch-success d-inline m-r-10">
-                                                <input type="checkbox" onchange="activar_check('edit_prof_check_caja_compensacion', 'edit_prof_caja_compensacion', 'edit_prof_caja_compensacion_porcentaje');" id="edit_prof_check_caja_compensacion" name="edit_prof_check_caja_compensacion" value="">
-                                                <label for="edit_prof_check_caja_compensacion" class="cr"></label>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                            <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_prof_caja_compensacion_porcentaje" id="edit_prof_caja_compensacion_porcentaje" value="N/A">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                            <label class="floating-label-activo-sm">Hora término colación</label>
+                                            <input type="time" class="form-control form-control-sm" id="edit_hora_salida_colacion" name="edit_hora_salida_colacion" value="13:00">
                                         </div>
                                     </div>
                                 </form>
                             </div>
-
                         </div>
-                    </div>
-
-                    <div class="tab-pane fade" id="edit_horario_contrato" role="tabpanel" aria-labelledby="edit_horario_contrato-tab">
-                        <form>
-                            <div class="form-row">
-                                <div class="col-sm-12 col-md-12 mb-2">
-                                    <h6 class="text-c-blue">HORARIO DE TRABAJO</h6>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                    <label class="floating-label-activo-sm">Días de Trabajo</label>
-                                    <select class="js-example-basic-multiple" name="edit_dias_laborales" id="edit_dias_laborales" multiple="multiple">
-                                        <option value="1">Lunes</option>
-                                        <option value="2">Martes</option>
-                                        <option value="3">Miercoles</option>
-                                        <option value="4">Jueves</option>
-                                        <option value="5">Viernes</option>
-                                        <option value="6">Sabado</option>
-                                        <option value="7">Domingo</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                    <label class="floating-label-activo-sm">Hora entrada</label>
-                                    <input type="time" class="form-control form-control-sm" id="edit_hora_entrada" name="edit_hora_entrada" value="08:00">
-                                </div>
-
-                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                    <label class="floating-label-activo-sm">Hora salida</label>
-                                    <input type="time" class="form-control form-control-sm" id="edit_hora_salida" name="edit_hora_salida" value="19:00">
-                                </div>
-                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                    <label class="floating-label-activo-sm">Hora Inicio Colación</label>
-                                    <input type="time" class="form-control form-control-sm" id="edit_hora_entrada_colacion" name="edit_hora_entrada_colacion" value="12:00">
-                                </div>
-                                <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                    <label class="floating-label-activo-sm">Hora término colación</label>
-                                    <input type="time" class="form-control form-control-sm" id="edit_hora_salida_colacion" name="edit_hora_salida_colacion" value="13:00">
-                                </div>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-warning" onclick="modificar_registros_profesional();">Editar </button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i>Cancelar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="modificar_registros_profesional();"><i class="feather icon-save"></i> Guardar cambios</button>
                 {{-- <button type="button" class="btn btn-primary">Ver formulario (PDF)</button> --}}
             </div>
         </div>
@@ -571,7 +574,7 @@
         if(locomocion == '')
         {
             valido = 0;
-            mensaje += 'Campo requerido Locomocion\n';
+            mensaje += 'Campo requerido Locomoción\n';
         }
         // if(locomocion_porcentaje == '')
         // {
@@ -581,7 +584,7 @@
         if(colacion == '')
         {
             valido = 0;
-            mensaje += 'Campo requerido Colacion\n';
+            mensaje += 'Campo requerido Colación\n';
         }
         // if(colacion_porcentaje == '')
         // {
@@ -601,7 +604,7 @@
         if(caja_compensacion == '')
         {
             valido = 0;
-            mensaje += 'Campo requerido Caja Compensacion\n';
+            mensaje += 'Campo requerido Caja Compensación\n';
         }
         // if(caja_compensacion_porcentaje == '')
         // {
@@ -612,27 +615,27 @@
         if(dias_laborales == '')
         {
             valido = 0;
-            mensaje += 'Campo requerido Días laborales\n';
+            mensaje += 'Campo requerido días laborales\n';
         }
         if(hora_entrada == '')
         {
             valido = 0;
-            mensaje += 'Campo requerido Hora entrada\n';
+            mensaje += 'Campo requerido hora entrada\n';
         }
         if(hora_salida == '')
         {
             valido = 0;
-            mensaje += 'Campo requerido Hora salida\n';
+            mensaje += 'Campo requerido hora salida\n';
         }
         if(hora_entrada_colacion == '')
         {
             valido = 0;
-            mensaje += 'Campo requerido Hora entrada colación\n';
+            mensaje += 'Campo requerido hora entrada colación\n';
         }
         if(hora_salida_colacion == '')
         {
             valido = 0;
-            mensaje += 'Campo requerido Hora salida colación\n';
+            mensaje += 'Campo requerido hora salida colación\n';
         }
         if(clave_ingreso == '')
         {
@@ -703,8 +706,8 @@
                         $('#editar_profesional_cm').modal('hide');
 
                         swal({
-                            title: "Edicion de Personal",
-                            text: 'Edicion Exitoso.',
+                            title: "Edición de Personal",
+                            text: 'Edición exitosa.',
                             icon: "success",
                             buttons: "Aceptar",
                         })
@@ -729,7 +732,7 @@
                         }
 
                         swal({
-                            title: "Edicion de Personal",
+                            title: "Edición de Personal",
                             text: mensaje,
                             icon: "error",
                             buttons: "Aceptar",

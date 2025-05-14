@@ -36,7 +36,7 @@
                                             {{ $solicitud_po->Profesional()->first()->nombre . ' ' . $solicitud_po->Profesional()->first()->apellido_uno }}
                                         </td>
                                         <td class="text-center align-middle">
-                                            {{ $solicitud_po->LugarAtencion()->first()->nombre }}
+                                            {{--  {{ $solicitud_po->LugarAtencion()->first()->nombre }}  --}}
                                         </td>
                                         <td class="text-center align-middle">
                                             @if ($solicitud_po->grado_urgencia == 1)

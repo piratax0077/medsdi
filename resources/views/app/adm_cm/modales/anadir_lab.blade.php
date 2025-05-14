@@ -168,7 +168,7 @@
 </div>
 
 <script>
-    function ag_laboratorio() {
+    function a_laboratorio() {
                $('#a_laboratorio').modal('show');
            }
    </script>

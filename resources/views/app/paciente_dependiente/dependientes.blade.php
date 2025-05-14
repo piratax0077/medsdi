@@ -9,11 +9,11 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Escritorio Paciente</h5>
+                                <h5 class="m-b-10 font-weight-bold">Escritorio paciente</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="{{ ROUTE('paciente.home') }}">Mi Escritorio </a>
+                                    <a href="{{ ROUTE('paciente.home') }}">Mi escritorio </a>
                                 </li>
                             </ul>
                         </div>
@@ -27,7 +27,7 @@
                 <div class="col-md-12">
                     <div class="card h-100 pb-0">
                         <div class="card-header text-center bg-c-info">
-                            <h5 class="text-white d-inline text-center" style="font-size: 1.2rem;">Mis Dependientes</h5>
+                            <h5 class="text-white d-inline text-center" style="font-size: 1.2rem;">Mis Dependientesx</h5>
                         </div>
                         <div class="card-body pt-4 pb-0">
 
@@ -41,7 +41,6 @@
                             <div class="row m-b-30">
                                 <div class="col-md-12">
                                     <div class="row" id="card-lista-dependientes">
-
                                         @if ($registros)
                                             @if ($registros->count() >0 )
                                                 @foreach ($registros as $registro)

@@ -316,9 +316,7 @@
 												</div>
 											</div>
 											<div class="col-sm-12">
-
-												 <button type="button" onclick="agregar_alergia_paciente({{ $paciente->id }});" class="btn btn-primary btn-sm float-right"><i class="fa fa-plus"></i> Agregar Alérgia</button>
-
+												 <button type="button" onclick="agregar_alergia_paciente({{ $paciente->id }});" class="btn btn-primary btn-sm float-right"><i class="fa fa-plus"></i> Agregar alergia</button>
 											</div>
 										</form>
 									</div>

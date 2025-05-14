@@ -2348,7 +2348,6 @@
                                     </select>
                                 </div>
                             </div>
-
                             <div id="div_form_servicio" class="d-none w-100">
                                 <div class="col-sm-12">
                                     <div class="form-group fill">
@@ -2503,48 +2502,16 @@
                 <div class="modal-body">
                     <form>
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="form-group fill">
                                     <!--Cargar áreas-->
-                                    <label class="floating-label">Área</label>
-                                    <select class="form-control form-control-sm" id="tipo_area">
-                                        <option value="0">Seleccione</option>
-                                        @foreach ($tipos_areas_cm as $tipo_area_cm)
-                                            <option value="{{ $tipo_area_cm->id }}">{{ $tipo_area_cm->nombre }}</option>
+                                    <label class="floating-label-activo-sm">Responsable</label>
+                                    <select class="form-control form-control-sm" id="editar_responsable" name="editar_responsable">
+                                        <option>Seleccione</option>
+                                        @foreach($profesionales as $p)
+                                            <option value="{{ $p->id }}">{{ $p->nombre }} {{ $p->apellido_uno }} {{ $p->apellido_dos }}</option>
                                         @endforeach
                                     </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group fill">
-                                    <label class="floating-label">Responsable</label>
-                                    <select class="form-control form-control-sm" id="responsable_cargo_area">
-                                            <option value="0">Seleccione</option>
-                                            @foreach ($profesionales as $profesional)
-                                                <option value="{{ $profesional->id_profesional }}">{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</option>
-                                            @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo">Contacto (email)</label>
-                                    <input type="text" class="form-control form-control-sm" name="e_cont" id="e_cont">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo">Teléfono</label>
-                                    <input type="number" class="form-control form-control-sm" name="tel_c" id="tel_c">
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group fill">
-                                    <label class="floating-label-activo">N°/pers a cargo</label>
-                                    <input type="number" class="form-control form-control-sm" name="n_pers" id="n_pers">
                                 </div>
                             </div>
                         </div>
@@ -4054,55 +4021,6 @@
         });
     }
 
-    function editar_buscar_sub_tipo_especialidad(id='')
-    {
-        let sub_tipo_especialidad_registro = $('#agregar_profesional_nuevo_sub_tipo_especialidad');
-        sub_tipo_especialidad_registro.find('option').remove();
-
-        let especialidad = $('#editar_especialidad_cm').val();
-        console.log(especialidad);
-        let url = "{{ route('home.buscar_sub_tipo_especialidad') }}";
-        $.ajax({
-            url: url,
-            type: "get",
-            data: {
-                //_token: _token,
-                especialidad: especialidad,
-            },
-        })
-        .done(function(data) {
-            if (data != null) {
-                data = JSON.parse(data);
-                console.log(data);
-                console.log(data.length);
-                let sub_especialidades = $('#sub_tipo_especialidad_cm');
-
-                sub_especialidades.find('option').remove();
-                sub_especialidades.append('<option value="">Seleccione</option>');
-                if(data.length > 0)
-                {
-                    $(data).each(function(i, v) { // indice, valor
-                        sub_especialidades.append('<option value="' + v.id + '">' + v.nombre + '</option>');
-                    })
-                }
-                else
-                {
-                    sub_especialidades.append('<option value="0">No Aplica</option>');
-                    sub_especialidades.val(0);
-                }
-                if(id != '')
-                    sub_especialidades.val(id);
-
-            } else {
-                alert('No se pudo Cargar los tipos de especialidad');
-            }
-
-        })
-        .fail(function(jqXHR, ajaxOptions, thrownError) {
-            console.log(jqXHR, ajaxOptions, thrownError)
-        });
-    }
-
     function cambiarEstadoEspecialidad(id){
         let estado = $('#esp-'+id).prop('checked');
         if(estado)
@@ -4546,8 +4464,6 @@
     function guardar_servicio(){
         let id_servicio = $('#servicio').val();
         let id_responsable = $('#responsable_servicio').val();
-        let n_salas_servicio = $('#n_salas_servicio').val();
-        let total_camas_servicio = $('#total_camas_servicio').val();
         id_servicio = parseInt(id_servicio);
         id_responsable = parseInt(id_responsable);
         let valido = 1;
@@ -4563,14 +4479,6 @@
             valido = 0;
             mensaje += 'Campo requerido Responsable\n';
         }
-        if(n_salas_servicio == ''){
-            valido = 0;
-            mensaje += 'Campo requerido N° Salas\n';
-        }
-        if(total_camas_servicio == ''){
-            valido = 0;
-            mensaje += 'Campo requerido Total Camas Servicio\n';
-        }
 
 
         if(valido == 1)
@@ -4578,8 +4486,6 @@
             let data = {
                 id_servicio : id_servicio,
                 id_responsable : id_responsable,
-                n_salas_servicio: n_salas_servicio,
-                total_camas_servicio: total_camas_servicio,
                 _token: CSRF_TOKEN,
             }
 

@@ -47,7 +47,7 @@
 
                             @if (auth()->user()->can('profesional.premium.pacientes.interconsulta'))
                                 <!--Boton Modal Formulario de interconsulta respuesta-->
-                                @if($interconsulta)
+                                @if(isset($interconsulta))
                                     <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta_respuesta">
                                         + Responder Interconsulta
                                     </button>
@@ -58,7 +58,7 @@
                                 @endif
                             @else
                                 <!--Boton Modal Formulario de interconsulta respuesta-->
-                                @if($interconsulta)
+                                @if(isset($interconsulta))
                                     <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta_respuesta">
                                         + Responder Interconsulta
                                     </button>
@@ -94,22 +94,22 @@
                             @endif
                         @else
                             <!--Boton Modal Formulario certificado de reposo-->
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_certificado_reposo" disabled='true'>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_certificado_reposo" >
                                 + Certificado de reposo
                             </button>
                             <!--Boton Modal Formulario de interconsulta-->
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta" disabled='true'>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta" >
                                 + Crear Interconsulta
                             </button>
                             <!--Boton Modal Formulario de interconsulta respuesta-->
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta_respuesta" disabled='true'>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_interconsulta_respuesta">
                                     + Responder Interconsulta
                             </button>
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_inf_medico" disabled='true'>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_inf_medico" >
                                 + Informe Médico
                             </button>
                             <!--Boton Modal formulario uso personal-->
-                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_uso_personal" disabled='true'>
+                            <button type="button" class="btn btn-sm btn-info btn-block text-left accion_modal_uso_personal" >
                                 + Uso Personal
                             </button>
                         @endif
@@ -139,10 +139,10 @@
                             class="btn btn-sm btn-info btn-block text-left accion_modal_enfermedades_declaracion_obligatoria">+ Enf.Notificación.Obligatoria (ENO)</button>
 
 
-                        <!--Boton Modal Formulario Reembolso Médico-->
+                        <!--Boton Modal Formulario Reembolso Médico
                         <button type="button"
                             class="btn btn-sm btn-info btn-block text-left accion_modal_reembolso_medico">+ Reembolso Gastos
-                            Médicos</button>
+                            Médicos</button>-->
 
                         <!--Boton Modal Formulario Reembolso Dental
                         <button type="button"
@@ -151,6 +151,26 @@
                     </div>
                 </div>
             </div>
+			 <div class="card-sidebar">
+                <div class="card-header-sidebar" id="heading_form_consultasbd">
+                    <h2 class="mb-0">
+                        <button class="btn btn-light btn-block text-left collapsed" type="button" data-toggle="collapse"
+                            data-target="#collapse_cons_bd" aria-expanded="false"
+                            aria-controls="collapse_cons_bd"><i
+                                class="feather icon-chevron-down float-right pt-1 flecha-accordion"></i>
+                            CONSULTAR BASES DE DATOS <br>DEL MINSAL
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapse_cons_bd" class="collapse"
+                    aria-labelledby="heading_form_consultasbd" data-parent="#accordion_formularios_atencion">
+                    <div class="card-body-sidebar">
+                        <!--Boton Modal consulta a b d-->
+                        <button type="button"class="btn btn-sm btn-info btn-block text-left accion_modal_consulta_minsal">+ Consultar base de datos MINSAL</br>&nbsp;&nbsp;(en construccíon)</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+

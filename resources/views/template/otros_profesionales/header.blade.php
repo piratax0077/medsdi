@@ -37,6 +37,8 @@
                                         Escritorio profesional
                                     </a>
                                 </li>
+                            @endif
+                            @if (Auth::user()->hasRole('Profesional') || Auth::user()->hasRole('Admin'))
                                 <li>
                                     <a href="{{ ROUTE('dental.index') }}" class="dropdown-item"><i
                                             class="feather icon-user"></i>

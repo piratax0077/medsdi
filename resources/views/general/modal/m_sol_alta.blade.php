@@ -3,7 +3,7 @@
         <div class="modal-content">
 			<div class="modal-header bg-info">
 				<h5 class="modal-title text-white text-center">Solicitud de alta voluntaria </h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close"  data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
 			<div class="modal-body">
                 <input type="hidden" name="modal_solalta_id" id="modal_solalta_id" value="0">

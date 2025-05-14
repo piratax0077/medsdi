@@ -5,30 +5,29 @@
     <div class="pcoded-main-container">
         <div class="pcoded-content">
             <!--Header-->
-            <div class="page-header">
+             <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center pb-2">
                         <div class="col-md-6">
                             <div class="page-header-title">
                                 <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN NUTRICIONISTA</strong></h5>
-                                <p class="font-italic mt-0 mb-0 text-white">
-                                    @php
-                                        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-                                        $fecha = \Carbon\Carbon::parse(now());
-                                        $mes = $meses[($fecha->format('n')) - 1];
-                                        $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
-                                    @endphp
-                                    {{ $fecha }}
-                                </p>
-                                <p class="font-italic mt-0 mb-0 text-white">
+                                
+                                {{--  <p class="font-italic mt-0 mb-0 text-white">
                                     <span class="f-16 f-w-600">{{ $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos }}</span>, RUT: <span class="f-16 f-w-600">{{ $paciente->rut}}</span> , Edad <span class="f-16 f-w-600">{{ \Carbon\Carbon::parse($paciente->fecha_nac)->age }}</span>
-                                </p>
+                                    <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
+                                </p>  --}}
                             </div>
                         </div>
                         <div class="col-md-6">
-                            {{--  <div class="page-header-title">
-                                <button type="button" class="btn btn-outline-light btn-sm d-inline float-md-right mr-4 mb-1">Finalizar atención</button>
-                            </div>  --}}
+                            <p class="font-italic mt-0 mb-0 text-white float-md-right">
+                                @php
+                                    $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                                    $fecha = \Carbon\Carbon::parse(now());
+                                    $mes = $meses[($fecha->format('n')) - 1];
+                                    $fecha = $fecha->format('d') . ' de ' . $mes . ' de ' . $fecha->format('Y');
+                                @endphp
+                                {{ $fecha }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -44,15 +43,20 @@
                                     <li class="nav-item">
                                         <a class="nav-link text-reset active" id="atender-tab" data-toggle="tab" href="#atender" role="tab" aria-controls="atender" aria-selected="true">Atender paciente</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
+
+                                    <li class="nav-item" id="nav-fmu">
+                                        @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
+                                            <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#fmu" role="tab" aria-controls="fmu" aria-selected="false">FMU</a>
+                                        @else
+                                            <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
+                                        @endif
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
                                     </li>
-                                   <li class="nav-item">
-                                        <a class="nav-link text-reset" id="hospitalizacion_op-tab" data-toggle="tab" href="#hospitalizacion_op" role="tab" aria-controls="hospitalizacion_op" aria-selected="false">Paciente Hospitalizado</a>
-                                   </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-reset" id="hospitalizacion-tab" data-toggle="tab" href="#hospitalizacion" role="tab" aria-controls="Paciente hospitalizado" aria-selected="false">Hospitalización</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -82,8 +86,8 @@
                             @include('atencion_medica.secciones_ficha.examenes')
                         </div>--}}
                         <!--Hospitalización-->
-                         <div class="tab-pane fade show" id="hospitalizacion_op" role="tabpanel" aria-labelledby="hospitalizacion_op-tab">
-                            @include('general.hospitalizacion.hospitalizacion_op')
+                        <div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
+                             @include('general.hospitalizacion.hospitalizacion')
                         </div>
                     </div>
                 </div>
@@ -111,6 +115,7 @@
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.modal_encuesta_aliment")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.modal_indicadores_nutri")
     @include("atencion_otros_prof.formularios.modal_atencion_especialidad.nutricion.planificacion_nutri")
+
 
 
 

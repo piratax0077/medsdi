@@ -14,7 +14,7 @@
             <div class="form-row">
                 <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
                     <div class="form-group">
-                        <label class="floating-label-activo-sm">Resp.Calor</label>
+                        <label class="floating-label-activo-sm">Resp.Calorx</label>
                         <select id="sel_endo_resp_calor{{ $counter }}" name="sel_endo_resp_calor{{ $counter }}" class="form-control form-control-sm" style=" font-size: 14px; color: #232020">
                             <option @if($examen->resp_calor == 'N/R No realizada') selected @endif><span>N/R </span> No realizada</option>
                             <option @if($examen->resp_calor == '↑ Aumentado') selected @endif><span>↑ </span> Aumentado</option>

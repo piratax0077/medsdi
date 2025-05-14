@@ -8,7 +8,7 @@
                     <div class="row align-items-center pb-2">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="page-header-title">
-                            <h5 class="text-white d-inline f-16 mt-1"><strong>FICHA DE ATENCIÓN CARDIOLOGÍA</strong></h5>
+                            <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN CARDIOLOGÍA</strong></h5>
                                 <p class="font-weight-bold mt-0 mb-0 text-white float-md-right">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");

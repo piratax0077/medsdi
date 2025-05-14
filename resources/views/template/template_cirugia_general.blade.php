@@ -55,6 +55,9 @@
     <!--Estilo tab secciones -->
     <link rel="stylesheet" type="text/css" href="{{ asset('css/tabs-secciones.css') }}">
 
+     <!-- CIERRE MODALS -->
+    <script src="{{ asset('js/cierremodals.js') }}"></script>
+
     <!--formulario sm-->
     <link rel="stylesheet" href="{{ asset('css/formulario_sm.css') }}">
     {{--  /** agregar css */  --}}
@@ -69,7 +72,7 @@
     @yield('css-btn-autorizacion')
 </head>
 <body>
-    @include('template.header')
+    @include('template.profesional.header')
     @include('template.menuProfesional')
     @yield('Content')
 

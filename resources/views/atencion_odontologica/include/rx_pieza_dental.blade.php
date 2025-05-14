@@ -1,107 +1,110 @@
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-    <div class="row">
-        <div class="col-md-6">
-            <!--IMAGENES-->
-            <div class="form-row" id="contenedor_piezas_ex_oral">
-                <div class="col-sm-12 col-md-12">
-                    <div class="card">
-                        <div class="form-row">
-                            <div class="col-sm-12 col-md-12">
-                                <h6 style="text-align: center;color:blue;bold">Subir imagen radiológica</h6>
+    <div class="card">
+        <div class="card-body">
+            <div class="form-row">
+                <div class="col-md-6">
+                    <!--IMAGENES-->
+                    <div class="form-row" id="contenedor_piezas_ex_oral">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="card-informacion mb-4">
+                                <div class="card-top">
+                                    <div class="col-sm-12 col-md-12">
+                                        <h6 class="text-c-blue">Subir imagen radiológica</h6>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <!-- [ Main Content ] start -->
+                                    <div class="dropzone" id="mis-imagenes-imagenes-rx-dental" action="{{ route('profesional.imagen.carga') }}"></div>
+                                    <!-- [ file-upload ] end -->
+                                </div>
                             </div>
                         </div>
-                        <div class="card-body-aten-a">
-                            <!-- [ Main Content ] start -->
-                            <div class="dropzone" id="mis-imagenes-imagenes-rx-dental" action="{{ route('profesional.imagen.carga') }}"></div>
-                            <!-- [ file-upload ] end -->
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-row">
+                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-12">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Piezas N°</label>
+                                <select class="form-control form-control-sm select2" name="rx_numero_pieza" id="rx_numero_pieza" multiple>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <!-- Agrega todas las piezas necesarias -->
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Espacio Periodontal Apical</label>
+                                <select name="rx_esp_peri_apical{{ $counter }}" id="rx_esp_peri_apical{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('rx_esp_peri_apical{{ $counter }}','div_detalle_rx_esp_peri_apical{{ $counter }}','det_rx_esp_peri_apical{{ $counter }}',4)">
+                                    <option value="0">Seleccione</option>
+                                    <option value="1">Normal</option>
+                                    <option value="2">Engrosado</option>
+                                    <option value="3">Ausente</option>
+                                    <option value="4">Otro</option>
+                                </select>
+                            </div>
+                            <div class="form-group"   id="div_detalle_rx_esp_peri_apical{{ $counter }}" style="display:none">
+                                <label class="floating-label-activo-sm">Espacio Periodontal Apical (Describir)</label>
+                                <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_rx_esp_peri_apical{{ $counter }}" id="det_rx_esp_peri_apical{{ $counter }}"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Hueso Alveolar Apical</label>
+                                <select name="h_apical{{ $counter }}" id="h_apical{{ $counter }}"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('h_apical{{ $counter }}','div_detalle_h_apical{{ $counter }}','aprec_h_apical{{ $counter }}',5)">
+                                    <option value="0">Seleccione</option>
+                                    <option value="1">Normal</option>
+                                    <option value="2">Zona apical Difusa</option>
+                                    <option value="3">Zona apical Corticalizada</option>
+                                    <option value="4">Osteítis Condensante</option>
+                                    <option value="5">Otro (Describir)</option>
+                                </select>
+                            </div>
+                            <div class="form-group"  id="div_detalle_h_apical{{ $counter }}" style="display:none">
+                                <label class="floating-label-activo-sm">Hueso Alveolar Apical<i>(describir)</i></label>
+                                <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="aprec_h_apical{{ $counter }}" id="aprec_h_apical{{ $counter }}"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
-        </div>
-        <div class="col-md-6">
             <div class="form-row">
-                <div class="col-sm-12 col-md-12 col-lg-2 col-xl-12">
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <div class="form-group">
-                        <label class="floating-label-activo-sm">Piezas N°</label>
-                        <select class="form-control form-control-sm select2" name="rx_numero_pieza" id="rx_numero_pieza" multiple>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="13">13</option>
-                            <option value="14">14</option>
-                            <option value="15">15</option>
-                            <option value="16">16</option>
-                            <option value="17">17</option>
-                            <option value="18">18</option>
-                            <option value="21">21</option>
-                            <option value="22">22</option>
-                            <option value="23">23</option>
-                            <option value="24">24</option>
-                            <option value="25">25</option>
-                            <option value="26">26</option>
-                            <option value="27">27</option>
-                            <option value="28">28</option>
-                            <!-- Agrega todas las piezas necesarias -->
-                        </select>
-
+                        <label class="floating-label-activo-sm">Informe del radiólogo</label>
+                        <textarea class="form-control caja-texto form-control-sm" rows="1"  data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="inf_rad{{ $counter }}" id="inf_rad{{ $counter }}"></textarea>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <div class="form-group">
-                        <label class="floating-label-activo-sm">Espacio Periodontal Apical</label>
-                        <select name="rx_esp_peri_apical{{ $counter }}" id="rx_esp_peri_apical{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('rx_esp_peri_apical{{ $counter }}','div_detalle_rx_esp_peri_apical{{ $counter }}','det_rx_esp_peri_apical{{ $counter }}',4)">
-                            <option value="0">Seleccione</option>
-                            <option value="1">Normal</option>
-                            <option value="2">Engrosado</option>
-                            <option value="3">Ausente</option>
-                            <option value="4">Otro</option>
-                        </select>
-                    </div>
-                    <div class="form-group"   id="div_detalle_rx_esp_peri_apical{{ $counter }}" style="display:none">
-                        <label class="floating-label-activo-sm">Espacio Periodontal Apical<i>(describir)</i></label>
-                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_rx_esp_peri_apical{{ $counter }}" id="det_rx_esp_peri_apical{{ $counter }}"></textarea>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="form-group">
-                        <label class="floating-label-activo-sm">Hueso Alveolar Apical</label>
-                        <select name="h_apical{{ $counter }}" id="h_apical{{ $counter }}"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('h_apical{{ $counter }}','div_detalle_h_apical{{ $counter }}','aprec_h_apical{{ $counter }}',5)">
-                            <option value="0">Seleccione</option>
-                            <option value="1">Normal</option>
-                            <option value="2">Zona apical Difusa</option>
-                            <option value="3">Zona apical Corticalizada</option>
-                            <option value="4">Osteítis Condensante</option>
-                            <option value="5">Otro<i>(describir)</i></option>
-                        </select>
-                    </div>
-                    <div class="form-group"  id="div_detalle_h_apical{{ $counter }}" style="display:none">
-                        <label class="floating-label-activo-sm">Hueso Alveolar Apical<i>(describir)</i></label>
-                        <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="aprec_h_apical{{ $counter }}" id="aprec_h_apical{{ $counter }}"></textarea>
+                        <label class="floating-label-activo-sm">Observaciones al estudio radiológico</label>
+                        <textarea class="form-control caja-texto form-control-sm" rows="1"  data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_rad{{ $counter }}" id="obs_rad{{ $counter }}"></textarea>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="card-footer">
+            <button type="button" class="btn btn-info btn-icon" onclick="guardar_nueva_pieza_ex_radio({{ $counter }})"><i class="feather icon-save"></i></button>
+            <button type="button" class="btn btn-icon btn-danger" onclick="ocultar_nueva_pieza_dental_rx({{ $counter }})"><i class="feather icon-x"></i></button>
         </div>
     </div>
-    <div class="form-row">
-        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-            <div class="form-group">
-                <label class="floating-label-activo-sm">Informe del radiólogo</label>
-                <textarea class="form-control caja-texto form-control-sm" rows="1"  data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="inf_rad{{ $counter }}" id="inf_rad{{ $counter }}"></textarea>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
-            <div class="form-group">
-                <label class="floating-label-activo-sm">Observaciones al estudio radiológico</label>
-                <textarea class="form-control caja-texto form-control-sm" rows="1"  data-tipo="general" onfocus="this.rows=2" onblur="this.rows=1;" name="obs_rad{{ $counter }}" id="obs_rad{{ $counter }}"></textarea>
-            </div>
-        </div>
-    </div>
-
-    <button type="button" class="btn btn-outline-primary btn-sm" onclick="guardar_nueva_pieza_ex_radio({{ $counter }})"><i class="fas fa-save"></i>Guardar</button>
-    <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_nueva_pieza_dental_rx({{ $counter }})">X</button>
-    <hr>
-
 </div>
 
 <input type="hidden" name="counter_" id="counter_" value="{{ $counter }}">

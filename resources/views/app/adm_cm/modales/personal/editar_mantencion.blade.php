@@ -45,7 +45,7 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="form-group">
-                                                <label for="edit_tipo_empleado">Tipo Contrato</label>
+                                                <label class="floating-label-activo-sm" for="edit_tipo_empleado">Tipo de Contrato</label>
                                                 <select class="form-control" id="edit_tipo_empleado">
                                                     <option value="0">Seleccione</option>
                                                     <option value="GASFITERÍA">Gasfitería</option>
@@ -63,37 +63,37 @@
                                 <div class="tab-pane fade" id="edit_info_personal_cont_mantencion" role="tabpabel" aria-labelledby="edit_info_personal_cont_mantencion-tab">
                                     <form>
                                         <div class="form-row">
-                                            <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">INFORMACIÓN Y DATOS DE CONTACTO</h6>
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                                <h6 class="t-modal">Información y datos de contacto</h6>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-12 col-lg-12 d-flex">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="tipo_mantenedor_edit" id="tipo_mantenedor-empresa_edit" value="empresa" onclick="que_mantenedor_edit()">
-                                                    <label class="form-check-label" for="tipo_mantenedor-empresa">
+                                                    <label class="form-check-label pt-1" for="tipo_mantenedor-empresa">
                                                       Empresa
                                                     </label>
                                                 </div>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="tipo_mantenedor_edit" id="tipo_mantenedor-persona_edit" value="persona" onclick="que_mantenedor_edit()" checked>
-                                                    <label class="form-check-label" for="tipo_mantenedor-persona">
+                                                    <label class="form-check-label pt-1" for="tipo_mantenedor-persona">
                                                         Persona Natural
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">RUT:</label>
+                                                <label class="floating-label-activo-sm">RUT</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_rut_mantencion" id="edit_rut_mantencion">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Razón Social:</label>
+                                                <label class="floating-label-activo-sm">Razón Social</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_rz_mantencion" id="edit_rz_mantencion" disabled>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Giro:</label>
+                                                <label class="floating-label-activo-sm">Giro</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_giro_mantencion" id="edit_giro_mantencion" disabled>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Nombres (o empresa)</label>
+                                                <label class="floating-label-activo-sm">Nombres o Empresa</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_nombre_mantencion" id="edit_nombre_mantencion">
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4">
@@ -118,15 +118,15 @@
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Email:</label>
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <label class="floating-label-activo-sm">Correo electrónico</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_email_mantencion" id="edit_email_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Teléfono</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_telefono_mantencion" id="edit_telefono_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Región</label>
                                                 <select class="form-control form-control-sm" name="edit_region_mantencion" id="edit_region_mantencion" onchange="buscar_ciudad_nuevo_mantencion();">
                                                     <option value="">Seleccione</option>
@@ -138,18 +138,18 @@
                                                     @endif
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Ciudad</label>
                                                 <select class="form-control form-control-sm" name="edit_ciudad_mantencion" id="edit_ciudad_mantencion">
                                                     <option value="">Seleccione</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-8 col-lg-9 cool-xl-9">
                                                 <label class="floating-label-activo-sm">Dirección</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_direccion_mantencion" id="edit_direccion_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Número</label>
+                                            <div class="form-group col-sm-12 col-md-4 col-lg-3 col-xl-3">
+                                                <label class="floating-label-activo-sm">Nº</label>
                                                 <input type="text" class="form-control form-control-sm" name="edit_numero_mantencion" id="edit_numero_mantencion">
                                             </div>
                                         </div>
@@ -159,18 +159,18 @@
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">INFORMACIÓN Y DATOS DEL CONTRATO</h6>
+                                                <h6 class="t-modal">Información y datos del contrato</h6>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <label class="floating-label-activo-sm">Fecha Inicio</label>
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                <label class="floating-label-activo-sm">Fecha inicio</label>
                                                 <input type="date" class="form-control form-control-sm" name="edit_fecha_inicio_mantencion" id="edit_fecha_inicio_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <label class="floating-label-activo-sm">Fecha Termino</label>
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                <label class="floating-label-activo-sm">Fecha término</label>
                                                 <input type="date" class="form-control form-control-sm" name="edit_fecha_termino_mantencion" id="edit_fecha_termino_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-6"style="text-align:right">
-                                                <label  class="cr">Indefinido</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6"style="text-align:right">
+                                                <label  class="cr">Contrato Indefinido</label>
                                                 <input type="hidden" id="add_cont_indefinido_mantencion" name="add_cont_indefinido_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
                                                     <input type="checkbox" onchange="activar_check('edit_check_contrato_indef_mantencion', 'add_cont_indefinido_mantencion', 'edit_fecha_termino_mantencion');" id="edit_check_contrato_indef_mantencion" name="edit_check_contrato_indef_mantencion" value="">
@@ -179,11 +179,11 @@
                                             </div>
 
 
-                                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                 <label class="floating-label-activo-sm">Monto Imponible</label>
                                                 <input type="number" class="form-control form-control-sm" name="edit_monto_imponible_mantencion" id="edit_monto_imponible_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <label  class="floating-label-activo-sm">Locomoción</label>
                                                 <input type="hidden" id="edit_locomocion_mantencion" name="edit_locomocion_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -191,12 +191,12 @@
                                                     <label for="edit_check_locomocion_mantencion" class="cr"></label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_locomocion_porcentaje_mantencion" id="edit_locomocion_porcentaje_mantencion" value="N/A">
                                             </div>
 
 
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <label class="floating-label-activo-sm">Colación</label>
                                                 <input type="hidden" id="edit_colacion_mantencion" name="edit_colacion_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -204,11 +204,11 @@
                                                     <label for="edit_check_colacion_mantencion" class="cr"></label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_colacion_porcentaje_mantencion" id="edit_colacion_porcentaje_mantencion" value="N/A">
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <label class="floating-label-activo-sm">Asignación Familar</label>
                                                 <input type="hidden" id="edit_asignacion_familiar_mantencion" name="edit_asignacion_familiar_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -216,10 +216,10 @@
                                                     <label for="edit_check_asignacion_familiar_mantencion" class="cr"></label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_asignacion_familiar_cantidad_mantencion" id="edit_asignacion_familiar_cantidad_mantencion" value="N/A">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <label class="floating-label-activo-sm">Cajas de Compensación</label>
                                                 <input type="hidden" id="edit_caja_compensacion_mantencion" name="edit_caja_compensacion_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -229,15 +229,18 @@
 
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3 col-xl-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="edit_caja_compensacion_porcentaje_mantencion" id="edit_caja_compensacion_porcentaje_mantencion" value="N/A">
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="tab-pane fade" id="edit_leyes_sociales_mantencion" role="tabpabel" aria-labelledby="edit_leyes_sociales_mantencion-tab">
-                                    <div class="form-group form-row">
-                                        <div class="col-md-3">
+                                    <div class="form-row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                            <h6 class="t-modal">Leyes sociales</h6>
+                                        </div>
+                                        <div class=" form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <label class="floating-label-activo-sm" for="afp">Seguros</label>
                                             <select name="afp_mantencion" id="afp_mantencion" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
@@ -249,7 +252,7 @@
                                                 <option value="6">AFP Provida</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <label class="floating-label-activo-sm" for="salud">Seguros</label>
                                             <select name="salud_mantencion" id="salud_mantencion" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
@@ -262,13 +265,13 @@
                                                 <option value="7">Isapre Vida Tres</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="seguros">Seguros</label>
                                                 <input type="text" name="seguros_mantencion" id="seguros_mantencion" class="form-control form-control-sm">
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="cantidad">Cantidad</label>
                                                 <input type="number" name="cantidad_mantencion" id="cantidad_mantencion" class="form-control form-control-sm">
@@ -279,35 +282,35 @@
                                 <div class="tab-pane fade" id="edit_horario_contrato_mantencion" role="tabpabel" aria-labelledby="edit_horario_contrato_mantencion-tab">
                                     <form>
                                         <div class="form-row">
-                                            <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">HORARIO DE TRABAJO</h6>
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12mb-2">
+                                                <h6 class="t-modal">Horario de trabajo</h6>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                <label class="floating-label-activo-sm">Días de Trabajo</label>
+                                                <label class="floating-label-activo-sm">Días de trabajo</label>
                                                 <select class="js-example-basic-multiple" name="edit_dias_laborales_mantencion" id="edit_dias_laborales_mantencion" multiple="multiple">
                                                     <option value="1">Lunes</option>
                                                     <option value="2">Martes</option>
-                                                    <option value="3">Miercoles</option>
+                                                    <option value="3">Miércoles</option>
                                                     <option value="4">Jueves</option>
                                                     <option value="5">Viernes</option>
-                                                    <option value="6">Sabado</option>
+                                                    <option value="6">Sábado</option>
                                                     <option value="7">Domingo</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Hora entrada</label>
                                                 <input type="time" class="form-control form-control-sm" id="edit_hora_entrada_mantencion" name="edit_hora_entrada_mantencion" value="08:00">
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Hora salida</label>
                                                 <input type="time" class="form-control form-control-sm" id="edit_hora_salida_mantencion" name="edit_hora_salida_mantencion" value="19:00">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Hora Inicio Colación</label>
                                                 <input type="time" class="form-control form-control-sm" id="edit_hora_entrada_colacion_mantencion" name="edit_hora_entrada_colacion_mantencion" value="12:00">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Hora término colación</label>
                                                 <input type="time" class="form-control form-control-sm" id="edit_hora_salida_colacion_mantencion" name="edit_hora_salida_colacion_mantencion" value="13:00">
                                             </div>
@@ -322,8 +325,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-sm mx-auto" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-warning btn-sm mx-auto" onclick="editar_nuevo_empleado_mantencion();">Editar</button>
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="editar_nuevo_empleado_mantencion();"><i class="feather icon-edit"></i> Guardar cambios</button>
                 {{--  <button type="button" class="btn btn-primary">Ver formulario (PDF)</button>  --}}
 
             </div>
