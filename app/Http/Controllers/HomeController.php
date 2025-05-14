@@ -82,7 +82,14 @@ class HomeController extends Controller
                 break;
             case 'Profesional':
                 $profesional = Profesional::where('id_usuario', $usuario->id)->first();
+                /** laboratorio */
                 if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
+                {
+                    // $prof_lug_at = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->where()->get();
+                    return redirect()->route('laboratorio.lab_profesional.escritorio_profesional_laboratorio');
+                }
+                /** laboratorio Rayo */
+                else if($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
                 {
                     // $prof_lug_at = ProfesionalesLugaresAtencion::where('id_profesional', $profesional->id)->where()->get();
                     return redirect()->route('laboratorio.lab_profesional.escritorio_profesional_laboratorio');

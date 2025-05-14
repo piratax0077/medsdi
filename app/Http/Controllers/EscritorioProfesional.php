@@ -568,6 +568,11 @@ class EscritorioProfesional extends Controller
                     /** profesional de laboratorio */
                     $direccion_escritorio = 'app.laboratorio.lab_profesional.escritorio_profesional_laboratorio';
                 }
+                else if($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
+                {
+                    /** tecnico rayos */
+                    $direccion_escritorio = 'app.laboratorio.lab_profesional.escritorio_profesional_laboratorio';
+                }
                 else
                 {
                     /** otros */
