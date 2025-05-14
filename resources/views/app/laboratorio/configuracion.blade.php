@@ -1922,18 +1922,20 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach($procedimeintos as $proced)
-                                                        <tr>
-                                                            <td class="align-middle text-left">{{ $proced->nombre }}</td>
-                                                            <td class="align-middle text-left">{{ $proced->descripcion }}</td>
-                                                            {{-- <td class="align-middle text-left">{{ $proced->minutos_bloque }}</td> --}}
-                                                            <td class="align-middle text-left">{{ $proced->cantidad_bloques }}</td>
-                                                            <td class="align-middle text-left">$ {{ empty($proced->valor)?0:number_format($proced->valor, 0, ",", ".") }}</td>
-                                                            <td class="align-middle text-left">
-                                                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm({{ $proced->id }});"><i class="feather icon-trash"></i></button>
-                                                            </td>
-                                                        </tr>
-                                                        @endforeach
+                                                        @if (!empty($procedimeintos))
+                                                            @foreach($procedimeintos as $proced)
+                                                                <tr>
+                                                                    <td class="align-middle text-left">{{ $proced->nombre }}</td>
+                                                                    <td class="align-middle text-left">{{ $proced->descripcion }}</td>
+                                                                    {{-- <td class="align-middle text-left">{{ $proced->minutos_bloque }}</td> --}}
+                                                                    <td class="align-middle text-left">{{ $proced->cantidad_bloques }}</td>
+                                                                    <td class="align-middle text-left">$ {{ empty($proced->valor)?0:number_format($proced->valor, 0, ",", ".") }}</td>
+                                                                    <td class="align-middle text-left">
+                                                                        <button type="button" class="btn btn-outline-danger btn-sm btn-icon" onclick="eliminar_procedimiento_cm({{ $proced->id }});"><i class="feather icon-trash"></i></button>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        @endif
                                                     </tbody>
                                                 </table>
                                             </div>
