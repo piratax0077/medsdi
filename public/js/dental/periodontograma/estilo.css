@@ -1,49 +1,4 @@
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-body {
-	line-height: 1;
-	font-family: arial, trebuchet;
-	font-size: 10pt;
-}
 
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
 #wrapper{
 	margin: 0 auto;
 	background: #ffffff;
@@ -131,22 +86,7 @@ table {
 	border:none;
 }
 
-input{
-	width: 11px;
-	height: 18px;
-	margin: 0;
-	font-size: 9px;
-	border: none;
-	text-align: center;
-	outline: none;
 
-}
-.titulo{
-	text-align: right;
-	padding-right: 5px;
-	font-weight:bold;
-	color:#3366FF;
-}
 .borde{
 		border: 1px solid #a4a4a4;
 		padding: 1px;
@@ -161,36 +101,49 @@ input{
 #suma,#suma2,#suma3,#suma3-neg,#suma4,#suma5{display:inline;}
 
 #d18,#d17,#d16,#d15,#d14,#d13,#d12,#d11{
-	text-align: center;
-	font-size:10pt;
-	background: #1a49a3;
-	width: 100%;
-	cursor: pointer;
-	transition: 0.2s;
-	color: #fff;
-	font-weight: 600;
-	font-size: 0.9rem;
+	border-radius:3px;
+	padding-bottom:1px;
+	padding-top:2px;
 	border:#1a49a3 ;
+	text-align: center;
+	font-size:0.9rem;
+	font-weight: 600;
+	background: #1a49a3;
+	color: #fff;
+	width: 100%;
+	transition: 0.2s;
+	cursor:pointer;
 }
 #d18:hover,#d17:hover,#d16:hover,#d15:hover,#d14:hover,#d13:hover,#d12:hover,#d11:hover{
-	background: #134ca8;
-	cursor: pointer;
-	transition: 0.2s;
-	color: #fff;
+	border-radius:3px;
+	padding-bottom:1px;
+	padding-top:2px;
+	border:#5076bf ;
+	text-align: center;
+	font-size:0.9rem;
 	font-weight: 600;
-	font-size: 0.9rem;
-	border: #3976d8;
+	background: #1a49a3;
+	color: #fff;
+	width: 100%;
+	cursor:pointer;
 }
 
 #i18,#i17,#i16,#i15,#i14,#i13,#i12,#i11{
 background: url('../../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
 	width: 100%;
 	height:18px;
+	font-size: 0.9rem!important;
+	font-weight: 600;
+	align-items: center;
+	cursor: pointer;
+	
 }
 
 
 #i18:hover,#i17:hover,#i16:hover,#i15:hover,#i14:hover,#i13:hover,#i12:hover,#i11:hover{
 	background: #E6E6E6;
+	cursor: pointer;
+
 }
 
 #i18-implante,#i17-implante,#i16-implante,#i15-implante,#i14-implante,#i13-implante,#i12-implante,#i11-implante{
@@ -247,13 +200,58 @@ background: url('../../img_pruebas//periodontograma-oblicuas.png') repeat-x cent
 #ae13-a,#ae13-b,#ae13-c,
 #ae12-a,#ae12-b,#ae12-c,
 #ae11-a,#ae11-b,#ae11-c, 
-#su18-a,#su18-b,#su18-c{
+#su18-a,#su18-b,#su18-c
+#su17-a,#su17-b,#su17-c
+#su14-a,#su14-b,#su14-c
+#su15-a,#su15-b,#su15-c
+#su16-a,#su16-b,#su16-c
+#su12-a,#su12-b,#su12-c
+#su11-a,#su11-b,#su11-c
+#su13-a,#su13-b,#su13-c
+#su21-a,#su21-b,#su21-c
+#su22-a,#su22-b,#su22-c
+#su23-a,#su23-b,#su23-c
+#su24-a,#su24-b,#su24-c
+#su25-a,#su25-b,#su25-c
+#su26-a,#su26-b,#su26-c
+#su27-a,#su27-b,#su27-c
+#su28-a,#su28-b,#su28-c
+#su29-a,#su29-b,#su29-c
+#su30-a,#su30-b,#su30-c
+#su31-a,#su31-b,#su31-c
+#su32-a,#su32-b,#su32-c
+#su33-a,#su33-b,#su33-c
+#su33-a,#su33-b,#su33-c
+#su34-a,#su34-b,#su34-c
+#su35-a,#su35-b,#su35-c
+#su36-a,#su36-b,#su36-c
+#su37-a,#su37-b,#su37-c
+#su38-a,#su38-b,#su38-c
+#su39-a,#su39-b,#su39-c
+#su40-a,#su40-b,#su40-c
+#su41-a,#su41-b,#su41-c
+#su42-a,#su42-b,#su42-c
+#su43-a,#su43-b,#su43-c
+#su44-a,#su44-b,#su44-c
+#su45-a,#su45-b,#su45-c
+#su46-a,#su46-b,#su46-c
+#su47-a,#su47-b,#su47-c
+#su48-a,#su48-b,#su48-c
+
+
+
+
+
+{
+
+
+
 	background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #C3C9C8;
     display: inline;
     float: left;
     height: 18px;
-    margin: 4px;
+    margin-bottom: 6px;
     width: 100%;
     transition: 0.2s;
 }
@@ -281,16 +279,52 @@ background: url('../../img_pruebas//periodontograma-oblicuas.png') repeat-x cent
 #ae13-a:hover,#ae13-b:hover,#ae13-c:hover,
 #ae12-a:hover,#ae12-b:hover,#ae12-c:hover,
 #ae11-a:hover,#ae11-b:hover,#ae11-c:hover
-#su18-a:hover,#su18-b:hover,#su18-c:hover{
+#su18-a:hover,#su18-b:hover,#su18-c:hover
+#su17-a:hover,#su17-b:hover,#su17-c:hover
+#su14-a:hover,#su14-b:hover,#su14-c:hover
+#su15-a:hover,#su15-b:hover,#su15-c:hover
+#su16-a:hover,#su16-b:hover,#su16-c:hover
+#su12-a:hover,#su12-b:hover,#su12-c:hover
+#su11-a:hover,#su11-b:hover,#su11-c:hover
+#su13-a:hover,#su13-b:hover,#su13-c:hover
+#su21-a:hover,#su21-b:hover,#su21-c:hover
+#su22-a:hover,#su22-b:hover,#su22-c:hover
+#su23-a:hover,#su23-b:hover,#su23-c:hover
+#su24-a:hover,#su24-b:hover,#su24-c:hover
+#su25-a:hover,#su25-b:hover,#su25-c:hover
+#su26-a:hover,#su26-b:hover,#su26-c:hover
+#su27-a:hover,#su27-b:hover,#su27-c:hover
+#su28-a:hover,#su28-b:hover,#su28-c:hover
+#su29-a:hover,#su29-b:hover,#su29-c:hover
+#su30-a:hover,#su30-b:hover,#su30-c:hover
+#su31-a:hover,#su31-b:hover,#su31-c:hover
+#su32-a:hover,#su32-b:hover,#su32-c:hover
+#su33-a:hover,#su33-b:hover,#su33-c:hover
+#su33-a:hover,#su33-b:hover,#su33-c:hover
+#su34-a:hover,#su34-b:hover,#su34-c:hover
+#su35-a:hover,#su35-b:hover,#su35-c:hover
+#su36-a:hover,#su36-b:hover,#su36-c:hover
+#su37-a:hover,#su37-b:hover,#su37-c:hover
+#su38-a:hover,#su38-b:hover,#su38-c:hover
+#su39-a:hover,#su39-b:hover,#su39-c:hover
+#su40-a:hover,#su40-b:hover,#su40-c:hover
+#su41-a:hover,#su41-b:hover,#su41-c:hover
+#su42-a:hover,#su42-b:hover,#su42-c:hover
+#su43-a:hover,#su43-b:hover,#su43-c:hover
+#su44-a:hover,#su44-b:hover,#su44-c:hover
+#su45-a:hover,#su45-b:hover,#su45-c:hover
+#su46-a:hover:,#su46-b:hover,#su46-c:hover
+#su47-a:hover,#su47-b:hover,#su47-c:hover
+#su48-a:hover,#su48-b:hover,#su48-c:hover{
 
 	transition: 0.2s;
 }
 
 #diente18-a,#diente17-a,#diente16-a,#diente15-a,#diente14-a,#diente13-a,#diente12-a,#diente11-a{
-	height: 155px;
+	height: 200px;
 	background-repeat: no-repeat;
 }
-#diente18-a{
+/**#diente18-a{
 	background: url('../../img_pruebas///tabla1/periodontograma-dientes-arriba-18.png');
 	width:54px;
 	background-position: 0 -2px;
@@ -299,7 +333,7 @@ background: url('../../img_pruebas//periodontograma-oblicuas.png') repeat-x cent
 #diente17-a{
 	background: url('../../img_pruebas///tabla1/periodontograma-dientes-arriba-17.png');
 	width:57px;
-	/*background-position: */
+	/*background-position: 
 	background-repeat: no-repeat;
 }
 #diente16-a{
@@ -317,7 +351,7 @@ background: url('../../img_pruebas//periodontograma-oblicuas.png') repeat-x cent
 #diente14-a{
 	background: url('../img_pruebas//tabla1/periodontograma-dientes-arriba-14.png');
 	width:46px;
-	/*background-position: */
+	/*background-position: 
 	background-repeat: no-repeat;
 }
 #diente13-a{
@@ -335,9 +369,9 @@ background: url('../../img_pruebas//periodontograma-oblicuas.png') repeat-x cent
 #diente11-a{
 	background: url('../img_pruebas//tabla1/periodontograma-dientes-arriba-11.png');
 	width:54px;
-	background-position: bottom;
+	background-position: 0px 22px;
 	background-repeat: no-repeat;
-}
+}*/
 
 
 /*TABLA 2*/
@@ -348,10 +382,18 @@ background: url('../../img_pruebas//periodontograma-oblicuas.png') repeat-x cent
 }
 
 #d21,#d22,#d23,#d24,#d25,#d26,#d27,#d28{
+	border-radius:3px;
+	padding-bottom:1px;
+	padding-top:2px;
+	border:#1a49a3 ;
 	text-align: center;
-	font-size:10pt;
-	background: #E6E6E6;
+	font-size:0.9rem;
+	font-weight: 600;
+	background: #1a49a3;
+	color: #fff;
 	width: 100%;
+	transition: 0.2s;
+	cursor:pointer;
 }
 #d21:hover,#d22:hover,#d23:hover,#d24:hover,#d25:hover,#d26:hover,#d27:hover,#d28:hover{
 	background: #E6E6E6;
@@ -378,7 +420,7 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
 	cursor: pointer;
 }
 #f26,#f27,#f28{
-	width: 95%;
+	width: 100%;
 	height: 18px;
 	background: #ffffff;
 	border: 1px solid #C3C9C8;
@@ -418,8 +460,8 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
     display: inline;
     float: left;
     height: 18px;
-    margin: 1px;
-    width: 23%;
+    margin-bottom: 6px;
+    width: 100%;
 }
 #s21-a:hover,#s21-b:hover,#s21-c:hover,
 #s22-a:hover,#s22-b:hover,#s22-c:hover,
@@ -449,10 +491,10 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
 }
 
 #diente21-a,#diente22-a,#diente23-a,#diente24-a,#diente25-a,#diente26-a,#diente27-a,#diente28-a{
-	height: 155px;
+	height: 200px;
 	background-repeat: no-repeat;
 }
-#diente21-a{
+/**#diente21-a{
 	background: url('../img_pruebas//tabla2/periodontograma-dientes-arriba-21.png');
 	width:53px;
 	background-position: bottom;
@@ -464,16 +506,10 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
 	background-position: 0px 6px;
 	background-repeat: no-repeat;
 }
-#diente23-a{
-	background: url('../img_pruebas//tabla2/periodontograma-dientes-arriba-23.png');
-	width:43px;
-	background-position: top;
-	background-repeat: no-repeat;
-}
+
 #diente24-a{
 	background: url('../img_pruebas//tabla2/periodontograma-dientes-arriba-24.png');
 	width:43px;
-	/*background-position: */
 	background-repeat: no-repeat;
 }
 #diente25-a{
@@ -499,20 +535,39 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
 	width:54px;
 	background-position: 0 -2px;
 	background-repeat: no-repeat;
-}
+}/**
 
 
 /*SEGUNDA PARTE DE TABLAS*/
 
 
 #d18b,#d17b,#d16b,#d15b,#d14b,#d13b,#d12b,#d11b{
+	border-radius:3px;
+	padding-bottom:4px;
+	padding-top:7px;
+	border:#1a49a3 ;
 	text-align: center;
-	font-size:10pt;
-	background: #E6E6E6;
+	font-size:0.9rem;
+	font-weight: 600;
+	background: #1a49a3;
+	color: #fff;
 	width: 100%;
+	transition: 0.2s;
+	cursor:pointer;
 }
 #d18b:hover,#d17b:hover,#d16b:hover,#d15b:hover,#d14b:hover,#d13b:hover,#d12b:hover,#d11b:hover{
-	background: #E6E6E6;
+	border-radius:3px;
+	padding-bottom:1px;
+	padding-top:2px;
+	border:#1a49a3 ;
+	text-align: center;
+	font-size:0.9rem;
+	font-weight: 600;
+	background: #1a49a3;
+	color: #fff;
+	width: 100%;
+	transition: 0.2s;
+	cursor:pointer;
 }
 
 #i18b,#i17b,#i16b,#i15b,#i14b,#i13b,#i12b,#i11b{
@@ -572,8 +627,8 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
     display: inline;
     float: left;
     height: 18px;
-    margin: 1px;
-    width: 100%!important;
+     margin-bottom: 6px;
+    width: 100%;
     transition: 0.2s;
 }
 #s18b-a:hover,#s18b-b:hover,#s18b-c:hover,
@@ -677,13 +732,32 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
 /*TABLA 2*/
 
 #d21b,#d22b,#d23b,#d24b,#d25b,#d26b,#d27b,#d28b{
+	border-radius:3px;
+	padding-bottom:1px;
+	padding-top:2px;
+	border:#1a49a3 ;
 	text-align: center;
-	font-size:10pt;
-	background: #E6E6E6;
+	font-size:0.9rem;
+	font-weight: 600;
+	background: #1a49a3;
+	color: #fff;
 	width: 100%;
+	transition: 0.2s;
+	cursor:pointer;
 }
 #d21b:hover,#d22b:hover,#d23b:hover,#d24b:hover,#d25b:hover,#d26b:hover,#d27b:hover,#d28b:hover{
-	background: #E6E6E6;
+	border-radius:3px;
+	padding-bottom:1px;
+	padding-top:2px;
+	border:#1a49a3 ;
+	text-align: center;
+	font-size:0.9rem;
+	font-weight: 600;
+	background: #1a49a3;
+	color: #fff;
+	width: 100%;
+	transition: 0.2s;
+	cursor:pointer;
 }
 
 #i21b,#i22b,#i23b,#i24b,#i25b,#i26b,#i27b,#i28b{
@@ -743,8 +817,8 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
     display: inline;
     float: left;
     height: 18px;
-    margin: 1px;
-    width: 100%!important;
+    margin-bottom: 6px;
+    width: 100%;
     transition: 0.2s;
 }
 #s21b-a:hover,#s21b-b:hover,#s21b-c:hover,
@@ -851,11 +925,11 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
 	position: absolute;
 }
 #furca18-a,#furca17-a,#furca16-a,#furca14-a,
-#furca24-a,#furca26-a,#furca27-a,#furca28-a{
+#furca24-a,#furca27-a,#furca28-a{
 	margin-top: 70px;
 }
 #furca18-b,#furca17-b,#furca16-b,#furca14-b,
-#furca24-b,#furca26-b,#furca27-b,#furca28-b{
+#furca24-b,#furca27-b,#furca28-b{
 	margin-top: 80px;
 	margin-left: 28px;
 }
@@ -863,13 +937,32 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
 /* TABLA 5*/
 
 #d48,#d47,#d46,#d45,#d44,#d43,#d42,#d41{
+	border-radius:3px;
+	padding-bottom:1px;
+	padding-top:2px;
+	border:#1a49a3 ;
 	text-align: center;
-	font-size:10pt;
-	background: #E6E6E6;
+	font-size:0.9rem;
+	font-weight: 600;
+	background: #1a49a3;
+	color: #fff;
 	width: 100%;
+	transition: 0.2s;
+	cursor:pointer;
 }
 #d48:hover,#d47:hover,#d46:hover,#d45:hover,#d44:hover,#d43:hover,#d42:hover,#d41:hover{
-	background: #E6E6E6;
+	border-radius:3px;
+	padding-bottom:1px;
+	padding-top:2px;
+	border:#1a49a3 ;
+	text-align: center;
+	font-size:0.9rem;
+	font-weight: 600;
+	background: #1a49a3;
+	color: #fff;
+	width: 100%;
+	transition: 0.2s;
+	cursor:pointer;
 }
 
 #i48,#i47,#i46,#i45,#i44,#i43,#i42,#i41{
@@ -945,8 +1038,8 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
     display: inline;
     float: left;
     height: 18px;
-    margin: 1px;
-     width: 100%!important;
+     margin-bottom: 6px;
+    width: 100%;
     transition: 0.2s;
 }
 #s48-a:hover,#s48-b:hover,#s48-c:hover,
@@ -1025,20 +1118,39 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
 #diente41-a{
 	background: url('../img_pruebas//tabla5/periodontograma-dientes-abajo-41.png');
 	width:36px;
-	background-position: 0 1px;
+	background-position: 10px 10px;
 	background-repeat: no-repeat;
 }
 
 /*TABLA 6 */
 
 #d31,#d32,#d33,#d34,#d35,#d36,#d37,#d38{
+	border-radius:3px;
+	padding-bottom:1px;
+	padding-top:2px;
+	border:#1a49a3 ;
 	text-align: center;
-	font-size:10pt;
-	background: #E6E6E6;
+	font-size:0.9rem;
+	font-weight: 600;
+	background: #1a49a3;
+	color: #fff;
 	width: 100%;
+	transition: 0.2s;
+	cursor:pointer;
 }
 #d31:hover,#d32:hover,#d33:hover,#d34:hover,#d35:hover,#d36:hover,#d37:hover,#d38:hover{
-	background: #E6E6E6;
+	border-radius:3px;
+	padding-bottom:1px;
+	padding-top:2px;
+	border:#1a49a3 ;
+	text-align: center;
+	font-size:0.9rem;
+	font-weight: 600;
+	background: #1a49a3;
+	color: #fff;
+	width: 100%;
+	transition: 0.2s;
+	cursor:pointer;
 }
 
 #i31,#i32,#i33,#i34,#i35,#i36,#i37,#i38{
@@ -1112,8 +1224,8 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
     display: inline;
     float: left;
     height: 18px;
-    margin: 1px;
-     width: 100%!important;
+     margin-bottom: 6px;
+    width: 100%;
     transition: 0.2s;
 }
 #s31-a:hover,#s31-b:hover,#s31-c:hover,
@@ -1156,7 +1268,7 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
 #diente32-a{
 	background: url('../img_pruebas//tabla6/periodontograma-dientes-abajo-32.png');
 	width:37px;
-	background-position: 0 3px;
+	background-position: 9px 4px;
 	background-repeat: no-repeat;
 }
 #diente33-a{
@@ -1269,8 +1381,8 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
     display: inline;
     float: left;
     height: 18px;
-    margin: 1px;
-   width: 100%!important;
+    margin-bottom: 6px;
+    width: 100%;
     transition: 0.2s;
 }
 #s48b-a:hover,#s48b-b:hover,#s48b-c:hover,
@@ -1356,10 +1468,17 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
 /*TABLA 8*/
 
 #d31b,#d32b,#d33b,#d34b,#d35b,#d36b,#d37b,#d38b{
+	border-radius:3px;
+	padding-top:7px;
+	border:#1a49a3 ;
 	text-align: center;
-	font-size:10pt;
-	background: #E6E6E6;
+	font-size:0.9rem;
+	font-weight: 600;
+	background: #1a49a3;
+	color: #fff;
 	width: 100%;
+	transition: 0.2s;
+	cursor:pointer;
 }
 #d31b:hover,#d32b:hover,#d33b:hover,#d34b:hover,#d35b:hover,#d36b:hover,#d37b:hover,#d38b:hover{
 	background: #E6E6E6;
@@ -1386,7 +1505,7 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
 	cursor: pointer;
 }
 #f36b,#f37b,#f38b{
-	width: 95%;
+	width: 100%;
 	height: 18px;
 	background: #ffffff;
 	border: 1px solid #C3C9C8;
@@ -1427,8 +1546,8 @@ background: url('../img_pruebas//periodontograma-oblicuas.png') repeat-x center;
     display: inline;
     float: left;
     height: 18px;
-    margin: 1px;
-     width: 100%!important;
+     margin-bottom: 6px;
+    width: 100%;
     transition: 0.2s;
 }
 #s31b-a:hover,#s31b-b:hover,#s31b-c:hover,
@@ -1541,4 +1660,8 @@ iframe {background-color:transparent;}
 
 .borde-celeste {
 	border: 1px solid #58ACFA!important;
+}
+
+.mb6 {
+	margin-bottom: 6px!important;
 }

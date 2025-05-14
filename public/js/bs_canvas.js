@@ -1,3 +1,4 @@
+
 jQuery(document).ready(function($) {
    var bsDefaults = {
          offset: false,
