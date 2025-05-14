@@ -1,8 +1,0 @@
-en el template
-//modals
-@yield('Modals-med-exa')
-@yield('Modals-med-exa-esp')
-
-//scripts de vistas
-@yield('page-script-med-exa')// seccion receta y exmaenes
-@yield('page-script-med-exa-esp')// seccion receta y exmaenes especiales

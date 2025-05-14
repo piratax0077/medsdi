@@ -1,4 +1,0 @@
-/** cierra session yt redirecciona a Login */
-$request->session()->invalidate();
-$request->session()->regenerateToken();
-return \Redirect::route('home.ingreso');
