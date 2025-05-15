@@ -907,7 +907,7 @@
 
         function registro_examen_ficha() {
             var rows1 = [];
-            $('#tabla_examen_cirugia tr').each(function(i, n) {
+            $('#tabla_examen_cirugia_d tr').each(function(i, n) {
                 if (i > 0) {
                     rol = {};
                     var data = $(this).find("td");

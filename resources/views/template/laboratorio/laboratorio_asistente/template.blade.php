@@ -59,6 +59,9 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
 
+    {{-- summernote --}}
+    <link rel="stylesheet" href="{{ asset('summernote/summernote-lite.min.css') }}">
+
     @yield('page-style')
 
     <style>
@@ -167,6 +170,9 @@
 
 
 	<script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
+
+    {{-- summernote --}}
+	<script src="{{ asset('summernote/summernote-lite.min.js') }}"></script>
 
 
     <script>

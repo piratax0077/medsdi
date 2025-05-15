@@ -127,11 +127,20 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Agenda Laboratorio</h5>
+                                @if ($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
+                                    <h5 class="m-b-10 font-weight-bold">Agenda Laboratorio Radiología</h5>
+                                @else
+                                    <h5 class="m-b-10 font-weight-bold">Agenda Laboratorio</h5>
+                                @endif
+
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="escritorio_asistente_cm.php" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="agenda_laboratorios_asistentes_cm.php">Agenda Laboratorio</a></li>
+                                @if ($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
+                                    <li class="breadcrumb-item"><a href="agenda_laboratorios_asistentes_cm.php">Agenda Laboratorio Radiología</a></li>
+                                @else
+                                    <li class="breadcrumb-item"><a href="agenda_laboratorios_asistentes_cm.php">Agenda Laboratorio</a></li>
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -156,7 +165,11 @@
                                                 <option value="">Seleccione</option>
                                                 @if($sucursales)
                                                     @foreach($sucursales as $key_suc => $value_suc)
-                                                        <option value="{{ $value_suc->id }}" data-id_lugar_atencion="{{ $value_suc->id_lugar_atencion }}" data-id_tipo_agenda="5">{{ strtoupper($value_suc->nombre) }}</option>
+                                                        @if ($loop->first)
+                                                            <option selected value="{{ $value_suc->id }}" data-id_lugar_atencion="{{ $value_suc->id_lugar_atencion }}" data-id_tipo_agenda="5">{{ strtoupper($value_suc->nombre) }}</option>
+                                                        @else
+                                                            <option value="{{ $value_suc->id }}" data-id_lugar_atencion="{{ $value_suc->id_lugar_atencion }}" data-id_tipo_agenda="5">{{ strtoupper($value_suc->nombre) }}</option>
+                                                        @endif
                                                     @endforeach
                                                 @endif
                                             </select>
@@ -1044,6 +1057,10 @@
     <script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
     <script>
         $(document).ready(function () {
+            $('.loader-bg').hide();
+
+            cargarBox();
+
             $('.mask_date').mask("dd/mm/0000", {
                 'translation': {
                     0: {pattern: /[0-9]/},
@@ -1133,6 +1150,8 @@
                             var html = '<option value="'+element.id+'">'+element.tipo_box+'</option>';
                             $('#agenda_box').append(html);
                         });
+
+                        $('#agenda_box').prop('selectedIndex', 0);
 
                         cargarAgendaSucursal();
                     }

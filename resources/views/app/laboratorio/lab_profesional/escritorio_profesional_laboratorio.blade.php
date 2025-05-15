@@ -90,7 +90,7 @@
                     <div class="col-md-12 mt-3">
                     <div class="page-header-title">
                         @if ($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
-                            <h5 class="m-b-10 font-weight-bold">Escritorio Radiografia</h5>
+                            <h5 class="m-b-10 font-weight-bold">Escritorio Laboratorio Radiología</h5>
                         @else
                             <h5 class="m-b-10 font-weight-bold">Escritorio del Laboratorio</h5>
                         @endif

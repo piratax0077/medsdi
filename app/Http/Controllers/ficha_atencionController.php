@@ -1460,7 +1460,6 @@ class ficha_atencionController extends Controller
                         $procedimientoCentroTem = ProcedimientosCentro::where('id',$idProcedimiento)->get();
                     }
 
-
                     $ruta_blade = 'app.laboratorio.atencion_prof_laboratorio_especialidades_rayox';
                 }
                 else
