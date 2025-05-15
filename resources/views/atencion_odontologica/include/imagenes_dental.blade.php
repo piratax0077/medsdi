@@ -3,10 +3,10 @@
         <div class="card-informacion">
             <div class="card-body">
                 <div class="form-row">
-                     <div class="col-sm-4">
+                     <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                          <div class="card-informacion p-2">
-                            <div class="text-center" id="img">
-                                <h6 class="sub-aten">Imagenes Pre</h6>
+                            <div class="card-top" id="img">
+                                <h6 class="text-c-blue">Imagenes Pre</h6>
                                 <div class="dropzone" id="mis-imagenes-dentales" action="{{ route('profesional.imagen.carga') }}"></div>
                             </div>
                             <div class="form-group fill mt-3">
@@ -15,10 +15,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                         <div class="card-informacion p-2">
-                            <div class="text-center" id="img">
-                                <h6 class="sub-aten">Imagenes Post</h6>
+                            <div class="card-top" id="img">
+                                <h6 class="text-c-blue">Imagenes Post</h6>
                                 <div class="dropzone" id="mis-imagenes-dentales-post" action="{{ route('profesional.imagen.carga') }}"></div>
                             </div>
                             <div>
@@ -31,12 +31,12 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4 mt-2">
+                    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 mt-2">
                         <div class="form-group fill">
                             <input type="hidden" name="biopsia_odont{{ $counter }}" id="biopsia_odont{{ $counter }}" value="">
 
                             <div class="form-group fill">
-                                <label id="" name="" class="floating-label-activo-sm">Observaciones/Comentarios</label>
+                                <label id="" name="" class="floating-label-activo-sm">Observaciones / Comentarios</label>
                                 <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=3" onblur="this.rows=1;" name="obs_result_biopsia{{ $counter }}" id="obs_result_biopsia{{ $counter }}"></textarea>
                             </div>
                         </div>
@@ -46,8 +46,8 @@
             <div class="card-footer">
                 <div class="form-row">
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-icon btn-primary-light-c" onclick="guardar_pieza_imagenes_rx({{ $counter }})" ><i class="feather icon-save"></i></button>
-                        <button type="button" class="btn btn-icon btn-danger-light-c" onclick="ocultar_pieza_imagenes_rx()"><i class="fas fa-times"></i></button>
+                        <button type="button" class="btn btn-icon btn-info" onclick="guardar_pieza_imagenes_rx({{ $counter }})" ><i class="feather icon-save"></i></button>
+                        <button type="button" class="btn btn-icon btn-danger" onclick="ocultar_pieza_imagenes_rx()"><i class="feather icon-x"></i></button>
                     </div>
                 </div>
             </div>

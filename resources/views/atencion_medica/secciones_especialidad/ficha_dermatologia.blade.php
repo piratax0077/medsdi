@@ -14,7 +14,14 @@
 
             <!--ALERTA-->
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                <div class="form-row mb-1">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-success-b alert-dismissible fade show  role="alert" id="mensaje_historias"></div>
+                    </div>
+                </div>
             </div>
 
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -37,10 +44,10 @@
                         <!--ATENCIÓN ESPECIALIDAD GENERAL-->
                         <div class="tab-pane fade show active" id="atencion_derma" role="tabpanel" aria-labelledby="atencion_derma-tab">
                             <div class="row">
-
-                                <!--Formulario / Menor de edad-->
-                                @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
-                                <!--Cierre: Formulario / Menor de edad-->
+                                                                        
+								<!--Formulario / Menor de edad-->
+								@include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
+								<!--Cierre: Formulario / Menor de edad-->
 
                                 <!--Motivo consulta-->
                                 @include('general.secciones_ficha.motivo')
@@ -443,11 +450,23 @@
         $(document).ready(function() {
 
             /** MENSAJE*/
-            $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
+            /** CARGAR mensaje */
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio el resto es opcional.');
             $('#mensaje_ficha').show();
             setTimeout(function(){
                 $('#mensaje_ficha').hide();
             }, 5000);
+
+            @if($fichas->count()>0)
+                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+            @else
+                $('#mensaje_historias').html(' Primera consulta del paciente. ');
+            @endif
+                $('#mensaje_historias').show();
+                setTimeout(function(){
+                    $('#mensaje_historias').hide();
+                }, 6000);
+
 
             /* formatear rut */
             $("#solicitado_por_rut_rfl").rut({

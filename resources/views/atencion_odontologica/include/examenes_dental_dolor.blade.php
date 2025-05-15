@@ -1,31 +1,15 @@
 
 <div id="pieza_dental_dolor" class="row">
     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-        <div class="card">
+        <div class="card-informacion">
             <div class="card-body">     
-            <div class="form-row align-items-center">
-                <div class="col-auto">
-                    <div class="form-group">
+                <div class="form-row align-items-center">
+                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
                         <label class="floating-label-activo-sm">Pieza N°</label>
                         <input type="text" class="form-control form-control-sm" name="numero_pieza{{ $counter }}" id="numero_pieza{{ $counter }}">
                     </div>
-                </div>
-                <div class="col-auto">
-                    <div class="form-group">
-                    <button type="button" class="btn btn-icon btn-danger-light-c"
-                            onclick="ocultarExamen({{ $counter }})"><i class="feather icon-x"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>   
+                </div>   
                 <div class="form-row">
-                    <!--<div class="col-sm-12 col-md-2 col-lg-2 col-xl-2">
-                        <div class="form-group">
-                            <label class="floating-label-activo-sm">Pieza N°mmmm</label>
-                            <input type="text" class="form-control form-control-sm" name="numero_pieza{{ $counter }}" id="numero_pieza{{ $counter }}">
-                        </div>
-                    </div>-->
-                    
                     <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Tipo de Dolor</label>
@@ -75,7 +59,7 @@
                             <select name="loc_dolor{{ $counter }}" id="loc_dolor{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('loc_dolor{{ $counter }}','div_loc_dolor{{ $counter }}','obs_loc_dolor{{ $counter }}',3);">
                                 <option selected  value="1">Localizado</option>
                                 <option value="2">Referido</option>
-                                <option value="3">Otro describir</option>
+                                <option value="3">Otro (Describir)</option>
                             </select>
                         </div>
                         <div class="form-group" id="div_loc_dolor{{ $counter }}" style="display:none;">
@@ -140,6 +124,10 @@
                         {{-- <button type="button" class="btn btn-icon btn-success-light-c" onclick="agregarEvolucionPaciente()"><i class="feather icon-save"></i> </button> --}}
                     </div>-->
                 </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-icon btn-danger" onclick="ocultarExamen({{ $counter }})"><i class="feather icon-x"></i></button>
+            </div>
             </div>
          </div>
     </div>

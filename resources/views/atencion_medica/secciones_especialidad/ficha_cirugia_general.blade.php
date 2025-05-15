@@ -9,7 +9,14 @@
 				</ul>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                <div class="form-row mb-1">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-success-b alert-dismissible border fade show"  role="alert" id="mensaje_historias"></div>
+                    </div>
+                </div>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_cg') }}" method="POST">
@@ -34,7 +41,7 @@
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <!--FORMULARIOS-->
                                     <div class="row">
-
+                                                                                
                                         <!--Formulario / Menor de edad-->
                                         @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "1"])
                                         <!--Cierre: Formulario / Menor de edad-->
@@ -43,7 +50,7 @@
                                         @include('general.secciones_ficha.motivo')
 
 										<!--CIRUGIA GENERAL-->
-                                        @include('general.secciones_ficha.cirugia_general.cirugia_adulto')
+                                        {{--  @include('general.secciones_ficha.cirugia_general.cirugia_adulto')  --}}
 
                                         <!-- hospitalizar -->
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -61,9 +68,7 @@
                                             </div>
                                         </div>
 
-                                        <!--Formulario / Signos vitales y otros-->
-                                        {{-- @include('general.secciones_ficha.signos_vitales') --}}
-                                        <!--Cierre: Formulario / Signos vitales y otros-->
+                                     
 
                                         <!-- control post qx -->
                                         @include('general.secciones_ficha.control_cirugia_gen')
@@ -112,13 +117,23 @@
 
 @section('page-script-ficha-atencion')
     <script>
-        /** MENSAJE*/
-        /** CARGAR mensaje */
-        $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
-        $('#mensaje_ficha').show();
-        setTimeout(function(){
-            $('#mensaje_ficha').hide();
-        }, 5000);
+         /** MENSAJE*/
+            /** CARGAR mensaje */
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es opcional.');
+            $('#mensaje_ficha').show();
+            setTimeout(function(){
+                $('#mensaje_ficha').hide();
+            }, 5000);
+
+            @if($fichas->count()>0)
+                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+            @else
+                $('#mensaje_historias').html(' Primera consulta del paciente. ');
+            @endif
+                $('#mensaje_historias').show();
+                setTimeout(function(){
+                    $('#mensaje_historias').hide();
+                }, 6000);
 
         $(document).ready(function() {
 

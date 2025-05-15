@@ -35,7 +35,7 @@ use App\Models\ExamenesDentalPieza;
 use App\Models\ExamenesDentalPiezaPeriod;
 use App\Models\ExamenesDentalPiezaHistoria;
 use App\Models\ExamenesDentalOralRx;
-
+use App\Models\ExamenPlanTratamiento;
 use App\Models\ExamenPPF;
 use App\Models\ExamenMedico;
 use App\Models\FichaAtencion;
@@ -119,6 +119,9 @@ use App\Models\TiposReceta;
 use DateTime;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+
+use Illuminate\Support\Facades\Validator;
+
 
 class EscritorioProfesional extends Controller
 {
@@ -902,11 +905,11 @@ class EscritorioProfesional extends Controller
                 ->where('id_paciente', $f->Paciente()->first()->id)
                 ->distinct()
                 ->get(['id_lugar_atencion']);
-    
+
                 $lugares_atenm = LugarAtencion::whereIn('id', $ficha_atencion_paciente)->pluck('nombre')->toArray();
-    
+
                 $paciente_temp->lugares_atencion = $lugares_atenm;
-    
+
                 array_push($paciente, $paciente_temp);
             }
         }
@@ -1061,6 +1064,7 @@ class EscritorioProfesional extends Controller
 
     public function aplicar_convenio_tratamiento(Request $request)
     {
+
         $convenio = EmpresasConvenios::find($request->id);
 
         $porcentaje_descuento = intval($convenio->porcentaje);
@@ -1094,27 +1098,36 @@ class EscritorioProfesional extends Controller
 
         // Aplicamos el descuento a insumos
         foreach ($insumos as $i) {
-            $total_insumo = $i->cantidad * $i->valor;
-            $descuento = $total_insumo * ($porcentaje_descuento / 100);
-            $i->valor_descuento = $descuento;
-            $i->nuevo_valor = $total_insumo - $descuento;
-            $descuentos += $descuento;
+            if($i->presupuesto == 1){
+                $total_insumo = $i->cantidad * $i->valor;
+                $descuento = $total_insumo * ($porcentaje_descuento / 100);
+                $i->valor_descuento = $descuento;
+                $i->nuevo_valor = $total_insumo - $descuento;
+                $descuentos += $descuento;
+            }
+
         }
 
         // Aplicamos el descuento a odontograma
         foreach ($odontograma as $o) {
-            $descuento = $o->valor * ($porcentaje_descuento / 100);
-            $o->valor_descuento = $descuento;
-            $o->nuevo_valor = $o->valor - $descuento;
-            $descuentos += $descuento;
+            if($o->presupuesto == 1){
+                $descuento = $o->valor * ($porcentaje_descuento / 100);
+                $o->valor_descuento = $descuento;
+                $o->nuevo_valor = $o->valor - $descuento;
+                $descuentos += $descuento;
+            }
+
         }
 
         // Aplicamos el descuento a tratamientos generales
         foreach($todos as $o){
-            $descuento = $o->valor * ($porcentaje_descuento / 100);
-            $o->valor_descuento = $descuento;
-            $o->nuevo_valor = $o->valor - $descuento;
-            $descuentos += $descuento;
+            if($o->presupuesto == 1){
+                $descuento = $o->valor * ($porcentaje_descuento / 100);
+                $o->valor_descuento = $descuento;
+                $o->nuevo_valor = $o->valor - $descuento;
+                $descuentos += $descuento;
+            }
+
         }
 
 
@@ -2426,6 +2439,129 @@ class EscritorioProfesional extends Controller
             return ['mensaje' => 'Error'];
         }
     }
+
+    public function registro_examen(Request $req)
+    {
+        // Validar datos mínimos
+        $req->validate([
+            'diagnostico' => 'required|string',
+            'observaciones' => 'nullable|string',
+            'id_ficha_atencion' => 'required|integer',
+            'tipo_examen' => 'required|integer',
+            'examenes' => 'required|array',
+        ]);
+
+        // Guardar el registro
+        ExamenPlanTratamiento::create([
+            'diagnostico' => $req->diagnostico,
+            'observaciones' => $req->observaciones,
+            'id_ficha_atencion' => $req->id_ficha_atencion,
+            'tipo_examen' => $req->tipo_examen,
+            'examenes' => json_encode($req->examenes),
+        ]);
+
+        // Consultar todos los exámenes del mismo tipo y ficha
+        $examenes = ExamenPlanTratamiento::where('id_ficha_atencion', $req->id_ficha_atencion)
+            ->where('tipo_examen', $req->tipo_examen)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Retornar respuesta en JSON
+        return response()->json([
+            'success' => true,
+            'examenes' => $examenes->map(function ($examen) {
+                return [
+                    'fecha' => Carbon::parse($examen->created_at)->format('d-m-Y H:i'),
+                    'diagnostico' => $examen->diagnostico,
+                    'observaciones' => $examen->observaciones,
+                    'examenes' => json_decode($examen->examenes),
+                    'id' => $examen->id,
+                ];
+            }),
+        ]);
+    }
+
+    public function eliminar_examen(Request $req)
+    {
+        $req->validate([
+            'id' => 'required|integer',
+            'nombre_examen' => 'required|string',
+        ]);
+
+        $examen = ExamenPlanTratamiento::find($req->id);
+
+        if (!$examen) {
+            return response()->json(['success' => false, 'message' => 'Examen no encontrado.'], 404);
+        }
+
+        // Decodificar los exámenes almacenados (como array)
+        $examenes = json_decode($examen->examenes, true);
+
+        // Eliminar el examen que coincida exactamente
+        $examenes = array_filter($examenes, function ($item) use ($req) {
+            return $item !== $req->nombre_examen;
+        });
+
+
+        // Si ya no quedan exámenes, eliminar el registro completo
+        if (empty($examenes)) {
+            $examen->delete();
+        } else {
+            // Si aún quedan exámenes, guardar el arreglo actualizado
+            $examen->examenes = json_encode(array_values($examenes)); // reindexar
+            $examen->save();
+        }
+
+        // Consultar todos los exámenes del mismo tipo y ficha
+        $examenes_actualizados = ExamenPlanTratamiento::where('id_ficha_atencion', $req->id_ficha_atencion)
+            ->where('tipo_examen', $req->tipo)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Examen eliminado correctamente.',
+            'examenes' => $examenes_actualizados->map(function ($ex) {
+                return [
+                    'fecha' => Carbon::parse($ex->created_at)->format('d-m-Y H:i'),
+                    'diagnostico' => $ex->diagnostico,
+                    'observaciones' => $ex->observaciones,
+                    'examenes' => json_decode($ex->examenes),
+                    'id' => $ex->id,
+                ];
+            })
+        ]);
+    }
+
+    public function generar_pdf_examen(Request $req){
+        try {
+            $examen = ExamenPlanTratamiento::find($req->id);
+            $ficha_atencion = FichaAtencion::find($examen->id_ficha_atencion);
+            $paciente = Paciente::find($ficha_atencion->id_paciente);
+            $profesional = Profesional::find($ficha_atencion->id_profesional);
+            $nombre_examen = $req->nombre_examen;
+                // Renderizar la vista del presupuesto dental
+            $pdf = Pdf::loadView('atencion_medica.PDF.plan_tratamiento', compact(
+                'examen',
+                'nombre_examen',
+                'paciente',
+                'profesional'
+            ));
+            // Guardar el PDF en la carpeta public
+            $fileName = 'plan_tratamiento_' . $paciente->id . '.pdf';
+            $filePath = public_path('reportes/' . $fileName);
+            file_put_contents($filePath, $pdf->output());
+
+            // Devolver la ruta accesible del archivo PDF
+            return response()->json(['ruta' => asset('reportes/' . $fileName)]);
+
+        } catch (\Exception $e) {
+            //throw $th;
+            return $e->getMessage();
+        }
+
+    }
+
 
     public function dameBocaCompletaGeneralTratamiento($id_paciente, $tipo_especialidad){
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
@@ -3756,6 +3892,7 @@ class EscritorioProfesional extends Controller
 
         $examen = ExamenesDentalPieza::find($req->id);
         $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
+
         if($examen->delete()){
             if($req->tipo == 'gral'){
                 $examenes = $this->dameExamenesPiezaDentalPieza($req->id_paciente , $profesional->id_tipo_especialidad);
@@ -3783,9 +3920,10 @@ class EscritorioProfesional extends Controller
 
             $paciente = Paciente::where('id', $req->id_paciente)->first();
             $tratamientos_dentales = DiagnosticosDental::where('tipo_examen',2)->orWhere('tipo_examen',3)->get();
-            $url_tratamientos = $profesional->id_tipo_especialidad == 18
+            $url_tratamientos = $profesional->id_tipo_especialidad != 16
             ? route('dental.getDiagnosticoDental')
             : route('dental.getTratamientoImplantologia');
+
             $vista_presupuestos = view('atencion_odontologica.include.cuadrantes',[
                 'url_tratamientos' => $url_tratamientos,
                 'primer_cuadrante' => $primer_cuadrante,

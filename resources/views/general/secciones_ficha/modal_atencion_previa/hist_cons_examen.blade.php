@@ -21,7 +21,6 @@
                         <tbody>
 
                         </tbody>
-
                     </table>
                 </form>
                 <!--fin autollenado-->
@@ -103,7 +102,7 @@
                     else
                     {
                         $('#table_atecion_previa_tabla_examen_paciente tbody').html('');
-                        var fila = '<tr><td colspan="4"><span><h5>no existen registros</h5></span></td></tr>';
+                        var fila = '<tr><td colspan="4"><span><h5>No existen registros</h5></span></td></tr>';
                         $('#table_atecion_previa_tabla_examen_paciente tbody').append(fila);
                     }
 
@@ -111,7 +110,7 @@
                 else
                 {
                     $('#table_atecion_previa_tabla_examen_paciente tbody').html('');
-                    var fila = '<tr><td colspan="4"><span><h5>no existen registros</h5></span></td></tr>'
+                    var fila = '<tr><td colspan="4"><span><h5>No existen registros</h5></span></td></tr>'
                     $('#table_atecion_previa_tabla_examen_paciente tbody').append(fila);
                 }
                 $('#m_cons_examen').modal('show');

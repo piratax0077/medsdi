@@ -3114,6 +3114,158 @@ class EscritorioPaciente extends Controller
         return $datos;
     }
 
+    public function modificarContacto(Request $request){
+        $datos = array();
+        $error = array();
+        $valido = 1;
+        $nombre = $request->nombre;
+        $apellido_uno = $request->apellido_uno;
+        $apellido_dos = $request->apellido_dos;
+        if (strpos($request->fecha_nac, '/') !== false) {
+            // Si la fecha tiene el formato dd/mm/yyyy
+            $fechaConvertida = Carbon::createFromFormat('d/m/Y', $request->fn)->format('Y-m-d');
+        } else {
+            // Si ya está en formato yyyy-mm-dd
+            $fechaConvertida = Carbon::createFromFormat('Y-m-d', $request->fn)->format('Y-m-d');
+        }
+        $fecha_nacimiento = $fechaConvertida;
+        $sexo = $request->sexo;
+        $direccion = $request->direccion;
+        $numero_direccion = $request->numero_direccion;
+        $region = $request->region;
+        $ciudad = $request->comuna;
+        $email = $request->email;
+        $telefono = $request->telefono;
+
+        $region_contacto = Region::where('id', $region)->first();
+        $ciudad_contacto = Ciudad::where('id', $ciudad)->first();
+
+         $rut = $request->rut;
+        $contacto = ContactoEmergencia::where('rut','like','%'.$rut.'%')->first();
+
+
+        $email_origen = $contacto->email;
+        $email_nuevo = $email;
+
+        $contacto->nombre = $nombre;
+        $contacto->apellido_uno = $apellido_uno;
+        $contacto->apellido_dos = $apellido_dos;
+        $contacto->fecha_nac = $fecha_nacimiento;
+        $contacto->email = $email;
+        $contacto->telefono = $telefono;
+
+        if( $contacto->save() )
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'exito';
+            $datos['contacto'] = $contacto;
+            // $paciente->region = $region_contacto ? $region_contacto->nombre : '';
+            $datos['contacto']['region'] = $region_contacto ? $region_contacto->nombre : '';
+            // $paciente->ciudad = $ciudad_contacto ? $ciudad_contacto->nombre : '';
+            $datos['contacto']['ciudad'] = $ciudad_contacto ? $ciudad_contacto->nombre : '';
+
+            $contacto->email = $email;
+
+            /** modificar direccion */
+            if($direccion){
+                $id_direccion = $contacto->id_direccion;
+                $carga_direccion = Direccion::find($id_direccion);
+                if($carga_direccion)
+                {
+                    /** modificar direccion */
+
+                    $carga_direccion->direccion = $direccion;
+                    $carga_direccion->numero_dir = $numero_direccion;
+                    $carga_direccion->id_ciudad = $ciudad;
+
+                    if($carga_direccion->save())
+                    {
+                        $datos['direccion']['estado'] = 1;
+                        $datos['direccion']['msj'] = 'exito';
+                    }
+                    else
+                    {
+                        $datos['direccion']['estado'] = 0;
+                        $datos['direccion']['msj'] = 'falla';
+                    }
+
+                }
+                else
+                {
+                    /** crear direccion*/
+                    $nueva_direccion = new Direccion();
+                    $nueva_direccion->direccion = $direccion;
+                    $nueva_direccion->numero_dir = $numero_direccion;
+                    $nueva_direccion->id_ciudad = $ciudad;
+
+                    if($nueva_direccion->save())
+                    {
+                        $datos['direccion']['estado'] = 1;
+                        $datos['direccion']['msj'] = 'exito';
+                        $ciudad = Ciudad::find($ciudad);
+                        // $paciente->ciudad = $ciudad->nombre;
+
+                        $datos['direccion']['direccion'] = $carga_direccion;
+
+                        $paciente2 = Paciente::where('id', $request->id)->first();
+                        $paciente2->id_direccion = $nueva_direccion->id;
+                        if( $paciente2->save() )
+                        {
+                            $datos['direccion']['update_paciente']['estado'] = 1;
+                            $datos['direccion']['update_paciente']['msj'] = 'exito';
+                        }
+                        else
+                        {
+                            $datos['direccion']['update_paciente']['estado'] = 0;
+                            $datos['direccion']['update_paciente']['msj'] = 'falla';
+                        }
+                    }
+                    else
+                    {
+                        $datos['direccion']['estado'] = 0;
+                        $datos['direccion']['msj'] = 'falla';
+                    }
+
+                }
+            }
+
+
+            /** modifica usuario */
+            if( $email_origen != $email_nuevo)
+            {
+                $usuario = User::find($contacto->id_usuario);
+                if($usuario)
+                {
+                    $usuario->email = $email_nuevo;
+                    if($usuario->save())
+                    {
+                        $datos['usuario']['estado'] = 1;
+                        $datos['usuario']['msj'] = 'exito';
+                        /** envo de correo al paciente para notificar cambio de correo */
+                    }
+                    else
+                    {
+                        $datos['usuario']['estado'] = 0;
+                        $datos['usuario']['msj'] = 'falla';
+                    }
+                }
+                else
+                {
+                    $datos['usuario']['estado'] = 0;
+                    $datos['usuario']['msj'] = 'no encontrado';
+                }
+            }
+        }
+        else
+        {
+            $datos['estado'] = 1;
+            $datos['msj'] = 'falla';
+            $datos['error'] = $error;
+        }
+
+        return $datos;
+    }
+
     public function editarAutorizacion(Request $request)
     {
         $datos = array();

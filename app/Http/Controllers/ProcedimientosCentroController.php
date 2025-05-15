@@ -192,7 +192,7 @@ class ProcedimientosCentroController extends Controller
 
     public function verRegistros_r(Request $request)
     {
-        return static::verRegistros($request->id, $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->valor, $request->otros, $request->estado), $request->tipo_ficha_atencion;
+        return static::verRegistros($request->id, $request->id_lugar_atencion, $request->nombre, $request->descripcion, $request->minutos_bloque, $request->cantidad_bloques, $request->valor, $request->otros, $request->estado, $request->tipo_ficha_atencion);
 
     }
     static public function verRegistros($id, $id_lugar_atencion, $nombre, $descripcion, $minutos_bloque, $cantidad_bloques, $valor, $otros, $estado, $tipo_ficha_atencion)

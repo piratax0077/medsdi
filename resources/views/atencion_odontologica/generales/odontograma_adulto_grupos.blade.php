@@ -4,7 +4,9 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    padding: 20px;
+    margin-bottom:20px;
+    margin-top:10px;
+
 }
 
 .fila {
@@ -14,26 +16,29 @@
 }
 
 .pieza {
-    border: 2px solid #007bff;
-    background-color: #e3f2fd;
+    border: 1px solid #749ef1;
+    background-color: #ddecff;
     text-align: center;
-    padding: 10px;
+    padding: 3px 5px;
     cursor: pointer;
-    border-radius: 4px;
-    transition: background 0.3s ease;
+    border-radius: 13px;
+    transition: 0.1s ease;
+    font-size:0.95rem;
+    color: #2353b5;
+    font-weight: 600;
 }
 
 .pieza.seleccionada {
-    background-color: #28a745;
+    background-color: #a366d1;
     color: #fff;
-    border-color: #218838;
+    border-color: #601886;
 }
 
 
 </style>
 <div class="odontograma">
     <!-- Fila superior (1.8 al 1.1 y 2.1 al 2.8) -->
-    <div class="fila">
+    <div class="fila mb-3">
         @for($i = 18; $i >= 11; $i--)
             <div class="pieza" data-pieza="1.{{ $i % 10 }}">1.{{ $i % 10 }}</div>
         @endfor

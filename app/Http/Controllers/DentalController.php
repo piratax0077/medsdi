@@ -3407,6 +3407,8 @@ class DentalController extends Controller
             }
         }
 
+
+
         foreach($todos as $o){
             if($o->presupuesto == 1){
                 $valor = intval($o->valor);

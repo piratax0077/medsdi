@@ -58,6 +58,18 @@ function guardar_pieza(pieza){
                     // buttons: "Aceptar",
                     //SuccessMode: true,
                 });
+                // Marcar pestaña como seleccionada
+                const tab = $('#eval_' + pieza + '_tab');
+
+                // Agrega clase si no está
+                if (!tab.hasClass('pieza_seleccionada')) {
+                    tab.addClass('pieza_seleccionada');
+                }
+
+                // Si no tiene el ícono, lo añadimos
+                if (tab.find('.fa-check-circle').length === 0) {
+                    tab.append('<i class="fas fa-check-circle text-success"></i>');
+                }
             }else{
                 swal({
                     title:'Ha ocurrido un error',

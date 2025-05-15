@@ -28,12 +28,12 @@
                                             id="fecha_diag_boca_compl_gral">
                                     </div>
                                     <div class="form-group">
-                                        <label class="floating-label">Diagnostico</label>
+                                        <label class="floating-label-activo-sm">Diagnostico</label>
                                         <input type="text" name="diag_seleccionado_boca_compl_gral_autocomplete" id="diag_seleccionado_boca_compl_gral_autocomplete" class="form-control form-control-sm">
 
                                     </div>
                                     <div class="form-group">
-                                        <label class="floating-label">Comentarios</label>
+                                        <label class="floating-label-activo-sm">Comentarios</label>
                                         <textarea class="form-control caja-texto form-control-sm" rows="2"
                                             name="comentarios_diag_boca_compl_gral" id="comentarios_diag_boca_compl_gral"></textarea>
                                     </div>
@@ -83,9 +83,9 @@
                                                         <td class="text-center align-middle"><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_diagnostico_boca_compl({{ $t->id }},'gral')"><i
                                                                     class="fa fa-trash"></i></button>
                                                                     @if($t->presupuesto == 0)
-                                                                    <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $t->id }},'gral')"></button>
+                                                                    <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $t->id }},'gral', this)"></button>
                                                                 @else
-                                                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $t->id }},'gral')"></button>
+                                                                    <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $t->id }},'gral', this)"></button>
                                                                 @endif
                                                         </td>
 
@@ -109,11 +109,11 @@
                                             id="fecha_proc_boca_compl_gral">
                                     </div>
                                     <div class="form-group">
-                                        <label class="floating-label">Procedimiento</label>
+                                        <label class="floating-label-activo-sm">Procedimiento</label>
                                         <input type="text" name="proc_seleccionado_boca_compl_gral_autocomplete" id="proc_seleccionado_boca_compl_gral_autocomplete" class="form-control form-control-sm">
                                     </div>
                                     <div class="form-group">
-                                        <label class="floating-label">Comentarios</label>
+                                        <label class="floating-label-activo-sm">Comentarios</label>
                                         <textarea class="form-control caja-texto form-control-sm" rows="2"
                                             name="comentarios_tratamiento_boca_compl_gral" id="comentarios_tratamiento_boca_compl_gral"></textarea>
                                     </div>
@@ -164,9 +164,9 @@
                                                         <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl({{ $tratamiento->id }},'gral')"><i
                                                                 class="feather icon-x"></i></button>
                                                                 @if($tratamiento->presupuesto == 0)
-                                                                <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $tratamiento->id }},'gral')"></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $tratamiento->id }},'gral', this)"></button>
                                                             @else
-                                                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $tratamiento->id }},'gral')"></button>
+                                                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $tratamiento->id }},'gral', this)"></button>
                                                             @endif
                                                     </td>
                                                 </tr>
@@ -220,11 +220,11 @@
                                             id="fecha_diag_boca_compl_endo">
                                     </div>
                                     <div class="form-group">
-                                        <label class="floating-label">Diagnostico</label>
+                                        <label class="floating-label-activo-sm">Diagnostico</label>
                                         <input type="text" name="diag_seleccionado_boca_compl_endo_autocomplete" id="diag_seleccionado_boca_compl_endo_autocomplete" class="form-control form-control-sm">
                                     </div>
                                     <div class="form-group">
-                                        <label class="floating-label">Comentarios</label>
+                                        <label class="floating-label-activo-sm">Comentarios</label>
                                         <textarea class="form-control caja-texto form-control-sm" rows="2"
                                             name="comentarios_diag_boca_compl_endo" id="comentarios_diag_boca_compl_endo"></textarea>
                                     </div>
@@ -274,9 +274,9 @@
                                                         <td class="text-center align-middle"><button type="button" class="btn btn-danger btn-sm" onclick="eliminar_diagnostico_boca_compl({{ $t->id }},'endo')"><i
                                                                     class="fa fa-trash"></i></button>
                                                                     @if($t->presupuesto == 0)
-                                                                <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $t->id }},'gral')"></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $t->id }},'gral', this)"></button>
                                                             @else
-                                                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $t->id }},'gral')"></button>
+                                                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $t->id }},'gral', this)"></button>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -299,12 +299,12 @@
                                             id="fecha_proc_boca_compl_endo">
                                     </div>
                                     <div class="form-group">
-                                        <label class="floating-label">Procedimiento</label>
+                                        <label class="floating-label-activo-sm">Procedimiento</label>
                                         <input type="text" name="proc_seleccionado_boca_compl_endo_autocomplete" id="proc_seleccionado_boca_compl_endo_autocomplete" class="form-control form-control-sm">
 
                                     </div>
                                     <div class="form-group">
-                                        <label class="floating-label">Comentarios</label>
+                                        <label class="floating-label-activo-sm">Comentarios</label>
                                         <textarea class="form-control caja-texto form-control-sm" rows="2"
                                             name="comentarios_tratamiento_boca_compl_endo" id="comentarios_tratamiento_boca_compl_endo"></textarea>
                                     </div>
@@ -355,9 +355,9 @@
                                                         <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl({{ $tratamiento->id }},'endo')"><i
                                                                 class="feather icon-x"></i></button>
                                                                 @if($tratamiento->presupuesto == 0)
-                                                                <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $tratamiento->id }},'gral')"></button>
+                                                                <button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto({{ $tratamiento->id }},'gral', this)"></button>
                                                             @else
-                                                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $tratamiento->id }},'gral')"></button>
+                                                                <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto({{ $tratamiento->id }},'gral', this)"></button>
                                                             @endif
                                                     </td>
                                                 </tr>
@@ -474,7 +474,7 @@
                             <td class="text-center align-middle">
                                 <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${t.id},'gral')"><i
                                         class="feather icon-x"></i></button>
-                                ${t.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                ${t.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${t.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                             </td>
                         </tr>
                         `);
@@ -553,7 +553,7 @@
                             <td class="text-center align-middle">
                                 <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${t.id},'endo')"><i
                                         class="feather icon-x"></i></button>
-                                ${t.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                ${t.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${t.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                             </td>
                         </tr>
                         `);
@@ -712,7 +712,7 @@
 
                                     <td class="text-center align-middle">
                                         <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
-                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                     </td>
                                 </tr>`;
                         $('#tbody_diagnosticos_boca_compl').append(html);
@@ -791,7 +791,7 @@
 
                                     <td class="text-center align-middle">
                                         <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'endo')"><i class="feather icon-x"></i></button>
-                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                        ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                     </td>
                                 </tr>`;
                         $('#tbody_diagnosticos_boca_compl_endo').append(html);
@@ -929,7 +929,7 @@
 
                                 <td class="text-center align-middle">
                                     <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'gral')"><i class="feather icon-x"></i></button>
-                                    ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                 </td>
                             </tr>`;
                     $('#tbody_diagnosticos_boca_compl').append(html);
@@ -1008,7 +1008,7 @@
 
                                 <td class="text-center align-middle">
                                     <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_diagnostico_boca_compl(${diagnostico.id},'endo')"><i class="feather icon-x"></i></button>
-                                    ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    ${diagnostico.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${diagnostico.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${diagnostico.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                 </td>
                             </tr>`;
                             $('#tbody_diagnosticos_boca_compl_endo').append(html);
@@ -1143,7 +1143,7 @@
 
                                     <td class="text-center align-middle">
                                         <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${tratamiento.id},'gral')"><i class="feather icon-x"></i></button>
-                                        ${tratamiento.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                        ${tratamiento.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                     </td>
                                 </tr>`;
                     $('#tbody_tratamientos_boca_compl').append(html);
@@ -1157,7 +1157,7 @@
 
                                 <td class="text-center align-middle">
                                     <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="eliminar_tratamiento_boca_compl(${tratamiento.id},'endo')"><i class="feather icon-x"></i></button>
-                                    ${tratamiento.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>`}
+                                    ${tratamiento.presupuesto == 0 ? `<button type="button" class="btn btn-primary btn-sm btn-icon" onclick="cargar_a_presupuesto(${tratamiento.id},'gral', this);"><i class="fas fa-save"> </i> </button>` : `<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="sacar_de_presupuesto(${tratamiento.id},'gral');"><i class="fas fa-save"> </i> </button>`}
                                 </td>
                             </tr>`;
                             $('#tbody_tratamientos_boca_compl_endo').append(html);

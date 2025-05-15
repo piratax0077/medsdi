@@ -143,7 +143,22 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="form-group">
+                                                        <label for="" class="floating-label-activo-sm">Fecha</label>
+                                                        <input type="date" value="<?php echo date('Y-m-d'); ?>" class="form-control form-control-sm">
+                                                    </div>
+                                                    <button type="button" class="btn btn-outline-success btn-sm mt-3"><i class="fas fa-search"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-12 col-lg-10 col-xl-10">
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="row">

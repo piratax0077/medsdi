@@ -6,7 +6,7 @@
 
     <div class="row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <h6 class="t-aten-dos">Detalle hospitalización</h6>
+            <h6 class="t-aten">Detalle hospitalización</h6>
         </div>
     </div>
     <div class="form-row">
@@ -65,7 +65,7 @@
             @else
             <div class="form-group" id="in_hosp_div_detalle_hosp_enserv" style="display:none">
             @endif
-                <label class="floating-label-activo-sm">Otro servicio <i>(Describir)</i></label>
+                <label class="floating-label-activo-sm">Otro servicio (Describir)</label>
                 @if(isset($seccion_tipo) && $seccion_tipo != '')
                 <textarea class="form-control caja-texto form-control-sm" data-titulo="Obs. Es Urgencia Qx.?" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="in_hosp_obs_hosp_enserv{{ '_'.$seccion_tipo }}" id="in_hosp_obs_hosp_enserv{{ '_'.$seccion_tipo }}"></textarea>
                 @else
@@ -115,13 +115,13 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             @if(isset($seccion_tipo) && $seccion_tipo != '')
-            <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="ingresohosp('{{ '_'.$seccion_tipo }}')";><i class="feather icon-file"></i> Orden de hospitalización </button>
+            <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="ingresohosp('{{ '_'.$seccion_tipo }}')";><i class="feather icon-edit-1"></i> Orden de hospitalización </button>
             @else
-            <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="ingresohosp('')";><i class="feather icon-file"></i> Orden de hospitalización </button>
+            <button type="button" class="btn btn-outline-primary btn-xs btn-block" onclick="ingresohosp('')";><i class="feather icon-edit-1"></i> Orden de hospitalización </button>
             @endif
         </div>
         <div class="form-group col-md-6">
-            <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_pabellon()";><i class="feather icon-file"></i> Solicitar pabellón</button>
+            <button type="button" class="btn btn-outline-primary btn-xs btn-block" onclick="sol_pabellon()";><i class="feather icon-edit-1"></i> Solicitar pabellón</button>
         </div>
     </div>
 </div>

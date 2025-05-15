@@ -115,7 +115,7 @@
     <!--SIDEBAR 3 (cda)-->
 
     <!--MODALS SIDE BAR GENERALES-->
-    @include('atencion_medica.modales')
+    {{-- @include('atencion_medica.modales') --}}
 
 
     <script>

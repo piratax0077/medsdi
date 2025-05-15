@@ -1168,6 +1168,8 @@ Route::group([
 
     /** modificar paciente */
     Route::get('paciente/modificar', [App\Http\Controllers\EscritorioPaciente::class, 'modificarPaciente'])->name('asistente.paciente.modificar');
+    /** modificar contacto emergencia */
+    Route::get('contacto/modificar',[App\Http\Controllers\EscritorioPaciente::class, 'modificarContacto'])->name('asistente.contacto.modificar');
 
     Route::post('carga/archivo', [App\Http\Controllers\CargaArchivoController::class, 'cargaArchivoTemp'])->name('asistente.archivo.carga');
 });
@@ -2154,6 +2156,7 @@ Route::group([
     Route::get('aprobar_rendicion/{id}', [App\Http\Controllers\FlujoCajaController::class, 'aprobarRendicion'])->name('flujo_caja.profesional.rendicion.aprobar');
     Route::get('rechazar_rendicion/{id}', [App\Http\Controllers\FlujoCajaController::class, 'rechazarRendicion'])->name('flujo_caja.profesional.rendicion.rechazar');
     Route::post('cambiar_estado', [App\Http\Controllers\FlujoCajaController::class, 'cambiarEstado'])->name('flujo_caja.profesional.rendicion.cambiar_estado');
+    Route::post('dame_bonos_diarios',[App\Http\Controllers\FlujoCajaController::class, 'dameBonosDiarios'])->name('flujo_caja.data_flujo_caja_diario');
 
 	Route::get('caja/rendir/bonos', [App\Http\Controllers\FlujoCajaController::class, 'cargaBonosAsistenteDia'])->name('asistentecm.rendicion_carga_bonos');
     Route::get('caja/pdf/bonos/cm/dia',[App\Http\Controllers\FlujoCajaController::class, 'pdfBonosDia'])->name('asistentecm.pdf_bonos_cm_dia');
@@ -2490,6 +2493,10 @@ Route::post('/profesional/registrar_tons',[App\Http\Controllers\EscritorioProfes
 Route::post('/profesional/eliminar_tons',[App\Http\Controllers\EscritorioProfesional::class, 'eliminar_tons'])->name('profesional.eliminar_tons');
 Route::post('/profesional/solicitar_tons_atencion',[App\Http\Controllers\EscritorioProfesional::class, 'solicitar_tons_atencion'])->name('profesional.solicitar_tons_atencion_dental');
 Route::post('/profesional/devolucion_bono',[App\Http\Controllers\EscritorioProfesional::class, 'devolucion_bono'])->name('profesional.devolucion_bono');
+Route::post('/profesional/examen/registro',[App\Http\Controllers\EscritorioProfesional::class, 'registro_examen'])->name('profesional.examen.registro');
+Route::post('/profesional/examen/eliminar', [EscritorioProfesional::class, 'eliminar_examen'])->name('profesional.examen.eliminar');
+Route::post('/profesional/examen/pdf',[EscritorioProfesional::class, 'generar_pdf_examen'])->name('profesional.examen.generarPDF');
+
 
 Route::get('/paciente/datos/cargar/prereserva/{token1}/{token2}/{token3}',[App\Http\Controllers\EscritorioPaciente::class, 'cargaDatosPacientePreReserva'])->name('paciente.datos.cargar.prereserva');
 Route::get('/paciente/datos/cargar/prereserva/registrar',[App\Http\Controllers\EscritorioPaciente::class, 'registrarCargaDatosPacientePreReserva'])->name('paciente.datos.cargar.prereserva.registrar');

@@ -1,51 +1,51 @@
 <div id="m_cons_receta" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_cons_recetaLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content bg-light">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="id_ficha_receta"> Recetas</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#m_cons_receta').modal('hide'); ">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row row-cols-1 row-cols-md-2" id="seccion_medicamentos">
-
-                        {{-- <div class="col mb-4">
-                            <div class="card-previas social-card">
-                                <div class="card-body p-2">
-                                    <div class="row d-flex justify-content-start">
-                                        <div class="col-1">
-                                            <img class="wid-35" src="{{ asset('images/iconos/otros/medicamento-light.svg') }}">
+            <div class="modal-header">
+                <h5 class="modal-title" id="id_ficha_receta"> Recetas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#m_cons_receta').modal('hide'); ">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row row-cols-1 row-cols-md-2" id="seccion_medicamentos">
+                    <div class="col-sm-12 col-md-12 col-xl-12">
+                            {{-- <div class="col mb-4">
+                                <div class="card-previas social-card">
+                                    <div class="card-body p-2">
+                                        <div class="row d-flex justify-content-start">
+                                            <div class="col-1">
+                                                <img class="wid-35" src="{{ asset('images/iconos/otros/medicamento-light.svg') }}">
+                                            </div>
+                                            <div class="col pl-4">
+                                                <small class="text-secondary pl-1">Medicamento</small><br>
+                                                <h5 class="text-c-blue">Aspirina 500</h5>
+                                            </div>
                                         </div>
-                                        <div class="col pl-4">
-                                            <small class="text-secondary pl-1">Medicamento</small><br>
-                                            <h5 class="text-c-blue">Aspirina 500</h5>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <p class="m-b-0"><strong>Presentación</strong></p>
-                                            <p class="mb-2">20 comp.</p>
-                                            <p class="m-b-0"><strong>Vía</strong></p>
-                                            <p class="mb-2">Vía Oral</p>
-                                            <p class="m-b-0"><strong>Uso crónico</strong></p>
-                                            <p>Normal</p>
-                                        </div>
-                                          <div class="col">
-                                            <p class="m-b-0"><strong>Posología</strong></p>
-                                            <p class="mb-2">1 cada 24 horas</p>
-                                            <p class="m-b-0"><strong>Periodo</strong></p>
-                                            <p class="mb-2">30 días</p>
-                                            <p class="m-b-0"><strong>Cantidad</strong></p>
-                                            <p>(2) Dos cajas</p>
+                                        <div class="row">
+                                            <div class="col">
+                                                <p class="m-b-0"><strong>Presentación</strong></p>
+                                                <p class="mb-2">20 comp.</p>
+                                                <p class="m-b-0"><strong>Vía</strong></p>
+                                                <p class="mb-2">Vía Oral</p>
+                                                <p class="m-b-0"><strong>Uso crónico</strong></p>
+                                                <p>Normal</p>
+                                            </div>
+                                              <div class="col">
+                                                <p class="m-b-0"><strong>Posología</strong></p>
+                                                <p class="mb-2">1 cada 24 horas</p>
+                                                <p class="m-b-0"><strong>Periodo</strong></p>
+                                                <p class="mb-2">30 días</p>
+                                                <p class="m-b-0"><strong>Cantidad</strong></p>
+                                                <p>(2) Dos cajas</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div> --}}
-
+                                </div> --}}
                     </div>
                 </div>
+            </div>
         </div>
     </div>
 </div>
@@ -108,7 +108,7 @@
                                 var cantidad_compr = value2.cantidad_compra;
 
                                 if(uso_cronico == 1)
-                                    uso_cronico = 'USO CRONICO';
+                                    uso_cronico = 'USO CRÓNICO';
                                 else
                                     uso_cronico = 'NORMAL';
 
@@ -157,14 +157,14 @@
                     else
                     {
                         $('#seccion_medicamentos').empty();
-                        var fila = '<h5>no existen registros</h5>';
+                        var fila = '<h5>No existen registros</h5>';
                         $('#seccion_medicamentos').append(fila);
                     }
                 }
                 else
                 {
                     $('#seccion_medicamentos').empty();
-                    var fila = '<h5>no existen registros</h5>';
+                    var fila = '<h5>No existen registros</h5>';
                     $('#seccion_medicamentos').append(fila);
                 }
 

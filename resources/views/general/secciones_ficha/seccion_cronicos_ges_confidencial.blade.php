@@ -1,7 +1,7 @@
 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
     <div class="card-a" style=" border: 1px solid #6c9bd5;">
         <div class="card-header-a" id="cgc" >
-            <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open" type="button" data-toggle="collapse" data-target="#cgc-c" aria-expanded="false" aria-controls="cgc-c">
+        <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button"  data-toggle="collapse" data-target="#cgc-c" aria-expanded="false" aria-controls="cgc-c">
               Nuevo Antecedente / Crónicos / GES / Confidencial
             </button>
         </div>
@@ -185,7 +185,7 @@
                         </select>
                     </div>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -1224,7 +1224,7 @@
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
             </div>-->
         </div>
-    </div>
+    </div>r
 </div>
 
 <!-- MODAL AÑADIR ANTECEDENTE-->
@@ -1254,7 +1254,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <h5 class="text-c-blue f-20 my-2 text-center" id="titulo_antecedente">Añadir XXX</h5>
+                        <h5 class="text-c-blue f-20 my-2 text-center" id="titulo_antecedente">Añadir</h5>
                     </div>
                 </div>
                 <div class="row">
@@ -1312,6 +1312,7 @@
             <div class="modal-header">
                 <h5 class="modal-title">Desactivar Antecedente</h5>
                 <button type="button" class="close" onclick="verModalDesactivar('hide')" aria-label="Close"><span aria-hidden="true">×</span></button>
+                
             </div>
             <div class="modal-body">
                 <p class="mb-0">Desea desactivar el antecedente ingresado.</p>
@@ -1328,6 +1329,7 @@
 
 
 <script>
+
 
     $(document).ready(function ()
     {
