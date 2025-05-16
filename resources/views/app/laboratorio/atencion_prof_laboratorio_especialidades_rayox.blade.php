@@ -211,7 +211,7 @@
                                             <div class="card-a">
                                                 <div class="card-header-a" id="sec_carga_archivo">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#sec_carga_archivo_c" aria-expanded="false" aria-controls="sec_carga_archivo_c">
-                                                        Informe Radiológico
+                                                        INFORME RADIOLÓGICO
                                                     </button>
                                                 </div>
                                                 <div class="card-body-aten-a">

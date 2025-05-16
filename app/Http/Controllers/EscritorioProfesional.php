@@ -1856,7 +1856,24 @@ class EscritorioProfesional extends Controller
         $procedimiento = '';
         if(!empty($hora_medica->id_procedimiento))
         {
-            $procedimiento = ProcedimientosCentro::find($hora_medica->id_procedimiento);
+            // Obtener el valor de id_procedimiento
+            $idProcedimiento = $hora_medica->id_procedimiento;
+
+            // Verificar si el valor contiene barras verticales (caso múltiples IDs)
+            if (strpos($idProcedimiento, '|') !== false) {
+                // Convertir la cadena en un array de IDs
+                $array_id_procedimiento = explode('|', $idProcedimiento);
+
+                // Obtener todos los procedimientos que coincidan con los IDs
+                $procedimiento = ProcedimientosCentro::whereIn('id', $array_id_procedimiento)->get();
+            } else {
+                // Caso de un solo ID (número)
+                $procedimiento = ProcedimientosCentro::where('id',$idProcedimiento)->get();
+            }
+        }
+        else
+        {
+            $procedimiento = array();
         }
 
 
