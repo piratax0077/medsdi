@@ -193,6 +193,12 @@
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         $(document).ready(function () {
+            $('#ex-funcional').select2({
+                dropdownParent: $('#m_ex_comunes .modal-body')
+            });
+            $('#examen_rx').select2({
+                dropdownParent: $('#m_rx_cardio .modal-body')
+            });
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
                 swal({

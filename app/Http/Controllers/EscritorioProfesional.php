@@ -2464,6 +2464,24 @@ class EscritorioProfesional extends Controller
         }
     }
 
+    public function getDsm5(Request $request){
+        $search = $request->search;
+        if ($search == '') {
+            $employees = DiagnosticoPsicologico::orderby('descripcion', 'asc')->select('id','codigo', 'descripcion', 'f')->limit(15)->get();
+        } else {
+           //  $employees = DiagnosticoPsicologico::orderby('nombre', 'asc')->select('id', 'nombre')->where('nombre', 'like', '%' . $search . '%')->limit(15)->get();
+            $employees = DiagnosticoPsicologico::orderby('descripcion', 'asc')->select('id','codigo', 'descripcion','f')->where('descripcion', 'like', $search . '%')->limit(15)->get();
+        }
+        $response = array();
+
+        foreach ($employees as $employee) {
+
+            $response[] = array("value" => $employee->id, "label" =>$employee->f.' - '. $employee->descripcion);
+
+        }
+        return response()->json($response);
+    }
+
     public function registro_examen(Request $req)
     {
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();

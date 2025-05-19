@@ -126,11 +126,6 @@
 </style>
 
 <script>
-        $(document).ready(function() {
-        $('#examen_rx').select2();
-
-
-    });
 
     function sol_rx_cardio()
     {

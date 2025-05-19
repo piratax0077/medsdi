@@ -104,10 +104,12 @@
 
 
         <!-- modales -->
-        @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_eda')
-        @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_edb')
+        @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_gastro_func')
+        @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_gastro_endosc')
+        @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_gastro_rx')
         @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
         @include('general.hospitalizacion.modals.in_solic_pabellon')
+
 
     </div>
     <!--Cierre: Container Completo-->

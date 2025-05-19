@@ -130,9 +130,6 @@
         $('#m_func_cardio').modal ('hide');
       }
 
-</script>
-
-
     function guardar_examenes(tipo) {
         if(tipo == 1){
             // Obtener valores de los exámenes seleccionados
@@ -270,50 +267,24 @@
     });
 }
 
-function generarPDF(id, nombre_examen = null){
-    console.log(id, nombre_examen);
-    let data = {
-        id: id,
-        nombre_examen: nombre_examen,
-        id_ficha_atencion: $('#id_ficha_atencion').val(),
-        _token: CSRF_TOKEN
-    }
+function generarPDF(id, nombre_examen = null) {
+        let id_ficha_atencion = $('#id_fc').val(); // input hidden en tu HTML
+        let auto = 1; // o el valor real que quieras enviar
+        let url = "{{ route('pdf.orden_examenes_plan_tto') }}";
 
-    let url = "{{ ROUTE('profesional.examen.generarPDF') }}";
-    $.ajax({
-        type:'post',
-        data: data,
-        url: url,
-        success: function(data){
-            console.log(data);
-            if(data.ruta){
-                    swal({
-                        title: "Reporte generado",
-                        text: "El reporte se ha generado correctamente",
-                        icon: "success",
-                        button: "Aceptar"
-                    }).then(() => {
-                        // Abrir el PDF en una ventana emergente
-                        var width = 800;
-                        var height = 600;
-                        var left = (screen.width - width) / 2;
-                        var top = (screen.height - height) / 2;
-                        window.open(data.ruta, 'Reporte Diario', 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left);
-                    });
-                }else{
-                    swal({
-                        title: "Error",
-                        text: "Ha ocurrido un error al generar el reporte",
-                        icon: "error",
-                        button: "Aceptar"
-                    });
-                }
-        },
-        error: function(error){
-            console.log(error.responseText);
-        }
-    })
-}
+
+        Fancybox.show(
+            [{
+                src: "{{ route('pdf.orden_examenes_plan_tto') }}?id=" + id + "&nombre=" + nombre_examen,
+                type: "iframe",
+                preload: false,
+            }, ]
+        );
+
+        // $('#m_bronco').modal('hide');
+        // $('#m_rx_brpul').modal('hide');
+        // $('#m_espiro').modal('hide');
+    }
 
 </script>
 {{--  <link rel="stylesheet"  href="{{ asset('css\plugins\select2.min.css') }}">

@@ -719,18 +719,22 @@
 																</div>
 															</div>
 															<div class="form-row">
-																<div class="form-group col-md-6">
-																	<label class="floating-label-activo-sm"for="dsm_5">DSM-5  (Por nombre)</label>
-																	<input type="text" class="form-control form-control-sm"  data-input_igual="dsm_5_certificado,eno_dsm_5_confirmado" name="dsm_5" id="dsm_5" onchange="cargarIgual('dsm_5')">
-																</div>
+																
 																{{--  <div class="form-group col-md-4">
 																	<label class="floating-label-activo-sm"for="indicaciones">DSM-5  (Por grupo Patología)</label>
 																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="indicaciones" id="indicaciones"></textarea>
 																</div>  --}}
-																<div class="form-group col-md-6">
-																	<label class="floating-label-activo-sm"for="dsm_5p">DSM-5  (Por código Patología)</label>
-																	<textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="dsm_5p" id="dsm_5p"></textarea>
+																 <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																	<label class="floating-label-activo-sm" for="descripcion_cie">Diagnóstico CIE-10</label>
+																	<input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_cie" id="descripcion_cie" value="" onchange="cargarIgual('descripcion_cie')">
+																	<input type="hidden" class="form-control form-control-sm" data-input_igual="id_lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_cie" id="id_descripcion_cie" value="" onchange="cargarIgual('id_descripcion_cie')">
 																</div>
+																<div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+																	<label class="floating-label-activo-sm" for="descripcion_dsm-5">Diagnóstico DSM-5</label>
+																	<input type="text" class="form-control form-control-sm" data-input_igual="lic_descripcion_cie,descripcion_cie_esp,eno_diagnostico_cie" name="descripcion_dsm-5" id="descripcion_dsm-5" value="" onchange="cargarIgual('descripcion_dsm-5')">
+																	<input type="hidden" class="form-control form-control-sm" data-input_igual="id_lic_descripcion_cie,id_descripcion_cie_esp,eno_id_diagnostico_cie" name="id_descripcion_dsm-5" id="id_descripcion_dsm-5" value="" onchange="cargarIgual('id_descripcion_dsm-5')">
+																</div>
+																
 															</div>
 														</div>
 													</div>
@@ -768,7 +772,59 @@
 @include('atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.modal_indicar_terapia')
 @include('atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.m_interconsulta_psi')
 @include('atencion_otros_prof.formularios.modal_atencion_especialidad.psicologia.informe_psico')
+@section('page-script-ficha-atencion')
+<script>
+	$(document).ready(function() {
+            $("#descripcion_cie").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getCie10') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    // Set selection
+                    $('#descripcion_cie').val(ui.item.label); // display the selected text
+                    $('#id_descripcion_cie').val(ui.item.value); // save selected id to input
+                    return false;
+                }
+            });
 
+			 $("#descripcion_dsm-5").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('profesional.getDSM-5') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    // Set selection
+                    $('#descripcion_dsm-5').val(ui.item.label); // display the selected text
+                    $('#id_descripcion_dsm-5').val(ui.item.value); // save selected id to input
+                    return false;
+                }
+            });
+        });
+</script>
+@endsection
 <script>
     function cargarIgual(input)
     {

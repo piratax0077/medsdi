@@ -13,6 +13,7 @@ class ExamenPlanTratamiento extends Model
         'diagnostico',
         'examenes',
         'observaciones',
+        'especialidad',
         'tipo_examen',
     ];
 

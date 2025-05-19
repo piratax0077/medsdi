@@ -204,11 +204,8 @@
                 dropdownParent: $('#m_func_gastro .modal-body')
             });
 
-            $('#examen_rx').select2({
-                dropdownParent: $('#m_rx_brpul .modal-body')
-            });
               $('#examenes_endoscopico').select2({
-                dropdownParent: $('#m_bronco .modal-body')
+                dropdownParent: $('#m_gastroenterologia_end .modal-body')
             });
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))

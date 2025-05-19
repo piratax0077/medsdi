@@ -253,6 +253,8 @@ Route::group([
     Route::post('/getCie10', [DentalController::class, 'getCie10'])->name('dental.getCie10');
     Route::post('/getCie10_1', [DentalController::class, 'getCie10_1'])->name('dental.getCie10_1');
 
+    Route::post('/getDSM5',[EscritorioProfesional::class,('getDsm5')])->name('profesional.getDSM-5');
+
     Route::post('/registrar_gastos', [DentalController::class, 'registrar_gastos'])->name('dental.registrar_gastos');
 
 
@@ -2441,7 +2443,6 @@ Route::get('/paciente/videollamada/{id}/{nombre}', [App\Http\Controllers\JitsiCo
 
 /** IMPORTAR DIAGNOSTICOS DENTALES **/
 Route::get('/importar/diagnosticos', [App\Http\Controllers\DentalController::class, 'importacion_datos_excel'])->name('importar.diagnosticos');
-Route::post('/importar/diagnosticos/psico',[App\Http\Controllers\EscritorioProfesional::class, 'importar_datos_excel_psicologia'])->name('importar.diagnosticos.psicologia');
 Route::post('/importar/diagnosticos/dentales', [App\Http\Controllers\DentalController::class, 'importarDiagnosticos'])->name('dental.importar_datos_excel');
 Route::post('/guardar/diagnostico/laboratorio', [App\Http\Controllers\DentalController::class, 'guardarDiagnosticoLaboratorio'])->name('dental.guardarLaboratorio');
 Route::post('/cargar/tratamiento',[App\Http\Controllers\DentalController::class, 'cargar_tratamiento_presupuesto'])->name('dental.cargar_tratamiento_presupuesto');
