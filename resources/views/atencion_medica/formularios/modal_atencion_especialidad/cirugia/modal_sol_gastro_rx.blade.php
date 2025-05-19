@@ -1,0 +1,142 @@
+<div id="m_rx_gastro" class="modal fade" role="dialog" aria-labelledby="m_rx_gastro" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h5 class="modal-title text-white text-center">Solicitud Estudio Radiológico</h5>
+                <button type="button" class="close text-white" data-bs-dismiss="modal"  aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                   <div class="form-row mt-1">
+                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm" for="ex-func-bronco">Exámenes Funcionales</label>
+                            <select class="js-example-basic-multiple select2" name="examen_rx" id="examen_rx" multiple="multiple">
+                                <option value="1">04 04 003  &nbsp;  |  &nbsp; ECOGRAFÍA ABDOMINAL </option>
+                                <option value="2">04 03 103  &nbsp;  |  &nbsp; TOMOGRAFÍA COMPUTARIZADA ANGIO DE ABDOMEN	</option>
+                                <option value="3">04 03 023  &nbsp;  |  &nbsp TOMOGRAFÍA COMPUTARIZADA DE COLONOSCOPÍA VIRTUAL. </option>
+                                <option value="4">04 03 020 &nbsp;  |  &nbsp;TOMOGRAFÍA COMPUTARIZADA DE ABDOMEN Y PELVIS </option>
+                                <option value="5">04 03 014  &nbsp;  |  &nbsp TOMOGRAFÍA COMPUTARIZADA DE ABDOMEN</option>
+
+                                <option value="6">04 04 121 &nbsp;  |  &nbsp;  ECOGRAFÍA ABDOMINAL </option>
+                                <option value="7">04 04 218 &nbsp;  |  &nbsp; ELASTOGRAFÍA HEPÁTICA</option>
+                                <option value="8">04 05 020 &nbsp;  |  &nbsp; RESONANCIA MAGNÉTICA ANGIOGRAFÍA DE ABDOMEN	</option>
+                                <option value="9">04 05 010 &nbsp;  |  &nbsp; RESONANCIA MAGNÉTICA DE ABDOMEN	</option>
+                                <option value="10">04 05 098 &nbsp;  |  &nbsp;  COLANGIORESONANCIA	 </option>
+
+                                <option value="11">05 01 111&nbsp;  |  &nbsp; ESTUDIO MOTILIDAD ESOFÁGICA Y/O REFLUJO GASTROESOFÁGICO</option>
+                                <option value="12">05 01 112 &nbsp;  |  &nbsp; VACIAMIENTO GÁSTRICO LÍQUIDO O SÓLIDO		</option>
+                                <option value="13">05 01 113 &nbsp;  |  &nbsp; CINTIGRAFÍA VESÍCULA Y VÍA BILIAR</option>
+                                <option value="14">05 01 114  &nbsp;  |  &nbsp;DETECCIÓN DE SITIO DE SANGRAMIENTO DIGESTIVO CON GLÓBULOS ROJOS MARCADOS </option>
+                                <option value="15"05 01 115 &nbsp;  |  &nbsp; DETECCIÓN DIVERTÍCULO MECKEL </option>
+                                <option value="16">05 01 116  &nbsp;  |  &nbsp; SPECT HEPATOESPLÉNICO, EVALUACIÓN HEMANGIOMA O HIPERPLASIA	</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <label class="floating-label-activo-sm">Diagnóstico</label>
+                            <input class="form-control" type="text" id="diagnostico_rx">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Observaciones</label>
+                                <textarea class="form-control caja-texto form-control-sm mt-1" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="observaciones_rx" id="observaciones_rx"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <button type="button" class="btn btn-success btn-sm float-right" onclick="guardar_examenes(2)">
+                            <i class="fa fa-plus"></i> Agregar examen</button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm-12 mt-3">
+                            <!--**** Al agregar un examen, se debe cargar la tabla *****-->
+                            <!--Tabla-->
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-xs" id="table_examen_2">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center align-middle">Fecha</th>
+                                            <th class="text-center align-middle">Examen</th>
+                                            <th class="text-center align-middle">Diagnóstico</th>
+                                            <th class="text-center align-middle">Observaciones</th>
+                                            <th class="text-center align-middle">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if(isset($examenes_plan_tratamiento_rx) && $examenes_plan_tratamiento_rx->count() > 0)
+                                            @foreach ($examenes_plan_tratamiento_rx as $e)
+                                                @foreach (json_decode($e->examenes, true) as $examen_nombre)
+                                                    <tr>
+                                                        {{-- Fecha --}}
+                                                        <td class="text-center align-middle">
+                                                            {{ \Carbon\Carbon::parse($e->created_at)->format('d-m-Y H:i') }}
+                                                        </td>
+
+                                                        {{-- Examen --}}
+                                                        <td class="text-left align-middle">
+                                                            • {{ $examen_nombre }}
+                                                        </td>
+
+                                                        {{-- Diagnóstico --}}
+                                                        <td class="text-left align-middle">
+                                                            {{ $e->diagnostico }}
+                                                        </td>
+
+                                                        {{-- Observaciones --}}
+                                                        <td class="text-left align-middle">
+                                                            {{ $e->observaciones }}
+                                                        </td>
+
+                                                        {{-- Acciones --}}
+                                                        <td class="text-center align-middle">
+                                                            <button type="button"
+                                                                class="btn btn-danger btn-sm mb-1"
+                                                                onclick="eliminarExamen('{{ $e->id }}',2, '{{ $examen_nombre }}')"
+                                                            ><i class="fas fa-trash"></i></button>
+
+                                                            <button type="button"
+                                                                class="btn btn-primary btn-sm"
+                                                                onclick="generarPDF({{ $e->id }}, '{{ $examen_nombre }}')"
+                                                            >PDF</button>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" onclick="sol_rx_gastro();" data-bs-dismiss="modal" >Cancelar</button>
+                <button type="submit" class="btn btn-info btn-sm"> Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function sol_rx_gastro()
+    {
+        $('#m_rx_gastro').modal('show');
+    }
+    function cerrarsol_rx_gastro() {
+        $('#m_rx_gastrol').modal ('hide');
+      }
+
+</script>
+{{--  <link rel="stylesheet"  href="{{ asset('css\plugins\select2.min.css') }}">
+
+<link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+<!-- select2 Js -->
+<script src="{{ asset('js/plugins/select2.full.min.js') }}"></script>
+<!-- form-select-custom Js -->
+<script src="{{ asset('js/pages/form-select-custom.js') }}"></script>
+<!-- select2 css -->  --}}

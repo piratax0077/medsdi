@@ -106,8 +106,6 @@
         @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_ex_cardiologicos')
         @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_rx_cardio')
 
-         @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_espirometria')
-
 
 
     </div>

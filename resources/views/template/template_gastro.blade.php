@@ -22,6 +22,13 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/bootstrap-tagsinput-typeahead.css') }}">
 
+      <!-- select2 selectbonito css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/formularios.css') }}">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+
     <!-- data tables css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
@@ -193,6 +200,16 @@
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         $(document).ready(function () {
+            $('#ex-funcional').select2({
+                dropdownParent: $('#m_func_gastro .modal-body')
+            });
+
+            $('#examen_rx').select2({
+                dropdownParent: $('#m_rx_brpul .modal-body')
+            });
+              $('#examenes_endoscopico').select2({
+                dropdownParent: $('#m_bronco .modal-body')
+            });
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
                 swal({

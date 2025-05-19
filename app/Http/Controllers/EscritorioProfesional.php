@@ -2449,6 +2449,7 @@ class EscritorioProfesional extends Controller
 
     public function registro_examen(Request $req)
     {
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         // Validar datos mínimos
         $req->validate([
             'diagnostico' => 'required|string',
@@ -2464,6 +2465,7 @@ class EscritorioProfesional extends Controller
             'observaciones' => $req->observaciones,
             'id_ficha_atencion' => $req->id_ficha_atencion,
             'tipo_examen' => $req->tipo_examen,
+            'especialidad' => $profesional->id_tipo_especialidad,
             'examenes' => json_encode($req->examenes),
         ]);
 
