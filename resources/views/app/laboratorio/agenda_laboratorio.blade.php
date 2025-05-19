@@ -239,7 +239,9 @@
 
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Procedimiento</label>
-                                    <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento" id="form_reseva_de_horas_id_procedimiento">
+                                    <input type="hidden" name="total_bloques_procedimientos" id="total_bloques_procedimientos" value="">
+                                    <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento" id="form_reseva_de_horas_id_procedimiento" multiple="multiple">
+
                                         {{-- <option value="">Seleccione</option> --}}
                                         @if ( isset($procedimientos) && !empty($procedimientos) )
                                             @foreach ($procedimientos as $proced )
@@ -1056,8 +1058,33 @@
 @section('page-script')
     <script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
     <script>
+
+        var sumaBloques = 0;
+
         $(document).ready(function () {
             $('.loader-bg').hide();
+
+            $('#form_reseva_de_horas_id_procedimiento').select2();
+
+            // Evento al cambiar selección
+            $('#form_reseva_de_horas_id_procedimiento').on('change', function() {
+                sumaBloques = 0;
+
+                const seleccionados = $(this).find('option:selected');
+                const idsSeleccionados = [];
+
+                seleccionados.each(function() {
+                    // Sumar los bloques (convertir a número con +)
+                    sumaBloques += +$(this).data('cant_bloque');
+                    idsSeleccionados.push($(this).val());
+                });
+
+                // Resultados
+                // console.log("IDs seleccionados:", idsSeleccionados);
+                // console.log("Total de bloques:", sumaBloques);
+
+                $('#total_bloques_procedimientos').val(sumaBloques);
+            });
 
             cargarBox();
 
@@ -1406,6 +1433,8 @@
                         },
 
                         eventClick: function(info) {
+                            $('#seccion_examenes').html('');
+
                             let id_hora_medica = info.event.id;
                             let url = "{{ route('agenda.buscar_hora_medica') }}"
 
@@ -1463,6 +1492,22 @@
                                         $('#confirmacion_hora').hide();
 
                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
+
+                                        if(data?.["procedimiento"] !== undefined)
+                                        {
+                                            if(data.procedimiento != '')
+                                            {
+                                                // Generar la lista ordenada
+                                                var lista_examen = '<strong>Examenes</strong>';
+                                                lista_examen += '<ul class="lista-examenes">';
+                                                data.procedimiento.forEach(function(examen) {
+                                                    lista_examen += `<li>${examen.nombre}</li>`;
+                                                });
+                                                lista_examen += '</ul>';
+                                                $('#seccion_examenes').html(lista_examen);
+                                            }
+                                        }
+
                                         $('#consulta').modal('show');
 
                                     }
@@ -1492,7 +1537,19 @@
                                         {
                                             if(data.procedimiento != '')
                                             {
-                                                $('#bono_valor_consulta').val(data.procedimiento.valor);
+                                                var total_valor = 0;
+                                                // Generar la lista ordenada
+                                                var lista_examen = '<strong>Examenes</strong>';
+                                                lista_examen += '<ul class="lista-examenes">';
+                                                data.procedimiento.forEach(function(examen) {
+                                                    lista_examen += `<li>${examen.nombre}</li>`;
+                                                    total_valor += examen.valor;
+                                                });
+                                                lista_examen += '</ul>';
+                                                $('#seccion_examenes').html(lista_examen);
+
+                                                // valor
+                                                $('#bono_valor_consulta').val(total_valor);
                                             }
                                             else
                                             {
@@ -1539,6 +1596,22 @@
                                         $('#confirmacion_hora').hide();
 
                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
+
+                                        if(data?.["procedimiento"] !== undefined)
+                                        {
+                                            if(data.procedimiento != '')
+                                            {
+                                                // Generar la lista ordenada
+                                                var lista_examen = '<strong>Examenes</strong>';
+                                                lista_examen += '<ul class="lista-examenes">';
+                                                data.procedimiento.forEach(function(examen) {
+                                                    lista_examen += `<li>${examen.nombre}</li>`;
+                                                });
+                                                lista_examen += '</ul>';
+                                                $('#seccion_examenes').html(lista_examen);
+                                            }
+                                        }
+
                                         $('#consulta').modal('show');
 
                                     }
@@ -1557,6 +1630,22 @@
                                         $('#confirmacion_hora').hide();
 
                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
+
+                                        if(data?.["procedimiento"] !== undefined)
+                                        {
+                                            if(data.procedimiento != '')
+                                            {
+                                                // Generar la lista ordenada
+                                                var lista_examen = '<strong>Examenes</strong>';
+                                                lista_examen += '<ul class="lista-examenes">';
+                                                data.procedimiento.forEach(function(examen) {
+                                                    lista_examen += `<li>${examen.nombre}</li>`;
+                                                });
+                                                lista_examen += '</ul>';
+                                                $('#seccion_examenes').html(lista_examen);
+                                            }
+                                        }
+
                                         $('#consulta').modal('show');
 
                                     }
@@ -1574,6 +1663,22 @@
                                         $('#confirmacion_hora').hide();
 
                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
+
+                                        if(data?.["procedimiento"] !== undefined)
+                                        {
+                                            if(data.procedimiento != '')
+                                            {
+                                                // Generar la lista ordenada
+                                                var lista_examen = '<strong>Examenes</strong>';
+                                                lista_examen += '<ul class="lista-examenes">';
+                                                data.procedimiento.forEach(function(examen) {
+                                                    lista_examen += `<li>${examen.nombre}</li>`;
+                                                });
+                                                lista_examen += '</ul>';
+                                                $('#seccion_examenes').html(lista_examen);
+                                            }
+                                        }
+
                                         $('#consulta').modal('show');
 
                                     }
@@ -1591,6 +1696,22 @@
                                         $('#confirmacion_hora').hide();
 
                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
+
+                                        if(data?.["procedimiento"] !== undefined)
+                                        {
+                                            if(data.procedimiento != '')
+                                            {
+                                                // Generar la lista ordenada
+                                                var lista_examen = '<strong>Examenes</strong>';
+                                                lista_examen += '<ul class="lista-examenes">';
+                                                data.procedimiento.forEach(function(examen) {
+                                                    lista_examen += `<li>${examen.nombre}</li>`;
+                                                });
+                                                lista_examen += '</ul>';
+                                                $('#seccion_examenes').html(lista_examen);
+                                            }
+                                        }
+
                                         $('#consulta').modal('show');
 
                                     }
@@ -1608,8 +1729,23 @@
                                         $('#confirmacion_hora').hide();
 
                                         $('#cabecera_hora_medica').text('Datos Del Paciente');
-                                        $('#consulta').modal('show');
 
+                                        if(data?.["procedimiento"] !== undefined)
+                                        {
+                                            if(data.procedimiento != '')
+                                            {
+                                                // Generar la lista ordenada
+                                                var lista_examen = '<strong>Examenes</strong>';
+                                                lista_examen += '<ul class="lista-examenes">';
+                                                data.procedimiento.forEach(function(examen) {
+                                                    lista_examen += `<li>${examen.nombre}</li>`;
+                                                });
+                                                lista_examen += '</ul>';
+                                                $('#seccion_examenes').html(lista_examen);
+                                            }
+                                        }
+
+                                        $('#consulta').modal('show');
 
                                     }
 
@@ -2000,8 +2136,8 @@
                             $('#contenedor_tratamientos_presupuesto').hide();
                             $('#presupuesto_numero').empty();
                             $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
-                            console.log(data.presupuestos.length);
-                            if(data.presupuestos.length > 0){
+                            console.log(data.presupuestos);
+                            if(data.presupuestos?.length > 0){
                                 data.presupuestos.forEach(p => {
                                     $('#presupuesto_numero').append(`<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}</option>`);
                                 });
@@ -2774,7 +2910,9 @@
             let id_box = $('#agenda_box').val();
             var tipo_agenda_text = 'C';
             var procedimiento = $('#form_reseva_de_horas_id_procedimiento').val();
-            var proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
+            // var proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
+            var proc_bloque = sumaBloques;
+
 
             console.log(tipo_agenda);
             console.log(tipo_agenda_text);

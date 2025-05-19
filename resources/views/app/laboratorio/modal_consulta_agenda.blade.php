@@ -20,22 +20,19 @@
                         <input type="hidden" name="modificando_paciente_asistente" id="modificando_paciente_asistente" value="0">
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        {{-- datos paciente --}}
+                        <div class="col-sm-6 col-md-6">
                             <table class="table table-borderless table-xs text-break table-responsive modal-agenda">
                                 <tbody>
+                                    <!-- Fila RUT -->
                                     <tr>
-                                        <th scope="row">
-                                            <strong>Rut</strong>
-                                        <td>
-                                            <span id="datos_consulta_rut"></span>
-                                        </td>
-
-
-                                        </th>
+                                        <th scope="row"><strong>Rut</strong></th>
+                                        <td><span id="datos_consulta_rut"></span></td>
                                     </tr>
+
+                                    <!-- Fila Nombre -->
                                     <tr>
-                                        <th scope="row">
-                                            <strong>Nombre</strong>
+                                        <th scope="row"><strong>Nombre</strong></th>
                                         <td>
                                             <div class="paciente_view_asistente">
                                                 <span id="datos_consulta_nombre"></span>
@@ -46,8 +43,8 @@
                                                     <div class="col-sm-12 col-md-4">
                                                         <input type="text" class="form-control form-control-sm" id="input_reserva_hora_nombre_asistente" value="">
                                                     </div>
-                                                        <div class="col-sm-12 col-md-4">
-                                                            <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_uno_asistente" value="">
+                                                    <div class="col-sm-12 col-md-4">
+                                                        <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_uno_asistente" value="">
                                                     </div>
                                                     <div class="col-sm-12 col-md-4">
                                                         <input type="text" class="form-control form-control-sm" id="input_reserva_hora_apellido_dos_asistente" value="">
@@ -55,31 +52,32 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        </th>
                                     </tr>
+
+                                    <!-- Fila Fecha Nacimiento -->
                                     <tr>
-                                        <th scope="row">
-                                            <strong>Fecha Nacimiento</strong>
+                                        <th scope="row"><strong>Fecha Nacimiento</strong></th>
                                         <td>
                                             <div class="paciente_view_asistente">
                                                 <span id="datos_consulta_edad"></span>
                                             </div>
                                             <div class="paciente_edit_asistente" style="display:none">
-                                                <input type="text" class="mask_date form-control form-control-sm"
-                                                    name="input_reserva_fecha_nacimiento_asistente" id="input_reserva_fecha_nacimiento_asistente"
+                                                <input type="text"
+                                                    class="mask_date form-control form-control-sm"
+                                                    name="input_reserva_fecha_nacimiento_asistente"
+                                                    id="input_reserva_fecha_nacimiento_asistente"
                                                     onchange="evaluar_edad();"
-                                                    maxlength="10" placeholder="dd/mm/aaaa"
+                                                    maxlength="10"
+                                                    placeholder="dd/mm/aaaa"
                                                     autocomplete="off"
-                                                    data-mask="00/00/0000"
-                                                />
+                                                    data-mask="00/00/0000" />
                                             </div>
-
                                         </td>
-                                        </th>
                                     </tr>
+
+                                    <!-- Fila Sexo -->
                                     <tr>
-                                        <th scope="row">
-                                            <strong>Sexo</strong>
+                                        <th scope="row"><strong>Sexo</strong></th>
                                         <td>
                                             <div class="paciente_view_asistente">
                                                 <span id="datos_consulta_sexo"></span>
@@ -90,15 +88,13 @@
                                                     <option value="F">Femenino</option>
                                                 </select>
                                             </div>
-
                                         </td>
-                                        </th>
                                     </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Email</strong>
-                                        <td>
 
+                                    <!-- Fila Email -->
+                                    <tr>
+                                        <th scope="row"><strong>Email</strong></th>
+                                        <td>
                                             <div class="paciente_view_asistente">
                                                 <span id="datos_consulta_email"></span>
                                             </div>
@@ -110,13 +106,12 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        </th>
                                     </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <strong>Telefono</strong>
-                                        <td>
 
+                                    <!-- Fila Teléfono -->
+                                    <tr>
+                                        <th scope="row"><strong>Telefono</strong></th>
+                                        <td>
                                             <div class="paciente_view_asistente">
                                                 <span id="datos_consulta_telefono"></span>
                                             </div>
@@ -128,40 +123,40 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        </th>
                                     </tr>
+
+                                    <!-- Fila Botones (solo en modo edición) -->
                                     <tr class="paciente_edit_asistente" style="display:none">
-
-                                        <td>
-                                            <button type="button" id="cancelar_modifcar_paciente" onclick="cancelar_modificacion_paciente_asistente();" class="btn btn-sm btn-danger has-ripple">
-                                                <i class="feather icon-x"></i> Cancelar actualización
-                                            <span class="ripple ripple-animate" style="height: 181.038px; width: 181.038px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(255, 255, 255); opacity: 0.4; top: -74.4315px; left: 20.481px;"></span></button>
-                                        </td>
-                                        <td>
-                                            <button type="button" id="actualizar_modificar_paciente" onclick="actualizar_paciente_asistente();" class="btn btn-sm btn-info">
-                                                <i class="feather icon-check"></i> Actualizar paciente
-                                            </button>
-
+                                        <td colspan="2" class="text-right">
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" id="cancelar_modifcar_paciente" onclick="cancelar_modificacion_paciente_asistente();" class="btn btn-sm btn-danger mr-2">
+                                                    <i class="feather icon-x"></i> Cancelar actualización
+                                                </button>
+                                                <button type="button" id="actualizar_modificar_paciente" onclick="actualizar_paciente_asistente();" class="btn btn-sm btn-info">
+                                                    <i class="feather icon-check"></i> Actualizar paciente
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
+
+                                    <!-- Fila Observaciones -->
                                     <tr>
-                                        <th scope="row">
-                                            <strong>Observaciones</strong>
-                                        <td>
-                                            <span id="datos_consulta_observaciones"></span>
-                                        </td>
-                                        </th>
+                                        <th scope="row"><strong>Observaciones</strong></th>
+                                        <td><span id="datos_consulta_observaciones"></span></td>
                                     </tr>
+
+                                    <!-- Fila Fecha última consulta -->
                                     <tr>
-                                        <th scope="row">
-                                            <strong>Fecha última consulta</strong>
-                                        <td>
-                                            <span id="datos_consulta_fecha_ultima"></span>
-                                        </td>
-                                        </th>
+                                        <th scope="row"><strong>Fecha última consulta</strong></th>
+                                        <td><span id="datos_consulta_fecha_ultima"></span></td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+
+                        {{-- procedimientos --}}
+                        <div class="col-sm-6 col-md-6" id="seccion_examenes">
+
                         </div>
                     </div>
                 </form>
