@@ -13,16 +13,21 @@
                         <a class="nav-secciones text-uppercase" id="control-tab" data-toggle="tab" href="#control" role="tab" aria-controls="control" aria-selected="false">Controles</a>
                     </li>
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones text-uppercase" id="h_control-tab" data-toggle="tab" href="#h_control" role="tab" aria-controls="h_control" aria-selected="false">Histórico controles</a>
+                        <a class="nav-secciones text-uppercase" id="h_control-tab" data-toggle="tab" href="#h_control" role="tab" aria-controls="h_control" aria-selected="false">Historial de controles</a>
                     </li>
                 </ul>
             </div>
              <!--ALERTA-->
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert"><strong>Solo el campo diagnóstico es obligatorio el resto es opcional</strong>
+             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="form-row mb-1">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 ">
+                        <div class="alert-atencion alert alert-success-b alert-dismissible fade show"  role="alert" id="mensaje_historias"></div>
+                    </div>
                 </div>
             </div>
-
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="tab-content" id="nutri-contenido">
                     <!--ATENCION GENERAL-->
@@ -30,12 +35,6 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <!--FORMULARIOS-->
-                                <div class="row">
-                                    <div class="col-md-12 mt-3 mb-0">
-                                        <h6 class="f-16 text-c-blue">Atención general</h6>
-                                        <hr>
-                                    </div>
-                                </div>
                                 <div class="row">
                                     <!--Formulario / Menor de edad-->
                                     @include('general.secciones_ficha.seccion_menor')
@@ -45,11 +44,11 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="card-a">
                                             <div class="card-header-a" id="motivop">
-                                                <button class="accor-open btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#motivop_c" aria-expanded="false" aria-controls="motivop_c">
+                                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#motivop_c" aria-expanded="false" aria-controls="motivop_c">
                                                     Motivo de la consulta
                                                 </button>
                                             </div>
-                                            <div id="motivop_c" class="collapse" aria-labelledby="motivop" data-parent="#motivop">
+                                            <div id="motivop_c" class="collapse show" aria-labelledby="motivop" data-parent="#motivop">
                                                 <div class="card-body-aten-a">
                                                     <form>
                                                         <div class="form-row">
@@ -90,11 +89,11 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="card-a">
                                             <div class="card-header-a" id="antec_fam">
-                                                <button class="accor-open btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#antec_fam_c" aria-expanded="false" aria-controls="antec_fam_c">
+                                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#antec_fam_c" aria-expanded="false" aria-controls="antec_fam_c">
                                                     Antecedentes patológicos propios y familiares de la especialidad
                                                 </button>
                                             </div>
-                                            <div id="antec_fam_c" class="collapse" aria-labelledby="antec_fam" data-parent="#antec_fam">
+                                            <div id="antec_fam_c" class="collapse show" aria-labelledby="antec_fam" data-parent="#antec_fam">
                                                 <div class="card-body-aten-a">
                                                     <form>
                                                         <div class="form-row">
@@ -199,11 +198,11 @@
                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                             </div>
                                                             <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                <label class="floating-label-activo-sm">Anticonceptivos <i>¿Cuáles?</i></label>
+                                                                <label class="floating-label-activo-sm">Anticonceptivos ¿Cuáles?</label>
                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                             </div>
                                                             <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                <label class="floating-label-activo-sm">Terapia de reemplazo hormonal <i>¿Cual?</i></label>
+                                                                <label class="floating-label-activo-sm">Terapia de reemplazo hormonal ¿Cual?</label>
                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=4" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                             </div>
                                                         </div>
@@ -217,7 +216,7 @@
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="card-a">
                                             <div class="card-header-a" id="e_nutricional">
-                                                <button class="accor-open btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#e_nutricional_c" aria-expanded="false" aria-controls="e_nutricional_c">
+                                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left card-act-open collapsed" type="button" data-toggle="collapse" data-target="#e_nutricional_c" aria-expanded="false" aria-controls="e_nutricional_c">
                                                     Evaluación nutricional
                                                 </button>
                                             </div>
@@ -233,10 +232,13 @@
                                                                     <a class="nav-link-aten text-reset" id="act-fisica-tab" data-toggle="tab" href="#act-fisica" role="tab" aria-controls="act-fisica" aria-selected="false">Actividad fisica</a>
                                                                 </li>
                                                                 <li class="nav-item">
-                                                                    <a class="nav-link-aten text-reset" id="exam-fisico-tab" data-toggle="tab" href="#exam-fisico" role="tab" aria-controls="exam-fisico" aria-selected="false">Exámen físico</a>
+                                                                    <a class="nav-link-aten text-reset" id="exam-fisico-tab" data-toggle="tab" href="#exam-fisico" role="tab" aria-controls="exam-fisico" aria-selected="false">Examen físico</a>
                                                                 </li>
                                                                 <li class="nav-item">
                                                                     <a class="nav-link-aten text-reset" id="in-diet-tab" data-toggle="tab" href="#in-diet" role="tab" aria-control="in-diet" aria-selected="false">Indicadores dietéticos</a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link-aten text-reset" id="antecedentes-nutri-tab" data-toggle="tab" href="#antecedentes-nutri" role="tab" aria-control="antecedentes-nutri" aria-selected="false">Antecedentes</a>
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -282,7 +284,7 @@
                                                                                 <select class="form-control form-control-sm" name="select_13" id="select_13" multiple="multiple">
                                                                                     <option value="HP">Gimnasio</option>
                                                                                     <option value="DI">Trotar</option>
-                                                                                    <option value="HC">Máquinas(en casa)</option>
+                                                                                    <option value="HC">Máquinas (Casa)</option>
                                                                                     <option value="HL">Caminata</option>
                                                                                     <option value="DB">Deporte de baja intensidad</option>
                                                                                     <option value="DM">Deporte de mediana intensidad</option>
@@ -294,7 +296,7 @@
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label">Tipo de esfuerzo</label>
+                                                                                <label class="floating-label-activo-sm">Tipo de esfuerzo</label>
                                                                                 <select class="form-control form-control-sm" name="tipo_resp" id="tipo_resp">
                                                                                     <option value="NE">Muy ligero</option>
                                                                                     <option value="N">Moderado</option>
@@ -331,7 +333,7 @@
                                                                                 <textarea class="form-control caja-texto form-control-sm" placeholder="Pelo, ojos, piél, labios,etc..." rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                                                                                <label class="floating-label-activo-sm">Examenes solicitados <i>¿resultados?</i></label>
+                                                                                <label class="floating-label-activo-sm">Examenes solicitados ¿Resultados?</label>
                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -343,12 +345,12 @@
                                                                 </div>
                                                                 <!--INDICADORES DIETÉTICOS-->
                                                                 <div class="tab-pane fade show" id="in-diet" role="tabpanel" aria-labelledby="in-diet-tab">
-                                                                    <div class="row">
+                                                                    <div class="form-row">
                                                                         <div class="col-md-12">
-                                                                            <div class="card">
+                                                                            <div class="card-informacion">
                                                                                 <div class="card-body">
-                                                                                    <div class="row">
-                                                                                        <div class="col-sm-2">
+                                                                                    <div class="form-row">
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-2 col-xl-2">
                                                                                             <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                                                                                                 <a class="nav-link-aten text-reset active " id="comidas-tab" data-toggle="tab" href="#comidas" role="tab" aria-controls="comidas" aria-selected="false">Comidas</a>
                                                                                                 <a class="nav-link-aten text-reset" id="dieta-tab" data-toggle="tab" href="#dieta" role="tab" aria-controls="dieta" aria-selected="true">Dieta</a>
@@ -358,7 +360,7 @@
                                                                                                 <a class="nav-link-aten text-reset" id="uso_sal_gr-tab" data-toggle="tab" href="#uso_sal_gr" role="tab" aria-controls="uso_sal_gr" aria-selected="false">Uso de Sal /Grasas</a>
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div class="col-sm-10">
+                                                                                        <div class="col-sm-12 col-md-12 col-lg-10 col-xl-10">
                                                                                             <div class="tab-content" id="v-pills-tabContent">
                                                                                                 <div class="tab-pane fade show active" id="comidas" role="tabpanel" aria-labelledby="comidas-tab">
                                                                                                     <div class="col-sm-12 col-md-12">
@@ -420,7 +422,7 @@
                                                                                                     <div class="col-sm-12 col-md-12">
                                                                                                         <div class="form-row">
                                                                                                             <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                                <label class="floating-label-activo-sm">Ha hecho dieta </label>
+                                                                                                                <label class="floating-label-activo-sm">¿Ha realizado dieta? </label>
                                                                                                                 <select class="form-control form-control-sm" name="alergia_alimentos" id="alergia_alimentos">
                                                                                                                     <option value="NE">Si</option>
                                                                                                                     <option value="N">No</option>
@@ -432,13 +434,13 @@
                                                                                                                 <input type="text" class="form-control form-control-sm" name="" id="">
                                                                                                             </div>
                                                                                                             <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                                                <label class="floating-label-activo-sm">Por cuanto tiempo</label>
+                                                                                                                <label class="floating-label-activo-sm">¿Por cuanto tiempo?</label>
                                                                                                                 <input type="text" class="form-control form-control-sm" name="" id="">
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="form-row">
                                                                                                             <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                                <label class="floating-label-activo-sm">Ha Modificado Dieta?</label>
+                                                                                                                <label class="floating-label-activo-sm">¿Ha Modificado Dieta?</label>
                                                                                                                 <select class="form-control form-control-sm" name="tipo_resp" id="tipo_resp">
                                                                                                                     <option value="NE">Si</option>
                                                                                                                     <option value="N">No</option>
@@ -458,7 +460,7 @@
                                                                                                                 </select>
                                                                                                             </div>
                                                                                                             <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                                <label class="floating-label-activo-sm">Horario que siente hambre</label>
+                                                                                                                <label class="floating-label-activo-sm">Horario en que siente hambre</label>
                                                                                                                 <input type="text" class="form-control form-control-sm" name="" id="">
                                                                                                             </div>
                                                                                                         </div>
@@ -475,11 +477,11 @@
                                                                                                     <div class="col-sm-12 col-md-12">
                                                                                                         <div class="form-row">
                                                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                                <label class="floating-label-activo-sm">Alimentos que no le agradan / no acostumbra</label>
+                                                                                                                <label class="floating-label-activo-sm">Alimentos que no le agradan / No acostumbra</label>
                                                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                                                             </div>
                                                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                                <label class="floating-label-activo-sm">Alimentos que le causan malestar <i>(especificar)</i></label>
+                                                                                                                <label class="floating-label-activo-sm">Alimentos que le causan malestar (Especificar)</label>
                                                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                                                             </div>
                                                                                                             <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -491,7 +493,7 @@
                                                                                                                 </select>
                                                                                                             </div>
                                                                                                             <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                                                                                                                <label class="floating-label-activo-sm"> Cuales alimentos <i>(especificar)</i></label>
+                                                                                                                <label class="floating-label-activo-sm"> ¿Cuales alimentos? (Especificar)</label>
                                                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                                                             </div>
                                                                                                         </div>
@@ -505,7 +507,7 @@
                                                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                                                             </div>
                                                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                                                <label class="floating-label-activo-sm"> Cantidad semanal <i>(especificar)</i></label>
+                                                                                                                <label class="floating-label-activo-sm"> Cantidad semanal (Especificar)</label>
                                                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                                                             </div>
                                                                                                         </div>
@@ -523,7 +525,7 @@
                                                                                                                 </select>
                                                                                                             </div>
                                                                                                             <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                                                                                                                <label class="floating-label-activo-sm"> Cuales Suplementos <i>(especificar)</i></label>
+                                                                                                                <label class="floating-label-activo-sm"> Cuales Suplementos (Especificar)</label>
                                                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                                                             </div>
                                                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -548,7 +550,7 @@
                                                                                                             </div>
 
                                                                                                             <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                                                                                                                <label class="floating-label-activo-sm">Qué grasa utilizan en casa para preparar su comida:</label>
+                                                                                                                <label class="floating-label-activo-sm">¿Qué grasa utilizan en casa para preparar su comida?</label>
                                                                                                                 <select class="form-control form-control-sm" name="select_15" id="select_15" multiple="multiple">
                                                                                                                     <option value="HP">Margarina</option>
                                                                                                                     <option value="DI">Mantequilla  </option>
@@ -569,7 +571,7 @@
                                                                                                                 </select>
                                                                                                             </div>
                                                                                                             <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                                                                                                                <label class="floating-label-activo-sm"> De que modo:</label>
+                                                                                                                <label class="floating-label-activo-sm"> ¿De que modo?</label>
                                                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                                                             </div>
                                                                                                         </div>
@@ -627,7 +629,7 @@
                                                                         </div>  --}}
                                                                         <div class="form-row">
                                                                             {{--  <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                <label class="floating-label-activo-sm">Ha Modificado Dieta?</label>
+                                                                                <label class="floating-label-activo-sm">¿Ha Modificado Dieta?</label>
                                                                                 <select class="form-control form-control-sm" name="tipo_resp" id="tipo_resp">
                                                                                     <option value="NE">Si</option>
                                                                                     <option value="N">No</option>
@@ -655,11 +657,11 @@
                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                             </div>  --}}
                                                                             {{--  <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <label class="floating-label-activo-sm">Alimentos que no le agradan / no acostumbra</label>
+                                                                                <label class="floating-label-activo-sm">Alimentos que no le agradan / No acostumbra</label>
                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <label class="floating-label-activo-sm">Alimentos que le causan malestar <i>(especificar)</i></label>
+                                                                                <label class="floating-label-activo-sm">Alimentos que le causan malestar (Especificar)</label>
                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -671,7 +673,7 @@
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-9 col-lg-9 col-xl-9">
-                                                                                <label class="floating-label-activo-sm"> Cuales alimentos <i>(especificar)</i></label>
+                                                                                <label class="floating-label-activo-sm"> ¿Cuales alimentos? (Especificar)</label>
                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                             </div>  --}}
                                                                             {{--  <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
@@ -683,12 +685,12 @@
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <label class="floating-label-activo-sm"> Cuales Suplementos <i>(especificar)</i></label>
+                                                                                <label class="floating-label-activo-sm">¿Cuales Suplementos? (Especificar)</label>
                                                                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="motivo_consulta" id="motivo_consulta"></textarea>
                                                                             </div>  --}}
 
                                                                             {{--  <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm">¿Agrega sal a su comida? </label>
+                                                                                <label class="floating-label-activo-sm">¿Agrega sal a su comida?</label>
                                                                                 <select class="form-control form-control-sm" name="alergia_alimentos" id="alergia_alimentos">
                                                                                     <option value="SA">Si, alta cantidad</option>
                                                                                     <option value="SM">Si, mediana cantidad</option>
@@ -698,7 +700,7 @@
                                                                                 </select>
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                                                <label class="floating-label-activo-sm">Qué grasa utilizan en casa para preparar su comida:</label>
+                                                                                <label class="floating-label-activo-sm">¿Qué grasa utilizan en casa para preparar su comida?</label>
                                                                                 <select class="form-control form-control-sm" name="select_15" id="select_15" multiple="multiple">
                                                                                     <option value="HP">Margarina</option>
                                                                                     <option value="DI">Mantequilla  </option>
@@ -709,7 +711,7 @@
                                                                                 </select>
                                                                             </div>  --}}
                                                                             {{--  <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm">Ha hecho dieta </label>
+                                                                                <label class="floating-label-activo-sm">¿Ha ralizado dieta? </label>
                                                                                 <select class="form-control form-control-sm" name="alergia_alimentos" id="alergia_alimentos">
                                                                                     <option value="NE">Si</option>
                                                                                     <option value="N">No</option>
@@ -721,7 +723,7 @@
                                                                                 <input type="text" class="form-control form-control-sm" name="" id="">
                                                                             </div>
                                                                             <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                                                <label class="floating-label-activo-sm">Por cuanto tiempo</label>
+                                                                                <label class="floating-label-activo-sm">¿Por cuanto tiempo?</label>
                                                                                 <input type="text" class="form-control form-control-sm" name="" id="">
                                                                             </div>  --}}
                                                                             {{--  <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -740,6 +742,16 @@
                                                                         </div>
                                                                     </form>
                                                                 </div>
+                                                                 <!--ANTECEDENTES-->
+                                                                 <div class="tab-pane fade show" id="antecedentes-nutri" role="tabpanel" aria-labelledby="antecedentes-nutri-tab">
+                                                                    <form>
+                                                                        <div class="form-row">
+                                                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                                <h6 class="text-c-blue mb-3">ANTECEDENTES</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -747,17 +759,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!--CRONICOS / GES / CONFIDENCIAL -->
-                                    @include('general.secciones_ficha.seccion_cronicos_ges_confidencial')
+                             
                                     <!--Diagnóstico-->
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div class="card-a">
                                             <div class="card-header-a" id="diagnostico">
-                                                <button class="accor-open btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#diagnostico_c" aria-expanded="false" aria-controls="diagnostico_c">
+                                              
+                                                <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed" type="button"  data-toggle="collapse" data-target="#diagnostico_c" aria-expanded="false" aria-controls="diagnostico_c">
                                                     Diagnóstico y plan de tratamiento
                                                 </button>
                                             </div>
-                                            <div id="diagnostico_c" class="collapse" aria-labelledby="diagnostico" data-parent="#diagnostico">
+                                            <div id="diagnostico_c" class="collapse show" aria-labelledby="diagnostico" data-parent="#diagnostico">
                                                 <div class="card-body-aten-a">
                                                     <div class="form-row">
                                                         <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -772,8 +784,8 @@
                                                             <button type="button" class="btn btn-outline-primary btn-block btn-sm " onclick="e_plan_nutri();"><i class="feather icon-file-plus"></i> Plan de Tratamiento</button>
                                                         </div>
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <div class="alert alert-primary" role="alert">
-                                                              Se añadió un plan de trataminto
+                                                            <div class="alert alert-success" role="alert">
+                                                              <i class="fas fa-check-circle"></i> Se añadió un plan de tratamiento.
                                                             </div>
                                                         </div>
                                                     </div>
@@ -783,22 +795,20 @@
                                     </div>
                                 </div>
                                 <!--Medicamentos o Examen-->
-
                                     <div class="card">
                                         <div class="form-row">
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 mt-3 pr-3 pl-3">
-                                                <button type="button" class="btn btn-outline-primary btn-block btn-sm" onclick="internutri();"><i class="feather icon-plus"></i> Indicar interconsulta</button>
+                                                <button type="button" class="btn btn-outline-primary btn-block btn-sm" onclick="internutri();"><i class="feather icon-edit-1"></i> Indicar interconsulta</button>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 mt-3 pr-3 pl-3">
-                                                <button type="button" class="btn btn-outline-primary btn-block btn-sm" onclick="examenes_nutri();"><i class="feather icon-plus"></i> Indicar examen especialidad </button>
+                                                <button type="button" class="btn btn-outline-primary btn-block btn-sm" onclick="examenes_nutri();"><i class="feather icon-edit-1"></i> Indicar examen especialidad </button>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4 mt-3 pr-3 pl-3">
-                                                <button type="button" class="btn btn-outline-primary btn-block btn-sm" onclick="informeNutri() ;"><i class="feather icon-plus"></i> Enviar informe</button>
+                                                <button type="button" class="btn btn-outline-primary btn-block btn-sm" onclick="informeNutri() ;"><i class="feather icon-edit-1"></i> Enviar informe</button>
                                             </div>
                                         </div>
                                     </div>
 
-                                <hr>
                                 <!--Guardar o imprimir ficha-->
                                 <div class="row mb-3">
                                     <div class="col-md-12 text-center">
@@ -813,444 +823,516 @@
 
                     <!--CONTROLES ATENCIÓN -->
                     <div class="tab-pane fade" id="control" role="tabpanel" aria-labelledby="control-tab">
-                        <div class="row bg-white shadow-none rounded mx-1">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                <h6 class="text-c-blue f-20">Controles</h6>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="row">
-                                    <div class="col-md-12 mt-3 mb-0">
-                                        <h6 class="f-16 text-c-blue">Controles</h6>
-                                        <hr>
+                                <div class="card-a">
+                                    <div class="card-body pb-0">
+                                        <div class="form-row">
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link-aten text-reset active" id="nutri_obesidad_tab" data-toggle="tab" href="#nutri_obesidad" role="tab" aria-controls="nutri_obesidad" aria-selected="true">Obesidad</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link-aten text-reset" id="nutri_diabetes_tab" data-toggle="tab" href="#nutri_diabetes" role="tab" aria-controls="nutri_diabetes" aria-selected="false">Diabetes</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link-aten text-reset" id="nutri_hipertension_tab" data-toggle="tab" href="#nutri_hipertension" role="tab" aria-controls="nutri_hipertension" aria-selected="false"> Hipertensión</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link-aten text-reset" id="nutri_dislipidemias_tab" data-toggle="tab" href="#nutri_dislipidemias" role="tab" aria-controls="nutri_dislipidemias" aria-selected="false"> Dislipidemias</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link-aten text-reset" id="nutri_irenaltab" data-toggle="tab" href="#nutri_irenal" role="tab" aria-control="nutri_irenal" aria-selected="false"> Insuficiencia Renal </a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link-aten text-reset" id="nutri_hiperuric_tab" data-toggle="tab" href="#nutri_hiperuric" role="tab" aria-control="nutri_hiperuric" aria-selected="false"> Hiperuricemia </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                        <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link-aten text-reset active" id="nutri_obesidad_tab" data-toggle="tab" href="#nutri_obesidad" role="tab" aria-controls="nutri_obesidad" aria-selected="true">Obesidad</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link-aten text-reset" id="nutri_diabetes_tab" data-toggle="tab" href="#nutri_diabetes" role="tab" aria-controls="nutri_diabetes" aria-selected="false">Diabetes</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link-aten text-reset" id="nutri_hipertension_tab" data-toggle="tab" href="#nutri_hipertension" role="tab" aria-controls="nutri_hipertension" aria-selected="false"> Hipertensión</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link-aten text-reset" id="nutri_dislipidemias_tab" data-toggle="tab" href="#nutri_dislipidemias" role="tab" aria-controls="nutri_dislipidemias" aria-selected="false"> Dislipidemias</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link-aten text-reset" id="nutri_irenaltab" data-toggle="tab" href="#nutri_irenal" role="tab" aria-control="nutri_irenal" aria-selected="false"> Insuficiencia Renal </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link-aten text-reset" id="nutri_hiperuric_tab" data-toggle="tab" href="#nutri_hiperuric" role="tab" aria-control="nutri_hiperuric" aria-selected="false"> Hiperuricemia </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row mt-3">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="tab-content" id="ev-nutricional">
-                                    <!--HABITOS DE CONSUMO-->
+                                    <!--OBESIDAD-->
                                     <div class="tab-pane fade show active" id="nutri_obesidad" role="tabpanel" aria-labelledby="nutri_obesidad_tab">
                                         <form>
-                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                <div class="form-row">
-                                                    <label class="form_fono">Fecha de control</label>
-                                                    <script>
-                                                    date = new Date().toLocaleDateString();
-                                                    document.write(date);
-                                                    </script>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <h6 class="tit-gen form_fono d-inline ">Control Obesidad</h6>
+                                                    <h6 class="tit-gen d-inline float-right">
+                                                        <script>
+                                                        date = new Date().toLocaleDateString();
+                                                        document.write(date);
+                                                        </script>
+                                                    </h6>
                                                 </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Peso inicial</label>
-                                                        <input type="text" class="form-control form-control-sm" name="peso_inicial_control" id="peso_inicial_control">
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Peso inicial</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="peso_inicial_control" id="peso_inicial_control">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Peso actual</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="peso_actual_control" id="peso_actual_control">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Variación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="peso_variacion_control" id="peso_variacion_control">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
+                                                                    <select class="form-control form-control-sm" name="control_logro_obj" id="control_logro_obj">
+                                                                        <option value="1">Si</option>
+                                                                        <option value="2">No</option>
+                                                                        <option value="3">Parcialmente</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Sesión N°</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="num_sesion" id="num_sesion">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Trabajo en</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="trabajo_en" id="trabajo_en">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Colaboración</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="colaboracion" id="colaboracion">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Cumple indicaciones</label>
+                                                                    <select class="form-control form-control-sm" name="control_cumple" id="control_cumple">
+                                                                        <option value="1">Si</option>
+                                                                        <option value="2">No</option>
+                                                                        <option value="3">Parcialmente</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <label class="floating-label-activo-sm"> Comentario y respuesta a tratamiento</label>
+                                                                    <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_res_trat" id="com_res_trat"></textarea>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <label class="floating-label-activo-sm">Comentario de la sesión</label>
+                                                                    <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_sesion" id="com_sesion"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Peso actual</label>
-                                                        <input type="text" class="form-control form-control-sm" name="peso_actual_control" id="peso_actual_control">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Variación</label>
-                                                        <input type="text" class="form-control form-control-sm" name="peso_variacion_control" id="peso_variacion_control">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
-                                                        <select class="form-control form-control-sm" name="control_logro_obj" id="control_logro_obj">
-                                                            <option value="1">Si</option>
-                                                            <option value="2">No</option>
-                                                            <option value="3">Parcialmente</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Sesión N°</label>
-                                                        <input type="text" class="form-control form-control-sm" name="num_sesion" id="num_sesion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Trabajo en</label>
-                                                        <input type="text" class="form-control form-control-sm" name="trabajo_en" id="trabajo_en">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Colaboración</label>
-                                                        <input type="text" class="form-control form-control-sm" name="colaboracion" id="colaboracion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">Cumple indicaciones</label>
-                                                        <select class="form-control form-control-sm" name="control_cumple" id="control_cumple">
-                                                            <option value="1">Si</option>
-                                                            <option value="2">No</option>
-                                                            <option value="3">Parcialmente</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label"> Comentario y respuesta a tratamiento</label>
-                                                        <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_res_trat" id="com_res_trat"></textarea>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label">Comentario de la sesión</label>
-                                                        <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_sesion" id="com_sesion"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
-                                                        <button type="button" class="btn btn-info"><i class="fas fa-save"></i> Guardar control Peso</button>
-                                                    </div>
+                                                </div>              
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
+                                                    <button type="button" class="btn btn-info"><i class="feather icon-save"></i> Guardar control peso</button>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
+                                    <!--DIABETES-->
                                     <div class="tab-pane fade show" id="nutri_diabetes" role="tabpanel" aria-labelledby="nutri_diabetes_tab">
                                         <form>
-                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                <div class="form-row">
-                                                    <label class="form_fono">Fecha de control Diabetes</label>
-                                                    <script>
-                                                    date = new Date().toLocaleDateString();
-                                                    document.write(date);
-                                                    </script>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <h6 class="tit-gen form_fono d-inline ">Control Diabetes</h6>
+                                                    <h6 class="tit-gen d-inline float-right">
+                                                        <script>
+                                                        date = new Date().toLocaleDateString();
+                                                        document.write(date);
+                                                        </script>
+                                                    </h6>
                                                 </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Última Glicemia</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Peso actual</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Variación Peso</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
-                                                        <select class="form-control form-control-sm" name="" id="">
-                                                            <option value="AL">Si</option>
-                                                            <option value="LA">No</option>
-                                                            <option value="LA">Parcialmente</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Sesión N°</label>
-                                                        <input type="text" class="form-control form-control-sm" name="num_sesion" id="num_sesion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Trabajo en</label>
-                                                        <input type="text" class="form-control form-control-sm" name="trabajo_en" id="trabajo_en">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Colaboración</label>
-                                                        <input type="text" class="form-control form-control-sm" name="colaboracion" id="colaboracion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
-                                                        <select class="form-control form-control-sm" name="ob_log" id="ob_log">
-                                                            <option value="AL">Si</option>
-                                                            <option value="LA">No</option>
-                                                            <option value="LA">Parcialmente</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label"> Comentario y respuesta a tratamiento</label>
-                                                        <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_res_trat" id="com_res_trat"></textarea>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label">Comentario de la sesión</label>
-                                                        <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_sesion" id="com_sesion"></textarea>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Última Glicemia</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Peso actual</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Variación Peso</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
+                                                                    <select class="form-control form-control-sm" name="" id="">
+                                                                        <option value="AL">Si</option>
+                                                                        <option value="LA">No</option>
+                                                                        <option value="LA">Parcialmente</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Sesión N°</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="num_sesion" id="num_sesion">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Trabajo en</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="trabajo_en" id="trabajo_en">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Colaboración</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="colaboracion" id="colaboracion">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
+                                                                    <select class="form-control form-control-sm" name="ob_log" id="ob_log">
+                                                                        <option value="AL">Si</option>
+                                                                        <option value="LA">No</option>
+                                                                        <option value="LA">Parcialmente</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <label class="floating-label-activo-sm"> Comentario y respuesta a tratamiento</label>
+                                                                    <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_res_trat" id="com_res_trat"></textarea>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <label class="floating-label-activo-sm">Comentario de la sesión</label>
+                                                                    <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_sesion" id="com_sesion"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
-                                                        <button type="button" class="btn btn-info"><i class="fas fa-save"></i> Guardar control Diabetes</button>
-                                                    </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
+                                                    <button type="button" class="btn btn-info"><i class="feather icon-save"></i> Guardar control Diabetes</button>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
+                                    <!--HIPERTENSIÓN-->
                                     <div class="tab-pane fade show" id="nutri_hipertension" role="tabpanel" aria-labelledby="nutri_hipertension_tab">
                                         <form>
-                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                <div class="form-row">
-                                                    <label class="form_fono">Fecha de control Hipertension</label>
-                                                    <script>
-                                                    date = new Date().toLocaleDateString();
-                                                    document.write(date);
-                                                    </script>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <h6 class="tit-gen form_fono d-inline ">Control Hipertensión</h6>
+                                                    <h6 class="tit-gen d-inline float-right">
+                                                        <script>
+                                                        date = new Date().toLocaleDateString();
+                                                        document.write(date);
+                                                        </script>
+                                                    </h6>
                                                 </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Presión Arterial</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Peso actual</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Variación</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
-                                                        <select class="form-control form-control-sm" name="" id="">
-                                                            <option value="AL">Si</option>
-                                                            <option value="LA">No</option>
-                                                            <option value="LA">Parcialmente</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Sesión N°</label>
-                                                        <input type="text" class="form-control form-control-sm" name="num_sesion" id="num_sesion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Trabajo en</label>
-                                                        <input type="text" class="form-control form-control-sm" name="trabajo_en" id="trabajo_en">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Colaboración</label>
-                                                        <input type="text" class="form-control form-control-sm" name="colaboracion" id="colaboracion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
-                                                        <select class="form-control form-control-sm" name="ob_log" id="ob_log">
-                                                            <option value="AL">Si</option>
-                                                            <option value="LA">No</option>
-                                                            <option value="LA">Parcialmente</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label"> Comentario y respuesta a tratamiento</label>
-                                                        <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_res_trat" id="com_res_trat"></textarea>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label">Comentario de la sesión</label>
-                                                        <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_sesion" id="com_sesion"></textarea>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Presión Arterial</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Peso actual</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Variación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
+                                                                    <select class="form-control form-control-sm" name="" id="">
+                                                                        <option value="AL">Si</option>
+                                                                        <option value="LA">No</option>
+                                                                        <option value="LA">Parcialmente</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Sesión N°</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="num_sesion" id="num_sesion">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Trabajo en</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="trabajo_en" id="trabajo_en">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Colaboración</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="colaboracion" id="colaboracion">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
+                                                                    <select class="form-control form-control-sm" name="ob_log" id="ob_log">
+                                                                        <option value="AL">Si</option>
+                                                                        <option value="LA">No</option>
+                                                                        <option value="LA">Parcialmente</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <label class="floating-label-activo-sm"> Comentario y respuesta a tratamiento</label>
+                                                                    <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_res_trat" id="com_res_trat"></textarea>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <label class="floating-label-activo-sm">Comentario de la sesión</label>
+                                                                    <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_sesion" id="com_sesion"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
-                                                        <button type="button" class="btn btn-info"><i class="fas fa-save"></i> Guardar control</button>
-                                                    </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
+                                                    <button type="button" class="btn btn-info"><i class="feather icon-save"></i> Guardar control</button>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
+                                    <!--DISLIPIDEMIAS-->
                                     <div class="tab-pane fade show" id="nutri_dislipidemias" role="tabpanel" aria-labelledby="nutri_dislipidemias_tab">
                                         <form>
-                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                <div class="form-row">
-                                                    <label class="form_fono">Fecha de control Dislipidemias</label>
-                                                    <script>
-                                                    date = new Date().toLocaleDateString();
-                                                    document.write(date);
-                                                    </script>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <h6 class="tit-gen form_fono d-inline ">Control Dislipidemias</h6>
+                                                    <h6 class="tit-gen d-inline float-right">
+                                                        <script>
+                                                        date = new Date().toLocaleDateString();
+                                                        document.write(date);
+                                                        </script>
+                                                    </h6>
                                                 </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Colesterol y trigic</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Colesterol y trigico actual</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Variación</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
-                                                        <select class="form-control form-control-sm" name="" id="">
-                                                            <option value="AL">Si</option>
-                                                            <option value="LA">No</option>
-                                                            <option value="LA">Parcialmente</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Sesión N°</label>
-                                                        <input type="text" class="form-control form-control-sm" name="num_sesion" id="num_sesion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Trabajo en</label>
-                                                        <input type="text" class="form-control form-control-sm" name="trabajo_en" id="trabajo_en">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Colaboración</label>
-                                                        <input type="text" class="form-control form-control-sm" name="colaboracion" id="colaboracion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
-                                                        <select class="form-control form-control-sm" name="ob_log" id="ob_log">
-                                                            <option value="AL">Si</option>
-                                                            <option value="LA">No</option>
-                                                            <option value="LA">Parcialmente</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label"> Comentario y respuesta a tratamiento</label>
-                                                        <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_res_trat" id="com_res_trat"></textarea>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label">Comentario de la sesión</label>
-                                                        <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_sesion" id="com_sesion"></textarea>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Colesterol y trigic</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Colesterol y trigico actual</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Variación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
+                                                                    <select class="form-control form-control-sm" name="" id="">
+                                                                        <option value="AL">Si</option>
+                                                                        <option value="LA">No</option>
+                                                                        <option value="LA">Parcialmente</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Sesión N°</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="num_sesion" id="num_sesion">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Trabajo en</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="trabajo_en" id="trabajo_en">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Colaboración</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="colaboracion" id="colaboracion">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
+                                                                    <select class="form-control form-control-sm" name="ob_log" id="ob_log">
+                                                                        <option value="AL">Si</option>
+                                                                        <option value="LA">No</option>
+                                                                        <option value="LA">Parcialmente</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <label class="floating-label-activo-sm"> Comentario y respuesta a tratamiento</label>
+                                                                    <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_res_trat" id="com_res_trat"></textarea>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <label class="floating-label-activo-sm">Comentario de la sesión</label>
+                                                                    <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_sesion" id="com_sesion"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
-                                                        <button type="button" class="btn btn-info"><i class="fas fa-save"></i> Guardar control</button>
-                                                    </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
+                                                    <button type="button" class="btn btn-info"><i class="feather icon-save"></i> Guardar control</button>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
+                                    <!--INSUFICIENCIA RENAL-->
                                     <div class="tab-pane fade show" id="nutri_irenal" role="tabpanel" aria-labelledby="nutri_irenal_tab">
                                         <form>
-                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                <div class="form-row">
-                                                    <label class="form_fono">Fecha de control insuf renal</label>
-                                                    <script>
-                                                    date = new Date().toLocaleDateString();
-                                                    document.write(date);
-                                                    </script>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <h6 class="tit-gen form_fono d-inline ">Control Insuficiencia Renal</h6>
+                                                    <h6 class="tit-gen d-inline float-right">
+                                                        <script>
+                                                        date = new Date().toLocaleDateString();
+                                                        document.write(date);
+                                                        </script>
+                                                    </h6>
                                                 </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Creatinina</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Peso actual</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Variación</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
-                                                        <select class="form-control form-control-sm" name="" id="">
-                                                            <option value="AL">Si</option>
-                                                            <option value="LA">No</option>
-                                                            <option value="LA">Parcialmente</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Sesión N°</label>
-                                                        <input type="text" class="form-control form-control-sm" name="num_sesion" id="num_sesion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Trabajo en</label>
-                                                        <input type="text" class="form-control form-control-sm" name="trabajo_en" id="trabajo_en">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Colaboración</label>
-                                                        <input type="text" class="form-control form-control-sm" name="colaboracion" id="colaboracion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
-                                                        <select class="form-control form-control-sm" name="ob_log" id="ob_log">
-                                                            <option value="AL">Si</option>
-                                                            <option value="LA">No</option>
-                                                            <option value="LA">Parcialmente</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label"> Comentario y respuesta a tratamiento</label>
-                                                        <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_res_trat" id="com_res_trat"></textarea>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label">Comentario de la sesión</label>
-                                                        <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_sesion" id="com_sesion"></textarea>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Creatinina</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Peso actual</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Variación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
+                                                                    <select class="form-control form-control-sm" name="" id="">
+                                                                        <option value="AL">Si</option>
+                                                                        <option value="LA">No</option>
+                                                                        <option value="LA">Parcialmente</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Sesión N°</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="num_sesion" id="num_sesion">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Trabajo en</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="trabajo_en" id="trabajo_en">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Colaboración</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="colaboracion" id="colaboracion">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
+                                                                    <select class="form-control form-control-sm" name="ob_log" id="ob_log">
+                                                                        <option value="AL">Si</option>
+                                                                        <option value="LA">No</option>
+                                                                        <option value="LA">Parcialmente</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <label class="floating-label-activo-sm"> Comentario y respuesta a tratamiento</label>
+                                                                    <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_res_trat" id="com_res_trat"></textarea>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <label class="floating-label-activo-sm">Comentario de la sesión</label>
+                                                                    <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_sesion" id="com_sesion"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
-                                                        <button type="button" class="btn btn-info"><i class="fas fa-save"></i> Guardar control</button>
-                                                    </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
+                                                    <button type="button" class="btn btn-info"><i class="feather icon-save"></i> Guardar control</button>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
+                                    <!--HIPERURICEMIA-->
                                     <div class="tab-pane fade show" id="nutri_hiperuric" role="tabpanel" aria-labelledby="nutri_hiperuric_tab">
                                         <form>
-                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                <div class="form-row">
-                                                    <label class="form_fono">Fecha de control hiperuric</label>
-                                                    <script>
-                                                    date = new Date().toLocaleDateString();
-                                                    document.write(date);
-                                                    </script>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <h6 class="tit-gen form_fono d-inline ">Control HIPERURICEMIA</h6>
+                                                    <h6 class="tit-gen d-inline float-right">
+                                                        <script>
+                                                        date = new Date().toLocaleDateString();
+                                                        document.write(date);
+                                                        </script>
+                                                    </h6>
                                                 </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Ac Úrico</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Peso actual</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Variación</label>
-                                                        <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
-                                                        <select class="form-control form-control-sm" name="" id="">
-                                                            <option value="AL">Si</option>
-                                                            <option value="LA">No</option>
-                                                            <option value="LA">Parcialmente</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Sesión N°</label>
-                                                        <input type="text" class="form-control form-control-sm" name="num_sesion" id="num_sesion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Trabajo en</label>
-                                                        <input type="text" class="form-control form-control-sm" name="trabajo_en" id="trabajo_en">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label">Colaboración</label>
-                                                        <input type="text" class="form-control form-control-sm" name="colaboracion" id="colaboracion">
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                        <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
-                                                        <select class="form-control form-control-sm" name="ob_log" id="ob_log">
-                                                            <option value="AL">Si</option>
-                                                            <option value="LA">No</option>
-                                                            <option value="LA">Parcialmente</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label"> Comentario y respuesta a tratamiento</label>
-                                                        <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_res_trat" id="com_res_trat"></textarea>
-                                                    </div>
-                                                    <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                        <label class="floating-label">Comentario de la sesión</label>
-                                                        <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_sesion" id="com_sesion"></textarea>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <div class="card-informacion">
+                                                        <div class="card-body">
+                                                            <div class="form-row">
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Ac Úrico</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Peso actual</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Variación</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="nombre_acompañante" id="nombre_acompañante">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
+                                                                    <select class="form-control form-control-sm" name="" id="">
+                                                                        <option value="AL">Si</option>
+                                                                        <option value="LA">No</option>
+                                                                        <option value="LA">Parcialmente</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Sesión N°</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="num_sesion" id="num_sesion">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Trabajo en</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="trabajo_en" id="trabajo_en">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">Colaboración</label>
+                                                                    <input type="text" class="form-control form-control-sm" name="colaboracion" id="colaboracion">
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-3 col-lg-3 col-xl-3">
+                                                                    <label class="floating-label-activo-sm">¿Objetivo logrado?</label>
+                                                                    <select class="form-control form-control-sm" name="ob_log" id="ob_log">
+                                                                        <option value="AL">Si</option>
+                                                                        <option value="LA">No</option>
+                                                                        <option value="LA">Parcialmente</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <label class="floating-label-activo-sm"> Comentario y respuesta a tratamiento</label>
+                                                                    <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_res_trat" id="com_res_trat"></textarea>
+                                                                </div>
+                                                                <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                                    <label class="floating-label-activo-sm">Comentario de la sesión</label>
+                                                                    <textarea type="text" class="form-control form-control-sm"  rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="com_sesion" id="com_sesion"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
-                                                        <button type="button" class="btn btn-info"><i class="fas fa-save"></i> Guardar control</button>
-                                                    </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center mb-3">
+                                                    <button type="button" class="btn btn-info"><i class="feather icon-save"></i> Guardar control</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -1262,66 +1344,71 @@
 
                     <!--HISTORICO CONTROLES ATENCIÓN -->
                     <div class="tab-pane fade" id="h_control" role="tabpanel" aria-labelledby="h_control-tab">
-                         <div class="row bg-white shadow-none rounded mx-1">
-                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div class="row">
-                                    <div class="col-md-12 mt-3 mb-0">
-                                        <h6 class="f-16 text-c-blue">Historico controles</h6>
-                                        <hr>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div style="overflow-x:auto;">
-                                        <table id="atenciones_previas" class="display table dt-responsive nowrap pb-4 table-sm" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center align-middle">Fecha</th>
-                                                    <th class="text-center align-middle">Sesion N°</th>
-                                                    <th class="text-center align-middle">S. Faltantes</th>
-                                                    <th class="text-center align-middle">Trabajo en</th>
-                                                    <th class="text-center align-middle">Objetivo Logrado?</th>
-                                                    <th class="text-center align-middle">Trab. En:</th>
-                                                    <th class="text-center align-middle">Ver doc</th>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                <h6 class="text-c-blue f-20">Historial de controles</h6>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                <div class="card-informacion">
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                <div style="overflow-x:auto;">
+                                                    <table id="atenciones_previas" class="display table dt-responsive nowrap pb-4 table-sm" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center align-middle">Fecha</th>
+                                                                <th class="text-center align-middle">Sesion N°</th>
+                                                                <th class="text-center align-middle">S. Faltantes</th>
+                                                                <th class="text-center align-middle">Trabajo en</th>
+                                                                <th class="text-center align-middle">¿Objetivo Logrado?</th>
+                                                                <th class="text-center align-middle">Trab. En:</th>
+                                                                <th class="text-center align-middle">Ver doc</th>
 
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="text-center align-middle">23/03/2020</td>
-                                                    <td class="text-center align-middle">1</td>
-                                                    <td class="text-center align-middle">9</td>
-                                                    <td class="text-center align-middle">Hombro Der</td>
-                                                    <td class="text-center align-middle">Si</td>
-                                                    <td class="text-center align-middle">Ultrasonido</td>
-                                                    <td class="text-center align-middle">
-                                                        <!-- <button type="button" class="btn btn-danger btn-sm btn-icon"  data-toggle="tooltip" data-placement="top" title="ver examenes" @if (isset($f->id)) onclick="buscar_examenes({{ $f->id }});" @endif><i class="feather icon-edit"></i></button>-->
-                                                        <a class="badge badge-light-success" @if (isset($f->id)) onclick="buscar_examenes({{ $f->id }});" @endif><i class="feather icon-activity"></i> Ver</a>
-                                                        <!--<button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="ver archivos" @if (isset($f->id)) onclick="buscar_archivos({{ $f->id }});" @endif> <i class="feather icon-edit"></i> </button>-->
-                                                        <a class="badge badge-light-purple" @if (isset($f->id)) onclick="buscar_archivos({{ $f->id }});" @endif><i class="feather icon-folder"></i> Ver</a>
-                                                        {{--  <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#m_consultaant">  --}}
-                                                        <!--<button type="button" style="border-radius: 15px;" class="btn btn-info btn-sm"  @if (isset($f->id)) onclick="buscar_ficha_atencion({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</button>-->
-                                                        <a class="badge badge-light-info" @if (isset($f->id)) onclick="buscar_ficha_atencion({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-center align-middle">30/03/2020</td>
-                                                    <td class="text-center align-middle">2</td>
-                                                    <td class="text-center align-middle">8</td>
-                                                    <td class="text-center align-middle">Hombro Der</td>
-                                                    <td class="text-center align-middle">Si</td>
-                                                    <td class="text-center align-middle">Ultrasonido</td>
-                                                    <td class="text-center align-middle">
-                                                        <!-- <button type="button" class="btn btn-danger btn-sm btn-icon"  data-toggle="tooltip" data-placement="top" title="ver examenes" @if (isset($f->id)) onclick="buscar_examenes({{ $f->id }});" @endif><i class="feather icon-edit"></i></button>-->
-                                                        <a class="badge badge-light-success" @if (isset($f->id)) onclick="buscar_examenes({{ $f->id }});" @endif><i class="feather icon-activity"></i> Ver</a>
-                                                        <!--<button type="button" class="btn btn-success btn-icon" data-toggle="tooltip" data-placement="top" title="ver archivos" @if (isset($f->id)) onclick="buscar_archivos({{ $f->id }});" @endif> <i class="feather icon-edit"></i> </button>-->
-                                                        <a class="badge badge-light-purple" @if (isset($f->id)) onclick="buscar_archivos({{ $f->id }});" @endif><i class="feather icon-folder"></i> Ver</a>
-                                                        {{--  <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#m_consultaant">  --}}
-                                                        <!--<button type="button" style="border-radius: 15px;" class="btn btn-info btn-sm"  @if (isset($f->id)) onclick="buscar_ficha_atencion({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</button>-->
-                                                        <a class="badge badge-light-info" @if (isset($f->id)) onclick="buscar_ficha_atencion({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="text-center align-middle">23/03/2020</td>
+                                                                <td class="text-center align-middle">1</td>
+                                                                <td class="text-center align-middle">9</td>
+                                                                <td class="text-center align-middle">Hombro Der</td>
+                                                                <td class="text-center align-middle">Si</td>
+                                                                <td class="text-center align-middle">Ultrasonido</td>
+                                                                <td class="text-center align-middle">
+                                                                    <!-- <button type="button" class="btn btn-danger btn-sm btn-icon"  data-toggle="tooltip" data-placement="top" title="ver examenes" @if (isset($f->id)) onclick="buscar_examenes({{ $f->id }});" @endif><i class="feather icon-edit"></i></button>-->
+                                                                    <a class="badge badge-light-success" @if (isset($f->id)) onclick="buscar_examenes({{ $f->id }});" @endif><i class="feather icon-activity"></i> Ver</a>
+                                                                    <!--<button type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="ver archivos" @if (isset($f->id)) onclick="buscar_archivos({{ $f->id }});" @endif> <i class="feather icon-edit"></i> </button>-->
+                                                                    <a class="badge badge-light-purple" @if (isset($f->id)) onclick="buscar_archivos({{ $f->id }});" @endif><i class="feather icon-folder"></i> Ver</a>
+                                                                    {{--  <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#m_consultaant">  --}}
+                                                                    <!--<button type="button" style="border-radius: 15px;" class="btn btn-info btn-sm"  @if (isset($f->id)) onclick="buscar_ficha_atencion({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</button>-->
+                                                                    <a class="badge badge-light-info" @if (isset($f->id)) onclick="buscar_ficha_atencion({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</a>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="text-center align-middle">30/03/2020</td>
+                                                                <td class="text-center align-middle">2</td>
+                                                                <td class="text-center align-middle">8</td>
+                                                                <td class="text-center align-middle">Hombro Der</td>
+                                                                <td class="text-center align-middle">Si</td>
+                                                                <td class="text-center align-middle">Ultrasonido</td>
+                                                                <td class="text-center align-middle">
+                                                                    <!-- <button type="button" class="btn btn-danger btn-sm btn-icon"  data-toggle="tooltip" data-placement="top" title="ver examenes" @if (isset($f->id)) onclick="buscar_examenes({{ $f->id }});" @endif><i class="feather icon-edit"></i></button>-->
+                                                                    <a class="badge badge-light-success" @if (isset($f->id)) onclick="buscar_examenes({{ $f->id }});" @endif><i class="feather icon-activity"></i> Ver</a>
+                                                                    <!--<button type="button" class="btn btn-success btn-icon" data-toggle="tooltip" data-placement="top" title="ver archivos" @if (isset($f->id)) onclick="buscar_archivos({{ $f->id }});" @endif> <i class="feather icon-edit"></i> </button>-->
+                                                                    <a class="badge badge-light-purple" @if (isset($f->id)) onclick="buscar_archivos({{ $f->id }});" @endif><i class="feather icon-folder"></i> Ver</a>
+                                                                    {{--  <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#m_consultaant">  --}}
+                                                                    <!--<button type="button" style="border-radius: 15px;" class="btn btn-info btn-sm"  @if (isset($f->id)) onclick="buscar_ficha_atencion({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</button>-->
+                                                                    <a class="badge badge-light-info" @if (isset($f->id)) onclick="buscar_ficha_atencion({{ $f->id }});" @endif><i class="feather icon-file-text"></i> Ver</a>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1385,6 +1472,26 @@ function indicadores_nutri() {
 }
 
 </script>
+<script>
+    	/** MENSAJE*/
+            /** CARGAR mensaje */
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio el resto es  opcional.');
+            $('#mensaje_ficha').show();
+            setTimeout(function(){
+                $('#mensaje_ficha').hide();
+            }, 5000);
+
+            @if($fichas->count()>0)
+                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+            @else
+                $('#mensaje_historias').html(' Primera consulta del paciente. ');
+            @endif
+                $('#mensaje_historias').show();
+                setTimeout(function(){
+                    $('#mensaje_historias').hide();
+                }, 6000);
+
+</script>
 
  <!--ALERTA DE ATENCION-->
     <script>
@@ -1394,5 +1501,6 @@ function indicadores_nutri() {
         });
     }, 5000);
 @endsection
+
 
 

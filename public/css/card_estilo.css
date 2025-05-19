@@ -37,7 +37,7 @@
   width: 100%;
   text-align: left;
   outline: none;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   transition: 0.4s;
 }
 
@@ -45,7 +45,7 @@
   content: "\2212";
   font-weight: 600;
   float: right;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   margin-left: 5px;
 }
 
@@ -60,7 +60,7 @@
   width: 100%;
   text-align: left;
   outline: none;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   transition: 0.4s;
 }
 
@@ -68,7 +68,7 @@
   content: '\002B';
   font-weight: 600;
   float: right;
- font-size: 0.85rem;
+  font-size: 0.95rem;
   margin-left: 5px;
 }
 

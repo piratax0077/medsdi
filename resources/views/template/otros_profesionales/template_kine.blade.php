@@ -21,8 +21,8 @@
         <!-- data tables css -->
         <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
-        <!-- fileupload-custom css -->
-        <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}?t={{ time() }}">
+        {{--  <!-- fileupload-custom css -->
+        <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.min.css') }}?t={{ time() }}">  --}}
 
         <!--Accordion-->
         <link rel="stylesheet" type="text/css" href="{{ asset('css/accordion.css') }}?t={{ time() }}">
@@ -58,6 +58,7 @@
         <link rel="stylesheet"  href="{{ asset('css\plugins\select2.min.css') }}">
 
         <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+
         {{--  /** agregar css */  --}}
         <style>
             .ui-front {
@@ -68,7 +69,7 @@
         </style>
     </head>
     <body>
-        @include('template.pediatria.header')
+        @include('template.profesional.header')
         @include('template.profesional.menu')
 
         @yield('Content')
@@ -139,9 +140,9 @@
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
-        {{-- autocomplete
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
-        <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+		{{-- autocomplete
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+		<script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
 
         <!-- select2 Js -->
@@ -149,10 +150,13 @@
         <!-- form-select-custom Js -->
         <script src="{{ asset('js/pages/form-select-custom.js') }}"></script>
         <!-- select2 css -->
+
         <!--Tablas y Toggle atención ginecobstetrica-->
         <script src="{{ asset('js/atencion_especialidades.js') }}"></script>
+
         <!--Tooltips-->
         <script src="{{ asset('js/tooltip_atencion_medica.js') }}"></script>
+
         {{--  @include('template.templateAutorizacion')  --}}
 
 
@@ -171,7 +175,7 @@
 
         <script src="{{ asset('js/atencion_pediatria.js') }}?upd={{ random_int(1111,9999) }}"></script>
 
-        <!-- rut -->
+		<!-- rut -->
         <script src="{{ asset('js/rut.js') }}"></script>
 
         <!-- funciones generales -->

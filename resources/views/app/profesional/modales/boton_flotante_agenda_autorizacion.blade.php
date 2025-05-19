@@ -81,10 +81,12 @@
 <!-- BOTÓN FLOTANTE AUTORIZACION (AUTORIZACION FMU) -->
 
 
-        @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
-            <button class="btn btn-agenda-autorizacion-fmu btn-info btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-file f-12"></i> FMU</button>
-        @else
-            <button class="btn btn-agenda-autorizacion-fmu btn-danger btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-file f-12"></i> FMU</button>
+        @if (Auth::user()->id == 3)
+            @if(!empty(session('fmu_token')) && session('fmu_estado') == 1)
+                <button class="btn btn-agenda-autorizacion-fmu btn-info btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-file f-12"></i> FMU</button>
+            @else
+                <button class="btn btn-agenda-autorizacion-fmu btn-danger btn-sm shadow-sm f-12" type="button" onclick="abrir_autorizacion_fmu();"><i class="feather feather icon-file f-12"></i> FMU</button>
+            @endif
         @endif
 
 

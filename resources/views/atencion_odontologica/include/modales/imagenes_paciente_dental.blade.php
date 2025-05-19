@@ -4,13 +4,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modal_agregar_imagenes_dental_pacienteLabel">Nuevas imagenes Paciente</h5>
-          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="dropzone" id="nuevas-imagenes-dental-oral-paciente" action="{{ route('profesional.imagen.carga') }}" method="post"  ></div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
           <button type="button" class="btn btn-primary">Subir</button>
         </div>
       </div>

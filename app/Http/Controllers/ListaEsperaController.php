@@ -305,7 +305,7 @@ class ListaEsperaController extends Controller
                 $direccion->save();
 
                 $paciente = new Paciente();
-                $paciente->token = md5(uniqid());
+				$paciente->token = md5(uniqid());
                 $paciente->rut = $request->rut;
                 $paciente->nombres = $request->nombres;
                 $paciente->apellido_uno = $request->apellido_uno;

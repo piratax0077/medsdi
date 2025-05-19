@@ -135,6 +135,8 @@ class AntecedenteController extends Controller
         $error = array();
         $campos_requeridos = 0;
 
+        $request->nombre = $request->nombre ?? $request->procedimiento;
+
         $registro = new Antecedente();
 
         /* VALIDACION CAMPOS */

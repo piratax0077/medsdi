@@ -1,14 +1,14 @@
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class PresentacionDosis extends Model
-{
-    use HasFactory;
-
-    protected $table = 'presentaciones_dosis';
-    protected $primaryKey = 'id';
-}
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class PresentacionDosis extends Model
+{
+    use HasFactory;
+
+    protected $table = 'presentaciones_dosis';
+    protected $primaryKey = 'id';
+}

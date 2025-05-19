@@ -1,8 +1,8 @@
 <div id="m_consultaant" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_consultaantLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-info">
-                <h5 class="modal-title text-white" id="m_consultaantLabel" style="font-size: 1.3rem; color: #3366CC;" onclick="$('#m_consultaant').modal('hide'); ">Datos de Consulta de: </h5>
+            <div class="modal-header bg-blue-light">
+                <h5 class="modal-title text-c-blue" id="m_consultaantLabel" style="font-size: 1.3rem; color: #3366CC;" onclick="$('#m_consultaant').modal('hide'); ">Ficha clinica (dani aca) </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

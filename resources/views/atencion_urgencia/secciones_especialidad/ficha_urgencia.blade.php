@@ -1,7 +1,7 @@
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 py-40 px-0">
         <div class="row">
-
+            
             {{--  @include('general.secciones_ficha.signos_vitales_ingreso_urgencia')  --}}
         </div>
     </div>
@@ -33,16 +33,12 @@
                             </div>
                             <!--ATENCION ENFERMERIA-->
                             @include('general.secciones_ficha.control_enfermeria')
-
                             <!--FORMULARIO / MENOR DE EDAD-->
                             @include('atencion_medica.generales.seccion_menor')
-
                             <!--ATENCION MEDICA URGENCIA (MOT.CONSULTA)-->
                             @include('general.secciones_ficha.urgencia.evoluc_medica_urgencia')
-
                             <!--CIRUGIA GENERAL-->
                             {{--  @include('general.secciones_ficha.cirugia_general.cirugia_adulto')  --}}
-
                             <!-- HOSPITALIZAR -->
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-a">
@@ -86,7 +82,7 @@
                     <!--CIERRE: ATENCIÓN ESPECIALIDAD GENERAL-->
                 </div>
             </form>
-
+           
             <!--GUARDAR O IMPRIMIR FICHA-->
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="row mb-3">

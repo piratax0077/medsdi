@@ -43,8 +43,7 @@
         var password_confirmacion_registro = $('#c_pass_password_confirmacion_registro').val();
 
         // var url = '{{ route('perfil.cambio_contrasena') }}';
-        // var url = '{{ route('paciente.perfil.contrasena.liberar.bienvenida') }}';
-        var url = "{{ route('perfil.cambio_contrasena') }}";
+        var url = '{{ route('paciente.perfil.contrasena.liberar.bienvenida') }}';
 
         $.ajax({
             url: url,

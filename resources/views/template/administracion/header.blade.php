@@ -1,54 +1,41 @@
 <header class="navbar pcoded-header navbar-expand-lg navbar-light header-blue">
-    <div class="m-header pb-3">
-        <a class="mobile-menu" id="mobile-collapse"><span></span></a>
-        <a href="#!" class="b-brand">
-            <img src="../assets/images/logo_pais.png" alt="" class="logo" height="45px">
-        </a>
-        <a href="#!" class="mob-toggler">
-            <i class="feather icon-more-vertical"></i>
-        </a>
-    </div>
-    <div class="collapse navbar-collapse pb-3">
-        <ul class="navbar-nav ml-auto">
-            <li>
-                <div class="dropdown drp-user pt-3">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Cambiar escritorio"
-                        data-placement="button">
-                        <i class="feather icon-refresh-cw fa-2x"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right profile-notification">
-                        <div class="pro-head">
-                            <span>Cambiar escritorio</span>
-                        </div>
-                        <ul></ul>
-                        <ul class="pro-body">
-                            <li><a href="#" class="dropdown-item"><i class="feather icon-user"></i>Escritorio
-                                    paciente</a></li>
-                            <li><a href="#" class="dropdown-item"><i class="feather icon-user"></i>Escritorio
-                                    profesional</a></li>
-                            <li><a href="#" class="dropdown-item"><i class="feather icon-user"></i>Escritorio
-                                    Asistente</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="dropdown drp-user pt-3">
+	<div class="m-header">
+			<a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
+			<a href="#!" class="b-brand">
+				<img src="{{ asset('images/logo_pais.png') }}" alt="" class="logo" height="45px">
+			</a>
+			<a href="#!" class="mob-toggler">
+				<i class="feather icon-more-vertical"></i>
+			</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="navbar-nav ml-auto">
+			</li>
+			<li>
+                <div class="dropdown drp-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="feather icon-user fa-2x"></i>
+                        <i class="feather icon-user "></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right profile-notification">
                         <div class="pro-head">
-                            <span>Nombre y Apellido</span>
+                            <span>{{  @Auth::user()->name  }}</span>
                         </div>
-                        <ul></ul>
+                        {{--  <ul></ul>  --}}
                         <ul class="pro-body">
-                            <li><a href="cerrar.php" class="dropdown-item"><i class="feather icon-log-out"></i> Cerrar
-                                    sesión</a></li>
+                            <li>
+                                <form action="{{ ROUTE('logout') }}" method="post" id="closeSession">
+                                    @csrf
+                                    <a data-toggle="tooltip" title="Cerrar sesión" class="text-danger" href="javascript:{}" onclick="document.getElementById('closeSession').submit();">
+                                        <i class="feather icon-power"></i> Cerrar sesión
+                                    </a>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </li>
-        </ul>
-    </div>
+		</ul>
+	</div>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/7066bc9f2e.js" crossorigin="anonymous"></script>
 </header>

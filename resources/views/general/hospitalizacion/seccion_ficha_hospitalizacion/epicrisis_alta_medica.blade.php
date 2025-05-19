@@ -51,14 +51,14 @@
 
                                 @if (isset($epicrisis_alta_medica->inicio_hospitalizacion))
                                     <div class="form-group col-md-4">
-                                        <label class="floating-label-activo-sm">Desde</label>
+                                        <label class="floating-label-activo-sm">Ingreso</label>
                                         <input type="date" class="form-control form-control-sm"
                                             name="inicio_hospitalizacion" id="inicio_hospitalizacion"
                                             value="{{ $epicrisis_alta_medica->inicio_hospitalizacion }}">
                                     </div>
                                 @else
                                     <div class="form-group col-md-4">
-                                        <label class="floating-label-activo-sm">Desde</label>
+                                        <label class="floating-label-activo-sm">Egreso</label>
                                         <input type="date" class="form-control form-control-sm"
                                             name="inicio_hospitalizacion" id="inicio_hospitalizacion">
                                     </div>
@@ -81,13 +81,13 @@
 
                                 @if (isset($epicrisis_alta_medica->inicio_hospitalizacion))
                                     <div class="form-group col-md-4">
-                                        <label class="floating-label">Total de días</label>
+                                        <label class="floating-label-activo-sm">Total de días</label>
                                         <input type="text" class="form-control form-control-sm" name="dias"
                                             id="dias">
                                     </div>
                                 @else
                                     <div class="form-group col-md-4">
-                                        <label class="floating-label">Total de días</label>
+                                        <label class="floating-label-activo-sm">Total de días</label>
                                         <input type="text" class="form-control form-control-sm" name="dias"
                                             id="dias">
                                     </div>
@@ -101,7 +101,7 @@
                             <div class="form-row">
                                 @if (isset($epicrisis_alta_medica))
                                     <div class="form-group col-md-6">
-                                        <label class="floating-label">Diagnósticos de ingreso</label>
+                                        <label class="floating-label-activo-sm">Diagnósticos de ingreso</label>
                                         <input class="form-control form-control-sm"
                                             name="diagnostico_ingreso_epicrisis_alta_medica"
                                             id="diagnostico_ingreso_epicrisis_alta_medica"
@@ -109,7 +109,7 @@
                                     </div>
                                 @else
                                     <div class="form-group col-md-6">
-                                        <label class="floating-label">Diagnósticos de ingreso</label>
+                                        <label class="floating-label-activo-sm">Diagnósticos de ingreso</label>
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=2;"
                                             name="diagnostico_ingreso_epicrisis_alta_medica"
                                             id="diagnostico_ingreso_epicrisis_alta_medica"></textarea>
@@ -119,7 +119,7 @@
 
                                 @if (isset($epicrisis_alta_medica))
                                     <div class="form-group col-md-6">
-                                        <label class="floating-label">Diagnósticos de alta</label>
+                                        <label class="floating-label-activo-sm">Diagnósticos de alta</label>
                                         <input class="form-control form-control-sm"
                                             name="diagnostico_alta_epicrisis_alta_medica"
                                             id="diagnostico_alta_epicrisis_alta_medica"
@@ -127,7 +127,7 @@
                                     </div>
                                 @else
                                     <div class="form-group col-md-6">
-                                        <label class="floating-label">Diagnósticos de alta</label>
+                                        <label class="floating-label-activo-sm">Diagnósticos de alta</label>
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=2;"
                                             name="diagnostico_alta_epicrisis_alta_medica"
                                             id="diagnostico_alta_epicrisis_alta_medica"></textarea>
@@ -142,7 +142,7 @@
 
                                 @if (isset($epicrisis_alta_medica))
                                     <div class="form-group col-md-4">
-                                        <label class="floating-label">Tratamientos</label>
+                                        <label class="floating-label-activo-sm">Tratamientos</label>
                                         <input class="form-control form-control-sm"
                                             name="tratamiento_cirugia_epicrisis_alta_medica"
                                             id="tratamiento_cirugia_epicrisis_alta_medica"
@@ -150,7 +150,7 @@
                                     </div>
                                 @else
                                     <div class="form-group col-md-4">
-                                        <label class="floating-label">Tratamientos</label>
+                                        <label class="floating-label-activo-sm">Tratamientos</label>
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=2;"
                                             name="tratamiento_cirugia_epicrisis_alta_medica"
                                             id="tratamiento_cirugia_epicrisis_alta_medica"></textarea>
@@ -159,7 +159,7 @@
 
                                 @if (isset($epicrisis_alta_medica))
                                     <div class="form-group col-md-4">
-                                        <label class="floating-label">Procedimientos quirúrgicos</label>
+                                        <label class="floating-label-activo-sm">Procedimientos quirúrgicos</label>
                                         <input class="form-control form-control-sm"
                                             name="procedimiento_quirurgico_cirugia_epicrisis_alta_medica"
                                             id="procedimiento_quirurgico_cirugia_epicrisis_alta_medica"
@@ -167,7 +167,7 @@
                                     </div>
                                 @else
                                     <div class="form-group col-md-4">
-                                        <label class="floating-label">Procedimientos quirúrgicos</label>
+                                        <label class="floating-label-activo-sm">Procedimientos quirúrgicos</label>
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=2;"
                                             name="procedimiento_quirurgico_cirugia_epicrisis_alta_medica"
                                             id="procedimiento_quirurgico_cirugia_epicrisis_alta_medica"></textarea>
@@ -177,7 +177,7 @@
 
                                 @if (isset($epicrisis_alta_medica))
                                     <div class="form-group col-md-4">
-                                        <label class="floating-label">Otros procedimientos y/o
+                                        <label class="floating-label-activo-sm">Otros procedimientos y/o
                                             tratamientos</label>
                                         <input class="form-control form-control-sm"
                                             name="otro_procedimiento_tratamiento_cirugia_epicrisis_alta_medica"
@@ -186,7 +186,7 @@
                                     </div>
                                 @else
                                     <div class="form-group col-md-4">
-                                        <label class="floating-label">Otros procedimientos y/o
+                                        <label class="floating-label-activo-sm">Otros procedimientos y/o
                                             tratamientos</label>
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=2;"
                                             name="otro_procedimiento_tratamiento_cirugia_epicrisis_alta_medica"
@@ -202,7 +202,7 @@
 
                                 @if (isset($epicrisis_alta_medica))
                                     <div class="form-group col-md-6">
-                                        <label class="floating-label">Tratamientos</label>
+                                        <label class="floating-label-activo-sm">Tratamientos</label>
                                         <input class="form-control form-control-sm"
                                             name="tratamiento_control_cirugia_epicrisis_alta_medica"
                                             id="tratamiento_control_cirugia_epicrisis_alta_medica"
@@ -220,7 +220,7 @@
 
                                 @if (isset($epicrisis_alta_medica))
                                     <div class="form-group col-md-6">
-                                        <label class="floating-label">Procedimientos quirúrgicos</label>
+                                        <label class="floating-label-activo-sm">Procedimientos quirúrgicos</label>
                                         <input class="form-control form-control-sm"
                                             name="procedimiento_control_cirugia_epicrisis_alta_medica"
                                             id="procedimiento_control_cirugia_epicrisis_alta_medica"
@@ -228,7 +228,7 @@
                                     </div>
                                 @else
                                     <div class="form-group col-md-6">
-                                        <label class="floating-label">Procedimientos quirúrgicos</label>
+                                        <label class="floating-label-activo-sm">Procedimientos quirúrgicos</label>
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=2;"
                                             name="procedimiento_control_cirugia_epicrisis_alta_medica"
                                             id="procedimiento_control_cirugia_epicrisis_alta_medica"></textarea>
@@ -258,7 +258,7 @@
 
                                 @if (isset($epicrisis_alta_medica))
                                     <div class="form-group col-md-8">
-                                        <label class="floating-label">Indicaciones al alta</label>
+                                        <label class="floating-label-activo-sm">Indicaciones al alta</label>
                                         <input class="form-control form-control-sm"
                                             name="indicaciones_alta_epicrisis_alta_medica"
                                             id="indicaciones_alta_epicrisis_alta_medica"
@@ -266,7 +266,7 @@
                                     </div>
                                 @else
                                     <div class="form-group col-md-8">
-                                        <label class="floating-label">Indicaciones al alta</label>
+                                        <label class="floating-label-activo-sm">Indicaciones al alta</label>
                                         <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=4" onblur="this.rows=2;"
                                             name="indicaciones_alta_epicrisis_alta_medica"
                                             id="indicaciones_alta_epicrisis_alta_medica"></textarea>

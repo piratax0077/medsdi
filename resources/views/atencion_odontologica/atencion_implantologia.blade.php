@@ -446,9 +446,9 @@
                                     var clase = 'bg-danger';
                                 }
                                 if (odonto.estado == 0) {
-                                    var estado = 'PENDIENTE';
-                                } else {
                                     var estado = 'TERMINADO';
+                                } else {
+                                    var estado = 'PENDIENTE';
                                 }
                                 // Agregar una nueva fila a la tabla
                                 let rowNode = table.row.add([
@@ -465,48 +465,8 @@
                                 $(rowNode).addClass('text-center align-middle status-circle');
                             }
 
-                        });
-
-                        $('#contenedor_todos').empty();
-                        todos.forEach(t => {
-                            if (t.presupuesto == 1) {
-                                $('#contenedor_todos').append(`
-                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div class="card-informacion">
-                                                <div class="card-body pb-0">
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-6">
-                                                            <label class="floating-label-activo-sm">${t.localizacion}</label>
-                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                        </div>
-                                                        <div class="form-group col-md-6 fill">
-                                                            <label class="floating-label-activo-sm">Prestación</label>
-                                                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${t.diagnostico_tratamiento}">
-                                                        </div>
-                                                        <div class="form-group col-md-4 fill">
-                                                            <label class="floating-label-activo-sm">Sub-Total</label>
-                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(t.valor)}">
-                                                        </div>
-                                                        <div class="form-group col-sm-12 col-md-3">
-                                                            <label class="floating-label-activo-sm">Descuento</label>
-                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                        </div>
-                                                        <div class="form-group col-md-4 fill">
-                                                            <label class="floating-label-activo-sm">Total
-                                                                prestación</label>
-                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(t.valor)}">
-                                                        </div>
-                                                        <div class="form-group col-md-1 fill">
-                                                            <button type="button" class="btn btn-danger btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral', this)"><i class="feather icon-x"></i> </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                    </div>`
-                                );
-                            }
-                        });
-                    }
+                            });
+                }
 
                     $('#tratamiento_presupuesto tbody').empty();
                     let presupuesto = resp.presupuesto;
@@ -766,9 +726,9 @@
                                         var clase = 'bg-danger';
                                     }
                                     if (odonto.estado == 0) {
-                                        var estado = 'PENDIENTE';
-                                    } else {
                                         var estado = 'TERMINADO';
+                                    } else {
+                                        var estado = 'PENDIENTE';
                                     }
                                     // Agregar una nueva fila a la tabla
                                     let rowNode = table.row.add([
@@ -786,56 +746,17 @@
                                 }
 
                             });
-                            $('#contenedor_todos').empty();
-                            todos.forEach(t => {
-                                if (t.presupuesto == 1) {
-                                    $('#contenedor_todos').append(`
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                <div class="card-informacion">
-                                                    <div class="card-body pb-0">
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-6">
-                                                                <label class="floating-label-activo-sm">${t.localizacion}</label>
-                                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                            </div>
-                                                            <div class="form-group col-md-6 fill">
-                                                                <label class="floating-label-activo-sm">Prestación</label>
-                                                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${t.diagnostico_tratamiento}">
-                                                            </div>
-                                                            <div class="form-group col-md-4 fill">
-                                                                <label class="floating-label-activo-sm">Sub-Total</label>
-                                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(t.valor)}">
-                                                            </div>
-                                                            <div class="form-group col-sm-12 col-md-3">
-                                                                <label class="floating-label-activo-sm">Descuento</label>
-                                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
-                                                            </div>
-                                                            <div class="form-group col-md-4 fill">
-                                                                <label class="floating-label-activo-sm">Total
-                                                                    prestación</label>
-                                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(t.valor)}">
-                                                            </div>
-                                                            <div class="form-group col-md-1 fill">
-                                                                <button type="button" class="btn btn-danger btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral', this)"><i class="feather icon-x"></i> </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                        </div>`
-                                    );
-                                }
-                            });
-
-                        }
 
                     }
 
-                },
-                error: function(error) {
-                    console.log(error.responseText);
                 }
-            });
-        }
+
+            },
+            error: function(error){
+                console.log(error.responseText);
+            }
+        });
+    }
 
         function eliminar_odontograma(id) {
             swal({

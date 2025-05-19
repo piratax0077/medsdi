@@ -509,44 +509,44 @@
             }).replace(/\./g, ',').replace(/,/g, '.');
         };
 
-        function sacar_de_presupuesto(id, tipo = null, elemento = null) {
-            let url = "{{ ROUTE('dental.sacar_tratamiento_presupuesto') }}";
-            let data = {
-                id: id,
-                tipo: tipo,
-                _token: "{{ csrf_token() }}"
-            }
-            console.log(data);
-            $.ajax({
-                type: 'post',
-                url: url,
-                data: data,
-                success: function(resp) {
-                    console.log(resp);
-                    if (tipo == null) {
-                        if (resp.status == 1) {
-                            swal({
-                                icon: 'success',
-                                title: 'Info',
-                                text: resp.mensaje
-                            });
-                            let odontograma = resp.odontograma_paciente;
-                            let html = '';
-                            odontograma.forEach(function(odonto) {
-                                html += '<tr>';
-                                html += '<td>' + odonto.fecha + '</td>';
-                                html += '<td>' + odonto.tratamiento + '</td>';
-                                html += '<td>' + odonto.caras + '</td>';
-                                html += '<td>' + odonto.pieza + '</td>';
-                                html += '<td>' + odonto.diagnostico + '</td>';
-                                html += '<td>' + formatoMoneda(formatoMoneda(odonto.valor)) + '</td>';
-                                // html += '<td>';
-                                // html += '<button type="button" class="btn btn-danger" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
-                                // if(odonto.presupuesto == 0){
-                                //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
-                                // }else{
-                                //     html += '<button type="button" class="btn btn-danger" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="feather icon-x"></i>Sacar de presupuesto</button>';
-                                // }
+    function sacar_de_presupuesto(id, tipo = null){
+        let url = "{{ ROUTE('dental.sacar_tratamiento_presupuesto') }}";
+        let data = {
+            id: id,
+            tipo:tipo,
+             _token: "{{ csrf_token() }}"
+        }
+        console.log(data);
+        $.ajax({
+            type:'post',
+            url: url,
+            data: data,
+            success: function(resp){
+                console.log(resp);
+                if(tipo == null){
+                    if(resp.status == 1){
+                        swal({
+                            icon:'success',
+                            title:'Info',
+                            text: resp.mensaje
+                        });
+                        let odontograma = resp.odontograma_paciente;
+                        let html = '';
+                        odontograma.forEach(function(odonto){
+                            html += '<tr>';
+                            html += '<td>'+odonto.fecha+'</td>';
+                            html += '<td>'+odonto.tratamiento+'</td>';
+                            html += '<td>'+odonto.caras+'</td>';
+                            html += '<td>'+odonto.pieza+'</td>';
+                            html += '<td>'+odonto.diagnostico+'</td>';
+                            html += '<td>'+formatoMoneda(formatoMoneda(odonto.valor))+'</td>';
+                            // html += '<td>';
+                            // html += '<button type="button" class="btn btn-danger-light-c btn-sm" onclick="eliminar_odontograma('+odonto.id+')"><i class="feather icon-x"></i>Eliminar</button>';
+                            // if(odonto.presupuesto == 0){
+                            //     html += '<button type="button" class="btn btn-primary btn-sm" onclick="cargar_a_presupuesto('+odonto.id+')"><i class="fas fa-save"></i>Cargar a presupuesto</button>';
+                            // }else{
+                            //     html += '<button type="button" class="btn btn-danger-light-c btn-sm" onclick="sacar_de_presupuesto('+odonto.id+')"><i class="feather icon-x"></i>Sacar de presupuesto</button>';
+                            // }
 
                                 // html += '</td>';
                                 // Checkbox para seleccionar el odontograma

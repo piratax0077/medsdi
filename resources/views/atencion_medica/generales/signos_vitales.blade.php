@@ -16,7 +16,9 @@
                         @else
                         <label class="floating-label-activo-sm">Tº</label>
                         <input type="text" class="form-control form-control-sm" name="temperatura" id="temperatura" value="{!! old('temperatura') !!}">
+                        
                         @endif
+
                     </div>
                     <div class="form-group col-md-1">
                         @if (isset($fichaAtencion) && $fichaAtencion->pulso != null)

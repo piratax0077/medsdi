@@ -23,6 +23,8 @@ use App\Models\DetalleReceta;
 use App\Models\DiagnosticoCie;
 use App\Models\DiagnosticosDental;
 use App\Models\DiagnosticosDentalProfesional;
+use App\Imports\DiagnosticosPsicologicosImport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Direccion;
 use App\Models\Empresas;
 use App\Models\EmpresasConvenios;
@@ -569,6 +571,11 @@ class EscritorioProfesional extends Controller
                 if($profesional->id_especialidad == 4 && $profesional->id_tipo_especialidad == 55)
                 {
                     /** profesional de laboratorio */
+                    $direccion_escritorio = 'app.laboratorio.lab_profesional.escritorio_profesional_laboratorio';
+                }
+                else if($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
+                {
+                    /** tecnico rayos */
                     $direccion_escritorio = 'app.laboratorio.lab_profesional.escritorio_profesional_laboratorio';
                 }
                 else
@@ -2692,6 +2699,7 @@ class EscritorioProfesional extends Controller
     public function eliminar_diagnostico_dental(Request $req){
 
         $diagnostico = ExamenesBocaGeneral::find($req->id);
+        $id_ficha_atencion = $diagnostico->id_ficha_atencion;
         if($diagnostico->delete()){
             $profesional = Profesional::where('id_usuario',Auth::user()->id)->first();
             $ficha_atencionController = new ficha_atencionController;
@@ -2710,6 +2718,9 @@ class EscritorioProfesional extends Controller
             $boca_completa_gral_diagnostico_endo = $ficha_atencionController->dameCompletaEndoDiagnostico($req->id_paciente, $profesional->id_tipo_especialidad);
 
             $valores_tratamientos = $this->dameValoresOdontograma($req->id_paciente, $req->id_ficha_atencion, $req->id_lugar_atencion, $profesional->id_tipo_especialidad);
+            $todos = $this->dameTratamientosBocaGeneral(
+                $id_ficha_atencion
+            );
             return [
                 'mensaje' => 'OK',
                 'examen' => $diagnostico,
@@ -2725,9 +2736,20 @@ class EscritorioProfesional extends Controller
                 'maxilar_inferior_gral_diagnostico_endo' => $maxilar_inferior_gral_diagnostico_endo,
                 'boca_completa_gral_tratamiento_endo' => $boca_completa_gral_tratamiento_endo,
                 'boca_completa_gral_diagnostico_endo' => $boca_completa_gral_diagnostico_endo,
-                'valores_tratamientos' => $valores_tratamientos
+                'valores_tratamientos' => $valores_tratamientos,
+                'todos' => $todos
             ];
         }
+    }
+
+    public function importar_datos_excel_psicologia(Request $request){
+         $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        Excel::import(new DiagnosticosPsicologicosImport, $request->file('file'));
+
+        return back()->with('success', 'Diagnósticos importados correctamente.');
     }
 
     public function generar_pdf_presupuesto(Request $req){

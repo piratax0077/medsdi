@@ -8,10 +8,10 @@ archivo CSV carga masiva, nombre rut y correo
 -->
 
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
-    <div class="col-md-12 ">
+    <div class="col-md-12">
         <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 px-2 pt-1 mt-2">
-                <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-1 mt-2">
+                <div class="mx-3 alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
             </div>
             <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_ant_sdi') }}" method="POST">
@@ -34,25 +34,60 @@ archivo CSV carga masiva, nombre rut y correo
                         <input type="hidden" name="profesional_visible" id="profesional_visible" value="1">
                         <input type="hidden" name="motivo" id="motivo" value="Carga de antecedentes de paciente SDI">
                         @csrf
+                        <div class="row">
+                            <div class="col-md-12">
+                                <style>
+                                    .container {
+                                      position: relative;
+                                      width: 100%;
+                                      overflow: hidden;
+                                      padding-top: 10%;
+                                      padding-bottom: 1%;
+                                      margin-bottom: 1%;
+                                    }
 
+                                    .responsive-iframe {
+                                      position: absolute;
+                                      top: 0;
+                                      left: 0;
+                                      bottom: 0;
+                                      right: 0;
+                                      width: 100%;
+                                      height: 75%;
+                                      border: none;
+                                    }
+                                    </style>
+                                {{-- <div class="container">
+                                    <iframe class="responsive-iframe" src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>
+                                  </div>
+                                 <iframe src="" frameborder="3,3px,3px,3px" width="100%" height="10%" aria-placeholder="VIDEOCONSULTA">
+
+                                </iframe>  --}}
+                            </div>
+                        </div>
 						{{-- Antecedentes I (Transfusiones y Donación de Órganos) --}}
-						<div class="row">
+						<div class="row mb-3">
+							<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+								<h5 class="f-22 d-inline text-c-blue">1. Transfusiones y donación de órganos</h5>
+								<button type="button" class="btn btn-primary btn-icon d-inline m-0 float-right" data-toggle="collapse" data-target=".info_residencial_sos" aria-expanded="false" aria-controls="info_residencial_sos_1 info_residencial_sos_2">
+											<i class="feather icon-edit"></i>
+										</button>
+							</div>
 							<div class="col-md-12">
 								<!--Card Datos Sangre Donación de Organos-->
 								<div class="card">
-									<div class="card-body d-flex align-items-center justify-content-between bg-c-blue">
+									<!--<div class="card-informacion d-flex align-items-center justify-content-between">
 										<h5 class="mb-0 text-white">Antecedentes I (Transfusiones y Donación de Órganos)</h5>
 										<button type="button" class="btn btn-light btn-sm rounded m-0 float-right" data-toggle="collapse" data-target=".info_residencial_sos" aria-expanded="false" aria-controls="info_residencial_sos_1 info_residencial_sos_2">
 											<i class="feather icon-edit"></i>
 										</button>
-									</div>
+									</div>-->
 									<!--Sangre Donación de Organo-->
 									<div class="card-body border-top info_residencial_sos collapse show" id="info_residencial_sos_1">
-
 										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group row">
-													<label class="col-sm-4 col-form-label font-weight-bolder">¿Acepta Transfusión?</label>
+											<div class="col-sm-12 col-md-6 col-xl-6 col-xxl-3">
+												<div class="form-group row mb-1">
+													<label class="col-sm-4 col-form-label ml-0 font-weight-bolder">¿Acepta transfusión?</label>
 													<div class="col-sm-7 col-form-label">
 														@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->transfusion == 1)
 															SI
@@ -62,10 +97,10 @@ archivo CSV carga masiva, nombre rut y correo
 													</div>
 												</div>
 											</div>
-											<div class="col-md-6">
-												<div class="form-group row">
-													<label class="col-sm-4 col-form-label font-weight-bolder">¿Donante de Sangre?</label>
-													<div class="col-sm-7 col-form-label">
+											<div class="col-sm-12 col-md-6 col-xl-6 col-xxl-3">
+												<div class="form-group row mb-1">
+													<label class="col-sm-4 col-form-label ml-0 font-weight-bolder">¿Donante de sangre?</label>
+													<div class="col-sm-7  col-form-label">
 														@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->dona_sangre == 1)
 															SI
 														@else
@@ -74,12 +109,10 @@ archivo CSV carga masiva, nombre rut y correo
 													</div>
 												</div>
 											</div>
-										</div>
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group row">
-													<label class="col-sm-4 col-form-label font-weight-bolder">Grupo Sanguíneo</label>
-													<div class="col-sm-7 col-form-label text-danger">
+											<div class="col-sm-12 col-md-6 col-xl-6 col-xxl-3">
+												<div class="form-group row mb-1">
+													<label class="col-sm-4 col-form-label ml-0 font-weight-bolder">Grupo sanguíneo</label>
+													<div class="col-sm-7   col-form-label text-danger">
 														@if ($paciente->Antecedentes()->first() != null)
 															@if ($paciente->Antecedentes()->first()->GrupoSanguineo()->first() != null)
 																{{ $paciente->Antecedentes()->first()->GrupoSanguineo()->first()->nombre_gs }}
@@ -90,8 +123,128 @@ archivo CSV carga masiva, nombre rut y correo
 													</div>
 												</div>
 											</div>
+											<div class="col-sm-12 col-md-6 col-xl-6 col-xxl-3">
+												<div class="form-group row mb-1">
+													<label class="col-sm-4 col-form-label ml-0 font-weight-bolder">Grupo sanguíneo</label>
+													<div class="col-sm-7  col-form-label text-danger">
+														@if ($paciente->Antecedentes()->first() != null)
+															@if ($paciente->Antecedentes()->first()->GrupoSanguineo()->first() != null)
+																{{ $paciente->Antecedentes()->first()->GrupoSanguineo()->first()->nombre_gs }}
+															@endif
+														@else
+															Sin registro
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-12 col-md-6 col-xl-6 col-xxl-3">
+												<div class="form-group row mb-0">
+													<label
+														class="col-sm-4 col-form-label ml-0 font-weight-bolder">Comentarios de grupo sanguíneo</label>
+													<div class="col-sm-7  col-form-label">
+														@if ($paciente->Antecedentes()->first() != null)
+															@if ($paciente->Antecedentes()->first()->GrupoSanguineo()->first() != null)
+																{{ $paciente->Antecedentes()->first()->GrupoSanguineo()->first()->descripcion_gs }}
+															@endif
+														@else
+															Sin registro
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-12 col-md-6 col-xl-6 col-xxl-3">
+												<div class="form-group row mb-0">
+													<label
+														class="col-sm-4 col-form-label ml-0 font-weight-bolder">Comentarios de grupo sanguíneo</label>
+													<div class="col-sm-7  col-form-label">
+														@if ($paciente->Antecedentes()->first() != null)
+															@if ($paciente->Antecedentes()->first()->GrupoSanguineo()->first() != null)
+																{{ $paciente->Antecedentes()->first()->GrupoSanguineo()->first()->descripcion_gs }}
+															@endif
+														@else
+															Sin registro
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-12 col-md-6 col-xl-6 col-xxl-3">
+												<div class="form-group row mb-0">
+													<label class="col-sm-4 col-form-label ml-0 font-weight-bolder">Vacuna o hepatitis</label>
+													<div class="col-sm-7  col-form-label text-danger">
+														@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->hepatitis == 1)
+															SI
+														@else
+															NO
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-12 col-md-6 col-xl-6 col-xxl-3">
+												<div class="form-group row mb-0">
+													<label class="col-sm-4 col-form-label ml-0 font-weight-bolder">Comentarios hepatitis o VIH</label>
+													<div class="col-sm-7  col-form-label">
+														@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->comentario_hepa != '')
+															{{ $paciente->Antecedentes()->first()->comentario_hepa }}
+														@else
+															Sin registro
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-12 col-md-6 col-xl-6 col-xxl-3">
+												<div class="form-group row mb-0">
+													<label class="col-sm-4 col-form-label ml-0 font-weight-bolder"> ¿Donante total de órganos? </label>
+													<div class="col-sm-7  col-form-label">
+														@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->dona_organos == 1)
+															SI
+														@else
+															NO
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-12 col-md-6 col-xl-6 col-xxl-3">
+												<div class="form-group row mb-0">
+													<label class="col-sm-4 col-form-label ml-0 font-weight-bolder"> ¿Donante parcial de órganos?
+													</label>
+													<div class="col-sm-7  col-form-label">
+													@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->dona_organos_parcial == 1)
+															SI
+														@else
+															NO
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-12 col-md-6 col-xl-6 col-xxl-3">
+												<div class="form-group row mb-0">
+													<label class="col-sm-4 col-form-label ml-0 font-weight-bolder">Órganos a donar</label>
+													<div class="col-sm-7 col-form-label">
+														@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->comentarios != '')
+															{{ $paciente->Antecedentes()->first()->comentarios }}
+														@else
+															Sin Registros
+														@endif
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-12 col-md-6 col-xl-6 col-xxl-3">
+												<div class="form-group row mb-0">
+													<label class="col-sm-4 col-form-label ml-0 font-weight-bolder"> Impedimento para donar
+													</label>
+													<div class="col-sm-7 col-form-label">
+														@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->impedimento_donar != '')
+															{{ $paciente->Antecedentes()->first()->impedimento_donar }}
+														@else
+															Sin Registros
+														@endif
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--<div class="row">
 											<div class="col-md-6">
-												<div class="form-group row">
+												<div class="form-group row mb-0">
 													<label
 														class="col-sm-4 col-form-label font-weight-bolder">Comentarios de grupo sanguíneo</label>
 													<div class="col-sm-7 col-form-label">
@@ -108,8 +261,8 @@ archivo CSV carga masiva, nombre rut y correo
 										</div>
 										<div class="row">
 											<div class="col-md-6">
-												<div class="form-group row">
-													<label class="col-sm-4 col-form-label font-weight-bolder">Vacuna o Hepatitis</label>
+												<div class="form-group row mb-0">
+													<label class="col-sm-4 col-form-label font-weight-bolder">Vacuna o hepatitis</label>
 													<div class="col-sm-7 col-form-label text-danger">
 														@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->hepatitis == 1)
 															SI
@@ -120,8 +273,8 @@ archivo CSV carga masiva, nombre rut y correo
 												</div>
 											</div>
 											<div class="col-md-6">
-												<div class="form-group row">
-													<label class="col-sm-4 col-form-label font-weight-bolder">Comentarios Hepatitis o VIH</label>
+												<div class="form-group row mb-0">
+													<label class="col-sm-4 col-form-label font-weight-bolder">Comentarios hepatitis o VIH</label>
 													<div class="col-sm-7 col-form-label">
 														@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->comentario_hepa != '')
 															{{ $paciente->Antecedentes()->first()->comentario_hepa }}
@@ -134,8 +287,8 @@ archivo CSV carga masiva, nombre rut y correo
 										</div>
 										<div class="row">
 											<div class="col-md-6">
-												<div class="form-group row">
-													<label class="col-sm-4 col-form-label font-weight-bolder"> ¿Donante Total de Órganos? </label>
+												<div class="form-group row mb-0">
+													<label class="col-sm-4 col-form-label font-weight-bolder"> ¿Donante total de órganos? </label>
 													<div class="col-sm-7 col-form-label">
 														@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->dona_organos == 1)
 															SI
@@ -146,8 +299,8 @@ archivo CSV carga masiva, nombre rut y correo
 												</div>
 											</div>
 											<div class="col-md-6">
-												<div class="form-group row">
-													<label class="col-sm-4 col-form-label font-weight-bolder"> ¿Donante Parcial de Órganos?
+												<div class="form-group row mb-0">
+													<label class="col-sm-4 col-form-label font-weight-bolder"> ¿Donante parcial de órganos?
 													</label>
 													@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->dona_organos_parcial == 1)
 															SI
@@ -159,7 +312,7 @@ archivo CSV carga masiva, nombre rut y correo
 										</div>
 										<div class="row">
 											<div class="col-md-6">
-												<div class="form-group row">
+												<div class="form-group row mb-0">
 													<label class="col-sm-4 col-form-label font-weight-bolder">Órganos a donar</label>
 													<div class="col-sm-7 col-form-label">
 														@if ($paciente->Antecedentes()->first() != null && $paciente->Antecedentes()->first()->comentarios != '')
@@ -171,7 +324,7 @@ archivo CSV carga masiva, nombre rut y correo
 												</div>
 											</div>
 											<div class="col-md-6">
-												<div class="form-group row">
+												<div class="form-group row mb-0">
 													<label class="col-sm-4 col-form-label font-weight-bolder"> Impedimento para donar
 													</label>
 													<div class="col-sm-7 col-form-label">
@@ -183,7 +336,7 @@ archivo CSV carga masiva, nombre rut y correo
 													</div>
 												</div>
 											</div>
-										</div>
+										</div>-->
 									</div>
 									<!--Cierre: Sangre Donación de Organo-->
 									<!--(Editar) Sangre Donación de Organo-->
@@ -450,11 +603,11 @@ archivo CSV carga masiva, nombre rut y correo
 								<!--Cierre: Datos Sangre Donación de Organos-->
 							</div>
 						</div>
-						
+
 						@include('app.profesional.edicion_paciente.antecedentes_paciente_dos')
-                        
+
                         <input type="hidden" name="descripcion_hipotesis" id="descripcion_hipotesis" value="Carga de antecedentes Paciente">
-								
+
                     </div>
 
                     {{--  div de botones para crear ordenes --}}
@@ -491,17 +644,17 @@ archivo CSV carga masiva, nombre rut y correo
     <script>
          /** MENSAJE*/
         /** CARGAR mensaje */
-        $('#mensaje_ficha').html('<strong>Solo el campo Hipótesis diagnóstica es obligatorio el resto es opcional</strong>');
+        $('#mensaje_ficha').html('<strong>RECUERDE QUE ESTOS ANTECEDENTES SON DE VITAL IMPORTANCIA PARA SU PACIENTE Y USTED ES EL MÉDICO RESPONSABLE</strong>');
         $('#mensaje_ficha').show();
         setTimeout(function(){
             $('#mensaje_ficha').hide();
-        }, 5000);
+        }, 9000);
 
         $(document).ready(function() {
-            
+
         });
 
-        
+
 		function editar_antecedentes_paciente(id) {
 
             let id_paciente = id;
@@ -576,6 +729,6 @@ archivo CSV carga masiva, nombre rut y correo
                 });
 
         }
-	
+
     </script>
 @endsection

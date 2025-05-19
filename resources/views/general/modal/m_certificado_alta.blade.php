@@ -5,7 +5,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Certificado de Alta</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button type="button" class="close text-white"  data-bs-dismiss="modal"  aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" name="modal_cert_alta_tipo_informe" id="modal_cert_alta_tipo_informe" value="2">
@@ -31,7 +31,7 @@
                         <select id="modal_cert_alta_region_paciente" name="modal_cert_alta_region_paciente" class="form-control form-control-sm" readonly>
                             <option value="0">Seleccione</option>
                             @foreach ($regiones as $r)
-                                @if ($r->id == $direccion_id_region_paciente)
+                                @if ($r->id == $paciente->Direccion()->first()->Ciudad()->first()->id_region)
                                     <option id="{{ $r->id }}" selected> {{ $r->nombre }} </option>
                                 @endif
                                 <option id="{{ $r->id }}"> {{ $r->nombre }} </option>
@@ -43,7 +43,7 @@
                         <select id="modal_cert_alta_region_paciente" name="modal_cert_alta_region_paciente" class="form-control form-control-sm" readonly>
                             <option value="0">Seleccione</option>
                             @foreach ($ciudades as $c)
-                                @if ($c->id == $direccion_id_ciudad_paciente)
+                                @if ($c->id == $paciente->Direccion()->first()->Ciudad()->first()->id)
                                     <option id="{{ $c->id }}" selected> {{ $c->nombre }} </option>
                                 @endif
                                 <option id="{{ $c->id }}"> {{ $c->nombre }} </option>

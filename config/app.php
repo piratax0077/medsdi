@@ -162,6 +162,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -182,10 +183,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
 
         /** Simple QrCode */
-        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
-
-        /** ZOOM */
-        Jubaer\Zoom\ZoomServiceProvider::class,
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class
 
     ],
 
@@ -241,16 +239,14 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
         /** PDF */
         'PDF' => Barryvdh\DomPDF\Facade::class,
 
         /** Simple QrCode */
-        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
 
-        /** ZOOM */
-        'Zoom' => Jubaer\Zoom\Facades\Zoom::class,
     ],
 
 ];

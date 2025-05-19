@@ -5,7 +5,7 @@
 	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Agregar Mantención y Limpieza</h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Registrar nuevo/a personal de mantención y limpieza</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -43,7 +43,7 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div class="form-group">
-                                                <label for="add_empleado_tipo_contrato_mantencion">Tipo Contrato</label>
+                                                <label class="floating-label-activo-sm" for="add_empleado_tipo_contrato_mantencion">Tipo de contrato</label>
                                                 <select class="form-control" id="add_empleado_tipo_contrato_mantencion">
                                                     <option value="0">Seleccione</option>
                                                     <option value="GASFITERÍA">Gasfitería</option>
@@ -62,47 +62,47 @@
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">INFORMACIÓN Y DATOS DE CONTACTO</h6>
+                                                <h6 class="t-modal">Información y datos de contacto</h6>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 d-flex">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 d-flex mb-3">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="tipo_mantenedor" id="tipo_mantenedor-empresa" value="empresa" onclick="que_mantenedor()">
-                                                    <label class="form-check-label" for="tipo_mantenedor-empresa">
+                                                    <label class="form-check-label mt-1" for="tipo_mantenedor-empresa">
                                                       Empresa
                                                     </label>
                                                 </div>
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio" name="tipo_mantenedor" id="tipo_mantenedor-persona" value="persona" onclick="que_mantenedor()" checked>
-                                                    <label class="form-check-label" for="tipo_mantenedor-persona">
+                                                    <label class="form-check-label mt-1" for="tipo_mantenedor-persona">
                                                         Persona Natural
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">RUT:</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                <label class="floating-label-activo-sm">RUT</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_rut_mantencion" id="add_empleado_rut_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Razón Social:</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                <label class="floating-label-activo-sm">Razón Social</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_rz_mantencion" id="add_empleado_rz_mantencion" disabled>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Giro:</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                                                <label class="floating-label-activo-sm">Giro</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_giro_mantencion" id="add_empleado_giro_mantencion" disabled>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Nombres (o Empresa)</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                <label class="floating-label-activo-sm">Nombres de persona o empresa</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_nombre_mantencion" id="add_empleado_nombre_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Apellido Paterno</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_uno_mantencion" id="add_empleado_apellido_uno_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Apellido Materno</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_dos_mantencion" id="add_empleado_apellido_dos_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Sexo</label>
                                                 <select class="form-control form-control-sm" name="add_empleado_sexo_mantencion" id="add_empleado_sexo_mantencion">
                                                     <option value="">Seleccione</option>
@@ -110,21 +110,21 @@
                                                     <option value="M">Masculino</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Fecha Nacimiento</label>
                                                 <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_nacimiento_mantencion" id="add_empleado_fecha_nacimiento_mantencion">
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Email:</label>
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <label class="floating-label-activo-sm">Email</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_email_mantencion" id="add_empleado_email_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Teléfono</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_telefono_mantencion" id="add_empleado_telefono_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Región</label>
                                                 <select class="form-control form-control-sm" name="add_empleado_region_mantencion" id="add_empleado_region_mantencion" onchange="buscar_ciudad_nuevo_mantencion();">
                                                     <option value="">Seleccione</option>
@@ -136,18 +136,18 @@
                                                     @endif
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Ciudad</label>
                                                 <select class="form-control form-control-sm" name="add_empleado_ciudad_mantencion" id="add_empleado_ciudad_mantencion">
                                                     <option value="">Seleccione</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-8 col-lg-8 col-xl-8">
                                                 <label class="floating-label-activo-sm">Dirección</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_direccion_mantencion" id="add_empleado_direccion_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Número</label>
+                                            <div class="form-group col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                                                <label class="floating-label-activo-sm">Nº</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_numero_mantencion" id="add_empleado_numero_mantencion">
                                             </div>
                                         </div>
@@ -157,31 +157,29 @@
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">INFORMACIÓN Y DATOS DEL CONTRATO</h6>
+                                                <h6 class="t-modal">Información y datos del contrato</h6>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                                 <label class="floating-label-activo-sm">Fecha Inicio</label>
                                                 <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_inicio_mantencion" id="add_empleado_fecha_inicio_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                                 <label class="floating-label-activo-sm">Fecha Termino</label>
                                                 <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_termino_mantencion" id="add_empleado_fecha_termino_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-6"style="text-align:right">
-                                                <label  class="cr">Indefinido</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6"style="text-align:right">
+                                                <label  class="cr">Contrato indefinido</label>
                                                 <input type="hidden" id="add_cont_indefinido_mantencion" name="add_cont_indefinido_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
                                                     <input type="checkbox" onchange="activar_check('add_empleado_check_contrato_indef_mantencion', 'add_cont_indefinido_mantencion', ' ');" id="add_empleado_check_contrato_indef_mantencion" name="add_empleado_check_contrato_indef_mantencion" value="">
                                                     <label for="add_empleado_check_contrato_indef_mantencion" class="cr"></label>
                                                 </div>
                                             </div>
-
-
                                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
                                                 <label class="floating-label-activo-sm">Monto Imponible</label>
                                                 <input type="number" class="form-control form-control-sm" name="add_empleado_monto_imponible_mantencion" id="add_empleado_monto_imponible_mantencion">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <label  class="floating-label-activo-sm">Locomoción</label>
                                                 <input type="hidden" id="add_empleado_locomocion_mantencion" name="add_empleado_locomocion_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -189,12 +187,12 @@
                                                     <label for="add_empleado_check_locomocion_mantencion" class="cr"></label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_locomocion_porcentaje_mantencion" id="add_empleado_locomocion_porcentaje_mantencion" value="N/A">
                                             </div>
 
 
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <label class="floating-label-activo-sm">Colación</label>
                                                 <input type="hidden" id="add_empleado_colacion_mantencion" name="add_empleado_colacion_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -202,11 +200,11 @@
                                                     <label for="add_empleado_check_colacion_mantencion" class="cr"></label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_colacion_porcentaje_mantencion" id="add_empleado_colacion_porcentaje_mantencion" value="N/A">
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <label class="floating-label-activo-sm">Asignación Familar</label>
                                                 <input type="hidden" id="add_empleado_asignacion_familiar_mantencion" name="add_empleado_asignacion_familiar_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -214,10 +212,10 @@
                                                     <label for="add_empleado_check_asignacion_familiar_mantencion" class="cr"></label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_asignacion_familiar_cantidad_mantencion" id="add_empleado_asignacion_familiar_cantidad_mantencion" value="N/A">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <label class="floating-label-activo-sm">Cajas de Compensación</label>
                                                 <input type="hidden" id="add_empleado_caja_compensacion_mantencion" name="add_empleado_caja_compensacion_mantencion" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -227,15 +225,18 @@
 
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_caja_compensacion_porcentaje_mantencion" id="add_empleado_caja_compensacion_porcentaje_mantencion" value="N/A">
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="tab-pane fade" id="leyes_sociales_mantencion" role="tabpabel" aria-labelledby="leyes_sociales_mantencion-tab">
-                                    <div class="form-group form-row">
-                                        <div class="col-md-3">
+                                    <div class="form-row">
+                                        <div class="col-sm-12 col-md-12 mb-2">
+                                            <h6 class="t-modal">Leyes sociales</h6>
+                                        </div>
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <label class="floating-label-activo-sm" for="afp">Seguros</label>
                                             <select name="afp_mantencion" id="afp_mantencion" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
@@ -247,7 +248,7 @@
                                                 <option value="6">AFP Provida</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <label class="floating-label-activo-sm" for="salud">Seguros</label>
                                             <select name="salud_mantencion" id="salud_mantencion" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
@@ -260,13 +261,13 @@
                                                 <option value="7">Isapre Vida Tres</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="seguros">Seguros</label>
                                                 <input type="text" name="seguros_mantencion" id="seguros_mantencion" class="form-control form-control-sm">
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="cantidad">Cantidad</label>
                                                 <input type="number" name="cantidad_mantencion" id="cantidad_mantencion" class="form-control form-control-sm">
@@ -277,11 +278,11 @@
                                 <div class="tab-pane fade" id="horario_contrato_mantencion" role="tabpabel" aria-labelledby="horario_contrato_mantencion-tab">
                                     <form>
                                         <div class="form-row">
-                                            <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">HORARIO DE TRABAJO</h6>
+                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                                                <h6 class="t-modal">Horario de trabajo</h6>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                <label class="floating-label-activo-sm">Días de Trabajo</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                <label class="floating-label-activo-sm">Días de trabajo</label>
                                                 <select class="js-example-basic-multiple" name="add_empleado_dias_laborales_mantencion" id="add_empleado_dias_laborales_mantencion" multiple="multiple">
                                                     <option value="1">Lunes</option>
                                                     <option value="2">Martes</option>
@@ -292,20 +293,20 @@
                                                     <option value="7">Domingo</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Hora entrada</label>
                                                 <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_mantencion" name="add_empleado_hora_entrada_mantencion" value="08:00">
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Hora salida</label>
                                                 <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_mantencion" name="add_empleado_hora_salida_mantencion" value="19:00">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Hora Inicio Colación</label>
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <label class="floating-label-activo-sm">Hora inicio colación</label>
                                                 <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_colacion_mantencion" name="add_empleado_hora_entrada_colacion_mantencion" value="12:00">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Hora término colación</label>
                                                 <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_colacion_mantencion" name="add_empleado_hora_salida_colacion_mantencion" value="13:00">
                                             </div>
@@ -320,10 +321,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-sm mx-auto" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="registrar_nuevo_empleado_mantencion();">Añadir al Equipo</button>
-                {{--  <button type="button" class="btn btn-primary">Ver formulario (PDF)</button>  --}}
-
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="registrar_nuevo_empleado_mantencion();"><i class="feather icon-check"></i> Añadir al equipo</button>
             </div>
         </div>
     </div>

@@ -85,12 +85,16 @@
                                 <label class="col-2 text-dark font-weight-bolder">Comuna / Región</label>
                                 <div class="col-9 ml-2 text-secondary" id="comuna_region_paciente">
                                     @if (isset($paciente))
-                                        @if ($paciente->Direccion()->first()->Ciudad()->first() != null)
-                                            {{ $paciente->Direccion()->first()->Ciudad()->first()->nombre }}<br>
-                                            {{ $paciente->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
-                                        @else
-                                            <span class="error">No se ha registrado ciudad</span>
-                                        @endif
+										@if ( $paciente->id_direccion )
+											@if ($paciente->Direccion()->first()->Ciudad()->first() != null)
+												{{ $paciente->Direccion()->first()->Ciudad()->first()->nombre }}<br>
+												{{ $paciente->Direccion()->first()->Ciudad()->first()->Region()->first()->nombre }}
+											@else
+												<span class="error">No se ha registrado ciudad</span>
+											@endif
+										@else
+											<span class="error">NO se ha registrado ciudad</span>
+										@endif
                                     @else
                                         <span class="error">NO se ha registrado ciudad</span>
                                     @endif

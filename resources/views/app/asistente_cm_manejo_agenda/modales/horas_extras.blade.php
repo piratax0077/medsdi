@@ -430,10 +430,11 @@
                 type: "GET",
                 data: {
                     rut: rut,
+                    id_profesional : $('#id_profesional').val(),
                 },
             })
             .done(function(data) {
-
+                console.log(data);
                 $('#m_hora_extra_div_cargando').hide();
                 $('#m_hora_extra_div_boton_buscar_paciente').show();
 

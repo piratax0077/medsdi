@@ -47,21 +47,21 @@
                                     <table id="pacientes_asistente" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-center align-middle">Paciente</th>
-                                            <th class="text-center align-middle">Nacimiento</th>
-                                            <th class="text-center align-middle">Contacto</th>
-                                            <th class="text-center align-middle">Previsión</th>
-                                            <th class="text-center align-middle">Tipo de usuario</th>
+                                            <th class="align-middle">Paciente</th>
+                                            <th class="align-middle">Nacimiento</th>
+                                            <th class="align-middle">Contacto</th>
+                                            <th class="align-middle">Previsión</th>
+                                            <th class="align-middle">Tipo de usuario</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td class="text-center align-middle">Pepita Vargas Díaz<br>
+                                            <td class="align-middle">Pepita Vargas Díaz<br>
                                             22.234.455-0</td>
-                                            <td class="text-center align-middle">24/01/1986</td>
-                                            <td class="text-center align-middle">Las Cruces #124 Viña del Mar, Chile<br>paciente@gmail.com<br>+569 4324343</td>
-                                            <td class="text-center align-middle">Colmena</td>
-                                            <td class="align-middle text-center">
+                                            <td class="align-middle">24/01/1986</td>
+                                            <td class="align-middle">Las Cruces #124 Viña del Mar, Chile<br>paciente@gmail.com<br>+569 4324343</td>
+                                            <td class="align-middle">Colmena</td>
+                                            <td class="align-middle">
                                                 <span class="badge badge-primary">Básico</span>
                                             </td>
                                         </tr>

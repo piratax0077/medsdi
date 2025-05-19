@@ -3,8 +3,8 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Solicitud de hospitalización 2x </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Solicitud de hospitalización</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">×</span>
                 </button>
             </div>

@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Buscador de código FONASA</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <button type="button" class="close"  data-bs-dismiss="modal" aria-label="Close"  onclick="cerrarfonasa();"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <!--Búsqueda por código-->
@@ -61,6 +61,16 @@
 </div>
 
 <script>
+    /*CIERRE MODALS*/
+    function cerrarfonasa()
+    {
+        $('#modal_codfonasa').modal('show');
+    }
+    function cerrarimc() {
+        $('#modal_codfonasa').modal ('hide');
+      }
+      /*CIERRE: CIERRE MODALS*/
+
     function ufonasa (){
         $('#modal_codfonasa').modal('show');
     }

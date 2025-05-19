@@ -1,8 +1,8 @@
 <div id="agregar_bodega" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="agregar_bodega" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Agregar Bodega</h5>
+                <h5 class="modal-title text-white text-center">Añadir bodega</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -10,38 +10,38 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
-                                <h6 class="text-c-blue ml-2 mb-3">Ingrese los datos de la Bodega</h6>
+                                <h6 class="t-aten">Ingrese los datos de la Bodega</h6>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-4 col-md-4">
+                    <div class="form-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
                             <div class="form-group">
-                                <label class="floating-label-activo">Nombre</label>
+                                <label class="floating-label-activo-sm">Nombre</label>
                                 <input type="text" class="form-control form-control-sm" name="nombre_bodega_agregar" id="nombre_bodega_agregar" >
                             </div>
                         </div>
-                        <div class="col-sm-4 col-md-4">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
                             <div class="form-group">
-                                <label class="floating-label-activo">Ubicacion</label>
+                                <label class="floating-label-activo-sm">Ubicación</label>
                                 <input type="text" name="direccion_bodega_agregar" id="direccion_bodega_agregar" class="form-control form-control-sm">
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm-4">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo" for="descripcion_bodega">Descripcion</label>
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm" for="descripcion_bodega">Descripción</label>
                                 <input type="text" class="form-control form-control-sm" id="descripcion_bodega_agregar" name="descripcion_bodega_agregar" required>
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo" for="email">Email</label>
+                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm" for="email">Correo electrónico</label>
                                 <input type="email" class="form-control form-control-sm" id="email_bodega_agregar" name="email_bodega_agregar" required>
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo" for="telefono">Telefono</label>
+                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm" for="telefono">Teléfono</label>
                                 <input type="telefono" class="form-control form-control-sm" id="telefono_bodega_agregar" name="telefono_bodega_agregar" required>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                                 </optgroup>
                             </select>
                         </div>
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="form-group">
                                 <label class="floating-label-activo">Lista de materiales e insumos con autorización</label>
                                 <select class="form-control form-control-sm" name="cont_ca_bodega_agregar" id="cont_ca_bodega_agregar" multiple="multiple">
@@ -76,63 +76,62 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-info" onclick="guardar_bodega()">Guardar Registro</button>
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_bodega()"><i class="feather icon-plus"></i> Añadir</button>
             </div>
         </div>
     </div>
 </div>
 <!-- MODAL editar_bodega -->
 <div id="editar_bodega" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="agregar_bodega" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Editar Bodega</h5>
+                <h5 class="modal-title text-white text-center">Editar bodega</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
                 <form id="">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                    <div class="form-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div class="form-group">
-                                <h6 class="text-c-blue ml-2 mb-3">Ingrese los datos de la Bodega</h6>
+                                <h6 class="t-aten">Ingrese los datos de la Bodega</h6>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-4 col-md-4">
+                    <div class="form-row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
                             <div class="form-group">
-                                <label class="floating-label-activo">Nombre</label>
+                                <label class="floating-label-activo-sm">Nombre</label>
                                 <input type="text" class="form-control form-control-sm" name="nombre_bodega_editar" id="nombre_bodega_editar" >
                             </div>
                         </div>
-                        <div class="col-sm-4 col-md-4">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
                             <div class="form-group">
-                                <label class="floating-label-activo">Ubicacion</label>
+                                <label class="floating-label-activo-sm">Ubicación</label>
                                 <input type="text" name="direccion_bodega_editar" id="direccion_bodega_editar" class="form-control form-control-sm">
                             </div>
                         </div>
-                        <div class="col-md-4 col-sm-4">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo" for="descripcion_bodega">Descripcion</label>
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm" for="descripcion_bodega">Descripción</label>
                                 <input type="text" class="form-control form-control-sm" id="descripcion_bodega_editar" name="descripcion_bodega_editar" required>
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo" for="email">Email</label>
+                       <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm" for="email">Correo electrónico</label>
                                 <input type="email" class="form-control form-control-sm" id="email_bodega_editar" name="email_bodega_editar" required>
                             </div>
                         </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo" for="telefono">Telefono</label>
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm" for="telefono">Teléfono</label>
                                 <input type="telefono" class="form-control form-control-sm" id="telefono_bodega_editar" name="telefono_bodega_editar" required>
                             </div>
                         </div>
 
                         <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <label class="floating-label-activo-sm" for="tpo_prod">Seleccionar Tipo de Productos</label>
+                            <label class="floating-label-activo-sm" for="tpo_prod">Seleccionar tipo de productos</label>
                             <select class="form-control form-control-sm" name="tpo_prod_bodega_editar" id="tpo_prod_bodega_editar" multiple="multiple">
                                 <optgroup label="Farmacia">
                                     @if(isset($tipos_productos))
@@ -145,7 +144,7 @@
                         </div>
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
-                                <label class="floating-label-activo">Lista de materiales e insumos con autorización</label>
+                                <label class="floating-label-activo-sm">Lista de materiales e insumos con autorización</label>
                                 <select class="form-control form-control-sm" name="cont_ca_bodega_editar" id="cont_ca_bodega_editar" multiple="multiple">
                                     <optgroup label="Farmacia">
                                         @if(isset($tipos_productos))
@@ -161,8 +160,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-warning" onclick="editar_registro_bodega()">Editar Registro</button>
+                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="editar_registro_bodega()"><i class="feather icon-save"></i> Guardar cambios</button>
             </div>
         </div>
     </div>

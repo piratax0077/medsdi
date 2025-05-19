@@ -103,7 +103,7 @@
                                     <option value="2">Si</option>
                                 </select>
                             </div>
-                           
+
                         </div>
                         <div class="form-row" id="div_detalle_urgencia_bronco" style="display:none">
                             <div class="form-group col-sm-12 col-md-12 col-lg-4 col-xl-4  col-xxl-4">
@@ -246,13 +246,13 @@
                                     <option value="2">Si</option>
                                 </select>
                             </div>
-                            
+
                             <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 form-group">
                                 <label class="floating-label-activo-sm" for="obs_bronco">Obs. Estado General Paciente</label>
                                 <textarea class="form-control caja-texto form-control-sm" rows="1"  onfocus="this.rows=2" onblur="this.rows=1;" name="obs_bronco" id="obs_cir_gastrica" placeholder="ANOTE APRECIACIÓN SOBRE ESTADO GENERAL DEL PACIENTE"></textarea>
                             </div>
-                    
-                         
+
+
                             <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-6">
                                 <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="ingresohosp();"><i class="feather icon-edit-1"></i> Orden de Hospitalización </button>
                             </div>

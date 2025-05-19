@@ -266,7 +266,7 @@
                                         <div class="tab-content" id="v-pills-tabContent">
                                             <!--INTRA ORAL-->
                                             <div class="tab-pane fade show active" id="intraoral" role="tabpanel" aria-labelledby="intraoral_tab">
-                                            <div class="form-row">
+                                                <div class="form-row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                         <h6 class="sub-aten">Intra Oral</h6>
                                                     </div>
@@ -369,15 +369,15 @@
                                                 </div>
                                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                     <div id="contenedor_pieza_dental_endorx">
-                                                        <div id="pieza_dentalrx" class="row">
+                                                        <div id="pieza_dentalrx" class="form-row">
                                                             @php $counter = 20; @endphp
                                                             @foreach ($examenes_rx_oral as $examen)
                                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                 <div class="card">
                                                                     <div class="card-body">
-                                                                            <div class="row">
+                                                                            <div class="form-row">
                                                                                 <div class="col-md-6">
-                                                                                        <!--IMAGENES-->
+                                                                                     <!--IMAGENES-->
                                                                                     <!-- Contenedor de Imágenes -->
                                                                                     <div class="form-row" id="contenedor_piezas_ex_oral">
                                                                                         @if (!empty($examen->decoded_imagenes) && is_array($examen->decoded_imagenes))
@@ -793,22 +793,22 @@
                                     <div class="form-row mb-3">
                                         <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                             <button type="button" class="btn btn-outline-primary btn-sm btn-block"
-                                                onclick="maxilar_superior()";><i class="fas fa-plus"></i> Maxilar superior</button>
+                                                onclick="maxilar_superior()";><i class="feather icon-edit-1"></i> Maxilar superior</button>
 
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                             <button type="button" class="btn btn-outline-primary btn-sm btn-block"
-                                                onclick="maxilar_inferior()";><i class="fas fa-plus"></i> Maxilar  inferior</button>
+                                                onclick="maxilar_inferior()";><i class="feather icon-edit-1"></i> Maxilar  inferior</button>
 
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                             <button type="button" class="btn btn-outline-primary btn-sm btn-block"
-                                                onclick="boca_completa()";><i class="fas fa-plus"></i> Boca  Completa</button>
+                                                onclick="boca_completa()";><i class="feather icon-edit-1"></i> Boca  Completa</button>
 
                                         </div>
                                         {{-- <div class="col-md-3 px-1 py-1">
                                             <button type="button" class="btn btn-outline-primary btn-sm btn-block"
-                                                onclick="prest_lab();"><i class="fas fa-plus"></i>Solicitud de laboratorio</button>
+                                                onclick="prest_lab();"><i class="feather icon-edit-1"></i>Solicitud de laboratorio</button>
 
                                         </div> --}}
                                     </div>

@@ -22,9 +22,8 @@ class CreateContratoProfesionalInstitucionTable extends Migration
             $table->string('segundo_apellido');
             $table->string('email');
             $table->string('telefono');
-            $table->string('telefono_dos')->nullable();
+            $table->string('telefono_dos');
             $table->string('direccion');
-            $table->integer('id_cargo');
             $table->integer('id_region');
             $table->integer('id_comuna');
             $table->integer('id_profesion');

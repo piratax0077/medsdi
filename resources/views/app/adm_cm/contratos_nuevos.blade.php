@@ -12,310 +12,298 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Escritorio Contabilidad/RRHH</h5>
+                            <h5 class="m-b-10 font-weight-bold">Escritorio Contabilidad / RRHH</h5>
                         </div>
 
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
-                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.area_contabilidad') }}">Escritorio Contabilidad</a></li>
+                            <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.area_contabilidad') }}">Escritorio contabilidad</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
         <!--Cierre: Header-->
-        <div class="col-md-12">
-            <!--Card Nav Pills-->
-            <div class="card">
-                <div class="card-body">
-                    <ul class="nav nav-pills bg-white" id="rrhh_cm" role="tablist">
-                        <li class="nav-item">
-                            <a class="btn btn-outline-info btn-sm mr-1 my-1 active" id="pills-prof_salud-tab" data-toggle="tab" href="#pills-prof-salud" role="tab" aria-controls="pills-prof_salud" aria-selected="false">Profesionales de la salud</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="administrativos-tab" data-toggle="tab" href="#administrativos" role="tab" aria-controls="administrativos" aria-selected="false">Personal administrativo</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="limpieza-mantencion-tab" data-toggle="tab" href="#limpieza-mantencion" role="tab" aria-controls="limpieza-mantencion" aria-selected="false">Limpieza y Mantención</a>
-                        </li>
-                        {{-- <li class="nav-item">
-                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="pills-asistentes-tab" data-toggle="tab" href="#pills-asistentes" role="tab" aria-controls="pills-asistentes" aria-selected="false">Asistentes/Personal</a>
-                        </li> --}}
-                        {{-- <li class="nav-item">
-                            <a class="btn btn-outline-info btn-sm mr-1 my-1" id="pills-limpieza-mantencion-tab" data-toggle="tab" href="#pills-limpieza-mantencion" role="tab" aria-controls="pills-limpieza-mantencion" aria-selected="false">Limpieza y Mantención</a>
-                        </li> --}}
-                    </ul>
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <!--Card Nav Pills-->
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="nav nav-pills bg-white" id="rrhh_cm" role="tablist">
+                            <li class="nav-item">
+                                <a class="btn btn-outline-info btn-sm mr-1 my-1 active" id="pills-prof_salud-tab" data-toggle="tab" href="#pills-prof-salud" role="tab" aria-controls="pills-prof_salud" aria-selected="false">Profesionales de la salud</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-info btn-sm mr-1 my-1" id="administrativos-tab" data-toggle="tab" href="#administrativos" role="tab" aria-controls="administrativos" aria-selected="false">Personal administrativo</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-info btn-sm mr-1 my-1" id="limpieza-mantencion-tab" data-toggle="tab" href="#limpieza-mantencion" role="tab" aria-controls="limpieza-mantencion" aria-selected="false">Limpieza y Mantención</a>
+                            </li>
+                            {{-- <li class="nav-item">
+                                <a class="btn btn-outline-info btn-sm mr-1 my-1" id="pills-asistentes-tab" data-toggle="tab" href="#pills-asistentes" role="tab" aria-controls="pills-asistentes" aria-selected="false">Asistentes / Personal</a>
+                            </li> --}}
+                            {{-- <li class="nav-item">
+                                <a class="btn btn-outline-info btn-sm mr-1 my-1" id="pills-limpieza-mantencion-tab" data-toggle="tab" href="#pills-limpieza-mantencion" role="tab" aria-controls="pills-limpieza-mantencion" aria-selected="false">Limpieza y Mantención</a>
+                            </li> --}}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-12">
-            <!--Cierre: Card Nav Pills-->
-            <div class="tab-content" id="rrhh_cm">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <!--Cierre: Card Nav Pills-->
+                <div class="tab-content" id="rrhh_cm">
 
-                <!--Tab Profesionales de la salud-->
-                <div class="tab-pane fade show active"id="pills-prof-salud" role="tabpanel" aria-labelledby="pills-prof-salud-tab">
-                    <div class="row mb-n10">
-                        <div class="col-sm-12">
-                            <div class="card">
-                                <div class="card-header bg-info">
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h4 class="text-white f-20 mt-2 mb-2 float-left">Profesionales Contratados del Centro</h4>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="btn-group mr-2 float-right mt- mb-">
-                                                    <div class="btn-group mr-2 float-right mt- mb-">
-                                                        <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_contratoprofesional">
-                                                        <i class="feather icon-plus"></i> Registrar Contrato Profesional </button>
-                                                        {{-- <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#liq_prof_institucion">
-                                                            <i class="feather icon-plus"></i> Registrar Convenio Profesional </button> --}}
-                                                            <button type="button" class="btn btn-sm btn-outline-light" onclick="asociar_profesional();">Asociar Otros profesionales</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body" id="card_body_profesionales_contratados">
-                                    <table id="tab_profesionales_cont_centroc" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center align-middle">Nombre / Rut</th>
-                                                <th class="text-center align-middle">Profesion</th>
-                                                <th class="text-center align-middle">Tipo de Contrato/Fecha contrato</th>
-                                                <th class="text-center align-middle">Contacto/cuenta</th>
-                                                <th class="text-center align-middle">Remuneración Mes</th>
-                                                <th class="text-center align-middle">Acción</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($profesionales_contratados as $profesional)
-                                                <tr>
-                                                    <td class="align-middle text-center">
-                                                        <span><strong>{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</strong></span><br>
-                                                        <span>{{ $profesional->rut }}</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <span>{{ $profesional->especialidad }}</span><br>
-                                                        <span>{{ $profesional->tipo_especialidad }}</span><br>
-                                                        <span>{{ $profesional->sub_tipo_especialidad }}</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        @if($profesional->contrato !== null)
-                                                            <span>{{ $profesional->contrato->tipo_contrato == 1 ? 'INDEFINIDO' : '' }}</span><br>
-                                                            <span>{{ $profesional->contrato->fecha_inicio }}</span>
-                                                        @else
-                                                            <span>Convenio</span>
-                                                        @endif
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto({{ $profesional->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-home"></i></button>
-                                                        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datoscuenta({{ $profesional->id }});" data-toggle="tooltip" data-placement="top" title="Depositar"><i class="fas fa-hand-holding-usd"></i></button>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        @if($profesional->contrato !== null)
-                                                            @if(!$profesional->es_convenio)
-                                                                <span>{{ $profesional->horas_semanales }} horas semanales <br> ${{ number_format($profesional->contrato->monto_imponible, 0, ",", ".") }}</span>
-                                                            @else
-                                                            <span> ${{ number_format($profesional->contrato->valor_fijo, 0, ",", ".") }}</span>
-                                                            @endif
-                                                        @else
-                                                        <span>Contrato no definido</span>
-                                                        @endif
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        @if($profesional->contrato !== null)
-                                                            @if(!$profesional->es_convenio)
-                                                                <button type="button" class="btn btn-success btn-sm" onclick="editar_datosprofesionalc({{ $profesional->id }});">
-                                                                <i class="feather icon-edit"></i> Editar</button>
-
-                                                                <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_profesional({{ $profesional->id}}, {{ $profesional->contrato->id }}, '{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}');">
-                                                                <i class="feather icon-x-circle"></i> Desasociar</button>
-                                                            @else
-                                                                <button type="button" class="btn btn-success btn-sm" onclick="editar_datosprofesionalc_convenio({{ $profesional->id }});">
-                                                                <i class="feather icon-edit"></i> Editar</button>
-
-                                                                <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_profesional_convenio({{ $profesional->id}}, {{ $profesional->contrato->id }}, '{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}');">
-                                                                <i class="feather icon-x-circle"></i> Desasociar</button>
-                                                            @endif
-                                                        @else
-                                                        <button type="button" class="btn btn-success btn-sm disabled" onclick="editar_datosprofesionalc({{ $profesional->id }});">
-                                                            <i class="feather icon-edit"></i> Editar</button>
-                                                        <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_profesional({{ $profesional->id}}, 0, '{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}');">
-                                                        <i class="feather icon-x-circle"></i> Desasociar</button>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--Cierre: Tab Profesionales de la salud-->
-
-                    <!--Tab personal administrativo-->
-                    <div class="tab-pane fade" id="administrativos" role="tabpanel" aria-labelledby="administrativos-tab">
-                        <div class="row mb-n4">
+                    <!--Tab Profesionales de la salud-->
+                    <div class="tab-pane fade show active"id="pills-prof-salud" role="tabpanel" aria-labelledby="pills-prof-salud-tab">
+                        <div class="row mb-n10">
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header bg-info">
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <h4 class="text-white f-20 mt-2 mb-2 float-left">Personal administrativo</h4>
+                                                    <h4 class="text-white f-20 mt-2 mb-2 float-left">Profesionales contratados</h4>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="btn-group mr-2 float-right mt- mb-">
-                                                        <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_administrativo();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo/a personal administrativo</button>
-                                                        <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="Asociar_personal();">Asociar personal administrativo</button>
+                                                    <div class="btn-group mr-2  float-md-right">
+                                                        <div class="btn-group mr-2 float-right mt- mb-">
+                                                            <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#registrar_contratoprofesional">
+                                                            <i class="feather icon-plus"></i> Registrar Contrato Profesional </button>
+                                                            {{-- <button type="button" class="btn btn-outline-light btn-sm d-inline float-right mr-4" data-toggle="modal" data-target="#liq_prof_institucion">
+                                                                <i class="feather icon-plus"></i> Registrar Convenio Profesional </button> --}}
+                                                                <button type="button" class="btn btn-sm btn-outline-light" onclick="asociar_profesional();">Asociar Otros profesionales</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-body">
-                                        <table id="administrativo_personal" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center align-middle">Nombre / Rut</th>
-                                                    <th class="text-center align-middle">Cargo</th>
-                                                    <th class="text-center align-middle">Dirección</th>
-                                                    <th class="text-center align-middle">Contacto</th>
-													<th class="text-center align-middle">Datos</th>
-                                                    <th class="text-center align-middle">Rol y permisos</th>
-                                                    <th class="text-center align-middle">Acción</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if($lista_administrativo)
-                                                    @foreach ( $lista_administrativo as $administrativo)
+                                    <div class="card-body" id="card_body_profesionales_contratados">
+                                        <div style="overflow-x:auto;">
+                                            <table id="tab_profesionales_cont_centroc" class="display table table-striped dt-responsive nowrap table-sm" style="width:100%">
+                                                <thead>
                                                     <tr>
-                                                        <td class="align-middle text-center">
-                                                            <span><strong>{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}</strong></span><br>
-                                                            <span>{{ $administrativo->rut }}</span>
-                                                        </td>
-                                                        <td class="align-middle text-center">{{ $administrativo->contrato->tipo_empleado }}</td>
-                                                        <td class="align-middle text-center">
-                                                            {{ $administrativo->direccion()->first()->direccion }} #{{ $administrativo->direccion()->first()->numero_dir }}, {{ $administrativo->direccion()->first()->ciudad()->first()->nombre }}
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_administrador('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('asistente publico',{{ $administrativo->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
-                                                            <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_administrativo_cm('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos_admin('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }},'{{ $administrativo->roles }}');" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_administrativo({{ $administrativo->id }});"><i class="feather icon-edit"></i> Editar</button>
-                                                            <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_otros_profesionales('administrativo',{{ $administrativo->id}}, {{ $administrativo->contrato->id }}, '{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}');"><i class="feather icon-x-circle"></i> Desasociar</button>
-                                                        </td>
+                                                        <th class="align-middle">Nombre / Rut</th>
+                                                        <th class="align-middle">Profesion</th>
+                                                        <th class="align-middle">Tipo de Contrato / <br>Fecha contrato</th>
+                                                        <th class="align-middle">Remuneración Mes</th>
+                                                        <th class="align-middle">Acción</th>
                                                     </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($profesionales_contratados as $profesional)
+                                                        <tr>
+                                                            <td class="align-middle">
+                                                                <span><strong>{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}</strong></span><br>
+                                                                <span>{{ $profesional->rut }}</span>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <span>{{ $profesional->especialidad }}</span><br>
+                                                                <span>{{ $profesional->tipo_especialidad }}</span><br>
+                                                                <span>{{ $profesional->sub_tipo_especialidad }}</span>
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                @if($profesional->contrato !== null)
+                                                                    <span>{{ $profesional->contrato->tipo_contrato == 1 ? 'INDEFINIDO' : '' }}</span><br>
+                                                                    <span>{{ $profesional->contrato->fecha_inicio }}</span>
+                                                                @else
+                                                                    <span>Convenio</span>
+                                                                @endif
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                @if($profesional->contrato !== null)
+                                                                    @if(!$profesional->es_convenio)
+                                                                        <span>{{ $profesional->horas_semanales }} horas semanales <br> ${{ number_format($profesional->contrato->monto_imponible, 0, ",", ".") }}</span>
+                                                                    @else
+                                                                    <span> ${{ number_format($profesional->contrato->valor_fijo, 0, ",", ".") }}</span>
+                                                                    @endif
+                                                                @else
+                                                                <span>Contrato no definido</span>
+                                                                @endif
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                @if($profesional->contrato !== null)
+                                                                    @if(!$profesional->es_convenio)
+                                                                        <button type="button" class="btn btn-info btn-xxs" onclick="editar_datosprofesionalc({{ $profesional->id }});">
+                                                                        <i class="feather icon-edit"></i> Editar</button>
+
+                                                                        <button type="button" class="btn btn-danger btn-xxs" onclick="modal_desactivar_profesional({{ $profesional->id}}, {{ $profesional->contrato->id }}, '{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}');">
+                                                                        <i class="feather icon-x"></i> Desasociar</button>
+                                                                    @else
+                                                                        <button type="button" class="btn btn-info btn-xxs" onclick="editar_datosprofesionalc_convenio({{ $profesional->id }});">
+                                                                        <i class="feather icon-edit"></i> Editar</button>
+
+                                                                        <button type="button" class="btn btn-danger btn-xxs" onclick="modal_desactivar_profesional_convenio({{ $profesional->id}}, {{ $profesional->contrato->id }}, '{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}');">
+                                                                        <i class="feather icon-x"></i> Desasociar</button>
+                                                                    @endif
+                                                                @else
+                                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto({{ $profesional->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
+                                                                <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datoscuenta({{ $profesional->id }});" data-toggle="tooltip" data-placement="top" title="Depositar"><i class="fas fa-hand-holding-usd"></i></button>
+                                                                <button type="button" class="btn btn-info btn-xxs disabled" onclick="editar_datosprofesionalc({{ $profesional->id }});">
+                                                                    <i class="feather icon-edit"></i> Editar</button>
+                                                                <button type="button" class="btn btn-danger btn-xxs" onclick="modal_desactivar_profesional({{ $profesional->id}}, 0, '{{ $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos }}');">
+                                                                <i class="feather icon-x"></i> Desasociar</button>
+                                                                @endif
+                                                            </td>
+                                                        </tr>
                                                     @endforeach
-                                                @endif
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!--Cierre: Tab personal administrativo-->
+                    <!--Cierre: Tab Profesionales de la salud-->
 
-                    <!--Tab personal limpieza y mantencion-->
-                    <div class="tab-pane fade" id="limpieza-mantencion" role="tabpanel" aria-labelledby="limpieza-mantencion-tab">
-                        <div class="row mb-n4">
-                            <div class="col-sm-12">
-                                <div class="card">
-                                    <div class="card-header bg-info">
-                                        <div class="col-md-12">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <h4 class="text-white f-20 mt-2 mb-2 float-left">Limpieza y mantención</h4>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="btn-group mr-2 float-right mt- mb-">
-                                                        <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_limpieza_mantencion();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo/a personal de limpieza y mantencion</button>
-                                                        <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
-                                                        <div class="dropdown-menu">
-                                                            <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="Asociar_personal();">Asociar personal de limpieza y mantencion</button>
+                        <!--Tab personal administrativo-->
+                        <div class="tab-pane fade" id="administrativos" role="tabpanel" aria-labelledby="administrativos-tab">
+                            <div class="row mb-n4">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header bg-info">
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h4 class="text-white f-20 mt-2 mb-2 float-left">Personal administrativo</h4>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="btn-group mr-2  float-md-right">
+                                                            <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_administrativo();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo/a personal administrativo</button>
+                                                            <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
+                                                            <div class="dropdown-menu">
+                                                                <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="Asociar_personal();">Asociar personal administrativo</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <table id="limpieza_mantencion_personal" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center align-middle">Nombre / Rut</th>
-                                                    <th class="text-center align-middle">Cargo</th>
-                                                    <th class="text-center align-middle">Tipo</th>
-                                                    <th class="text-center align-middle">Dirección</th>
-                                                    <th class="text-center align-middle">Contacto</th>
-													<th class="text-center align-middle">Datos</th>
-                                                    <th class="text-center align-middle">Rol y permisos</th>
-                                                    <th class="text-center align-middle">Acción</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if($lista_mantencion)
-                                                @foreach ( $lista_mantencion as $administrativo)
-                                                <tr>
-                                                    <td class="align-middle text-center">
-                                                        <span><strong>{{ $administrativo->nombre.' '.$administrativo->apellido_paterno.' '.$administrativo->apellido_materno }}</strong></span><br>
-                                                        <span>{{ $administrativo->rut }}</span>
-                                                    </td>
-                                                    <td class="align-middle text-center">{{ $administrativo->contrato->tipo_empleado }}</td>
-                                                    <td class="align-middle text-center">@if($administrativo->empresa) Empresa @else Persona @endif</td>
-                                                    <td class="align-middle text-center">
-                                                        {{ $administrativo->direccion()->first()->direccion }} #{{ $administrativo->direccion()->first()->numero_dir }}, {{ $administrativo->direccion()->first()->ciudad()->first()->nombre }}
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto_mantenedor('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_mantencion_cm('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <!--Botón Modal-->
-                                                        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
-                                                    </td>
-                                                    <td class="align-middle text-center">
-                                                        <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});"><i class="feather icon-edit"></i> Editar</button>
-                                                        <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_otros_profesionales('mantencion',{{ $administrativo->id}}, {{ $administrativo->contrato->id }}, '{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}');"><i class="feather icon-x-circle"></i> Desasociar</button>
-                                                    </td>
-                                                </tr>
-                                                @endforeach
-                                                @endif
-                                            </tbody>
-                                        </table>
+                                        <div class="card-body">
+                                            <div style="overflow-x:auto;">
+                                                <table id="administrativo_personal" class="display table table-striped dt-responsive nowrap table-sm" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="align-middle">Nombre / Rut</th>
+                                                            <th class="align-middle">Cargo</th>
+                                                            <th class="align-middle">Dirección</th>
+                                                            <th class="align-middle">Acción</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if($lista_administrativo)
+                                                            @foreach ( $lista_administrativo as $administrativo)
+                                                            <tr>
+                                                                <td class="align-middle">
+                                                                    <span><strong>{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}</strong></span><br>
+                                                                    <span>{{ $administrativo->rut }}</span>
+                                                                </td>
+                                                                <td class="align-middle">{{ $administrativo->contrato->tipo_empleado }}</td>
+                                                                <td class="align-middle">
+                                                                    {{ $administrativo->direccion()->first()->direccion }} #{{ $administrativo->direccion()->first()->numero_dir }}, {{ $administrativo->direccion()->first()->ciudad()->first()->nombre }}
+                                                                </td>
+                                                                <td class="align-middle">
+                                                                    <!--Botón Modal-->
+                                                                    <button type="button" class="btn btn-info btn-icon" onclick="contacto_administrador('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
+                                                                                                                                <!--Botón Modal-->
+                                                                    <button type="button" class="btn btn-success btn-icon" onclick="datos_depositos('asistente publico',{{ $administrativo->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Datos bancarios para depósito"><i class="fas fa-hand-holding-usd"></i></button>
+                                                                    <!--Botón Modal-->
+                                                                    <button type="button" class="btn btn-purple btn-sm btn-icon" onclick="horario_administrativo_cm('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather icon-clock"></i></button>
+                                                                    <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos_admin('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }},'{{ $administrativo->roles }}');" data-toggle="tooltip" data-placement="top" title="Roles y permisos"><i class="feather icon-settings"></i></button>
+                                                                    <button type="button" class="btn btn-info btn-xxs" onclick="editar_datos_administrativo({{ $administrativo->id }});"><i class="feather icon-edit"></i> Editar</button>
+                                                                    <button type="button" class="btn btn-danger btn-xxs" onclick="modal_desactivar_otros_profesionales('administrativo',{{ $administrativo->id}}, {{ $administrativo->contrato->id }}, '{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}');"><i class="feather icon-x"></i> Desasociar</button>
+                                                                </td>
+                                                            </tr>
+                                                            @endforeach
+                                                        @endif
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!--Cierre: Tab personal limpieza y mantencion-->
+                        <!--Cierre: Tab personal administrativo-->
+
+                        <!--Tab personal limpieza y mantencion-->
+                        <div class="tab-pane fade" id="limpieza-mantencion" role="tabpanel" aria-labelledby="limpieza-mantencion-tab">
+                            <div class="row mb-n4">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header bg-info">
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <h4 class="text-white f-20 mt-2 mb-2 float-left">Limpieza y mantención</h4>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="btn-group mr-2 float-md-right">
+                                                            <button type="button" class="btn btn-sm btn-outline-light" onclick="registrar_limpieza_mantencion();"><i class="fa fa-plus" aria-hidden="true"></i> Registrar nuevo/a personal de limpieza y mantención</button>
+                                                            <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
+                                                            <div class="dropdown-menu">
+                                                                <button class="dropdown-item" type="button" class="btn  btn-primary" onclick="Asociar_personal();">Asociar personal de limpieza y mantencion</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div style="overflow-x:auto;">
+                                                <table id="limpieza_mantencion_personal" class="display table table-striped dt-responsive nowrap table-sm" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="align-middle">Nombre / Rut</th>
+                                                            <th class="align-middle">Cargo</th>
+                                                            <th class="align-middle">Tipo</th>
+                                                            <th class="align-middle">Dirección</th>
+                                                            <th class="align-middle">Acción</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if($lista_mantencion)
+                                                        @foreach ( $lista_mantencion as $administrativo)
+                                                        <tr>
+                                                            <td class="align-middle">
+                                                                <span><strong>{{ $administrativo->nombre.' '.$administrativo->apellido_paterno.' '.$administrativo->apellido_materno }}</strong></span><br>
+                                                                <span>{{ $administrativo->rut }}</span>
+                                                            </td>
+                                                            <td class="align-middle">{{ $administrativo->contrato->tipo_empleado }}</td>
+                                                            <td class="align-middle">@if($administrativo->empresa) Empresa @else Persona @endif</td>
+                                                            <td class="align-middle">
+                                                                {{ $administrativo->direccion()->first()->direccion }} #{{ $administrativo->direccion()->first()->numero_dir }}, {{ $administrativo->direccion()->first()->ciudad()->first()->nombre }}
+                                                            </td>
+                                                            <td class="align-middle">
+                                                                <!--Botón Modal-->
+                                                                <button type="button" class="btn btn-info btn-icon" onclick="contacto_mantenedor('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
+                                                                <!--Botón Modal-->
+                                                                <button type="button" class="btn btn-success btn-icon" onclick="datos_depositos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Datos bancarios para depósito"><i class="fas fa-hand-holding-usd"></i></button>
+                                                                <!--Botón Modal-->
+                                                                <button type="button" class="btn btn-purple btn-icon" onclick="horario_mantencion_cm('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather icon-clock"></i></button>
+                                                                <!--Botón Modal-->
+                                                                <button type="button" class="btn btn-warning btn-icon" onclick="roles_permisos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
+                                                                <button type="button" class="btn btn-info btn-xxs" onclick="editar_datos_mantencion('{{ $administrativo->contrato->tipo_empleado }}',{{ $administrativo->id }});"><i class="feather icon-edit"></i> Editar</button>
+                                                                <button type="button" class="btn btn-danger btn-xxs" onclick="modal_desactivar_otros_profesionales('mantencion',{{ $administrativo->id}}, {{ $administrativo->contrato->id }}, '{{ $administrativo->nombres.' '.$administrativo->apellido_uno.' '.$administrativo->apellido_dos }}');"><i class="feather icon-x-circle"></i> Desasociar</button>
+                                                            </td>
+                                                        </tr>
+                                                        @endforeach
+                                                    @endif
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Cierre: Tab personal limpieza y mantencion-->
+                </div>
+                <!--Cierre: Pills-->
             </div>
-            <!--Cierre: Pills-->
         </div>
     </div>
 </div>
@@ -650,7 +638,7 @@
 
         if(rut == ''){
             valido = 0;
-            mensaje += '<li>Debe ingresar el rut del administrativo</li>';
+            mensaje += '<li>Debe ingresar el RUT del administrativo</li>';
         }
         if(f_ingreso == ''){
             valido = 0;
@@ -678,7 +666,7 @@
         }
         if(email == ''){
             valido = 0;
-            mensaje += '<li>Debe ingresar el email del administrativo</li>';
+            mensaje += '<li>Debe ingresar el correo electrónico del administrativo</li>';
         }
         if(telefono == ''){
             valido = 0;
@@ -690,11 +678,11 @@
         }
         if(region == ''){
             valido = 0;
-            mensaje += '<li>Debe seleccionar la región del administrativo</li>';
+            mensaje += '<li>Debe seleccionar la Región del administrativo</li>';
         }
         if(ciudad == ''){
             valido = 0;
-            mensaje += '<li>Debe seleccionar la ciudad del administrativo</li>';
+            mensaje += '<li>Debe seleccionar la Ciudad del administrativo</li>';
         }
         if(numero == ''){
             valido = 0;
@@ -1853,7 +1841,6 @@ function asociar_profesional_existente()
 {
 let id_lugar_atencion = $('#agregar_profesional_int_id_lugar_atencion').val();
 let id_profesional = $('#agregar_profesional_id_profesional').val();
-let id_tipo_convenio_institucion = $('#agregar_profesional_id_tipo_convenio_institucion').val();
 let url = "{{ route('adm_cm.asociar_profesional_existente')}}";
 
 $.ajax({
@@ -1863,7 +1850,6 @@ $.ajax({
         _token: CSRF_TOKEN,
         id_lugar_atencion: id_lugar_atencion,
         id_profesional: id_profesional,
-        id_tipo_convenio_institucion: id_tipo_convenio_institucion
     },
 })
 .done(function(data) {

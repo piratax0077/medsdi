@@ -90,7 +90,6 @@
                                         <input type="hidden" name="reserva_hora_id_responsable" id="reserva_hora_id_responsable" value="">
                                         <input type="hidden" name="reserva_nombre_paciente" id="reserva_nombre_paciente" value="">
                                         <input type="hidden" name="bono_paciente_nombre" id="bono_paciente_nombre" value="">
-                                        <input type="hidden" name="id_servicio_interno" id="id_servicio_interno" value="{{ $servicio->id }}">
 
 
 
@@ -301,38 +300,12 @@
                                                 </tbody>
                                             </table>
                                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 d-none">
-                                                @php $enfermera = false; @endphp
                                                 <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Motivo de la hospitalización</label>
+                                                    <label class="floating-label-activo-sm">Motivo de la urgencia</label>
                                                     <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion" id="reserva_hora_descripcion">
                                                 </div>
                                             </div>
-                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                <div class="form-group">
-                                                    <label class="floating-label-activo-sm">Motivo de la hospitalización</label>
-                                                    <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion_" id="reserva_hora_descripcion_">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-3">
-                                                <label class="floating-label-activo-sm" for="motivo">Diagnósticos</label>
-                                                <input type="text" class="form-control form-control-sm"name="motivo" id="motivo" @if(isset($antecedentes_urgencia_paciente)) value="{{ $antecedentes_urgencia_paciente->motivo_consulta }}" @endif @if(!$enfermera) readonly @endif>
-                                            </div>
-                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-3">
-                                                <label class="floating-label-activo-sm" for="antecedentes">Derivado por:</label>
-                                                <input type="text" class="form-control form-control-sm" name="antecedentes" id="antecedentes"@if(isset($antecedentes_urgencia_paciente)) value="{{ $antecedentes_urgencia_paciente->medio_referencia }}" @endif @if(!$enfermera) readonly @endif>
-                                            </div>
-                                            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-3">
-                                                <label class="floating-label-activo-sm" for="esc_eva_ing">Escala EVA</label>
-                                                <input type="text" class="form-control form-control-sm" name="esc_eva_ing" id="esc_eva_ing"@if(isset($antecedentes_urgencia_paciente)) value="{{ $antecedentes_urgencia_paciente->eva }}" @endif @if(!$enfermera) readonly @endif>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
-                                                    <label class="floating-label-activo-sm" for="examen_fisico">Examen relevante y Observaciones de la  Urgencia</label>
-                                                    <textarea class="form-control caja-texto form-control-sm mb-9" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_ing_pcte" id="obs_ing_pcte" placeholder="EXAMEN DE INGRESO PACIENTE" @if(!$enfermera) readonly @endif>
-                                                        @if(isset($antecedentes_urgencia_paciente)){{ $antecedentes_urgencia_paciente->observaciones }}@endif
-                                                    </textarea>
-                                                </div>
-                                            </div>
+
                                             <div class="modal-footer mb-0 pt-1 pb-0">
                                                 {{--  <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
                                                 <button type="button" onclick="agendar_hora();" class="btn btn-info"><i class="feather icon-check"></i> Agendar hora</button>  --}}
@@ -488,29 +461,11 @@
                                                 </div>
                                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                     <div class="form-group">
-                                                        <label class="floating-label-activo-sm">Motivo de la hospitalización</label>
+                                                        <label class="floating-label-activo-sm">Motivo de la urgencia</label>
                                                         <input type="text" class="form-control form-control-sm" name="reserva_hora_descripcion_" id="reserva_hora_descripcion_">
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-3">
-                                                    <label class="floating-label-activo-sm" for="motivo">Diagnósticos</label>
-                                                    <input type="text" class="form-control form-control-sm"name="motivo" id="motivo" @if(isset($antecedentes_urgencia_paciente)) value="{{ $antecedentes_urgencia_paciente->motivo_consulta }}" @endif @if(!$enfermera) readonly @endif>
-                                                </div>
-                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-3">
-                                                    <label class="floating-label-activo-sm" for="antecedentes">Derivado por:</label>
-                                                    <input type="text" class="form-control form-control-sm" name="antecedentes" id="antecedentes"@if(isset($antecedentes_urgencia_paciente)) value="{{ $antecedentes_urgencia_paciente->medio_referencia }}" @endif @if(!$enfermera) readonly @endif>
-                                                </div>
-                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 my-3">
-                                                    <label class="floating-label-activo-sm" for="esc_eva_ing">Escala EVA</label>
-                                                    <input type="text" class="form-control form-control-sm" name="esc_eva_ing" id="esc_eva_ing"@if(isset($antecedentes_urgencia_paciente)) value="{{ $antecedentes_urgencia_paciente->eva }}" @endif @if(!$enfermera) readonly @endif>
-                                                </div>
 
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 ">
-                                                    <label class="floating-label-activo-sm" for="examen_fisico">Examen relevante y Observaciones de la  Hospitalización</label>
-                                                    <textarea class="form-control caja-texto form-control-sm mb-9" rows="1" onfocus="this.rows=4" onblur="this.rows=1;" name="obs_ing_pcte" id="obs_ing_pcte" placeholder="EXAMEN DE INGRESO PACIENTE" @if(!$enfermera) readonly @endif>
-                                                        @if(isset($antecedentes_urgencia_paciente)){{ $antecedentes_urgencia_paciente->observaciones }}@endif
-                                                    </textarea>
-                                                </div>
                                             </div>
 
 
@@ -718,10 +673,10 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-row my-2">
-                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="form-row">
+                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
                                                     <div class="form-group">
-                                                        <h6 class="f-14 text-c-blue">Aviso o contacto con familiares</h6>
+                                                        <h6 class="f-14 text-c-blue">Enviar confirmación</h6>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
@@ -741,18 +696,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
-                                                    <div class="form-group">
-                                                        <div class="custom-control custom-switch">
-                                                            <input type="checkbox" class="custom-control-input" id="reserva_contacto_emergencia" name="reserva_contacto_emergencia">
-                                                            <label class="custom-control-label" for="reserva_contacto_emergencia">Contacto emergencia</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
-
                                             <div class="modal-footer">
-                                                <button type="button"   onclick="registrar_paciente();"class="btn btn-info"><i class="feather icon-check"></i>Asignar Sala/Cama</button>
+                                                <button type="button"   onclick="registrar_paciente();"class="btn btn-info"><i class="feather icon-check"></i>Cobro Ingreso Paciente</button>
                                             </div>
                                         </div>
                                     </form>
@@ -1044,7 +990,7 @@
         if(reserva_hora_descripcion == '')
         {
             $valido = 0;
-            $mensaje += 'Motivo de la hospitalización es requerida\n';
+            $mensaje += 'Motivo de la urgencia es requerida\n';
         }
 
         // if(profesional_asignado == 0){

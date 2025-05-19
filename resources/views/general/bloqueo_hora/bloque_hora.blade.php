@@ -3,22 +3,21 @@
 
 
 <div class="modal fade" id="modal_bloqueo_hora" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal_bloqueo_hora" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header" style="background-color: rgb(28, 190, 190);">
-        <h5 class="modal-title text-white" id="modal_bloqueo_horaLabel">Configuración de Agenda</h5>
+      <div class="modal-header bg-info">
+        <h5 class="modal-title text-white" id="modal_bloqueo_horaLabel">Configuración de agenda</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#modal_bloqueo_hora').modal('hide');">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
 
       <div class="modal-body">
-
         <div class="row">
             <div class="col-md-12">
                 <ul class="nav nav-tabs-secciones mb-3 mt-3" id="orl" role="tablist">
                     <li class="nav-item-secciones">
-                        <a class="nav-secciones active text-uppercase" id="bloqueo_crear-tab" data-toggle="tab" href="#bloqueo_crear" role="tab" aria-controls="bloqueo_crear" aria-selected="true">Crear Bloqueo</a>
+                        <a class="nav-secciones active text-uppercase" id="bloqueo_crear-tab" data-toggle="tab" href="#bloqueo_crear" role="tab" aria-controls="bloqueo_crear" aria-selected="true">Crear bloqueo</a>
                     </li>
                     <li class="nav-item-secciones">
                         <a class="nav-secciones text-uppercase" id="bloqueos_lista-tab" data-toggle="tab" href="#bloqueos_lista" role="tab" aria-controls="bloqueos_lista" aria-selected="false">Bloqueos</a>
@@ -58,29 +57,29 @@
                                 <input type="time" class="form-control form-control-sm" name="bloqueo_hora_inicio" id="bloqueo_hora_inicio">
                             </div>
                             <div class="form-group col-md-6">
-                                <label class="floating-label-activo-sm">Hora de termino</label>
+                                <label class="floating-label-activo-sm">Hora de término</label>
                                 <input type="time" class="form-control form-control-sm" name="bloqueo_hora_termino" id="bloqueo_hora_termino">
                             </div>
 
                             <div class="form-group col-md-6">
                                 <div class="custom-control custom-switch">
                                     <input type="checkbox" class="custom-control-input" onchange="bloqueo_todo_dia();" id="bloqueo_todo_dia" name="bloqueo_todo_dia" value="">
-                                    <label class="custom-control-label" for="bloqueo_todo_dia">Todo el día</label>
+                                    <label class="custom-control-label pt-1" for="bloqueo_todo_dia">Todo el día</label>
                                 </div>
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="col-md-12">
-                                <button type="button" class="btn btn-success-light btn-sm" onclick="registrar_bloqueo_hora();">Guardar</button>
+                            <div class="col-md-12 text-center">
+                                <button type="button" class="btn btn-info" onclick="registrar_bloqueo_hora();"><i class="feather icon-save"></i> Guardar bloqueo</button>
                             </div>
                         </div>
                     </div>
-
                     <div class="tab-pane fade" id="bloqueos_lista" role="tabpanel" aria-labelledby="bloqueos_lista-tab">
-
                         @if (!empty($bloque_horario))
                             @foreach ($bloque_horario as $bloqueo)
-                                <div class="row" style="border: 2px solid #aba8a8; border-radius: 13px; margin: 1em;padding: 10px 0px;">
+                                <div class="row">
+                                    <div class="card-informacion">
+                                        <div class="card-body">
                                     <div class="col-md-12 mb-2" style="text-align: left;"><span class="font-weight-bold">Motivo:</span> {{ empty($bloqueo->motivo)?'-':$bloqueo->motivo }}</div>
                                     @php
                                         $mes = array('', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE');
@@ -91,14 +90,16 @@
                                     <div class="col-md-12 mb-2" style="text-align: left;"><span class="font-weight-bold">Finalización:</span> {!! $fecha_termino !!} {{ $bloqueo->hora_termino }}</div>
                                     <div class="col-md-6 mb-2" style="text-align: center;">
                                         @if ($bloqueo->estado == 1)
-                                            <button class="btn btn-sm btn-success-light" onclick="desbloquear_bloqueo_hora('{{ $bloqueo->id }}');">Desbloquear</button>
+                                            <button class="btn btn-sm btn-info-light-c" onclick="desbloquear_bloqueo_hora('{{ $bloqueo->id }}');"><i class="feather icon-x"></i> Desbloquear</button>
                                         @else
-                                            <button class="btn btn-sm btn-danger-light" onclick="bloquear_bloqueo_hora('{{ $bloqueo->id }}');">Bloquear</button>
+                                            <button class="btn btn-sm btn-danger-light-c" onclick="bloquear_bloqueo_hora('{{ $bloqueo->id }}');"><i class="feather icon-x"></i> Bloquear</button>
                                         @endif
                                     </div>
                                     <div class="col-md-6 mb-2" style="text-align: center;">
-                                        <button class="btn btn-sm btn-secondary-light" onclick="eliminar_bloqueo_hora('{{ $bloqueo->id }}');">Eliminar Bloqueo</button>
+                                        <button class="btn btn-sm btn-info-light-c" onclick="eliminar_bloqueo_hora('{{ $bloqueo->id }}');"><i class="feather icon-x"></i> Eliminar bloqueo</button>
                                     </div>
+                                </div>
+                                </div>
                                 </div>
                             @endforeach
                         @endif
@@ -107,12 +108,6 @@
             </div>
         </div>
       </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger-light btn-sm" onclick="$('#modal_bloqueo_hora').modal('hide');">Cerrar</button>
-      </div>
-
-
     </div>
   </div>
 </div>
@@ -202,7 +197,7 @@
                 $('#modal_bloqueo_hora').modal('hide');
 
                 swal({
-                    title: "Bloqueo de Horario",
+                    title: "Bloqueo de horario",
                     text: "Registro con exito.",
                     icon: "success",
                     buttons: "Aceptar",
@@ -235,7 +230,7 @@
                 }
 
                 swal({
-                    title: "Bloqueo de Horario",
+                    title: "Bloqueo de horario",
                     text: mensaje,
                     icon: "error",
                 });
@@ -271,7 +266,7 @@
             {
 
                 swal({
-                    title: "Bloqueo de Horario Desbloqueado",
+                    title: "Bloqueo de horario desbloqueado",
                     text: "Registro con exito.",
                     icon: "success",
                     buttons: "Aceptar",
@@ -297,7 +292,7 @@
                 }
 
                 swal({
-                    title: "Bloqueo de Horario",
+                    title: "Bloqueo de horario",
                     text: mensaje,
                     icon: "error",
                 });
@@ -333,7 +328,7 @@
             {
 
                 swal({
-                    title: "Bloqueo de Horario Bloqueado",
+                    title: "Bloqueo de horario bloqueado",
                     text: "Registro con exito.",
                     icon: "success",
                     buttons: "Aceptar",
@@ -395,7 +390,7 @@
             {
 
                 swal({
-                    title: "Bloqueo de Horario Eliminado",
+                    title: "Bloqueo de horario eliminado",
                     text: "Registro con exito.",
                     icon: "success",
                     buttons: "Aceptar",
@@ -468,22 +463,24 @@
                     var fechaTermino = dia + ' de ' + meses[mes] + ' del ' + anio;
 
                     var html = '';
-                    html += '<div class="row" style="border: 2px solid #aba8a8; border-radius: 13px; margin: 1em;padding: 10px 0px;">';
-                    html += '    <div class="col-md-12 mb-2" style="text-align: left;"><span class="font-weight-bold">Motivo:</span> '+((value.motivo == null)?'':value.motivo)+'</div>';
+                    html += '<div class="card-informacion">';
+                    html += '<div class="card-body">';
+                    html += '<div class="row">';
+                    html += '    <div class="col-md-12 mb-1" style="text-align: left;"><span class="font-weight-bold">Motivo:</span> '+((value.motivo == null)?'':value.motivo)+'</div>';
                     html += '    ';
-                    html += '    <div class="col-md-12 mb-2" style="text-align: left;"><span class="font-weight-bold">Inicio:</span> '+fechaInicio+' '+value.hora_inicio+'</div>';
-                    html += '    <div class="col-md-12 mb-2" style="text-align: left;"><span class="font-weight-bold">Finalización:</span> '+fechaTermino+' '+value.hora_termino+'</div>';
-                    html += '    <div class="col-md-6 mb-2" style="text-align: center;">';
+                    html += '    <div class="col-md-12 mb-1" style="text-align: left;"><span class="font-weight-bold">Inicio:</span> '+fechaInicio+' - '+value.hora_inicio+'</div>';
+                    html += '    <div class="col-md-12 mb-1" style="text-align: left;"><span class="font-weight-bold">Finalización:</span> '+fechaTermino+' - '+value.hora_termino+'</div>';
+                    html += '    <div class="col-md-12 mb-1 d-inline mt-3" style="text-align: right;">';
 
                     if (value.estado == 1)
-                    html += '            <button class="btn btn-sm btn-success-light" onclick="desbloquear_bloqueo_hora(\''+value.id+'\');">Desbloquear</button>';
+                    html += '            <button class="btn btn-xxs btn-info-light-c d-inline" onclick="desbloquear_bloqueo_hora(\''+value.id+'\');"><i class="feather icon-unlock"></i> Desbloquear</button>';
                     else
-                    html += '            <button class="btn btn-sm btn-danger-light" onclick="bloquear_bloqueo_hora(\''+value.id+'\');">Bloquear</button>';
+                    html += '            <button class="btn btn-xxs btn-danger-light-c  d-inline" onclick="bloquear_bloqueo_hora(\''+value.id+'\');"><i class="feather icon-lock"></i> Bloquear</button>';
+                    html += '        <button class="btn btn-xxs btn-primary-light-c d-inline" onclick="eliminar_bloqueo_hora(\''+value.id+'\');"><i class="feather icon-x"></i> Eliminar bloqueo</button>';
 
                     html += '    </div>';
-                    html += '    <div class="col-md-6 mb-2" style="text-align: center;">';
-                    html += '        <button class="btn btn-sm btn-secondary-light" onclick="eliminar_bloqueo_hora(\''+value.id+'\');">Eliminar Bloqueo</button>';
-                    html += '    </div>';
+                     html += '    </div>';
+                      html += '    </div>';
                     html += '</div>';
 
                     $('#bloqueos_lista').append(html);

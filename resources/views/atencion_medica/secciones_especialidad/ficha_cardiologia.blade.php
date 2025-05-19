@@ -6,7 +6,7 @@
                     <li class="nav-item-secciones">
                         <a class="nav-secciones active text-uppercase" id="atencion_cardiologia_gen-tab" data-toggle="tab" href="#atencion_cardiologia_gen" role="tab" aria-controls="atencion_cardiologia_gen" aria-selected="true">Atención Especialidad</a>
                     </li>
-                 
+
 				</ul>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -105,7 +105,7 @@
                                                                                 <h6 class="t-aten">Ficha Broncopulmonar</h6>
                                                                             </div>
                                                                         </div>  --}}
-                                                                        
+
                                                                         <div class="form-row">
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                 <label class="floating-label-activo-sm" for="mc_cardio">Motivo de consulta</label>
@@ -122,7 +122,7 @@
                                                                                     <option value="2">Si</option>
                                                                                 </select>
                                                                             </div>
-                                                                    
+
                                                                         </div>
                                                                         <div class="form-row" id="div_detalle_urgencia_cardio" style="display:none">
                                                                             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 form-group">
@@ -136,7 +136,7 @@
                                                                                 <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_pabellon();"><i class="feather icon-edit-1"></i> Solicitar Pabellón</button>
                                                                             </div>
                                                                         </div>
-                                                                
+
                                                                         {{--  <div class="row mb-2">
                                                                             <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
                                                                                 <div class="form-group">
@@ -230,7 +230,7 @@
                                                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 my-1">
                                                                                 <button type="button" class="btn btn-primary-light-c btn-xs btn-block" onclick="sol_examen_rx_cardio()";><i class="feather icon-edit-1"></i> Solicitar Radiologia especialidad</button>
                                                                             </div>
-                                                                           
+
                                                                         </div>
                                                                         <div class="form-row">
                                                                             <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">

@@ -3,7 +3,7 @@
 	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Agregar Empleado Nuevo Administrativo</h5>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine">Registrar nuevo/a personal administrativo</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -14,14 +14,14 @@
                         <input type="hidden" name="add_empleado_id_tipo_admin_creador_administrativo" id="add_empleado_id_tipo_admin_creador_administrativo" value="{{ Auth::user()->Roles()->first()->id }}">
                         <input type="hidden" name="add_empleado_clave_ingreso_administrativo" id="add_empleado_clave_ingreso_administrativo" value="{{ rand(11111,99999) }}">
                     <div class="row">
-                        <div class="form-group col-sm-12 col-md-12 col-lg-12">
+                        <!--<div class="form-group col-sm-12 col-md-12 col-lg-12">
                             <script>
                             var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
                             var f=new Date();
                             document.write( f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear());
                             </script>
-                        </div>
+                        </div>-->
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <ul class="nav nav-tabs-aten nav-fill mb-3" id="ev-nutricional" role="tablist">
                                 <li class="nav-item">
@@ -48,18 +48,21 @@
                             <div class="tab-content" id="info-ingreso">
                                 <!---->
                                 <div class="tab-pane fade show active" id="info-tipo_contrato_administrativo" role="tabpanel" aria-labelledby="info-tipo_contrato-tab">
-                                    <div class="form-group col-sm-12 col-md-6 col-lg-6">
-                                        <select class="form-control form-control-sm" name="_administrativo" id="add_empleado_tipo_contrato_administrativo">
-                                            <option value="">Seleccione</option>
-                                            @if ($lista_tipo_administrativo)
-                                                @foreach ($lista_tipo_administrativo as $item)
-                                                    <option value="{{ $item['nombres'] }}" data-id="{{ $item['id'] }}">{{ $item['nombres'] }}</option>
-                                                @endforeach
-                                            @endif
-                                            {{--  asistente tipo  --}}
-                                            {{--  tipo institucion  --}}
-                                            {{--  tipo administrador  --}}
-                                        </select>
+                                    <div class="form-row">
+                                        <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <label class="floating-label-activo-sm">Tipo de contrato</label>
+                                            <select class="form-control" name="_administrativo" id="add_empleado_tipo_contrato_administrativo">
+                                                <option value="">Seleccione</option>
+                                                @if ($lista_tipo_administrativo)
+                                                    @foreach ($lista_tipo_administrativo as $item)
+                                                        <option value="{{ $item['nombres'] }}" data-id="{{ $item['id'] }}">{{ $item['nombres'] }}</option>
+                                                    @endforeach
+                                                @endif
+                                                {{--  asistente tipo  --}}
+                                                {{--  tipo institucion  --}}
+                                                {{--  tipo administrador  --}}
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                                     <!--INFO PERSONAL-->
@@ -67,25 +70,25 @@
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">INFORMACIÓN Y DATOS DE CONTACTO</h6>
+                                                <h6 class="t-modal">Información y datos de contacto</h6>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">RUT:</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-4">
+                                                <label class="floating-label-activo-sm">RUT</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_rut_administrativo" id="add_empleado_rut_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-6 col-xl-4">
                                                 <label class="floating-label-activo-sm">Nombres</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_nombre_administrativo" id="add_empleado_nombre_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
                                                 <label class="floating-label-activo-sm">Apellido Paterno</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_uno_administrativo" id="add_empleado_apellido_uno_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
                                                 <label class="floating-label-activo-sm">Apellido Materno</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_apellido_dos_administrativo" id="add_empleado_apellido_dos_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
                                                 <label class="floating-label-activo-sm">Sexo</label>
                                                 <select class="form-control form-control-sm" name="add_empleado_sexo_administrativo" id="add_empleado_sexo_administrativo">
                                                     <option value="">Seleccione</option>
@@ -93,21 +96,21 @@
                                                     <option value="M">Masculino</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-4">
                                                 <label class="floating-label-activo-sm">Fecha Nacimiento</label>
                                                 <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_nacimiento_administrativo" id="add_empleado_fecha_nacimiento_administrativo">
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Email:</label>
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                                                <label class="floating-label-activo-sm">Email</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_email_administrativo" id="add_empleado_email_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                                                 <label class="floating-label-activo-sm">Teléfono</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_telefono_administrativo" id="add_empleado_telefono_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                 <label class="floating-label-activo-sm">Región</label>
                                                 <select class="form-control form-control-sm" name="add_empleado_region_administrativo" id="add_empleado_region_administrativo" onchange="buscar_ciudad_nuevo_empleado_administrativo_();">
                                                     <option value="">Seleccione</option>
@@ -119,18 +122,18 @@
                                                     @endif
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                 <label class="floating-label-activo-sm">Ciudad</label>
                                                 <select class="form-control form-control-sm" name="add_empleado_ciudad_administrativo" id="add_empleado_ciudad_administrativo">
                                                     <option value="">Seleccione</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-9 col-lg-9">
                                                 <label class="floating-label-activo-sm">Dirección</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_direccion_administrativo" id="add_empleado_direccion_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Número</label>
+                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                                <label class="floating-label-activo-sm">Nº</label>
                                                 <input type="text" class="form-control form-control-sm" name="add_empleado_numero_administrativo" id="add_empleado_numero_administrativo">
                                             </div>
                                         </div>
@@ -141,18 +144,18 @@
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">INFORMACIÓN Y DATOS DEL CONTRATO</h6>
+                                                <h6 class="t-modal">Información y datos del contrato</h6>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <label class="floating-label-activo-sm">Fecha Inicio</label>
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                <label class="floating-label-activo-sm">Fecha inicio</label>
                                                 <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_inicio_administrativo" id="add_empleado_fecha_inicio_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
-                                                <label class="floating-label-activo-sm">Fecha Termino</label>
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
+                                                <label class="floating-label-activo-sm">Fecha término</label>
                                                 <input type="date" class="form-control form-control-sm" name="add_empleado_fecha_termino_administrativo" id="add_empleado_fecha_termino_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-6 col-lg-6"style="text-align:right">
-                                                <label  class="cr">Indefinido</label>
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-6"style="text-align:right">
+                                                <label  class="cr">Contrato indefinido</label>
                                                 <input type="hidden" id="add_cont_indefinido_administrativo" name="add_cont_indefinido_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
                                                     <input type="checkbox" onchange="activar_check('add_empleado_check_contrato_indef_administrativo', 'add_cont_indefinido_administrativo_administrativo', ' ');" id="add_empleado_check_contrato_indef_administrativo" name="add_empleado_check_contrato_indef_administrativo" value="">
@@ -165,7 +168,7 @@
                                                 <label class="floating-label-activo-sm">Monto Imponible</label>
                                                 <input type="number" class="form-control form-control-sm" name="add_empleado_monto_imponible_administrativo" id="add_empleado_monto_imponible_administrativo">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <label  class="floating-label-activo-sm">Locomoción</label>
                                                 <input type="hidden" id="add_empleado_locomocion_administrativo" name="add_empleado_locomocion_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -173,12 +176,10 @@
                                                     <label for="add_empleado_check_locomocion_administrativo" class="cr"></label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_locomocion_porcentaje_administrativo" id="add_empleado_locomocion_porcentaje_administrativo" value="N/A">
                                             </div>
-
-
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <label class="floating-label-activo-sm">Colación</label>
                                                  <input type="hidden" id="add_empleado_colacion_administrativo" name="add_empleado_colacion_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -186,11 +187,11 @@
                                                     <label for="add_empleado_check_colacion_administrativo" class="cr"></label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_colacion_porcentaje_administrativo" id="add_empleado_colacion_porcentaje_administrativo" value="N/A">
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <label class="floating-label-activo-sm">Asignación Familar</label>
                                                 <input type="hidden" id="add_empleado_asignacion_familiar_administrativo" name="add_empleado_asignacion_familiar_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -198,10 +199,10 @@
                                                     <label for="add_empleado_check_asignacion_familiar_administrativo" class="cr"></label>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_asignacion_familiar_cantidad_administrativo" id="add_empleado_asignacion_familiar_cantidad_administrativo" value="N/A">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <label class="floating-label-activo-sm">Cajas de Compensación</label>
                                                 <input type="hidden" id="add_empleado_caja_compensacion_administrativo" name="add_empleado_caja_compensacion_administrativo" value="0">
                                                 <div class="switch switch-success d-inline m-r-10">
@@ -211,7 +212,7 @@
 
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-3 col-lg-3">
+                                            <div class="form-group col-sm-12 col-md-12 col-lg-3">
                                                 <input type="number" disabled="disabled" class="form-control form-control-sm" name="add_empleado_caja_compensacion_porcentaje_administrativo" id="add_empleado_caja_compensacion_porcentaje_administrativo" value="N/A">
                                             </div>
                                         </div>
@@ -222,10 +223,10 @@
                                     <form>
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-12 mb-2">
-                                                <h6 class="text-c-blue">HORARIO DE TRABAJO</h6>
+                                                <h6 class="t-modal">Horario de trabajo</h6>
                                             </div>
                                             <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                                                <label class="floating-label-activo-sm">Días de Trabajo</label>
+                                                <label class="floating-label-activo-sm">Días de trabajo</label>
                                                 <select class="js-example-basic-multiple" name="add_empleado_dias_laborales_administrativo" id="add_empleado_dias_laborales_administrativo" multiple="multiple">
                                                     <option value="1">Lunes</option>
                                                     <option value="2">Martes</option>
@@ -236,20 +237,20 @@
                                                     <option value="7">Domingo</option>
                                                 </select>
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                 <label class="floating-label-activo-sm">Hora entrada</label>
                                                 <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_administrativo" name="add_empleado_hora_entrada_administrativo" value="08:00">
                                             </div>
 
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                 <label class="floating-label-activo-sm">Hora salida</label>
                                                 <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_administrativo" name="add_empleado_hora_salida_administrativo" value="19:00">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
-                                                <label class="floating-label-activo-sm">Hora Inicio Colación</label>
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
+                                                <label class="floating-label-activo-sm">Hora inicio colación</label>
                                                 <input type="time" class="form-control form-control-sm" id="add_empleado_hora_entrada_colacion_administrativo" name="add_empleado_hora_entrada_colacion_administrativo" value="12:00">
                                             </div>
-                                            <div class="form-group col-sm-12 col-md-4 col-lg-4">
+                                            <div class="form-group col-sm-12 col-md-6 col-lg-6">
                                                 <label class="floating-label-activo-sm">Hora término colación</label>
                                                 <input type="time" class="form-control form-control-sm" id="add_empleado_hora_salida_colacion_administrativo" name="add_empleado_hora_salida_colacion_administrativo" value="13:00">
                                             </div>
@@ -258,8 +259,12 @@
                                 </div>
                                 <!-- LEYES SOCIALES -->
                                 <div class="tab-pane fade show" id="leyes_sociales_administrativo" role="tabpanel" aria-labelledby="leyes_sociales-tab">
-                                    <div class="form-group form-row">
-                                        <div class="col-md-3">
+
+                                    <div class="form-row">
+                                        <div class="col-sm-12 col-md-12 mb-2">
+                                                <h6 class="t-modal">Horario de trabajo</h6>
+                                            </div>
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <label class="floating-label-activo-sm" for="afp">Seguros</label>
                                             <select name="afp_administrativo" id="afp_administrativo" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
@@ -271,7 +276,7 @@
                                                 <option value="6">AFP Provida</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <label class="floating-label-activo-sm" for="salud">Seguros</label>
                                             <select name="salud_administrativo" id="salud_administrativo" class="form-control form-control-sm">
                                                 <option value="0">Seleccione</option>
@@ -284,13 +289,13 @@
                                                 <option value="7">Isapre Vida Tres</option>
                                             </select>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="com-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="seguros">Seguros</label>
                                                 <input type="text" name="seguros_administrativo" id="seguros_administrativo" class="form-control form-control-sm">
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="com-sm-12 col-md-6 col-lg-6 col-xl-3">
                                             <div class="form-group">
                                                 <label class="floating-label-activo-sm" for="cantidad">Cantidad</label>
                                                 <input type="number" name="cantidad_administrativo" id="cantidad_administrativo" class="form-control form-control-sm">
@@ -305,9 +310,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-sm mx-auto" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-info btn-sm mx-auto" onclick="registrar_nuevo_empleado_administrativo();">Añadir al Equipo</button>
-                {{--  <button type="button" class="btn btn-primary">Ver formulario (PDF)</button>  --}}
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="feather icon-x"></i> Cancelar</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="registrar_nuevo_empleado_administrativo();"><i class="feather icon-check"></i> Añadir al Equipo</button>
                 </form>
             </div>
         </div>

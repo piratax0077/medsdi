@@ -1992,6 +1992,7 @@ Route::get('consulta/persona', [App\Http\Controllers\PersonasController::class, 
 Route::get('pdf_receta/receta_medicamentos', [App\Http\Controllers\RecomendacionController::class, 'verPDF'])->name('pdf.receta_medicamentos');
 // Route::get('pdf_receta/receta_medicamentos', [App\Http\Controllers\ficha_atencionController::class, 'pdf_receta_medicamentos'])->name('pdf.receta_medicamentos');
 Route::get('pdf_orden/orden_examenes', [App\Http\Controllers\ficha_atencionController::class, 'pdf_orden_examenes'])->name('pdf.orden_examenes');
+Route::get('pdf_orden/orden_examenes_plan_tto', [App\Http\Controllers\ficha_atencionController::class, 'pdf_orden_examenes_plan_tto'])->name('pdf.orden_examenes_plan_tto');
 Route::get('pdf_certificado_reposo/certificado_reposo', [App\Http\Controllers\ficha_atencionController::class, 'pdf_certificado_reposo'])->name('pdf.certificado_reposo');
 Route::get('pdf_informe_medico/informe_medico', [App\Http\Controllers\ficha_atencionController::class, 'pdf_informe_medico'])->name('pdf.informe_medico');
 Route::get('pdf_uso_personal/uso_personal', [App\Http\Controllers\ficha_atencionController::class, 'pdf_uso_personal'])->name('pdf.uso_personal');
@@ -2440,6 +2441,7 @@ Route::get('/paciente/videollamada/{id}/{nombre}', [App\Http\Controllers\JitsiCo
 
 /** IMPORTAR DIAGNOSTICOS DENTALES **/
 Route::get('/importar/diagnosticos', [App\Http\Controllers\DentalController::class, 'importacion_datos_excel'])->name('importar.diagnosticos');
+Route::post('/importar/diagnosticos/psico',[App\Http\Controllers\EscritorioProfesional::class, 'importar_datos_excel_psicologia'])->name('importar.diagnosticos.psicologia');
 Route::post('/importar/diagnosticos/dentales', [App\Http\Controllers\DentalController::class, 'importarDiagnosticos'])->name('dental.importar_datos_excel');
 Route::post('/guardar/diagnostico/laboratorio', [App\Http\Controllers\DentalController::class, 'guardarDiagnosticoLaboratorio'])->name('dental.guardarLaboratorio');
 Route::post('/cargar/tratamiento',[App\Http\Controllers\DentalController::class, 'cargar_tratamiento_presupuesto'])->name('dental.cargar_tratamiento_presupuesto');

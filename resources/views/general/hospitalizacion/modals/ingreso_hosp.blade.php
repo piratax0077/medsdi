@@ -3,9 +3,8 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Solicitud de hospitalización 2x </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">×</span>
+                <h5 class="modal-title text-white mt-1 f-18" id="eco_gine"> Solicitud de hospitalización </h5>
+                <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close" onclick="cerrarihosp();"><span aria-hidden="true">×</span></button>
                 </button>
             </div>
             <div class="modal-body">
@@ -1197,7 +1196,18 @@
         </div>
     </div>
 </div>
+
+
 <script>
+    /*CERRAR MODAL*/
+    function cerrarihosp()
+    {
+        $('#ingreso_m_modal').modal('show');
+    }
+    function cerrarihosp() {
+        $('#ingreso_m_modal').modal ('hide');
+      }
+
     /* Definimos una variable global para los IDs */
     var idCounter = 2;
 

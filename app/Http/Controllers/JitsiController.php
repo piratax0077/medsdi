@@ -394,7 +394,7 @@ class JitsiController extends Controller
             date('Y-m-d H:i:s', strtotime($hora_medica->fecha_consulta . ' ' . $hora_medica->hora_inicio . ' -5 minutes'))
         );
 
-        // echo json_encode($token_paciente_temp);
+         echo json_encode($token_paciente_temp);
         // echo $token_paciente_temp->estado;
 
         if($token_paciente_temp->estado == 1)
@@ -495,8 +495,8 @@ class JitsiController extends Controller
     public function envioNotificacionLlamada()
     {
 
-        $fecha = date('Y-m-d');
-        // $fecha = '2024-09-28';
+        // $fecha = date('Y-m-d');
+        $fecha = '2025-05-05';
 
 
         // Obtener la hora actual
@@ -514,8 +514,8 @@ class JitsiController extends Controller
 
         $registros = HoraMedica::where($filtros)
                                 ->whereIn('id_estado', [1,2,4,8])
-                                ->whereTime('hora_inicio', '>', $horaActual)
-                                ->whereTime('hora_inicio', '<', $horaMasCinco)
+                                //->whereTime('hora_inicio', '>', $horaActual)
+                                //->whereTime('hora_inicio', '<', $horaMasCinco)
                                 ->get();
 
         foreach ($registros as $key => $value)

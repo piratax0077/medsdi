@@ -1806,7 +1806,7 @@
         /* Carnet de alta*/
         function carnet_alta() {
             $('#carnet_alta_modal').modal('show');
-        };
+        }
 
         function cargar_datos_lugar_atencion() {
 
@@ -2399,7 +2399,7 @@
             });
             $('#medicamentos').val(JSON.stringify(rows1));
 
-        };
+        }
 
         function reset_form(tipo) {
 
@@ -2412,7 +2412,7 @@
             //("#fecha_termino_certificado").trigger('reset');
 
 
-        };
+        }
 
         /* function imprimir_certificado_reposo() {
 
@@ -2489,7 +2489,7 @@
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
 
-        };
+        }
 
         function getFrecuencia() {
 
@@ -2534,7 +2534,7 @@
                     console.log(jqXHR, ajaxOptions, thrownError)
                 });
 
-        };
+        }
 
         function indicar_medicamento_fd() {
 
@@ -2584,7 +2584,7 @@
             //$("#sub_tipo_examen").empty();
             //$("#nro_orden").disabled();
 
-        };
+        }
 
         function es_cronico() {
             if ($('#cronico_ficha_dental').prop('checked')) {
@@ -2595,7 +2595,7 @@
 
             }
 
-        };
+        }
 
         function cambiar_enfermedad_cronica() {
             switch ($('#cronicos').val()) {
@@ -2620,7 +2620,7 @@
                 default:
                     break;
             }
-        };
+        }
 
         function registrar_control_obesidad_dental() {
 
@@ -2658,7 +2658,7 @@
                     console.log("error");
                     console.log(e);
                 })
-        };
+        }
 
         function registrar_hipertension() {
 
@@ -2696,7 +2696,7 @@
                     console.log("error");
                     console.log(e);
                 })
-        };
+        }
 
         function registrar_diabetes() {
 
@@ -2741,7 +2741,7 @@
                     console.log("error");
                     console.log(e);
                 })
-        };
+        }
 
         function validar() {
             $('#form_radiologico_validacion').validate({
@@ -2782,7 +2782,7 @@
                     console.log("AJAX");
                 }
             });
-        };
+        }
 
         function agregar_examen_radiologico() {
 
@@ -2823,7 +2823,7 @@
             //$("#sub_tipo_examen").empty();
             //$("#nro_orden").disabled();
 
-        };
+        }
 
         function registrar_examen_radiologico() {
 
@@ -2874,7 +2874,7 @@
                       console.log(jqXHR, ajaxOptions, thrownError)
                   });*/
 
-        };
+        }
 
         function indicar_medicamentos_cirugia() {
 
@@ -2956,7 +2956,7 @@
             });
             $('#medicamentos_recuperacion_cirugia_dental').val(JSON.stringify(rows1));
 
-        };
+        }
     </script>
 </body>
 

@@ -1,5 +1,5 @@
 <div id="m_ind_es_implante" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="m_ind_es_implante" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Recomendaciones Personales Posterior a Implante Dental</h5>
@@ -28,32 +28,41 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group col-sm-6 col-md-6">
-                            <label class="floating-label-activo-sm">Nombre Paciente</label>
-                            <!--correlativo-->
-                            <input type="text" class="form-control form-control-sm" name="nombre_pcte_rec_imp_esp" id="nombre_pcte_rec_imp_esp" value=""disabled>
+                        <div class="col-sm-8 col-md-8">
+                            <img src="{{ asset('images/dental/indicaciones_implante.png') }}" class="w-100" alt="recomendaciones">
+                            
                         </div>
-                        <div class="form-group col-sm-6 col-md-6">
-                            <label class="floating-label-activo-sm">Nombre Implantólogo</label>
-                            <input type="text" class="form-control form-control-sm" name="nomb_imp_rec_esp"  id="nomb_imp_rec_esp" value="" disabled>
-
+                        <div class="col-sm-4 col-md-4">
+                            <div class="form-row">
+                                <div class="form-group col-sm-12 col-md-12">
+                                    <label class="floating-label-activo-sm">Nombre Paciente</label>
+                                    <!--correlativo-->
+                                    <input type="text" class="form-control form-control-sm" name="nombre_pcte_rec_imp_esp" id="nombre_pcte_rec_imp_esp" value=""disabled>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-12">
+                                    <label class="floating-label-activo-sm">Nombre Implantólogo</label>
+                                    <input type="text" class="form-control form-control-sm" name="nomb_imp_rec_esp"  id="nomb_imp_rec_esp" value="" disabled>
+        
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-sm-12 col-md-12">
+                                    <label class="floating-label-activo-sm">Recomendaciones especiales para usted</label>
+                                    <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="obs_rec_esp_impl" id="obs_rec_esp_impl"></textarea>
+                                </div>
+                            </div>
+        
+                            <div class="form-row">
+                                <div class="form-group col-sm-12 col-md-12">
+                                    <label class="floating-label-activo-sm">Próximo control</label>
+                                    <input type="date" class="form-control form-control-sm" name="prox_cont_imp_rec_esp" id="prox_cont_imp_rec_esp">
+        
+                                </div>
+        
+                            </div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-12">
-                            <label class="floating-label-activo-sm">Recomendaciones especiales para usted</label>
-                            <textarea class="form-control form-control-sm" rows="1" onfocus="this.rows=6" onblur="this.rows=1;" name="obs_rec_esp_impl" id="obs_rec_esp_impl"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-sm-3 col-md-3">
-                            <label class="floating-label-activo-sm">Próximo control</label>
-                            <input type="date" class="form-control form-control-sm" name="prox_cont_imp_rec_esp" id="prox_cont_imp_rec_esp">
-
-                        </div>
-
-                    </div>
+                    
 
 
                 </form>

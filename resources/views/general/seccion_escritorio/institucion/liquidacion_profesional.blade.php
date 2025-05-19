@@ -50,53 +50,53 @@
                                             <div class="col-md-12">
                                                 <div class="row">
 													<div class="col-md-6">
-                                                        <h4 class="text-white f-20 mt-2 mb-2 float-left">Liquidaciones Profesionales Médicos</h4>
+                                                        <h4 class="text-white f-20 mt-2 mb-2 float-left">Liquidaciones profesionales médicos</h4>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <table id="aacm_liq_profesionales_med" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
+                                            <table id="aacm_liq_profesionales_med" class="display table table-striped dt-responsive nowrap" style="width:100%">
                                                 <thead>
                                                     <tr>
 
-                                                        <th class="text-center align-middle">Profesional</th>
-                                                        <th class="text-center align-middle">Fecha</th>
-                                                        <th class="text-center align-middle">Mes</th>
-                                                        <th class="text-center align-middle">N° Atenciones</th>
-                                                        <th class="text-center align-middle">Valor Total</th>
-                                                        <th class="text-center align-middle">Info</th>
-                                                        <th class="text-center align-middle">Detalle</th>
+                                                        <th class="align-middle">Profesional</th>
+                                                        <th class="align-middle">Fecha</th>
+                                                        <th class="align-middle">Mes</th>
+                                                        <th class="align-middle">N° Atenciones</th>
+                                                        <th class="align-middle">Valor Total</th>
+                                                        <th class="align-middle">Info</th>
+                                                        <th class="align-middle">Detalle</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             <span><strong>Jaime Kriman</strong></span><br>
                                                             <span>4.345.466-2</span><br>
                                                             <span>Otorrinolaringología</span>
                                                         </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             <span>10/11/2023</span><br>
                                                         </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             <span>octubre/20223</span><br>
                                                         </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             <span>102</span><br>
                                                         </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             <span>2.000.000</span><br>
                                                         </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="cuenta_corriente();" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
+                                                            <button type="button" class="btn btn-success btn-icon" onclick="cuenta_corriente();" data-toggle="tooltip" data-placement="top" title="Datos bancarios"><i class="feather icon-credit-card"></i></button>
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="convenio_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Convenio"><i class="fas fa-file-contract"></i></button>
+                                                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="convenio_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Convenio"><i class="feather icon-file-text"></i></button>
                                                         </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-danger btn-sm btn-icon" onclick="liquidacion_prof_cm();" data-toggle="tooltip" data-placement="top" title="Liquidación"><i class="fas fa-file-contract"></i></button>
+                                                            <button type="button" class="btn btn-secondary btn-sm btn-icon" onclick="liquidacion_prof_cm();" data-toggle="tooltip" data-placement="top" title="Liquidación"><i class="fas fa-dollar-sign"></i></button>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -109,65 +109,62 @@
                         <!--Cierre: Tab medicos-->
                         <!--Tab odontologos-->
                         <div class="tab-pane fade" id="odontologos" role="tabpanel" aria-labelledby="odontologos-tab">
-                            <div class="row mb-n4">
-                            <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-12">
                                     <div class="card">
                                         <div class="card-header bg-info">
-                                            <div class="col-md-12">
-                                                <div class="row">
-													<div class="col-md-6">
-                                                        <h4 class="text-white f-20 mt-2 mb-2 float-left">Liquidaciones Profesionales Odontólogos</h4>
-                                                    </div>
-
-                                                </div>
-                                            </div>
+                                            <h4 class="text-white f-20 mt-2 mb-2">Liquidaciones profesionales odontólogos</h4>
                                         </div>
                                         <div class="card-body">
-                                            <div class="card-body">
-                                                <table id="liq_profesionales_od" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                    <table id="liq_profesionales_od" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center align-middle">Fecha</th>
-                                                            <th class="text-center align-middle">Profesional</th>
-                                                            <th class="text-center align-middle">Periodo</th>
-                                                            <th class="text-center align-middle">N°Liquidación</th>
-                                                            <th class="text-center align-middle">Estado</th>
-                                                            <th class="text-center align-middle">Datos</th>
+                                                            <th class="align-middle">Fecha</th>
+                                                            <th class="align-middle">Profesional</th>
+                                                            <th class="align-middle">Periodo</th>
+                                                            <th class="align-middle">N° Liquidación</th>
+                                                            <th class="align-middle">Estado</th>
+                                                            <th class="align-middle">Info</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle">
                                                                 <span>10/11/2022</span><br>
                                                             </td>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle">
                                                                 <span><strong>J. Kriman</strong></span><br>
                                                                 <span>4.345.466-2</span><br>
                                                                 <span>Implantología</span>
                                                             </td>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle">
                                                                 <span>10/03/2022 a 17/03/2022</span><br>
                                                             </td>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle">
                                                                 <span>10202122</span><br>
                                                             </td>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle">
                                                                 <span>Pagada</span><br>
                                                             </td>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle">
                                                                 <!--Botón Modal-->
-                                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto();" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
+                                                                <button type="button" class="btn btn-info btn-icon" onclick="contacto();" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
 
                                                                 <!--Botón Modal-->
-                                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="cuenta_corriente();" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
+                                                                <button type="button" class="btn btn-success btn-icon" onclick="cuenta_corriente();" data-toggle="tooltip" data-placement="top" title="Datos bancarios"><i class="feather icon-credit-card"></i></button>
+
                                                                 <!--Botón Modal-->
-                                                                <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
-																<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="liquidacion_prof_cm();" data-toggle="tooltip" data-placement="top" title="Liquidación"><i class="fas fa-file-contract"></i></button>
+                                                                <button type="button" class="btn btn-purple btn-icon" onclick="horario_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather feather icon-clock"></i></button>
+    															
+                                                                <button type="button" class="btn btn-secondary btn-icon" onclick="liquidacion_prof_cm();" data-toggle="tooltip" data-placement="top" title="Liquidación"><i class="fas fa-dollar-sign"></i></button>
                                                                 <!--Botón Modal-->
                                                             </td>
                                                         </tr>
                                                     </tbody>
-                                                </table>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -186,53 +183,52 @@
 													<div class="col-md-6">
                                                         <h4 class="text-white f-20 mt-2 mb-2 float-left">Liquidaciones Otros Profesionales de la Salud</h4>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="card-body">
                                             <div class="card-body">
-                                                <table id="liq_profesionales_otros" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
+                                                <table id="liq_profesionales_otros" class="display table table-striped dt-responsive nowrap" style="width:100%">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center align-middle">Fecha</th>
-                                                            <th class="text-center align-middle">Profesional</th>
-                                                            <th class="text-center align-middle">Periodo</th>
-                                                            <th class="text-center align-middle">N°Liquidación</th>
-                                                            <th class="text-center align-middle">Estado</th>
-                                                            <th class="text-center align-middle">Datos</th>
+                                                            <th class="align-middle">Fecha</th>
+                                                            <th class="align-middle">Profesional</th>
+                                                            <th class="align-middle">Periodo</th>
+                                                            <th class="align-middle">N°Liquidación</th>
+                                                            <th class="align-middle">Estado</th>
+                                                            <th class="align-middle">Info</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle">
                                                                 <span>10/11/2022</span><br>
                                                             </td>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle">
                                                                 <span><strong>J. Kriman</strong></span><br>
                                                                 <span>4.345.466-2</span><br>
                                                                 <span>Implantología</span>
                                                             </td>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle">
                                                                 <span>10/03/2022 a 17/03/2022</span><br>
                                                             </td>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle">
                                                                 <span>10202122</span><br>
                                                             </td>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle">
                                                                 <span>Pagada</span><br>
                                                             </td>
-                                                            <td class="align-middle text-center">
+                                                            <td class="align-middle">
                                                                 <!--Botón Modal-->
-                                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto();" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
+                                                                <button type="button" class="btn btn-info btn-icon" onclick="contacto();" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
 
                                                                 <!--Botón Modal-->
-                                                                <button type="button" class="btn btn-info btn-sm btn-icon" onclick="cuenta_corriente();" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
+                                                                <button type="button" class="btn btn-success btn-icon" onclick="cuenta_corriente();" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="feather icon-credit-card"></i></button>
                                                                 <!--Botón Modal-->
-                                                                <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
+                                                                <button type="button" class="btn btn-purple btn-icon" onclick="horario_profesional_cm();" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather icon-clock"></i></button>
 
                                                                <!--Botón Modal-->
-																<button type="button" class="btn btn-danger btn-sm btn-icon" onclick="liquidacion_prof_cm();" data-toggle="tooltip" data-placement="top" title="Liquidación"><i class="fas fa-file-contract"></i></button>
+																<button type="button" class="btn btn-secondary btn-icon" onclick="liquidacion_prof_cm();" data-toggle="tooltip" data-placement="top" title="Liquidación"><i class="fas fa-dollar-sign"></i></button>
                                                             </td>
                                                         </tr>
                                                     </tbody>

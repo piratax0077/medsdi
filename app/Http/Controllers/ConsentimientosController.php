@@ -85,9 +85,9 @@ class ConsentimientosController extends Controller
             $error['id_consentimiento'] = 'campo requerido';
             $valido = 0;
         }
-        if(empty($request->id_fciha_atencion))
+        if(empty($request->id_ficha_atencion))
         {
-            $error['id_fciha_atencion'] = 'campo requerido';
+            $error['id_ficha_atencion'] = 'campo requerido';
             $valido = 0;
         }
         if(empty($request->id_paciente))
@@ -122,7 +122,7 @@ class ConsentimientosController extends Controller
             $registro = new ConConsentimientosPcte();
 
             $registro->id_consent = $request->id_consentimiento;
-            $registro->id_fc = $request->id_fciha_atencion;
+            $registro->id_fc = $request->id_ficha_atencion;
             $registro->id_paciente = $request->id_paciente;
             $registro->id_profesional = $request->id_profesional;
             $registro->diagnostico_cons = $request->diagnostico_cons;
@@ -130,7 +130,7 @@ class ConsentimientosController extends Controller
             $registro->num_consentimiento = $request->num_consentimiento;
             $registro->fecha_cons = date('Y-m-d');
             $registro->observaciones_con = $request->observaciones_con;
-            // $registro->revocacion = $request->
+            $registro->revocacion = 0;
             // $registro->fecha_revocacion = $request->
             // $registro->observaciones_rev = $request->
             $registro->otro = $request->otro;
@@ -551,7 +551,7 @@ class ConsentimientosController extends Controller
                 $qr_documento = GeneradorQrController::generar($url_documento);
             }
 
-            $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+            $temp_token = CertificadoController::certificadoProfesional($profesional->id,1,1,1);
             if($temp_token['estado'] == 1)
             {
                 $token_profesional = $temp_token['certificado'];
@@ -650,6 +650,7 @@ class ConsentimientosController extends Controller
                 $id_profesional = $consenrimientoPcte->id_profesional;
 
                 $paciente = Paciente::find($id_paciente);
+
                 $id_usuario_envio_noti = $paciente->id_usuario;
 
                 $datos['id_usuario_envio_noti_1'] = $id_usuario_envio_noti;
@@ -811,7 +812,7 @@ class ConsentimientosController extends Controller
                 $qr_documento = GeneradorQrController::generar($url_documento);
             }
 
-            $temp_token = CertificadoController::certificadoProfesional($profesional->id);
+            $temp_token = CertificadoController::certificadoProfesional($profesional->id,1,1,$request->id_ficha_atencion);
             if($temp_token['estado'] == 1)
             {
                 $token_profesional = $temp_token['certificado'];

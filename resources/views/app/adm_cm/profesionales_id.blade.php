@@ -1,5 +1,12 @@
 @extends('template.adm_cm.template')
 @section('content')
+
+<!--****Container Completo****-->
+<style>
+    .select2-container--open{
+        z-index: 9999999 !important;
+    }
+</style>
 <div class="pcoded-main-container">
     <div class="pcoded-content">
         <div class="page-header">
@@ -7,7 +14,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Profesionales de {{ $institucion->nombre }}</h5>
+                            <h5 class="m-b-10 font-weight-bold">Profesionales del {{ $CM->nombre }}</h5>
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ ROUTE('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>

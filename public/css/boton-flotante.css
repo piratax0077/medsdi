@@ -34,7 +34,7 @@
 .redes a{
     margin-bottom: -15px!important;
     opacity: 0!important;
-    visibility: visible!important;
+    visibility: hidden!important;
 
 }
 #btn-mas:checked~ .redes a{
@@ -72,6 +72,7 @@
     position: relative;
     left: 10px;
 }
+
 
 .accordion > .card > .card-header> {
     border-radius: 5 !important;

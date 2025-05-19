@@ -27,6 +27,7 @@ use App\Models\DeclaracionEno;
 use App\Models\DetalleReceta;
 use App\Imports\DiagnosticosDentalImport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\DiagnosticosPsicologicosImport;
 use App\Models\Diabete;
 use App\Models\DiagnosticoCie;
 use App\Models\DiagnosticosDental;
@@ -1576,32 +1577,43 @@ class DentalController extends Controller
     }
 
     public function importarDiagnosticos(Request $request)
-{
-    // Validar que el request tenga un archivo
-    $request->validate([
-        'archivo' => 'required|file',
-    ]);
+    {
+        // Validar que el request tenga un archivo
+        $request->validate([
+            'archivo' => 'required|file',
+        ]);
 
-    // Importar los datos
-    $diagnosticos = Excel::toArray(new DiagnosticosDentalImport, $request->file('archivo'));
+        // Importar los datos
+        $diagnosticos = Excel::toArray(new DiagnosticosDentalImport, $request->file('archivo'));
 
-    // Procesar únicamente las filas de la hoja 'ARANCEL DENTOLAB'
-    // Procesar únicamente las filas de la hoja 'ARANCEL DENTOLAB'
-    foreach ($diagnosticos['ARANCEL DENTOLAB'] as $row) {
-        // Verificar que la fila tenga datos válidos en las columnas esperadas y que el valor sea numérico
-        if (isset($row[0], $row[1]) && !is_null($row[0]) && is_numeric($row[1])) {
-            // Crear y guardar el diagnóstico
-            $diagnostico = new DiagnosticosDental();
-            $diagnostico->descripcion = trim($row[0]); // Elimina espacios innecesarios
-            $diagnostico->valor = $row[1];
-            $diagnostico->estado = 1;
-            $diagnostico->tipo_examen = 4;
-            $diagnostico->save();
+        // Procesar únicamente las filas de la hoja 'ARANCEL DENTOLAB'
+        // Procesar únicamente las filas de la hoja 'ARANCEL DENTOLAB'
+        foreach ($diagnosticos['ARANCEL DENTOLAB'] as $row) {
+            // Verificar que la fila tenga datos válidos en las columnas esperadas y que el valor sea numérico
+            if (isset($row[0], $row[1]) && !is_null($row[0]) && is_numeric($row[1])) {
+                // Crear y guardar el diagnóstico
+                $diagnostico = new DiagnosticosDental();
+                $diagnostico->descripcion = trim($row[0]); // Elimina espacios innecesarios
+                $diagnostico->valor = $row[1];
+                $diagnostico->estado = 1;
+                $diagnostico->tipo_examen = 4;
+                $diagnostico->save();
+            }
         }
+
+        return redirect()->back()->with('mensaje', 'Datos importados correctamente');
     }
 
-    return redirect()->back()->with('mensaje', 'Datos importados correctamente');
-}
+    public function importar(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        Excel::import(new DiagnosticosPsicologicosImport, $request->file('file'));
+
+        return back()->with('success', 'Diagnósticos importados correctamente.');
+    }
 
     public function guardarDiagnosticoLaboratorio(Request $request){
         try {

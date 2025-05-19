@@ -60,7 +60,7 @@
         </style>
     </head>
     <body>
-        @include('template.pediatria.header_mat_cns')
+        @include('template.profesional.header')
         @include('template.profesional.menu')
 
         @yield('Content')

@@ -11,15 +11,14 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <h5>
-                            Usted esta por <span style="color:red">Finalizar el contrato y Desasociar</span> a <span id="modal_finalizar_empleado_nombre" style="font-weight: bold; color:#1317d6"></span> de forma definitiva.<br>
-                            Si esta seguro presione el botón de "Finalizar / Desasociar"
+                            Usted está por <span class="text-danger">finalizar el contrato y desasociar</span> a <span class="font-weight bold text-c-blue" id="modal_finalizar_empleado_nombre"></span> de forma definitiva.<br><br>
+                            Si esta seguro presione el botón de "Finalizar / Desasociar".
                         </h5>
                     </div>
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" data-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-danger" onclick="finalizar_personal();">Finalizar / Desasociar</button>
             </div>
         </div>
@@ -52,7 +51,6 @@
             },
         })
         .done(function(data) {
-            console.log(data);
             if (data != null)
             {
                 if(data.estado == 1)

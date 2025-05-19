@@ -35577,3 +35577,15 @@ texto-blue-tabla {
     color:#1a49a3!important;
 }
 
+
+.ui-autocomplete-input {
+    z-index: 3000;
+}
+
+.btn-agenda-autorizacion{
+    z-index: 1100!important;
+}
+
+.btn-agenda-autorizacion-fmu{
+    z-index: 1100!important;
+}

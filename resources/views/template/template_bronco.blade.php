@@ -57,7 +57,6 @@
 
     <link rel="stylesheet" href="{{ asset('css/estilos_atencion_medica.css') }}?t=<?= time() ?>">
 
-
     <!-- fancy box -->
     <link rel="stylesheet" href="{{ asset('css/fancybox/fancybox.css') }}" />
     <script src="{{ asset('css/fancybox/fancybox.umd.js') }}"></script>
@@ -198,6 +197,7 @@
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
 
+
         $(document).ready(function () {
             $('#ex-funcional').select2({
                 dropdownParent: $('#m_espiro .modal-body')
@@ -286,7 +286,7 @@
 
         });
 
-function editarInformacionContacto(){
+        function editarInformacionContacto(){
             $('#modal_editar_contacto').modal('show');
             $('#info_contacto').css('display', 'none');
             $('#info_contacto-edit').css('display', 'block');

@@ -49,7 +49,7 @@
                                             <th>Convenio</th>
                                             <th>Contacto</th>
                                             <th>Acción</th>
-                                            <th>Mensaje</th>
+											<th>Mensaje</th>
                                             {{-- <th>Usuario</th> --}}
                                             <th>Lugares de Atención</th>
                                         </tr>
@@ -58,15 +58,15 @@
                                         @if (isset($paciente) && count($paciente) > 0 && $paciente != null && $paciente != '')
                                             @foreach ($paciente as $p)
                                                 <tr>
-                                                    <td>
+                                                    <td class="text-uppercase align-middle font-weight-bold">
                                                         {{ $p->nombres . ' ' . $p->apellido_uno . ' ' . $p->apellido_dos }}<br>
                                                         {{ $p->rut }}<br>
                                                     </td>
-                                                    <td>
+                                                    <td class="align-middle">
                                                         {{ \Carbon\Carbon::parse($p->fecha_nac)->format('d/m/Y') }}</td>
-                                                    <td class="text-center align-middle">{{ $p->Prevision()->first()->nombre }}
+                                                    <td class="align-middle">{{ $p->Prevision()->first()->nombre }}
                                                     </td>
-                                                    <td>
+                                                    <td class="text-lowercas align-middle">
                                                         {{ $p->email }}<br>
                                                         {{ $p->telefono_uno }}
                                                     </td>
@@ -81,6 +81,11 @@
                                                             class="btn btn-icon btn-info" data-toggle="tooltip" data-placement="top"
                                                             title="Atenciones previas"><i class="feather icon-activity"></i></a>
 
+                                                            <!--EMITIR DOCUMENTOS-->
+                                                            <a href="#"
+                                                            class="btn btn-icon btn-orange" onclick="emitir_doc()" data-toggle="tooltip" data-placement="top"
+                                                            title="Emitir documentos"><i class="feather icon-file-text"></i></a>
+
                                                         <!--<a onclick="autorizacion_ficha_medica_unica({{ $p->id }});"
                                                             class="btn btn-warning btn-sm btn-icon" data-toggle="tooltip"
                                                             data-placement="top" title="Ficha Médica Única"><i
@@ -91,9 +96,9 @@
                                                             data-placement="top" title="Editar datos medicos del paciente"><i
                                                                 class="feather icon-edit"></i></a>
                                                         @endif
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-icon btn-purple" onclick="enviar_mensaje_paciente({{ $p->id }})" data-toggle="tooltip" data-placement="top" title="Enviar mensaje de difusión"><i class="feather icon-mail"></i></button>
+													</td>
+													<td>
+                                                         <button class="btn btn-icon btn-purple" onclick="enviar_mensaje_paciente({{ $p->id }})" data-toggle="tooltip" data-placement="top" title="Enviar mensaje de difusión"><i class="feather icon-mail"></i></button>
                                                     </td>
                                                     {{-- @if ($p->id_premium == null)
                                                         <td><span
@@ -176,9 +181,43 @@
                 <div class="modal-footer bg-info d-flex justify-content-center">
                     <button class="btn btn-unique bg-white"
                         @if (isset($p)) onclick="enviar_email({{ $p->id }});" @endif>Enviar</button>
-
-
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!--EMITIR DOCUMENTO-->
+    <div class="modal fade" id="modal_emitir_doc" tabindex="-1" role="dialog" aria-labelledby="emitir_documento"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h4 class="modal-title text-white w-100 font-weight-bold">Emitir documentos</h4>
+                    <button type="button" class="close" onclick="cerrar_cta_banco_m();" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <label class="floating-label-activo">Seleccione documento</label>
+                                <select class="form-control form-control-sm">
+                                    <option>Seleccione una opción</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <h5>DESPUES DE SELECCIONAR, ACÁ SE CARGA EL FORMULARIO DEL DOCUMENTO.<h5>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                <button type="button" class="btn btn-info"><i class="feather icon-check"></i> Emitir</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                    
             </div>
         </div>
     </div>
@@ -197,6 +236,10 @@
 
     function enviar_difusion_pacientes(){
         $('#modalMensajeDifusionPacientes').modal('show');
+    }
+
+    function emitir_doc(){
+        $('#modal_emitir_doc').modal('show');
     }
 </script>
 @endsection

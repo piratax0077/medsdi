@@ -1,6 +1,5 @@
 @extends('template.bienvenida.bienvenida')
 
-
 @section('page-styles')
     <style>
         .auth-wrapper{
@@ -20,7 +19,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12 col-md-10 mx-auto py-2 px-5 text-center">
-					<h4 class="text-c-blue">MEDICHILE, te da la bienvenida</h4>
+					<h4 class="text-c-blue">SDI, te da la bienvenida</h4>
 					<h6>Ahora podrás trabajar con profesionales e instituciones sin importar dónde te encuentres <br>Para ingresar a tu escritorio deberás completar la configuración básica
 				</div>
 				<div class="col-sm-12 col-md-12 col-lg-12 mx-auto py-2 px-4">

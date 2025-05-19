@@ -170,10 +170,10 @@
             <div class="modal-header bg-info">
 
                 <div class="row">
-                    <div class="col-md-6">
-                        <h5 class="modal-title text-white">Control de Enfermedades Crónicas</h5>
+                    <div class="col-md-5">
+                        <h5 class="modal-title text-white">Control de enfermedades crónicas</h5>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <select class="form-control form-control-sm" onchange="cambiar_enfermedad_cronica();" id="cronicos" name="cronicos" >
                             <option value="n_C">Seleccione control</option>
                             <option value="cpeso">Obesidad</option>
@@ -186,7 +186,7 @@
                         </select>
                     </div>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -1211,7 +1211,7 @@
             <div class="modal-header bg-info">
 				<div class="row">
 					<div class="col-md-7">
-						<h5 class="modal-title text-white">Seleccione  Aquí Nuevo antecedente</h5>
+						<h5 class="modal-title text-white">Seleccione  antecedente</h5>
 					</div>
 					<div class="col-md-5">
 						<select class="form-control form-control-sm" onchange="cambiar_antecedente();" id="nuevo_antecedente" name="nuevo_antecedente" onchange="mostrar(this.value);">

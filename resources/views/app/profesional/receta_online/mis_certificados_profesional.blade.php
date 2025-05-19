@@ -26,7 +26,6 @@
                     <div class="card">
                         <div class="card-header bg-light">
                             <h4 class="text-c-blue f-22">Mis certificados</h4>
-                            <!--<button type="button" class="btn btn-success btn-sm d-inline float-right mr-4 my-1" data-toggle="modal" data-target="#agregar_certificado_profesional_ro"> <i class="feather icon-plus"></i> Agregar certificado</button>-->
                         </div>
                             <div class="card-body">
                                 <table id="tabla_certificado_profesional_ro"
@@ -37,8 +36,6 @@
                                             <th class="align-middle">Fecha</th>
                                             <th class="text-center align-middle">Paciente</th>
                                             <th class="text-center align-middle">Tipo de certificado</th>
-                                            <!--<th class="text-center align-middle">Acción</th>-->
-                                            <!--<th class="text-center align-middle">Estado</th>-->
                                             <th class="text-center align-middle">Certificado</th>
                                         </tr>
                                     </thead>
@@ -81,7 +78,7 @@
                                                     <button type="button" class="btn  btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Enviar Certificado a Paciente"><i class="feather icon-navigation"></i></button>
                                                 </td>
                                                 <td class="align-middle text-center">Enviado</td>-->
-                                                    <td> <div onclick="ver_pdf_interconsulta('{{ $inter->id }}')"><img src="{{ asset('images/documento.png') }}" alt="Documento" height="35px"></div></td>
+                                                    <td> <div onclick="ver_pdf_interconsulta('{{ $inter->id }}')" class="btn btn-secondary-light-c btn-xxs"><i class="feather icon-activity"></i> Ver Receta</div></td>
                                                 </tr>
                                             @endforeach
                                         @endif

@@ -38,7 +38,7 @@
                                 <div class="tab-pane fade show active" id="examen_fisico_cg" role="tabpanel" aria-labelledby="examen_fisico_cg-tab">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <h6 class="f-16 text-c-blue mb-3">Examen General</h6>
+                                            <h6 class="tit-gen">Examen General</h6>
                                         </div>
                                     </div>
                                     <div class="form-row">
@@ -64,8 +64,8 @@
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-12" id="div_detalle_cir_grl_urgencia" style="display:none">
-                                                <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="ingresohosp()";<i class="feather icon-save"></i> Orden de Hospitalización </button>
-                                                <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="sol_pabellon()";<i class="feather icon-save"></i> Solicitar Pabellón</button>
+                                                <button type="button" class="btn btn-outline-primary btn-sm btn-block" onclick="ingresohosp()";><i class="feather icon-edit-1"></i> Orden de Hospitalización </button>
+                                                <button type="button" class="btn btn-outline-primary btn-sm btn-block" onclick="sol_pabellon()";><i class="feather icon-edit-1"></i> Solicitar Pabellón</button>
                                             </div>
                                         </div>
                                         <div class=" col-md-8">
@@ -83,7 +83,7 @@
                                     </script>
                                     <div class="form-row mt-2">
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0">
-                                            <h6 class="t-aten">Plan de Tratamiento Cirugía General</h6>
+                                            <h6 class="t-aten">Plan de Tratamiento</h6>
                                         </div>
                                     </div>
                                     <div class="form-row">
@@ -165,7 +165,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <!--<div class="row">
                                     <div class="col-md-12">
                                         <h6 class="f-16 text-c-blue mb-3">Ficha tipo</h6>
                                     </div>
@@ -189,7 +189,7 @@
                                     <div class="form-group col-md-4">
                                         <button type="button" class="btn btn-primary-light btn-sm btn-block" onclick="abrir_modal_guardar_tipo_cg('form-cg-adulto','registro_f_t_cg_detalle','cg');"><i class="feather icon-save"></i> Guardar nueva ficha tipo</button>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>

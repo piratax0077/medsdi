@@ -41,7 +41,7 @@
                             </div>-->
                             <!--FORMULARIOS-->
                             <div class="row">
-
+                                
                                 <!--Formulario / Menor de edad-->
                                 @include('general.secciones_ficha.seccion_menor', ['tipo_ficha' => "3"])
                                 <!--Cierre: Formulario / Menor de edad-->

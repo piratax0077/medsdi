@@ -16,7 +16,7 @@ class Funciones{
 
     }
 
-    static public function userData($id_usuario)
+    public function userData($id_usuario)
     {
         /*
         * profesionales
@@ -200,7 +200,7 @@ class Funciones{
         $log_users_devices->id_user_recept = $id_user_recept;
         $log_users_devices->msg = json_encode($msj);
 
-        if($id_user_recept==6 || $id_user_recept==38)
+		if($id_user_recept==6 || $id_user_recept==38)
         {
             $log_users_devices->estado = 1;
         }

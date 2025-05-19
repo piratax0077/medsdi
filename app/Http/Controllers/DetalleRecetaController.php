@@ -477,48 +477,6 @@ class DetalleRecetaController extends Controller
         }
     }
 
-    public function registroRecetaManualInterna(Request $req){
-
-        $detalle_receta = new DetalleRecetaInterna();
-        $detalle_receta->id_institucion = 19; // Cambiar por el id institucion del usuario
-        $detalle_receta->id_servicio = 1; // Cambiar por el id servicio del usuario
-        $detalle_receta->id_medicamento = $req->id_medicamento;
-        $detalle_receta->receta_am = $req->receta_am;
-        $detalle_receta->nombre_medicamento = $req->nombre_medicamento_ficha_dental;
-        $detalle_receta->id_dosis = $req->id_dosis_medicamento_ficha_dental;
-        $detalle_receta->nombre_dosis = $req->nombre_dosis_ficha_dental;
-        $detalle_receta->id_paciente = $req->id_paciente;
-        $detalle_receta->id_frecuencia = $req->id_frecuencia_medicamento_ficha_dental;
-        if($req->id_frecuencia_medicamento_ficha_dental == 1000){
-            $detalle_receta->nombre_frecuencia = $req->nombre_frecuencia_ficha_dental;
-        }
-        $detalle_receta->nombre_frecuencia = $req->nombre_frecuencia_ficha_dental;
-        $detalle_receta->id_administra = Auth::user()->id;
-        $detalle_receta->via_administracion = $req->via_administracion;
-        $detalle_receta->id_tipo_control = $req->id_tipo_control;
-        $detalle_receta->composicion = $req->farmaco;
-
-        $detalle_receta->observaciones = 'SIN OBSERVACIONES';
-        $detalle_receta->otros = 'SIN OTROS';
-        $detalle_receta->otros_2 = 'SIN OTROS';
-
-        $detalle_receta->estado_tratamiento = 1;
-        $detalle_receta->estado_finalizado = 1;
-        $detalle_receta->id_responsable = Auth::user()->id;
-
-        // estados del medicamento 1: Pendiente, 2: Administrado
-
-
-
-        if($detalle_receta->save()){
-            $dame_todo_detalle_receta_paciente = $this->dameTodoDetalleRecetaPaciente($req->id_paciente);
-
-            return response()->json(['status' => 'success', 'message' => 'Receta registrada correctamente', 'data' => $dame_todo_detalle_receta_paciente]);
-        }else{
-            return response()->json(['status' => 'error', 'message' => 'Error al registrar la receta']);
-        }
-    }
-
     public function eliminarMedicamento(Request $req){
         $id = $req->id;
         $detalle_receta = DetalleRecetaInterna::find($id);

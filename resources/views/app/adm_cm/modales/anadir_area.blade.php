@@ -1,17 +1,17 @@
 <div id="a_area_cm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="a_area_cm" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info">
-                <h5 class="modal-title text-white text-center">Agregar área Centro médico</h5>
+                <h5 class="modal-title text-white text-center">Añadir área del Centro Médico</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
 				<form>
-					<div class="row">
-						<div class="col-sm-6">
-							<div class="form-group fill">
+					<div class="form-row">
+						<div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+							<div class="form-group">
 								<!--Cargar áreas-->
-								<label class="floating-label">Área</label>
+								<label class="floating-label-activo-sm">Área</label>
 								<select class="form-control form-control-sm" id="tipo_area">
 									<option value="0">Seleccione</option>
 									@foreach ($tipos_areas_cm as $tipo_area_cm)
@@ -20,9 +20,9 @@
 								</select>
 							</div>
 						</div>
-						<div class="col-sm-6">
-							<div class="form-group fill">
-								<label class="floating-label">Responsable</label>
+						<div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+							<div class="form-group">
+								<label class="floating-label-activo-sm">Responsable</label>
 								<select class="form-control form-control-sm" id="responsable_cargo_area">
                                         <option value="0">Seleccione</option>
 										@foreach ($profesionales as $profesional)
@@ -31,32 +31,30 @@
 								</select>
 							</div>
 						</div>
-
 					</div>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo">Contacto (email)</label>
-                                <input type="text" class="form-control form-control-sm" name="e_cont" id="e_cont">
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo">Teléfono</label>
-                                <input type="number" class="form-control form-control-sm" name="tel_c" id="tel_c">
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group fill">
-                                <label class="floating-label-activo">N°/pers a cargo</label>
-                                <input type="number" class="form-control form-control-sm" name="n_pers" id="n_pers">
-                            </div>
-                        </div>
-                    </div>
-                </form>
+				<div class="form-row">
+					<div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<label class="floating-label-activo-sm">Contacto (email)</label>
+							<input type="text" class="form-control form-control-sm" name="e_cont" id="e_cont">
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<label class="floating-label-activo-sm">Teléfono</label>
+							<input type="number" class="form-control form-control-sm" name="tel_c" id="tel_c">
+						</div>
+					</div>
+					<div class="col-sm-12 col-md-12 col-lg-4 col-xl-4">
+						<div class="form-group">
+							<label class="floating-label-activo-sm">N°/ Pers. a cargo</label>
+							<input type="number" class="form-control form-control-sm" name="n_pers" id="n_pers">
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_area_cm();">Agregar</button>
+				<button type="button" class="btn btn-info btn-sm mx-auto" onclick="guardar_area_cm();"><i class="feather icon-plus"></i> Añadir</button>
 			</div>
 
 			</form>

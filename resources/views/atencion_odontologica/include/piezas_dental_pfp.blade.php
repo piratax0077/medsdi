@@ -1,14 +1,20 @@
 <div class="card">
     <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h6 class="t-aten d-inline"> PFP</h6>
+                <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-2"><i class="fas fa-plus"></i> Añadir pieza</button>
+            </div>
+        </div>
         <div class="form-row">
-            {{-- <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+            {{-- <div class="col-sm-12 col-md-6 col-lg-6  col-xl-6 col-xxl-3">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Piezas N°</label>
                     <input type="text" class="form-control form-control-sm" name="n_pieza_pfp{{ $counter }}" id="n_pieza_pfp{{ $counter }}">
                 </div>
             </div> --}}
 
-            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+            <div class="col-sm-12 col-md-6 col-lg-6  col-xl-6  col-xxl-3">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Tipo de anclaje</label>
                     <select name="tipo_anc_impl_pfp{{ $counter }}" id="tipo_anc_impl_pfp{{ $counter }}"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('tipo_anc_impl_pfp{{ $counter }}','div_tipo_anc_impl_pfp{{ $counter }}','det_tipo_anc_impl_pfp{{ $counter }}',3)">
@@ -24,7 +30,7 @@
 
                 </div>
             </div>
-            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Impresión / Envío a Lab.</label>
                     <select name="corona_toma_imp_pfp{{ $counter }}" id="corona_toma_imp_pfp{{ $counter }}"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('corona_toma_imp_pfp{{ $counter }}','div_corona_toma_imp_pfp{{ $counter }}','det_corona_toma_imp_pfp{{ $counter }}',2)">
@@ -48,7 +54,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Prueba de ajuste</label>
                     <select name="prueba_ajuste_cor_pfp{{ $counter }}"  id="prueba_ajuste_cor_pfp{{ $counter }}" class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('prueba_ajuste_cor_pfp{{ $counter }}','div_prueba_ajuste_cor_pfp{{ $counter }}','obs_prueba_ajuste_cor_pfp{{ $counter }}',2);">
@@ -58,12 +64,12 @@
                     </select>
                 </div>
                 <div class="form-group" id="div_prueba_ajuste_cor_pfp{{ $counter }}" style="display:none;">
-                    <label class="floating-label-activo-sm">Otro describa</label>
+                    <label class="floating-label-activo-sm">Otro (Describir)</label>
                     <textarea class="form-control form-control-sm"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_prueba_ajuste_cor_pfp{{ $counter }}" id="obs_prueba_ajuste_cor_pfp{{ $counter }}"></textarea>
                 </div>
             </div>
 
-            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-3">
                 <div class="form-group">
                     <label class="floating-label-activo-sm">Pulido</label>
                     <select name="pulido_ajuste_pfp{{ $counter }}" id="pulido_ajuste_pfp{{ $counter }}"  class="form-control form-control-sm" onchange="evaluar_para_carga_detalle('pulido_ajuste_pfp{{ $counter }}','div_pulido_ajuste_pfp{{ $counter }}','det_pulido_ajuste_pfp{{ $counter }}',2)">
@@ -74,7 +80,7 @@
                     </select>
                 </div>
                 <div class="form-group"   id="div_pulido_ajuste_pfp{{ $counter }}" style="display:none">
-                    <label class="floating-label-activo-sm">Detalle <i>(describir)</i></label>
+                    <label class="floating-label-activo-sm">Detalle (Describir)</label>
                     <textarea class="form-control caja-texto form-control-sm" data-titulo="Apreciación Respiratoria" data-seccion="Naríz"  rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="det_pulido_ajuste_pfp{{ $counter }}" id="det_pulido_ajuste_pfp{{ $counter }}"></textarea>
                 </div>
             </div>
@@ -84,15 +90,15 @@
         <div class="form-row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="form-group">
-                    <label class="floating-label-activo-sm">Observaciones al procedimiento</label>
+                    <label class="floating-label-activo-sm">Obs. Al procedimiento</label>
                     <textarea class="form-control caja-texto form-control-sm"  rows="1"  onfocus="this.rows=6" onblur="this.rows=1;" name="aprec_pfp{{ $counter }}" id="aprec_pfp{{ $counter }}"></textarea>
                 </div>
             </div>
         </div>
     </div>
     <div class="card-footer">
-        <button type="button" class="btn btn-danger btn-icon" onclick="ocultar_pieza_dental_pfp()">X</button>
-        <button type="button" class="btn btn-primary btn-icon" onclick="guardar_pieza_dental_pfp({{ $counter }})"><i class="fas fa-save"></i></button>
+        <button type="button" class="btn btn-danger-light-c btn-icon" onclick="ocultar_pieza_dental_pfp()"><i class="feather icon-x"></i></button>
+        <button type="button" class="btn btn-primary-light-c btn-icon" onclick="guardar_pieza_dental_pfp({{ $counter }})"><i class="feather icon-save"></i></button>
     </div>
 </div>
 

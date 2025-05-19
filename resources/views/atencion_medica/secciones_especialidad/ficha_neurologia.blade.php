@@ -2,8 +2,10 @@
 <div class="user-profile user-card mt-0"style="background-color: #ecf0f5!important;">
     <div class="col-md-12 ">
         <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 px-2 pt-1 mt-2">
+            <!--MENSAJE ALERTA-->
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <div class="alert-atencion alert alert-warning-b alert-dismissible fade show" role="alert" id="mensaje_ficha"></div>
+                <div class="alert-atencion alert alert-success-b alert-dismissible fade show" role="alert" id="mensaje_historias"></div>
             </div>
             <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha') }}" method="POST">
@@ -42,7 +44,7 @@
                                             <!--Cierre: Formulario / Signos vitales y otros-->
 
                                             <!-- hospitalizacion -->
-                                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            {{--<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                 <div class="card-a">
                                                     <div class="card-header-a" id="hospitalizar_paciente">
                                                         <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left collapsed card-act-open " type="button" data-toggle="collapse" data-target="#hospitalizar_paciente-c" aria-expanded="false" aria-controls="hospitalizar_paciente-c">
@@ -55,7 +57,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>--}}
                                             <!-- cierre hospitalizacion -->
 
                                             <!-- ges -->
@@ -107,12 +109,22 @@
 @section('page-script-ficha-atencion')
     <script>
          /** MENSAJE*/
-        /** CARGAR mensaje */
-        $('#mensaje_ficha').html('<strong>Solo el campo Hipótesis diagnóstica es obligatorio el resto es opcional</strong>');
-        $('#mensaje_ficha').show();
-        setTimeout(function(){
-            $('#mensaje_ficha').hide();
-        }, 5000);
+       /** CARGAR mensaje */
+            $('#mensaje_ficha').html(' Solo el campo dignóstico es obligatorio el resto es opcional.');
+            $('#mensaje_ficha').show();
+            setTimeout(function(){
+                $('#mensaje_ficha').hide();
+            }, 5000);
+
+            @if($fichas->count()>0)
+                $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
+            @else
+                $('#mensaje_historias').html(' Primera consulta del paciente. ');
+            @endif
+                $('#mensaje_historias').show();
+                setTimeout(function(){
+                    $('#mensaje_historias').hide();
+                }, 6000);
 
         $(document).ready(function() {
             $("#descripcion_cie").autocomplete({

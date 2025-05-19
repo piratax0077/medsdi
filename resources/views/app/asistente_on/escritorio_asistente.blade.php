@@ -13,7 +13,7 @@
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item">
-                                <a href="{{ ROUTE('asistentecm.home') }}">Mi Escritorio </a>
+                                <a href="{{ ROUTE('asistentecm.home') }}">Mi escritorio </a>
                             </li>
                         </ul>
                     </div>

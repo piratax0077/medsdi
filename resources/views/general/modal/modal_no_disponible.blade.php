@@ -3,7 +3,7 @@
 		<div class="modal-content ">
 			<div class="modal-header bg-info">
 				<h5 class="modal-title text-white">DOCUMENTO NO DISPONIBLE</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#m_acomp1').modal('hide');">
+				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#m_acomp1').modal('hide');">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>

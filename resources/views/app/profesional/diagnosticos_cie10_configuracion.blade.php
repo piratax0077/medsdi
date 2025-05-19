@@ -14,7 +14,7 @@
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="{{ route('profesional.configuracion') }}" data-toggle="tooltip" data-placement="top" title="Volver a panel de configuración">Panel de Configuración</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('profesional.configuracion') }}" data-toggle="tooltip" data-placement="top" title="Volver a panel de configuración">Panel de configuración</a></li>
                                 <li class="breadcrumb-item"><a href="#">Configuración Diagnósticos CIE 1O</a></li>
                             </ul>
                         </div>
@@ -29,65 +29,70 @@
                             <h4 class="text-white f-20 text-center mb-0">Diagnósticos Frecuentes CIE-10</h4>
                         </div>
                         <div class="card-body">
-                            <div class="container row">
-                                <div class="col-md-4">
-                                    <div class="form-group row">
-                                        <label class="col-form-label-sm-active">Ingrese texto buesqueda</label>
-                                        <input type="text" name="text_busqueda_cie10" id="text_busqueda_cie10">
-                                        <div class="btn btn-success" onclick="buscar_diagnosticos_cie10();">Buscar</div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <div class="input-group mb-1">
+                                      <input type="text" class="form-control form-control-sm" placeholder="Buscar diagnóstico" aria-label="Buscar diagnóstico" aria-describedby="button-addon2" name="text_busqueda_cie10" id="text_busqueda_cie10">
+                                      <div class="input-group-append">
+                                        <button class="btn btn-info btn-sm" type="button" id="button-addon2" onclick="buscar_diagnosticos_cie10();"><i class="feather icon-search"></i> Buscar</button>
+                                      </div>
                                     </div>
+                                    <small>Por cada búsqueda si realiza modificación debe "Guardar Diagnósticos Seleccionados".</small>
                                 </div>
-                                <div class="col-md-5">
-                                    <div class="form-group ">
-                                        <label for="todos_diagnosticos_cie10" class="cr">Activar Todos los diagnosticos Seleccionados</label>
+                                <!--<div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="col-form-label-sm-active">Buscar diagnóstico</label>
+                                        <input type="text" name="text_busqueda_cie10" id="text_busqueda_cie10">
+                                        <div class="btn btn-primary" onclick="buscar_diagnosticos_cie10();">Buscar</div>
+                                        <small>Por cada busqueda si realiza modificación debe "Guardar Diagnósticos Seleccionados"</small>
+                                    </div>
+                                </div>-->
+                                <div class="col-md-8">
+                                    <div class="form-group">
                                         <div class="switch switch-success d-inline m-r-10">
                                             <input type="checkbox" id="todos_diagnosticos_cie10" onchange="activar_diagnosticos_cie10();">
-                                            {{--  <label for="todos_diagnosticos_cie10" class="cr">Activar Todos los diagnosticos Seleccionados</label>  --}}
+                                            {{--  <label for="todos_diagnosticos_cie10" class="cr">Activar Todos los diagnosticos seleccionados</label>  --}}
                                             <label for="todos_diagnosticos_cie10" class="cr"></label>
                                         </div>
-
+                                        <label for="todos_diagnosticos_cie10" class="cr">Activar todos los diagnósticos seleccionados</label>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="btn btn-success" onclick="guardar_diagnosticos_cie10_profesional();">Guardar Diagnósticos Seleccionados</div>
+                                <div class="col-md-4">
+                                    <div class="btn btn-primary-light-c btn-sm" onclick="guardar_diagnosticos_cie10_profesional();"><i class="feather icon-save"></i> Guardar diagnósticos seleccionados</div>
                                 </div>
-                                <div class="col-md-12">
-                                        <label class="label">*Por cada busqueda si realiza modificación debe <span class="" style="font-weight: bold;">"Guardar Diagnósticos Seleccionados"</span></label>
-                                </div>
-                                <div class="col-md-12">
-                                    <table id="tabla_configuracion_cie10" class="display table table-striped table-hover dt-responsive nowrap table-xs"
-                                        style="width:100%">
-                                        <thead>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="overflow-x:auto;"></div>
+                            <div class="table-responsive">
+                                <table id="tabla_configuracion_cie10" class="display table table-striped table-hover dt-responsive nowrap table-xs"
+                                    style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 20%;">Código</th>
+                                            <th style="width: 60%;">Descripción</th>
+                                            <th style="width: 9%;">Activar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{--  @foreach ($diagnostico as $df)
                                             <tr>
-                                                <th class="text-wrap text-center" style="width: 20%;">Código</th>
-                                                <th class="text-center" style="width: 60%;">Descripción</th>
-                                                <th class="text-center" style="width: 9%;">Activar</th>
+                                                <td class="" style="width: 20%;">{{ $df->codigo }}
+                                                </td>
+                                                <td class="" style="width: 60%;">{{ $df->descripcion }}
+                                                </td>
+                                                <td class="" style="width: 9%;">
+                                                    <div class="switch switch-success d-inline m-r-10">
+                                                        <input type="checkbox" id="diagnostico_{{ $df->id }}">
+                                                        <label for="diagnostico_{{ $df->id }}" class="cr"></label>
+                                                    </div>
+                                                </td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            {{--  @foreach ($diagnostico as $df)
-
-                                                <tr>
-                                                    <td class="" style="width: 20%;">{{ $df->codigo }}
-                                                    </td>
-                                                    <td class="" style="width: 60%;">{{ $df->descripcion }}
-                                                    </td>
-                                                    <td class="" style="width: 9%;">
-
-                                                        <div class="switch switch-success d-inline m-r-10">
-                                                            <input type="checkbox" id="diagnostico_{{ $df->id }}">
-                                                            <label for="diagnostico_{{ $df->id }}" class="cr"></label>
-                                                        </div>
-
-                                                    </td>
-                                                </tr>
-                                            @endforeach  --}}
-
-                                        </tbody>
-
-                                    </table>
-                                </div>
+                                        @endforeach  --}}
+                                    </tbody>
+                                </table>
                             </div>
                             {{--  {{ $diagnostico->links() }}  --}}
                         </div>

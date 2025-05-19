@@ -80,8 +80,8 @@
                                   <a class="dropdown-item" onclick="i_vacunas();"><i class="feather icon-plus"></i> Indicar Vacunas Programa MINSAL</a>
                                   <a class="dropdown-item" onclick="i_vacunas_otras();"><i class="feather icon-plus"></i> Indicar Otras Vacunas</a>
                                   <a class="dropdown-item" onclick="inter();"><i class="feather icon-plus"></i> Interconsulta</a>
-                                  {{-- <a class="dropdown-item" onclick="carnet_vac();"><i class="feather icon-plus"></i> Carnet de vacunas generales</a> --}}
-                                  {{-- <a class="dropdown-item" onclick="otras_vac();"><i class="feather icon-plus"></i> Carnet de vacunas especiales</a> --}}
+                                  {{-- <a class="dropdown-item" onclick="carnet_vac();"><i class="feather icon-plus"></i> Carne de vacunas generales</a> --}}
+                                  {{-- <a class="dropdown-item" onclick="otras_vac();"><i class="feather icon-plus"></i> Carne de vacunas especiales</a> --}}
                                 </div>
                             </div>
                         </div>
@@ -93,10 +93,10 @@
                                 <li><i class="feather icon-check text-info"></i>Se añadio otras vacunas</li>
                             </ul>
                             <ul>
-                                <li><i class="feather icon-check text-info"></i>Se modificó carnet vacunas generales</li>
+                                <li><i class="feather icon-check text-info"></i>Se modificó carne vacunas generales</li>
                             </ul>
                             <ul>
-                                <li><i class="feather icon-check text-info"></i>Se modificó carnet vacunas especiales</li>
+                                <li><i class="feather icon-check text-info"></i>Se modificó carne vacunas especiales</li>
                             </ul>
                             <ul>
                                 <li><i class="feather icon-check text-info"></i>Se añadió Interconsulta</li>
@@ -114,8 +114,10 @@
                     <div class="row">
                         <div class="col-md-9 d-inline">
                             <h6 class="text-c-blue d-inline">Estado de Vacunación</h6>
+                            
                         </div>
 						<div class="col-md-3 d-inline">
+                            
                             <button type="button" class="btn btn-xs btn-danger-light float-right mr-2" onclick="carnet_pdf();">VER CARNE DE VACUNACIÓN</button>
                         </div>
                     </div>

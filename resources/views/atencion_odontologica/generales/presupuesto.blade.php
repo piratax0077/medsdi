@@ -1819,6 +1819,36 @@
                     </table>
                 </div>
                 <div class="table-responsive">
+                    <table class="table table-bordered table-striped" id="table_pagos_reasignar_grupos">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Seleccionar</th>
+                                <th>Nombre</th>
+                                <th>Valor</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($todos as $o)
+                                @if ($o->presupuesto == 1)
+                                    <tr>
+                                        <td><input type="checkbox" class="valor-checkbox"
+                                                data-valor="{{ $o->valor }}" data-id="{{ $o->id }}"
+                                                data-info="odonto"></td>
+                                        <td>{{ $o->diagnostico_tratamiento }}</td>
+                                        <td>${{ number_format($o->valor, 0, ',', '.') }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                onclick="eliminar_diagnostico({{ $o->id }},'gral',this)"><i
+                                                    class="feather icon-x"></i></button>
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-responsive">
                     <table class="table table-bordered table-striped" id="table_pagos_reasignar_insumos">
                         <thead class="thead-dark">
                             <tr>

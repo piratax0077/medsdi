@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Revocación consentimiento informado</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close"  data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -152,6 +152,9 @@
     {
         var id_paciente_fc = $('#id_paciente_fc').val();
         var id_lugar_atencion = $('#id_lugar_atencion').val();
+        var id_ficha_atencion = $('#id_ficha_atencion').val();
+
+        if(!id_ficha_atencion) id_ficha_atencion = $('#id_fc').val();
 
         let url = "{{ route('consentimiento.paciente.ver') }}";
         var _token = $('input[name=_token]').val();
@@ -162,6 +165,7 @@
             data: {
                 id_paciente : id_paciente_fc,
                 id_lugar_atencion : id_lugar_atencion,
+                id_ficha_atencion: id_ficha_atencion,
                 confirmacion : '1',
                 revocacion : '0',
             },
@@ -171,7 +175,7 @@
                 if(resp.estado==1)
                 {
 
-                    let estado_log = ['En espera', 'Aprobado', 'Rechazado'];
+                    let estado_log = ['En espera', 'Aprobado', 'Rechazado','Otro','Otro'];
                     $.each(resp.registros, function (key, value) {
                         var estado_log_valor = 0;
                         // var fecha_log = '-';
@@ -241,7 +245,7 @@
             dataType: "json",
             data: datos,
             success: function(data) {
-                // console.log(data);
+                console.log(data);
                 if(data.estado == 1)
                 {
                     swal({
@@ -399,6 +403,7 @@
     {
         var id_paciente_fc = $('#id_paciente_fc').val();
         var id_lugar_atencion = $('#id_lugar_atencion').val();
+        var id_ficha_atencion = $('#id_fc').val();
 
         let url = "{{ route('consentimiento.paciente.ver') }}";
         var _token = $('input[name=_token]').val();
@@ -409,6 +414,7 @@
             data: {
                 id_paciente : id_paciente_fc,
                 id_lugar_atencion : id_lugar_atencion,
+                id_ficha_atencion: id_ficha_atencion,
                 revocacion : 1,
             },
             success: (resp)=>{

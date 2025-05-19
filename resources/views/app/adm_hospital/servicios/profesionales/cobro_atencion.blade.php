@@ -118,15 +118,15 @@
                         </div>
                     </div>
                     <div class="tab-pane fade show" id="medicamentos" role="tabpanel" aria-labelledby="medicamentos-tab">
-
+                        <form id="form_indicar_medicamento">
                             <div class="form-row">
                                 <div class="col-sm-6 mt-2">
                                     <div class="form-group fill">
                                         <label class="floating-label">Medicamento</label>
                                         <input type="text" id="nombre_medicamento_ficha_dental_hosp" name="nombre_medicamento_ficha_dental_hosp" onblur="getDosis_sdi();" class="form-control form-control-sm ui-autocomplete-input" autocomplete="off">
-                                        <input type="hidden" id="id_medicamento_ficha_dental_hosp" name="id_medicamento_ficha_dental_hosp" class="form-control " value="">
-                                        <input type="hidden" id="id_medicamento_cant_comp_hosp" name="id_medicamento_cant_comp_hosp" class="form-control " value="">
-                                        <input type="hidden" id="id_medicamento_tipo_control_hosp" name="id_medicamento_tipo_control_hosp" class="form-control" value="">
+                                        <input type="hidden" id="id_medicamento_ficha_dental" name="id_medicamento_ficha_dental" class="form-control " value="">
+                                        <input type="hidden" id="id_medicamento_cant_comp" name="id_medicamento_cant_comp" class="form-control " value="">
+                                        <input type="hidden" id="id_medicamento_tipo_control" name="id_medicamento_tipo_control" class="form-control" value="">
                                     </div>
                                 </div>
 
@@ -137,7 +137,7 @@
                                     </div>
                                 </div>
                                 {{--  CUANDO SE ENCUENTRA MEDICAMENTO EN BUSQUEDA  --}}
-                                <div class="col-sm-6 mt-2 medicamento_activo_hosp">
+                                <div class="col-sm-6 mt-2 medicamento_activo">
                                     <div class="form-group fill">
                                         <label class="floating-label">Presentación</label>
                                         <select class="form-control form-control-sm" id="dosis_medicamento_ficha_dental_hosp" name="dosis_medicamento_ficha_dental_hosp" onchange="getFrecuencia();getCantComp();">
@@ -145,7 +145,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-6 mt-2 medicamento_activo_hosp">
+                                <div class="col-sm-6 mt-2 medicamento_activo">
                                     <div class="form-group fill">
                                         <label class="floating-label">Posología</label>
                                         <select class="form-control form-control-sm" id="frecuencia_medicamento_ficha_dental_hosp"
@@ -155,13 +155,13 @@
                                     </div>
                                 </div>
                                 {{--  SI NO SE ENCUENTRA EL MEDICAMENTO EN LA BUSQUEDA  --}}
-                                <div class="col-sm-6 mt-2 medicamento_inactivo_hosp" style="display:none;">
+                                <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
                                     <div class="form-group fill">
                                         <label class="floating-label">Presentación</label>
                                         <input type="text" name="dosis_medicamento_ficha_dental_2" id="dosis_medicamento_ficha_dental_2" class="form-control form-control-sm ">
                                     </div>
                                 </div>
-                                <div class="col-sm-6 mt-2 medicamento_inactivo_hosp" style="display:none;">
+                                <div class="col-sm-6 mt-2 medicamento_inactivo" style="display:none;">
                                     <div class="form-group fill">
                                         <label class="floating-label">Posología</label>
                                         <input type="text" name="frecuencia_medicamento_ficha_dental_2" id="frecuencia_medicamento_ficha_dental_2" class="form-control form-control-sm ">
@@ -246,43 +246,7 @@
                                     </div>
                                 </div>
                             </div>
-
-                        <table id="tabla_medicamento" class="table table-bordered table-xs">
-                            <thead>
-                                <tr>
-                                    <td class="text-center align-middle text-wrap hidden" hidden="hidden">
-                                        id_tipo_control
-                                    </td>
-                                    <td class="text-center align-middle text-wrap hidden" hidden="hidden">
-                                        id_producto
-                                    </td>
-                                    <td class="text-center align-middle text-wrap">
-                                        Medicamentos
-                                    </td>
-                                    <td class="text-center align-middle text-wrap hidden" hidden="hidden">
-                                        farmaco</td>
-                                    <td class="text-center align-middle text-wrap hidden" hidden="hidden">
-                                        id_presentacion
-                                    </td>
-
-                                    <td class="text-center align-middle text-wrap" hidden="hidden">
-                                        id_receta_dosis
-                                    </td>
-                                    <td class="text-center align-middle text-wrap hidden">
-                                        Posología
-                                    </td>
-                                    <td class="text-center align-middle text-wrap">
-                                        Via Adm.
-                                    </td>
-                                    <th class="text-center align-middle">
-                                        Eliminar
-                                    </th>
-                            </tr></thead>
-                            <tbody>
-
-                            </tbody>
-                                                                                                                                </tbody>
-                        </table>
+                        </form>
                     </div>
                     <div class="tab-pane fade show" id="control_ciclo" role="tabpanel" aria-labelledby="control_ciclo-tab">
 
@@ -465,28 +429,7 @@
                     </div>
 
                     <div class="tab-pane fade show" id="procedimientos" role="tabpanel" aria-labelledby="procedimientos-tab">
-                        <table id="tabla_procedimientos_hosp" class="table table-bordered table-xs">
-                            <thead>
-                                <tr>
-                                    <td class="text-center align-middle text-wrap hidden" hidden="hidden">
-                                        id_procedimiento
-                                    </td>
-                                    <td class="text-center align-middle text-wrap">
-                                        Procedimiento
-                                    </td>
-                                    <td class="text-center align-middle text-wrap">
-                                        Vigilar
-                                        Signos de
-                                        Alerta</td>
-                                    <th class="text-center align-middle">
-                                        Acción
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                                                                                                                                </tbody>
-                        </table>
+                        <p>Procedimientos</p>
                     </div>
                 </div>
 
@@ -515,20 +458,19 @@
                     success: function(data) {
                         console.log(data);
                         if (data.length == 0) {
-                            $('.medicamento_activo_hosp').hide();
-                            $('.medicamento_inactivo_hosp').show();
-                            $('#dosis_medicamento_ficha_dental_hosp').val('');
-                            $('#frecuencia_medicamento_ficha_dental_hosp').val('');
+                            $('.medicamento_activo').hide();
+                            $('.medicamento_inactivo').show();
+                            $('#dosis_medicamento_ficha_dental_2').val('');
+                            $('#frecuencia_medicamento_ficha_dental_2').val('');
                             $('#id_medicamento_ficha_dental').val('');
                             $('#id_medicamento_tipo_control').val('');
                             $('#mensaje_med_control').val('');
                         } else {
-                            console.log('deberia mostrar el div oculto :/');
-                            $('.medicamento_activo_hosp').show();
-                            $('.medicamento_inactivo_hosp').hide();
-                            $('#dosis_medicamento_ficha_dental_hosp').val('');
-                            $('#frecuencia_medicamento_ficha_dental_hosp').val('');
-                            $('#id_medicamento_ficha_dental').val('');
+                            $('.medicamento_activo').show();
+                            $('.medicamento_inactivo').hide();
+                            $('#dosis_medicamento_ficha_dental_2').val('');
+                            $('#frecuencia_medicamento_ficha_dental_2').val('');
+                            // $('#id_medicamento_ficha_dental').val('');
                             $('#id_medicamento_tipo_control').val('');
                             $('#mensaje_med_control').val('');
                         }
@@ -541,7 +483,7 @@
                 // Set selection
                 $('#nombre_medicamento_ficha_dental_hosp').val(ui.item
                 .label); // display the selected text
-                $('#id_medicamento_ficha_dental_hosp').val(ui.item.value); // save selected id to input
+                $('#id_medicamento_ficha_dental').val(ui.item.value); // save selected id to input
                 $('#nombre_composicion_farmaco_hosp').html(ui.item.droga); // save selected id to input
                 $('#id_medicamento_tipo_control').val(ui.item.control); // save selected id to input
                 if (ui.item.control == 1 || ui.item.control == 1 || ui.item.control == 2 || ui.item
@@ -736,9 +678,7 @@
                         icon:'success',
                         title:'Exito',
                         text:'Paciente asignado correctamente'
-                    }).then((resp) => {
-                        window.location.href = `/Enfermeria/Enfermera/atencion/${resp.id_paciente}`;
-                    })
+                    });
                 }else{
                     swal({
                         icon:'info',
@@ -746,7 +686,6 @@
                         text:resp.mensaje
                     });
                 }
-
             },
             error: function(error){
                 console.log(error.responseText);

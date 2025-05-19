@@ -19,7 +19,7 @@
                                     <i class="feather icon-mail" style="font-size: 1.2rem!important;"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right profile-notification">
-                                    <div class="pro-head font-weight-bold f-14">
+                                    <div class="pro-head font-weight-bold f-16 py-2">
                                         Mensajes  <span class="badge badge-danger">{{ count($mensajes) }}</span>
                                     </div>
                                     <ul></ul>
@@ -60,7 +60,7 @@
                                     <i class="feather icon-refresh-cw" style="font-size: 1.2rem!important;"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right profile-notification">
-                                    <div class="pro-head font-weight-bold">
+                                    <div class="pro-head font-weight-bold f-16 py-2">
                                         <span>Cambiar escritorio</span>
                                     </div>
                                     <ul></ul>
@@ -101,7 +101,7 @@
                                 <i class="feather icon-user" style="font-size: 1.2rem!important;"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right profile-notification">
-                                <div class="pro-head font-weight-bold">
+                                <div class="pro-head font-weight-bold f-16 py-2">
                                     <span>{{  @Auth::user()->name }}</span>
                                 </div>
                                 {{--  <ul></ul>  --}}

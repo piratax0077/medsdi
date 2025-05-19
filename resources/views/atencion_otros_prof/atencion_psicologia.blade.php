@@ -8,10 +8,10 @@
             <div class="page-header">
                 <div class="page-block">
                     <div class="row align-items-center pb-2">
-                        <div class="col-md-6">
-                            <div class="page-header-title">
-                                <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN PSICOLOGIA ADULTO</strong></h5>
-                                <p class="font-italic mt-0 mb-0 text-white">
+                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-2">
+                            <div class="page-header-title mt-2">
+                                <h5 class="text-white d-inline f-16 mt-2"><strong>ATENCIÓN PSICOLOGIA ADULTO</strong></h5>
+                                <p class="f-16 mt-0 mb-0 text-white float-md-right d-inline mr-3">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
                                         $fecha = \Carbon\Carbon::parse(now());
@@ -33,7 +33,7 @@
             </div>
             <!--Cierre: Header-->
             <!-- TAB ATENCIÓN -->
-            <div class="user-profile user-card pt-0">
+            <div class="user-profile user-card pt-0 mt-1">
                 <div class="card-body py-0">
                     <div class="user-about-block m-0">
                         <div class="row">

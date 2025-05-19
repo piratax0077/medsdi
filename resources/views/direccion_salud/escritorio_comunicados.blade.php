@@ -575,13 +575,13 @@
 
                 this.on("successmultiple", function(files, response) {
                     // Manejar la respuesta de éxito
-                    console.log("Archivos subidos correctamente:", response);
+                    console.log("Archivos subidos correctamente:", response.errors);
                     alert("Archivos subidos correctamente");
                 });
 
                 this.on("errormultiple", function(files, response) {
                     // Manejar la respuesta de error
-                    console.log("Error al subir los archivos:", response.errors);
+                    console.log("Error al subir los archivos:", response);
                     alert("Error al subir los archivos");
                 });
 

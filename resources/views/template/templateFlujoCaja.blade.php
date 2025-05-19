@@ -293,7 +293,6 @@
         }
 
 
-
         function seleccionar_bonos_rendicion(){
             var estado  = $('#enviar_todos').is(':checked')
             $("input:checkbox").each(function() {

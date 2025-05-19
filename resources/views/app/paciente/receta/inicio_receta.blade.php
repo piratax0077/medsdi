@@ -80,19 +80,19 @@
                         </a>
                     </div>
                 </div>
-                {{-- <div class="col">
+                <div class="col">
                     <div class="card subir">
-                        <a href="#">
+                       <a href="{{ ROUTE('paciente.receta.documentos') }}">
                             <div class="card-body text-center" style="cursor:pointer">
                                 <img class="wid-60 text-center mb-3"
                                     src="{{ asset('images/iconos/documentos-ro.svg') }}" alt="Mis documentos">
                                 <h5 class="titulos_tarjetas">
-                                    Mis documentos
+                                    Mis documentos e indicaciones
                                 </h5>
                             </div>
                         </a>
                     </div>
-                </div> --}}
+                </div> 
                 <div class="col">
                     <div class="card subir">
                         <a href="{{ ROUTE('paciente.mis_controles') }}">

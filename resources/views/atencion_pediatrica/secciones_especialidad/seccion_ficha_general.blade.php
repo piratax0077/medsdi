@@ -690,7 +690,6 @@
 @section('js-ficha-general-espc')
     <script>
         $(document).ready(function() {
-
             $("#descripcion_cie").autocomplete({
                 source: function(request, response) {
                     // Fetch data

@@ -12,6 +12,6 @@ class Ciudad extends Model
 
     public function Region()
     {
-        return $this->belongsTo(Region::class,'id_region', 'id');
+       return $this->belongsTo(Region::class,'id_region', 'id');
     }
 }

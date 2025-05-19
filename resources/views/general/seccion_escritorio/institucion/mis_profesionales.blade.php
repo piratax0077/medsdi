@@ -8,11 +8,11 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Información de Profesionales Institución</h5>
+                                <h5 class="m-b-10 font-weight-bold">Información de profesionales del CM</h5>
                             </div>
                             <ul class="breadcrumb">
                                  <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="#">Información de profesionales</a></li>
+                                <li class="breadcrumb-item"><a href="#">Info. de profesionales del CM</a></li>
                             </ul>
                         </div>
                     </div>
@@ -33,19 +33,19 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-6 col-md-12">
-                                    <table id="tabla_profesionales_inst" class="display table table-striped table-hover dt-responsive nowrap table-sm" style="width:100%">
+                                    <table id="tabla_profesionales_inst" class="display table table-striped dt-responsive nowrap table-xs" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th class="text-wrap text-center align-middle">Profesional</th>
-                                            <th class="text-center align-middle">Especialidad</th>
-                                            <th class="text-center align-middle">Contacto</th>
-                                            <th class="text-center align-middle">Agenda</th>
+                                            <th class="align-middle">Profesional</th>
+                                            <th class="align-middle">Especialidad</th>
+                                            <th class="align-middle">Contacto</th>
+                                            <th class="align-middle">Agenda</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($lugares_atencion->Profesionales()->get() as $p)
                                         <tr>
-                                            <td class="align-middle text-center">
+                                            <td class="align-middle">
                                                 <strong>
                                                     {{ $p->nombre }}
                                                     {{ $p->apellido_uno }}
@@ -54,13 +54,13 @@
                                                 <br>
                                                 {{ $p->rut }}
                                             </td>
-                                            <td class="text-center align-middle">{{ $p->Especialidad()->first()->nombre }}</td>
-                                            <td class="text-center align-middle">
+                                            <td class=" align-middle">{{ $p->Especialidad()->first()->nombre }}</td>
+                                            <td class=" align-middle">
                                                 {{ $p->email }}
                                                 <br>
                                                 {{ $p->telefono_uno }}
                                             </td>
-                                            <td class="align-middle text-center">
+                                            <td class="align-middle">
                                                 <button class="btn btn-info btn-sm" onclick="info_profesional({{ $p->id }});">
                                                     <i class="feather icon-calendar"></i>
                                                     Ver Información

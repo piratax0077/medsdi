@@ -12,8 +12,8 @@
 
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <label class="floating-label-activo-sm" for="ex-endosc-bronco">Exámenes Funcionales</label>
-                        <select class="js-example-basic-multiple select2" name="examenes_endoscopico" id="examenes_endoscopico"
-                            multiple="multiple">
+                        <select class="js-example-basic-multiple select2" name="examenes_endoscopico"
+                            id="examenes_endoscopico" multiple="multiple">
                             <option value="1">17 07 021 &nbsp; | &nbsp; LARINGOTRAQUEOBRONCOSCOPÍA CON FIBROSCOPIA
                             </option>
                             <option value="2">17 07 022 &nbsp; | &nbsp; LARIGOTRAQUEOSCOPÍA CON TUBO RÍGIDO
@@ -23,94 +23,113 @@
                             </option>
                             <option value="5">17 07 056 &nbsp; | &nbsp; ENDOSONOGRAFÍA BRONQUIAL (EBUS) </option>
                         </select>
+
+
                     </div>
                     <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-                        <label class="floating-label-activo-sm">Diagnóstico</label>
-                        <input class="form-control" type="text" id="diagnostico_endoscopico">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-sm-12">
-                        <div class="form-group fill">
-                            <label class="floating-label-activo-sm">Observaciones</label>
-                            <textarea class="form-control caja-texto form-control-sm mt-1" rows="1" onfocus="this.rows=3"
-                                onblur="this.rows=1;" name="observaciones_endoscopias" id="observaciones_endoscopias"></textarea>
+                            <label class="floating-label-activo-sm">Diagnóstico</label>
+                            <input class="form-control" type="text" id="diagnostico_endoscopico">
                         </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <button type="button" class="btn btn-success btn-sm float-right"  onclick="guardar_examenes(3)">
-                            <i class="fa fa-plus"></i> Agregar examen</button>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-sm-12 mt-3">
-                        <!--**** Al agregar un examen, se debe cargar la tabla *****-->
-                        <!--Tabla-->
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-xs" id="table_examen_3">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center align-middle">Fecha</th>
-                                        <th class="text-center align-middle">Examen</th>
-                                        <th class="text-center align-middle">Diagnóstico</th>
-                                        <th class="text-center align-middle">Observaciones</th>
-                                        <th class="text-center align-middle">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (isset($examenes_plan_tratamiento_broncoscopia) && $examenes_plan_tratamiento_broncoscopia->count() > 0)
-                                        @foreach ($examenes_plan_tratamiento_broncoscopia as $e)
-                                            @foreach (json_decode($e->examenes, true) as $examen_nombre)
-                                                <tr>
-                                                    {{-- Fecha --}}
-                                                    <td class="text-center align-middle">
-                                                        {{ \Carbon\Carbon::parse($e->created_at)->format('d-m-Y H:i') }}
-                                                    </td>
-
-                                                    {{-- Examen --}}
-                                                    <td class="text-left align-middle">
-                                                        • {{ $examen_nombre }}
-                                                    </td>
-
-                                                    {{-- Diagnóstico --}}
-                                                    <td class="text-left align-middle">
-                                                        {{ $e->diagnostico }}
-                                                    </td>
-
-                                                    {{-- Observaciones --}}
-                                                    <td class="text-left align-middle">
-                                                        {{ $e->observaciones }}
-                                                    </td>
-
-                                                    {{-- Acciones --}}
-                                                    <td class="text-center align-middle">
-                                                        <button type="button" class="btn btn-danger btn-sm mb-1"
-                                                            onclick="eliminarExamen('{{ $e->id }}',3, '{{ $examen_nombre }}')"><i
-                                                                class="fas fa-trash"></i></button>
-
-                                                        <button type="button" class="btn btn-primary btn-sm"
-                                                            onclick="generarPDF({{ $e->id }}, '{{ $examen_nombre }}')">PDF</button>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endforeach
-                                    @else
-                                        <tr>
-                                            <td colspan="5" class="text-center">No hay exámenes registrados.</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-
-                            </table>
+                    <div class="form-row">
+                        <div class="col-sm-12">
+                            <div class="form-group fill">
+                                <label class="floating-label-activo-sm">Observaciones</label>
+                                <textarea class="form-control caja-texto form-control-sm mt-1" rows="1" onfocus="this.rows=3"
+                                    onblur="this.rows=1;" name="observaciones_endoscopias" id="observaciones_endoscopias"></textarea>
+                            </div>
                         </div>
+                        <div class="col-sm-12">
+                            <button type="button" class="btn btn-success btn-sm float-right"
+                                onclick="guardar_examenes(3)">
+                                <i class="fa fa-plus"></i> Agregar examen</button>
+                        </div>
+                        <div class="col-sm-12">
+ <div class="form-row">
+                            <div class="col-sm-12">
+
+
+
+
+                                <div class="form-row">
+                                    <div class="col-sm-12 mt-3">
+                                        <!--**** Al agregar un examen, se debe cargar la tabla *****-->
+                                        <!--Tabla-->
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-xs" id="table_examen_3">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center align-middle">Fecha</th>
+                                                        <th class="text-center align-middle">Examen</th>
+                                                        <th class="text-center align-middle">Diagnóstico</th>
+                                                        <th class="text-center align-middle">Observaciones</th>
+                                                        <th class="text-center align-middle">Acciones</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (isset($examenes_plan_tratamiento_broncoscopia) && $examenes_plan_tratamiento_broncoscopia->count() > 0)
+                                                        @foreach ($examenes_plan_tratamiento_broncoscopia as $e)
+                                                            @foreach (json_decode($e->examenes, true) as $examen_nombre)
+                                                                <tr>
+                                                                    {{-- Fecha --}}
+                                                                    <td class="text-center align-middle">
+                                                                        {{ \Carbon\Carbon::parse($e->created_at)->format('d-m-Y H:i') }}
+                                                                    </td>
+
+                                                                    {{-- Examen --}}
+                                                                    <td class="text-left align-middle">
+                                                                        • {{ $examen_nombre }}
+                                                                    </td>
+
+                                                                    {{-- Diagnóstico --}}
+                                                                    <td class="text-left align-middle">
+                                                                        {{ $e->diagnostico }}
+                                                                    </td>
+
+                                                                    {{-- Observaciones --}}
+                                                                    <td class="text-left align-middle">
+                                                                        {{ $e->observaciones }}
+                                                                    </td>
+
+                                                                    {{-- Acciones --}}
+                                                                    <td class="text-center align-middle">
+                                                                        <button type="button"
+                                                                            class="btn btn-danger btn-sm mb-1"
+                                                                            onclick="eliminarExamen('{{ $e->id }}',3, '{{ $examen_nombre }}')"><i
+                                                                                class="fas fa-trash"></i></button>
+
+                                                                        <button type="button"
+                                                                            class="btn btn-primary btn-sm"
+                                                                            onclick="generarPDF({{ $e->id }}, '{{ $examen_nombre }}')">PDF</button>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        @endforeach
+                                                    @else
+                                                        <tr>
+                                                            <td colspan="5" class="text-center">No hay exámenes
+                                                                registrados.</td>
+                                                        </tr>
+                                                    @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        </div>
+
+
                     </div>
                 </div>
-
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-sm" onclick="cerrarsol_examen_broncoscopia();"
+                <button type="button" class="btn btn-danger btn-sm"
+                    onclick="cerrarsol_examen_broncoscopia();"
                     data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-info btn-sm"> Guardar</button>
+                <button type="button" class="btn btn-success btn-sm float-right" onclick="guardar_examenes(3)">Guardar</button>
             </div>
         </div>
     </div>

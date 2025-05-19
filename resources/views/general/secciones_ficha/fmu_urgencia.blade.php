@@ -2,11 +2,11 @@
 
     <div class="mt-0">
         <div class="col-sm-12 col-md-12 py-0 px-1 shadow-none">
-            
+
                         <div class="row">
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="card-fmu">
-                                 
+
                         <h4 class="text-c-blue f-18 pt-2 text-center">Ficha Médica Única</h4>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                                 		 <h6 class="f-14">Paciente Crónico: {!! ($antecedentes_paciente->transfusion == '1'?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}</h6>
                                 	</div>
                                 	<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
-                                		<h6 class="f-14">Transfuciones: {!! ($cantidad_ante_cronicos > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}</h6>
+                                		<h6 class="f-14">Transfusiones: {!! ($cantidad_ante_cronicos > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}</h6>
                                 	</div>
                                 	<div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 mb-2">
                                 		<h6 class="f-14">Alergias:  {!! ($cantidad_ante_alergias > 0?'<span style="color: #ff0000;font-weight: bold;">SI</span>':'<span style="color: #000000;font-weight: bold;">NO</span>') !!}</h6>

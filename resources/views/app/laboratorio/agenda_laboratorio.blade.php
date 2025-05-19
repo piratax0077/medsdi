@@ -127,11 +127,20 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Agenda Laboratorio</h5>
+                                @if ($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
+                                    <h5 class="m-b-10 font-weight-bold">Agenda Laboratorio Radiología</h5>
+                                @else
+                                    <h5 class="m-b-10 font-weight-bold">Agenda Laboratorio</h5>
+                                @endif
+
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="escritorio_asistente_cm.php" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-                                <li class="breadcrumb-item"><a href="agenda_laboratorios_asistentes_cm.php">Agenda Laboratorio</a></li>
+                                @if ($profesional->id_especialidad == 11 && $profesional->id_tipo_especialidad == 59)
+                                    <li class="breadcrumb-item"><a href="agenda_laboratorios_asistentes_cm.php">Agenda Laboratorio Radiología</a></li>
+                                @else
+                                    <li class="breadcrumb-item"><a href="agenda_laboratorios_asistentes_cm.php">Agenda Laboratorio</a></li>
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -156,7 +165,11 @@
                                                 <option value="">Seleccione</option>
                                                 @if($sucursales)
                                                     @foreach($sucursales as $key_suc => $value_suc)
-                                                        <option value="{{ $value_suc->id }}" data-id_lugar_atencion="{{ $value_suc->id_lugar_atencion }}" data-id_tipo_agenda="5">{{ strtoupper($value_suc->nombre) }}</option>
+                                                        @if ($loop->first)
+                                                            <option selected value="{{ $value_suc->id }}" data-id_lugar_atencion="{{ $value_suc->id_lugar_atencion }}" data-id_tipo_agenda="5">{{ strtoupper($value_suc->nombre) }}</option>
+                                                        @else
+                                                            <option value="{{ $value_suc->id }}" data-id_lugar_atencion="{{ $value_suc->id_lugar_atencion }}" data-id_tipo_agenda="5">{{ strtoupper($value_suc->nombre) }}</option>
+                                                        @endif
                                                     @endforeach
                                                 @endif
                                             </select>
@@ -226,8 +239,7 @@
 
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Procedimiento</label>
-                                    <input type="hidden" name="total_bloques_procedimientos" id="total_bloques_procedimientos" value="">
-                                    <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento" id="form_reseva_de_horas_id_procedimiento" multiple="multiple">
+                                    <select class="form-control form-control-sm" name="form_reseva_de_horas_id_procedimiento" id="form_reseva_de_horas_id_procedimiento">
                                         {{-- <option value="">Seleccione</option> --}}
                                         @if ( isset($procedimientos) && !empty($procedimientos) )
                                             @foreach ($procedimientos as $proced )
@@ -1044,30 +1056,10 @@
 @section('page-script')
     <script src="{{ asset('js/jQuery-Mask-Plugin-master/jquery.mask.js') }}"></script>
     <script>
-        var sumaBloques = 0;
         $(document).ready(function () {
+            $('.loader-bg').hide();
 
-            $('#form_reseva_de_horas_id_procedimiento').select2();
-
-            // Evento al cambiar selección
-            $('#form_reseva_de_horas_id_procedimiento').on('change', function() {
-                sumaBloques = 0;
-
-                const seleccionados = $(this).find('option:selected');
-                const idsSeleccionados = [];
-
-                seleccionados.each(function() {
-                    // Sumar los bloques (convertir a número con +)
-                    sumaBloques += +$(this).data('cant_bloque');
-                    idsSeleccionados.push($(this).val());
-                });
-
-                // Resultados
-                // console.log("IDs seleccionados:", idsSeleccionados);
-                // console.log("Total de bloques:", sumaBloques);
-
-                $('#total_bloques_procedimientos').val(sumaBloques);
-            });
+            cargarBox();
 
             $('.mask_date').mask("dd/mm/0000", {
                 'translation': {
@@ -1158,6 +1150,8 @@
                             var html = '<option value="'+element.id+'">'+element.tipo_box+'</option>';
                             $('#agenda_box').append(html);
                         });
+
+                        $('#agenda_box').prop('selectedIndex', 0);
 
                         cargarAgendaSucursal();
                     }
@@ -2006,8 +2000,8 @@
                             $('#contenedor_tratamientos_presupuesto').hide();
                             $('#presupuesto_numero').empty();
                             $('#presupuesto_numero').append('<option>Seleccione el presupuesto </option>');
-                            console.log(data.presupuestos);
-                            if(data.presupuestos?.length > 0){
+                            console.log(data.presupuestos.length);
+                            if(data.presupuestos.length > 0){
                                 data.presupuestos.forEach(p => {
                                     $('#presupuesto_numero').append(`<option value="${p.id}" data-total="${p.valor_total}">${p.id} - ${p.fecha}</option>`);
                                 });
@@ -2780,7 +2774,7 @@
             let id_box = $('#agenda_box').val();
             var tipo_agenda_text = 'C';
             var procedimiento = $('#form_reseva_de_horas_id_procedimiento').val();
-            var proc_bloque = sumaBloques;
+            var proc_bloque = $('#form_reseva_de_horas_id_procedimiento option:selected').attr('data-cant_bloque');
 
             console.log(tipo_agenda);
             console.log(tipo_agenda_text);

@@ -3,9 +3,7 @@
 		<div class="modal-content">
 			<div class="modal-header bg-info">
 				<h5 class="modal-title text-white" id="modal_IMCLabel"><strong> Calculadora de IMC</strong></h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<button type="button" class="close"  data-dismiss="modal" aria-label="Close" onclick="cerrarimc();"><span aria-hidden="true">×</span></button>
 			</div>
 			<div class="modal-body">
                 <div class="form-row">
@@ -30,7 +28,7 @@
                 </div>
                 <div class="row mt-2">
                     <div class="form-group col-sm-12 col-md-12 col-lg-12">
-                        <button type="button" class="buttonimc btn btn-block btn-primary" onclick="calcularimc()">Calcular</button>
+                        <button type="button" class="buttonimc btn btn-block btn-primary" onclick="calcularimc();">Calcular</button>
                     </div>
                 </div>
                 <div class="form-row">
@@ -51,10 +49,17 @@
     </div>
 </div>
 
+
+
 <script>
+
+
+
     function imc() {
         $('#modal_calcimc').modal('show');
     }
+
+  
 
     function calcularimc() {
         var height = document.getElementById("height").value / 100;

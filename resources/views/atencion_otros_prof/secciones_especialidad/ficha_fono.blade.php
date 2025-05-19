@@ -20,7 +20,6 @@
 
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <form action="#" method="POST">
-                    @csrf
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
                     {{--  <input type="hidden" name="examenes_esp" id="examenes_esp" value="{!! old('examenes_esp') !!}">
                     <input type="hidden" name="medicamentos" id="medicamentos" value="{!! old('medicamentos') !!}">  --}}
@@ -34,7 +33,7 @@
                     <input type="hidden" name="mostrarpdf" id="mostrarpdf" value="0">
                     <input type="hidden" name="tipopdf" id="tipopdf" value="0">
                     {{--  <input type="hidden" name="input_lista_imagenes" id="input_lista_imagenes" value="">  --}}
-
+                    @csrf
                     <div class="tab-content" id="fono-contenido">
                         <!--ATENCIÓN ESPECIALIDAD FONO-->
                         <div class="tab-pane fade show active" id="atencion_fono" role="tabpanel" aria-labelledby="atencion_fono-tab">
@@ -574,8 +573,8 @@
 								<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 									<div class="row mb-3">
 										<div class="col-md-12 text-center">
-											<button type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta"></button>
-											<input type="button" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+											<input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+											<input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
 										</div>
 									</div>
 								</div>

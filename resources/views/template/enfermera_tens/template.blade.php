@@ -166,10 +166,10 @@
 
         <!-- funciones generales -->
         <script src="{{ asset('js/funciones.js') }}"></script>
-
+        
         <script>
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
+        
             /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
             function  envio_indicaciones_pdf(id_modal){
                 let url = "{{ route('indicacion.medica.registro.envio') }}";

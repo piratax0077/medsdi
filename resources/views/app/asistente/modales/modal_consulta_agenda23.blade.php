@@ -228,15 +228,18 @@
                                     <label class="floating-label-activo-sm">Valor total</label>
                                     <input name="bono_valor_consulta" id="bono_valor_consulta" type="number" class="form-control">
                                 </div>
-                                <div class="form-group">
-                                    <label class="floating-label-activo-sm">Convenio</label>
-                                    <select id="bono_prevision" name="bono_prevision" class="form-control">
-                                        <option value="0">Selecione una opción</option>
-                                        @foreach ($prevision as $prev)
-                                            <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="input-group">
+                                <label class="floating-label-activo-sm">Convenio</label>
+                                 <select id="bono_prevision" name="bono_prevision" class="form-control form-control-sm">
+                                    <option value="0">Selecione una opción</option>
+                                    @foreach ($prevision as $prev)
+                                        <option value="{{ $prev->id }}">{{ $prev->nombre }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-primary btn-sm" type="button"><i class="feather icon-edit"></i></button>
                                 </div>
+                            </div>
                                 <div class="form-group mb-3">
                                     <div class="switch switch-success d-inline m-r-10">
                                         <input type="checkbox" id="recepcion_programa">

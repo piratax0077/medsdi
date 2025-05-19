@@ -8,20 +8,6 @@
         <link rel="stylesheet" href="{{ asset('css/style_index.css') }}?t={{ time() }}">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
-            integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
-            integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
-        </script>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-
         <!-- Links del REG-->
         <link rel="stylesheet" href="{{ asset('css/escritorio_profesional.css') }}?t={{ time() }}">
         <link rel="stylesheet" href="{{ asset('css/card_estilo.css') }}?t={{ time() }}">
@@ -73,52 +59,19 @@
 
         <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
 
-        <!-- flatpickr -->
-        <link rel="stylesheet" href="{{ asset('css/flatpickr/flatpickr.min.css') }}">
-
         @yield('css-btn-autorizacion')
         {{--  /** agregar css */  --}}
         <style>
-            .diagnostico_activo{
-                background: #fff !important;
-            }
-            #loading {
-                display: none;
+            .ui-front {
                 position: absolute;
-                top: 10px;
-                right: 10px;
-            }
-
-            #calendar {
-                max-width: 900px;
-                margin: 40px auto;
-            }
-
-            /* kill the scrollbars and allow natural height */
-            .fc-scroller,
-            .fc-day-grid-container,
-            /* these divs might be assigned height, which we need to cleared */
-            .fc-time-grid-container {
-                /* */
-                overflow-x: hidden;
-                overflow-y: auto !important;
-                height: auto !important;
-            }
-
-            /* kill the horizontal border/padding used to compensate for scrollbars */
-            .fc-row {
-                border: 0 !important;
-                margin: 0 !important;
-            }
-
-            .fc .fc-timegrid-slot {
-                height: 3.5em;
+                z-index: 2006;
+                overflow: auto;
             }
         </style>
-
+        @yield('page-style')
     </head>
     <body>
-        @include('template.pediatria.header')
+        @include('template.profesional.header')
         @include('template.profesional.menu')
 
         @yield('Content')

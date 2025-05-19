@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Consentimiento_faltante extends Model
+class ConsentimientoFaltante extends Model
 {
     use HasFactory;
     protected $table = 'consentimiento_faltante';

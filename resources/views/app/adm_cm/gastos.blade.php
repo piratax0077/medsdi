@@ -23,15 +23,15 @@
                 <div class="card-header bg-info">
                     <div class="row">
                         <div class="col-md-12 align-botton">
-                            <h4 class="text-white f-20 d-inline ml-4 mt-3">Gastos y Pagos Institucionales</h4>
+                            <h4 class="text-white f-20 d-inline ml-4 mt-3">Gastos y pagos institucionales</h4>
                             <div class="btn-group float-right" role="group" aria-label="Basic example">
-                              <button type="button" class="btn btn-outline-light btn-sm" onclick="mostrar_agregar_gasto();"><i class="feather icon-plus"></i>Agregar gasto</button>
+                              <button type="button" class="btn btn-outline-light btn-sm" onclick="mostrar_agregar_gasto();"><i class="feather icon-plus"></i> Agregar gasto</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="row">
+                    <div class="form-row">
                         <div class="col-md-3 mb-3">
                             <select class="form-control form-control-sm" name="filtro_anio" id="filtro_anio" onchange="carga_filtros();">
                                @for ($i = 2023;$i <= date('Y'); $i++)
@@ -89,27 +89,27 @@
                             </select>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <button type="button" class="btn btn-info btn-sm">Descargar Reporte</button>
+                            <button type="button" class="btn btn-info btn-block btn-sm"><i class="feather icon-download"></i> Descargar reporte</button>
                         </div>
                     </div>
-                    <table id="gastos_comunes_inst" class="display table table-striped  table-sm table-hover dt-responsive nowrap" style="width:100%">
+                    <table id="gastos_comunes_inst" class="display table table-striped  table-sm dt-responsive nowrap" style="width:100%">
                         <thead>
                             <tr>
-                                <th class="text-center align-middle">Tipo</th>
-                                <th class="text-center align-middle">Nombre</th>
-                                <th class="text-center align-middle">Fecha Vencimiento</th>
-                                <th class="text-center align-middle">Emisor</th>
-                                <th class="text-center align-middle">Folio</th>
-                                <th class="text-center align-middle">Cuenta Contable</th>
-                                <th class="text-center align-middle">Mes de pago</th>
-                                <th class="text-center align-middle">Año de pago</th>
-                                <th class="text-center align-middle">Modo de pago</th>
-                                <th class="text-center align-middle">Monto</th>
-                                <th class="text-center align-middle">Sucursal</th>
-                                <th class="text-center align-middle">Estado</th>
-                                <th class="text-center align-middle">Pagar</th>
-                                <th class="text-center align-middle">Editar</th>
-                                {{-- <th class="text-center align-middle">Habilitar /<br> deshabilitar</th> --}}
+                                <th class="align-middle">Tipo</th>
+                                <th class="align-middle">Nombre</th>
+                                <th class="align-middle">Fecha Vencimiento</th>
+                                <th class="align-middle">Emisor</th>
+                                <th class="align-middle">Folio</th>
+                                <th class="align-middle">Cuenta Contable</th>
+                                <th class="align-middle">Mes de pago</th>
+                                <th class="align-middle">Año de pago</th>
+                                <th class="align-middle">Modo de pago</th>
+                                <th class="align-middle">Monto</th>
+                                <th class="align-middle">Sucursal</th>
+                                <th class="align-middle">Estado</th>
+                                <th class="align-middle">Pagar</th>
+                                <th class="align-middle">Editar</th>
+                                {{-- <th class="align-middle">Habilitar /<br> deshabilitar</th> --}}
                             </tr>
                         </thead>
                         <tbody>

@@ -58,6 +58,7 @@
         <!--Estilos escritorios-->
         <link rel="stylesheet"  href="{{ asset('css/escritorios.css') }}">
         <!-- SERLECT2-->
+        <link rel="stylesheet"  href="{{ asset('css\plugins\select2.min.css') }}">
 
         <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
         <style>
@@ -101,23 +102,23 @@
             .tcaj_nau {height: 34px;width: 137px;text-align: center;}
             .caja_resp {height: 26px;text-align: center;}
             .text_center {text-align: center;}
-            .ng_esp {
-                /* Common */
-                font : 13px 'Wingdings 3';text-align: center;padding:1px; margin-left:5px;margin-right:5px;margin-top: 5px;
+        .ng_esp {
+            /* Common */
+	        font : 13px 'Wingdings 3';text-align: center;padding:1px; margin-left:5px;margin-right:5px;margin-top: 5px;
 
 
-                width:85px; height:25px;    background-color: #CFD6D5; color: #FF0000; font-weight: bold; font-size: 1.2rem;
-            }
+            width:85px; height:25px;    background-color: #CFD6D5; color: #FF0000; font-weight: bold; font-size: 1.2rem;
+        }
 
-            .subtitOD{text-align:left; font-family: Arial, Helvetica, sans-serif; color: #FF0000;}
-            .subtitOD1{text-align:left; font-family: Arial, Helvetica, sans-serif; color: #FF0000;padding-left:10px}
-            .subtitOI{font-family: Arial, Helvetica, sans-serif; color: #007EFD}
-            .subtitOI1{font-family: Arial, Helvetica, sans-serif; color: #007EFD;padding-left:10px}
-            .tit{
-                text-align: center;
-                color: #666666;
-                height: 23px;
-            }
+        .subtitOD{text-align:left; font-family: Arial, Helvetica, sans-serif; color: #FF0000;}
+        .subtitOD1{text-align:left; font-family: Arial, Helvetica, sans-serif; color: #FF0000;padding-left:10px}
+        .subtitOI{font-family: Arial, Helvetica, sans-serif; color: #007EFD}
+        .subtitOI1{font-family: Arial, Helvetica, sans-serif; color: #007EFD;padding-left:10px}
+        .tit{
+            text-align: center;
+            color: #666666;
+            height: 23px;
+        }
 
             .impWidh{
                 width: 33px;color: #FF0000;text-align:center;margin-left:10px
@@ -238,7 +239,7 @@
 		</style>
     </head>
     <body>
-        @include('template.pediatria.header')
+        @include('template.profesional.header')
         @include('template.profesional.menu')
 
         @yield('Content')
@@ -315,9 +316,9 @@
         <!-- mensajes -->
         <script src="{{ asset('js/plugins/sweetalert.min.js') }}"></script>
 
-        {{-- autocomplete
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
-        <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
+      {{-- autocomplete
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>--}}
+    <script src="{{ asset('js/jquery-ui/jquery-ui.min.js') }}"></script>
 
 
         <!-- select2 Js -->
@@ -513,7 +514,7 @@
                                     myLineChart.parse(multiple_dataset, "json");
                                 }
         </script>
-		<script>
+        <script>
             /** METODO PARA ENVIO DE INDICACIONES MEDICAS PDF */
             function  envio_indicaciones_pdf(id_modal){
                 let url = "{{ route('indicacion.medica.registro.envio') }}";

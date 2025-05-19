@@ -339,6 +339,8 @@
                 $("#ver_contrato_usuario").modal('hide');
             });
         });
+		
+
 
         function ver_detalle_contrato(id)
         {
@@ -403,6 +405,8 @@
                 console.log(jqXHR, ajaxOptions, thrownError)
             });
         }
+		
+		
     </script>
 @endsection
 

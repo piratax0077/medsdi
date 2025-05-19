@@ -9,7 +9,6 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Confirmar Hora</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -18,7 +17,7 @@
                                     </a>
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="{{ ROUTE('asistentecm.buscar_paciente') }}">Confirmar Hora Institución</a>
+                                    <a href="{{ ROUTE('asistentecm.buscar_paciente') }}">Confirmar hora Institución</a>
                                 </li>
                             </ul>
                         </div>

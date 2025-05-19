@@ -9,7 +9,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10 font-weight-bold">Reservar Hora Médica</h5>
+                                <h5 class="m-b-10 font-weight-bold">Reservar hora médica</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item">
@@ -19,7 +19,7 @@
                                     </a>
                                 </li>
                                 <li class="breadcrumb-item">
-                                    <a href="{{ ROUTE('paciente.agendar_hora') }}">Reservar Hora Médica</a>
+                                    <a href="{{ ROUTE('paciente.agendar_hora') }}">Reservar hora médica</a>
                                 </li>
                             </ul>
                         </div>
@@ -31,25 +31,25 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card">
-                        <div class="card-header text-white bg-light">
-                            <h4 class="f-20 text-c-blue text-center mb-0">Reserve su hora médica</h4>
+                        <div class="card-header bg-info">
+                            <h4 class="f-20 text-white text-center mb-0">Reserve su hora médica</h4>
                         </div>
                         <div class="card-body">
                             <ul class="nav nav-tabs mb-3 justify-content-center" id="Buscadores" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link @if (Session::has('view')) @if (Session::get('view') == 1) active @endif
+                                <li class="nav-item mx-3">
+                                    <a class="nav-link text-secondary @if (Session::has('view')) @if (Session::get('view') == 1) active @endif
 @else
 active  @endif text-uppercase"
                                         id="buscar_especialidad-tab" data-toggle="tab" href="#buscar_especialidad"
                                         role="tab" aria-controls="home" aria-selected="true">Especialidad</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link @if (Session::has('view') && Session::get('view') == 2) active @endif text-uppercase"
+                                <li class="nav-item mx-3">
+                                    <a class="nav-link text-secondary  @if (Session::has('view') && Session::get('view') == 2) active @endif text-uppercase"
                                         id="buscar_profesional-tab" data-toggle="tab" href="#buscar_profesional" role="tab"
                                         aria-controls="buscar_profesional" aria-selected="false">Profesional</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link @if (Session::has('view') && Session::get('view') == 3) active @endif text-uppercase"
+                                <li class="nav-item mx-3">
+                                    <a class="nav-link text-secondary  @if (Session::has('view') && Session::get('view') == 3) active @endif text-uppercase"
                                         id="buscar_videoconsulta-tab" data-toggle="tab" href="#buscar_videoconsulta"
                                         role="tab" aria-controls="buscar_videoconsulta"
                                         aria-selected="false">Videoconsulta</a>
@@ -315,7 +315,7 @@ show active  @endif"
                                                     <label class="floating-label">Región / Comuna</label>
                                                     <select id="comuna_paciente3" name="comuna_paciente3"
                                                         class="form-control @error('comuna_paciente3') is-invalid @enderror">
-                                                        <option value="S">Seleccione una opción</option>
+                                                        <option value="S">Seleccione</option>
                                                         <optgroup label="Valparaíso">
                                                             <option value="Viña del Mar">Viña del Mar</option>
                                                             <option value="La Calera">La Calera</option>
@@ -345,7 +345,7 @@ show active  @endif"
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md-12 text-center">
-                                                <button class="btn btn-info" type="submit">Buscar hora</button>
+                                                <button class="btn btn-info" type="submit"><i class="feather icon-search"></i> Buscar hora</button>
                                             </div>
                                         </div>
                                     </form>

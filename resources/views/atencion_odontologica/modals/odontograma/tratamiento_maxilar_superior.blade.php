@@ -1319,6 +1319,58 @@
 
                 $('#valores_examenes_presupuesto').html(formatoMoneda(valores_examenes));
                 $('#valores_piezas_presupuesto').html(formatoMoneda(valores_piezas));
+                let todos = response.todos;
+
+                let table_gral = $('#presup_estado_pago_gral').DataTable();
+
+                // Limpiar la tabla antes de agregar nuevas filas
+                table_gral.clear().draw();
+
+                // Recorrer el odontograma y agregar nuevas filas
+                todos.forEach(function(odonto) {
+
+                    if (odonto.presupuesto == 1) {
+                        if (odonto.estado_pago == 'ok') {
+                            var clase = 'bg-success';
+                        } else if (odonto.estado_pago == 'intermedio') {
+                            var clase = 'bg-warning';
+                        } else {
+                            var clase = 'bg-danger';
+                        }
+                        if (odonto.estado == 0) {
+                            var estado = 'TERMINADO';
+                        } else {
+                            var estado = 'PENDIENTE';
+                        }
+                        // Agregar una nueva fila a la tabla
+                        let rowNode = table_gral.row.add([
+                            odonto.localizacion,
+                            odonto.diagnostico_tratamiento,
+                            formatoMoneda(formatoMoneda(odonto.valor)),
+                            0,
+                            formatoMoneda(odonto.valor),
+                            ' <div class="circle ' + clase + '"></div>',
+                            estado
+                        ]).draw(false).node();
+
+                        // Agregar clases a la fila
+                        $(rowNode).addClass('text-center align-middle status-circle');
+                    }
+
+                });
+
+                 $('#table_pagos_reasignar_grupos tbody').empty();
+                    todos.forEach(function(odonto) {
+                        if (odonto.presupuesto == 1) {
+                            let fila = `<tr>
+                            <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
+                            <td>${odonto.pieza}</td>
+                            <td>${formatoMoneda(odonto.valor)}</td>
+                            <td><button type="button" class="btn btn-danger" onclick="eliminar_odontograma(${odonto.id})"><i class="feather icon-x"> </i> </button></td>
+                        </tr>`;
+                            $('#table_pagos_reasignar_grupos tbody').append(fila);
+                        }
+                    });
             },
             error: function(xhr, status, error){
                 console.log(xhr.responseText);

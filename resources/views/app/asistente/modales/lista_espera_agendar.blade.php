@@ -312,7 +312,7 @@
     {
         console.log('generar_reserva_cita');
 
-        // $('#form_reseva_de_horas').hide();
+        $('#form_reseva_de_horas').hide();
         $('#reserva_datos_paciente').hide();
 
         $('#reservar_hora').modal('hide');
@@ -400,7 +400,7 @@
         let id_lugar_atencion = $('#le_reserva_hora_id_lugar_atencion').val();
         let id_asistente = $('#le_reserva_hora_id_asistente').val();
         let origen = $('#le_reserva_hora_origen').val();
-        let tipo_agenda = $('#id_tipo_agenda').val();
+		let tipo_agenda = $('#id_tipo_agenda').val();
         var tipo_agenda_text = 'C';
 
         switch (tipo_agenda) {

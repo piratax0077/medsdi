@@ -40,7 +40,7 @@ p {
 				</div>
 			</div>
 		</div>
-        <div class="row">
+        <div class="row d-none">
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-body">
@@ -96,7 +96,15 @@ p {
 				</div>
 			</div>
 		</div>
-
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h5 class="card-title">Estimado Profesional {{ Auth::user()->name }} rogamos personalizar su listado de aranceles editando el procedimiento, número de bloques y valor.</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row my-4">
             <div class="col-md-3">
                 <div class="card">

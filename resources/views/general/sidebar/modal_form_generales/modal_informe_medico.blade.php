@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header bg-info">
                 <h5 class="modal-title text-white text-center">Informe Médico</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span
+                <button type="button" class="close text-white"  data-bs-dismiss="modal"aria-label="Close"><span
                         aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body">
@@ -32,7 +32,13 @@
                             <label class="floating-label-activo-sm">Dirección</label>
                             <input type="address" class="form-control form-control-sm"
                                 name="direccion_paciente_informe_medico" id="direccion_paciente_informe_medico"
-                                value="{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}">
+								@if($paciente->id_direccion)
+									value="{{ $paciente->Direccion()->first()->direccion . ' ' . $paciente->Direccion()->first()->numero_dir }}"
+								@else
+									value=""
+								@endif
+							>
+								
                         </div>
                         <div class="form-group col-sm-12 col-md-12">
                             <label class="floating-label-activo-sm">Regi&oacute;n</label>
@@ -40,9 +46,13 @@
                                 class="form-control form-control-sm">
                                 <option value="0">Seleccione</option>
                                 @foreach ($regiones as $r)
-                                    @if ($r->id == $direccion_id_region_paciente)
-                                        <option id="{{ $r->id }}" selected> {{ $r->nombre }} </option>
-                                    @endif
+									@if($paciente->id_direccion)
+										@if($paciente->Direccion())
+											@if ($r->id == $paciente->Direccion()->first()->Ciudad()->first()->id_region)
+												<option id="{{ $r->id }}" selected> {{ $r->nombre }} </option>
+											@endif
+										@endif
+									@endif
                                     <option id="{{ $r->id }}"> {{ $r->nombre }} </option>
                                 @endforeach
                             </select>
@@ -53,8 +63,10 @@
                                 class="form-control form-control-sm">
                                 <option value="0">Seleccione</option>
                                 @foreach ($ciudades as $c)
-                                    @if ($c->id == $direccion_id_ciudad_paciente)
-                                        <option id="{{ $c->id }}" selected> {{ $c->nombre }} </option>
+									@if($paciente->id_direccion)
+										@if ($c->id == $paciente->Direccion()->first()->Ciudad()->first()->id)
+											<option id="{{ $c->id }}" selected> {{ $c->nombre }} </option>
+										@endif
                                     @endif
                                     <option id="{{ $c->id }}"> {{ $c->nombre }} </option>
                                 @endforeach

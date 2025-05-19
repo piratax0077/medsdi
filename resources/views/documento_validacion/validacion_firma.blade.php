@@ -54,7 +54,7 @@
                             {!! $card_informacion !!}
                         @endif
                         {{-- <div class="row">
-							<div class="col-sm-12 col-md-12 col-lg-8 col-xl-6 mx-auto mb-2 text-white">
+							<div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 mx-auto mb-2 text-white">
 
                                 <div class="card" style="color: #000;">
                                     <div class="card-head text-center ">

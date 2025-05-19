@@ -13,7 +13,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h5 class="m-b-10 font-weight-bold">Personal del Centro</h5>
+                            <h5 class="m-b-10 font-weight-bold">Personal del Centro Médico</h5>
                         </div>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ ROUTE('adm_cm.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather  icon-home"></i></a></li>
@@ -65,50 +65,44 @@
                                         </div>
                                     </div>
                                     <div class="card-body" id="contenedor_asistentes_personal">
-                                        <table id="asistentes_personal" class="display table table-striped table-hover dt-responsive nowrap" style="width:100%">
+                                        <table id="asistentes_personal" class="display table table-striped dt-responsive nowrap" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center align-middle">Nombre / Rut</th>
-                                                    <th class="text-center align-middle">Tipo</th>
-                                                    <th class="text-center align-middle">Sucursales</th>
-                                                    <th class="text-center align-middle">Contacto</th>
-													<th class="text-center align-middle">Datos</th>
-                                                    <th class="text-center align-middle">Rol y permisos</th>
-                                                    <th class="text-center align-middle">Acción</th>
+                                                    <th class="align-middle">Nombre / Rut</th>
+                                                    <th class="align-middle">Tipo</th>
+                                                    <th class="align-middle">Sucursales</th>
+                                                    <th class="align-middle">Acción</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @if($lista_asistente)
                                                     @foreach ( $lista_asistente as $asistente)
                                                     <tr>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             <span><strong>{{ $asistente->nombres.' '.$asistente->apellido_uno.' '.$asistente->apellido_dos }}</strong></span><br>
                                                             <span>{{ $asistente->rut }}</span>
                                                         </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             <span><strong>{{ $asistente->asistente_tipo->nombre }}</strong></span>
                                                         </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             {{ $asistente->direccion()->first()->direccion }} #{{ $asistente->direccion()->first()->numero_dir }}, {{ $asistente->direccion()->first()->ciudad()->first()->nombre }}
                                                         </td>
-                                                        <td class="align-middle text-center">
+                                                        <td class="align-middle">
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto('asistente publico',{{ $asistente->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>
-                                                        </td>
-                                                        <td class="align-middle text-center">
+                                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto('asistente publico',{{ $asistente->id }});" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>
+                                                      
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos('asistente publico',{{ $asistente->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>
+                                                            <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datos_depositos('asistente publico',{{ $asistente->id_usuario }});" data-toggle="tooltip" data-placement="top" title="Datos Bancarios"><i class="feather icon-credit-card"></i></button>
                                                             <!--Botón Modal-->
-                                                            <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm('{{ $asistente->asistente_tipo->nombre }}',{{ $asistente->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>
-                                                        </td>
-                                                        <td class="align-middle text-center">
+                                                            <button type="button" class="btn btn-purple btn-sm btn-icon" onclick="horario_profesional_cm('{{ $asistente->asistente_tipo->nombre }}',{{ $asistente->id }}, {{ $institucion->id_lugar_atencion }});" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather icon-clock"></i></button>
+                                                     
                                                             <!--Botón Modal-->
                                                             <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos({{ $asistente->asistente_tipo->id }}, {{ $asistente->id_usuario }}, '{{ $asistente->roles }}');" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>
-                                                        </td>
-                                                        <td class="align-middle text-center">
-                                                            <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_asistente({{ $asistente->id }});"><i class="feather icon-edit"></i> Editar</button>
+                                                
+                                                            <button type="button" class="btn btn-info btn-xxs" onclick="editar_datos_asistente({{ $asistente->id }});"><i class="feather icon-edit"></i> Editar</button>
                                                             @if($asistente->contrato !== null)
-                                                            <button type="button" class="btn btn-danger btn-sm" onclick="modal_desactivar_asistente({{ $asistente->id}}, {{ $asistente->contrato->id }}, '{{ $asistente->nombres.' '.$asistente->apellido_uno.' '.$asistente->apellido_dos }}');"><i class="feather icon-x-circle"></i> Desasociar</button>
+                                                            <button type="button" class="btn btn-danger btn-xxs" onclick="modal_desactivar_asistente({{ $asistente->id}}, {{ $asistente->contrato->id }}, '{{ $asistente->nombres.' '.$asistente->apellido_uno.' '.$asistente->apellido_dos }}');"><i class="feather icon-x"></i> Desasociar</button>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -447,33 +441,27 @@
                         $.each(data.registro, function (indexInArray, valueOfElement) {
                             html = '';
                             html += '<tr>';
-                            html += '    <td class="align-middle text-center">';
+                            html += '    <td class="align-middle">';
                             html += '        <span><strong>'+valueOfElement.nombres+' '+valueOfElement.apellido_uno+' '+valueOfElement.apellido_dos+'</strong></span><br>';
                             html += '        <span>'+valueOfElement.rut+'</span>';
                             html += '    </td>';
-                            html += '    <td class="align-middle text-center">';
+                            html += '    <td class="align-middle">';
                             html += '        <span><strong>'+valueOfElement.asistente_tipo.nombre+'</strong></span>';
                             html += '    </td>';
-                            html += '    <td class="align-middle text-center">';
+                            html += '    <td class="align-middle">';
                             html += '        '+valueOfElement.direccion+' #'+valueOfElement.numero_dir+', '+valueOfElement.ciudad+'';
                             html += '    </td>';
-                            html += '    <td class="align-middle text-center">';
+                            html += '    <td class="align-middle">';
                             html += '        <!--Botón Modal-->';
-                            html += '        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="contacto(\'asistente publico\','+valueOfElement.id+');" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="fab fa-contao"></i></button>';
-                            html += '    </td>';
-                            html += '    <td class="align-middle text-center">';
+                            html += '        <button type="button" class="btn btn-purple btn-sm btn-icon" onclick="contacto(\'asistente publico\','+valueOfElement.id+');" data-toggle="tooltip" data-placement="top" title="Contacto"><i class="feather icon-phone"></i></button>';
                             html += '        <!--Botón Modal-->';
-                            html += '        <button type="button" class="btn btn-info btn-sm btn-icon" onclick="datos_depositos(\'asistente publico\', '+valueOfElement.id_usuario+');" data-toggle="tooltip" data-placement="top" title="Cta.Corriente"><i class="fab fa-creative-commons-nc"></i></button>';
+                            html += '        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="datos_depositos(\'asistente publico\', '+valueOfElement.id_usuario+');" data-toggle="tooltip" data-placement="top" title="Datos Bancarios"><i class="feather icon-credit-card"></i></button>';
                             html += '        <!--Botón Modal-->';
-                            html += '        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm(\''+valueOfElement.asistente_tipo.nombre+'\','+valueOfElement.id+', '+valueOfElement.institucion.id_lugar_atencion+');" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="fas fa-hourglass-half"></i></button>';
-                            html += '    </td>';
-                            html += '    <td class="align-middle text-center">';
+                            html += '        <button type="button" class="btn btn-success btn-sm btn-icon" onclick="horario_profesional_cm(\''+valueOfElement.asistente_tipo.nombre+'\','+valueOfElement.id+', '+valueOfElement.institucion.id_lugar_atencion+');" data-toggle="tooltip" data-placement="top" title="Horario y Días de atención"><i class="feather icon-clock"></i></button>';
                             html += '        <!--Botón Modal-->';
                             html += '        <button type="button" class="btn btn-warning btn-sm btn-icon" onclick="roles_permisos('+valueOfElement.asistente_tipo.id+', '+valueOfElement.id_usuario+', \''+valueOfElement.roles+'\');" data-toggle="tooltip" data-placement="top" title="Ver"><i class="feather icon-settings"></i></button>';
-                            html += '    </td>';
-                            html += '    <td class="align-middle text-center">';
-                            html += '        <button type="button" class="btn btn-success btn-sm" onclick="editar_datos_asistente('+valueOfElement.id+');"><i class="feather icon-edit"></i> Editar</button>';
-                            html += '        <button type="button" class="btn btn-danger btn-sm"><i class="feather icon-x-circle"></i> Desasociar</button>';
+                            html += '        <button type="button" class="btn btn-info btn-xxs" onclick="editar_datos_asistente('+valueOfElement.id+');"><i class="feather icon-edit"></i> Editar</button>';
+                            html += '        <button type="button" class="btn btn-danger btn-xxs"><i class="feather icon-x"></i> Desasociar</button>';
                             html += '    </td>';
                             html += '</tr>';
 

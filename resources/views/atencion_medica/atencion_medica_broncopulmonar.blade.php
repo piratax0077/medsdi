@@ -101,7 +101,7 @@
 
         <!-- SIDE BAR BRONCOPULMONAR -->
         @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
-        @include("atencion_medica.include.sidebar_derecho_broncopulmonar")modales y data de sidebar especialidad
+        @include("atencion_medica.include.sidebar_derecho_broncopulmonar")
         @include("general.modal.modal_no_disponible")
 
         <!-- modales -->

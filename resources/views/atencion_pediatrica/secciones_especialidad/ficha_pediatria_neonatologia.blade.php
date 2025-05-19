@@ -14,6 +14,12 @@
                     </li>
                 </ul>
             </div>
+			<div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-0 pt-3 d-inline float-left">
+                    {{-- mensaje --}}
+                    <div class="alert alert-success" role="alert" id="mensaje_ficha"></div>
+                </div>
+            </div>
             <div class="col-sm-12 col-md-12">
                 <form action="{{ route('fichaAtencion.registrar_ficha_orl') }}" method="POST">
                     <input type="hidden" name="examenes" id="examenes" value="{!! old('examenes') !!}">
@@ -934,4 +940,12 @@
         </div>
     </div>
 </div>
+<script>
+    /** CARGAR mensaje */
+    $('#mensaje_ficha').html(' Solo el campo dignóstico es Obligatorio el resto es  opcional');
+    $('#mensaje_ficha').show();
+    setTimeout(function(){
+        $('#mensaje_ficha').hide();
+    }, 5000);
+</script>
 
