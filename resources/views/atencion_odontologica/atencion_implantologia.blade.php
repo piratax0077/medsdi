@@ -465,6 +465,58 @@
                                 $(rowNode).addClass('text-center align-middle status-circle');
                             }
 
+                        });
+
+                        $('#contenedor_todos').empty();
+                        todos.forEach(t => {
+                            if (t.presupuesto == 1) {
+                                $('#contenedor_todos').append(`
+                                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                            <div class="card-informacion">
+                                                <div class="card-body pb-0">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-6">
+                                                            <label class="floating-label-activo-sm">${t.localizacion}</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        </div>
+                                                        <div class="form-group col-md-6 fill">
+                                                            <label class="floating-label-activo-sm">Prestación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${t.diagnostico_tratamiento}">
+                                                        </div>
+                                                        <div class="form-group col-md-4 fill">
+                                                            <label class="floating-label-activo-sm">Sub-Total</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(t.valor)}">
+                                                        </div>
+                                                        <div class="form-group col-sm-12 col-md-3">
+                                                            <label class="floating-label-activo-sm">Descuento</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                        </div>
+                                                        <div class="form-group col-md-4 fill">
+                                                            <label class="floating-label-activo-sm">Total
+                                                                prestación</label>
+                                                            <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(t.valor)}">
+                                                        </div>
+                                                        <div class="form-group col-md-1 fill">
+                                                            <button type="button" class="btn btn-danger btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral')"><i class="feather icon-x"></i> </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>`
+                                );
+                            }
+                        });
+                        $('#table_pagos_reasignar_grupos tbody').empty();
+                            todos.forEach(function(odonto) {
+                                if (odonto.presupuesto == 1) {
+                                    let fila = `<tr>
+                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
+                                    <td>${odonto.diagnostico_tratamiento}</td>
+                                    <td>${formatoMoneda(odonto.valor)}</td>
+                                    <td><button type="button" class="btn btn-danger" onclick="eliminar_diagnostico(${odonto.id})"><i class="feather icon-x"> </i> </button></td>
+                                </tr>`;
+                                    $('#table_pagos_reasignar_grupos tbody').append(fila);
+                                }
                             });
                 }
 
@@ -472,32 +524,32 @@
                     let presupuesto = resp.presupuesto;
                     console.log(presupuesto);
                     $('#tratamiento_presupuesto tbody').append(`
-                <tr>
-                    <td class="text-center align-middle">${presupuesto.fecha}</td>
-                    <td class="text-center align-middle">${presupuesto.id}</td>
-                    <td class="text-center align-middle">${presupuesto.aprobado}</td>
-                    <td class="text-center align-middle">Sector I</td>
-                    <td class="text-center align-middle">${presupuesto.boca}</td>
+                        <tr>
+                            <td class="text-center align-middle">${presupuesto.fecha}</td>
+                            <td class="text-center align-middle">${presupuesto.id}</td>
+                            <td class="text-center align-middle">${presupuesto.aprobado}</td>
+                            <td class="text-center align-middle">Sector I</td>
+                            <td class="text-center align-middle">${presupuesto.boca}</td>
 
-                    <td class="text-center align-middle">
-                        <div class="form-group col-md-4">
-                            <div class="switch switch-success d-inline m-r-2">
-                                <input type="checkbox" id="info_finalizado" checked="">
-                                <label for="info_finalizado" class="cr"></label>
-                            </div>
-                            <label>Realizado?</label>
-                        </div>
-                    </td>
-                    <td class="text-center align-middle">
-                       ${presupuesto.fecha}
-                    </td>
-                    <td class="text-center align-middle">
-                        <button type="button" class="btn btn-info btn-sm" onclick="presupuesto()" ;="">
-                            <i class="fa fa-plus"></i> Trabajar en pieza
-                        </button>
-                    </td>
-                </tr>
-                `);
+                            <td class="text-center align-middle">
+                                <div class="form-group col-md-4">
+                                    <div class="switch switch-success d-inline m-r-2">
+                                        <input type="checkbox" id="info_finalizado" checked="">
+                                        <label for="info_finalizado" class="cr"></label>
+                                    </div>
+                                    <label>Realizado?</label>
+                                </div>
+                            </td>
+                            <td class="text-center align-middle">
+                            ${presupuesto.fecha}
+                            </td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-info btn-sm" onclick="presupuesto()" ;="">
+                                    <i class="fa fa-plus"></i> Trabajar en pieza
+                                </button>
+                            </td>
+                        </tr>
+                    `);
 
                 },
                 error: function(error) {
@@ -746,7 +798,58 @@
                                 }
 
                             });
+                            $('#contenedor_todos').empty();
+                            todos.forEach(t => {
+                                if (t.presupuesto == 1) {
+                                    $('#contenedor_todos').append(`
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                <div class="card-informacion">
+                                                    <div class="card-body pb-0">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label class="floating-label-activo-sm">${t.localizacion}</label>
+                                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                            </div>
+                                                            <div class="form-group col-md-6 fill">
+                                                                <label class="floating-label-activo-sm">Prestación</label>
+                                                                <input type="text" class="form-control form-control-sm" name="prestación" id="prestación" value="${t.diagnostico_tratamiento}">
+                                                            </div>
+                                                            <div class="form-group col-md-4 fill">
+                                                                <label class="floating-label-activo-sm">Sub-Total</label>
+                                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(t.valor)}">
+                                                            </div>
+                                                            <div class="form-group col-sm-12 col-md-3">
+                                                                <label class="floating-label-activo-sm">Descuento</label>
+                                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza">
+                                                            </div>
+                                                            <div class="form-group col-md-4 fill">
+                                                                <label class="floating-label-activo-sm">Total
+                                                                    prestación</label>
+                                                                <input type="text" class="form-control form-control-sm" name="pieza" id="pieza" value="${formatoMoneda(t.valor)}">
+                                                            </div>
+                                                            <div class="form-group col-md-1 fill">
+                                                                <button type="button" class="btn btn-danger btn-icon" onclick="sacar_de_presupuesto(${t.id},'gral')"><i class="feather icon-x"></i> </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>`
+                                    );
+                                }
+                            });
 
+                            $('#table_pagos_reasignar_grupos tbody').empty();
+                            todos.forEach(function(odonto) {
+                                if (odonto.presupuesto == 1) {
+                                    let fila = `<tr>
+                                    <td><input type="checkbox" class="valor-checkbox" data-valor="${odonto.valor}" data-id="${odonto.id}" data-info="odonto"></td>
+                                    <td>${odonto.pieza}</td>
+                                    <td>${formatoMoneda(odonto.valor)}</td>
+                                    <td><button type="button" class="btn btn-danger" onclick="eliminar_diagnostico(${odonto.id},'gral')"><i class="feather icon-x"> </i> </button></td>
+                                </tr>`;
+                                    $('#table_pagos_reasignar_grupos tbody').append(fila);
+                                }
+                            });
                     }
 
                 }
@@ -755,8 +858,8 @@
             error: function(error){
                 console.log(error.responseText);
             }
-        });
-    }
+            });
+        }
 
         function eliminar_odontograma(id) {
             swal({
