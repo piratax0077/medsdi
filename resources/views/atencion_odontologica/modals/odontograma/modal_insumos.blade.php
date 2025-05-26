@@ -11,13 +11,13 @@
                       <div class="col-md-6">
                           <div class="form-group">
                               <label for="" class="floating-label-activo-sm">Profesional</label>
-                              <input type="text" name="" id="" class="form-control form-control-sm" value="HERNAN CASTILLO GARCIA">
+                              <input type="text" name="" id="" class="form-control form-control-sm" value="{{ $profesional->nombre }} {{ $profesional->apellido_uno }} {{ $profesional->apellido_dos }}">
                           </div>
                       </div>
                       <div class="col-md-6">
                           <div class="form-group">
                               <label for="" class="floating-label-activo-sm">Paciente</label>
-                              <input type="text" name="" id="" class="form-control form-control-sm" value="napoleon demo demo">
+                              <input type="text" name="" id="" class="form-control form-control-sm" value="{{ $paciente->nombres }} {{ $paciente->apellido_uno }} {{ $paciente->apellido_dos }}">
                           </div>
                       </div>
                       <div class="col-md-2" id="tipo_insumo_select">

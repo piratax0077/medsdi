@@ -191,9 +191,10 @@
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         $(document).ready(function () {
-
+            mostrar_nueva_pieza_post_impl(2000);
             $('#table_trabajos_menores_dental').DataTable();
             $('#table_trabajos_mayores_dental').DataTable();
+            $('#table_piezas_presupuesto_odonto').DataTable();
             $('#table_profesionales_tons').DataTable({
                 responsive: 'true'
             });
@@ -402,7 +403,7 @@
             }
 
             console.log(data);
-             let url = "#";
+             let url = "{{ ROUTE('asistente.contacto.modificar') }}";
 
             $.ajax({
 

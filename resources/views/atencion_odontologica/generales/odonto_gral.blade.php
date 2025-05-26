@@ -38,7 +38,7 @@
                                     <div class="form-row mt-3">
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <h6 class="tit-gen d-inline">Dolor</h6>
-                                            <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-1"><i class="fas fa-plus"></i> Añadir pieza</button>
+                                            <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-1" onclick="mostrar_nueva_pieza_dental(1000)"><i class="fas fa-plus"></i> Añadir pieza</button>
                                         </div>
                                     </div>
                                     <div id="h_dental" class="row my-2">
@@ -233,10 +233,10 @@
                                     <div id="nueva_pieza_dental_odontodolor"></div>
                                     <div class="row">
                                         <div class="col-sm-4 col-md-4 mb-3">
-                                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="guardar_pieza_dental_dolor({{ $count }})" ><i class="fas fa-save"></i>Guardar</button>
-                                            <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nueva_pieza_dental({{ $count }})">MOSTRAR NUEVA PIEZA</button>
+                                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="guardar_pieza_dental_dolor(1000)" ><i class="fas fa-save"></i>Guardar</button>
+                                            {{-- <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nueva_pieza_dental({{ $count }})">MOSTRAR NUEVA PIEZA</button> --}}
                                         </div>
-                                    </div> 
+                                    </div>
                                 </div>
 
                                 <!--EXAMEN  ORAL-->
@@ -352,10 +352,12 @@
                                                     <div class="form-row">
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                             <h6 class="tit-gen d-inline">Examen radiológico</h6>
-                                                            <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-1"><i class="fas fa-plus"></i> Añadir pieza</button>
+                                                            <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-1" onclick="mostrar_nueva_pieza_ex_radio(1000)"><i class="fas fa-plus"></i> Añadir pieza</button>
+
+
                                                         </div>
                                                     </div>
-                                    
+
                                                     <div id="contenedor_pieza_dental_endorx">
                                                         <div id="pieza_dentalrx" class="form-row">
                                                             @php $counter = 20; @endphp
@@ -480,23 +482,16 @@
                                                             @endforeach
                                                         </div>
                                                         <div class="form-row" id="contenedor_examenes_oral_rx"></div>
-                                                        <div class="form-row">
-                                                            <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
-                                                                <div class="form-group">
 
-                                                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nueva_pieza_ex_radio({{ $counter }})">MOSTRAR NUEVA PIEZA</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
-                                                          
+
                                                 </div>
                                                 <!--IMÁGENES-->
                                                 <div class="tab-pane fade show" id="imagenes_dent" role="tabpanel" aria-labelledby="imagenes_dent_tab">
                                                     <div class="row">
                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                             <h6 class="t-aten d-inline">Imágenes</h6>
-                                                            <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-1"><i class="fas fa-plus"></i> Añadir imágenes</button>
+                                                            <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-1" onclick="mostrar_nuevas_imagenes_dent(1000)"><i class="fas fa-plus"></i> Añadir imágenes</button>
                                                         </div>
                                                     </div>
                                                     <div id="contenedor_imagenes_dent">
@@ -622,13 +617,6 @@
                                                     <div id="contenedor_nueva_imagen_dent">
 
                                                     </div>
-                                                    <div class="form-row">
-                                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
-                                                            <div class="form-group">
-                                                                <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_nuevas_imagenes_dent({{ $count }})">CARGAR NUEVAS IMAGENES</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -639,7 +627,7 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-3">
                                             <h6 class="t-aten d-inline">Examen por pieza</h6>
-                                            <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-1"><i class="fas fa-plus"></i> Añadir pieza</button>
+                                            <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-1" onclick="mostrar_pieza_dental_examen(1000)"><i class="fas fa-plus"></i> Añadir pieza</button>
                                         </div>
                                     </div>
 
@@ -746,13 +734,9 @@
                                     </div>
                                     <div id="contenedor_nueva_pieza_dental"></div>
 
-                                    <div class="row">
-                                    <div class="col-sm-4 col-md-4 mb-3">
-                                        <button type="button" class="btn btn-warning btn-sm" onclick="mostrar_pieza_dental_examen({{ $counter++ }})" >Mostrar nueva pieza</button>
-                                    </div>
+
                                 </div>
-                                </div>
-                               
+
                                 <!--EXAMEN  BOCA GENERAL-->
                                 <div class="tab-pane fade show " id="endo_boca_gral" role="tabpanel" aria-labelledby="endo_boca_gral-tab">
                                     <div class="form-row">

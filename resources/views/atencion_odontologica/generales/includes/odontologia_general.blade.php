@@ -661,7 +661,7 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4">
                                         <h6 class="t-aten d-inline">Examen por pieza</h6>
-                                        <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2"><i class="fas fa-plus"></i> Añadir pieza</button>
+                                        <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2" onclick="mostrar_pieza_dental_examen(1000)"><i class="fas fa-plus"></i> Añadir pieza</button>
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                         <div id="contenedor_pieza_dental_endo_gral" class="mb-3">
@@ -775,11 +775,7 @@
                                         </div>
 
                                         <div id="contenedor_nueva_pieza_dental"></div>
-                                        <div class="row">
-                                            <div class="col-sm-4 col-md-4 mb-3">
-                                                <button type="button" class="btn btn-primary-light-c btn-sm" onclick="mostrar_pieza_dental_examen({{ $counter++ }})" ><i class="fas fa-plus"></i> Añadir nueva pieza</button>
-                                            </div>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>

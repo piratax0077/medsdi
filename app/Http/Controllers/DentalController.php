@@ -1489,8 +1489,9 @@ class DentalController extends Controller
             }
 
             $mensaje = 'Se ha agregado Odontograma a pieza '.$odontograma->pieza.' de forma exitosa';
-            $odontograma_paciente = $this->dame_odontograma_paciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
-            $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
+            $odontograma_paciente = $this->dame_odontograma_paciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad, $request->id_presupuesto);
+            $odontograma_paciente_historial = $this->dame_odontograma_paciente_historial($request->id_paciente);
+            $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente_historial])->render();
             $valores = $this->dameValoresOdontograma($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
             return ['status' => 1 ,'mensaje' => $mensaje, 'odontograma_paciente' => $odontograma_paciente,'valores' => $valores,'odontograma_paciente_vista' => $odontograma_paciente_vista];
 
@@ -1507,49 +1508,15 @@ class DentalController extends Controller
     }
 
     public function dame_odontograma_paciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto = null){
-        if($tipo_especialidad == 16){
-            $query = OdontogramaPaciente::select(
-                'odontogramas_pacientes.*',
-                'tratamientos_implantologia.descripcion',
-                'tratamientos_implantologia.cantidad_bloques',
-                'tratamientos_implantologia.valor',
-                'tratamientos_dental.descripcion as diagnostico')
-                ->join('tratamientos_implantologia', 'odontogramas_pacientes.tratamiento', '=', 'tratamientos_implantologia.descripcion')
-                ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
-                ->where('odontogramas_pacientes.id_paciente', $id_paciente)
+        $fichaController = new ficha_atencionController;
+        $odontograma_paciente = $fichaController->dameOdontogramaPaciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $tipo_especialidad,$id_presupuesto);
+        return $odontograma_paciente;
+    }
 
-                ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
-                ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
-        }else{
-            $query = OdontogramaPaciente::select(
-                'odontogramas_pacientes.*',
-                'diagnosticos_dental.descripcion',
-                'diagnosticos_dental.cantidad_bloques',
-                'diagnosticos_dental.valor',
-                'tratamientos_dental.descripcion as diagnostico')
-                ->join('diagnosticos_dental', 'odontogramas_pacientes.tratamiento', '=', 'diagnosticos_dental.descripcion')
-                ->join('tratamientos_dental', 'odontogramas_pacientes.diagnostico', '=', 'tratamientos_dental.id')
-                ->where('odontogramas_pacientes.id_paciente', $id_paciente)
-
-                ->where('odontogramas_pacientes.id_lugar_atencion', $id_lugar_atencion)
-                ->where('odontogramas_pacientes.tipo_especialidad', $tipo_especialidad);
-        }
-
-
-            // verificar si trae ficha de atencion
-            if (!is_null($id_ficha_atencion)) {
-                $query->where('odontogramas_pacientes.id_ficha_atencion', $id_ficha_atencion);
-            }
-
-            // Verificar si el parámetro $id_presupuesto no es nulo
-            if (!is_null($id_presupuesto)) {
-                $query->where('odontogramas_pacientes.id_presupuesto', $id_presupuesto);
-            }
-
-            // Obtener los resultados
-            $odontogramas = $query->get();
-
-            return $odontogramas;
+    public function dame_odontograma_paciente_historial($id_paciente){
+        $fichaController = new ficha_atencionController;
+        $odontograma_paciente = $fichaController->dameOdontogramaPacienteHistorial($id_paciente);
+        return $odontograma_paciente;
     }
 
     public function eliminar_odontograma(Request $request){
@@ -1567,7 +1534,8 @@ class DentalController extends Controller
 
             $mensaje = 'Se ha eliminado Odontograma a pieza de forma exitosa';
             $odontograma_paciente = $this->dame_odontograma_paciente($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $profesional->id_tipo_especialidad);
-            $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente])->render();
+            $odontograma_paciente_historial = $this->dame_odontograma_paciente_historial($id_paciente);
+            $odontograma_paciente_vista = view('atencion_odontologica.generales.odontograma_adulto',['odontograma' => $odontograma_paciente_historial])->render();
             $valores = $this->dameValoresOdontograma($id_paciente, $id_ficha_atencion, $id_lugar_atencion, $profesional->id_tipo_especialidad);
             return ['status' => 1 ,'mensaje' => $mensaje, 'odontograma_paciente' => $odontograma_paciente,'valores' => $valores, 'odontograma_paciente_vista' => $odontograma_paciente_vista];
 
@@ -1878,78 +1846,112 @@ class DentalController extends Controller
         }
     }
 
-    public function reasignar_pago_presupuesto(Request $request){
-        try {
-            $valores = $request->valores;
-            $valorPresupuestoTotal = intval($request->valorPresupuestoTotal);
-            $valorAbonado = intval($request->valorAbonado);
-            $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+    public function reasignar_pago_presupuesto(Request $request)
+{
+    try {
+        $valores = $request->valores;
+        $valorAbonado = intval($request->valorAbonado);
 
-            // limpiamos el estado de pago de todo el odontograma
-            $odontograma_paciente = $this->dame_odontograma_paciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
-            foreach($odontograma_paciente as $o){
-                $o->estado_pago = null;
-                $o->save();
-            }
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
 
-            // limpiamos el estado de pago de todos los insumos
-            $insumos = InsumosTratamientosDental::where('id_ficha_atencion',$request->id_ficha_atencion)->get();
-            foreach($insumos as $i){
-                $i->estado_pago = null;
-                $i->save();
-            }
+        // Limpiar estados anteriores
+        $odontograma_paciente = OdontogramaPaciente::where('id_ficha_atencion', $request->id_ficha_atencion)->get();
 
-            foreach($valores as $v){
-                if($v['info'] == 'insumo'){
-                    if($valorAbonado >= 0 && $valorAbonado >= intval($v['valor'])){
-                        $insumo = InsumosTratamientosDental::find($v['id']);
-                        $insumo->estado_pago = 'ok'; // pagado
-                        $valorAbonado -= intval($v['valor']);
-                    }else if($valorAbonado >= 0 && $valorAbonado <= intval($v['valor'])){
-                        $insumo = InsumosTratamientosDental::find($v['id']);
-                        $insumo->estado_pago = 'incompleto'; // incompleto
-                        $valorAbonado -= intval($v['valor']);
-                    }else if($valorAbonado < 0){
-                        $insumo = InsumosTratamientosDental::find($v['id']);
-                        $insumo->estado_pago = 'error'; // error
-                    }
-                    $insumo->save();
-                }
-
-            }
-
-
-            foreach($valores as $v){
-                if($v['info'] == 'odonto'){
-                    if($valorAbonado >= 0 && $valorAbonado >= intval($v['valor'])){
-                        $pieza = OdontogramaPaciente::find($v['id']);
-                        $pieza->estado_pago = 'ok'; // pagado
-                        $valorAbonado -= intval($v['valor']);
-                        //$pieza->valorAbonado = $valorAbonado;
-                    }else if($valorAbonado >= 0 && $valorAbonado <= intval($v['valor'])){
-                        $pieza = OdontogramaPaciente::find($v['id']);
-                        $pieza->estado_pago = 'incompleto'; // incompleto
-                        $valorAbonado -= intval($v['valor']);
-                        //$pieza->valorAbonado = $valorAbonado;
-                    }else if($valorAbonado < 0){
-                        $pieza = OdontogramaPaciente::find($v['id']);
-                        $pieza->estado_pago = 'error'; // error
-                    }
-                    $pieza->save();
-
-                }
-            }
-
-            $odontograma_paciente = $this->dame_odontograma_paciente($request->id_paciente, $request->id_ficha_atencion, $request->id_lugar_atencion, $profesional->id_tipo_especialidad);
-            $insumos = InsumosTratamientosDental::where('id_ficha_atencion',$request->id_ficha_atencion)->get();
-
-            return ['estado' => 1, 'mensaje' => 'Pagos reasignados correctamente', 'odontograma' => $odontograma_paciente, 'insumos' => $insumos];
-        } catch (\Exception $e) {
-            //throw $th;
-            return ['estado' => 0, 'mensaje' => $e->getMessage()];
+        foreach ($odontograma_paciente as $o) {
+            $o->estado_pago = null;
+            $o->save();
         }
 
+        $todos = $this->dameTratamientosBocaGeneral($request->id_ficha_atencion);
+
+        foreach ($todos as $o) {
+            $o->estado_pago = null;
+            $o->save();
+        }
+
+        $insumos = InsumosTratamientosDental::where('id_ficha_atencion', $request->id_ficha_atencion)->get();
+        foreach ($insumos as $i) {
+            $i->estado_pago = null;
+            $i->save();
+        }
+
+        // 1. Procesar insumos primero
+        foreach ($valores as $v) {
+            if ($v['info'] == 'insumo') {
+                $valor = intval($v['valor']);
+                $insumo = $insumos->find($v['id']);
+
+                if ($valorAbonado >= $valor) {
+                    $insumo->estado_pago = 'ok';
+                    $valorAbonado -= $valor;
+                } elseif ($valorAbonado > 0) {
+                    $insumo->estado_pago = 'incompleto';
+                    $valorAbonado = 0; // Se consume todo
+                } else {
+                    $insumo->estado_pago = 'error';
+                }
+
+                $insumo->save();
+            }
+        }
+
+        // 2. Procesar odontograma después
+        foreach ($valores as $v) {
+            if ($v['info'] == 'odonto') {
+                $valor = intval($v['valor']);
+                $pieza = $odontograma_paciente->find($v['id']);
+                if (!$pieza) {
+                    continue; // Si no se encuentra la pieza, continuar con la siguiente
+                }
+
+                if ($valorAbonado >= $valor) {
+                    $pieza->estado_pago = 'ok';
+                    $valorAbonado -= $valor;
+                } elseif ($valorAbonado > 0) {
+                    $pieza->estado_pago = 'incompleto';
+                    $valorAbonado = 0;
+                } else {
+                    $pieza->estado_pago = 'error';
+                }
+
+                $pieza->save();
+            }else if($v['info'] == 'gral'){
+                $valor = intval($v['valor']);
+                $pieza = $todos->find($v['id']);
+                if (!$pieza) {
+                    continue; // Si no se encuentra la pieza, continuar con la siguiente
+                }
+
+                if ($valorAbonado >= $valor) {
+                    $pieza->estado_pago = 'ok';
+                    $valorAbonado -= $valor;
+                } elseif ($valorAbonado > 0) {
+                    $pieza->estado_pago = 'incompleto';
+                    $valorAbonado = 0;
+                } else {
+                    $pieza->estado_pago = 'error';
+                }
+
+                $pieza->save();
+            }
+        }
+
+        $fc = new ficha_atencionController();
+        $odontograma_paciente = $fc->dameOdontogramaPaciente($request->id_paciente, $request->id_ficha_atencion,$request->id_lugar_atencion, $profesional->id_tipo_especialidad);
+        $insumos = InsumosTratamientosDental::where('id_ficha_atencion', $request->id_ficha_atencion)->get();
+
+        return [
+            'estado' => 1,
+            'mensaje' => 'Pagos reasignados correctamente',
+            'odontograma' => $odontograma_paciente,
+            'insumos' => $insumos,
+            'todos' => $todos,
+        ];
+    } catch (\Exception $e) {
+        return ['estado' => 0, 'mensaje' => $e->getMessage()];
     }
+}
+
 
     public function cargar_tratamiento_presupuesto_period(Request $request){
 
@@ -2495,6 +2497,9 @@ class DentalController extends Controller
                 $valores = $this->dameValoresOdontograma($pieza->id_paciente, $pieza->id_ficha_atencion, $pieza->id_lugar_atencion, $profesional->id_tipo_especialidad);
                 $valor_total = $valores[0] + $valores[1] + $valores[2];
                 $presupuesto->valor_total = $valor_total;
+                if($presupuesto->valor_total == 0){
+                    $presupuesto->estado = 0;
+                }
                 $presupuesto->save();
                 $pagos_tratamientos_dentales = PagosPresupuestoDental::where('id_ficha_atencion', $pieza->id_ficha_atencion)->get();
 
@@ -3165,8 +3170,8 @@ class DentalController extends Controller
     private function recalcularPagosYDescuentos($id_paciente, $id_ficha, $id_lugar, $id_especialidad, $monto_abonado, $id_convenio = 0)
     {
         $ep = new EscritorioProfesional;
-
-        $odontograma = $ep->dameOdontogramaPaciente($id_paciente, $id_ficha, $id_lugar, $id_especialidad);
+        $fc = new ficha_atencionController;
+        $odontograma = $fc->dameOdontogramaPaciente($id_paciente, $id_ficha, $id_lugar, $id_especialidad);
         $valores = $ep->dameValoresOdontograma($id_paciente, $id_ficha, $id_lugar, $id_especialidad);
         $insumos = $ep->dame_insumos_tratamiento($id_paciente, $id_ficha);
         $todos = $ep->dameTratamientosBocaGeneral($id_ficha);
@@ -3452,13 +3457,82 @@ class DentalController extends Controller
 
     public function generar_pdf_prot_impl(Request $req){
 try {
+    $id_ficha_atencion = $req->id_ficha_atencion;
+    $ficha_atencion = FichaAtencion::find($id_ficha_atencion);
+    $lugar_atencion = LugarAtencion::find($ficha_atencion->id_lugar_atencion);
 
+    $paciente = Paciente::find($ficha_atencion->id_paciente);
+    $profesional = Profesional::find($ficha_atencion->id_profesional);
+    if($profesional == null){
+        $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
+    }
+    // Certificados y QR
+    $token_receta = '';
+    $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, $profesional->id, $paciente->id, 1);
+    if ($temp_token['estado'] != 1) {
+        $temp_token = CertificadoController::certificadoDocumento($ficha_atencion->id, rand(111,999), $paciente->id, 1);
+    }
+    $token_receta = $temp_token['certificado'];
+    $url_documento = CertificadoController::generarUrlDocumento($token_receta);
+    $qr_documento = GeneradorQrController::generar($url_documento);
+
+    $temp_token = CertificadoController::certificadoProfesional($profesional->id, 1, 1, $ficha_atencion->id);
+    if ($temp_token['estado'] != 1) {
+        $temp_token = CertificadoController::certificadoProfesional(rand(1114, 999));
+    }
+    $token_profesional = $temp_token['certificado'];
+    $url_profesional = CertificadoController::generarUrlProfesional($token_profesional);
+    $qr_profesional = GeneradorQrController::generar($url_documento);
+
+    // Arreglos para la vista
+    $array_ficha_atencion = [
+        'id' => $ficha_atencion->id,
+        'created_at' => $ficha_atencion->created_at->format('d/m/Y'),
+        'token' => $token_receta,
+        'url' => $url_documento,
+        'qr' => $qr_documento,
+    ];
+
+    $array_lugar_atencion = [
+        'id' => $lugar_atencion->id,
+        'nombre' => $lugar_atencion->nombre
+    ];
+
+    $array_profesional = [
+        'id' => $profesional->id,
+        'nombre' => $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos,
+        'rut' => $profesional->rut,
+        'especialidad' => optional($profesional->SubTipoEspecialidad()->first())->nombre,
+        'token' => $token_profesional,
+        'url' => $url_profesional,
+        'qr' => $qr_profesional,
+    ];
+
+    $direccion = $paciente->Direccion()->first();
+    $array_paciente = [
+        'id' => $paciente->id,
+        'nombre' => $paciente->nombres.' '.$paciente->apellido_uno.' '.$paciente->apellido_dos,
+        'fecha_nac' => $paciente->fecha_nac,
+        'rut' => $paciente->rut,
+        'sexo' => $paciente->sexo,
+        'direccion' => $direccion->direccion.' '.$direccion->numero_dir.', '.$direccion->Ciudad()->first()->nombre
+    ];
+    $cuerpo = [
+            'array_ficha_atencion' => $array_ficha_atencion,
+            'array_lugar_atencion' => $array_lugar_atencion,
+            'array_profesional' => $array_profesional,
+            'array_paciente' => $array_paciente
+        ];
+
+
+        $titulo = 'PROTOCOLO DENTAL ';
      // Recibir los datos desde el request
      $data = $req->all();
      $id_paciente = $req->id_paciente;
      $nombre_cir = $req->nombre_cir;
+     $nombre_cir_nuevo = $req->nombre_cir_nuevo ?? '';
      $nombre_anest = $req->nombre_anest;
-     $nombre_ars = $req->nombre_arsenalera;
+     $nombre_ars = $req->nombre_arsenalera ?? '';
      $implantes = $req->implantes;
      $insumos = $req->implantes_insumos;
 
@@ -3474,7 +3548,26 @@ try {
      $prot_pieza_imp = $req->prot_pieza_imp;
     //code...
     // Renderizar la vista del presupuesto dental
-    $pdf = Pdf::loadView('atencion_odontologica.PDF.protocolo_implantes_dental',compact('id_paciente','nombre_cir','nombre_anest','nombre_ars','implantes','insumos_array','forma_mat_impl','prot_prot_corona','det_cir','nombre_tons','prot_pieza_imp'));
+    $pdf = Pdf::loadView('atencion_odontologica.PDF.protocolo_implantes_dental',compact(
+        'id_paciente',
+        'nombre_cir',
+        'nombre_cir_nuevo',
+        'nombre_anest',
+        'nombre_ars',
+        'implantes',
+        'insumos_array',
+        'forma_mat_impl',
+        'prot_prot_corona',
+        'det_cir',
+        'nombre_tons',
+        'prot_pieza_imp',
+        'titulo',
+        'cuerpo',
+        'array_ficha_atencion',
+        'array_lugar_atencion',
+        'array_profesional',
+        'array_paciente'
+    ));
     // Guardar el PDF en la carpeta public
     $fileName = 'presupuesto_dental_' . $req->id_paciente . '.pdf';
     $filePath = public_path('reportes/' . $fileName);

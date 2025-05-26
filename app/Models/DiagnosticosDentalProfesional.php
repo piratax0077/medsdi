@@ -9,4 +9,6 @@ class DiagnosticosDentalProfesional extends Model
 {
     use HasFactory;
     protected $table = 'diagnosticos_dental_profesional';
+
+
 }

@@ -2574,8 +2574,9 @@
                                 $('#reserva_hora_nombres_paciente').val(data.nombres);
                                 $('#reserva_hora_apellido_uno').val(data.apellido_uno);
                                 $('#reserva_hora_apellido_dos').val(data.apellido_dos);
-
-                                $('#reserva_hora_fecha_nac').val((DateFormatVista(data.fecha_nac)));
+                                $('#presupuesto_numero').empty();
+                                $('#presupuesto_numero').append(`<option value="0">Primera consulta</option>`);
+                                //$('#reserva_hora_fecha_nac').val((DateFormatVista(data.fecha_nac)));
 
                                 if (data.sexo != null)
                                     $('#reserva_hora_sexo').val(data.sexo);
@@ -4898,7 +4899,7 @@
                         let ciudades = $('#ciudad_agregar');
 
                         ciudades.find('option').remove();
-                        ciudades.append('<option value="0">seleccione</option>');
+                        ciudades.append('<option value="0">Seleccione</option>');
                         $(data).each(function(i, v) { // indice, valor
                             ciudades.append('<option value="' + v.id + '">' + v.nombre +
                                 '</option>');
@@ -5344,6 +5345,39 @@
                     $('#id_procedimiento').val(ui.item.value);
                     // Set selection
                     $('#nombre_procedimiento').val(ui.item.label); // display the selected text
+                    return false;
+                }
+            });
+
+            $('#nombre_procedimiento_impl').autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getTratamientoImplantologia') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            if (data.length == 0) {
+                                $('.diagnostico_activo').hide();
+                                $('.diagnostico_inactivo').show();
+                            } else {
+                                $('.diagnostico_activo').show();
+                                $('.diagnostico_inactivo').hide();
+                            }
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    console.log(ui.item);
+                    $('#id_procedimiento').val(ui.item.value);
+                    // Set selection
+                    $('#nombre_procedimiento_impl').val(ui.item.label); // display the selected text
                     return false;
                 }
             });

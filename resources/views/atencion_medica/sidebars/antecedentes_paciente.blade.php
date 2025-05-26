@@ -425,9 +425,9 @@
                             <label class="col-2 text-dark font-weight-bolder">Sexo</label>
                             <div class="col-9 ml-2 text-secondary">
                                 <select name="contacto_sexo_edit" id="contacto_sexo_edit" class="form-control">
-                                    <option value="M" @if ($paciente->sexo == 'M') selected @endif>Masculino
+                                    <option value="M" @if ($paciente->ContactosEmergencia()->first()->sexo == 'M') selected @endif>Masculino
                                     </option>
-                                    <option value="F" @if ($paciente->sexo == 'F') selected @endif>Femenino
+                                    <option value="F" @if ($paciente->ContactosEmergencia()->first()->sexo == 'F') selected @endif>Femenino
                                     </option>
                                 </select>
                             </div>
@@ -470,7 +470,7 @@
                             <div class="col-9 ml-2 text-secondary">
                                 <select name="contacto_comuna_edit" id="contacto_comuna_edit" class="form-control">
                                     <option value="0">Seleccione comuna</option>
-                                    @foreach ($ciudades as $comuna)
+                                    @foreach ($paciente->comunas_contacto_emer as $comuna)
                                         <option value="{{ $comuna->id }}"
                                             @if ($paciente->ContactosEmergencia()->first()->Direccion()->first()->Ciudad()->first()->id == $comuna->id) selected @endif>{{ $comuna->nombre }}
                                         </option>

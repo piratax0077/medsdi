@@ -22,101 +22,67 @@ p {
 @section('content')
 
 <div class="pcoded-main-container">
-	<div class="pcoded-content">
+	<div class="pcoded-content  m-top">
 		<!--Header-->
-		<div class="page-header">
-			<div class="page-block">
-				<div class="row align-items-center">
-					<div class="col-md-12">
-						<div class="page-header-title">
-							<h5 class="m-b-10">Configuracion trabajos y aranceles</h5>
-						</div>
-						<ul class="breadcrumb">
-							<li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
-							<li class="breadcrumb-item"><a href="{{ route('profesional.pacientes') }}" data-toggle="tooltip" data-placement="top" title="Volver a mis pacientes">Mis pacientes</a></li>
-							<li class="breadcrumb-item"><a href="#">Configuracion trabajos y aranceles</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-        <div class="row d-none">
-			<div class="col-sm-12">
-				<div class="card">
-					<div class="card-body">
-						<div class="row">
-							<div class="col-sm-12 pb-4">
-                                <div class="form-row m-2">
-                                    <div class="col-md-6">
-                                        <label class="form-control-active" for="valor_uco">UCO</label>
-                                        <input type="number" name="valor_uco" id="valor_uco" class="form-control form-control-sm" placeholder="Ingrese el valor de la UCO">
-                                    </div>
-                                    <div class="col-md-6 mt-4">
-                                        <button class="btn btn-outline-success btn-sm" type="button" onclick="recalcular_presupuestos()">Recalcular presupuestos</button>
-                                    </div>
-
-                                </div>
-                                <table class="table-responsive" id="table_aranceles_dental" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Trabajo</th>
-                                            <th>Arancel</th>
-                                            <th>UCO RCDCH</th>
-                                            <th>¿Tiene laboratorio?</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($trabajos as $t)
-                                        <tr>
-                                            <td>{{ $t->descripcion }}</td>
-                                            <td>{{ number_format($t->valor, 0, ',', '.') }}</td>
-                                            <td>{{ $t->uco }}</td>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="{{ $t->id }}" id="existeLaboratorioDental{{ $t->id }}" onclick="guardarLaboratorioIndex({{ $t->id }})" @if($t->laboratorio == 1) checked @endif>
-                                                    <label class="form-check-label" for="existeLaboratorioDental{{ $t->id }}">
-                                                        ¿Laboratorio?
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-outline-warning btn-sm" role="button" onclick="mostrar_procedimiento({{ $t->id }})"><i class="fas fa-edit"></i> Editar</button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-
-
-                                    </tbody>
-                                </table>
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h5 class="card-title">Estimado Profesional {{ Auth::user()->name }} rogamos personalizar su listado de aranceles editando el procedimiento, número de bloques y valor.</h5>
+        <div class="page-header">
+            <div class="page-block">
+                <div class="row align-items-center">
+                    <div class="col-md-12 mt-2">
+                        <div class="page-header-title">
+                        </div>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('profesional.home') }}" data-toggle="tooltip" data-placement="top" title="Volver a mi escritorio"><i class="feather icon-home"></i></a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('profesional.pacientes') }}" data-toggle="tooltip" data-placement="top" title="Volver a mis pacientes">Mis pacientes</a></li>
+                            <li class="breadcrumb-item"><a href="#">Configuracion trabajos y aranceles</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row my-4">
-            <div class="col-md-3">
+
+
+        <div class="row bg-gris">
+            <div class="col-12">
+                <div class="card-informacion bg-purple mt-3">
+                    <div class="card-body text-center">
+                        <h5 class="text-white mb-0">Estimado Profesional {{ Auth::user()->name }} rogamos personalizar su listado de aranceles editando el procedimiento, número de bloques y valor.</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+             <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3">
                 <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Buscador</h5>
+                    <div class="card-header bg-info">
+                        <h6 class="f-18 text-white">UCO</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label class="floating-label-activo-sm" for="valor_uco">Valor UCO</label>
+                                <input type="number" name="valor_uco" id="valor_uco" class="form-control form-control-sm" placeholder="Ingrese el valor de la UCO">
+                            </div>
+                            <div class="col-md-12">
+                                <button class="btn btn-primary btn-sm btn-block" type="button" onclick="recalcular_presupuestos()"><i class="feather icon-check"></i> Recalcular aranceles</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card">
+                    <div class="card-header bg-info">
+                        <h6 class="f-18 text-white">Ingresar procedimiento</h6>
                     </div>
                     <div class="card-body">
                         <div class="form-row">
                             <div class="col-md-12 mb-3">
                                 <div class="form-group">
-                                    <label class="floating-label-activo-sm" for="nombre_procedimiento">Nombre del procedimiento</label>
-                                    <input type="text" name="nombre_procedimiento" id="nombre_procedimiento" class="form-control form-control-sm">
+                                    <label class="floating-label-activo-sm" for="nombre_procedimiento_impl">Nombre del procedimiento</label>
+                                    @if(isset($profesional) && $profesional->id_tipo_especialidad == 16)
+                                    <input type="text" name="nombre_procedimiento_impl" id="nombre_procedimiento_impl" class="form-control form-control-sm">
+                                    @else
+                                    <input type="text" name="nombre_procedimiento" id="nombre_procedimiento" class="form-control form-control-sm" placeholder="Ingrese el nombre del procedimiento">
+                                    @endif
                                 </div>
                                 <div class="col-md-12 mt-2 diagnostico_activo"></div>
                                 <div class="col-md-12 mt-2 diagnostico_inactivo" style="display: none;"></div>
@@ -124,20 +90,20 @@ p {
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="cantidad_bloques_buscador" class="floating-label-activo-sm">Cantidad de bloques</label>
                                     <input type="number" name="cantidad_bloques_buscador" id="cantidad_bloques_buscador" class="form-control form-control-sm">
                                 </div>
 
                             </div>
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="cantidad_uco_buscador" class="floating-label-activo-sm">Cantidad de UCO</label>
                                     <input type="number" name="cantidad_uco_buscador" id="cantidad_uco_buscador" class="form-control form-control-sm">
                                 </div>
                             </div>
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-12">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="" id="tiene_lab_buscador">
                                     <label class="form-check-label" for="existeLaboratorioDental">
@@ -146,21 +112,29 @@ p {
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-outline-success btn-sm my-3 w-100" role="button" onclick="guardarTratamientoProfesional()"><i class="fas fa-save"></i> Guardar</button>
+                        @if(isset($profesional) && $profesional->id_tipo_especialidad == 16)
+                            <button class="btn btn-primary btn-sm my-2 btn-block" role="button" onclick="guardarTratamientoProfesional({{ $profesional->id_tipo_especialidad }})"><i class="feather icon-save"></i> Guardar</button>
+                        @else
+                            <button class="btn btn-primary btn-sm my-2 btn-block" role="button" onclick="guardarTratamientoProfesional({{ $profesional->id_tipo_especialidad }})"><i class="feather icon-save"></i> Guardar</button>
+                        @endif
+
                     </div>
                 </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8 col-xxl-9">
                 <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Trabajos y aranceles</h5>
+                    <div class="card-header bg-info">
+                        <h5 class="text-white d-inline">Trabajos y aranceles calculados con un valor de uco de $ <span id="valor_uco_header">{{ number_format($valor_uco,0,',','.') }}</span>
+                            <button class="btn btn-light btn-xs float-md-right d-inline" data-bs-toggle="modal" data-bs-target="#modalAgregarDiagnosticoDental" type="button"><i class="fas fa-plus"></i> Agregar nuevo Diagnóstico/Trabajo</button>
+                        </h5>
                     </div>
                     <div class="card-body">
-                        <table class="table w-100" id="table_procedimientos_propios_dental">
+                        <table class="display table w-100 table-striped dt-responsive nowrap dataTable no-footer dtr-inline collapsed" id="table_procedimientos_propios_dental">
                             <thead>
                                 <tr>
                                     <th>Procedimiento</th>
                                     <th>UCO</th>
+                                    <th>Valor</th>
                                     <th>¿Laboratorio?</th>
                                     <th>Bloques</th>
                                     <th>Acciones</th>
@@ -172,6 +146,7 @@ p {
                                     <tr>
                                         <td>{{ $mi_trabajo->descripcion }}</td>
                                         <td>{{ $mi_trabajo->cantidad_uco }}</td>
+                                        <td>${{ number_format($mi_trabajo->valor,0,',','.') }}</td>
                                         <td>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" value="{{ $mi_trabajo->id }}" id="existeLaboratorioDental{{ $mi_trabajo->id }}" onclick="guardarLaboratorio({{ $mi_trabajo->id }})" @if($mi_trabajo->laboratorio == 1) checked @endif>
@@ -182,15 +157,14 @@ p {
                                         </td>
                                         <td>{{ $mi_trabajo->cantidad_bloques }}</td>
                                         <td>
-                                            <button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})"><i class="fas fa-trash"></i></button>
-                                            <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-x"></i></button>
+                                            <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-edit"></i></button>
                                         </td>
                                     </tr>
                                 @endforeach
                                 @endif
                             </tbody>
                         </table>
-                        <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregarDiagnosticoDental" type="button">Agregar nuevo Diagnóstico/Trabajo</button>
                     </div>
                 </div>
             </div>
@@ -199,14 +173,14 @@ p {
 </div>
 <!-- Modal -->
 <div class="modal fade" id="modalAgregarDiagnosticoDental" tabindex="-1" aria-labelledby="modalAgregarDiagnosticoDentalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalAgregarDiagnosticoDentalLabel">Agregar nuevo procedimiento/trabajo</h5>
+          <h5 class="modal-title" id="modalAgregarDiagnosticoDentalLabel">Agregar nuevo procedimiento / trabajo</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <div class="row">
+            <div class="form-row">
                 <div class="col-md-12">
                     <div class="form-group">
                         <label class="floating-label-activo-sm" for="nombre_procedimiento_nuevo">Nombre del procedimiento</label>
@@ -236,7 +210,7 @@ p {
             </div>
 
 
-            <button type="button" class="btn btn-success btn-sm w-100 my-3" id="btn_guardar_procedimiento" onclick="agregar_otro_procedimiento()">Agregar otro diagnostico</button>
+            <button type="button" class="btn btn-info btn-sm float-right" id="btn_guardar_procedimiento" onclick="agregar_otro_procedimiento()"><i class="fas fa-plus"></i>  Agregar otro diagnostico</button>
             {{-- <table class="table w-100" id="table_procedimientos_propios_dental">
                 <thead>
                     <tr>
@@ -262,17 +236,17 @@ p {
                             </td>
                             <td>{{ $mi_trabajo->cantidad_bloques }}</td>
                             <td>
-                                <button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})"><i class="fas fa-trash"></i></button>
-                                <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-x"></i></button>
+                                <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento({{ $mi_trabajo->id }})"><i class="feather icon-edit"></i></button>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table> --}}
         </div>
-        <div class="modal-footer">
+        <!--<div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        </div>
+        </div>-->
       </div>
     </div>
   </div>
@@ -291,32 +265,66 @@ p {
                 return;
             }
 
+            let url = "{{ route('profesional.recalcular_presupuestos') }}";
+            let data = {
+                valor_uco: valor_uco,
+                _token: '{{ csrf_token() }}'
+            }
 
-            // recorrer los checkbox y verificar cuales estan chequeados y cuales no
-            var trabajos = [];
-            var existeLaboratorio = [];
-            $('#table_aranceles_dental tbody tr').each(function(){
-                // multiplicar los valores de los trabajos por el valor de la UCO
-                var trabajo = $(this).find('td').eq(0).text();
-                var arancel = $(this).find('td').eq(1).text();
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: data,
+                success: function(response) {
+                    console.log(response);
+                    if(response.status == "ok"){
+                        $('#valor_uco_header').text(parseFloat(valor_uco).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 }));
+                        swal({
+                            title: 'Éxito',
+                            text: 'Se han recalculado los presupuestos correctamente',
+                            icon: 'success'
+                        });
+                        let trabajos = response.mis_trabajos_profesional;
+                        let table = $('#table_procedimientos_propios_dental').DataTable(); // Accede a la instancia de DataTable
+                        // Limpia los datos de la tabla correctamente
+                        table.clear();
+                        // Agrega las nuevas filas
+                        trabajos.forEach(trabajo => {
+                            trabajo.valor = parseFloat(trabajo.valor).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                            console.log(trabajo);
+                            const isChecked = trabajo.laboratorio === 1 ? 'checked' : '';
+                            table.row.add([
+                                trabajo.descripcion,
+                                trabajo.cantidad_uco,
+                                '$'+trabajo.valor,
 
-                var uco = $(this).find('td').eq(2).text();
-                var nuevo_arancel = parseFloat(valor_uco) * parseFloat(uco);
-                $(this).find('td').eq(1).text(parseFloat(nuevo_arancel * 1000).toLocaleString('es-CL'));
-                var existeLaboratorioDental = $(this).find('input[type="checkbox"]').is(':checked');
-                trabajos.push({
-                    trabajo: trabajo,
-                    arancel: arancel,
-                    uco: uco
-                });
-                existeLaboratorio.push({
-                    existeLaboratorioDental: existeLaboratorioDental
-                });
+                                `
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="existeLaboratorioDental${trabajo.id}" onclick="guardarLaboratorioIndex(${trabajo.id})" ${isChecked}>
+                                    <label class="form-check-label" for="existeLaboratorioDental${trabajo.id}" >
+                                        ¿Laboratorio?
+                                    </label>
+                                </div>
+                                `,
+                                trabajo.cantidad_bloques,
+                                `<button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(${trabajo.id})"><i class="eather icon-x"></i></button>
+                                <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="eather icon-edit"></i></button>`
+                            ]);
+                        });
+                        // Dibuja la tabla nuevamente
+                        table.draw();
+                    }else{
+                        swal({
+                            title: 'Error',
+                            text: 'No se han podido recalcular los presupuestos',
+                            icon: 'error'
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
             });
-
-
-            console.log(trabajos);
-            console.log(existeLaboratorio);
         }
 
         function agregar_otro_procedimiento() {
@@ -358,10 +366,12 @@ p {
 
                     // Agrega las nuevas filas
                     procedimientos.forEach(p => {
+                        p.valor = parseFloat(p.valor).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
                         const isChecked_p = p.laboratorio == 1 ? 'checked' : '';
                         table_procedimientos_propios.row.add([
                             p.descripcion,
                             p.uco,
+                            '$'+p.valor,
                             `
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
@@ -371,8 +381,8 @@ p {
                             </div>
                             `,
                             p.cantidad_bloques,
-                            `<button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="fas fa-trash"></i></button>
-                            <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="fas fa-edit"></i></button>`
+                            `<button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="fas feather icon-x"></i></button>
+                            <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="feather icon-edit"></i></button>`
                         ]);
                     });
 
@@ -401,7 +411,7 @@ p {
                                 </label>
                             </div>
                             `,
-                            `<button class="btn btn-warning btn-sm" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="fas fa-edit"></i> Editar</button>`
+                            `<button class="btn btn-warning btn-icon" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="feather icon-edit"></i> Editar</button>`
                         ]);
                     });
 
@@ -454,10 +464,12 @@ p {
 
                     // Agrega las nuevas filas
                     procedimientos.forEach(p => {
+                        p.valor = parseFloat(p.valor).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
                         const isChecked_p = p.laboratorio == 1 ? 'checked' : '';
                         table_procedimientos_propios.row.add([
                             p.descripcion,
                             p.cantidad_uco,
+                            '$'+p.valor,
                             `
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
@@ -467,8 +479,8 @@ p {
                             </div>
                             `,
                             p.cantidad_bloques,
-                            `<button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="fas fa-trash"></i></button>
-                            <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="fas fa-edit"></i></button>`
+                            `<button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
+                            <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="feather icon-edit"></i></button>`
                         ]);
                     });
 
@@ -497,7 +509,7 @@ p {
                                 </label>
                             </div>
                             `,
-                            `<button class="btn btn-warning btn-sm" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="fas fa-edit"></i> Editar</button>`
+                            `<button class="btn btn-warning btn-icon" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="feather icon-edit"></i> Editar</button>`
                         ]);
                     });
 
@@ -584,7 +596,7 @@ p {
                                         </label>
                                     </div>
                                 </td>`;
-                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')"><i class="fas fa-trash"></i></button></td>';
+                        html += '<td><button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(' + p.id + ')"><i class="feather icon-x"></i></button></td>';
                         html += '</tr>';
                         $('#table_procedimientos_propios_dental').append(html);
                     });
@@ -611,7 +623,7 @@ p {
                                 </label>
                             </div>
                             `,
-                            `<button class="btn btn-warning btn-sm" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="fas fa-edit"></i> Editar</button>`
+                            `<button class="btn btn-warning btn-icon" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="feather icon-edit"></i> Editar</button>`
                         ]);
                     });
 
@@ -657,7 +669,7 @@ p {
                                         </label>
                                     </div>
                                 </td>`;
-                        html += '<td><button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(' + p.id + ')"><i class="fas fa-trash"></i></button></td>';
+                        html += '<td><button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(' + p.id + ')"><i class="feather icon-x"></i></button></td>';
                         html += '</tr>';
                         $('#table_procedimientos_propios_dental').append(html);
                     });
@@ -671,11 +683,24 @@ p {
             });
         }
 
-        function guardarTratamientoProfesional(){
-            var nombre_procedimiento = $('#nombre_procedimiento').val();
+        function guardarTratamientoProfesional(especialidad){
+            if(especialidad == 16){
+                var nombre_procedimiento = $('#nombre_procedimiento_impl').val();
+            }else{
+                var nombre_procedimiento = $('#nombre_procedimiento').val();
+            }
             var cantidad_bloques = $('#cantidad_bloques_buscador').val();
             var cantidad_uco = $('#cantidad_uco_buscador').val();
             var tiene_lab = $('#tiene_lab_buscador').is(':checked') ? 1 : 0;
+            var valor_uco = $('#valor_uco').val();
+            if(valor_uco == ''){
+                swal({
+                    title: 'Error',
+                    text: 'Debe ingresar el valor de la UCO',
+                    icon: 'error'
+                });
+                return;
+            }
 
             if(nombre_procedimiento == '' || cantidad_bloques == '' || cantidad_uco == ''){
                 swal({
@@ -692,6 +717,7 @@ p {
                 cantidad_uco: cantidad_uco,
                 tiene_lab: tiene_lab,
                 nuevo_procedimiento: false,
+                valor_uco: valor_uco,
                 _token: '{{ csrf_token() }}'
             }
 
@@ -727,9 +753,11 @@ p {
                         // Agrega las nuevas filas
                         procedimientos.forEach(p => {
                             const isChecked_p = p.laboratorio == 1 ? 'checked' : '';
+                            let valor = parseFloat(p.valor).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
                             table_procedimientos_propios.row.add([
                                 p.descripcion,
-                                p.uco,
+                                p.cantidad_uco,
+                                '$'+valor,
                                 `
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
@@ -739,8 +767,8 @@ p {
                                 </div>
                                 `,
                                 p.cantidad_bloques,
-                                `<button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="fas fa-trash"></i></button>
-                                <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="fas fa-edit"></i></button>`
+                                `<button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="feather icon-x"></i></button>
+                                <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="eather icon-edit"></i></button>`
                             ]);
                         });
 
@@ -769,7 +797,7 @@ p {
                                     </label>
                                 </div>
                                 `,
-                                `<button class="btn btn-warning btn-sm" role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="fas fa-edit"></i> Editar</button>`
+                                `<button class="btn btn-warning btn-icon role="button" onclick="mostrar_procedimiento(${trabajo.id})"><i class="feather icon-edit"></i> Editar</button>`
                             ]);
                         });
 
@@ -790,6 +818,15 @@ p {
             var cantidad_uco = $('#cantidad_uco').val();
             var cantidad_bloques = $('#cantidad_bloques').val();
             var tiene_lab = $('#tiene_lab').is(':checked') ? 1 : 0;
+            var valor_uco = $('#valor_uco').val();
+            if(valor_uco == ''){
+                swal({
+                    title: 'Error',
+                    text: 'Debe ingresar el valor de la UCO',
+                    icon: 'error'
+                });
+                return;
+            }
             if (nombre_procedimiento_nuevo == '' || cantidad_uco == '') {
                 swal({
                     title: 'Error',
@@ -806,6 +843,7 @@ p {
                 cantidad_bloques: cantidad_bloques,
                 tiene_lab: tiene_lab,
                 nuevo_procedimiento: false,
+                valor_uco: valor_uco,
                 _token: '{{ csrf_token() }}'
             }
 
@@ -835,10 +873,13 @@ p {
 
                         // Agrega las nuevas filas
                         procedimientos.forEach(p => {
+                            // formatear el valor a 0 decimales y separador de miles
+                            p.valor = parseFloat(p.valor).toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
                             const isChecked_p = p.laboratorio == 1 ? 'checked' : '';
                             table_procedimientos_propios.row.add([
                                 p.descripcion,
                                 p.cantidad_uco,
+                                '$'+p.valor,
                                 `
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="${p.id}" id="existeLaboratorioDental${p.id}" onclick="guardarLaboratorio(${p.id})" ${isChecked_p}>
@@ -848,8 +889,8 @@ p {
                                 </div>
                                 `,
                                 p.cantidad_bloques,
-                                `<button class="btn btn-danger btn-sm" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="fas fa-trash"></i></button>
-                                <button class="btn btn-warning btn-sm" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="fas fa-edit"></i></button>`
+                                `<button class="btn btn-danger btn-icon" type="button" onclick="eliminar_procedimiento(${p.id})"><i class="eather icon-x"></i></button>
+                                <button class="btn btn-warning btn-icon" type="button" onclick="mostrar_procedimiento(${p.id})"><i class="eather icon-edit"></i></button>`
                             ]);
                         });
 

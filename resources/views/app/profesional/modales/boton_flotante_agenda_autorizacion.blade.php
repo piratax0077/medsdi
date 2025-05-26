@@ -277,54 +277,63 @@
                         <button type="button" class="btn btn-outline-success btn-sm my-3 w-100" onclick="solicitar_tons_profesional()">Seleccionar</button>
                     </div>
                 </div>
-                <table class="table table-responsive" id="table_profesionales_tons" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Apellidos</th>
-                            <th scope="col">Rut</th>
-                            <th scope="col">Teléfono</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Activar/Desactivar</th>
-                            <th scope="col">Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody_tons">
-                        @foreach ($tons_dental as $tons)
-                            <tr>
-                                <td>{{ $tons->nombre_tons }}</td>
-                                <td>{{ $tons->apellido_tons }}</td>
-                                <td>{{ $tons->rut_tons }}</td>
-                                <td>{{ $tons->telefono_tons }}</td>
-                                <td>{{ $tons->email_tons }}</td>
-                                <td class="d-flex justify-content-center">
-                                    @if($tons->estado == 2)
-                                    <button class="btn btn-outline-danger btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Ficha Médica Única" onclick="desasociar_tons_profesional({{ $tons->id }})"><i class="fas fa-trash"></i></button>
-                                    @else
-                                    <button type="button" class="btn btn-outline-success btn-sm btn-icon" data-toggle="tooltip" data-placement="top" title="" data-bs-original-title="Ficha Médica Única" onclick="solicitar_tons_profesional({{ $tons->id }})"><i class="fas fa-check"></i></button>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($tons->estado == 2)
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table w-100" id="table_profesionales_tons">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Apellidos</th>
+                                        <th scope="col">Rut</th>
+                                        <th scope="col">Teléfono</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Activar/Desactivar</th>
+                                        <th scope="col">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_tons">
+                                    @foreach ($tons_dental as $tons)
+                                        <tr>
+                                            <td>{{ $tons->nombre_tons }}</td>
+                                            <td>{{ $tons->apellido_tons }}</td>
+                                            <td>{{ $tons->rut_tons }}</td>
+                                            <td>{{ $tons->telefono_tons }}</td>
+                                            <td>{{ $tons->email_tons }}</td>
+                                            <td class="d-flex justify-content-center">
+                                                @if($tons->estado == 2)
+                                                <button class="btn btn-outline-danger btn-sm btn-icon" onclick="desasociar_tons_profesional({{ $tons->id }})">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                                @else
+                                                <button type="button" class="btn btn-outline-success btn-sm btn-icon" onclick="solicitar_tons_profesional({{ $tons->id }})">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($tons->estado == 2)
+                                                    <span class="badge badge-success">Activo</span>
+                                                @elseif($tons->estado == 1)
+                                                    <span class="badge badge-danger">Inactivo</span>
+                                                @else
+                                                    <span class="badge badge-warning">Inactivo</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </
 
-                                        <span class="badge badge-success">Activo</span>
-                                    @elseif($tons->estado == 1)
-                                        <span class="badge badge-danger">Inactivo</span>
-                                    @else
-                                        <span class="badge badge-warning">Inactivo</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-sm btn-danger" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-sm btn-danger" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 <!--SCRIPT (DEJARLO EN JS CON JOHAN)-->
 @section('page-script-btn-autorizacion')
@@ -1127,7 +1136,8 @@
     }
     function actualizarEstadoSidebarTons(tons) {
         let algunoActivo = tons.some(t => t.estado == 2);
-
+        let tons_activa = tons.filter(t => t.estado == 2);
+        console.log(tons_activa);
         if (algunoActivo) {
             // Habilita botón del colapsable
             $('#heading_ayudante button').removeClass('disabled').prop('disabled', false);
@@ -1137,6 +1147,7 @@
 
             // Habilita todos los botones internos
             $('#collapse_ayudante .btn').removeClass('disabled').prop('disabled', false);
+            $('#prot_tons_imp_man').val(tons_activa[0].nombre_tons+' '+tons_activa[0].apellido_tons);
         } else {
             // Desactiva botón principal (colapsable)
             $('#heading_ayudante button').addClass('disabled').prop('disabled', true);
@@ -1146,6 +1157,7 @@
 
             // Desactiva botones internos
             $('#collapse_ayudante .btn').addClass('disabled').prop('disabled', true);
+            $('#prot_tons_imp_man').val('');
         }
     }
 

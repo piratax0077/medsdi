@@ -76,7 +76,7 @@
                                         @include('general.secciones_ficha.motivo')
 
                                         <!--EXAMEN ESPECIALIDAD - PARAMETROS DE CONTROL-->
-                                        <div class="col-sm-12 col-md-12">
+                                        {{--  <div class="col-sm-12 col-md-12">
                                             <div class="card-a">
                                                 <div class="card-header-a" id="exam_esp_cdg">
                                                     <button class="accor-closed btn pt-1 pb-0 pl-1 btn-block text-left has-ripple card-act-open collapsed" type="button" data-toggle="collapse" data-target="#exam_esp_cdg_c" aria-expanded="false" aria-controls="exam_esp_cdg_c">
@@ -247,7 +247,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>  --}}
 
 										
 
@@ -297,8 +297,8 @@
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="row mb-3">
                                         <div class="col-md-12 text-center">
-                                            <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                            <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+                                            <input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
+                                            <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
                                         </div>
                                     </div>
                                 </div>
@@ -343,7 +343,31 @@
 
 @section('page-script-ficha-atencion')
     <script>
-
+        $(document).ready(function() {
+            $("#descripcion_cie").autocomplete({
+                source: function(request, response) {
+                    // Fetch data
+                    $.ajax({
+                        url: "{{ route('dental.getCie10') }}",
+                        type: 'post',
+                        dataType: "json",
+                        data: {
+                            _token: CSRF_TOKEN,
+                            search: request.term
+                        },
+                        success: function(data) {
+                            response(data);
+                        }
+                    });
+                },
+                select: function(event, ui) {
+                    // Set selection
+                    $('#descripcion_cie').val(ui.item.label); // display the selected text
+                    $('#id_descripcion_cie').val(ui.item.value); // save selected id to input
+                    return false;
+                }
+            });
+        });
         function showContentTmcda() {
             element = document.getElementById("contentTto_cda");
             check = document.getElementById("tto_med_cda");
@@ -408,7 +432,7 @@
             @if($fichas->count()>0)
                 $('#mensaje_historias').html(' El paciente posee historia medica previa. ');
             @else
-                $('#mensaje_historias').html(' es la primera consulta del paciente. ');
+                $('#mensaje_historias').html(' Es la primera consulta del paciente. ');
             @endif
                 $('#mensaje_historias').show();
                 setTimeout(function(){

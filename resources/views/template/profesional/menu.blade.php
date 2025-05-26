@@ -58,6 +58,13 @@
                             <!--<li><a href="suscripcion.php">Pagos y Suscripción</a></li>-->
                         </ul>
                     </li>
+                    <li class="nav-item pcoded-hasmenu">
+                        <a href="javascript:void(0)" class="nav-link"><span class="pcoded-micon"><i  class="feather icon-settings"></i></span><span class="pcoded-mtext text-center">Configuraciones</span></a>
+                        <ul class="pcoded-submenu">
+                            <li><a href="{{ route('profesional.mi_perfil') }}">Tutoriales</a></li>
+                            <!--<li><a href="suscripcion.php">Pagos y Suscripción</a></li>-->
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -117,6 +124,16 @@
                             <!--<li><a href="suscripcion.php">Pagos y Suscripción</a></li>-->
                         </ul>
                     </li>
+                     <li class="nav-item pcoded-hasmenu">
+                        <a href="javascript:void(0)" class="nav-link"><span class="pcoded-micon"><i  class="feather icon-video"></i></span><span class="pcoded-mtext text-center">Tutoriales</span></a>
+                        <ul class="pcoded-submenu">
+                            <li><a href="https://vimeo.com/1085553533" target="_blank">Funciones Agenda</a></li>
+                            <li><a href="https://vimeo.com/1085535164" target="_blank">Receta online</a></li>
+                            <li><a href="https://vimeo.com/1085574920" target="_blank">Funciones Ficha de atención</a></li>
+                            <li><a href="https://vimeo.com/1085574269" target="_blank">Funciones Mis pacientes</a></li>
+                            <li><a href="https://vimeo.com/1085548556" target="_blank">Descarga la App SDI</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -124,7 +141,7 @@
 @endif
 
 <div class="modal fade" id="confirmLogoutModal" tabindex="-1" role="dialog" aria-labelledby="confirmLogoutModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="confirmLogoutModalLabel">Confirmar</h5>
@@ -139,8 +156,8 @@
                 <p>¿Esta seguro que desea continuar?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" onclick="menuContinuar();">Continuar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="feather icon-x"></i>Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="menuContinuar();"><i class="feather icon-check"></i>Continuar</button>
             </div>
         </div>
     </div>

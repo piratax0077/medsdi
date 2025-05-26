@@ -89,11 +89,6 @@
                                                                 class="btn btn-danger btn-sm mb-1"
                                                                 onclick="eliminarExamen('{{ $examen->id }}',1, '{{ $examen_nombre }}')"
                                                             ><i class="fas fa-trash"></i></button>
-
-                                                            <button type="button"
-                                                                class="btn btn-primary btn-sm"
-                                                                onclick="generarPDF({{ $examen->id }}, '{{ $examen_nombre }}')"
-                                                            >PDF</button>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -104,6 +99,9 @@
 
                                 </table>
                             </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <button type="button" class="btn btn-success btn-sm" onclick="generarPDFtipoExamen(1)">Generar PDF</button>
                         </div>
                     </div>
                 </form>
@@ -181,6 +179,7 @@
             success: function(resp){
                 console.log(resp);
                 if (resp.success) {
+                    limpiar_campos(tipo);
                     swal({
                         title:'Se han guardado con éxito los examenes',
                         icon:'success',
@@ -200,18 +199,48 @@
                                         <button type="button" class="btn btn-danger btn-sm" onclick="eliminarExamen(${item.id},${tipo},'${nombre_examen}')">
                                             <i class="fa fa-trash"></i>
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-sm" onclick="generarPDF(${item.id},'${nombre_examen}')">PDF</button>
                                     </td>
                                 </tr>
                             `);
                         });
                     });
+
                 }
             },
             error: function(error){
                 console.log(error.responseText);
             }
         })
+    }
+
+     function limpiar_campos(tipo){
+        if(tipo == 1){
+            // limpiar campos
+            $('#ex-funcional').val(null).trigger('change');
+        }else if(tipo == 2){
+            // limpiar campos
+            $('#examen_rx').val(null).trigger('change');
+        }else if(tipo == 3){
+            // limpiar campos
+            $('#examenes_endoscopico').val(null).trigger('change');
+        }else if(tipo == 4){
+            // limpiar campos
+            $('#ex-frecuente').val(null).trigger('change');
+        }
+    }
+
+    function generarPDFtipoExamen(tipo) {
+            let id_ficha_atencion = $('#id_fc').val(); // input hidden en tu HTML
+            let auto = 1; // o el valor real que quieras enviar
+            let url = "{{ route('pdf.orden_examenes_tipo_examen') }}";
+
+            Fancybox.show(
+                [{
+                    src: "{{ route('pdf.orden_examenes_tipo_examen') }}?id=" + id_ficha_atencion + "&tipo=" + tipo,
+                    type: "iframe",
+                    preload: false,
+                }, ]
+            );
     }
 
     function eliminarExamen(id,tipo, nombre_examen = null) {
@@ -249,8 +278,6 @@
                                         <button type="button" class="btn btn-danger btn-sm" onclick="eliminarExamen(${item.id},${tipo}, '${nombre_examen}')">
                                             <i class="fa fa-trash"></i>
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-sm" onclick="generarPDF(${item.id},'${nombre_examen}')">PDF</button>
-
                                     </td>
                                 </tr>
                             `);

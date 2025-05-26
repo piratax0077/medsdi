@@ -3,16 +3,15 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <h6 class="t-aten d-inline"> PFP</h6>
-                <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-2"><i class="fas fa-plus"></i> Añadir pieza</button>
-            </div>
+             </div>
         </div>
         <div class="form-row">
-            {{-- <div class="col-sm-12 col-md-6 col-lg-6  col-xl-6 col-xxl-3">
+            <div class="col-sm-12 col-md-6 col-lg-6  col-xl-6 col-xxl-3">
                 <div class="form-group">
-                    <label class="floating-label-activo-sm">Piezas N°</label>
+                    <label class="floating-label-activo-sm">Pieza N°</label>
                     <input type="text" class="form-control form-control-sm" name="n_pieza_pfp{{ $counter }}" id="n_pieza_pfp{{ $counter }}">
                 </div>
-            </div> --}}
+            </div>
 
             <div class="col-sm-12 col-md-6 col-lg-6  col-xl-6  col-xxl-3">
                 <div class="form-group">

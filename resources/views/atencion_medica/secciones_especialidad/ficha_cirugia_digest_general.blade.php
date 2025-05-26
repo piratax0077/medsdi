@@ -296,8 +296,8 @@
                                 <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div class="row mb-3">
                                         <div class="col-md-12 text-center">
-                                            <input type="submit" class="btn btn-info mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha y Finalizar su Consulta">
-                                            <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Ficha e ir a su Agenda">
+                                            <input type="submit" class="btn btn-purple mt-1" onclick="$('#cerrarsession').val('1');agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha y finalizar su consulta">
+                                            <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar ficha e ir a su agenda">
                                         </div>
                                     </div>
                                 </div>
@@ -307,25 +307,20 @@
 
                         <!--INFORME ENDOSCOPÍA DIGESTIVA ALTA-->
                         <div class="tab-pane fade" id="endosc_gastrica" role="tabpanel" aria-labelledby="endosc_gastrica-tab">
-                            <div class="row bg-white shadow-none rounded mx-1">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-12 mt-3 mb-0">
-                                            <h6 class="f-16 text-c-blue">Informe Endoscopía Digestiva</h6>
-                                            <hr>
-                                        </div>
-                                    </div>
-                                    <div class="row div_form_examen_eda">
-                                        <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_eda" id="id_examen_especialidad_tipo_eda" value="{{ $array_examen_especialidad_tipo['eda'] }}">
-                                        {!! $examen['eda'] !!}
-                                    </div>
-                                    <!--GUARDAR EXAMEN-->
-                                    <div class="row">
-                                        <div class="col-md-12 text-center mb-3">
-                                            <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
-                                            <button type="button" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('eda');">Ver Examen PDF</button>
-                                        </div>
-                                    </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-2">
+                                    <h6 class="text-c-blue f-20">Informe Endoscopía Digestiva</h6>
+                                </div>
+                            </div>
+                            <div class="row div_form_examen_eda">
+                                <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_eda" id="id_examen_especialidad_tipo_eda" value="{{ $array_examen_especialidad_tipo['eda'] }}">
+                                {!! $examen['eda'] !!}
+                            </div>
+                            <!--GUARDAR EXAMEN-->
+                            <div class="row">
+                                <div class="col-md-12 text-center mb-3">
+                                    <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar examen e ir a su agenda">
+                                    <button type="button" class="btn btn-primary mt-1" onclick="visualizar_pdf_examen('eda');">Ver examen PDF</button>
                                 </div>
                             </div>
                         </div>
@@ -333,32 +328,27 @@
 
                         <!--INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
                         <div class="tab-pane fade" id="colonoscopia" role="tabpanel" aria-labelledby="colonoscopia-tab">
-                           <div class="row bg-white shadow-none rounded mx-1">
-                               <div class="col-md-12">
-                                   <div class="row">
-                                       <div class="col-md-12 mt-3 mb-0">
-                                           <h6 class="f-16 text-c-blue">Informe Colonoscopía</h6>
-                                           <hr>
-                                       </div>
-                                   </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-2">
+                                    <h6 class="text-c-blue f-20">Informe Colonoscopía</h6>
                                 </div>
-                                <div class="row div_form_examen_edb">
-                                    <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_edb" id="id_examen_especialidad_tipo_edb" value="{{ $array_examen_especialidad_tipo['edb'] }}">
-                                    {!! $examen['edb'] !!}
-                                </div>
-                                <!--GUARDAR EXAMEN-->
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-12 text-center mb-3">
-                                            <input type="submit" class="btn btn-success mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar Examen e ir a su Agenda">
-                                            <button type="button" class="btn btn-success mt-1" onclick="visualizar_pdf_examen('edb');">Ver Examen PDF</button>
-                                        </div>
+                            </div>
+             
+                            <div class="row div_form_examen_edb">
+                                <input type="hidden" class="form-control" name="id_examen_especialidad_tipo_edb" id="id_examen_especialidad_tipo_edb" value="{{ $array_examen_especialidad_tipo['edb'] }}">
+                                {!! $examen['edb'] !!}
+                            </div>
+                            <!--GUARDAR EXAMEN-->
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12 text-center mb-3">
+                                        <input type="submit" class="btn btn-info mt-1" onclick="agregar_medicamentos_ficha(); agregar_examenes_ficha(); " value="Guardar examen e ir a su agenda">
+                                        <button type="button" class="btn btn-info mt-1" onclick="visualizar_pdf_examen('edb');">Ver examen PDF</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!--CIERRE:INFORME ENDOSCOPÍA DIGESTIVA BAJA-->
-
                     </div>
                 </form>
             </div>
@@ -599,7 +589,7 @@
             }
             if(registro_f_t_cg_descripcion == ''){
                 swal({
-                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripcion",
+                        title: "Problema al Registrar Tipo Ficha.\n Campo requedido Descripción",
                         icon: "warning",
                         // buttons: "Aceptar",
                         //SuccessMode: true,

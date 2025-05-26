@@ -1995,6 +1995,7 @@ Route::get('pdf_receta/receta_medicamentos', [App\Http\Controllers\Recomendacion
 // Route::get('pdf_receta/receta_medicamentos', [App\Http\Controllers\ficha_atencionController::class, 'pdf_receta_medicamentos'])->name('pdf.receta_medicamentos');
 Route::get('pdf_orden/orden_examenes', [App\Http\Controllers\ficha_atencionController::class, 'pdf_orden_examenes'])->name('pdf.orden_examenes');
 Route::get('pdf_orden/orden_examenes_plan_tto', [App\Http\Controllers\ficha_atencionController::class, 'pdf_orden_examenes_plan_tto'])->name('pdf.orden_examenes_plan_tto');
+Route::get('pdf_orden/orden_examenes_tipo_examen', [App\Http\Controllers\ficha_atencionController::class, 'pdf_orden_examenes_tipo_examen'])->name('pdf.orden_examenes_tipo_examen');
 Route::get('pdf_certificado_reposo/certificado_reposo', [App\Http\Controllers\ficha_atencionController::class, 'pdf_certificado_reposo'])->name('pdf.certificado_reposo');
 Route::get('pdf_informe_medico/informe_medico', [App\Http\Controllers\ficha_atencionController::class, 'pdf_informe_medico'])->name('pdf.informe_medico');
 Route::get('pdf_uso_personal/uso_personal', [App\Http\Controllers\ficha_atencionController::class, 'pdf_uso_personal'])->name('pdf.uso_personal');
@@ -2499,6 +2500,7 @@ Route::post('/profesional/devolucion_bono',[App\Http\Controllers\EscritorioProfe
 Route::post('/profesional/examen/registro',[App\Http\Controllers\EscritorioProfesional::class, 'registro_examen'])->name('profesional.examen.registro');
 Route::post('/profesional/examen/eliminar', [EscritorioProfesional::class, 'eliminar_examen'])->name('profesional.examen.eliminar');
 Route::post('/profesional/examen/pdf',[EscritorioProfesional::class, 'generar_pdf_examen'])->name('profesional.examen.generarPDF');
+Route::post('/profesional/recalcular_presupuestos',[App\Http\Controllers\EscritorioProfesional::class, 'recalcular_presupuestos'])->name('profesional.recalcular_presupuestos');
 
 
 Route::get('/paciente/datos/cargar/prereserva/{token1}/{token2}/{token3}',[App\Http\Controllers\EscritorioPaciente::class, 'cargaDatosPacientePreReserva'])->name('paciente.datos.cargar.prereserva');

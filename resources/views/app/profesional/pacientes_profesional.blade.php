@@ -96,6 +96,9 @@
                                                             data-placement="top" title="Editar datos medicos del paciente"><i
                                                                 class="feather icon-edit"></i></a>
                                                         @endif
+                                                        @if($profesional->id_especialidad == 2)
+                                                            <a data-toggle="tooltip" data-placement="top" title="Historial de presupuestos" href="#" class="btn btn-secondary btn-sm btn-icon" href=""><i class="fas fa-check"></i></a>
+                                                        @endif
 													</td>
 													<td>
                                                          <button class="btn btn-icon btn-purple" onclick="enviar_mensaje_paciente({{ $p->id }})" data-toggle="tooltip" data-placement="top" title="Enviar mensaje de difusión"><i class="feather icon-mail"></i></button>
@@ -217,7 +220,7 @@
                         </div>
                     </form>
                 </div>
-                    
+
             </div>
         </div>
     </div>

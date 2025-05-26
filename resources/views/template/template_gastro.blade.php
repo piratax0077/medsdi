@@ -33,6 +33,14 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/responsive.bootstrap4.min.css') }}">
 
+    
+    <!-- fileupload-custom css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
+
+    <!--boton azul-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
+
+
 
     <!-- fileupload-custom css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
@@ -207,6 +215,15 @@
               $('#examenes_endoscopico').select2({
                 dropdownParent: $('#m_gastroenterologia_end .modal-body')
             });
+
+            $('#ex-frecuente').select2({
+                dropdownParent: $('#m_ex_comunes .modal-body')
+            });
+
+            $('#examen_rx').select2({
+                dropdownParent: $('#m_rx_gastro .modal-body')
+            });
+
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
                 swal({

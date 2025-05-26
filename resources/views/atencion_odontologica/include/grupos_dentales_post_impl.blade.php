@@ -7,24 +7,9 @@
                         <div class="form-group">
                             <label class="floating-label-activo-sm">Piezas N°</label><!--USAR SELECT 2 ?-->
                             <select class="js-example-basic-multiple select2-dental" name="pzas_grupo_impl{{ $counter }}" id="pzas_grupo_impl{{ $counter }}" multiple="multiple">
-                                <option value="1.1">1.1</option>
-                                <option value="1.2">1.2</option>
-                                <option value="1.3">1.3</option>
-                                <option value="1.4">1.4</option>
-                                <option value="1.5">1.5</option>
-                                <option value="1.6">1.6</option>
-                                <option value="1.7">1.7</option>
-                                <option value="1.8">1.8</option>
-                                <option value="1.9">1.9</option>
-                                <option value="2.1">2.1</option>
-                                <option value="2.2">2.2</option>
-                                <option value="2.3">2.3</option>
-                                <option value="2.4">2.4</option>
-                                <option value="2.5">2.5</option>
-                                <option value="2.6">2.6</option>
-                                <option value="2.7">2.7</option>
-                                <option value="2.8">2.8</option>
-                                <option value="2.9">2.9</option>
+                                @foreach (['1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '2.8','3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '4.1', '4.2', '4.3', '4.4', '4.5', '4.6', '4.7', '4.8'] as $pieza)
+                                    <option value="{{ $pieza }}" @if(in_array($pieza, $piezasSeleccionadas ?? [])) selected @endif>{{ $pieza }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -147,7 +132,7 @@
                 </div>
             </div>
             <div class="card-footer">
-                <div class="row">        
+                <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <button type="button" class="btn btn-danger-light-c btn-sm btn-icon" onclick="ocultar_grupo_dental_post_impl()"><i class="feather icon-x"></i></button>
                         <button type="button" class="btn btn-icon btn-primary-light-c" onclick="guardar_grupo_dental_post_impl({{ $counter }})"><i class="feather icon-save"></i></button>

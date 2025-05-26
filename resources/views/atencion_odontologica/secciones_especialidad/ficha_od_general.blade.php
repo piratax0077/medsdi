@@ -4591,7 +4591,7 @@ function cargar_a_presupuesto_impl_g_confirmar(){
                             ]).draw(false).node(); // Obtener el nodo de la fila
 
 
-                        });
+                });
 
             }else{
                 swal({
@@ -4824,7 +4824,10 @@ function generar_pdf_protocolo_dental(){
         forma_mat_impl = $('#det_prot_forma_mat').val();
     }
     let implantes_insumos = $('#prot_implante').val();
-
+    if(implantes_insumos.length == 0){
+        valido = 0;
+        mensaje += '<li>Implantes/insumos </li>';
+    }
     let id_implantes = $('#prot_proc').val();
     let implantes = $('#prot_proc option:selected').text();
     if(id_implantes == 3){
@@ -4961,6 +4964,7 @@ function generar_pdf_protocolo_dental(){
 
 function generar_pdf_protocolo_man_dental(){
     let nombre_cir = $('#prot_cirujanos_imp_man').val();
+    let nombre_cir_nuevo = $('#prot_cirujanos_imp_man_nuevo').val();
     let nombre_anest = $('#prot_anestesista_imp_man').val();
     let nombre_tons = $('#prot_tons_imp_man').val();
     let nombre_arsenalera = $('#prot_ars_imp_man').val();
@@ -5003,20 +5007,6 @@ function generar_pdf_protocolo_man_dental(){
         mensaje += '<li>Cirujano </li>';
     }
 
-    if(nombre_anest == ''){
-        valido = 0;
-        mensaje += '<li>Anestesista </li>';
-    }
-
-    if(nombre_arsenalera == ''){
-        valido = 0;
-        mensaje += '<li>Arsenalera </li>';
-    }
-
-    if(nombre_tons == ''){
-        valido = 0;
-        mensaje += '<li>Tons </li>';
-    }
 
     if(prot_pieza_imp.length == 0){
         valido = 0;
@@ -5029,6 +5019,7 @@ function generar_pdf_protocolo_man_dental(){
 
         let data = {
             nombre_cir: nombre_cir,
+            nombre_cir_nuevo: nombre_cir_nuevo,
             nombre_anest: nombre_anest,
             nombre_tons: nombre_tons,
             nombre_arsenalera: nombre_arsenalera,
@@ -5042,6 +5033,7 @@ function generar_pdf_protocolo_man_dental(){
             prot_pieza_imp: prot_pieza_imp,
             det_cir: det_cir,
             id_paciente: dame_id_paciente(),
+            id_ficha_atencion: $('#id_fc').val(),
             tipo:'mantencion',
             _token: CSRF_TOKEN
         }
@@ -5085,6 +5077,14 @@ function generar_pdf_protocolo_man_dental(){
                     button: "Aceptar"
                 });
             }
+            // limpiar formulario
+            $('#prot_anestesista_imp_man').val('');
+            $('#prot_forma_mat_man').val(0);
+            $('#prot_proc_man').val(0);
+            // $('#det_cir_man').val('');
+            // limpiar los select2
+            $('#prot_implante_man').val(null).trigger('change');
+            $('#prot_pieza_imp_man').val(null).trigger('change');
         },
         else: function(error){
             console.log(error.responseText);
