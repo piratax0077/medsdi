@@ -97,8 +97,17 @@
                                                                 class="feather icon-edit"></i></a>
                                                         @endif
                                                         @if($profesional->id_especialidad == 2)
-                                                            <a data-toggle="tooltip" data-placement="top" title="Historial de presupuestos" href="#" class="btn btn-secondary btn-sm btn-icon" href=""><i class="fas fa-check"></i></a>
+                                                            <button
+                                                                class="btn btn-secondary btn-sm btn-icon"
+                                                                data-toggle="tooltip"
+                                                                data-placement="top"
+                                                                title="Historial de presupuestos"
+                                                                onclick="verPresupuestos({{ $p->id }})"
+                                                            >
+                                                                <i class="fas fa-check"></i>
+                                                            </button>
                                                         @endif
+
 													</td>
 													<td>
                                                          <button class="btn btn-icon btn-purple" onclick="enviar_mensaje_paciente({{ $p->id }})" data-toggle="tooltip" data-placement="top" title="Enviar mensaje de difusión"><i class="feather icon-mail"></i></button>
@@ -189,6 +198,37 @@
         </div>
     </div>
 
+    <!-- Modal Presupuestos -->
+<div class="modal fade" id="modalPresupuestos" tabindex="-1" role="dialog" aria-labelledby="modalPresupuestosLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Historial de Presupuestos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Fecha</th>
+                            <th>Profesional</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyPresupuestos">
+                        <tr><td colspan="5" class="text-center">Cargando...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
     <!--EMITIR DOCUMENTO-->
     <div class="modal fade" id="modal_emitir_doc" tabindex="-1" role="dialog" aria-labelledby="emitir_documento"
         aria-hidden="true">
@@ -232,6 +272,7 @@
 
 @section('page-script')
 <script>
+
     function enviar_mensaje_paciente(id_paciente){
         $('#modalMensajePaciente').modal('show');
         $('#id_paciente_mensaje').val(id_paciente);
@@ -244,5 +285,49 @@
     function emitir_doc(){
         $('#modal_emitir_doc').modal('show');
     }
+
+    function verPresupuestos(idPaciente) {
+        $('#modalPresupuestos').modal('show');
+        $('#tbodyPresupuestos').html('<tr><td colspan="5" class="text-center">Cargando...</td></tr>');
+
+        $.ajax({
+            url: '{{ route("profesional.presupuestos.paciente") }}',
+            method: 'GET',
+            data: { id: idPaciente },
+            success: function(response) {
+                console.log(response);
+                if (response.length > 0) {
+                    let rows = '';
+                    response.forEach((item, index) => {
+                        item.valor_total = parseFloat(item.valor_total).toLocaleString('es-CL', {
+                            style: 'currency',
+                            currency: 'CLP'
+                        });
+                        if(item.estado == 1){
+                            item.estado = 'Pendiente';
+                        } else if(item.estado == 0){
+                            item.estado = 'Aceptado';
+                        } else {
+                            item.estado = 'Desconocido';
+                        }
+                        rows += `<tr>
+                            <td>${index + 1}</td>
+                            <td>${item.fecha}</td>
+                            <td>${item.profesional_nombre} ${item.profesional_apellido_uno} ${item.profesional_apellido_dos}</td>
+                            <td>${item.valor_total}</td>
+                            <td>${item.estado}</td>
+                        </tr>`;
+                    });
+                    $('#tbodyPresupuestos').html(rows);
+                } else {
+                    $('#tbodyPresupuestos').html('<tr><td colspan="5" class="text-center">Sin presupuestos</td></tr>');
+                }
+            },
+            error: function() {
+                $('#tbodyPresupuestos').html('<tr><td colspan="5" class="text-danger text-center">Error al cargar</td></tr>');
+            }
+        });
+    }
+
 </script>
 @endsection

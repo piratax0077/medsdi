@@ -184,7 +184,7 @@
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
         $(document).ready(function () {
-
+            $('#table_trabajos_menores_dental').DataTable();
             $('#presup_estado_pago').DataTable();
 
             $('#presup_estado_pago_gral').DataTable();
@@ -606,10 +606,7 @@
     @yield('js-sidebar') {{-- seccion js side bar --}}
     @yield('js-lic') {{-- seccion js side bar --}}
 	@yield('page-script-btn-autorizacion')
-    @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajoM')
-    @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajo')
 
-    @include('atencion_odontologica.formularios_dentales_tons.pedido_material_trabajo.pedido_insumos_materiales')
 </body>
 
 </html>

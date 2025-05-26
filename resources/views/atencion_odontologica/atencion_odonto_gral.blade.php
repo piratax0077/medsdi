@@ -168,6 +168,9 @@
         @include('atencion_odontologica.generales.includes.modales.recomendaciones_especiales_implan')
         @include('app.dental.modals.formularios_dentales.pedido_material_trabajo.pedido_insumos_materiales')
         @include('app.dental.modals.formularios_dentales.pedido_material_trabajo.m_pmateriales')
+
+        @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajoM')
+    @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajo')
     </div>
     @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
     <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">

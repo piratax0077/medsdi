@@ -6,7 +6,7 @@
 
     @include('atencion_medica.include.head_homeopatia')
 
-    
+
     <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?t={{ time() }}">
     <link rel="stylesheet" href="{{ asset('css/style_index.css') }}?t={{ time() }}">
@@ -510,7 +510,7 @@
                     })
 
             });
-function editarInformacionContacto(){
+        function editarInformacionContacto(){
             $('#modal_editar_contacto').modal('show');
             $('#info_contacto').css('display', 'none');
             $('#info_contacto-edit').css('display', 'block');

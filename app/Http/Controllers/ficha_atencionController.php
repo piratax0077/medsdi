@@ -74,6 +74,7 @@ use App\Models\Paciente;
 use App\Models\PacienteContactoEmergencia;
 use App\Models\PagosPresupuestoDental;
 use App\Models\PedidoInsumos;
+use App\Models\PedidoMateriales;
 use App\Models\PiezasDentalCoronaProtesis;
 use App\Models\PiezaPeriodontograma;
 use App\Models\Presentacion;
@@ -2496,7 +2497,19 @@ class ficha_atencionController extends Controller
     public function dame_insumos_bodega($id_ficha_atencion){
         try {
             $insumos = PedidoInsumos::where('id_ficha_atencion',$id_ficha_atencion)->get();
-            return $insumos;
+            $materiales = PedidoMateriales::where('id_ficha_atencion',$id_ficha_atencion)->get();
+            // unificar los insumos y materiales en un solo array de tipo collection
+            $pedidos = $insumos->merge($materiales);
+            foreach ($pedidos as $pedido) {
+                $pedido->fecha = Carbon::parse($pedido->created_at)->format('Y-m-d H:m:s');
+                if($pedido->id_profesional == null){
+                    $pedido->profesional = 'No asignado';
+                }else{
+                    $profesional = Profesional::where('id', $pedido->id_profesional)->first();
+                    $pedido->profesional = $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos;
+                }
+            }
+            return $pedidos;
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();

@@ -2501,6 +2501,7 @@ Route::post('/profesional/examen/registro',[App\Http\Controllers\EscritorioProfe
 Route::post('/profesional/examen/eliminar', [EscritorioProfesional::class, 'eliminar_examen'])->name('profesional.examen.eliminar');
 Route::post('/profesional/examen/pdf',[EscritorioProfesional::class, 'generar_pdf_examen'])->name('profesional.examen.generarPDF');
 Route::post('/profesional/recalcular_presupuestos',[App\Http\Controllers\EscritorioProfesional::class, 'recalcular_presupuestos'])->name('profesional.recalcular_presupuestos');
+Route::get('/profesional/presupuestos_paciente', [App\Http\Controllers\EscritorioProfesional::class, 'presupuestosPaciente'])->name('profesional.presupuestos.paciente');
 
 
 Route::get('/paciente/datos/cargar/prereserva/{token1}/{token2}/{token3}',[App\Http\Controllers\EscritorioPaciente::class, 'cargaDatosPacientePreReserva'])->name('paciente.datos.cargar.prereserva');

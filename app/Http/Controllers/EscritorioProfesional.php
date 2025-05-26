@@ -6904,6 +6904,31 @@ public function eliminarPiezaCoronaProtesis(Request $req){
         return $datos;
     }
 
+    public function presupuestosPaciente(Request $request)
+    {
+        $id = $request->input('id');
+        $presupuestos = PresupuestosDental::select(
+                'presupuestos_dental.id',
+                'presupuestos_dental.fecha',
+                'presupuestos_dental.valor_total',
+                'presupuestos_dental.estado',
+                'profesionales.nombre as profesional_nombre',
+                'profesionales.apellido_uno as profesional_apellido_uno',
+                'profesionales.apellido_dos as profesional_apellido_dos',
+                'pacientes.nombres as paciente_nombres',
+                'pacientes.apellido_uno as paciente_apellido_uno',
+                'pacientes.apellido_dos as paciente_apellido_dos',
+            )
+            ->join('pacientes', 'presupuestos_dental.id_paciente', '=', 'pacientes.id')
+            ->join('profesionales', 'presupuestos_dental.id_profesional', '=', 'profesionales.id')
+            ->where('presupuestos_dental.id_paciente', $id)
+            ->orderBy('presupuestos_dental.fecha', 'desc')
+            ->get();
+
+        return $presupuestos;
+    }
+
+
     public function confirmar_hora(Request $request)
     {
         $hora_medica = HoraMedica::where('id', $request->id_hora_medica)->first();

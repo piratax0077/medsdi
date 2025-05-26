@@ -119,11 +119,7 @@
 
                         <div class="card-body-sidebar">
                             <button type="button"
-                                class="btn btn-sm btn-info btn-block accion_modal_pedido_insumos">PEDIDO
-                                INSUMOS</button>
-                            <button type="button"
-                                class="btn btn-sm btn-info btn-block accion_modal_pedido_materiales">PEDIDO
-                                MATERIALES</button>
+                                class="btn btn-sm btn-info btn-block accion_modal_pedido_insumos" onclick="$('#modal_pedido_insumos').modal();">PEDIDO MATERIAL/INSUMOS</button>
                         </div>
                     </div>
                 </div>

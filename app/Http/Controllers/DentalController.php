@@ -5052,7 +5052,6 @@ public function generar_pdf_trabajo_mayor(Request $req){
 
     public function registrar_pedido_insumos_materiales(Request $request)
     {
-
         $user = Auth::user()->id;
         $profesional = Profesional::where('id_usuario', $user)->first();
 
@@ -5071,16 +5070,13 @@ public function generar_pdf_trabajo_mayor(Request $req){
 
             case 'material':
                 $pedido  = new PedidoMateriales();
-                $pedido->nro_orden = $request->nro_orden_trabajo_menor;
-                $pedido->clinica_doctor = $request->clinica_doctor;
-                $pedido->rut_profesional = $request->rut_profesional;
-                $pedido->guia = $request->guia;
-                $pedido->color = $request->color;
-                $pedido->urgencia = $request->urgencia;
-                $pedido->material = $request->material;
-                $pedido->trabajo_realizar = $request->trabajo_realizar;
-                $pedido->comentarios = $request->comentarios_trabajo_menor;
-                $pedido->id_paciente = $request->id_paciente;
+                $pedido->tipo_solicitud = $request->tipo_insumo_material;
+                $pedido->cantidad = $request->cantidad_insumo_material;
+                $pedido->uso = $request->uso_en_insumo_material;
+                $pedido->pedido_a = $request->lugar_pedido_insumo_material;
+                $pedido->descripcion = $request->nombre_insumo_material;
+                $pedido->id_usuario = Auth::user()->id;
+                $pedido->id_ficha_atencion = $request->id_ficha_atencion;
                 $pedido->id_profesional = $profesional->id;
                 break;
 
@@ -5100,7 +5096,12 @@ public function generar_pdf_trabajo_mayor(Request $req){
     public function eliminar_pedido_insumos_materiales(Request $request)
     {
         try {
-            $pedido = PedidoInsumos::where('id', $request->id)->first();
+            $tipo = $request->tipo;
+            if($tipo == 'insumo'){
+                $pedido = PedidoInsumos::where('id', $request->id)->first();
+            }else{
+                $pedido = PedidoMateriales::where('id', $request->id)->first();
+            }
             $id_ficha_atencion = $pedido->id_ficha_atencion;
             if ($pedido) {
                 $pedido->delete();
@@ -5118,6 +5119,9 @@ public function generar_pdf_trabajo_mayor(Request $req){
         $id_ficha_atencion = $req->id_ficha_atencion;
         $profesional = Profesional::where('id_usuario', Auth::user()->id)->first();
         $insumos = PedidoInsumos::where('id_ficha_atencion',$id_ficha_atencion)->get();
+        $materiales = PedidoMateriales::where('id_ficha_atencion',$id_ficha_atencion)->get();
+        // unificar los insumos y materiales en un solo array de tipo collection
+        $insumos = $insumos->merge($materiales);
 
         $ficha_atencion = FichaAtencion::where('id',$id_ficha_atencion)->first();
         $paciente = Paciente::where('id',$ficha_atencion->id_paciente)->first();
@@ -5140,7 +5144,19 @@ public function generar_pdf_trabajo_mayor(Request $req){
     public function dame_insumos_bodega($id_ficha_atencion){
         try {
             $insumos = PedidoInsumos::where('id_ficha_atencion',$id_ficha_atencion)->get();
-            return $insumos;
+            $materiales = PedidoMateriales::where('id_ficha_atencion',$id_ficha_atencion)->get();
+            // unificar los insumos y materiales en un solo array de tipo collection
+            $pedidos = $insumos->merge($materiales);
+            foreach ($pedidos as $pedido) {
+                $pedido->fecha = Carbon::parse($pedido->created_at)->format('Y-m-d H:m:s');
+                if($pedido->id_profesional == null){
+                    $pedido->profesional = 'No asignado';
+                }else{
+                    $profesional = Profesional::where('id', $pedido->id_profesional)->first();
+                    $pedido->profesional = $profesional->nombre.' '.$profesional->apellido_uno.' '.$profesional->apellido_dos;
+                }
+            }
+            return $pedidos;
         } catch (\Exception $e) {
             //throw $th;
             return $e->getMessage();

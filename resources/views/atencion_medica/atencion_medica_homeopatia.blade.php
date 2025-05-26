@@ -1,5 +1,6 @@
-@extends('template.template_cda')
+@extends('template.template_homeopatia')
 @section('Content')
+
     <!--Container Completo-->
     <div class="pcoded-main-container">
         <div class="pcoded-content">
@@ -9,7 +10,7 @@
                     <div class="row align-items-center pb-2">
                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="page-header-title">
-                            <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN FICHA CIRUGIA DIGESTIVA ALTA </strong></h5>
+                            <h5 class="text-white d-inline f-16 mt-1"><strong>ATENCIÓN FICHA ATENCIÓN HOMEOPATIA</strong></h5>
                                 <p class="font-weight-bold mt-0 mb-0 text-white float-md-right">
                                     @php
                                         $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -71,7 +72,7 @@
                     <div class="tab-content" id="at-oftalmo">
                         <!--Atender paciente-->
                         <div class="tab-pane fade show active" id="atender" role="tabpanel" aria-labelledby="atender-tab">
-                            @include('atencion_medica.secciones_especialidad.ficha_cirugia_digest_alta')
+                             @include('atencion_medica.secciones_especialidad.ficha_homeopatia')
                         </div>
                         <!--Licencia-->
                         <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
@@ -90,7 +91,7 @@
                             @include('general.secciones_ficha.bandeja_examenes')
                         </div>
                         <!--Hospitalización-->
-                         <div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
+						<div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">
                             @include('general.hospitalizacion.hospitalizacion')
                         </div>
                     </div>
@@ -98,19 +99,28 @@
             </div>
         </div>
 
-        <!-- SIDE BAR CDA -->
-        @include("atencion_medica.include.sidebar_derecho_cda")
+        <!-- SIDE BAR ORL -->
 
+        <!--Modals de especialidad -->
+        {{--  @include("../modals_generales/autorizacion_acompa.php");  --}}
 
-        <!-- modales -->
-        @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_eda')
-        @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_edb')
-        @include('app.cirugia.modals.modals_cesarea.modal_indicar_examenes')
-        @include('general.hospitalizacion.modals.in_solic_pabellon')
+        <!--Modals formularios generales-->
+        {{--  @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_examenes")
+        @include("atencion_medica.formularios.modal_atencion_especialidad.otorrino.modal_indicar_medicamentos")--}}
 
     </div>
     <!--Cierre: Container Completo-->
-	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
-	@include('app.profesional.modales.boton_flotante_agenda_autorizacion')
+            @include("atencion_medica.modales"){{-- base de botones de sidebar --}}
+            @include("atencion_medica.include.sidebar_derecho_medicina_general")
+            @include("general.modal.modal_no_disponible")
+            @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_clasif_colon')
+	        @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia')
+            @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_gastro_endosc')
+            {{--  @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_gastro_func')  --}}
+            @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_gastro_rx')
+            @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_examenes_com')
+            @include('general.hospitalizacion.modals.in_solic_pabellon')
+	        @include("general.modal.modal_no_disponible")
+             @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
 @endsection
 
