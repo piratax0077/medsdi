@@ -87,8 +87,7 @@
             </div>
             <!-- tab general-->
             <!--Contenido de tab-->
-            {{-- <form action="{{ route('ficha.otro.prof.registrar_lab_general') }}" method="POST"> --}}
-            <form action="" method="POST">
+            <form action="{{ route('ficha.otro.prof.registrar_lab_rayos') }}" method="POST">
                 <input type="hidden" name="id_fc" value="{{ $id_ficha_atencion }}" id="id_fc">
                 <input type="hidden" name="hora_medica" id="hora_medica" value="{{ $hora_medica->id }}">
                 <input type="hidden" name="id_examen" value="{{ $id_ficha_atencion }}" id="id_examen">
@@ -132,11 +131,11 @@
                                                                 {{-- <input type="text" class="form-control form-control-sm" name="derivado_por" id="derivado_por" value=""> --}}
                                                                 <div class="row">
                                                                     <div class="col-sm-6">
-                                                                        <input type="hidden" name="solicitado_id_profesional_oct_par" id="solicitado_id_profesional_oct_par" value="">
+                                                                        <input type="hidden" name="solicitado_id_profesional" id="solicitado_id_profesional" value="">
                                                                         <label class="floating-label-activo-sm">Derivado por RUT:</label>
                                                                         <input type="text" class="form-control form-control-sm" name="derivado_por_rut" id="derivado_por_rut" value=""
-                                                                            onblur="cargar_profesional(this,'derivado_por', 'solicitado_id_profesional_oct_par', 'div_profesional_no_inscrito');"
-                                                                            onkeyup="cargar_profesional(this,'derivado_por', 'solicitado_id_profesional_oct_par', 'div_profesional_no_inscrito');"
+                                                                            onblur="cargar_profesional(this,'derivado_por', 'solicitado_id_profesional', 'div_profesional_no_inscrito');"
+                                                                            onkeyup="cargar_profesional(this,'derivado_por', 'solicitado_id_profesional', 'div_profesional_no_inscrito');"
                                                                             oninput="formatoRut(this);"
                                                                         >
 
@@ -153,19 +152,19 @@
 
                                                                     <div class="form-group col-md-3">
                                                                         <label class="floating-label-activo-sm">Nombre</label>
-                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_nombre_oct_par" id="solicitado_nombre_oct_par" onchange="actualizar_solicitado_por('derivado_por', 'solicitado_nombre_oct_par', 'solicitado_apellido_oct_par');">
+                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_nombre" id="solicitado_nombre" onchange="actualizar_solicitado_por('derivado_por', 'solicitado_nombre', 'solicitado_apellido');">
                                                                     </div>
                                                                     <div class="form-group col-md-3">
                                                                         <label class="floating-label-activo-sm">Apellido</label>
-                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_apellido_oct_par" id="solicitado_apellido_oct_par" onchange="actualizar_solicitado_por('derivado_por', 'solicitado_nombre_oct_par', 'solicitado_apellido_oct_par');">
+                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_apellido" id="solicitado_apellido" onchange="actualizar_solicitado_por('derivado_por', 'solicitado_nombre', 'solicitado_apellido');">
                                                                     </div>
                                                                     <div class="form-group col-md-3">
                                                                         <label class="floating-label-activo-sm">Telefono</label>
-                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_telefono_oct_par" id="solicitado_telefono_oct_par" >
+                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_telefono" id="solicitado_telefono" >
                                                                     </div>
                                                                     <div class="form-group col-md-3">
                                                                         <label class="floating-label-activo-sm">Email</label>
-                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_email_oct_par" id="solicitado_email_oct_par" >
+                                                                        <input type="text" class="form-control form-control-sm"  name="solicitado_email" id="solicitado_email" >
                                                                     </div>
 
                                                                 </div>
@@ -329,10 +328,10 @@
                             mensaje = '';
                             $('#div_mensaje').hide();
                             $('#mensaje_solicitado_por').html(mensaje);
-                            $('#solicitado_nombre_oct_par').val('');
-                            $('#solicitado_apellido_oct_par').val('');
-                            $('#solicitado_telefono_oct_par').val('');
-                            $('#solicitado_email_oct_par').val('');
+                            $('#solicitado_nombre').val('');
+                            $('#solicitado_apellido').val('');
+                            $('#solicitado_telefono').val('');
+                            $('#solicitado_email').val('');
                         }
                         else
                         {
@@ -342,10 +341,10 @@
                             $('#'+div_solicitar).show();
                             $('#div_mensaje').show();
                             $('#mensaje_solicitado_por').html(mensaje);
-                            $('#solicitado_nombre_oct_par').val('');
-                            $('#solicitado_apellido_oct_par').val('');
-                            $('#solicitado_telefono_oct_par').val('');
-                            $('#solicitado_email_oct_par').val('');
+                            $('#solicitado_nombre').val('');
+                            $('#solicitado_apellido').val('');
+                            $('#solicitado_telefono').val('');
+                            $('#solicitado_email').val('');
                             $('#'+input_nombre).attr('readonly', true);
                         }
                     }
