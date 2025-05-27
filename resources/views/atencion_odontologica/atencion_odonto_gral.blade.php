@@ -127,13 +127,13 @@
                             @include('atencion_odontologica.secciones_especialidad.ficha_od_general')
                         </div>
                         <!--Licencia-->
-                        {-- <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
+                         <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
                             @include('general.secciones_ficha.licencia')
                         </div>
                         <!--Ficha Médica Única-->
                         <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
                             @include('general.secciones_ficha.fmu')
-                        </div> --}
+                        </div>
                         <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel"
                             aria-labelledby="aten-previas-tab">
@@ -168,6 +168,9 @@
         @include('atencion_odontologica.generales.includes.modales.recomendaciones_especiales_implan')
         @include('app.dental.modals.formularios_dentales.pedido_material_trabajo.pedido_insumos_materiales')
         @include('app.dental.modals.formularios_dentales.pedido_material_trabajo.m_pmateriales')
+
+        @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajoM')
+    @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajo')
     </div>
     @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
     <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
@@ -193,6 +196,8 @@
             mostrar_pieza_dental_examen_odontop_(random);
             // mostrar_nueva_pieza_ex_radio(random);
             mostrar_nuevas_imagenes_dent(random);
+            mostrar_pieza_dental_examen(1000);
+            mostrar_nueva_pieza_dental(1000);
             $('#table_piezas_presupuesto_odonto').DataTable();
         });
 

@@ -1279,6 +1279,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if($todos->count() > 0)
                                     <!--P. POR GRUPOS-->
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                         <div class="card">
@@ -1367,6 +1368,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
                                     <!--INSUMOS Y GASTOS GENERALES-->
                                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                         <div class="card">
@@ -1834,7 +1836,7 @@
                                     <tr>
                                         <td><input type="checkbox" class="valor-checkbox"
                                                 data-valor="{{ $o->valor }}" data-id="{{ $o->id }}"
-                                                data-info="odonto"></td>
+                                                data-info="gral"></td>
                                         <td>{{ $o->diagnostico_tratamiento }}</td>
                                         <td>${{ number_format($o->valor, 0, ',', '.') }}</td>
                                         <td>
@@ -1899,6 +1901,31 @@
 <input type="hidden" id="id_pieza_tto">
 <input type="hidden" id="tipo_tto">
 <script>
+    const valoresSeleccionados = [];
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.valor-checkbox').forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                const id = parseInt(this.getAttribute('data-id'));
+                const info = this.getAttribute('data-info');
+                const valor = parseInt(this.getAttribute('data-valor'));
+
+                if (this.checked) {
+                    // Si no existe ya, lo agregamos en el orden del clic
+                    if (!valoresSeleccionados.some(v => v.id === id && v.info === info)) {
+                        valoresSeleccionados.push({ id, info, valor });
+                    }
+                } else {
+                    // Si se desmarca, lo quitamos del array
+                    const index = valoresSeleccionados.findIndex(v => v.id === id && v.info === info);
+                    if (index !== -1) {
+                        valoresSeleccionados.splice(index, 1);
+                    }
+                }
+            });
+        });
+    });
+
     $(document).ready(function() {
         $('#table_pagos_presupuesto').DataTable();
     })
@@ -2309,7 +2336,7 @@
 
         // Enviar los datos por AJAX
         $.ajax({
-            url: '{{ ROUTE('dental.confirmar_pago_presupuesto_dental') }}',
+            url: '{{ ROUTE("dental.confirmar_pago_presupuesto_dental") }}',
             method: 'POST',
             data: data,
             success: function(response) {
@@ -2726,6 +2753,7 @@
                     let valores_odontograma = resp.valores[1];
                     let valores_insumos = resp.valores[2];
                     let descuentos = resp.descuentos;
+                    let suma_pagado = resp.suma_pagado;
                     let total_general = valores_boca_general + valores_odontograma + valores_insumos -
                         descuentos;
                     $('#valores_examenes_presupuesto').html(formatoMoneda(valores_boca_general));
@@ -2743,6 +2771,8 @@
                     // guardamos el total en un input hidden
                     $('#total_presupuesto_dental').val(total_general);
                     $('#subtotal_presup').val(formatoMoneda(resp.total_general));
+                    $('#valores_total_abonado_presupuesto_conf').html(formatoMoneda(parseInt(
+                        suma_pagado)));
                     let todos = resp.todos;
 
                     let table_ = $('#presup_estado_pago_gral').DataTable();
@@ -2803,17 +2833,7 @@
     }
 
     function reasignar_presupuesto_modal() {
-        // Obtener los valores seleccionados
-        const valoresSeleccionados = [];
-        document.querySelectorAll('.valor-checkbox').forEach(function(checkbox) {
-            if (checkbox.checked) {
-                valoresSeleccionados.push({
-                    id: parseInt(checkbox.getAttribute('data-id')),
-                    info: checkbox.getAttribute('data-info'),
-                    valor: parseInt(checkbox.getAttribute('data-valor')),
-                });
-            }
-        });
+
 
         // Crear objeto JSON con los datos del formulario
         const data = {
@@ -2827,9 +2847,12 @@
             id_lugar_atencion: $('#id_lugar_atencion').val(),
         };
 
+        console.log('Orden de clics:', valoresSeleccionados);
+
+
         // Enviar los datos por AJAX
         $.ajax({
-            url: '{{ ROUTE('dental.reasignar_presupuesto_dental') }}', // Reemplaza con la URL de tu endpoint en el controlador
+            url: '{{ ROUTE("dental.reasignar_presupuesto_dental") }}', // Reemplaza con la URL de tu endpoint en el controlador
             method: 'POST',
             data: data,
             success: function(response) {
@@ -2912,6 +2935,43 @@
 
                     });
                     table_insumos_pagos.draw();
+
+                    let todos = response.todos;
+
+                    let table_todos = $('#presup_estado_pago_gral').DataTable();
+                    // Limpiar la tabla antes de agregar nuevas filas
+                    table_todos.clear().draw();
+                    // Recorrer el odontograma y agregar nuevas filas
+                    todos.forEach(function(odonto) {
+                        if (odonto.presupuesto == 1) {
+                            if (odonto.estado_pago == 'ok') {
+                                var clase = 'bg-success';
+                            } else if (odonto.estado_pago == 'incompleto') {
+                                var clase = 'bg-warning';
+                            } else {
+                                var clase = 'bg-danger';
+                            }
+                            if (odonto.estado == 0) {
+                                var estado = 'TERMINADO';
+                            } else {
+                                var estado = 'PENDIENTE';
+                            }
+                            // Agregar una nueva fila a la tabla
+                            let rowNode = table_todos.row.add([
+                                odonto.localizacion,
+                                odonto.diagnostico_tratamiento,
+                                formatoMoneda(formatoMoneda(odonto.valor)),
+                                0,
+                                formatoMoneda(odonto.valor),
+                                ' <div class="circle ' + clase + '"></div>',
+                                estado
+                            ]).draw(false).node();
+
+                            // Agregar clases a la fila
+                            $(rowNode).addClass('text-center align-middle status-circle');
+                        }
+
+                    });
                 } else {
                     swal({
                         title: 'error',

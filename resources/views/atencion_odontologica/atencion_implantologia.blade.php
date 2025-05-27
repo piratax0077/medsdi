@@ -167,6 +167,10 @@
         @include('atencion_odontologica.generales.includes.modales.recomendaciones_generales_implan')
         @include('atencion_odontologica.generales.includes.modales.recomendaciones_especiales_implan')
 
+        @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajoM')
+        @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajo')
+        @include('atencion_odontologica.formularios_dentales_tons.pedido_material_trabajo.pedido_insumos_materiales')
+
     </div>
     @include('app.profesional.modales.boton_flotante_agenda_autorizacion')
     <input type="hidden" name="id_paciente" id="id_paciente" value="{{ $paciente->id }}">
@@ -626,6 +630,8 @@
                             $('#table_odontograma tbody').html(html);
                             $('#contenedor_piezas_dentales_presupuesto').empty();
                             $('#table_trabajos_presupuesto tbody').empty();
+                            $('#numero_pieza_post_impl2000').empty();
+                             $('#numero_pieza_tto_impl1000').empty();
                             odontograma.forEach(function(odonto) {
                                 if (odonto.presupuesto == 1) {
                                     $('#contenedor_piezas_dentales_presupuesto').append(`
@@ -674,6 +680,12 @@
                                                 <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Cargar</button>
                                             </td>
                                         </tr>
+                                    `);
+                                    $('#numero_pieza_post_impl2000').append(`
+                                        <option value="${odonto.pieza}">${odonto.pieza}</option>
+                                    `);
+                                    $('#numero_pieza_tto_impl1000').append(`
+                                        <option value="${odonto.pieza}">${odonto.pieza}</option>
                                     `);
                                 }
                             });
@@ -941,6 +953,10 @@
                             $('#table_odontograma tbody').html(html);
                             $('#contenedor_piezas_dentales_presupuesto').empty();
                             $('#table_trabajos_presupuesto tbody').empty();
+                            // id que representa el select de piezas post implante
+                            $('#numero_pieza_post_impl2000').empty();
+                            // id que representa el select de piezas pre implante
+                            $('#numero_pieza_tto_impl1000').empty();
                             odontograma.forEach(function(odonto) {
                                 if (odonto.presupuesto == 1) {
                                     $('#contenedor_piezas_dentales_presupuesto').append(`
@@ -977,19 +993,25 @@
                                         </div>
                                     `);
                                     $('#table_trabajos_presupuesto tbody').append(`
-                                    <tr>
-                                        <td>${odonto.fecha}</td>
-                                        <td>${odonto.diagnostico} </td>
-                                        <td>${odonto.caras} </td>
-                                        <td>${odonto.pieza} </td>
-                                        <td>${odonto.tratamiento} </td>
-                                        <td>${formatoMoneda(odonto.valor)} </td>
-                                        <td> </td>
-                                        <td>
-                                            <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
-                                        </td>
-                                    </tr>
-                                `);
+                                        <tr>
+                                            <td>${odonto.fecha}</td>
+                                            <td>${odonto.diagnostico} </td>
+                                            <td>${odonto.caras} </td>
+                                            <td>${odonto.pieza} </td>
+                                            <td>${odonto.tratamiento} </td>
+                                            <td>${formatoMoneda(odonto.valor)} </td>
+                                            <td> </td>
+                                            <td>
+                                                <button type="button" class="btn btn-secondary btn-sm" onclick="atender_procedimiento(${odonto.id},'${odonto.tratamiento}',${odonto.pieza})"><i class="fas fa-check"></i>Atender</button>
+                                            </td>
+                                        </tr>
+                                    `);
+                                    $('#numero_pieza_post_impl2000').append(`
+                                        <option value="${odonto.pieza}">${odonto.pieza}</option>
+                                    `);
+                                    $('#numero_pieza_tto_impl1000').append(`
+                                        <option value="${odonto.pieza}">${odonto.pieza}</option>
+                                    `);
                                 }
                             });
                             let valores_boca_general = response.valores[0];
@@ -1012,6 +1034,21 @@
                             $('#monto_adeudado').html(formatoMoneda(total_general - valores_insumos));
                             $('#odon_adults').empty();
                             $('#odon_adults').append(response.odontograma_paciente_vista);
+
+                            let table_odon_gral = $('#table_piezas_presupuesto_odonto').DataTable();
+                            table_odon_gral.clear().draw();
+
+                            odontograma.forEach(function(pieza) {
+                                // Agregar una nueva fila a la tabla
+                                let rowNode = table_odon_gral.row.add([
+                                    pieza.pieza,
+                                    pieza.descripcion,
+                                    formatoMoneda(formatoMoneda(pieza.valor)),
+                                    '<button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma(' +
+                                    pieza.id + ')"><i class="feather icon-x"> </i> </button>'
+
+                                ]).draw(false).node(); // Obtener el nodo de la fila
+                            });
 
                             let table = $('#presup_estado_pago').DataTable();
 

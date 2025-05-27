@@ -164,6 +164,11 @@
         @include('app.dental.modals.formularios_dentales.pedido_material_trabajo.pedido_insumos_materiales')
         @include('app.dental.modals.formularios_dentales.pedido_material_trabajo.m_pmateriales')
 
+        @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajoM')
+        @include('atencion_odontologica.formularios_dentales_tons.laboratorio_dental.m_trabajo')
+
+        @include('atencion_odontologica.formularios_dentales_tons.pedido_material_trabajo.pedido_insumos_materiales')
+
     </div>
     <!--Fin Container Completo-->
     <script>

@@ -49,9 +49,9 @@
                                                         <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
                                                     @endif
                                                 </li>  --}}
-                                                <li class="nav-item">
+                                                {{--  <li class="nav-item">
                                                     <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
-                                                </li>
+                                                </li>  --}}
                                                 <li class="nav-item">
                                                     <a class="nav-link text-reset" id="band_exam-tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
                                                 </li>
@@ -77,10 +77,10 @@
                         <!--Licencia-->
                         {{-- <div class="tab-pane fade show" id="licencia" role="tabpanel" aria-labelledby="licencia-tab">
                             {{-- @include('general.secciones_ficha.licencia') --}}
-                        </div>--}}
+                        </div>
                         <!--Ficha Médica Única-->
                         <div class="tab-pane fade show" id="fmu" role="tabpanel" aria-labelledby="fmu-tab">
-                            @include('general.secciones_ficha.fmu')
+                            {{--  @include('general.secciones_ficha.fmu')  --}}
                         </div>
                        <!--Atenciones previas-->
                         <div class="tab-pane fade show" id="aten-previas" role="tabpanel" aria-labelledby="aten-previas-tab">
@@ -88,7 +88,7 @@
                         </div>
                         <!--Exámenes-->
                         <div class="tab-pane fade show" id="band_exam" role="tabpanel" aria-labelledby="band_exam_tab">
-                            @include('general.secciones_ficha.bandeja_examenes')
+                            {{--  @include('general.secciones_ficha.bandeja_examenes')  --}}
                         </div>
                         <!--Hospitalización-->
                         {{-- <div class="tab-pane fade show" id="hospitalizacion" role="tabpanel" aria-labelledby="hospitalizacion-tab">

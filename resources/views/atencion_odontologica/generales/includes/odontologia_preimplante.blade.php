@@ -71,7 +71,7 @@
                                                                                             </span>
                                                                                         </li>
                                                                                     @else
-                                                                                        <li style="font-size: 12px">{{ $detalle['producto'] }}<br/>&nbsp;&nbsp;<span style="font-size: 9px; font-weight: bold;">{{ $detalle['farmaco'] }}</span></li>
+                                                                                        <li style="font-size: 12px">{{ $detalle['producto'] }}</li>
                                                                                     @endif
                                                                                 @endforeach
                                                                             @endforeach
@@ -435,6 +435,14 @@
 
                                 <!--ESTUDIO RADIOLÓGICO POR PIEZA-->
                                 <div class="tab-pane fade show" id="estudio_rx" role="tabpanel" aria-labelledby="estudio_rx_tab">
+                                    <div class="form-row mt-2">
+                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
+                                            <div class="form-group">
+
+                                                <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-2" onclick="mostrar_nuevas_imagenes_dent_estudio()"><i class="fas fa-plus"></i>CARGAR NUEVA IMAGEN</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div id="contenedor_imagenes_dent_estudio">
                                         @php $count = 1; @endphp
                                         @foreach ($imagenes_preimplante as $imagen)
@@ -537,17 +545,48 @@
 
                                     </div>
 
-                                    <div class="form-row">
-                                        <div class="col-sm-12 col-md-3 col-lg-3 col-xl-12">
-                                            <div class="form-group">
 
-                                                <button type="button" class="btn btn-outline-success btn-sm" onclick="mostrar_nuevas_imagenes_dent_estudio()">CARGAR NUEVA IMAGEN</button>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                                 <!--PLANIFICACION TRATAMIENTO-->
                                 <div class="tab-pane fade show" id="plan_tto_impl" role="tabpanel" aria-labelledby="plan_tto_impl_tab">
+                                    <div class="form-row mt-3">
+                                        <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
+                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                                            <div class="card-informacion">
+                                                <div class="card-top">
+                                                    <h6 class="text-uppercase text-c-blue">Tratamientos en piezas o grupos</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="form-row">
+                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                                            <div class="table-responsive">
+                                                                <table id="table_piezas_presupuesto_odonto" class="display table table-striped dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Pieza o Grupo</th>
+                                                                            <th>Tratamiento</th>
+                                                                            <th>Valor</th>
+                                                                            <th>Accion</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach ($odontograma as $o)
+                                                                            <tr>
+                                                                                <td>{{ $o->pieza }}</td>
+                                                                                <td>{{ $o->descripcion }}</td>
+                                                                                <td>${{ number_format($o->valor,0,',','.') }}</td>
+                                                                                <td><button type="button" class="btn btn-danger btn-icon" onclick="eliminar_odontograma({{ $o->id }})"><i class="feather icon-x"></i></button></td>
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="form-row mt-2">
                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <h6 class="tit-gen">Planificación del tratamiento</h6>
@@ -690,44 +729,9 @@
                                             </div>
                                         </div>
                                         <!--TABLA SELECCION DE PIEZAS O GRUPOS DE PIEZAS-->
-                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
-                                            <div class="card-informacion">
-                                                <div class="card-top">
-                                                    <h6 class="text-uppercase text-c-blue">Tratamientos en piezas o grupos</h6>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="form-row">
-                                                        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                                            <div class="table-responsive">
-                                                                <table id="#" class="display table table-striped dt-responsive nowrap table-sm dataTable no-footer dtr-inline w-100 mt-2">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <td>Pieza o Grupo</td>
-                                                                            <td>Tratamiento</td>
-                                                                            <td>Valor</td>
-                                                                            <td>Accion</td>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td>
-                                                                                <button type="button" class="btn btn-icon btn-primary"><i class="feather icon-save"></i></button>
-                                                                                <button type="button" class="btn btn-icon btn-danger"><i class="feather icon-x"></i></button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                          <!--TABLA INSUMOS-->
-                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6 col-xxl-6">
+                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                                             <div class="card-informacion">
                                                 <div class="card-top">
                                                     <h6 class="text-uppercase text-c-blue d-inline">Insumos</h6>
@@ -1147,6 +1151,21 @@
                             }
 
                         });
+                        let $select = $('#prot_implante_man');
+
+                        // Limpiar opciones actuales
+                        $select.empty();
+
+                        // Agregar nuevas opciones desde resp.insumos
+                        resp.insumos.forEach(insumo => {
+                            let text = insumo.insumos + ' ' + insumo.nombre_marca;
+                            let option = new Option(text, insumo.id, false, false); // false para no seleccionar
+                            $select.append(option);
+                        });
+
+                        // Refrescar Select2
+                        $select.trigger('change');
+
                 }
             },
             error: function(error){
@@ -1316,6 +1335,22 @@
                             }
 
                         });
+
+                        let $select = $('#prot_implante_man');
+
+                        // Limpiar opciones actuales
+                        $select.empty();
+
+                        // Agregar nuevas opciones desde resp.insumos
+                        insumos.forEach(insumo => {
+                            let text = insumo.insumos + ' ' + insumo.nombre_marca;
+                            let option = new Option(text, insumo.id, false, false); // false para no seleccionar
+                            $select.append(option);
+                        });
+
+                        // Refrescar Select2
+                        $select.trigger('change');
+
 
                         $('#tratamiento_presupuesto tbody').empty();
                         let presupuesto = resp.presupuesto;
@@ -1540,6 +1575,21 @@
 
                         //Dibujar la tabla nuevamente con los nuevos datos
                         table_insumos.draw();
+                        let $select = $('#prot_implante_man');
+
+                        // Limpiar opciones actuales
+                        $select.empty();
+
+                        // Agregar nuevas opciones desde resp.insumos
+                        resp.insumos.forEach(insumo => {
+                            let text = insumo.insumos + ' ' + insumo.nombre_marca;
+                            let option = new Option(text, insumo.id, false, false); // false para no seleccionar
+                            $select.append(option);
+                        });
+
+                        // Refrescar Select2
+                        $select.trigger('change');
+
                     }else{
                         swal({
                             icon:'error',

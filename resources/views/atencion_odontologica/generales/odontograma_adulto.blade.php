@@ -3,8 +3,8 @@
 
     // Crear un array para almacenar el estado final de cada pieza
     $piezasEstado = [];
-    if(isset($odontograma)){
-    foreach ($odontograma as $pieza) {
+    if(isset($odontograma_historial)){
+    foreach ($odontograma_historial as $pieza) {
         $codigoPieza = $pieza['pieza'];
         $tratamiento = $pieza['tratamiento'] ?? '';
         $diagnostico = $pieza['diagnostico'] ?? '';

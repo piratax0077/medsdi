@@ -35589,3 +35589,7 @@ texto-blue-tabla {
 .btn-agenda-autorizacion-fmu{
     z-index: 1100!important;
 }
+
+.m-top {
+    padding: 20px 15px!important;
+}

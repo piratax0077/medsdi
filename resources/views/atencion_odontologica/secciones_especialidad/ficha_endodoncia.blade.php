@@ -125,6 +125,11 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-12">
+                                                                                        <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-1" onclick="mostrar_nueva_pieza_dental_end(1000)">MOSTRAR NUEVA PIEZA</button>
+                                                                                    </div>
+                                                                                </div>
                                                                                 <div id="contenedor_examen_dolor_end">
                                                                                     <div class="card">
 
@@ -294,12 +299,7 @@
                                                                                 <div id="contenedor_nuevo_examen_end"></div>
                                                                             </div>
 
-                                                                            <div class="row">
-                                                                                <div class="col-sm-4 col-md-4 mb-3">
-                                                                                    <button type="button" class="btn btn-purple btn-sm" onclick="guardar_pieza_dental_end({{ $count }})" ><i class="fas fa-save"></i>Guardar</button>
-                                                                                    <button type="button" class="btn btn-info btn-sm" onclick="mostrar_nueva_pieza_dental_end({{ $count }})">MOSTRAR NUEVA PIEZA</button>
-                                                                                </div>
-                                                                            </div>
+
                                                                         </div>
 
                                                                     </div>
@@ -412,9 +412,17 @@
                                                                                                         <div class="card">
                                                                                                             <div class="card-body">
                                                                                                                 <div id="contenedor_pieza_dental_endorx_endo">
+                                                                                                                    <div class="row">
+                                                                                                                        <div class="col-12">
+                                                                                                                            <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-1" onclick="mostrar_nueva_pieza_ex_radio_end(1000)"><i class="fas fa-save"></i> Cargar Otra Pieza</button>
+                                                                                                                        </div>
+                                                                                                                    </div>
+
                                                                                                                     @php $counter = 1; @endphp
                                                                                                                     @foreach($examenes_rx_oral_end as $e)
-                                                                                                                    <div id="pieza_dentalrx{{ $counter }}" class="row">
+                                                                                                                    <div class="card">
+                                                                                                                        <div class="card-body">
+                                                                                                                            <div id="pieza_dentalrx{{ $counter }}" class="row">
                                                                                                                         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                                                                                             <div class="row">
                                                                                                                                 <div class="col-md-6">
@@ -457,7 +465,7 @@
                                                                                                                                         <div class="col-12">
                                                                                                                                             <div class="form-group">
                                                                                                                                                 <label class="floating-label-activo-sm">Piezas N°</label>
-                                                                                                                                                <select class="form-control form-control-sm select2" name="end_numero_pieza_{{ $counter }}[]" id="end_numero_pieza_{{ $counter }}" multiple>
+                                                                                                                                                <select class="form-control form-control-sm select2_rx_end" name="end_numero_pieza_{{ $counter }}[]" id="end_numero_pieza_{{ $counter }}" multiple>
                                                                                                                                                     @foreach([11,12,13,14,15,16,17,18,21,22,23,24,25,26,27,28] as $pieza)
                                                                                                                                                         <option value="{{ $pieza }}" {{ (isset($e->numero_piezas) && in_array($pieza, (array)$e->numero_piezas)) ? 'selected' : '' }}>{{ $pieza }}</option>
                                                                                                                                                     @endforeach
@@ -503,7 +511,7 @@
                                                                                                                                 </div>
                                                                                                                             </div>
 
-                                                                                                                            <div class="form-row">
+                                                                                                                            <div class="form-row mt-2">
                                                                                                                                 <div class="col-md-6">
                                                                                                                                     <div class="form-group">
                                                                                                                                         <label class="floating-label-activo-sm">Informe del radiólogo</label>
@@ -521,19 +529,16 @@
 
                                                                                                                         <button type="button" class="btn btn-icon btn-danger-light-c" onclick="eliminar_pieza_dental_rx_end({{ $e->id }})"><i class="feather icon-x"></i></button>
                                                                                                                     </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+
                                                                                                                     @php $counter++; @endphp
                                                                                                                     @endforeach
 
 
                                                                                                                 </div>
                                                                                                                 <div id="nueva_pieza_end"></div>
-                                                                                                                <div class="row">
-                                                                                                                    <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3">
-                                                                                                                        <div class="form-group">
-                                                                                                                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="mostrar_nueva_pieza_ex_radio_end({{ $counter }})"><i class="fas fa-save"></i> Cargar Otra Pieza</button>
-                                                                                                                        </div>
-                                                                                                                    </div>
-                                                                                                                </div>
+
 
                                                                                                             </div>
                                                                                                         </div>
@@ -556,7 +561,11 @@
                                                             </div>
                                                             <!--EXAMEN  POR PIEZA-->
                                                             <div class="tab-pane fade show" id="endo_pieza_end" role="tabpanel" aria-labelledby="endo_pieza_end-tab">
+
                                                                 <div class="row">
+                                                                    <div class="col-md-12 mt-2">
+                                                                        <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-1" onclick="mostrar_pieza_dental_examen_end(1000)"><i class="fas fa-save"></i>Cargar Otra Pieza</button>
+                                                                    </div>
                                                                     <div class="col-md-12">
                                                                         <div class="card">
                                                                             <div class="card-body">
@@ -661,11 +670,7 @@
                                                                                 </div>
                                                                                 <div id="nueva_pieza_dental_endo"></div>
                                                                             </div>
-                                                                            <div class="row">
-                                                                                <div class="col-sm-4 col-md-4 mb-3">
-                                                                                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="mostrar_pieza_dental_examen_end({{ $count }})"><i class="fas fa-save"></i>Cargar Otra Pieza</button>
-                                                                                </div>
-                                                                            </div>
+
                                                                         </div>
 
                                                                     </div>
@@ -2327,6 +2332,13 @@
     }, 5000);
 
     $(document).ready(function() {
+
+        mostrar_nueva_pieza_ex_radio_end(1000);
+        mostrar_pieza_dental_examen_end(1000);
+        mostrar_nueva_pieza_ex_radio(1000);
+        mostrar_pieza_dental_examen(1000);
+        mostrar_nueva_pieza_dental(1000);
+        mostrar_nueva_pieza_dental_end(1000);
         $('#tabla_odontologico_tratamiento').DataTable({
             responsive: true,
         });
@@ -2342,6 +2354,7 @@
         $('#prot_pieza_imp_man').select2();
         $('#prot_implante').select2();
         $('#prot_implante_man').select2();
+
 
         // $('.select2').select2({
         //     width: '100%',

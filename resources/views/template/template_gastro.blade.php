@@ -36,6 +36,14 @@
 
     <!-- fileupload-custom css -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
+
+    <!--boton azul-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/nav_azul_sm.css') }}?t={{ time() }}">
+
+
+
+    <!-- fileupload-custom css -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.css') }}?t={{ time() }}">
     <!-- <link rel="stylesheet" href="https://unpkg.com/dropzone@5.9.3/dist/dropzone.css" type="text/css" /> -->
 
     <!--Accordion-->
@@ -207,6 +215,15 @@
               $('#examenes_endoscopico').select2({
                 dropdownParent: $('#m_gastroenterologia_end .modal-body')
             });
+
+            $('#ex-frecuente').select2({
+                dropdownParent: $('#m_ex_comunes .modal-body')
+            });
+
+            $('#examen_rx').select2({
+                dropdownParent: $('#m_rx_gastro .modal-body')
+            });
+
             {{--  mensaje de exito al registrar ficha clinica  --}}
              @if(session('mensaje'))
                 swal({
@@ -279,6 +296,105 @@
             });
 
         });
+
+        function editarInformacionContacto(){
+            $('#modal_editar_contacto').modal('show');
+            $('#info_contacto').css('display', 'none');
+            $('#info_contacto-edit').css('display', 'block');
+        }
+
+
+
+        function cancelarInformacionContacto(){
+            $('#info_contacto').css('display', 'block');
+            $('#info_contacto-edit').css('display', 'none');
+        }
+
+         function guardarInformacionContacto(){
+            console.log('editando');
+            let rut = $('#contacto_rut_edit').val();
+            let nombre = $('#contacto_nombre_edit').val();
+            let apellido_uno = $('#contacto_apellido_uno').val();
+            let apellido_dos = $('#contacto_apellido_dos').val();
+            let fn = $('#contacto_fn_edit').val();
+            let sexo = $('#contacto_sexo_edit').val();
+            let direccion = $('#contacto_dir_edit').val();
+            let region = $('#contacto_region_edit').val();
+            let comuna = $('#contacto_comuna_edit').val();
+            let email = $('#contacto_email_edit').val();
+            let telefono = $('#contacto_telefono_edit').val();
+
+            let data = {
+                rut: rut,
+                nombre: nombre,
+                apellido_uno: apellido_uno,
+                apellido_dos: apellido_dos,
+                fn: fn,
+                sexo: sexo,
+                direccion: direccion,
+                region: region,
+                comuna: comuna,
+                email: email,
+                telefono: telefono,
+                _token: CSRF_TOKEN
+            }
+
+            console.log(data);
+             let url = "{{ ROUTE('asistente.contacto.modificar') }}";
+
+            $.ajax({
+
+                url: url,
+                type: "get",
+                data: data,
+                })
+                .done(function(data) {
+                console.log(data);
+                if (data.estado == 1)
+                {
+                    if (data.estado == 1)
+                    {
+                        let contacto = data.contacto;
+                        $('#nombre_completo_contacto').text(contacto.nombres);
+                        $('#apellidos_contacto').text(contacto.apellido_uno + ' ' + contacto.apellido_dos)
+
+                        $('#email_contacto_').text(contacto.email);
+                        $('#telefono_contacto').text(contacto.telefono_uno);
+                        $('#comuna_region_contacto').html(contacto.ciudad + '<br> ' + contacto.region);
+
+                        // $('.paciente_view_asistente').show();
+                        // $('.paciente_edit_asistente').hide();
+                        // $('#modificando_paciente_asistente').val(0);
+
+                        swal({
+                            title: "Actualización de Contacto",
+                            text: "Actualización Exitosa",
+                            icon: "success",
+                        });
+                        cancelarInformacionContacto();
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Actualización de Paciente",
+                            text: "Falla en Actualización.\nIntente de nuevo.",
+                            icon: "error",
+                        });
+                    }
+                }
+                else
+                {
+                    swal({
+                        title: "Actualización de Paciente",
+                        text: "Falla en Actualización.\nIntente de nuevo.",
+                        icon: "error",
+                    });
+                }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                console.log(jqXHR, ajaxOptions, thrownError)
+                });
+        }
 
         function editarInformacionPaciente(){
             $('#modal_editar_paciente').modal('show');

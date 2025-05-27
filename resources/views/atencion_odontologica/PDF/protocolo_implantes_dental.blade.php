@@ -4,14 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>{{ $titulo }}</title>
+    <link rel="stylesheet" href="{{ asset('css/pdf.css') }}">
 </head>
-<body>
-    <h1>Reporte de Implante</h1>
-    <p><strong>Paciente ID:</strong> {{ $id_paciente }}</p>
-    <p><strong>Cirujano:</strong> {{ $nombre_cir }}</p>
-    <p><strong>Anestesista:</strong> {{ $nombre_anest }}</p>
-    <p><strong>Arsenalera:</strong> {{ $nombre_ars }}</p>
+@include('PDF.header')
+@include('PDF.footer')
+<main>
+    @if(isset($nombre_cir_nuevo) && $nombre_cir_nuevo != '')
+        <p><strong>Cirujano Nuevo:</strong> {{ $nombre_cir_nuevo }}</p>
+    @endif
+    @if(isset($nombre_tons) && $nombre_tons != '')
+        <p><strong>Tons:</strong> {{ $nombre_tons }}</p>
+    @endif
+    @if(isset($nombre_anest) && $nombre_anest != '')
+        <p><strong>Anestesista:</strong> {{ $nombre_anest }}</p>
+    @endif
+    @if(isset($nombre_ars) && $nombre_ars != '')
+        <p><strong>Arsenalera:</strong> {{ $nombre_ars }}</p>
+    @endif
     <p><strong>Implantes:</strong> {{ $implantes }}</p>
     <table>
         <thead>
@@ -36,10 +46,10 @@
     <p><strong>Detalles de Cirugía:</strong> {{ $det_cir }}</p>
     <p><strong>Material de Toma de Impresión:</strong> {{ $nombre_tons }}</p>
     <p><strong>Piezas Implantadas:</strong></p>
-    <ul>
+    <div>
         @foreach ($prot_pieza_imp as $pieza)
-            <li>{{ $pieza }}</li>
+            <span style="margin-right: 10px;">{{ $pieza }}</span>
         @endforeach
-    </ul>
-</body>
+    </div>
+</main>
 </html>

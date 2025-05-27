@@ -115,6 +115,14 @@
                                 <textarea class="form-control form-control-sm"   rows="1"  onfocus="this.rows=3" onblur="this.rows=1;" name="obs_control_post_implante{{ $counter }}" id="obs_control_post_implante{{ $counter }}">{{ $examen->observaciones }}</textarea>
                             </div>
                         </div>
+                        @if($examen->tipo == 2)
+                        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+                            <div class="form-group">
+                                <label class="floating-label-activo-sm">Nombre Implantólogo</label>
+                                <input type="text" class="form-control form-control-sm" name="nombre_implantologo{{ $counter }}" id="nombre_implantologo{{ $counter }}" value="{{ $examen->nombre_implantologo }}">
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

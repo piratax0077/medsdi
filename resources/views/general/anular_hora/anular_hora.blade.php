@@ -1,10 +1,10 @@
 <button type="button" class="btn btn-agenda btn-danger d-inline float-right mb-2 mt-0 ml-2 mr-3" onclick="abrir_anular_hora();" data-toggle="tooltip" data-placement="top" title="Anular horas"><i class="fas fa-calendar-times"></i> </button>
 
 <div class="modal fade" id="modal_anular_hora" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal_anular_hora" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header" style="background-color: rgb(28, 190, 190);">
-        <h5 class="modal-title text-white" id="modal_anular_horaLabel">Anular hora Medica</h5>
+      <div class="modal-header bg-info">
+        <h5 class="modal-title text-white" id="modal_anular_horaLabel">Anular hora médica</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#modal_anular_hora').modal('hide');">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -13,7 +13,7 @@
       <div class="modal-body">
         <input type="hidden" name="anular_id_profesional" id="anular_id_profesional" value="" >
         <input type="hidden" name="anular_id_lugar_atencion" id="anular_id_lugar_atencion" value="" >
-        <div class="row">
+        <div class="form-row">
             <div class="form-group col-md-6">
                 <label class="floating-label-activo-sm">Agenda</label>
                 <select class="form-control form-control-sm" name="anular_agenda" id="anular_agenda" onchange="carga_calendario_anular();">
@@ -28,28 +28,25 @@
                 <input type="date" class="form-control form-control-sm" name="anular_fecha_consulta" id="anular_fecha_consulta" value="{{ date('Y-m-d') }}" min="{{ date('Y-m-d') }}" onchange="cargar_anular_horas();">
             </div>
         </div>
-        <div class="row" >
+        <div class="form-row" >
             <div class="col-md-12" id="horas_medicas_lista">
 
             </div>
         </div>
       </div>
-
-      <div class="modal-footer">
+      <!--<div class="modal-footer">
         <button type="button" class="btn btn-danger-light btn-sm" onclick="$('#modal_anular_hora').modal('hide');">Cerrar</button>
-      </div>
-
-
+      </div>-->
     </div>
   </div>
 </div>
 
 
 <div class="modal fade" id="modal_anular_hora_comentario" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modal_anular_hora_comentario" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header" style="background-color: rgb(28, 190, 190);">
-          <h5 class="modal-title text-white" id="modal_anular_hora_comentarioLabel">Anular hora Medica Comentario</h5>
+        <div class="modal-header bg-info">
+          <h5 class="modal-title text-white" id="modal_anular_hora_comentarioLabel">Anular hora médica comentario</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#modal_anular_hora_comentario').modal('hide');">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -59,8 +56,8 @@
           <input type="hidden" name="anular_id_profesional_comentario" id="anular_id_profesional_comentario" value="" >
           <input type="hidden" name="anular_id_lugar_atencion_comentario" id="anular_id_lugar_atencion_comentario" value="" >
           <input type="hidden" name="anular_id_hora_comentario" id="anular_id_hora_comentario" value="" >
-          <div class="row">
-                <div class="form-group col-md-6">
+          <div class="form-row">
+                <div class="form-group col-md-12">
                   <label class="floating-label-activo-sm">Comentario</label>
                   <textarea class="form-control" name="anular_comentario"  id="anular_comentario"></textarea>
               </div>
@@ -68,8 +65,8 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger-light btn-sm" onclick="$('#modal_anular_hora_comentario').modal('hide');">Cerrar</button>
-          <button type="button" class="btn btn-success-light btn-sm" onclick="anular_horas();">Anular</button>
+          <!--<button type="button" class="btn btn-danger-light btn-sm" onclick="$('#modal_anular_hora_comentario').modal('hide');">Cerrar</button>-->
+          <button type="button" class="btn btn-danger-light-c btn-xxs" onclick="anular_horas();"><i class="feather icon-x"></i> Anular</button>
         </div>
 
       </div>
@@ -130,7 +127,7 @@
                     if(data.registros.horario_agenda_laboral != '')
                     {
                         console.log(data);
-                        let dias = ['','LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO'];
+                        let dias = ['','LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO'];
                         var dias_activos = data.registros.horario_agenda_laboral.split(',');
                         var dias_texto = '';
                         var cant = 0;
@@ -211,14 +208,22 @@
                 $.each(data.registros, function (index, value)
                 {
                     var html = '';
-                    html += '<div class="row" style="border: 2px solid #aba8a8; border-radius: 13px; margin: 1em;padding: 10px 0px;">';
-                    html += '    <div class="col-md-6 mb-2" style="text-align: left;"><span class="font-weight-bold">Paciente:</span> '+value.paciente.nombres+' '+value.paciente.apellido_uno+' '+value.paciente.apellido_dos+'</div>';
-                    html += '    <div class="col-md-6 mb-2" style="text-align: left;"><span class="font-weight-bold">Rut:</span> '+value.paciente.rut+'</div>';
-                    html += '    <div class="col-md-6 mb-2" style="text-align: left;"><span class="font-weight-bold">Hora inicio:</span> '+value.hora_inicio+'</div>';
-                    html += '    <div class="col-md-6 mb-2" style="text-align: left;"><span class="font-weight-bold">Hora termino:</span> '+value.hora_termino+'</div>';
-                    html += '    <div class="col-md-12 mb-2" style="text-align: left;background-color:'+value.estado.color+';"><span class="font-weight-bold">Estado: '+value.estado.valor+'</span></div>';
-                    html += '    <div class="col-md-6 mb-2" style="text-align: center;">';
-                    html += '       <button class="btn btn-sm btn-danger-light" onclick="cargar_comentario_anular_hora(\''+value.id+'\');">Anular</button>';
+                    html += '<div class="form-row">';
+                    html += '<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">';
+                    html += '<div class="card-informacion">';
+                    html += '<div class="card-body px-1 pb-1">';
+                    html += '    <div class="col-md-12 text-left mb-2"><span class="font-weight-bold text-c-blue">Paciente:</span> '+value.paciente.nombres+' '+value.paciente.apellido_uno+' '+value.paciente.apellido_dos+'</div>';
+                    html += '    <div class="col-md-12 text-left mb-2"><span class="font-weight-bold text-c-blue">Rut:</span> '+value.paciente.rut+'</div>';
+                    html += '    <div class="col-md-12 text-left mb-2"><span class="font-weight-bold text-c-blue">Hora inicio:</span> '+value.hora_inicio+'</div>';
+                    html += '    <div class="col-md-12 text-left mb-2"><span class="font-weight-bold text-c-blue">Hora término:</span> '+value.hora_termino+'</div>';
+                    html += '    <div class="col-md-12 text-left mb-2"><span class="font-weight-bold text-c-blue">Estado:</span> <span style="background-color:'+value.estado.color+'; color:#fff; padding:2px 5px; border-radius:5px; font-weight:600;">'+value.estado.valor+'</span></div>';
+                    html += '    <div class="card-footer pb-0">';
+                    html += '    <div class="col-md-12 text-right">';
+                    html += '       <button class="btn btn-xxs btn-danger-light-c" onclick="cargar_comentario_anular_hora(\''+value.id+'\');"><i class="feather icon-x"></i> Anular</button>';
+                    html += '    </div>';
+                    html += '   </div>';
+                    html += '    </div>';
+                    html += '    </div>';
                     html += '    </div>';
                     html += '</div>';
 

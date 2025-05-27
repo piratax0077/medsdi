@@ -117,7 +117,7 @@
                                     <td>{{ $i->cantidad }}</td>
                                     <td>{{ $i->uso }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_pedido_insumos({{ $i->id }})">Eliminar</button>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="eliminar_pedido_insumos({{ $i->id }},'{{ $i->tipo_solicitud }}')">Eliminar</button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -208,7 +208,7 @@
                             pedido.pedido_a,
                             pedido.cantidad,
                             pedido.uso,
-                            `<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_pedido_insumos(${pedido.id})">Eliminar</button>`
+                            `<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_pedido_insumos(${pedido.id},'${pedido.tipo_solicitud}')">Eliminar</button>`
                         ]).draw(false);
                     }
 
@@ -242,7 +242,7 @@
         })
     }
 
-    function eliminar_pedido_insumos(id){
+    function eliminar_pedido_insumos(id, tipo){
         swal({
             title: "¿Está seguro de eliminar este pedido?",
             text: "Una vez eliminado, no podrá recuperarlo.",
@@ -257,9 +257,11 @@
                     url: "{{ route('dental.eliminar_pedido_insumos_materiales') }}",
                     data: {
                         id: id,
+                        tipo: tipo,
                         _token: '{{ csrf_token() }}'
                     },
                     success: function (response) {
+                        console.log(response);
                         if (response.status == 1) {
                             $('#cuerpo_tabla_pedido_insumos_materiales').empty();
                             let pedidos = response.pedidos;
@@ -273,7 +275,7 @@
                                     pedido.pedido_a,
                                     pedido.cantidad,
                                     pedido.uso,
-                                    `<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_pedido_insumos(${pedido.id})">Eliminar</button>`
+                                    `<button type="button" class="btn btn-danger btn-sm" onclick="eliminar_pedido_insumos(${pedido.id},'${pedido.tipo_solicitud}')">Eliminar</button>`
                                 ]).draw(false);
                             }
                         } else {

@@ -25,7 +25,7 @@
                             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div class="form-group">
                                     <label class="floating-label-activo-sm">Piezas N°</label>
-                                    <select class="form-control form-control-sm select2" name="end_numero_pieza_{{ $counter }}[]" id="end_numero_pieza_{{ $counter }}" multiple>
+                                    <select class="form-control form-control-sm select2_rx_end" name="end_numero_pieza_{{ $counter }}[]" id="end_numero_pieza_{{ $counter }}" multiple>
                                         <option value="11">11</option>
                                         <option value="12">12</option>
                                         <option value="13">13</option>
@@ -113,7 +113,7 @@ if (typeof dropzoneEnd === 'undefined') {
     var dropzoneEnd;
 }
 $(document).ready(function(){
-    $('.select2').select2({
+    $('.select2_rx_end').select2({
         width: '100%',
         placeholder: 'Seleccionar pieza(s)',
         allowClear: true

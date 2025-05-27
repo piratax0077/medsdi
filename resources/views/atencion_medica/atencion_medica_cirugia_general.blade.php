@@ -50,9 +50,9 @@
                                             <a class="nav-link text-reset" id="fmu-tab" data-toggle="tab" href="#" role="tab" aria-controls="fmu" aria-selected="false" onclick="abrir_autorizacion_fmu();">FMU</a>
                                         @endif
                                     </li>  --}}
-                                    <li class="nav-item">
+                                    {{--  <li class="nav-item">
                                         <a class="nav-link text-reset" id="aten-previas-tab" data-toggle="tab" href="#aten-previas" role="tab" aria-controls="aten-previas" aria-selected="false">Historial de consultas</a>
-                                    </li>
+                                    </li>  --}}
                                     <li class="nav-item">
                                         <a class="nav-link text-reset" id="band_exam-tab" data-toggle="tab" href="#band_exam" role="tab" aria-controls="band_exam" aria-selected="false">Exámenes</a>
                                     </li>
@@ -112,6 +112,13 @@
 
     </div>
     <!--Cierre: Container Completo-->
+     @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_clasif_colon')
+	@include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia')
+    @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_gastro_endosc')
+    {{--  @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_gastro_func')  --}}
+    @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_gastro_rx')
+     @include('atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_sol_examenes_com')
+    @include('general.hospitalizacion.modals.in_solic_pabellon')
 	@include("general.modal.modal_no_disponible")
 	@include("atencion_medica.formularios.modal_atencion_especialidad.cirugia.modal_biopsia_cirugia")
 @include('app.profesional.modales.boton_flotante_agenda_autorizacion')

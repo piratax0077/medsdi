@@ -3103,7 +3103,7 @@ class EscritorioPaciente extends Controller
                     $datos['usuario']['msj'] = 'no encontrado';
                 }
             }
-			
+
 			/** modificar horas medicas */
             HoraMedica::where('id_paciente', $paciente->id)
                 ->get()
@@ -3124,6 +3124,7 @@ class EscritorioPaciente extends Controller
     }
 
     public function modificarContacto(Request $request){
+
         $datos = array();
         $error = array();
         $valido = 1;
@@ -3157,6 +3158,7 @@ class EscritorioPaciente extends Controller
         $email_nuevo = $email;
 
         $contacto->nombre = $nombre;
+        $contacto->sexo = $sexo;
         $contacto->apellido_uno = $apellido_uno;
         $contacto->apellido_dos = $apellido_dos;
         $contacto->fecha_nac = $fecha_nacimiento;

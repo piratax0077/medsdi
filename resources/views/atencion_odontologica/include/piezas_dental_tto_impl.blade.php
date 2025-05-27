@@ -229,7 +229,7 @@
         let valido = 1;
         let mensaje = '';
 
-        if(numero_pieza == ''){
+        if(numero_pieza == '' || numero_pieza == 0){
             valido = 0;
             mensaje += '<li>Campo requerido N° Pieza </li>';
         }
@@ -242,6 +242,11 @@
         if(grosor_nylon == ''){
             valido = 0;
             mensaje += '<li>Campo requerido Grosor </li>';
+        }
+
+        if(tipo_injerto_tto == ''){
+            valido = 0;
+            mensaje += '<li>Campo requerido Método de injerto </li>';
         }
 
         if(valido == 0){

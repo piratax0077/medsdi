@@ -1,7 +1,6 @@
 <div class="form-row">
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mt-4">
             <h6 class="t-aten d-inline"> Estudio Radiológico</h6>
-            <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-2"><i class="fas fa-plus"></i> Cargar nueva imagen</button>
         </div>
     <div class="col-sm-8 mt-2">
         <div class="card-informacion" id="img">
@@ -14,7 +13,7 @@
                 <div class="form-row" id="contenedor_piezas_ex_oral">
                     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-8">
                         <div id="img">
-               
+
                         </div>
                         <div class="aten-a">
                             <div class="dropzone" id="mis-imagenes-dentales-preimplante" action="{{ route('profesional.imagen.carga') }}"></div>
@@ -96,7 +95,7 @@
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
     </div>
     @endif
 </div>

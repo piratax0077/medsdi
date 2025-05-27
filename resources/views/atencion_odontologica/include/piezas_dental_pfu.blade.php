@@ -3,8 +3,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
                 <h6 class="t-aten d-inline"> PFU</h6>
-                <button type="button" class="btn btn-info btn-sm  d-inline float-md-right mt-n2 mb-3"><i class="fas fa-plus"></i> Añadir pieza</button>
-            </div>
+             </div>
         </div>
         <div class="form-row">
             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 col-xxl-1">
